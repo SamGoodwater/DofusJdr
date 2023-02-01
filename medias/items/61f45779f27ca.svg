@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 70.05 119.55" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+<metadata>
+<rdf:RDF>
+<cc:Work rdf:about="">
+<dc:format>image/svg+xml</dc:format>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+</cc:Work>
+</rdf:RDF>
+</metadata>
+<g transform="translate(-239.95,-140.2)">
+<use transform="translate(239.95,140.2)" width="70.050003" height="119.55" xlink:href="#a"/>
+</g>
+<defs>
+<g id="a" transform="translate(35,59.75)">
+<use transform="translate(-35,-59.75)" width="70.050003" height="119.55" xlink:href="#b"/>
+</g>
+<g id="b" transform="translate(35,59.75)">
+<path d="m19.45-11.6 0.3 23.2 0.05 5.65-24.4 0.95-8.2-15.3 5.9 17.65 0.65 5.3 0.1 0.95 0.15 0.95q-0.85 0.2-1.45 1.05-0.75 1.15-0.75 2.7l0.05 0.85-0.15 0.25-0.55 0.75-7.1-5.35 2.2-6.4-1.1-1.9 1.1-0.9-4.2-11.75 3.65-16.25 9.25 6.25q6.95 2.25 13.95 0.75l3.1 16.45 6.2 1.25v-21.2l-2.25-6.45h0.15q0.65-1.45-0.35-2.5l3.7 3.05m-4.7-3.85v-0.1l0.25 0.25-0.25-0.15" fill="url(#o)" fill-rule="evenodd"/>
+<path d="m2.85-22.4 0.05 1.75v0.05l-1.15-0.5-2.2 2.4q4.35 5.4 16.4 6.55l2.25 6.45v21.2l-6.2-1.25-3.1-16.45q-7 1.5-13.95-0.75l-9.25-6.25-3.65 16.25 4.2 11.75-1.1 0.9 1.1 1.9-2.2 6.4-1.3-1 1.85-5.9-1.1-2.3 1.25-0.85-4.15-10.5 0.6-3.15 0.65-3.15 1.1-5.8 1.45-6.5 1.95-1.45 0.1 0.1 5.1-3.7 5.25-3.9 4.05-2.95 2 0.65m10.35 6.2 0.5-2.45 5.65 1.95 0.1 5.1-3.7-3.05-0.75-0.65-0.25-0.25v0.1l-0.4-0.25-1.15-0.5m13.1 4.85 7.45 10.9-0.05 7.5-0.05 3.35q-1.4 2.5-5 4.8l-2.35-26.55" fill="url(#n)" fill-rule="evenodd"/>
+<path d="m1.2-56.8 9.55-1.35-3.05 40.6-0.35-0.15 0.35 0.15v0.1l-0.35-0.25-4.45-2.95-0.05-1.75-0.35-7v-0.15l2.7-1.2 1-3.05 0.15-0.35v-0.15q-0.5-3.95-4.25-3.65l-0.9-18.8v-0.05" fill="url(#j)" fill-rule="evenodd"/>
+<path d="m7.7-17.55 3.05-40.6-9.55 1.35-0.05-1.3 9.65-1.15 10.55 2.55-7.65 38.05-0.5 2.45q-2.85-0.35-5-1.05l-0.5-0.3 0.5 0.3-0.4-0.15-0.1-0.05v-0.1" fill="url(#i)" fill-rule="evenodd"/>
+<path d="m6.2-33.8-1 3.05-2.7 1.2-0.15-2.75q2.95 0.85 3.85-1.5m15.9 6.4-1.6 2.5 1.55-2.55 0.05 0.05m-2.35 39 0.15 5.75-0.1-0.1-0.05-5.65m-28.2-27.8-5.1 3.7 5-3.85 0.05 0.05 0.05 0.1m-9.7 17.35-0.65 3.15 0.55-3.2 0.1 0.05m25.95-18.55-0.1-0.05 0.1 0.05m22.05 46.75 1.55 17.65-0.35 0.85-1.65-18.15 0.45-0.35m-9.65 17.85-0.2-14.8h0.25l-0.05 14.8m-40.05-72.9 2.4 1.15v2.85l-1.25 3.65-1.2-1.3q2.25-3.15 0.05-6.35m-6.1 31q-0.85 0.9-1.55 4.15l-1.3 0.25 1.5-4.4h1.35m19.7 20.55 0.1 0.95-0.1-0.95" fill="#f40b0b" fill-rule="evenodd"/>
+<path d="m20.5-24.9 1.6-2.5h0.2v0.2l2.15 46.9-4.55-2.35-0.15-5.75-0.3-23.2-0.1-5.1-0.1-6.25 1.25-1.95" fill="url(#h)" fill-rule="evenodd"/>
+<path d="m22.3-27.4h-0.2l0.15-0.25 0.05 0.25m6.7 80.4v0.05-0.05" fill-opacity=".2" fill-rule="evenodd"/>
+<path d="m8.2-17.25q2.15 0.7 5 1.05l1.15 0.5 0.4 0.25 0.25 0.15 0.75 0.65q1 1.05 0.35 2.5l-0.15-0.05q-9.05-1.95-7.75-5.05" fill="#f4330b" fill-rule="evenodd"/>
+<path d="m2.9-20.65 4.45 2.95 0.35 0.25 0.1 0.05 0.4 0.15q-1.3 3.1 7.75 5.05l0.15 0.05h-0.15q-12.05-1.15-16.4-6.55l2.2-2.4 1.15 0.5v-0.05" fill="url(#g)" fill-rule="evenodd"/>
+<path d="m19.9 17.35 4.55 2.35-2.15-46.9 2.95 3.4 1.05 12.45 2.35 26.55q3.6-2.3 5-4.8 0.8-1.45 0.9-2.9v10.5q-6.1 8.7-33.4 8.2l-1.55-0.05-3.2-0.15-2.65-0.15-0.65-5.3-5.9-17.65 8.2 15.3 24.4-0.95 0.1 0.1" fill="url(#f)" fill-rule="evenodd"/>
+<path d="m33.7 7.05v-0.8l0.85 0.8v0.45q-0.1 1.45-0.9 2.9l0.05-3.35" fill="#ae0909" fill-rule="evenodd"/>
+<path d="m34.55 18v3.25q-0.5 4.6-4.7 8.1l-0.45 0.35 1.65 18.15-2.05 5.15-1.45-22.2-2.6 1.05 1.45 27-5.1-7.2-1.15-1.6 0.05-2.85 0.05-14.8h-0.25q-9.95 1.4-22.55-0.4l-0.35-0.05-0.1 0.65q-0.2 0.85-0.7 1.55l-0.25 0.35-0.05 0.05-0.75 0.6h-0.05l-2.55 3.65-12.65-8.25 1.85-4.2 2.2 1.65 7.1 5.35 0.55-0.75 0.15-0.25-0.05-0.85q0-1.55 0.75-2.7 0.6-0.85 1.45-1.05l-0.15-0.95-0.1-0.95 2.65 0.15 3.2 0.15 1.55 0.05q27.3 0.5 33.4-8.2m-40.15 11.75h-0.2l-0.7 0.5q-0.4 0.55-0.35 1.3-0.05 0.75 0.35 1.3 0.35 0.55 0.9 0.55 0.5 0 0.9-0.55l0.35-1.1 0.05-0.2q-0.05-0.75-0.4-1.3-0.4-0.55-0.9-0.5" fill="url(#e)" fill-rule="evenodd"/>
+<path d="m29 53-0.05 0.05-2.55 6.25-5.1-7.65 5.1 7.2-1.45-27 2.6-1.05 1.45 22.2" fill="url(#d)" fill-rule="evenodd"/>
+<path d="m-13.55-12.5-0.1-0.1-5.05-5.45 1.25-3.65v-2.85l-2.4-1.15-0.05-0.05v0.05l-2 2.35-6.15-7.25 3.85-8.15 15.65 22.4-5 3.85" fill="url(#c)" fill-rule="evenodd"/>
+<path d="m-3.2-20.1-5.25 3.9-0.05-0.1-0.05-0.05-15.65-22.4-3.85 8.15-0.85-0.95 3.8-8.5 6.4-7.5 15.5 27.45" fill="url(#m)" fill-rule="evenodd"/>
+<path d="m-17.05-4.65-1.1 5.8-0.1-0.05h-0.05l-14.3-2.2-1 11.6-0.9 0.15 0.9-11.9 2.5-11.1 14.4 5.9-0.35 1.8" fill="url(#l)" fill-rule="evenodd"/>
+<path d="m-18.8 4.3-0.6 3.15v0.05l-5.7 1.95q1.35-4.2 0-4.45-0.45-0.1-0.85 0.3h-1.35l-1.5 4.4h-0.15l-4.65 0.8 1-11.6 14.3 2.2h0.05l-0.55 3.2" fill="url(#k)" fill-rule="evenodd"/>
+<path d="m-5.6 29.75q0.5-0.05 0.9 0.5 0.35 0.55 0.4 1.3l-0.05 0.2-0.35 1.1q-0.4 0.55-0.9 0.55-0.55 0-0.9-0.55-0.4-0.55-0.35-1.3-0.05-0.75 0.35-1.3l0.7-0.5h0.2" fill-rule="evenodd"/>
+<path d="m-2.55 32-0.45 0.6 0.1-0.65 0.35 0.05" fill="#c90000" fill-rule="evenodd"/>
+<path d="m13.7-18.65 5.65 1.95m-16.5-5.7-2-0.65-4.05 2.95m-10.45 7.5-1.95 1.45-1.45 6.5m-2.35 12.1 4.15 10.5-1.25 0.85 1.1 2.3-1.85 5.9m43.55-38.35 7.45 10.9-0.05 7.5m-0.05 3.35 0.05-3.35" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".38824" stroke-width=".5"/>
+<path d="m1.2-56.75 0.9 18.8q3.75-0.3 4.25 3.65v0.15m-3.85 4.75 0.35 7 0.05 1.75m4.45 2.95 0.35 0.15 0.5 0.3m5 1.05 0.5-2.45 7.65-38.05-10.55-2.55-9.65 1.15 0.05 1.3m20.9 29.4-0.05-0.05-1.55 2.55-1.25 1.95 0.1 6.25 0.1 5.1 0.3 23.2 0.05 5.65-24.4 0.95-8.2-15.3 5.9 17.65 0.65 5.3m8.75-55.4-0.15-2.75q2.95 0.85 3.85-1.5m7 17.6 1.15 0.5 0.4 0.25 0.25 0.15 0.75 0.65m-16.2-4.05 2.2-2.4 1.15 0.5v-0.05m-6.1 0.55-5.25 3.9-5.1 3.7-0.1-0.1m-3.4 7.95-1.1 5.8-0.65 3.15-0.6 3.15v0.05l-5.7 1.95q1.35-4.2 0-4.45-0.45-0.1-0.85 0.3-0.85 0.9-1.55 4.15l-1.3 0.25m44.9-21.85q0.65-1.45-0.35-2.5m18.8 21.7v14.2q-0.5 4.6-4.7 8.1l1.55 17.65-0.35 0.85-2.05 5.15-0.05 0.05-2.55 6.25-5.1-7.65-1.15-1.6 0.05-2.85-0.2-14.8q-9.95 1.4-22.55-0.4m-0.45 0.6q-0.2 0.85-0.7 1.55l-0.25 0.35-0.05 0.05-0.75 0.6h-0.05m27.1-62.35 2.95 3.4 1.05 12.45 2.35 26.55q3.6-2.3 5-4.8m-61.7-41 6.15 7.25 2-2.35v-0.05l0.05 0.05q2.2 3.2-0.05 6.35l1.2 1.3 5.05 5.45m10.45-7.5-15.5-27.45-6.4 7.5-3.8 8.5 0.85 0.95m11 25.95 0.35-1.8-14.4-5.9-2.5 11.1-0.9 11.9 0.9-0.15m4.65-0.8-4.65 0.8m27.45 16.3-0.1-0.95m-1.9 6.5-0.05-0.85q0-1.55 0.75-2.7 0.6-0.85 1.45-1.05l-0.15-0.95m3.15 5.8 0.1-0.65 0.35 0.05m37.1-24.5q-0.1 1.45-0.9 2.9" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".5"/>
+<path d="m2.9-20.65 4.45 2.95 0.35 0.25m0.5 0.2q2.15 0.7 5 1.05m-5.4-1.2-0.1-0.05m0.1 0.05 0.4 0.15" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".5"/>
+<path d="m-2.55 32-0.45 0.6m-1.8 2.55-2.55 3.65-12.65-8.25 1.85-4.2 2.2 1.65 7.1 5.35 0.55-0.75 0.15-0.25" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".38824" stroke-width=".5"/>
+<path d="m34.3 19.1q-4.25 9-30.65 8.45v-4.2q25.05 1.05 30.65-8.25v4" fill-rule="evenodd"/>
+<path d="m10.8-59.25 10.55 2.55-7.65 38.05 5.65 1.95-0.1-6.25 2.8-4.5 0.05 0.05 0.15-0.25 0.05 0.45 2.95 3.4 1.05 12.45 7.45 10.9-0.05 7.5v-0.8l0.85 0.8v14.2q-0.5 4.6-4.7 8.1l1.55 17.65-2.4 6v0.05-0.05l-0.05 0.05-2.55 6.25-6.25-9.25-0.15-17.65q-9.95 1.4-22.55-0.4l-0.45 0.6q-0.2 0.85-0.7 1.55l-0.25 0.35-0.05 0.05-0.75 0.6h-0.05l-2.55 3.65-12.65-8.25 1.85-4.2 2.2 1.65-1.3-1 1.85-5.9-1.1-2.3 1.25-0.85-4.15-10.5v0.05l-5.7 1.95q1.35-4.2 0-4.45-0.45-0.1-0.85 0.3-0.85 0.9-1.55 4.15l-7 1.2 0.9-11.9 2.5-11.1 14.4 5.9-0.35 1.8 1.45-6.5 1.95-1.45-6.25-6.75q2.25-3.15 0.05-6.35l-0.05-0.05v0.05l-2 2.35-7-8.2 3.8-8.5 6.4-7.5 15.5 27.45 4.05-2.95 2 0.65-0.5-9.9q2.95 0.85 3.85-1.5l0.15-0.35v-0.15q-0.5-3.95-4.25-3.65l-0.95-20.15z" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4"/>
+</g>
+<linearGradient id="o" x1="-819.2" x2="819.2" gradientTransform="matrix(-.0092 .0126 -.0248 -.0181 1.15 12.4)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#cdb882" offset="0"/>
+<stop stop-color="#987f3d" offset="1"/>
+</linearGradient>
+<linearGradient id="n" x1="-819.2" x2="819.2" gradientTransform="matrix(0 -.0144 .0328 0 7.25 -3.75)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#fbf4ce" offset="0"/>
+<stop stop-color="#e2d6a9" offset="1"/>
+</linearGradient>
+<linearGradient id="j" x1="-819.2" x2="819.2" gradientTransform="matrix(0 .0167 -.0058 0 6 -35.75)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#c30808" offset="0"/>
+<stop stop-color="#930606" offset="1"/>
+</linearGradient>
+<linearGradient id="i" x1="-819.2" x2="819.2" gradientTransform="matrix(-.0045 .0168 -.0133 -.0036 8.6 -42.35)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#f4430b" offset="0"/>
+<stop stop-color="#f40b0b" offset="1"/>
+</linearGradient>
+<linearGradient id="h" x1="-819.2" x2="819.2" gradientTransform="matrix(0 .0139 -.0032 0 21.85 -7.7)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#c30808" offset="0"/>
+<stop stop-color="#930606" offset="1"/>
+</linearGradient>
+<linearGradient id="g" x1="-819.2" x2="819.2" gradientTransform="matrix(-.0045 -.0026 .0017 -.003 8.05 -16.1)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#c30808" offset="0"/>
+<stop stop-color="#930606" offset="1"/>
+</linearGradient>
+<linearGradient id="f" x1="-819.2" x2="819.2" gradientTransform="matrix(.0021 .0184 -.0282 .0032 10.2 -.8)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#f4430b" offset="0"/>
+<stop stop-color="#f40b0b" offset="1"/>
+</linearGradient>
+<linearGradient id="e" x1="-819.2" x2="819.2" gradientTransform="matrix(0 -.0139 .0333 0 7.25 39.85)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#c30808" offset="0"/>
+<stop stop-color="#930606" offset="1"/>
+</linearGradient>
+<linearGradient id="d" x1="-819.2" x2="819.2" gradientTransform="matrix(0 -.012 .0047 0 25.15 40)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#f4430b" offset="0"/>
+<stop stop-color="#f40b0b" offset="1"/>
+</linearGradient>
+<linearGradient id="c" x1="-819.2" x2="819.2" gradientTransform="matrix(.0059 .0059 -.0048 .0048 -19.45 -26.25)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#c30808" offset="0"/>
+<stop stop-color="#930606" offset="1"/>
+</linearGradient>
+<linearGradient id="m" x1="-819.2" x2="819.2" gradientTransform="matrix(.0067 .0116 -.0089 .0052 -18.6 -30.6)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#f4430b" offset="0"/>
+<stop stop-color="#f40b0b" offset="1"/>
+</linearGradient>
+<linearGradient id="l" x1="-819.2" x2="819.2" gradientTransform="matrix(.0063 .0017 -.0036 .0136 -25.85 1)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#f4430b" offset="0"/>
+<stop stop-color="#f40b0b" offset="1"/>
+</linearGradient>
+<linearGradient id="k" x1="-819.2" x2="819.2" gradientTransform="matrix(.0043 -.0011 .0019 .0072 -26.7 3.6)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#c30808" offset="0"/>
+<stop stop-color="#930606" offset="1"/>
+</linearGradient>
+</defs>
+</svg>

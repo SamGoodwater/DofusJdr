@@ -1,0 +1,8 @@
+SetEnvIfNoCase Referer "^(http|https)://(www\.)?jdr.iota\.fr|localhost" allowed_referer
+<Files "backup">
+    Order deny,allow
+    Deny from all
+    Allow from env=allowed_referer
+</Files>
+
+Options -Indexes

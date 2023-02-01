@@ -1,0 +1,40 @@
+/* F I L E  ---  D R O P   Z O N E */
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+    .inputfile + label, .inputfilelabel {
+        display: inline-block;
+        color: #878787;  
+    }
+    #optionImage{
+        border: 3px dashed var(--blue-grey-darken-3, #37474f);
+        padding: 10px;
+        width: 100%;
+    }
+    #filesView{
+        border: 1px dotted var(--blue-grey-darken-3, #37474f);
+        padding:20px;
+        width: 200px;
+        display: none;
+    }
+    div[data-select="true"] {
+        background-color: var(--blue-grey, #96abb6);
+        box-shadow: 1px 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    }
+    div[data-select="false"]:hover {
+        background-color: var(--blue-grey-lighten-3, #c3e3f5);
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    }
+    div[data-select="true"] #is_selected i {
+        background-color: var(--blue-grey-darken-3, #353f44);
+        color:rgba(255, 255, 255, 100);
+    }
+    div[data-select="false"] #is_selected i {
+        background-color: rgba(255, 255, 255, 0);
+        color:rgba(255, 255, 255, 0);
+    }

@@ -1,0 +1,21 @@
+/* figure.image{
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+figure.image img{
+    position: absolute;
+}
+figure.image img::before{
+    content: '';
+    padding-top: 100%;
+    display: block;
+}
+figure.image_resized{
+    display: block;
+    box-sizing: border-box;
+} */

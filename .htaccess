@@ -1,0 +1,14 @@
+# FORCER HTTPS
+#RewriteEngine On
+#RewriteCond %{HTTPS} off
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ONLINE
+#ErrorDocument 404 /index.php
+#ErrorDocument 404 /view/maintenance.php
+
+# OFFLINE
+ErrorDocument 404 /jdrdofus/index.php
+#ErrorDocument 404 /ProjectFounil/view/maintenance.php
+
+Options -Indexes

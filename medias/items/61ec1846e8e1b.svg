@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 43.774 43.852" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+<metadata>
+<rdf:RDF>
+<cc:Work rdf:about="">
+<dc:format>image/svg+xml</dc:format>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+</cc:Work>
+</rdf:RDF>
+</metadata>
+<g transform="translate(-253.08 -178.54)">
+<use transform="translate(253.05,178.55)" width="43.799999" height="43.849998" xlink:href="#d"/>
+<use transform="matrix(1.1164 .0106 -.0106 1.1164 262.35 184.95)" width="18.6" height="16.75" xlink:href="#b"/>
+</g>
+<defs>
+<g id="d" transform="translate(-253.05,-178.55)">
+<path d="m282.3 181.05 4-0.3q2.25 0.65 2.75 3.2-4.9-2.05-8.65-0.65 0.6-1.55 1.85-2.25h0.05m-12.4 10.25 6.35 0.15q1.8 0.95 3.2 3.4-6.55-3.7-11.7-0.45 0.6-1.35 2.15-3.1m-12.15 14.15q1.35-2.1 5.6-1.25 2.4 1 3.75 3.65-6.15-2.3-10 0.3h-0.05q0.2-1.2 0.7-2.7" fill="#645135" fill-rule="evenodd"/>
+<path d="m295 180.65q1.25 2.7-3.3 10.5l-1.8 1.95-13.55 14.35q-8.2 8.75-17.4 14.25l-0.05 0.05q-2.35 1-4.3-1.4l-0.3-0.45q1.95 1.4 7.95-1.65l0.2-0.25q1.35-2.05 1.9-4.35 0.75-3.55-4.75-1.45-4.35 3.05-1.5 3.35l-2.3 1.5q-1.1-0.1 0.25-3.2 3.45-4.05 6.7-4.15 5.5 0.35 3.95 3.35 3.4-1.15 5.2-3.35 2.45-2.95 1.5-6.95 3.45-0.3 8.3-5.75 8.8-10.1 8.7-11.85 5.05-3.7 0.8-6.25 1.25 0.15 3.1 1.2l0.7 0.55" fill="#70663c" fill-rule="evenodd"/>
+<path d="m257.1 208.15-0.1 0.15 0.05-0.15h0.05" fill="#c8a06c" fill-rule="evenodd"/>
+<path d="m291.2 178.9q4.25 2.55-0.8 6.25 0.1 1.75-8.7 11.85-4.85 5.45-8.3 5.75 0.95 4-1.5 6.95-1.8 2.2-5.2 3.35 1.55-3-3.95-3.35-3.25 0.1-6.7 4.15-1.35 3.1-0.25 3.2l2.3-1.5q-2.85-0.3 1.5-3.35 5.5-2.1 4.75 1.45-0.55 2.3-1.9 4.35l-0.2 0.25q-6 3.05-7.95 1.65-1.45-2.35-0.5-5.85 0.8-3.45 3.2-5.75l0.1-0.15q3.85-2.6 10-0.3-1.35-2.65-3.75-3.65-4.25-0.85-5.6 1.25 0.8-2.25 3.75-5l3.1-3.3q2.05-2.15 2.95-2.65l0.15-0.1h0.05q5.15-3.25 11.7 0.45-1.4-2.45-3.2-3.4l-6.35-0.15q2.4-2.5 5.9-5.05 3.2-2.35 4.6-2.85v-0.1q3.75-1.4 8.65 0.65-0.5-2.55-2.75-3.2l-4 0.3q5.45-2.3 8.9-2.15" fill="url(#e)" fill-rule="evenodd"/>
+<path d="m291.7 191.15q4.55-7.8 3.3-10.5 1.05 1.05 1.5 4.15-1 1.95-4.8 6.35" fill="#8c864a" fill-rule="evenodd"/>
+<path d="m295 180.65-0.7-0.55q-1.85-1.05-3.1-1.2m-36.9 41 0.3 0.45q1.95 2.4 4.3 1.4l0.05-0.05q9.2-5.5 17.4-14.25l13.55-14.35 1.8-1.95q3.8-4.4 4.8-6.35-0.45-3.1-1.5-4.15m-5.95 3.3q-4.9-2.05-8.65-0.65v0.1q-1.4 0.5-4.6 2.85-3.5 2.55-5.9 5.05m9.55 3.55q-6.55-3.7-11.7-0.45h-0.05l-0.15 0.1q-0.9 0.5-2.95 2.65l-3.1 3.3q-2.95 2.75-3.75 5m9.35 2.4q-6.15-2.3-10 0.3l-0.1 0.15q-2.4 2.3-3.2 5.75-0.95 3.5 0.5 5.85m26.1-36.6q0.6-1.55 1.85-2.25h0.05q5.45-2.3 8.9-2.15m-23.45 15.5q0.6-1.35 2.15-3.1m-12.9 17 0.05-0.15q0.2-1.2 0.7-2.7" fill="none" stroke="#382510" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".30196" stroke-width=".7"/>
+<path d="m274.2 189.35q-1.05 0.15-2.6 1.15 3.15-3.9 6.85-5.75 3.65-1.95 4.3-1.25t0.55 1.4-2.15 2.3q-2.1 1.55-3.5 1.7l-1.95 0.2-1.5 0.25m-0.65 4.55q1.35 1.6-1.65 4.6l-3.45 3.35-0.75 0.3q-1.4 0.65-2.35 0.75l-2.6-0.05q-1.7-0.15-3.55 1 3.55-5.4 8.3-8.45 4.7-3.1 6.05-1.5m-14.65 13.8q1.65-0.9 1.95 1.65-2 0.9-3.9 2.55-1.9 1.6-2.45 2.6-0.6 1 0.35-2.95 1.65-3.15 4.05-3.85" fill="#b6a56d" fill-opacity=".72157" fill-rule="evenodd"/>
+</g>
+<radialGradient id="e" cx="0" cy="0" r="819.2" gradientTransform="matrix(.022 -.0099 .0099 .022 259.35 207.15)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#989250" offset="0"/>
+<stop stop-color="#7a7241" offset="1"/>
+</radialGradient>
+<g id="b">
+<use transform="matrix(.2496 -.0555 .1295 .5823 -7e-4 15.961)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.5823 -.1295 .1295 .5823 .0829 14.448)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.5823 -.1295 .1295 .5823 1.7829 14.648)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.2496 -.0555 .1295 .5823 3.4493 10.611)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.5823 -.1295 .1295 .5823 7.3329 10.398)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.3605 -.0802 .1295 .5823 7.6438 11.624)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.5823 -.1295 .1295 .5823 15.883 4.4983)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.2496 -.0555 .1295 .5823 8.2493 7.3613)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.5823 -.1295 .1295 .5823 10.733 8.0983)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.3882 -.0863 .1295 .5823 11.03 4.2267)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.5823 -.1295 .1295 .5823 9.2829 3.6483)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.4159 -.0925 .1295 .5823 14.316 1.4798)" width="3.1500001" height="1.35" xlink:href="#a"/>
+<use transform="matrix(.5823 -.1295 .1295 .5823 16.583 .3983)" width="3.1500001" height="1.35" xlink:href="#a"/>
+</g>
+<g id="a" transform="translate(.5 .2)">
+<use transform="translate(-.5 -.2)" width="3.1500001" height="1.35" xlink:href="#c"/>
+</g>
+<g id="c" transform="translate(.5 .2)">
+<path d="m1.1-0.2 1.1 0.15 0.45 0.55-0.45 0.45-1.1 0.2q1.25-0.65 0-1.35" fill="#ceb67c" fill-rule="evenodd"/>
+<path d="m1.1 1.15-1.15-0.2-0.45-0.45 0.45-0.55 1.15-0.15q1.25 0.7 0 1.35" fill="#e8cd8c" fill-rule="evenodd"/>
+</g>
+</defs>
+</svg>

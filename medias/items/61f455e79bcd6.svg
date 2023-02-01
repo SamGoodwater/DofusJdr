@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="69px" height="75px" version="1.1" viewBox="65.413 29.85 69.082 74.819" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<g id="cc">
+<path d="m111.35 56.2h0.4l0.55 0.1q6.85 1 11.65 6.2 4.95 5.45 4.6 12.3-0.25 6.95-5.75 11.2-5.1 4-11.85 3.55l-1.9-0.2q-3.65-0.5-6.85-2.35 2.65-0.9 4.95-2.75 5.45-4.3 5.7-11.15 0.35-6.9-4.6-12.35-2.1-2.25-4.65-3.8 3.55-1.15 7.75-0.75" fill="#033"/>
+<path d="m110.95 89.55-1.05-0.05-0.85-0.15q-6.4 0.2-14-1.2l-2.3-0.6q-6.4-1.15-10.9-6.05-5-5.45-4.7-12.3 0.4-6.95 5.8-11.2 5.45-4.3 12.65-3.55 7.9 0.1 15.75 1.75h0.4l0.55 0.1q6.85 1 11.65 6.2 4.95 5.45 4.6 12.3-0.25 6.95-5.75 11.2-5.1 4-11.85 3.55l-1.9-0.2q-3.65-0.5-6.85-2.35-2.45-1.5-4.65-3.85-5.05-5.4-4.65-12.25 0.3-6.85 5.8-11.2 2.3-1.8 4.9-2.75 3.55-1.15 7.75-0.75m-7.75 0.75q2.55 1.55 4.65 3.8 4.95 5.45 4.6 12.35-0.25 6.85-5.7 11.15-2.3 1.85-4.95 2.75" fill="none" stroke="#000"/>
+</g>
+<g id="a">
+<path d="m-42.95-49.7q9.9-8.6 29.45-0.05 19.65 8.45 37.45 29.05 17.75 20.6 23.35 41.2t-4.35 29.2-29.55 0.1q-19.55-8.5-37.35-29.1t-23.4-41.2q-5.55-20.6 4.4-29.2" fill="#690"/>
+<path d="m25.9-8.8q11.05 12.75 14.4 25.55 3.55 12.8-2.6 18.1t-18.35 0.05q-12.1-5.25-23.15-18t-14.5-25.55 2.7-18.1 18.25-0.05q12.2 5.25 23.25 18" fill="#9f0"/>
+</g>
+<g id="cb">
+<path d="m15.45 0.05q5.2 0.25 8.95 3.3 4.2 3.35 4.2 8.1t-4.2 8.1l-0.65 0.5q-20.15-1.5-21.25-7.75-0.15-0.75 0-1.55 0.25-1.65 1.6-3.55 2.35-3 7.55-7l-1.65 1.4q2.8 0.7 1.9 0.9l-0.7 0.05q-1.4 0.25-1.4 0.55l0.05 0.05q-1.25 0.6-1.25 1.1 0 0.55 1.85 1l0.2 0.05q-2.05 2.4-2.05 4.05-0.05 1.9 2.15 3.25 2.2 1.3 5.3 1.3t6.45-1.1q3.3-1.15 3.75-3.05t-0.75-4.05q-1.25-2.2-6.15-3.35l-2.65-0.35q-1.05 0-1.7-1.75l0.45-0.2" fill="#b5501a"/>
+<path d="m16.7 2 2.65 0.35q4.9 1.15 6.15 3.35 1.2 2.15 0.75 4.05t-3.75 3.05q-3.35 1.1-6.45 1.1t-5.3-1.3q-2.2-1.35-2.15-3.25 0-1.65 2.05-4.05l4.25 0.35 4.45-0.4q1.8-0.45 1.85-1-0.05-0.6-1.85-1.1h-0.05v-0.05q0-0.3-1.4-0.55-0.6-0.1-1.2-0.55" fill="#8a3d13"/>
+<path d="m21.3 21.5 3.7-0.1q0 0.85-1.9 1.55l1.5 0.2q3.65 0.7 3.65 1.7 0 0.95-3.65 1.65l-8.7 0.65-8.75-0.65q-3.65-0.7-3.6-1.65-0.05-1 3.6-1.7l0.8-0.1q-1.9-0.6-2.8-2.25l0.1-0.05 0.45 0.65-0.05-0.55q1.55 1.15 3.6 1.65l5.05 0.45q3.9-0.05 7-1.45m-13.35 1.55 0.6 0.15q2.8 0.75 6.8 0.75l6.8-0.75 0.95-0.25-0.95 0.25-6.8 0.75q-4 0-6.8-0.75l-0.6-0.15" fill="#727107"/>
+<path d="m23.75 20.05-2.45 1.45q-3.1 1.4-7 1.45-5.95-0.05-10.15-3.4l-1.65-1.6q-2.5-2.85-2.5-6.5t2.5-6.5l1.65-1.6q3.25-2.6 7.5-3.15-5.2 4-7.55 7-1.35 1.9-1.6 3.55-0.15 0.8 0 1.55 1.1 6.25 21.25 7.75m-11.8-19.9 2.35-0.15h0.3 0.25 0.05l0.55 0.05-0.45 0.2-0.05-0.1-0.1-0.15-0.05 0.35-2.85-0.2" fill="#793511"/>
+<path d="m10.65 5.3-0.2-0.05q-1.85-0.45-1.85-1 0-0.5 1.25-1.1 0.1 0.25 1.35 0.45l3.35 0.25 3.35-0.25 1.4-0.45h0.05q1.8 0.5 1.85 1.1-0.05 0.55-1.85 1l-4.45 0.4-4.25-0.35" fill="#e2753a"/>
+<path d="m11.65 0.2 0.1-0.1 0.2 0.05-1.95 1.45 1.65-1.4m3.35 0.05-0.2 0.1 0.05-0.35 0.1 0.15 0.05 0.1" fill="#eda985"/>
+<path d="m15 0.25q0.65 1.75 1.7 1.75 0.6 0.45 1.2 0.55 1.4 0.25 1.4 0.55v0.05l-1.4 0.45-3.35 0.25-3.35-0.25q-1.25-0.2-1.35-0.45l-0.05-0.05q0-0.3 1.4-0.55l0.7-0.05q0.9-0.2-1.9-0.9l1.95-1.45 2.85 0.2 0.2-0.1" fill="#f5d1be"/>
+<path d="m15.45 0.05q5.2 0.25 8.95 3.3 4.2 3.35 4.2 8.1t-4.2 8.1l-0.65 0.5-2.45 1.45 3.7-0.1q0 0.85-1.9 1.55l1.5 0.2q3.65 0.7 3.65 1.7 0 0.95-3.65 1.65l-8.7 0.65-8.75-0.65q-3.65-0.7-3.6-1.65-0.05-1 3.6-1.7l0.8-0.1q-1.9-0.6-2.8-2.25l-0.05 0.05q-0.3 0.25-0.2-0.6l0.55 0.45 0.2 0.15q1.55 1.15 3.6 1.65l5.05 0.45q-5.95-0.05-10.15-3.4l-1.65-1.6q-2.5-2.85-2.5-6.5t2.5-6.5l1.65-1.6q3.25-2.6 7.5-3.15l0.1-0.1 0.2 0.05 2.35-0.15h0.3 0.25 0.05l0.55 0.05-0.45 0.2-0.2 0.1-2.85-0.2-1.95 1.45 1.65-1.4q-5.2 4-7.55 7-1.35 1.9-1.6 3.55-0.15 0.8 0 1.55 1.1 6.25 21.25 7.75m-0.65 2.9-0.95 0.25-6.8 0.75q-4 0-6.8-0.75l-0.6-0.15m-2.3-2.2 0.05 0.55-0.45-0.65-0.1 0.05-0.25-0.55 0.35 0.5 0.2-0.05m15.85 0.8q-3.1 1.4-7 1.45" fill="none" stroke="#000" stroke-opacity=".30196"/>
+</g>
+<g id="ca">
+<use xlink:href="#cb"/>
+</g>
+<filter id="bf">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="au">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="aj">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="y">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="n">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="c">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="b">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bz">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="by">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bx">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bw">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bv">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bu">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bt">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bs">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="br">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bq">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bp">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bo">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bn">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bm">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bl">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bk">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bj">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bi">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bh">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bg">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="be">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 0.0 0.19921875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bd">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bc">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="bb">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ba">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="az">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ay">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ax">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="aw">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="av">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="at">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.09765625 0.0 0.0 0.0 0.0 0.34375 0.0 0.0 0.0 0.0 0.32421875 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="as">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ar">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="aq">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ap">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ao">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="an">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.265625 0.0 0.0 0.0 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="am">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="al">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ak">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ai">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ah">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ag">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="af">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ae">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ad">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ac">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="ab">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="aa">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="z">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="x">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="w">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="v">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="u">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="t">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="s">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="r">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.3203125 0.0 0.0 0.0 -0.109375 0.0 0.71875 0.0 0.0 -0.09375 0.0 0.0 0.73828125 0.0 0.3984375 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="q">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="p">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="o">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="m">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="l">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="k">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="j">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="i">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="h">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="g">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="f">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.00390625 0.0 0.0 0.0 -0.19921875 0.0 0.00390625 0.0 0.0 -0.109375 0.0 0.0 0.00390625 0.0 0.44921875 0.0 0.0 0.0 0.00390625 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="e">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.73828125 0.0 0.0 0.0 0.0 0.0 0.73828125 0.0 0.0 0.0 0.0 0.0 0.73828125 0.0 0.0 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+<filter id="d">
+<feColorMatrix in="SourceGraphic" result="cxform" values="0.73828125 0.0 0.0 0.0 0.0 0.0 0.73828125 0.0 0.0 0.0 0.0 0.0 0.73828125 0.0 0.0 0.0 0.0 0.0 1.0 0.0"/>
+<feComposite in2="SourceGraphic" operator="in" result="color-xform"/>
+</filter>
+</defs>
+<use xlink:href="#cc"/>
+<use transform="matrix(-.10738 -.0028534 -.021088 .10365 122.6 75.85)" filter="url(#bf)" xlink:href="#a"/>
+<use transform="matrix(-.079987 -.057816 -.075317 .086563 120.4 82.55)" filter="url(#au)" xlink:href="#a"/>
+<use transform="matrix(-.089783 .032867 .020081 .080719 115.9 77.85)" filter="url(#aj)" xlink:href="#a"/>
+<use transform="matrix(-.064072 -.051453 -.065842 .070175 121.8 86.8)" filter="url(#y)" xlink:href="#a"/>
+<use transform="matrix(-.079987 -.057816 -.075317 .086563 110.95 77.8)" filter="url(#n)" xlink:href="#a"/>
+<use transform="matrix(-.064072 -.051453 -.065842 .070175 112.35 82.05)" filter="url(#c)" xlink:href="#a"/>
+<use transform="matrix(-.010803 .072891 -.14261 -.0041046 125.5 88.3)" filter="url(#b)" xlink:href="#a"/>
+<use transform="matrix(.060608 .052277 -.10358 .031967 110.65 86.95)" filter="url(#bz)" xlink:href="#a"/>
+<use transform="matrix(.057693 -.073135 .10916 .050613 92.15 88.95)" filter="url(#by)" xlink:href="#a"/>
+<use transform="matrix(-.093079 -.004837 -.0043793 -.06694 111.95 92.8)" filter="url(#bx)" xlink:href="#a"/>
+<use transform="matrix(-.069077 -.078552 .10153 -.040695 100 97)" filter="url(#bw)" xlink:href="#a"/>
+<use transform="matrix(-.11295 -.045013 .049408 -.076538 106.15 93.7)" filter="url(#bv)" xlink:href="#a"/>
+<use transform="matrix(-.018814 -.074219 .1015 -.0047607 98.15 91.45)" filter="url(#bu)" xlink:href="#a"/>
+<use transform="matrix(-.079987 .02327 -.042099 -.060822 110.05 91.1)" filter="url(#bt)" xlink:href="#a"/>
+<use transform="matrix(-.010132 -.08873 .12282 .0032806 101.1 94.55)" filter="url(#bs)" xlink:href="#a"/>
+<use transform="matrix(-.075912 .031937 -.053741 -.058884 119.4 90.4)" filter="url(#br)" xlink:href="#a"/>
+<use transform="matrix(-.11269 -.044189 .048279 -.076477 113.15 98.75)" filter="url(#bq)" xlink:href="#a"/>
+<use transform="matrix(-.12157 .0032806 -.01915 -.088593 115.5 93.4)" filter="url(#bp)" xlink:href="#a"/>
+<use transform="matrix(-.070404 -.059875 .075287 -.043915 107.55 94.5)" filter="url(#bo)" xlink:href="#a"/>
+<use transform="matrix(-.044632 .052277 -.07843 -.038635 116.7 89.5)" filter="url(#bn)" xlink:href="#a"/>
+<use transform="matrix(.079651 .05307 -.057846 .074905 122.4 61.6)" filter="url(#bm)" xlink:href="#a"/>
+<use transform="matrix(.098618 .0050812 -.0066071 .092041 119.35 66.95)" filter="url(#bl)" xlink:href="#a"/>
+<use transform="matrix(.041733 .066193 -.071442 .039703 125.95 66.3)" filter="url(#bk)" xlink:href="#a"/>
+<use transform="matrix(.082642 .00085449 -.0018921 .077087 115.2 68.85)" filter="url(#bj)" xlink:href="#a"/>
+<use transform="matrix(.098618 .0050812 -.0066071 .092041 129.55 68.8)" filter="url(#bi)" xlink:href="#a"/>
+<use transform="matrix(.082642 .00085449 -.0018921 .077087 125.5 70.7)" filter="url(#bh)" xlink:href="#a"/>
+<use transform="matrix(-.043579 .050629 .10596 .070297 111.6 67.85)" filter="url(#bg)" xlink:href="#a"/>
+<use transform="matrix(-.080673 .0014191 .052322 .072708 123.2 74.7)" filter="url(#be)" xlink:href="#a"/>
+<use transform="matrix(.10623 -.055664 .116 .072372 75.8 82.8)" filter="url(#bd)" xlink:href="#a"/>
+<use transform="matrix(.121 -.018311 .053345 .074524 84.5 81)" filter="url(#bc)" xlink:href="#a"/>
+<use transform="matrix(-.043045 -.090698 .15105 -.0094147 85.95 96.6)" filter="url(#bb)" xlink:href="#a"/>
+<use transform="matrix(-.11725 -.072021 .10535 -.056473 95.4 95.25)" filter="url(#ba)" xlink:href="#a"/>
+<use transform="matrix(.017944 -.072968 .13078 .023422 86.6 91.1)" filter="url(#az)" xlink:href="#a"/>
+<use transform="matrix(.10695 -.019012 .052109 .066376 88.15 87.2)" filter="url(#ay)" xlink:href="#a"/>
+<use transform="matrix(.15495 -.001236 .029343 .091537 90.9 80.1)" filter="url(#ax)" xlink:href="#a"/>
+<use transform="matrix(-.14725 .016098 -.053986 -.089615 110.7 92.95)" filter="url(#aw)" xlink:href="#a"/>
+<use transform="matrix(-.13158 -.017944 .0082397 -.074432 100.9 92.1)" filter="url(#av)" xlink:href="#a"/>
+<use transform="matrix(-.059769 -.064697 .10265 -.023849 93.85 90.7)" filter="url(#at)" xlink:href="#a"/>
+<use transform="matrix(.024155 -.084 .12033 .027573 103.35 60)" filter="url(#as)" xlink:href="#a"/>
+<use transform="matrix(-.087479 .014313 -.030487 -.06517 123 59.8)" filter="url(#ar)" xlink:href="#a"/>
+<use transform="matrix(-.094574 -.063339 .077225 -.06102 113.7 66.35)" filter="url(#aq)" xlink:href="#a"/>
+<use transform="matrix(-.12161 -.021271 .015167 -.085693 118.15 61.8)" filter="url(#ap)" xlink:href="#a"/>
+<use transform="matrix(-.046646 -.069397 .091431 -.025513 109.85 61.25)" filter="url(#ao)" xlink:href="#a"/>
+<use transform="matrix(-.064301 .039383 -.062759 -.051361 120.8 58.5)" filter="url(#an)" xlink:href="#a"/>
+<use transform="matrix(.0074921 -.075912 .11436 .016068 87.65 61.6)" filter="url(#am)" xlink:href="#a"/>
+<use transform="matrix(.044449 -.052994 .085464 .03801 90.45 57.45)" filter="url(#al)" xlink:href="#a"/>
+<use transform="matrix(.086258 .0019379 .0095367 .058731 93.4 54.75)" filter="url(#ak)" xlink:href="#a"/>
+<use transform="matrix(.10786 .036743 -.039291 .068497 98.6 53.9)" filter="url(#ai)" xlink:href="#a"/>
+<use transform="matrix(.071869 -.02243 .043793 .052399 95.15 56.15)" filter="url(#ah)" xlink:href="#a"/>
+<use transform="matrix(-.072815 .037186 -.065948 -.055176 117.2 58)" filter="url(#ag)" xlink:href="#a"/>
+<use transform="matrix(-.026672 .061081 -.09491 -.027039 112.4 54.8)" filter="url(#af)" xlink:href="#a"/>
+<use transform="matrix(-.078354 .0099335 -.026123 -.055038 111.55 59.05)" filter="url(#ae)" xlink:href="#a"/>
+<use transform="matrix(.031769 .054077 -.076096 .013962 107.2 53.45)" filter="url(#ad)" xlink:href="#a"/>
+<use transform="matrix(-.041061 .037552 -.061905 -.033508 108.6 56.4)" filter="url(#ac)" xlink:href="#a"/>
+<use transform="matrix(-.15846 .0081482 -.030396 -.11595 108.2 90.7)" filter="url(#ab)" xlink:href="#a"/>
+<use transform="matrix(-.1322 -.032928 .030212 -.091965 98.3 88.7)" filter="url(#aa)" xlink:href="#a"/>
+<use transform="matrix(-.043625 -.085388 .11417 -.021423 91.3 86.4)" filter="url(#z)" xlink:href="#a"/>
+<use transform="matrix(.015228 -.11378 .1609 .024673 86.5 81.35)" filter="url(#x)" xlink:href="#a"/>
+<use transform="matrix(-.085175 -.066223 .082382 -.053864 93.1 84.35)" filter="url(#w)" xlink:href="#a"/>
+<use transform="matrix(.11569 .064148 -.075821 .076263 84.75 62.1)" filter="url(#v)" xlink:href="#a"/>
+<use transform="matrix(.13881 .013779 -.0026245 .09906 80.7 67.7)" filter="url(#u)" xlink:href="#a"/>
+<use transform="matrix(.06337 .07515 -.097473 .036972 90 67.5)" filter="url(#t)" xlink:href="#a"/>
+<use transform="matrix(.092392 -.042358 .070282 .072098 80.95 73)" filter="url(#s)" xlink:href="#a"/>
+<use transform="matrix(.098923 .032776 -.033951 .067825 86.35 71.05)" filter="url(#r)" xlink:href="#a"/>
+<use transform="matrix(-.10652 -.043579 .06398 -.0737 93.85 80)" filter="url(#q)" xlink:href="#a"/>
+<use transform="matrix(-.060364 -.058502 .085281 -.041992 88.9 75.85)" filter="url(#p)" xlink:href="#a"/>
+<use transform="matrix(.021362 -.084366 .12231 .014191 77.8 72.65)" filter="url(#o)" xlink:href="#a"/>
+<use transform="matrix(-.04715 -.079239 .11536 -.033005 85.9 72.8)" filter="url(#m)" xlink:href="#a"/>
+<use transform="matrix(.057816 -.06012 .086868 .039429 81.55 67.95)" filter="url(#l)" xlink:href="#a"/>
+<use transform="matrix(-.087662 -.017349 .025772 -.060516 91.65 72.8)" filter="url(#k)" xlink:href="#a"/>
+<use transform="matrix(.093994 -.00061035 .00022888 .064789 85.05 64.9)" filter="url(#j)" xlink:href="#a"/>
+<use transform="matrix(.065018 .072403 -.10548 .045288 97.45 60.2)" filter="url(#i)" xlink:href="#a"/>
+<use transform="matrix(.1116 .037292 -.054886 .077133 91.25 63.75)" filter="url(#h)" xlink:href="#a"/>
+<use transform="matrix(.014343 .071014 -.10315 .010345 99.05 65.4)" filter="url(#g)" xlink:href="#a"/>
+<use transform="matrix(.08252 -.027115 .038803 .056686 87 66.4)" filter="url(#f)" xlink:href="#a"/>
+<use transform="matrix(-.0027008 -.086609 .12077 .0084229 77.45 76.95)" filter="url(#e)" xlink:href="#a"/>
+<use transform="matrix(-.0073853 .049713 -.070389 -.011337 103.65 55.2)" filter="url(#d)" xlink:href="#a"/>
+<use transform="matrix(-.086746 -.065018 .10866 -.03627 86.2 66.15)" xlink:href="#a"/>
+<use transform="matrix(-.13177 -.035889 .046021 -.065582 92.45 63.2)" xlink:href="#a"/>
+<use transform="matrix(-.029968 -.062317 .11302 -.0058899 83.4 61.5)" xlink:href="#a"/>
+<use transform="matrix(-.086655 .021118 -.054398 -.050552 96.65 61.05)" xlink:href="#a"/>
+<use transform="matrix(.06958 -.035614 .079041 .043701 82.5 58.05)" xlink:href="#a"/>
+<use transform="translate(85.95 29.85)" xlink:href="#ca"/>
+</svg>

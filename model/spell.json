@@ -1,0 +1,158 @@
+{
+    "id" : {
+        "default" : null,
+        "type" : "int(11)",
+        "null" : false,
+        "description" : "",
+        "auto_increment" : true
+    },
+    "uniqid": {
+        "default" : null,
+        "type" : "varchar(100)",
+        "null" : false,
+        "description" : ""
+    },
+    "timestamp_add": {
+        "default" : null,
+        "type" : "bigint(20)",
+        "null" : false,
+        "description" : ""
+    },
+    "timestamp_updated": {
+        "default" : null,
+        "type" : "bigint(20)",
+        "null" : false,
+        "description" : ""
+    },
+    "name": {
+        "default" : "",
+        "type" : "text",
+        "null" : false,
+        "description" : ""
+    },
+    "description": {
+        "default" : "",
+        "type" : "richtext",
+        "null" : false,
+        "description" : ""
+    },
+    "effect": {
+        "default" : null,
+        "type" : "richtext",
+        "null" : false,
+        "description" : ""
+    },
+    "level": {
+        "default" : 1,
+        "type" : "int(11)",
+        "null" : false,
+        "description" : "",
+        "max" : 20,
+        "min" : 1
+    },
+    "po": {
+        "default" : 1,
+        "type" : "varchar(255)",
+        "null" : false,
+        "description" : ""
+    },
+    "po_editable": {
+        "default" : true,
+        "type" : "bool",
+        "null" : false,
+        "description" : ""
+    },
+    "pa": {
+        "default" : 4,
+        "type" : "varchar(255)",
+        "null" : false,
+        "description" : ""
+    },
+    "cast_per_turn": {
+        "default" : 1,
+        "type" : "varchar(255)",
+        "null" : false,
+        "description" : ""
+    },
+    "sight_line": {
+        "default" : true,
+        "type" : "bool",
+        "null" : false,
+        "description" : ""
+    },
+    "number_between_two_cast": {
+        "default" : 0,
+        "type" : "varchar(255)",
+        "null" : false,
+        "description" : ""
+    },
+    "element": {
+        "default" : 0,
+        "type" : "list",
+        "null" : false,
+        "description" : "",
+        "list" : {
+            "0" : "neutre",
+            "1" : "vitalité",
+            "2" : "sagesse",
+            "3" : "terre",
+            "4" : "feu",
+            "5" : "air",
+            "6" : "eau",
+            "7" : "terre-feu",
+            "8" : "terre-air",
+            "9" : "terre-eau",
+            "10" : "feu-air",
+            "11" : "feu-eau",
+            "12" : "air-eau",
+            "13" : "terre-feu-air",
+            "14" : "terre-feu-eau",
+            "15" : "terre-air-eau",
+            "16" : "feu-air-eau",
+            "17" : "terre-feu-air-eau"
+        }
+    },
+    "category": {
+        "default" : 0,
+        "type" : "list",
+        "null" : false,
+        "description" : "",
+        "list" : {
+            "0" : "Sort de créature",
+            "1" : "Sort de classe",
+            "2" : "Sort apprenable",
+            "3" : "Sort consommable"
+        }
+    },
+    "id_invocation": {
+        "default" : null,
+        "type" : "int(11)",
+        "null" : true,
+        "description" : ""
+    },
+    "is_magic": {
+        "default" : true,
+        "type" : "bool",
+        "null" : false,
+        "description" : ""
+    },
+    "powerful": {
+        "default" : 2,
+        "type" : "tinyint(4)",
+        "null" : false,
+        "description" : ""
+    },
+    "path_img": {
+        "default" : "medias/spells/default.svg",
+        "type" : "integer",
+        "null" : false,
+        "description" : "",
+        "in_sql" : false
+    },
+    "usable": {
+        "default" : false,
+        "type" : "bool",
+        "null" : false,
+        "description" : ""
+    }
+}

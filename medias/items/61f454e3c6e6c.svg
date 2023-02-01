@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 215.25 363.5" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+<metadata>
+<rdf:RDF>
+<cc:Work rdf:about="">
+<dc:format>image/svg+xml</dc:format>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+</cc:Work>
+</rdf:RDF>
+</metadata>
+<g transform="translate(-621.95 -110.3)">
+<use transform="translate(621.95,110.3)" width="215.25" height="363.5" xlink:href="#a"/>
+</g>
+<defs>
+<g id="a" transform="translate(-621.95,-110.3)">
+<path d="m778.1 337.5 18.3 12.75-17.55 29.1-24-58.15 10.15 7.15 13.1 9.15m-10.45 1.6-2.65-10.75 2.65 10.75" fill="#fff" fill-rule="evenodd"/>
+<path d="m750.05 267.65 14.95 60.7-10.15-7.15-24.1-80.2 19.3 26.65" fill="#319393" fill-rule="evenodd"/>
+<path d="m776 309.8 2.1 27.7-13.1-9.15-14.95-60.7 15.35 21.1 10.6 21.05" fill="#59c8c8" fill-rule="evenodd"/>
+<path d="m778.1 337.5-2.1-27.7 20.4 40.45-18.3-12.75" fill="#73d0d0" fill-rule="evenodd"/>
+<path d="m778.1 337.5 18.3 12.75m-31.4-21.9 13.1 9.15m-13.1-9.15-10.15-7.15m10.15 7.15 2.65 10.75" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m796.4 350.25-20.4-40.45-10.6-21.05-15.35-21.1m28.8 111.7 17.55-29.1m-65.65-109.25 19.3 26.65" fill="none" stroke="#319393" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m789.6 430.1 1.05 14.45-47.3 11.95 46.25-26.4-15.25-36.6-8.05-57.35 19.35 49 3.95 44.95m-158.4-207.85 19.65 22.1 6.1 21.3 1.75 6.5-13.9 65.3-6.25-45.1-7.35-70.1m27.6-43.3 4.8-39 58.9 95.15 22.65 79.25-86.35-135.4" fill="#d9f2f1" fill-rule="evenodd"/>
+<path d="m790.65 444.55-1.05-14.45-3.95-44.95 51.45 85.85-46.45-26.45m-137.1-221.9-23.35-66.7 25.85 46.1-1.3 10.25-1.2 10.35m30.1 138.1 45.65 73.25 13.95 22.4-78.25-51.7 18.65-43.95" fill="#b3e6e4" fill-rule="evenodd"/>
+<path d="m743.35 456.5 47.3-11.95 46.45 26.45-44.25-2.7-49.5-11.8" fill="#319393" fill-rule="evenodd"/>
+<path d="m789.6 430.1-46.25 26.4 6.15-67.5 4.1-45.2 6.55 15.65 14.2 34.05 15.25 36.6m-126-290.15 2.7-22.1 51 99.1 5.2 18.15-58.9-95.15m-12.75 104.4-19.65-22.1-1-66.3 23.35 66.7-2.7 21.7" fill="#fff" fill-rule="evenodd"/>
+<path d="m774.35 393.5-14.2-34.05-16.95-82 23.1 58.7 8.05 57.35m-24.85-4.5-6.15 67.5-0.1-0.1-13.95-22.4-72.35-168.35-6.1-21.3 2.7-21.7 1.2-10.35 94.75 176.7m-76.45-66.05 10.6 37.8-18.65 43.95-3.8-13.2 11.85-68.55" fill="#9dd" fill-rule="evenodd"/>
+<path d="m760.15 359.45-6.55-15.65-8.45-29.45-22.65-79.25-5.2-18.15-51-99.1 0.85-7.45 45 88.55 31.05 78.5 16.95 82m-48-160.5 5.15 18-5.15-18m-53.45 73.2-1.75-6.5 72.35 168.35-45.65-73.25-10.6-37.8-14.35-50.8m84.55 184.25 0.05 0.1-72.2-24.65-2.8-8.9-3.3-18.25 78.25 51.7" fill="#6cc" fill-rule="evenodd"/>
+<path d="m753.6 343.8-4.1 45.2-94.75-176.7 1.3-10.25 2.75-23.1 86.35 135.4 8.45 29.45m-108.8-6.35 13.9-65.3 14.35 50.8-11.85 68.55-16.4-54.05" fill="#b9e8e7" fill-rule="evenodd"/>
+<path d="m790.65 444.55-1.05-14.45-46.25 26.4 47.3-11.95 46.45 26.45m-51.45-85.85 3.95 44.95-15.25-36.6-14.2-34.05-6.55-15.65-4.1 45.2-6.15 67.5m-26.05-239.55-5.15-18m-61.3 45.4-19.65-22.1m27.5 49.9-1.75-6.5-6.1-21.3 2.7-21.7-23.35-66.7m92.3 79.15-5.2-18.15m-61.25-14.9-1.3 10.25-1.2 10.35m68.95 12.45 22.65 79.25 8.45 29.45m-94.9-71.65 14.35 50.8 10.6 37.8 45.65 73.25 13.95 22.4m-78.25-51.7 18.65-43.95" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m837.1 471-51.45-85.85m-42.3 71.35 49.5 11.8 44.25 2.7m-70.8-134.85 19.35 49m-119.35-267.3 0.85-7.45 45 88.55 31.05 78.5 23.1 58.7m-102.7-196.2 2.7-22.1m-35.1 104.4 7.35 70.1 6.25 45.1m-14.6-181.5 1 66.3m24.85-20.2 2.75-23.1 4.8-39m-33.4 16 25.85 46.1m87.25 254.45-72.2-24.65-2.8-8.9-3.3-18.25-3.8-13.2-16.4-54.05m98.55 119.05-0.1-0.1" fill="none" stroke="#319393" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m633.15 258.85 26.25 46.8 20.9 69.1-4.15 37.2-5.6-9.65-27.05-77.05-11.2-67.75 0.85 1.35m67.1 211.75 13.35-25.2 32.05 10.45-45.4 14.75" fill="#b3e6e4" fill-rule="evenodd"/>
+<path d="m659.4 305.65 14.9 18.4 3.1 26.15 11.6 39.4-8.7-14.85-20.9-69.1m33.3 121.5 6.25 5.65 2.5 8.5 12.15 4.1-13.35 25.2-7.45 2.4-2.35-30.4 2.25-15.45" fill="#fff" fill-rule="evenodd"/>
+<path d="m674.3 324.05-14.9-18.4-26.25-46.8 39.05 47.7 2.1 17.5m9.15 108.15-3.2-16.5 9.45 8.65-6.25 7.85" fill="#6cc" fill-rule="evenodd"/>
+<path d="m680.3 374.75 8.7 14.85 7 25.55 2.95 17.65-6.25-5.65-3-2.8-9.45-8.65-4.1-3.75 4.15-37.2m-4.9 98.95 15.05-31.1 2.35 30.4-17.4 0.7" fill="#319393" fill-rule="evenodd"/>
+<path d="m689.7 424.35 3 2.8-2.25 15.45-15.05 31.1 7.5-34.9 0.55-6.6 6.25-7.85" fill="#d9f2f1" fill-rule="evenodd"/>
+<path d="m659.4 305.65 14.9 18.4m-41.15-65.2 26.25 46.8 20.9 69.1 8.7 14.85m0.7 34.75-6.25 7.85m-8.05 41.5 15.05-31.1 2.25-15.45m-2.25 15.45 2.35 30.4m7.45-2.4 13.35-25.2m-33.3-70.65-4.15 37.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m680.25 415.7-4.1-3.75-5.6-9.65-27.05-77.05-11.2-67.75 0.85 1.35m50.3 173.35-3.2-16.5 9.45 8.65 3 2.8 6.25 5.65m-15.5-0.6-0.55 6.6-7.5 34.9m17.4-0.7 7.45-2.4m-7.45 2.4-17.4 0.7m70.25-17.85-45.4 14.75" fill="none" stroke="#319393" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m740 246.8 2.75 15m17.45 10.95 10.3-0.4m-23.85 10.8 3 16.4m-33.65-25.25 13.5-0.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m742.75 261.8 1.1 5.85m7.1 5.4 9.25-0.3m-14.65 4.3 1.1 6.1m-17.15-9.35 8.45-0.3" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m743.85 267.65 0.55 3.05m2.55 2.5 4-0.15m-5.85 1.65 0.45 2.35m-7.6-3.55 5.55-0.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m744.4 270.7 0.45 2.6 2.1-0.1m-2.1 0.1 0.25 1.4m-1.6-1.4h1.35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m753.7 277.05 6 2.65m-8.3-20.9-3.75 8.15m-5.3 11.6-4.1 8.95m-10.2-21.6 7.8 3.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m748.3 274.75 5.4 2.3m-6.05-10.1-1.45 3.2m-2.35 5.1-1.5 3.3m-6.5-9.25 4.95 2.15" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m746.2 270.15-0.75 1.65m0.55 1.95 2.3 1m-3.85-0.8-0.6 1.3m-3.05-3.8 3.2 1.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m745.45 271.8-0.65 1.4 1.2 0.55m-1.2-0.55-0.35 0.75m-0.45-1.1 0.8 0.35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m752.6 264.15-4.5 5m2.15 7.95 3.85 2.8m-12.45-3.7-4.95 5.4m-2.8-16.45 5 3.65" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m748.1 269.15-1.8 1.9m0.55 3.55 3.4 2.5m-6.75-2.95-1.85 2.05m-2.75-7.4 3.15 2.25" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m746.3 271.05-0.9 1m-0.05 1.45 1.5 1.1m-2.65-1.2-0.7 0.75m-1.45-3.1 2.05 1.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m745.4 272.05-0.8 0.9 0.75 0.55m-0.75-0.55-0.4 0.45m-0.1-0.85 0.5 0.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m673.05 201.6 10.3-0.4m-30.5-25.55 2.75 15m3.9 21.35 3 16.4m-33.65-25.25 13.5-0.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m663.8 201.9 9.25-0.3m-17.45-10.95 1.1 5.85m1.7 9.4 1.1 6.1m-17.15-9.35 8.45-0.3" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m656.7 196.5 0.55 3.05m2.55 2.5 4-0.15m-5.85 1.65 0.45 2.35m-7.6-3.55 5.55-0.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m657.25 199.55 0.45 2.6 2.1-0.1m-2.1 0.1 0.25 1.4m-1.6-1.4h1.35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m664.3 187.75-3.75 8.15m6.05 10.1 6 2.65m-17.35-1.15-4.1 8.95m-10.2-21.6 7.8 3.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m660.55 195.9-1.45 3.2m2.1 4.6 5.4 2.3m-9.85-1.8-1.5 3.3m-6.5-9.25 4.95 2.15" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m659.1 199.1-0.75 1.65m0.55 1.95 2.3 1m-3.85-0.8-0.6 1.3m-3.05-3.8 3.2 1.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m658.35 200.75-0.65 1.4 1.2 0.55m-1.2-0.55-0.35 0.75m-0.45-1.1 0.8 0.35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m663.3 205.95 3.85 2.8m-1.5-15.75-4.5 5m-6.45 7.05-4.95 5.4m-2.8-16.45 5 3.65" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m659.9 203.45 3.4 2.5m-2.15-7.95-1.8 1.9m-2.8 3.1-1.85 2.05m-2.75-7.4 3.15 2.25" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m659.35 199.9-0.9 1m-0.05 1.45 1.5 1.1m-2.65-1.2-0.7 0.75m-1.45-3.1 2.05 1.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m658.45 200.9-0.8 0.9 0.75 0.55m-0.75-0.55-0.4 0.45m-0.1-0.85 0.5 0.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m676.6 266.05 6.25 34.1m39.65 24.9 23.45-0.85m-54.25 24.45 6.8 37.3m-76.45-57.3 30.65-1.1" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m682.85 300.15 2.4 13.35m16.2 12.3 21.05-0.75m-33.35 9.75 2.55 13.85m-39-21.1 19.25-0.7" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m685.25 313.5 1.3 6.9m5.85 5.75 9.05-0.35m-13.25 3.65 0.95 5.35m-17.2-7.95 12.65-0.45" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m686.55 320.4 1.05 5.9 4.8-0.15m-4.8 0.15 0.6 3.15m-3.6-3.05 3-0.1" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m707.75 335.1 13.65 5.9m-18.9-47.4-8.5 18.55m-12.05 26.35-9.3 20.25m-23.2-49.05 17.8 7.75" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m695.55 329.75 12.2 5.35m-13.75-22.95-3.3 7.2m-5.3 11.6-3.45 7.55m-14.7-21.05 11.2 4.9" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m690.7 319.35-1.75 3.8m1.35 4.35 5.25 2.25m-8.85-1.7-1.3 2.9m-6.95-8.6 7.3 3.15" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m688.95 323.15-1.45 3.15 2.8 1.2m-2.8-1.2-0.8 1.75m-0.95-2.55 1.75 0.8" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m705.4 305.6-10.3 11.25m5.05 18.1 8.7 6.35m-28.35-8.4-11.2 12.35m-6.25-37.45 11.3 8.25" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m695.1 316.85-4 4.45m1.3 7.95 7.75 5.7m-15.45-6.6-4.2 4.55m-6.15-16.85 7.15 5.25" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m691.1 321.3-2.1 2.25m0.05 3.25 3.35 2.45m-6.1-2.7-1.6 1.8m-3.2-7.05 4.65 3.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m689 323.55-1.75 1.95 1.8 1.3m-1.8-1.3-0.95 1.05m-0.15-1.85 1.1 0.8" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m785.15 363.8 10.3-0.4m-30.5-25.55 2.75 15m3.9 21.35 3 16.4m-33.65-25.25 13.5-0.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m775.9 364.1 9.25-0.3m-17.45-10.95 1.1 5.85m1.7 9.4 1.1 6.1m-17.15-9.35 8.45-0.3" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m768.8 358.7 0.55 3.05m2.55 2.5 4-0.15m-5.85 1.65 0.45 2.35m-7.6-3.55 5.55-0.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m769.35 361.75 0.45 2.6 2.1-0.1m-2.1 0.1 0.25 1.4m-1.6-1.4h1.35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m776.4 350-3.75 8.15m6.05 10.1 6 2.65m-17.35-1.15-4.1 8.95m-10.2-21.6 7.8 3.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m772.65 358.15-1.45 3.2m2.1 4.6 5.4 2.3m-9.85-1.8-1.5 3.3m-6.5-9.25 4.95 2.15" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m771.2 361.35-0.75 1.65m0.55 1.95 2.3 1m-3.85-0.8-0.6 1.3m-3.05-3.8 3.2 1.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m770.45 363-0.65 1.4 1.2 0.55m-1.2-0.55-0.35 0.75m-0.45-1.1 0.8 0.35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m775.4 368.25 3.85 2.8m-1.5-15.75-4.5 5m-6.45 7.05-4.95 5.4m-2.8-16.45 5 3.65" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m772 365.75 3.4 2.5m-2.15-7.95-1.8 1.9m-2.8 3.1-1.85 2.05m-2.75-7.4 3.15 2.25" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m771.45 362.2-0.9 1m-0.05 1.45 1.5 1.1m-2.65-1.2-0.7 0.75m-1.45-3.1 2.05 1.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m770.55 363.2-0.8 0.9 0.75 0.55m-0.75-0.55-0.4 0.45m-0.1-0.85 0.5 0.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m656.05 359.05 2.75 15m17.45 10.95 10.3-0.4m-23.85 10.8 3 16.4m-33.65-25.25 13.5-0.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m658.8 374.05 1.1 5.85m7.1 5.4 9.25-0.3m-14.65 4.3 1.1 6.1m-17.15-9.35 8.45-0.3" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m659.9 379.9 0.55 3.05m2.55 2.5 4-0.15m-5.85 1.65 0.45 2.35m-7.6-3.55 5.55-0.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m660.45 382.95 0.45 2.6 2.1-0.1m-2.1 0.1 0.25 1.4m-1.6-1.4h1.35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m669.75 389.45 6 2.65m-8.3-20.9-3.75 8.15m-5.3 11.6-4.1 8.95m-10.2-21.6 7.8 3.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m664.35 387.15 5.4 2.3m-6.05-10.1-1.45 3.2m-2.35 5.1-1.5 3.3m-6.5-9.25 4.95 2.15" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m662.25 382.55-0.75 1.65m0.55 1.95 2.3 1m-3.85-0.8-0.6 1.3m-3.05-3.8 3.2 1.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m661.5 384.2-0.65 1.4 1.2 0.55m-1.2-0.55-0.35 0.75m-0.45-1.1 0.8 0.35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+<path d="m668.65 376.35-4.5 5m2.15 7.95 3.85 2.8m-12.45-3.7-4.95 5.4m-2.8-16.45 5 3.65" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4" stroke-width=".2"/>
+<path d="m664.15 381.35-1.8 1.9m0.55 3.55 3.4 2.5m-6.75-2.95-1.85 2.05m-2.75-7.4 3.15 2.25" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".61176" stroke-width=".2"/>
+<path d="m662.35 383.25-0.9 1m-0.05 1.45 1.5 1.1m-2.65-1.2-0.7 0.75m-1.45-3.1 2.05 1.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".77255" stroke-width=".2"/>
+<path d="m661.45 384.25-0.8 0.9 0.75 0.55m-0.75-0.55-0.4 0.45m-0.1-0.85 0.5 0.4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".99216" stroke-width=".2"/>
+</g>
+</defs>
+</svg>
