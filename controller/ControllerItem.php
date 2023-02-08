@@ -1,22 +1,6 @@
 <?php
 class ControllerItem extends Controller{
 
-  public function countAll(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'success',
-      'value' => "",
-      'error' => 'erreur inconnue',
-    ];
-    if(!$currentUser->getRight('item', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-
-      $manager = new ItemManager();
-      $return["value"] = $manager->countAll();
-    }
-    echo json_encode($return);
-    flush();
-  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     $bookmarks = $currentUser->getBookmark();
@@ -58,10 +42,14 @@ class ControllerItem extends Controller{
 
       foreach ($objs as $key => $obj) {
 
-        if(isset($bookmarks["Item-".$obj->getUniqid()])){
-          $bookmark_icon = "fas";
-        } else {
-          $bookmark_icon = "far";
+        $bookmark_icon = "far";
+        if($currentUser->in_bookmark($obj)){
+            $bookmark_icon = "fas";
+        }
+
+        $edit = "";
+        if($currentUser->getRight('item', User::RIGHT_WRITE)){
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Item.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
         }
 
         $json[] = array(
@@ -84,8 +72,8 @@ class ControllerItem extends Controller{
           'path_img' => $obj->getPath_img(Content::FORMAT_IMAGE, "img-back-30"),
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
           'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='item' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
-          'edit' => "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Item.open('{$obj->getUniqid()}')\"><i class='far fa-edit'></i></a>",
-          'detailView' => $obj->getVisual(Content::FORMAT_CARD)
+          'edit' => $edit,
+          'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
         );
       }
 
@@ -99,7 +87,7 @@ class ControllerItem extends Controller{
     $bookmarks = $currentUser->getBookmark();
 
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => [],
       'error' => 'erreur inconnue'
     ];
@@ -117,10 +105,14 @@ class ControllerItem extends Controller{
           if($manager->existsUniqid($_REQUEST['uniqid'])){
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
 
-            if(isset($bookmarks["Item-".$obj->getUniqid()])){
-              $bookmark_icon = "fas";
-            } else {
-              $bookmark_icon = "far";
+            $bookmark_icon = "far";
+            if($currentUser->in_bookmark($obj)){
+                $bookmark_icon = "fas";
+            }
+
+            $edit = "";
+            if($currentUser->getRight('item', User::RIGHT_WRITE)){
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Item.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -143,11 +135,11 @@ class ControllerItem extends Controller{
               'path_img' => $obj->getPath_img(Content::FORMAT_IMAGE, "img-back-30"),
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='item' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
-              'edit' => "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Item.open('{$obj->getUniqid()}')\"><i class='far fa-edit'></i></a>",
-              'detailView' => $obj->getVisual(Content::FORMAT_CARD)
+              'edit' => $edit,
+              'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
             );
 
-            $return['return'] = "success";
+            $return['state'] = true;
           }else {
             $return['error'] = 'Impossible de récupérer les données';
           }
@@ -158,47 +150,11 @@ class ControllerItem extends Controller{
     echo json_encode($return);
     flush();
   }
-  public function getFromUniqid(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('item', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
 
-      if(!isset($_REQUEST['uniqid']))
-      {
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-        $manager = new ItemManager();
-
-        // Récupération de l'objet
-          if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-            $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-            $return['value'] = array(
-              'visual' => $obj->getVisual(Content::FORMAT_MODIFY),
-              "title" => $obj->getName(Content::FORMAT_MODIFY)
-            );
-            $return['return'] = "success";
-          }else {
-            $return['error'] = 'Impossible de récupérer les données';
-          }
-      }
-    
-    }
-
-    echo json_encode($return);
-    flush();
-  }
   public function add(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -228,8 +184,8 @@ class ControllerItem extends Controller{
           $object->setTimestamp_updated();
             
             if($manager->add($object)){
-              $return['return'] = "success";
-              $return['script'] = "Item.open('".$object->getUniqid()."')";
+              $return['state'] = true;
+              $return['script'] = "Item.open('".$object->getUniqid()."', Controller.DISPLAY_MODIFY)";
             }else {
               $return['error'] = 'Impossible d\'ajouter l\'objet';
             }
@@ -238,91 +194,6 @@ class ControllerItem extends Controller{
             $return['error'] = "Ce nom est déjà utilisé";
           }
       }
-    
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function update(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('item', User::RIGHT_WRITE)){
-      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid'], $_REQUEST['type'], $_REQUEST['value'])){
-        $return['error'] = 'Impossible de récupérer les données';
-
-      } else {
-
-            $manager = new ItemManager(); // A modifier
-
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-                $method = "set".ucfirst($_REQUEST['type']);
-
-                if(method_exists($obj,$method)){
-                    $result = $obj->$method($_REQUEST['value']);
-                    if($result == "success"){
-                      $obj->setTimestamp_updated(time());
-                      $manager->update($obj);
-                      $return['return'] = "success";
-                    } else {
-                      $return['error'] = $result;
-                    }
-
-                } else {
-                  $return['error'] = "Aucun type correspondant dans l'objet";
-                }
-
-            } else {
-              $return['error'] = 'Impossible de récupérer l\'objet.';
-            }
-
-      }
-
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function remove(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('item', User::RIGHT_WRITE)){
-      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid']))
-      {
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-          // Récupération des objets
-            $manager = new ItemManager();
-
-          // Récupération de l'objet
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-              $manager->delete($obj);
-              $return['return'] = "success";
-
-            } else {
-              $return['error'] = 'Cet équipement n\'existe pas.';
-            }
-      }
-    
     }
 
     echo json_encode($return);
@@ -351,7 +222,7 @@ class ControllerItem extends Controller{
                     $click_action = "onclick=\"Shop.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'item', IS_VALUE);\"";
                   break;
                   default:
-                    $click_action = "onclick=\"Item.open('".$object->getUniqid()."')\"";
+                    $click_action = "onclick=\"Item.open('".$this->_model_name."','".$object->getUniqid()."', Controller.DISPLAY_CARD)\"";
                   break;
                 }
 
@@ -377,4 +248,3 @@ class ControllerItem extends Controller{
     return $array;
   }
 }
- 

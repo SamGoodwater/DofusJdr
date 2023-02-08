@@ -1,21 +1,6 @@
 <?php
 class ControllerUser extends Controller{
 
-  public function countAll(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'success',
-      'value' => "",
-      'error' => 'erreur inconnue',
-    ];
-    if(!$currentUser->getRight('user', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-      $manager = new UserManager();
-      $return["value"] = $manager->countAll();
-    }
-    echo json_encode($return);
-    flush();
-  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     $json = array();  
@@ -23,19 +8,24 @@ class ControllerUser extends Controller{
       $json = "Vous n'avez pas les droits pour lire cet objet";}else{
 
       $managerS = new UserManager();
-      $objects = $managerS->getAll();
+      $objs = $managerS->getAll();
 
-      foreach ($objects AS $object) {
+      foreach ($objs AS $obj) {
+        $edit = "";
+        if($currentUser->getRight('user', User::RIGHT_WRITE)){
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+        }
+
         $json[] = array(
-          'id' => $object->getId(Content::FORMAT_BADGE),
-          "uniqid" => $object->getUniqid(),
-          "timestamp_add" => $object->getTimestamp_add(),
-          "last_connexion" => $object->getLast_connexion(),
-          "pseudo" => $object->getPseudo(),
-          "email" => $object->getEmail(),
-          "rights" => $object->getRights(Content::FORMAT_BADGE),
-          'edit' => "<a class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$object->getUniqid()}')\"><i class='far fa-edit'></i></a>",
-          'detailView' => $object->getVisual(Content::FORMAT_CARD)
+          'id' => $obj->getId(Content::FORMAT_BADGE),
+          "uniqid" => $obj->getUniqid(),
+          "timestamp_add" => $obj->getTimestamp_add(),
+          "last_connexion" => $obj->getLast_connexion(),
+          "pseudo" => $obj->getPseudo(),
+          "email" => $obj->getEmail(),
+          "rights" => $obj->getRights(Content::FORMAT_BADGE),
+          'edit' => $edit,
+          'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
         );
       }
 
@@ -47,7 +37,7 @@ class ControllerUser extends Controller{
   public function getArrayFromUniqid(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => [],
       'error' => 'erreur inconnue'
     ];
@@ -62,57 +52,26 @@ class ControllerUser extends Controller{
 
         // Récupération de l'objet
           if($manager->existsUniqid($_REQUEST['uniqid'])){
-            $object = $manager->getFromUniqid($_REQUEST['uniqid']);
+            $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
+
+            $edit = "";
+            if($currentUser->getRight('user', User::RIGHT_WRITE)){
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+            }
 
             $return["value"] = array(
-              'id' => $object->getId(Content::FORMAT_BADGE),
-              "uniqid" => $object->getUniqid(),
-              "timestamp_add" => $object->getTimestamp_add(),
-              "last_connexion" => $object->getLast_connexion(),
-              "pseudo" => $object->getPseudo(),
-              "email" => $object->getEmail(),
-              "rights" => $object->getRights(Content::FORMAT_BADGE),
-              'edit' => "<a class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$object->getUniqid()}')\"><i class='far fa-edit'></i></a>",
-              'detailView' => $object->getVisual(Content::FORMAT_CARD)
+              'id' => $obj->getId(Content::FORMAT_BADGE),
+              "uniqid" => $obj->getUniqid(),
+              "timestamp_add" => $obj->getTimestamp_add(),
+              "last_connexion" => $obj->getLast_connexion(),
+              "pseudo" => $obj->getPseudo(),
+              "email" => $obj->getEmail(),
+              "rights" => $obj->getRights(Content::FORMAT_BADGE),
+              'edit' => $edit,
+              'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
             );
 
-            $return['return'] = "success";
-          }else {
-            $return['error'] = 'Impossible de récupérer les données';
-          }
-      }
-
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function getFromUniqid(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('user', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid'])){
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-        $managerS = new UserManager();
-
-        // Récupération de l'objet
-          if($managerS->existsUniqid($_REQUEST['uniqid'])){
-
-            $obj = $managerS->getFromUniqid($_REQUEST['uniqid']);
-            $return['value'] = array(
-              'visual' => $obj->getVisual(Content::FORMAT_MODIFY),
-              "title" => $obj->getPseudo(Content::FORMAT_MODIFY)
-            );
-            $return['return'] = "success";
+            $return['state'] = true;
           }else {
             $return['error'] = 'Impossible de récupérer les données';
           }
@@ -127,7 +86,7 @@ class ControllerUser extends Controller{
   public function add(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -158,104 +117,13 @@ class ControllerUser extends Controller{
               $object->setLast_connexion();
 
               if($manager->add($object)){
-                $return['return'] = "success";
-                $return['script'] = "User.open('".$object->getUniqid()."')";
+                $return['state'] = true;
+                $return['script'] = "User.open('".$object->getUniqid()."', Controller.DISPLAY_MODIFY)";
               }else {
                 $return['error'] = 'Impossible d\'ajouter l\'objet';
               }
             }
         }
-      }
-
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function update(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-
-      if(!isset($_REQUEST['uniqid'], $_REQUEST['type'], $_REQUEST['value'])){
-        $return['error'] = 'Impossible de récupérer les données';
-
-      } else {
-
-            $manager = new UserManager(); // A modifier
-
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-
-              if(!$currentUser->getRight('user', User::RIGHT_WRITE) && $obj->getUniqid() != $currentUser->getFromUniqid()){
-                $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
-
-                $method = "set".ucfirst($_REQUEST['type']);
-
-                if(method_exists($obj,$method)){
-                    $result = $obj->$method($_REQUEST['value']);
-                    if($result == "success"){
-                      $obj->setLast_connexion(time());
-                      $manager->update($obj);
-                      if(ControllerConnect::isConnect()){
-                        $user = ControllerConnect::getCurrentUser();
-                        if($user->getUniqid() == $obj->getUniqid()){
-                          ControllerConnect::setCurrentUser($obj);
-                        }
-                      }
-                      $return['return'] = "success";
-                    } else {
-                      $return['error'] = $result;
-                    }
-
-                } else {
-                  $return['error'] = "Aucun type correspondant dans l'objet";
-                }
-
-              }
-
-            } else {
-              $return['error'] = 'Impossible de récupérer l\'objet.';
-            }
-
-      }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function remove(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('user', User::RIGHT_WRITE)){
-      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid'])){
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-          // Récupération des objets
-            $manager = new UserManager();
-
-          // Récupération de l'objet
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-              $manager->remove($obj);
-              $return['return'] = "success";
-
-            } else {
-              $return['error'] = 'Cet objet n\'existe pas.';
-            }
       }
 
     }
@@ -276,7 +144,7 @@ class ControllerUser extends Controller{
     if(!empty($bookmarks)){
 
         ob_start(); ?>
-          <?=$user->getBookmark(Content::FORMAT_CARD);?>
+          <?=$user->getBookmark(Content::DISPLAY_CARD);?>
         <?php $return["visual"] = ob_get_clean();
 
     } else {

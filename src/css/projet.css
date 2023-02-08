@@ -313,6 +313,25 @@
 background-color: var(--main-d-2);
 color:white;
 }
+.short-badge-50 .badge{
+  max-width:50px; 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.short-badge-100 .badge{
+  max-width:100px; 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.short-badge-150 .badge{
+  max-width:150px; 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+  
 .badge-outline{
 border:1px solid var(--main-d-2);
 background-color: white;

@@ -19,9 +19,9 @@ const FORMAT_FANCY = 8;
 const FORMAT_LIST = 9;
 const FORMAT_TEXT = 10;
 const FORMAT_PATH = 11;
-const FORMAT_CARD = 12;
+const DISPLAY_CARD = 12;
 const FORMAT_LINK = 13;
-const FORMAT_RESUME = 14;
+const DISPLAY_RESUME = 14;
 
 jQuery(document).ready(function($) {
 

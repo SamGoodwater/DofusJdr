@@ -1,1 +1,4 @@
 *.sql
+src/conf.php
+conf.php
+src/conf.php

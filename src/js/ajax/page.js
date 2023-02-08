@@ -1,4 +1,4 @@
-class Page {
+class Page extends Controller{
 
     SIZE_SM = 576;
     SIZE_MD = 768;
@@ -128,16 +128,23 @@ class Page {
         }
 
         $("#offcanvasbookmark .offcanvas-title").html(title);
-        $("#offcanvasbookmark .offcanvas-body").html(content);
+        $("#offcanvasbookmark .offcanvas-body #offcanvas-content").html(content);
     }
 
     static offCanvasFullscreen(){
+        $("#offcanvasbookmark .offcanvas-body").css("width", "");
+        $("#offcanvasbookmark .offcanvas-body").css("max-width", "");
         if($("#offcanvasbookmark").hasClass("offcanvas-fullscreen")){
             $("#offcanvasbookmark").removeClass("offcanvas-fullscreen");
-            $("#offcanvasbookmark #btn-fullscreen i").removeClass("fa-compress").addClass("fa-expand")
+            $("#offcanvasbookmark").css("width", "");
+            $("#offcanvasbookmark").css("max-width", "");
+            $("#offcanvasbookmark #btn-fullscreen i").removeClass("fa-compress").addClass("fa-expand");
+            $("#offcanvasbookmark #btn-fullscreen i").attr("title", "Agrandir");
         } else {
             $("#offcanvasbookmark").addClass("offcanvas-fullscreen");
-            $("#offcanvasbookmark #btn-fullscreen i").removeClass("fa-expand").addClass("fa-compress")
+            $("#offcanvasbookmark").css("width", "100%");
+            $("#offcanvasbookmark #btn-fullscreen i").removeClass("fa-expand").addClass("fa-compress");
+            $("#offcanvasbookmark #btn-fullscreen i").attr("title", "Réduire");
         }
     }
 
@@ -156,10 +163,10 @@ class Page {
             },
             function(data, status)
             {
-                if(data['script'] != ""){
-                    $('body').append("<script>"+data['script']+"</script>");
+                if(data.script != ""){
+                    $('body').append("<script>"+data.script+"</script>");
                 }
-                if(data.return == 'success'){
+                if(data.state){
                     $(".dashboard-app #content").hide();
                     $(".dashboard-app #title").hide();
                     $(".dashboard-app #content").html("");
@@ -213,7 +220,7 @@ class Page {
                     $('body').append("<script>"+data['script']+"</script>");
                 }
                 if(data.state){
-                    MsgAlert("Ajout d'une page", 'La page ' + name + ' a bien été ajouté.', "success" , 3000);
+                    MsgAlert("Ajout d'une page", 'La page ' + name + ' a bien été ajouté.', "green" , 3000);
                     $('.addpage #name').val("");
                     window.location.hash = data.link;
                     location.reload();
@@ -223,110 +230,6 @@ class Page {
             },
             "json"
         ); 
-    }
-    
-    static update(uniqid, input, type, value_type = IS_INPUT, fct = ""){
-        var URL = 'index.php?c=page&a=update';
-        var value = 0;
-    
-        switch (value_type) {
-            case IS_INPUT:
-                var inp = $(input);
-                if(inp.attr("required") && inp.val() == ""){
-                    inp.addClass("is-invalid").removeClass('is-valid');
-                    $('#PageModalModify #display_error').text("Le champs est obligatoire");
-                    MsgAlert("Le champs est obligatoire.", '', "error" , 3000);
-                    return false;
-                } else {
-                    inp.addClass("is-valid").removeClass('is-invalid');
-                    $('#PageModalModify #display_error').text("");
-                    value = inp.val();
-                }
-            break;
-            case IS_VALUE:
-                value = input;
-            break;
-            case IS_CHECKBOX:
-                if ($(input).is(":checked")) {
-                    value = 1;
-                } else {
-                    value = 0;
-                }
-            break;
-            case IS_CKEDITOR:
-                value = CKEDITOR.instances[type+id].getData();
-            break;
-            case IS_PATH_FILE:
-                if(file_select.extention != "dir" && file_select.path != ""){
-                    value = file_select.dirname + file_select.name;
-                    $("#showFile_"+type+" a").attr('href', value);
-                    $("#showFile_"+type+" a div").css('background-image', "url('"+value+"')");
-                } else {
-                    alert('Aucun fichier sélectionné');
-                }
-            break;
-            default:
-                MsgAlert("Aucun type de valeur spécifié", '', "error" , 3000);
-                return false;
-        }
-    
-        if(fct !=""){
-            value = fct(value);
-            if(value == '***error***'){
-                MsgAlert("Echec de la mise à jour", "Erreur d'éxécuttion de la fonction", "danger" , 4000);
-                $('#PageModalModify #display_error').text("Erreur d'éxécuttion de la fonction");
-                return false;
-            }
-            $(input).val(value);
-        }
-    
-        $.post(URL,
-            {
-                uniqid:uniqid,
-                value:value,
-                type:type
-            },
-            function(data, status)
-            {
-                if(data['script'] != ""){
-                    $('body').append("<script>"+data['script']+"</script>");
-                }
-                if(data['return'] == "success"){
-                    location.reload();
-                    MsgAlert("Mise à jour de la page", '', "success" , 3000);
-                } else {
-                    MsgAlert("Echec de la mise à jour", 'Erreur : ' + data['error'], "danger" , 4000);
-                }
-            },
-            "json"
-        ); 
-    }
-    
-    static remove(uniqid){
-        var URL = 'index.php?c=page&a=remove';
-    
-        if (confirm("Etes vous sûr de vouloir supprimer définitivement cette page ?")) {
-            $.post(URL,
-                {
-                    uniqid:uniqid
-                },
-                function(data, status)
-                {
-                    if(data['script'] != ""){
-                        $('body').append("<script>"+data['script']+"</script>");
-                    }
-                    if(data['return'] == 'success'){
-                        MsgAlert("Suppression de la page", 'La page a bien été supprimé.', "success" , 3000);
-                        location.reload();
-                    } else {
-                        $('#display_error').text(data['error']);
-                        MsgAlert("Echec de la suppresion", 'Erreur : ' + data['error'], "danger" , 4000);
-                    }
-                },
-                "json"
-            ); 
-        }
-    
     }
 
     static updateOrder_num(){
@@ -346,7 +249,7 @@ class Page {
                     $('body').append("<script>"+data['script']+"</script>");
                 }
                 if(data.state){
-                    MsgAlert("L'ordre a été mise à jour","", "success" , 3000);
+                    MsgAlert("L'ordre a été mise à jour","", "green" , 3000);
                     $('#btn-update-order').hide();
                 } else {
                     MsgAlert("Echec de la mise à jour", 'Erreur : ' + data.error, "danger" , 4000);

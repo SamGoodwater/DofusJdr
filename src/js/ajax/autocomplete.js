@@ -69,7 +69,6 @@ function autocomplete_load(input, display_error = false) {
             sign.html("");
         },
         select: function( event, ui ) {
-            console.log(ui);
             input.val('');
         }
     })

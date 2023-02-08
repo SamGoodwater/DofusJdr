@@ -85,7 +85,7 @@ class Npc extends Content
                                 placeholder="Nom du ou de la PNJ" 
                                 maxlength="50"
                                 type="text" 
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 value="<?=$this->_name?>">
                         </div>
                     <?php return ob_get_clean();
@@ -242,7 +242,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'historical');" 
                                 placeholder="Histoire du ou de la PNJ" 
                                 maxlength="255"
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 rows="3"><?=$this->_historical?></textarea>
                         </div>
                     <?php return ob_get_clean();
@@ -262,7 +262,7 @@ class Npc extends Content
                                 placeholder="Alignement du ou de la PNJ" 
                                 maxlength="500"
                                 type="text" 
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 value="<?=$this->_alignment?>">
                         </div>
                     <?php return ob_get_clean();
@@ -284,7 +284,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'level');" 
                                 data-bs-toggle='tooltip' data-bs-placement='bottom' title="Niveau du ou de la PNJ"
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_level?>">
                         </div>
                     <?php return ob_get_clean();
@@ -309,7 +309,7 @@ class Npc extends Content
                                 placeholder="Traits du joueur" 
                                 maxlength="3000" 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_trait?>">
                             <label class="size-0-8">Traits du ou de la PNJ</label>
                         </div>
@@ -450,7 +450,7 @@ class Npc extends Content
                                 placeholder="Age du ou de la PNJ" 
                                 maxlength="50"
                                 type="text" 
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 value="<?=$this->_age?>">
                         </div>
                     <?php return ob_get_clean();
@@ -473,7 +473,7 @@ class Npc extends Content
                                 placeholder="Taille du ou de la PNJ" 
                                 maxlength="50"
                                 type="text" 
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 value="<?=$this->_size?>">
                         </div>
                     <?php return ob_get_clean();
@@ -496,7 +496,7 @@ class Npc extends Content
                                 placeholder="Poids du ou de la PNJ" 
                                 maxlength="50"
                                 type="text" 
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 value="<?=$this->_weight?>">
                         </div>
                     <?php return ob_get_clean();
@@ -520,7 +520,7 @@ class Npc extends Content
                                 placeholder="Points de vie du ou de la PNJ" 
                                 maxlength="50"
                                 type="text" 
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 value="<?=$this->_life?>">
                         </div>
                     <?php return ob_get_clean();
@@ -528,12 +528,15 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-life border-1 border-solid">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-life"><?=$this->_life?> points de vie</h6>
-                                <p class="card-text text-grey text-0-9">Dès de classe + mod. Vitalité * niveau + bonus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-life"><?=$this->_life?> points de vie</h6>
+                                <p class="text-grey-d-2 size-0-8">Dès de classe + mod. Vitalité * niveau + bonus d'équipement</p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
+
+                case Content::FORMAT_ICON:
+                    return "<span class='text-life' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Points de vie\">{$this->_life} <img class='icon' src='medias/icons/life.svg'></span>";
                    
                 default:
                     return $this->_life;
@@ -551,7 +554,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'pa');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="PA du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_pa?>">
                             </div>
                         </div>
@@ -566,9 +569,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-pa border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-pa"><?=$this->_pa?> PA</h6>
-                                <p class="card-text text-grey text-0-9">Bonus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-pa"><?=$this->_pa?> PA</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonus d'équipement</p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -589,7 +592,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'pm');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="PM du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_pm?>">
                             </div>
                         </div>
@@ -604,9 +607,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-pm border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-pm"><?=$this->_pm?> PM</h6>
-                                <p class="card-text text-grey text-0-9">Bonus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-pm"><?=$this->_pm?> PM</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonus d'équipement</p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -627,7 +630,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'po');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="PO du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_po?>">
                             </div>
                         </div>
@@ -642,9 +645,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-po border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-po"><?=$this->_po?> PO</h6>
-                                <p class="card-text text-grey text-0-9">Bonus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-po"><?=$this->_po?> PO</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonus d'équipement</p>
                             </div> 
                         </div>       
                     <?php return ob_get_clean();
@@ -666,7 +669,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'ini');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'initiative du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_ini?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9"><?=$this->getIntel(Content::FORMAT_BADGE)?> + Bonus</p>
@@ -682,9 +685,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-ini border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-po"><?=$total?> Ini</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getIni(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-ini"><?=$total?> Ini</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getIni(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -706,7 +709,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'invocation');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre d'invocation du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_ini?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">1 + Bonus de l'équipement</p>
@@ -722,9 +725,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-invocation border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-po"><?=$total?> Invocation</h6>
-                                <p class="card-text text-grey text-0-9">1 + Bonus de l'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-invocation"><?=$total?> Invocation</h6>
+                                <p class="text-grey-d-2 size-0-8">1 + Bonus de l'équipement</p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -744,7 +747,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'touch');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de touche du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_touch?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus de l'équipement</p>
@@ -760,9 +763,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-touch border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-touch">+ <?=$this->_touch?> Touche</h6>
-                                <p class="card-text text-grey text-0-9">Bonus de l'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-touch">+ <?=$this->_touch?> Touche</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonus de l'équipement</p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -783,7 +786,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'ca');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de la classe d'armure du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_ca?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">10 + <?=$this->getVitality(Content::FORMAT_BADGE)?> + Bonus</p>
@@ -799,9 +802,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-ca border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-ca"><?=$total?> CA</h6>
-                                <p class="card-text text-grey text-0-9">10 + <?=$this->getVitality(Content::FORMAT_BADGE)?> + <?=$this->getCa(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-ca"><?=$total?> CA</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getVitality(Content::FORMAT_BADGE)?> + <?=$this->getCa(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -823,7 +826,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'dodge_pa');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PA du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_dodge_pa?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">10 + <?=$this->getSagesse(Content::FORMAT_BADGE)?> + Bonus</p>
@@ -839,9 +842,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-pa border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-ca"><?=$total?> Esquive PA</h6>
-                                <p class="card-text text-grey text-0-9">10 + <?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getDodge_pa(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-pa"><?=$total?> Esquive PA</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getDodge_pa(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -863,7 +866,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'dodge_pm');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PM du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_dodge_pm?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">10 + <?=$this->getSagesse(Content::FORMAT_BADGE)?> + Bonus</p>
@@ -878,10 +881,10 @@ class Npc extends Content
                 
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
-                        <div class="card border-ca border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-ca"><?=$total?> Esquive PM</h6>
-                                <p class="card-text text-grey text-0-9">10 + <?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getDodge_pm(Content::FORMAT_BADGE)?></p>
+                        <div class="card border-pm border-1 border-solid" style="width: 18rem;">
+                            <div class="m-2">
+                                <h6 class="m-0 text-pm"><?=$total?> Esquive PM</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getDodge_pm(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();    
@@ -891,7 +894,7 @@ class Npc extends Content
             }
         }
         public function getFuite(int $format = Content::FORMAT_BRUT){
-            $total = $this->_ca + $this->getAgi();
+            $total = $this->_fuite + $this->getAgi();
             switch ($format) {
                 case Content::FORMAT_MODIFY:
                     ob_start(); ?>
@@ -903,7 +906,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'fuite');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de fuite du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_fuite?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9"><?=$this->getAgi(Content::FORMAT_BADGE)?> + Bonus</p>
@@ -919,9 +922,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-fuite border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-fuite"><?=$total?> Fuite</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getFuite(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-fuite"><?=$total?> Fuite</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getFuite(Content::FORMAT_BADGE)?></p>
                             </div>    
                         </div>    
                     <?php return ob_get_clean();
@@ -931,7 +934,7 @@ class Npc extends Content
             }
         }
         public function getTacle(int $format = Content::FORMAT_BRUT){
-            $total = $this->_ca + $this->getChance();
+            $total = $this->_tacle + $this->getChance();
             switch ($format) {
                 case Content::FORMAT_MODIFY:
                     ob_start(); ?>
@@ -943,7 +946,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'tacle');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de tacle du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_tacle?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9"><?=$this->getChance(Content::FORMAT_BADGE)?> + Bonus</p>
@@ -959,9 +962,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-tacle border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-tacle"><?=$total?> Tacle</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getFuite(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-tacle"><?=$total?> Tacle</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getTacle(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -982,7 +985,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'vitality');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de vitalité du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_vitality?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -998,9 +1001,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-vitality border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-tacle"><?=$this->_vitality?> Mod. Vitalité</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-vitality"><?=$this->_vitality?> Mod. Vitalité</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div> 
                         </div>       
                     <?php return ob_get_clean();
@@ -1021,7 +1024,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'sagesse');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de sagesse du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_sagesse?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1037,9 +1040,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-tacle"><?=$this->_sagesse?> Mod. Sagesse</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-sagesse"><?=$this->_sagesse?> Mod. Sagesse</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div> 
                         </div>       
                     <?php return ob_get_clean();
@@ -1060,7 +1063,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'strong');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de force du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_strong?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1076,10 +1079,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-strong border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-body">
-                                <h6 class="card-subtitle mb-2 text-force"><?=$this->_strong?> Mod. Force</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus de Force</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-strong"><?=$this->_strong?> Mod. Force</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus de Force</p>
                             </div>  
                         </div>      
                     <?php return ob_get_clean();
@@ -1100,7 +1102,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'intel');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur d'intelligence du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_intel?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1116,9 +1118,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-intelligence"><?=$this->_intel?> Mod. Intelligence</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-intel"><?=$this->_intel?> Mod. Intelligence</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1139,7 +1141,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'agi');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur d'agilité du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_agi?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1155,9 +1157,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-agi border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-agility"><?=$this->_agi?> Mod. Agilité</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-agi"><?=$this->_agi?> Mod. Agilité</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1178,7 +1180,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'chance');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de chance du ou de la PNJ"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_chance?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1194,9 +1196,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-chance border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-chance"><?=$this->_chance?> Mod. Chance</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-chance"><?=$this->_chance?> Mod. Chance</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1217,7 +1219,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_neutre');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance neutre du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_neutre?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1233,9 +1235,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-neutre border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-neutre"><?=$this->_res_neutre?> Res. neutre</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="text-neutre"><?=$this->_res_neutre?> Res. neutre</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div>
                         </div> 
                     <?php return ob_get_clean();
@@ -1256,7 +1258,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_terre');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance terre du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_terre?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1272,9 +1274,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-terre border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-terre"><?=$this->_res_terre?> Res. Force</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-terre"><?=$this->_res_terre?> Res. Force</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1295,7 +1297,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_feu');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance feu du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_feu?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1311,9 +1313,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-feu border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-feu"><?=$this->_res_feu?> Res. Feu</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-feu"><?=$this->_res_feu?> Res. Feu</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1334,7 +1336,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_air');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance air du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_air?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1350,9 +1352,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-air border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-air"><?=$this->_res_air?> Res. Air</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-air"><?=$this->_res_air?> Res. Air</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1373,7 +1375,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_eau');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance eau du ou de la PNJ"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_eau?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
@@ -1389,9 +1391,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-eau border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-eau"><?=$this->_res_eau?> Res. Eau</h6>
-                                <p class="card-text text-grey text-0-9">Bonnus d'équipement</p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-eau"><?=$this->_res_eau?> Res. Eau</h6>
+                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1410,7 +1412,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'acrobatie');" 
                                 placeholder="Bonus d'acrobatie" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_acrobatie?>">
                             <label class="size-0-8">Bonus d'acrobatie</label>
                         </div>
@@ -1422,9 +1424,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-agi border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-agi"><?=$total?> Acrobatie</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getAcrobatie(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-agi"><?=$total?> Acrobatie</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getAcrobatie(Content::FORMAT_BADGE)?></p>
                             </div>        
                         </div>
                     <?php return ob_get_clean();
@@ -1443,7 +1445,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'discretion');" 
                                 placeholder="Bonus de discretion" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_discretion?>">
                             <label class="size-0-8">Bonus de discretion</label>
                         </div>
@@ -1455,9 +1457,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-agi border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-agi"><?=$total?> Discretion</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getDiscretion(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-agi"><?=$total?> Discretion</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getDiscretion(Content::FORMAT_BADGE)?></p>
                             </div>  
                         </div>      
                     <?php return ob_get_clean();
@@ -1476,7 +1478,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'escamotage');" 
                                 placeholder="Bonus d'escamotage" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_escamotage?>">
                             <label class="size-0-8">Bonus d'escamotage</label>
                         </div>
@@ -1488,9 +1490,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-agi border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-agi"><?=$total?> Escamotage</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getEscamotage(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-agi"><?=$total?> Escamotage</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getEscamotage(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -1509,7 +1511,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'athletisme');" 
                                 placeholder="Bonus d'athletisme" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_athletisme?>">
                             <label class="size-0-8">Bonus d'athletisme</label>
                         </div>
@@ -1521,9 +1523,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-strong border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-strong"><?=$total?> Athletisme</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getStrong(Content::FORMAT_BADGE)?> + <?=$this->getAthletisme(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-strong"><?=$total?> Athletisme</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getStrong(Content::FORMAT_BADGE)?> + <?=$this->getAthletisme(Content::FORMAT_BADGE)?></p>
                             </div> 
                         </div>       
                     <?php return ob_get_clean();
@@ -1542,7 +1544,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'intimidation');" 
                                 placeholder="Bonus d'intimidation" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_intimidation?>">
                             <label class="size-0-8">Bonus d'intimidation</label>
                         </div>
@@ -1554,9 +1556,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-strong border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-strong"><?=$total?> Intimidation</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getStrong(Content::FORMAT_BADGE)?> + <?=$this->getIntimidation(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-strong"><?=$total?> Intimidation</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getStrong(Content::FORMAT_BADGE)?> + <?=$this->getIntimidation(Content::FORMAT_BADGE)?></p>
                             </div>   
                         </div>     
                     <?php return ob_get_clean();
@@ -1575,7 +1577,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'arcane');" 
                                 placeholder="Bonus d'arcane" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_arcane?>">
                             <label class="size-0-8">Bonus d'arcane</label>
                         </div>
@@ -1587,9 +1589,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-intel"><?=$total?> Arcane</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getArcane(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-intel"><?=$total?> Arcane</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getArcane(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -1608,7 +1610,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'histoire');" 
                                 placeholder="Bonus d'histoire" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_histoire?>">
                             <label class="size-0-8">Bonus d'histoire</label>
                         </div>
@@ -1620,9 +1622,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-intel"><?=$total?> Histoire</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getHistoire(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-intel"><?=$total?> Histoire</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getHistoire(Content::FORMAT_BADGE)?></p>
                             </div>    
                         </div>    
                     <?php return ob_get_clean();
@@ -1641,7 +1643,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'investigation');" 
                                 placeholder="Bonus d'investigation" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_investigation?>">
                             <label class="size-0-8">Bonus d'investigation</label>
                         </div>
@@ -1653,9 +1655,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-intel"><?=$total?> Investigation</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getInvestigation(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-intel"><?=$total?> Investigation</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getInvestigation(Content::FORMAT_BADGE)?></p>
                             </div>    
                         </div>    
                     <?php return ob_get_clean();
@@ -1674,7 +1676,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'religion');" 
                                 placeholder="Bonus de religion" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_religion?>">
                             <label class="size-0-8">Bonus de religion</label>
                         </div>
@@ -1686,9 +1688,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-intel"><?=$total?> Religion</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getReligion(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-intel"><?=$total?> Religion</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getReligion(Content::FORMAT_BADGE)?></p>
                             </div>  
                         </div>      
                     <?php return ob_get_clean();
@@ -1707,7 +1709,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'nature');" 
                                 placeholder="Bonus de nature" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_nature?>">
                             <label class="size-0-8">Bonus de nature</label>
                         </div>
@@ -1719,9 +1721,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-intel"><?=$total?> Nature</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getNature(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-intel"><?=$total?> Nature</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getNature(Content::FORMAT_BADGE)?></p>
                             </div>       
                         </div> 
                     <?php return ob_get_clean();
@@ -1740,7 +1742,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'dressage');" 
                                 placeholder="Bonus de dressage" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_dressage?>">
                             <label class="size-0-8">Bonus de dressage</label>
                         </div>
@@ -1752,9 +1754,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-sagesse"><?=$total?> Dressage</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getDressage(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-sagesse"><?=$total?> Dressage</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getDressage(Content::FORMAT_BADGE)?></p>
                             </div> 
                         </div>       
                     <?php return ob_get_clean();
@@ -1773,7 +1775,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'medecine');" 
                                 placeholder="Bonus de médecine" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_medecine?>">
                             <label class="size-0-8">Bonus de médecine</label>
                         </div>
@@ -1785,9 +1787,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-sagesse"><?=$total?> Dressage</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getMedecine(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-sagesse"><?=$total?> Dressage</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getMedecine(Content::FORMAT_BADGE)?></p>
                             </div> 
                         </div>       
                     <?php return ob_get_clean();
@@ -1806,7 +1808,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'perception');" 
                                 placeholder="Bonus de perception" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_perception?>">
                             <label class="size-0-8">Bonus de perception</label>
                         </div>
@@ -1818,9 +1820,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-sagesse"><?=$total?> Perception</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getPerception(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-sagesse"><?=$total?> Perception</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getPerception(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>        
                     <?php return ob_get_clean();
@@ -1839,7 +1841,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'perspicacite');" 
                                 placeholder="Bonus de perspicacité" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_perspicacite?>">
                             <label class="size-0-8">Bonus de perspicacité</label>
                         </div>
@@ -1851,9 +1853,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-sagesse"><?=$total?> Perspicacité</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getPerspicacite(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-sagesse"><?=$total?> Perspicacité</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getPerspicacite(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1872,7 +1874,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'survie');" 
                                 placeholder="Bonus de survie" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_survie?>">
                             <label class="size-0-8">Bonus de survie</label>
                         </div>
@@ -1884,9 +1886,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-sagesse"><?=$total?> Survie</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getSurvie(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-sagesse"><?=$total?> Survie</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getSurvie(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1905,7 +1907,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'persuasion');" 
                                 placeholder="Bonus de persuasion" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_persuasion?>">
                             <label class="size-0-8">Bonus de persuasion</label>
                         </div>
@@ -1917,9 +1919,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-chance border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-chance"><?=$total?> Persuasion</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getPersuasion(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-chance"><?=$total?> Persuasion</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getPersuasion(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1938,7 +1940,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'representation');" 
                                 placeholder="Bonus de représentation" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_representation?>">
                             <label class="size-0-8">Bonus de représentation</label>
                         </div>
@@ -1950,9 +1952,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-chance border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-chance"><?=$total?> Représentation</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getRepresentation(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-chance"><?=$total?> Représentation</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getRepresentation(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -1972,7 +1974,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'supercherie');" 
                                 placeholder="Bonus de supercherie" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_supercherie?>">
                             <label class="size-0-8">Bonus de supercherie</label>
                         </div>
@@ -1984,9 +1986,9 @@ class Npc extends Content
                 case Content::FORMAT_VIEW:
                     ob_start(); ?>
                         <div class="card border-chance border-1 border-solid" style="width: 18rem;">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-chance"><?=$total?> Supercherie</h6>
-                                <p class="card-text text-grey text-0-9"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getSupercherie(Content::FORMAT_BADGE)?></p>
+                            <div class="m-2">
+                                <h6 class="m-0 text-chance"><?=$total?> Supercherie</h6>
+                                <p class="text-grey-d-2 size-0-8"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getSupercherie(Content::FORMAT_BADGE)?></p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -2006,7 +2008,7 @@ class Npc extends Content
                                     onchange="Npc.update('<?=$this->getUniqid();?>', this, 'kamas');" 
                                     placeholder="Kamas" 
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_kamas?>">
                                 <label class="size-0-8">Kamas</label>
                             </div>
@@ -2035,7 +2037,7 @@ class Npc extends Content
                                 onchange="Npc.update('<?=$this->getUniqid();?>', this, 'drop_');" 
                                 placeholder="Objets récupérables" 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_drop_?>">
                             <label class="size-0-8">Objets récupérables</label>
                         </div>
@@ -2362,25 +2364,32 @@ class Npc extends Content
             }
         }
 
-        public function getVisual(int $format = Content::FORMAT_BRUT){
+        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
+            $user = ControllerConnect::getCurrentUser();
+            $bookmark_icon = "far";
+            if($user->in_bookmark($this)){
+                $bookmark_icon = "fas";
+            }
             $classe = $this->getClasse(Content::FORMAT_OBJECT);
 
-            switch ($format) {
-                case Content::FORMAT_MODIFY:      
+            //OPTIONS
+            if($size < 100){$size = 300;}
+
+            switch ($display) {
+                case Content::DISPLAY_MODIFY:      
                     ob_start(); ?>
                         <div class="card mb-3">
-                            <p class='size-0-7 mb-1'>PNJ <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
-                                <div class="d-flex flex-row justify-content-between">
-                                    <?=$classe->getPath_img(Content::FORMAT_IMAGE, "img-back-200")?>
-                                    <div>
-                                        <h6>Classe : <?=$this->getClasse(Content::FORMAT_MODIFY)?></h6>
-                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getSpecificity()?>
-                                        <?=$this->getTrait(Content::FORMAT_MODIFY)?>
-                                        <p class="text-main-l-2 size-0-8">Arme priviligiée :</p>
-                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getWeapons_of_choice(Content::FORMAT_ICON)?>
+                            <p class='size-0-7 m-1'>PNJ <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
+                                <div class="row m-2">
+                                    <div class="col-auto">
+                                        <h6 class="text-center">Classe</h6>
+                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getVisual(Content::DISPLAY_RESUME)?>
+                                        <p class="mt-4 text-center"><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i> Générer un pdf</a></p>
                                     </div>
-                                    <div>
-                                        <?=$this->getLevel(Content::FORMAT_MODIFY)?>
+                                    <div class="col ms-4">
+                                        <div class="d-flex justify-content-between align-items-baseline">
+                                            <p class="text-center"><?=$this->getLevel(Content::FORMAT_MODIFY)?></p>
+                                        </div>
                                         <div class="d-flex flex-row">
                                             <?=$this->getAge(Content::FORMAT_MODIFY)?>
                                             <?=$this->getSize(Content::FORMAT_MODIFY)?>
@@ -2430,38 +2439,38 @@ class Npc extends Content
                                     <div class="nav-item-divider back-main-d-1"></div>
                                     <h4 class="text-main-d-1 text-center">Compétences</h4>
                                     <div class="row">
-                                        <div class="col-auto">
+                                        <div class="col-auto my-2">
                                             <p class="text-agi">Dépendant de l'agilité</p>
-                                            <p class="text-grey-d-1 size-0-9"><?=$this->getAgi(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
+                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getAgi(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
                                             <?=$this->getAcrobatie(Content::FORMAT_MODIFY)?>
                                             <?=$this->getDiscretion(Content::FORMAT_MODIFY)?>
                                             <?=$this->getEscamotage(Content::FORMAT_MODIFY)?>
-                                            <p class="text-force">Dépendant de la Force</p>
-                                            <p class="text-grey-d-1 size-0-9"><?=$this->getStrong(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
+                                            <p class="text-force mt-2">Dépendant de la Force</p>
+                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getStrong(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
                                             <?=$this->getAthletisme(Content::FORMAT_MODIFY)?>
                                             <?=$this->getIntimidation(Content::FORMAT_MODIFY)?>
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-auto my-2">
                                             <p class="text-intel">Dépendant de l'Intelligence</p>
-                                            <p class="text-grey-d-1 size-0-9"><?=$this->getIntel(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
+                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getIntel(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
                                             <?=$this->getArcane(Content::FORMAT_MODIFY)?>
                                             <?=$this->getHistoire(Content::FORMAT_MODIFY)?>
                                             <?=$this->getInvestigation(Content::FORMAT_MODIFY)?>
                                             <?=$this->getNature(Content::FORMAT_MODIFY)?>
                                             <?=$this->getReligion(Content::FORMAT_MODIFY)?>
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-auto my-2">
                                             <p class="text-sagesse">Dépendant de la Sagesse</p>
-                                            <p class="text-grey-d-1 size-0-9"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
+                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
                                             <?=$this->getDressage(Content::FORMAT_MODIFY)?>
                                             <?=$this->getMedecine(Content::FORMAT_MODIFY)?>
                                             <?=$this->getPerception(Content::FORMAT_MODIFY)?>
                                             <?=$this->getPerspicacite(Content::FORMAT_MODIFY)?>
                                             <?=$this->getSurvie(Content::FORMAT_MODIFY)?>
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-auto my-2">
                                             <p class="text-chance">Dépendant de la Chance</p>
-                                            <p class="text-grey-d-1 size-0-9"><?=$this->getChance(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
+                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getChance(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
                                             <?=$this->getPersuasion(Content::FORMAT_MODIFY)?>
                                             <?=$this->getRepresentation(Content::FORMAT_MODIFY)?>
                                             <?=$this->getSupercherie(Content::FORMAT_MODIFY)?>
@@ -2469,131 +2478,127 @@ class Npc extends Content
                                     </div>
                                     <div class="nav-item-divider back-main-d-1"></div>
                                     <h4 class="text-main-d-1 text-center">Informations</h4>
-                                    <p class="card-text"><?=$this->getStory(Content::FORMAT_MODIFY);?></p>
-                                    <p class="card-text"><?=$this->getOther_info(Content::FORMAT_MODIFY);?></p>
-                                    <div class="d-flex flex-row justify-content-between">
+                                    <p class="card-text my-2"><?=$this->getStory(Content::FORMAT_MODIFY);?></p>
+                                    <p class="card-text my-2"><?=$this->getOther_info(Content::FORMAT_MODIFY);?></p>
+                                    <div class="d-flex flex-row justify-content-between my-2">
                                         <?=$this->getDrop_(Content::FORMAT_MODIFY)?>
                                         <?=$this->getKamas(Content::FORMAT_MODIFY)?>
                                     </div>
                                     <div class="nav-item-divider back-main-d-1"></div>
                                     <h4 class="text-main-d-1 text-center">Sorts</h4>
-                                    <p class="card-text"><?=$this->getClasse(Content::FORMAT_OBJECT)->getSpell(Content::FORMAT_BADGE);?></p>
-                                    <p class="card-text"><?=$this->getOther_spell(Content::FORMAT_MODIFY);?></p>
+                                    <p class="card-text my-2"><?=$this->getClasse(Content::FORMAT_OBJECT)->getSpell(Content::FORMAT_BADGE);?></p>
+                                    <p class="card-text my-2"><?=$this->getOther_spell(Content::FORMAT_MODIFY);?></p>
                                     <div class="nav-item-divider back-main-d-1"></div>
                                     <h4 class="text-main-d-1 text-center">Equipements</h4>
-                                    <p class="card-text"><?=$this->getOther_equipment(Content::FORMAT_MODIFY);?></p>
+                                    <p class="card-text my-2"><?=$this->getOther_equipment(Content::FORMAT_MODIFY);?></p>
                                     <div class="nav-item-divider back-main-d-1"></div>
                                     <h4 class="text-main-d-1 text-center">Consommables</h4>
-                                    <p class="card-text"><?=$this->getOther_consomable(Content::FORMAT_MODIFY);?></p>
+                                    <p class="card-text my-2"><?=$this->getOther_consomable(Content::FORMAT_MODIFY);?></p>
                                 </div>
                                 <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Npc.remove('<?=$this->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
                         </div>
                     <?php return ob_get_clean();
 
-                case  Content::FORMAT_CARD:      
+                case  Content::DISPLAY_CARD:      
                     ob_start(); ?>
                         <div class="card mb-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center">
-                                    <?=$classe->getPath_img(Content::FORMAT_IMAGE, "img-back-150")?>
+                                <div class="d-flex flex-row justify-content-between align-items-start m-2">
                                     <div>
-                                        <h6>Classe : <?=$this->getClasse(Content::FORMAT_OBJECT)->getName()?></h6>
-                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getSpecificity()?>
-                                        <?=$this->getTrait(Content::FORMAT_BADGE)?>
-                                        <p class="text-main-l-2 size-0-8">Arme priviligiée :</p>
-                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getWeapons_of_choice(Content::FORMAT_ICON)?>
+                                        <h6 class="text-center">Classe</h6>
+                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getVisual(Content::DISPLAY_RESUME)?>
                                     </div>
                                     <div>
-                                        <p><?=$this->getLevel(Content::FORMAT_BADGE)?></p>
+                                        <div class="d-flex justify-content-between align-items-baseline">
+                                            <h4><?=$this->getName()?></h4>
+                                            <p class="text-center"><?=$this->getLevel(Content::FORMAT_BADGE)?></p>
+                                        </div>
                                         <p>
                                             <?=$this->getAge(Content::FORMAT_BADGE)?>
                                             <?=$this->getSize(Content::FORMAT_BADGE)?>
                                             <?=$this->getWeight(Content::FORMAT_BADGE)?>
                                         </p>
-                                        <p>
-                                            <span class="size-0-8 text-grey-d-2">Alignement : </span><?=$this->getAlignment()?>
-                                        </p>
-                                        <p>
-                                            <span class="size-0-8 text-grey-d-2">Historique : </span><?=$this->getHistorical()?>
-                                        </p>
+                                        <p><span class="size-0-8 text-grey-d-2">Alignement : </span><?=$this->getAlignment()?></p>
+                                        <p><span class="size-0-8 text-grey-d-2">Historique : </span><?=$this->getHistorical()?></p>
                                     </div>
                                     <div class="m-2">
-                                        <p><a class='text-main-d-2 text-main-l-3-hover' onclick="Npc.open('<?=$this->getUniqid()?>')"><i class='far fa-edit'></i> Modifier</a></p>
+                                        <?php if($user->getRight('npc', User::RIGHT_WRITE)){ ?>
+                                            <p><a class='text-main-d-2 text-main-l-3-hover' onclick="Npc.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY)"><i class='far fa-edit'></i> Modifier</a></p>
+                                        <?php } ?>
                                         <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i> Générer un pdf</a></p>
-                                        <p><a class='text-red-d-2 text-red-l-3-hover' onclick="Npc.remove('<?=$this->getUniqid()?>')"><i class="fas fa-trash"></i> Suprimer</a></p>
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="nav-item-divider back-main-d-1"></div>
                                     <h4 class="text-main-d-1 text-center">Caractèristiques</h4>
                                     <div class="m-1 d-flex flex-row justify-content-between align-items-center">
-                                        <?=$this->getLife(Content::FORMAT_VIEW)?>
-                                        <?=$this->getPA(Content::FORMAT_VIEW)?>
-                                        <?=$this->getPM(Content::FORMAT_VIEW)?>
-                                        <?=$this->getPO(Content::FORMAT_VIEW)?>
+                                        <p class="m-1"><?=$this->getLife(Content::FORMAT_VIEW)?></p>
+                                        <p class="m-1"><?=$this->getPA(Content::FORMAT_VIEW)?></p>
+                                        <p class="m-1"><?=$this->getPM(Content::FORMAT_VIEW)?></p>
+                                        <p class="m-1"><?=$this->getPO(Content::FORMAT_VIEW)?></p>
                                     </div>
-                                    <div class=" m-1 mb-2 d-flex flex-row justify-content-between align-items-center">
-                                        <?=$this->getIni(Content::FORMAT_VIEW)?>
-                                        <?=$this->getInvocation(Content::FORMAT_VIEW)?>
-                                        <?=$this->getTouch(Content::FORMAT_VIEW)?>
+                                    <div class="m-1 mb-2 d-flex flex-row justify-content-between align-items-center">
+                                        <p class="m-1"><?=$this->getIni(Content::FORMAT_VIEW)?></p>
+                                        <p class="m-1"><?=$this->getInvocation(Content::FORMAT_VIEW)?></p>
+                                        <p class="m-1"><?=$this->getTouch(Content::FORMAT_VIEW)?></p>
                                     </div>
                                     <div class="row justify-content-around">
                                         <div class="col-auto">
-                                            <p><?=$this->getVitality(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getSagesse(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getStrong(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getIntel(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getAgi(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getChance(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getVitality(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getSagesse(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getStrong(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getIntel(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getAgi(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getChance(Content::FORMAT_VIEW)?></p>
                                         </div>
                                         <div class="col-auto">
-                                            <p><?=$this->getCa(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getDodge_pa(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getDodge_pm(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getFuite(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getTacle(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getCa(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getDodge_pa(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getDodge_pm(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getFuite(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getTacle(Content::FORMAT_VIEW)?></p>
                                         </div>
                                         <div class="col-auto">
-                                            <p><?=$this->getRes_neutre(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getRes_terre(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getRes_feu(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getRes_air(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getRes_eau(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getRes_neutre(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getRes_terre(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getRes_feu(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getRes_air(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getRes_eau(Content::FORMAT_VIEW)?></p>
                                         </div>
                                     </div>
 
                                     <div class="nav-item-divider back-main-d-1"></div>
                                     <h4 class="text-main-d-1 text-center">Compétences</h4>
                                     <div class="row">
-                                        <div class="col-auto">
-                                            <p class="text-agi">Dépendant de l'agilité</p>
-                                            <p><?=$this->getAcrobatie(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getDiscretion(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getEscamotage(Content::FORMAT_VIEW)?></p>
-                                            <p class="text-force">Dépendant de la Force</p>
-                                            <p><?=$this->getAthletisme(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getIntimidation(Content::FORMAT_VIEW)?></p>
+                                        <div class="col-auto my-2">
+                                            <p class="text-agi mb-2">Dépendant de l'agilité</p>
+                                            <p class="m-1"><?=$this->getAcrobatie(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getDiscretion(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getEscamotage(Content::FORMAT_VIEW)?></p>
+                                            <p class="text-force my-2">Dépendant de la Force</p>
+                                            <p class="m-1"><?=$this->getAthletisme(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getIntimidation(Content::FORMAT_VIEW)?></p>
                                         </div>
-                                        <div class="col-auto">
-                                            <p class="text-intel">Dépendant de l'Intelligence</p>
-                                            <p><?=$this->getArcane(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getHistoire(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getInvestigation(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getNature(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getReligion(Content::FORMAT_VIEW)?></p>
+                                        <div class="col-auto mb-2 mt-3">
+                                            <p class="text-intel mb-2">Dépendant de l'Intelligence</p>
+                                            <p class="m-1"><?=$this->getArcane(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getHistoire(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getInvestigation(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getNature(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getReligion(Content::FORMAT_VIEW)?></p>
                                         </div>
-                                        <div class="col-auto">
-                                            <p class="text-sagesse">Dépendant de la Sagesse</p>
-                                            <p><?=$this->getDressage(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getMedecine(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getPerception(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getPerspicacite(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getSurvie(Content::FORMAT_VIEW)?></p>
+                                        <div class="col-auto my-2">
+                                            <p class="text-sagesse mb-2">Dépendant de la Sagesse</p>
+                                            <p class="m-1"><?=$this->getDressage(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getMedecine(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getPerception(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getPerspicacite(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getSurvie(Content::FORMAT_VIEW)?></p>
                                         </div>
-                                        <div class="col-auto">
-                                            <p class="text-chance">Dépendant de la Chance</p>
-                                            <p><?=$this->getPersuasion(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getRepresentation(Content::FORMAT_VIEW)?></p>
-                                            <p><?=$this->getSupercherie(Content::FORMAT_VIEW)?></p>
+                                        <div class="col-auto my-2">
+                                            <p class="text-chance mb-2">Dépendant de la Chance</p>
+                                            <p class="m-1"><?=$this->getPersuasion(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getRepresentation(Content::FORMAT_VIEW)?></p>
+                                            <p class="m-1"><?=$this->getSupercherie(Content::FORMAT_VIEW)?></p>
                                         </div>
                                     </div>
                                     <div class="nav-item-divider back-main-d-1"></div>
@@ -2618,87 +2623,112 @@ class Npc extends Content
                         </div>
                     <?php return ob_get_clean();
 
-                case Content::FORMAT_RESUME:
+                case Content::DISPLAY_RESUME:
                     ob_start(); ?>
-                    <div class="card mb-3" style="max-width: 540px;">
-                            <p class="d-flex flex-row justify-content-between">
-                                <?=$this->getLevel(Content::FORMAT_BADGE)?>
-                                <span class="size-0-8 text-grey-d-2">Alignement : </span><?=$this->getAlignment()?>
-                                <span class="size-0-8 text-grey-d-2">Historique : </span><?=$this->getHistorical()?>
-                            </p>
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <?=$classe->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                                <div>
-                                    <div class="d-flex flex-row justify-content-around align-items-center">
-                                        <h4><?=$this->getName()?></h4>
-                                        <h6>Classe : <?=$this->getClasse(Content::FORMAT_OBJECT)->getName()?></h6>
+                        <div style="width: <?=$size?>px;">
+                            <div style="position:relative;">
+                                <div ondblclick="Npc.open('<?=$this->getUniqid()?>');" class="card-hover-linked card p-2 m-1 border-secondary-d-2 border" style="width: <?=$size?>px;" >
+                                    <div class="d-flex flew-row flex-nowrap justify-content-start">
+                                        <div>
+                                            <?=$classe->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
+                                        </div>
+                                        <div class="m-1">
+                                            <p class="bold ms-1"><?=$this->getName()?></p>
+                                            <div class="d-flex align-items-baseline">
+                                                <h6>Classe : <?=$this->getClasse(Content::FORMAT_OBJECT)->getName()?></h6>
+                                                <div class="ms-3 text-center short-badge-150"><?=$this->getLevel(Content::FORMAT_BADGE)?></div>
+                                            </div>
+                                        </div>
+                                        <div class="ms-auto align-self-end">
+                                            <a onclick='User.changeBookmark(this);' data-classe='npc' data-uniqid='<?=$this->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
+                                            <p><a class="btn-text-secondary" title="Afficher les sorts" onclick="Classe.getSpellList('<?=$classe->getUniqid()?>');"><i class="fas fa-magic"></i></a></p>
+                                            <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i></a></p>
+                                        </div>
                                     </div>
-                                    <div class="size-0-8 text-grey-d-2">
-                                            <?=$this->getAge(Content::FORMAT_BADGE)?>
-                                            <?=$this->getSize(Content::FORMAT_BADGE)?>
-                                            <?=$this->getWeight(Content::FORMAT_BADGE)?>
-                                    </div>
-                                </div>
-                                <div class="m-2">
-                                    <p><a class='text-main-d-2 text-main-l-3-hover' onclick="Npc.open('<?=$this->getUniqid()?>')"><i class='far fa-edit'></i></a></p>
-                                    <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i></a></p>
-                                </div>
-                            </div>
-                            <div class="card-body size-0-8">
-                                <p class="card-text text-grey-d-2"><?=$this->getStory();?></p>
-                                <div class="nav-item-divider back-main-d-1"></div>
-                                <p class="card-text text-grey"><?=$this->getOther_info();?></p>
-                                <div class="d-flex flex-row justify-content-between">
-                                    <?=$this->getDrop_()?>
-                                    <?=$this->getKamas()?>
-                                </div>
-                            </div>
-                    </div>
-                <?php return ob_get_clean();
-
-                default:
-                    ob_start(); ?>
-                        <div class="card mb-3" style="max-width: 540px;">
-                                <div class="d-flex flex-row justify-content-between align-items-center">
-                                    <?=$classe->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                                    <div>
-                                        <h4><?=$this->getName()?></h4>
-                                        <h6>Classe : <?=$this->getClasse(Content::FORMAT_OBJECT)->getName()?></h6>
-                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getSpecificity()?>
-                                        <?=$this->getTrait(Content::FORMAT_BADGE)?>
-                                        <p class="text-main-l-2 size-0-8">Arme priviligiée :</p>
-                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getWeapons_of_choice(Content::FORMAT_ICON)?>
-                                    </div>
-                                    <div>
-                                        <p><?=$this->getLevel(Content::FORMAT_BADGE)?></p>
-                                        <p>
+                                    <div class="justify-content-center d-flex short-badge-150 flex-wrap"><?=$this->getTrait(Content::FORMAT_BADGE)?></div>
+                                    <div class="card-hover-showed">
+                                        <p class="size-0-8 short-badge-150">
                                             <?=$this->getAge(Content::FORMAT_BADGE)?>
                                             <?=$this->getSize(Content::FORMAT_BADGE)?>
                                             <?=$this->getWeight(Content::FORMAT_BADGE)?>
                                         </p>
-                                        <p>
-                                            <span class="size-0-8 text-grey-d-2">Alignement : </span><?=$this->getAlignment()?>
-                                        </p>
-                                        <p>
-                                            <span class="size-0-8 text-grey-d-2">Historique : </span><?=$this->getHistorical()?>
-                                        </p>
+                                        <p class="size-0-8"><span class="size-0-8 text-grey-d-2">Alignement : </span><?=$this->getAlignment()?></p>
+                                        <p class="size-0-8"><span class="size-0-8 text-grey-d-2">Historique : </span><?=$this->getHistorical()?></p>
+                                        <div class="d-flex justify-content-around flex-wrap">
+                                            <div class="col-auto">
+                                                <div><?=$this->getPa(Content::FORMAT_ICON)?></div>
+                                                <div><?=$this->getPm(Content::FORMAT_ICON)?></div>
+                                                <div><?=$this->getPo(Content::FORMAT_ICON)?></div>
+                                                <div><?=$this->getIni(Content::FORMAT_ICON)?></div>
+                                                <div><?=$this->getLife(Content::FORMAT_ICON)?></div>
+                                                <div><?=$this->getTouch(Content::FORMAT_ICON)?></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div><?=$this->getVitality(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getSagesse(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getStrong(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getIntel(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getAgi(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getChance(Content::FORMAT_ICON);?></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div><?=$this->getCa(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getFuite(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getTacle(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getDodge_pa(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getDodge_pm(Content::FORMAT_ICON);?></div>
+                                            </div> 
+                                            <div class="col-auto">
+                                                <div><?=$this->getRes_neutre(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getRes_terre(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getRes_feu(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getRes_air(Content::FORMAT_ICON);?></div>
+                                                <div><?=$this->getRes_eau(Content::FORMAT_ICON);?></div>
+                                            </div> 
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-auto my-1">
+                                                <p class="m-1"><?=$this->getAcrobatie(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getDiscretion(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getEscamotage(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getAthletisme(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getIntimidation(Content::FORMAT_VIEW)?></p>
+                                            </div>
+                                            <div class="col-auto my-1">
+                                                <p class="m-1"><?=$this->getArcane(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getHistoire(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getInvestigation(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getNature(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getReligion(Content::FORMAT_VIEW)?></p>
+                                            </div>
+                                            <div class="col-auto my-1">
+                                                <p class="m-1"><?=$this->getDressage(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getMedecine(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getPerception(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getPerspicacite(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getSurvie(Content::FORMAT_VIEW)?></p>
+                                            </div>
+                                            <div class="col-auto my-1">
+                                                <p class="m-1"><?=$this->getPersuasion(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getRepresentation(Content::FORMAT_VIEW)?></p>
+                                                <p class="m-1"><?=$this->getSupercherie(Content::FORMAT_VIEW)?></p>
+                                            </div>
                                     </div>
-                                    <div class="m-2">
-                                        <p><a class='text-main-d-2 text-main-l-3-hover' onclick="Npc.open('<?=$this->getUniqid()?>')"><i class='far fa-edit'></i> Modifier</a></p>
-                                        <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i> Générer un pdf</a></p>
-                                    </div>
+                                        <p class="card-text text-grey-d-2"><?=$this->getStory();?></p>
+                                        <div class="nav-item-divider back-main-d-1"></div>
+                                            <p class="card-text text-grey"><?=$this->getOther_info();?></p>
+                                            <div class="d-flex flex-row justify-content-between">
+                                                <?=$this->getDrop_()?>
+                                                <?=$this->getKamas()?>
+                                            </div>
+                                        </div>
                                 </div>
-                                <div class="card-body size-0-8">
-                                    <p class="card-text text-grey-d-2"><?=$this->getStory();?></p>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <p class="card-text text-grey"><?=$this->getOther_info();?></p>
-                                    <div class="d-flex flex-row justify-content-between">
-                                        <?=$this->getDrop_()?>
-                                        <?=$this->getKamas()?>
-                                    </div>
-                                </div>
+                            </div>
                         </div>
                     <?php return ob_get_clean();
+                break;
+                default:
+                    return "Erreur : format de display non reconnu";
             }
 
         }
@@ -2706,230 +2736,230 @@ class Npc extends Content
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function setName($data){
             $this->_name = $data;
-            return "success";
+            return true;
         }
         public function setClasse($data){
             $this->_classe = $data;
-            return "success";
+            return true;
         }
         public function setStory($data){
             $this->_story = $data;
-            return "success";
+            return true;
         }
         public function setHistorical($data){
             $this->_historical = $data;
-            return "success";
+            return true;
         }
         public function setAlignment($data){
             $this->_alignment = $data;
-            return "success";
+            return true;
         }
         public function setLevel($data){
             $this->_level = $data;
-            return "success";
+            return true;
         }
         public function setTrait($data){
             $this->_trait = $data;
-            return "success";
+            return true;
         }
         public function setOther_info($data){
             $this->_other_info = $data;
-            return "success";
+            return true;
         }
         public function setAge($data){
             $this->_age = $data;
-            return "success";
+            return true;
         }
         public function setSize($data){
             $this->_size = $data;
-            return "success";
+            return true;
         }
         public function setWeight($data){
             $this->_weight = $data;
-            return "success";
+            return true;
         }
         public function setLife($data){
             $this->_life = $data;
-            return "success";
+            return true;
         }
         public function setPa($data){
             $this->_pa = $data;
-            return "success";
+            return true;
         }
         public function setPm($data){
             $this->_pm = $data;
-            return "success";
+            return true;
         }
         public function setPo($data){
             $this->_po = $data;
-            return "success";
+            return true;
         }
         public function setIni($data){
             $this->_ini = $data;
-            return "success";
+            return true;
         }
         public function setInvocation($data){
             $this->_invocation = $data;
-            return "success";
+            return true;
         }
         public function setTouch($data){
             $this->_touch = $data;
-            return "success";
+            return true;
         }
         public function setCa($data){
             $this->_ca = $data;
-            return "success";
+            return true;
         }
         public function setDodge_pa($data){
             $this->_dodge_pa = $data;
-            return "success";
+            return true;
         }
         public function setDodge_pm($data){
             $this->_dodge_pm = $data;
-            return "success";
+            return true;
         }
         public function setFuite($data){
             $this->_fuite = $data;
-            return "success";
+            return true;
         }
         public function setTacle($data){
             $this->_tacle = $data;
-            return "success";
+            return true;
         }
         public function setVitality($data){
             $this->_vitality = $data;
-            return "success";
+            return true;
         }
         public function setSagesse($data){
             $this->_sagesse = $data;
-            return "success";
+            return true;
         }
         public function setStrong($data){
             $this->_strong = $data;
-            return "success";
+            return true;
         }
         public function setIntel($data){
             $this->_intel = $data;
-            return "success";
+            return true;
         }
         public function setAgi($data){
             $this->_agi = $data;
-            return "success";
+            return true;
         }
         public function setChance($data){
             $this->_chance = $data;
-            return "success";
+            return true;
         }
         public function setRes_neutre($data){
             $this->_res_neutre = $data;
-            return "success";
+            return true;
         }
         public function setRes_terre($data){
             $this->_res_terre = $data;
-            return "success";
+            return true;
         }
         public function setRes_feu($data){
             $this->_res_feu = $data;
-            return "success";
+            return true;
         }
         public function setRes_air($data){
             $this->_res_air = $data;
-            return "success";
+            return true;
         }
         public function setRes_eau($data){
             $this->_res_eau = $data;
-            return "success";
+            return true;
         }
         public function setAcrobatie($data){
             $this->_acrobatie = $data;
-            return "success";
+            return true;
         }
         public function setDiscretion($data){
             $this->_discretion = $data;
-            return "success";
+            return true;
         }
         public function setEscamotage($data){
             $this->_escamotage = $data;
-            return "success";
+            return true;
         }
         public function setAthletisme($data){
             $this->_athletisme = $data;
-            return "success";
+            return true;
         }
         public function setIntimidation($data){
             $this->_intimidation = $data;
-            return "success";
+            return true;
         }
         public function setArcane($data){
             $this->_arcane = $data;
-            return "success";
+            return true;
         }
         public function setHistoire($data){
             $this->_histoire = $data;
-            return "success";
+            return true;
         }
         public function setInvestigation($data){
             $this->_investigation = $data;
-            return "success";
+            return true;
         }
         public function setNature($data){
             $this->_nature = $data;
-            return "success";
+            return true;
         }
         public function setReligion($data){
             $this->_religion = $data;
-            return "success";
+            return true;
         }
         public function setDressage($data){
             $this->_dressage = $data;
-            return "success";
+            return true;
         }
         public function setMedecine($data){
             $this->_medecine = $data;
-            return "success";
+            return true;
         }
         public function setPerception($data){
             $this->_perception = $data;
-            return "success";
+            return true;
         }
         public function setPerspicacite($data){
             $this->_perspicacite = $data;
-            return "success";
+            return true;
         }
         public function setSurvie($data){
             $this->_survie = $data;
-            return "success";
+            return true;
         }
         public function setPersuasion($data){
             $this->_persuasion = $data;
-            return "success";
+            return true;
         }
         public function setRepresentation($data){
             $this->_representation = $data;
-            return "success";
+            return true;
         }
         public function setSupercherie($data){
             $this->_supercherie = $data;
-            return "success";
+            return true;
         }
         public function setKamas($data){
             $this->_kamas = $data;
-            return "success";
+            return true;
         }
         public function setDrop_($data){
             $this->_drop_ = $data;
-            return "success";
+            return true;
         }
         public function setOther_equipement($data){
             $this->_other_consomable = $data;
-            return "success";
+            return true;
         }
         public function setOther_consomable($data){
             $this->_other_consomable = $data;
-            return "success";
+            return true;
         }
         public function setOther_spell($data){
             $this->_other_spell = $data;
-            return "success";
+            return true;
         }
 }

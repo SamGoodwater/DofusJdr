@@ -1,23 +1,6 @@
 <?php
 class ControllerConsumable extends Controller{
 
-  public function countAll(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'success',
-      'value' => "",
-      'error' => 'erreur inconnue',
-    ];
-    if(!$currentUser->getRight('consumable', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-
-      $manager = new ConsumableManager();
-      $return["value"] = $manager->countAll();
-
-    }
-    echo json_encode($return);
-    flush();
-  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     $bookmarks = $currentUser->getBookmark();
@@ -39,10 +22,14 @@ class ControllerConsumable extends Controller{
 
         foreach ($objs as $obj) {
 
-          if(isset($bookmarks["Consumable-".$obj->getUniqid()])){
-            $bookmark_icon = "fas";
-          } else {
-            $bookmark_icon = "far";
+          $bookmark_icon = "far";
+          if($currentUser->in_bookmark($obj)){
+              $bookmark_icon = "fas";
+          }
+
+          $edit = "";
+          if($currentUser->getRight('consumable', User::RIGHT_WRITE)){
+            $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Consumable.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
           }
 
           $json[] = array(
@@ -61,8 +48,8 @@ class ControllerConsumable extends Controller{
             'path_img' => $obj->getPath_img(Content::FORMAT_IMAGE, "img-back-30"),
             'usable' => $obj->getUsable(Content::FORMAT_ICON),
             'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='consumable' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
-            'edit' => "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Consumable.open('{$obj->getUniqid()}')\"><i class='far fa-edit'></i></a>",
-            'detailView' => $obj->getVisual(Content::FORMAT_CARD)
+            'edit' => $edit,
+            'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
           );
         }
 
@@ -75,7 +62,7 @@ class ControllerConsumable extends Controller{
     $currentUser = ControllerConnect::getCurrentUser();
     $bookmarks = $currentUser->getBookmark();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => [],
       'error' => 'erreur inconnue'
     ];
@@ -93,10 +80,14 @@ class ControllerConsumable extends Controller{
           if($manager->existsUniqid($_REQUEST['uniqid'])){
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
 
-            if(isset($bookmarks["Consumable-".$obj->getUniqid()])){
-              $bookmark_icon = "fas";
-            } else {
-              $bookmark_icon = "far";
+            $bookmark_icon = "far";
+            if($currentUser->in_bookmark($obj)){
+                $bookmark_icon = "fas";
+            }
+
+            $edit = "";
+            if($currentUser->getRight('consumable', User::RIGHT_WRITE)){
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Consumable.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -115,52 +106,16 @@ class ControllerConsumable extends Controller{
               'path_img' => $obj->getPath_img(Content::FORMAT_IMAGE, "img-back-30"),
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='consumable' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
-              'edit' => "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Consumable.open('{$obj->getUniqid()}')\"><i class='far fa-edit'></i></a>",
-              'detailView' => $obj->getVisual(Content::FORMAT_CARD)
+              'edit' => $edit,
+              'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
             );
 
-            $return['return'] = "success";
+            $return['state'] = true;
           }else {
             $return['error'] = 'Impossible de récupérer les données';
           }
       }
 
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function getFromUniqid(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('consumable', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid'])){
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-        $managerS = new ConsumableManager();
-
-        // Récupération de l'objet
-          if($managerS->existsUniqid($_REQUEST['uniqid'])){
-
-            $obj = $managerS->getFromUniqid($_REQUEST['uniqid']);
-            $return['value'] = array(
-              'visual' => $obj->getVisual(Content::FORMAT_MODIFY),
-              "title" => $obj->getName(Content::FORMAT_MODIFY)
-            );
-            $return['return'] = "success";
-          }else {
-            $return['error'] = 'Impossible de récupérer les données';
-          }
-      }
-    
     }
 
     echo json_encode($return);
@@ -169,7 +124,7 @@ class ControllerConsumable extends Controller{
   public function add(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -198,8 +153,8 @@ class ControllerConsumable extends Controller{
           $object->setTimestamp_updated();
             
             if($manager->add($object)){
-              $return['return'] = "success";
-              $return['script'] = "Consumable.open('".$object->getUniqid()."')";
+              $return['state'] = true;
+              $return['script'] = "Consumable.open('".$object->getUniqid()."', Controller.DISPLAY_MODIFY);";
             }else {
               $return['error'] = 'Impossible d\'ajouter l\'objet';
             }
@@ -214,91 +169,6 @@ class ControllerConsumable extends Controller{
     echo json_encode($return);
     flush();
   }
-  public function update(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('consumable', User::RIGHT_WRITE)){
-      $return['error'] = "Vous n'avez pas les droits pour modifier cet objet";} else {
-
-      if(!isset($_REQUEST['uniqid'], $_REQUEST['type'], $_REQUEST['value'])){
-        $return['error'] = 'Impossible de récupérer les données';
-
-      } else {
-
-            $manager = new ConsumableManager(); // A modifier
-
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-                $method = "set".ucfirst($_REQUEST['type']);
-
-                if(method_exists($obj,$method)){
-                    $result = $obj->$method($_REQUEST['value']);
-                    if($result == "success"){
-                      $obj->setTimestamp_updated(time());
-                      $manager->update($obj);
-                      $return['return'] = "success";
-                    } else {
-                      $return['error'] = $result;
-                    }
-
-                } else {
-                  $return['error'] = "Aucun type correspondant dans l'objet";
-                }
-
-            } else {
-              $return['error'] = 'Impossible de récupérer l\'objet.';
-            }
-
-      }
-    
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function remove(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('consumable', User::RIGHT_WRITE)){
-      $return['error'] = "Vous n'avez pas les droits pour modifier cet objet";} else {
-
-      if(!isset($_REQUEST['uniqid']))
-      {
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-          // Récupération des objets
-            $manager = new ConsumableManager();
-
-          // Récupération de l'objet
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-              $manager->delete($obj);
-              $return['return'] = "success";
-
-            } else {
-              $return['error'] = 'Cet objet n\'existe pas.';
-            }
-      }
-    
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-
   public function search($term, $action = ControllerSearch::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
     $currentUser = ControllerConnect::getCurrentUser();
     if(!$currentUser->getRight('consumable', User::RIGHT_READ)){
@@ -345,5 +215,4 @@ class ControllerConsumable extends Controller{
     }    
     return $array;
   }
-
 }

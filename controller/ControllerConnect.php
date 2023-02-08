@@ -157,11 +157,11 @@ class ControllerConnect extends Controller{
                         <div id="modalConnexionUser">
                             <h3>Connexion</h3>
                             <div class="form-floating mb-3">
-                                <input required type="text" class="form-control" id="email" placeholder="Email">
+                                <input required type="text" class="form-control form-control-main-focus form-control form-control-main-focus-main-focus" id="email" placeholder="Email">
                                 <label for="email">Email</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input required type="password" class="form-control" id="password" placeholder="Mot de passe ou Passe-phrase">
+                                <input required type="password" class="form-control form-control-main-focus" id="password" placeholder="Mot de passe ou Passe-phrase">
                                 <label for="password">Mot de passe ou Passe-phrase</label>
                             </div>
                             <div class="form-check text-left">
@@ -176,19 +176,19 @@ class ControllerConnect extends Controller{
                         <div id="modalAddUser">
                             <h3>Inscription</h3>
                             <div class="form-floating mb-3">
-                                <input required type="text" class="form-control" id="email" placeholder="Email">
+                                <input required type="text" class="form-control form-control-main-focus" id="email" placeholder="Email">
                                 <label for="email">Email</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input required type="text" class="form-control" id="pseudo" placeholder="Pseudo">
+                                <input required type="text" class="form-control form-control-main-focus" id="pseudo" placeholder="Pseudo">
                                 <label for="email">Pseudo</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input required onchange="verifPassword();" type="password" class="form-control" id="password" placeholder="Mot de passe ou Passe-phrase">
+                                <input required onchange="verifPassword();" type="password" class="form-control form-control-main-focus" id="password" placeholder="Mot de passe ou Passe-phrase">
                                 <label for="password">Mot de passe ou Passe-phrase</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input required onchange="verifPassword();" type="password" class="form-control" id="password_repeat" placeholder="Réécrire le mot de passe ou la passe-phrase">
+                                <input required onchange="verifPassword();" type="password" class="form-control form-control-main-focus" id="password_repeat" placeholder="Réécrire le mot de passe ou la passe-phrase">
                                 <label for="password_repeat">Réécrire le mot de passe ou la passe-phrase</label>
                             </div>
                             <p id="display_error" class="bold text-red-d-3 size-0-8"></p>
@@ -227,7 +227,7 @@ class ControllerConnect extends Controller{
         
         public function connexion(){
             $return = [
-                'state ' => 'error',
+                'state ' => false,
                 'value' => "",
                 'script' => "",
                 'error' => 'erreur inconnue',
@@ -254,7 +254,7 @@ class ControllerConnect extends Controller{
                                 $return['cookie'] = $ControllerConnect->createCookie($user);
                             }
                         }
-                        $return["state"] = "success";
+                        $return["state"] = true;
                         $return["value"] = $ControllerConnect->getVisual(false);
 
                     } else {
@@ -270,7 +270,7 @@ class ControllerConnect extends Controller{
         }
         public function disconnect(){  
             $return = [
-                'state' => 'success',
+                'state' => true,
                 'value' => "",
                 'error' => '',
                 'script' => "",
@@ -293,7 +293,7 @@ class ControllerConnect extends Controller{
 
         public function setCookiePreference(){
             $return = [
-                'state ' => 'error',
+                'state ' => false,
                 'error' => 'erreur inconnue',
                 'cookie' => []
               ];
@@ -307,7 +307,7 @@ class ControllerConnect extends Controller{
                 $return["cookie"]["preference"] = "requisite:true|connexion:".$_REQUEST['connexion']."|bookmark:".$_REQUEST['bookmark'];
                 $time = time() + (60 * 60 * 24 * 7 * 4 * 6); // 6 mois
                 $return["cookie"]["date"] = gmdate("D, d M Y H:i:s",$time);
-                $return['state'] = "success";
+                $return['state'] = true;
             } else {
                 $return["error"] = "Tout les cookies ne sont pas envoyés.";
             }
@@ -329,7 +329,7 @@ class ControllerConnect extends Controller{
 
 // public function passwordForgotten(){
         //     $return = [
-        //         'return' => 'success',
+        //         'state' => true,
         //         'value' => "",
         //         'error' => '',
         //         'script' => ""
@@ -361,11 +361,11 @@ class ControllerConnect extends Controller{
         //                         $mail->setTo($_REQUEST['mail']); // --- peut-être répéter ---
         //                         $mail->setTemplate(Mail::TEMPLATE_PASSWORD_FORGOTTEN,["password" => $password]);
         //                       // Envoi
-        //                         if($mail->send() != "success"){
+        //                         if(!$mail->send()){
         //                           $return['error'] = $result;
         //                         }
 
-        //                 $return['return'] = "success";
+        //                 $return['state'] = true;
         //             }
         //       }
           

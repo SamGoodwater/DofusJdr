@@ -5,7 +5,7 @@ class ControllerPage extends Controller{
 
   public function show(){
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'html' => "",
       'title' => "",
       'modal_title' => "",
@@ -58,7 +58,7 @@ class ControllerPage extends Controller{
       }
       $return["html"] = $content;
       $return["title"] = $title;
-      $return["return"] = "success";
+      $return["state"] = true;
     } else {
       $return["error"] = "Données manquantes.";
     }
@@ -71,7 +71,7 @@ class ControllerPage extends Controller{
   public function add(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'state' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => "",
@@ -112,7 +112,7 @@ class ControllerPage extends Controller{
         $manager->add($obj);
           
         $return['link'] = $obj->getUrl_name();
-        $return['state'] = "success";
+        $return['state'] = true;
       } else {
         $return['error'] = "Les données ne sont pas complètes.";
       }
@@ -127,7 +127,7 @@ class ControllerPage extends Controller{
   public function update(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -148,7 +148,7 @@ class ControllerPage extends Controller{
               if($result){
                 $obj->setTimestamp_updated(time());
                 $manager->update($obj);
-                $return['return'] = "success";
+                $return['state'] = true;
               } else {
                 $return['error'] = $result;
               }
@@ -172,7 +172,7 @@ class ControllerPage extends Controller{
   public function updateorder(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'state' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -198,7 +198,7 @@ class ControllerPage extends Controller{
             }
           }
           $return['script'] = "location.reload();";
-          $return['state'] = "success";
+          $return['state'] = true;
 
         } else {
           $return['error'] = "Les données envoyés ne sont pas valides.";
@@ -218,7 +218,7 @@ class ControllerPage extends Controller{
   public function remove(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -238,7 +238,7 @@ class ControllerPage extends Controller{
 
             $item = $manager->getFromUniqid($_REQUEST['uniqid']);
             $manager->delete($item);
-            $return['return'] = "success";
+            $return['state'] = true;
 
           } else {
             $return['error'] = 'Cette page n\'existe pas.';

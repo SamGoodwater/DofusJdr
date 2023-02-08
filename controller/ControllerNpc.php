@@ -1,21 +1,6 @@
 <?php
 class ControllerNpc extends Controller{
 
-  public function countAll(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'success',
-      'value' => "",
-      'error' => 'erreur inconnue',
-    ];
-    if(!$currentUser->getRight('npc', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-      $manager = new NpcManager();
-      $return["value"] = $manager->countAll();
-    }
-    echo json_encode($return);
-    flush();
-  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     $bookmarks = $currentUser->getBookmark();
@@ -32,83 +17,87 @@ class ControllerNpc extends Controller{
           $usable = $_REQUEST['usable'];
         }
       }
-      $objects = $managerS->getAll($usable);
+      $objs = $managerS->getAll($usable);
 
-      foreach ($objects AS $object) {
+      foreach ($objs AS $obj) {
+        
+        $bookmark_icon = "far";
+        if($currentUser->in_bookmark($obj)){
+            $bookmark_icon = "fas";
+        }
 
-        if(isset($bookmarks["Npc-".$object->getUniqid()])){
-          $bookmark_icon = "fas";
-        } else {
-          $bookmark_icon = "far";
+        $edit = "";
+        if($currentUser->getRight('npc', User::RIGHT_WRITE)){
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Npc.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
         }
 
         $json[] = array(
-          'id' => $object->getId(Content::FORMAT_BADGE),
-          "uniqid" => $object->getUniqid(),
-          "timestamp_add" => $object->getTimestamp_add(),
-          "timestamp_updated" => $object->getTimestamp_updated(),
-          "name" => $object->getName(),
-          "classe" => $object->getClasse(Content::FORMAT_OBJECT)->getName(),
-          "story" => $object->getStory(),
-          "historical" => $object->getHistorical(),
-          "alignment" => $object->getAlignment(),
-          "level" => $object->getLevel(),
-          "trait" => $object->getTrait(Content::FORMAT_BADGE),
-          "other_info" => $object->getOther_info(),
-          "age" => $object->getAge(Content::FORMAT_VIEW),
-          "size" => $object->getSize(Content::FORMAT_VIEW),
-          "weight" => $object->getWeight(Content::FORMAT_VIEW),
-          "life" => $object->getLife(Content::FORMAT_VIEW),
-          "pa" => $object->getPa(Content::FORMAT_VIEW),
-          "pm" => $object->getPm(Content::FORMAT_VIEW),
-          "po" => $object->getPo(Content::FORMAT_VIEW),
-          "ini" => $object->getIni(Content::FORMAT_VIEW),
-          "invocation" => $object->getInvocation(Content::FORMAT_VIEW),
-          "touch" => $object->getTouch(Content::FORMAT_VIEW),
-          "ca" => $object->getCa(Content::FORMAT_VIEW),
-          "dodge_pa" => $object->getDodge_pa(Content::FORMAT_VIEW),
-          "dodge_pm" => $object->getDodge_pm(Content::FORMAT_VIEW),
-          "fuite" => $object->getFuite(Content::FORMAT_VIEW),
-          "tacle" => $object->getTacle(Content::FORMAT_VIEW),
-          "vitality" => $object->getVitality(Content::FORMAT_VIEW),
-          "sagesse" => $object->getSagesse(Content::FORMAT_VIEW),
-          "strong" => $object->getStrong(Content::FORMAT_VIEW),
-          "intel" => $object->getIntel(Content::FORMAT_VIEW),
-          "agi" => $object->getAgi(Content::FORMAT_VIEW),
-          "chance" => $object->getChance(Content::FORMAT_VIEW),
-          "res_neutre" => $object->getRes_neutre(Content::FORMAT_VIEW),
-          "res_terre" => $object->getRes_terre(Content::FORMAT_VIEW),
-          "res_feu" => $object->getRes_feu(Content::FORMAT_VIEW),
-          "res_air" => $object->getRes_air(Content::FORMAT_VIEW),
-          "res_eau" => $object->getRes_eau(Content::FORMAT_VIEW),
-          "acrobatie" => $object->getAcrobatie(Content::FORMAT_VIEW),
-          "discretion" => $object->getDiscretion(Content::FORMAT_VIEW),
-          "escamotage" => $object->getEscamotage(Content::FORMAT_VIEW),
-          "athletisme" => $object->getAthletisme(Content::FORMAT_VIEW),
-          "intimidation" => $object->getIntimidation(Content::FORMAT_VIEW),
-          "arcane" => $object->getArcane(Content::FORMAT_VIEW),
-          "histoire" => $object->getHistoire(Content::FORMAT_VIEW),
-          "investigation" => $object->getInvestigation(Content::FORMAT_VIEW),
-          "nature" => $object->getNature(Content::FORMAT_VIEW),
-          "religion" => $object->getReligion(Content::FORMAT_VIEW),
-          "dressage" => $object->getDressage(Content::FORMAT_VIEW),
-          "medecine" => $object->getMedecine(Content::FORMAT_VIEW),
-          "perception" => $object->getPerception(Content::FORMAT_VIEW),
-          "perspicacite" => $object->getPerspicacite(Content::FORMAT_VIEW),
-          "survie" => $object->getSurvie(Content::FORMAT_VIEW),
-          "persuasion" => $object->getPersuasion(Content::FORMAT_VIEW),
-          "representation" => $object->getRepresentation(Content::FORMAT_VIEW),
-          "supercherie" => $object->getSupercherie(Content::FORMAT_VIEW),
-          "kamas" => $object->getKamas(Content::FORMAT_BADGE),
-          "drop_" => $object->getDrop_(Content::FORMAT_BADGE),
-          "other_equipment" => $object->getOther_equipment(),
-          "other_consomable" => $object->getOther_consomable(),
-          "other_spell" => $object->getOther_spell(),
-          "logo" => $object->getClasse(Content::FORMAT_OBJECT)->getPath_img_logo(Content::FORMAT_IMAGE, "img-back-30"),
-          'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='npc' data-uniqid='".$object->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
-          'edit' => "<a class='text-main-d-2 text-main-l-3-hover' onclick=\"Npc.open('{$object->getUniqid()}')\"><i class='far fa-edit'></i></a>",
-          'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title)='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=".$object->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
-          'detailView' => $object->getVisual(Content::FORMAT_CARD)
+          'id' => $obj->getId(Content::FORMAT_BADGE),
+          "uniqid" => $obj->getUniqid(),
+          "timestamp_add" => $obj->getTimestamp_add(),
+          "timestamp_updated" => $obj->getTimestamp_updated(),
+          "name" => $obj->getName(),
+          "classe" => $obj->getClasse(Content::FORMAT_OBJECT)->getName(),
+          "story" => $obj->getStory(),
+          "historical" => $obj->getHistorical(),
+          "alignment" => $obj->getAlignment(),
+          "level" => $obj->getLevel(),
+          "trait" => $obj->getTrait(Content::FORMAT_BADGE),
+          "other_info" => $obj->getOther_info(),
+          "age" => $obj->getAge(Content::FORMAT_VIEW),
+          "size" => $obj->getSize(Content::FORMAT_VIEW),
+          "weight" => $obj->getWeight(Content::FORMAT_VIEW),
+          "life" => $obj->getLife(Content::FORMAT_VIEW),
+          "pa" => $obj->getPa(Content::FORMAT_VIEW),
+          "pm" => $obj->getPm(Content::FORMAT_VIEW),
+          "po" => $obj->getPo(Content::FORMAT_VIEW),
+          "ini" => $obj->getIni(Content::FORMAT_VIEW),
+          "invocation" => $obj->getInvocation(Content::FORMAT_VIEW),
+          "touch" => $obj->getTouch(Content::FORMAT_VIEW),
+          "ca" => $obj->getCa(Content::FORMAT_VIEW),
+          "dodge_pa" => $obj->getDodge_pa(Content::FORMAT_VIEW),
+          "dodge_pm" => $obj->getDodge_pm(Content::FORMAT_VIEW),
+          "fuite" => $obj->getFuite(Content::FORMAT_VIEW),
+          "tacle" => $obj->getTacle(Content::FORMAT_VIEW),
+          "vitality" => $obj->getVitality(Content::FORMAT_VIEW),
+          "sagesse" => $obj->getSagesse(Content::FORMAT_VIEW),
+          "strong" => $obj->getStrong(Content::FORMAT_VIEW),
+          "intel" => $obj->getIntel(Content::FORMAT_VIEW),
+          "agi" => $obj->getAgi(Content::FORMAT_VIEW),
+          "chance" => $obj->getChance(Content::FORMAT_VIEW),
+          "res_neutre" => $obj->getRes_neutre(Content::FORMAT_VIEW),
+          "res_terre" => $obj->getRes_terre(Content::FORMAT_VIEW),
+          "res_feu" => $obj->getRes_feu(Content::FORMAT_VIEW),
+          "res_air" => $obj->getRes_air(Content::FORMAT_VIEW),
+          "res_eau" => $obj->getRes_eau(Content::FORMAT_VIEW),
+          "acrobatie" => $obj->getAcrobatie(Content::FORMAT_VIEW),
+          "discretion" => $obj->getDiscretion(Content::FORMAT_VIEW),
+          "escamotage" => $obj->getEscamotage(Content::FORMAT_VIEW),
+          "athletisme" => $obj->getAthletisme(Content::FORMAT_VIEW),
+          "intimidation" => $obj->getIntimidation(Content::FORMAT_VIEW),
+          "arcane" => $obj->getArcane(Content::FORMAT_VIEW),
+          "histoire" => $obj->getHistoire(Content::FORMAT_VIEW),
+          "investigation" => $obj->getInvestigation(Content::FORMAT_VIEW),
+          "nature" => $obj->getNature(Content::FORMAT_VIEW),
+          "religion" => $obj->getReligion(Content::FORMAT_VIEW),
+          "dressage" => $obj->getDressage(Content::FORMAT_VIEW),
+          "medecine" => $obj->getMedecine(Content::FORMAT_VIEW),
+          "perception" => $obj->getPerception(Content::FORMAT_VIEW),
+          "perspicacite" => $obj->getPerspicacite(Content::FORMAT_VIEW),
+          "survie" => $obj->getSurvie(Content::FORMAT_VIEW),
+          "persuasion" => $obj->getPersuasion(Content::FORMAT_VIEW),
+          "representation" => $obj->getRepresentation(Content::FORMAT_VIEW),
+          "supercherie" => $obj->getSupercherie(Content::FORMAT_VIEW),
+          "kamas" => $obj->getKamas(Content::FORMAT_BADGE),
+          "drop_" => $obj->getDrop_(Content::FORMAT_BADGE),
+          "other_equipment" => $obj->getOther_equipment(),
+          "other_consomable" => $obj->getOther_consomable(),
+          "other_spell" => $obj->getOther_spell(),
+          "logo" => $obj->getClasse(Content::FORMAT_OBJECT)->getPath_img_logo(Content::FORMAT_IMAGE, "img-back-30"),
+          'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='npc' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+          'edit' => $edit,
+          'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title)='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=".$obj->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
+          'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
         );
       }
 
@@ -117,13 +106,12 @@ class ControllerNpc extends Controller{
     echo json_encode($json);
     flush();
   }
-
   public function getArrayFromUniqid(){
     $currentUser = ControllerConnect::getCurrentUser();
     $bookmarks = $currentUser->getBookmark();
 
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => [],
       'error' => 'erreur inconnue'
     ];
@@ -138,84 +126,88 @@ class ControllerNpc extends Controller{
 
         // Récupération de l'objet
           if($manager->existsUniqid($_REQUEST['uniqid'])){
-            $object = $manager->getFromUniqid($_REQUEST['uniqid']);
+            $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
 
-            if(isset($bookmarks["Npc-".$object->getUniqid()])){
-              $bookmark_icon = "fas";
-            } else {
-              $bookmark_icon = "far";
+            $bookmark_icon = "far";
+            if($currentUser->in_bookmark($obj)){
+                $bookmark_icon = "fas";
+            }
+
+            $edit = "";
+            if($currentUser->getRight('npc', User::RIGHT_WRITE)){
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Npc.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
             }
 
             $return["value"] = array(
-              'id' => $object->getId(Content::FORMAT_BADGE),
-              "uniqid" => $object->getUniqid(),
-              "timestamp_add" => $object->getTimestamp_add(),
-              "timestamp_updated" => $object->getTimestamp_updated(),
-              "name" => $object->getName(),
-              "classe" => $object->getClasse(Content::FORMAT_OBJECT)->getName(),
-              "story" => $object->getStory(),
-              "historical" => $object->getHistorical(),
-              "alignment" => $object->getAlignment(),
-              "level" => $object->getLevel(),
-              "trait" => $object->getTrait(Content::FORMAT_BADGE),
-              "other_info" => $object->getOther_info(),
-              "age" => $object->getAge(Content::FORMAT_VIEW),
-              "size" => $object->getSize(Content::FORMAT_VIEW),
-              "weight" => $object->getWeight(Content::FORMAT_VIEW),
-              "life" => $object->getLife(Content::FORMAT_VIEW),
-              "pa" => $object->getPa(Content::FORMAT_VIEW),
-              "pm" => $object->getPm(Content::FORMAT_VIEW),
-              "po" => $object->getPo(Content::FORMAT_VIEW),
-              "ini" => $object->getIni(Content::FORMAT_VIEW),
-              "invocation" => $object->getInvocation(Content::FORMAT_VIEW),
-              "touch" => $object->getTouch(Content::FORMAT_VIEW),
-              "ca" => $object->getCa(Content::FORMAT_VIEW),
-              "dodge_pa" => $object->getDodge_pa(Content::FORMAT_VIEW),
-              "dodge_pm" => $object->getDodge_pm(Content::FORMAT_VIEW),
-              "fuite" => $object->getFuite(Content::FORMAT_VIEW),
-              "tacle" => $object->getTacle(Content::FORMAT_VIEW),
-              "vitality" => $object->getVitality(Content::FORMAT_VIEW),
-              "sagesse" => $object->getSagesse(Content::FORMAT_VIEW),
-              "strong" => $object->getStrong(Content::FORMAT_VIEW),
-              "intel" => $object->getIntel(Content::FORMAT_VIEW),
-              "agi" => $object->getAgi(Content::FORMAT_VIEW),
-              "chance" => $object->getChance(Content::FORMAT_VIEW),
-              "res_neutre" => $object->getRes_neutre(Content::FORMAT_VIEW),
-              "res_terre" => $object->getRes_terre(Content::FORMAT_VIEW),
-              "res_feu" => $object->getRes_feu(Content::FORMAT_VIEW),
-              "res_air" => $object->getRes_air(Content::FORMAT_VIEW),
-              "res_eau" => $object->getRes_eau(Content::FORMAT_VIEW),
-              "acrobatie" => $object->getAcrobatie(Content::FORMAT_VIEW),
-              "discretion" => $object->getDiscretion(Content::FORMAT_VIEW),
-              "escamotage" => $object->getEscamotage(Content::FORMAT_VIEW),
-              "athletisme" => $object->getAthletisme(Content::FORMAT_VIEW),
-              "intimidation" => $object->getIntimidation(Content::FORMAT_VIEW),
-              "arcane" => $object->getArcane(Content::FORMAT_VIEW),
-              "histoire" => $object->getHistoire(Content::FORMAT_VIEW),
-              "investigation" => $object->getInvestigation(Content::FORMAT_VIEW),
-              "nature" => $object->getNature(Content::FORMAT_VIEW),
-              "religion" => $object->getReligion(Content::FORMAT_VIEW),
-              "dressage" => $object->getDressage(Content::FORMAT_VIEW),
-              "medecine" => $object->getMedecine(Content::FORMAT_VIEW),
-              "perception" => $object->getPerception(Content::FORMAT_VIEW),
-              "perspicacite" => $object->getPerspicacite(Content::FORMAT_VIEW),
-              "survie" => $object->getSurvie(Content::FORMAT_VIEW),
-              "persuasion" => $object->getPersuasion(Content::FORMAT_VIEW),
-              "representation" => $object->getRepresentation(Content::FORMAT_VIEW),
-              "supercherie" => $object->getSupercherie(Content::FORMAT_VIEW),
-              "kamas" => $object->getKamas(Content::FORMAT_BADGE),
-              "drop_" => $object->getDrop_(Content::FORMAT_BADGE),
-              "other_equipment" => $object->getOther_equipment(),
-              "other_consomable" => $object->getOther_consomable(),
-              "other_spell" => $object->getOther_spell(),
-              "logo" => $object->getClasse(Content::FORMAT_OBJECT)->getPath_img_logo(Content::FORMAT_IMAGE, "img-back-30"),
-              'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='npc' data-uniqid='".$object->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
-              'edit' => "<a class='text-main-d-2 text-main-l-3-hover' onclick=\"Npc.open('{$object->getUniqid()}')\"><i class='far fa-edit'></i></a>",
-              'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=".$object->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
-              'detailView' => $object->getVisual(Content::FORMAT_CARD)
+              'id' => $obj->getId(Content::FORMAT_BADGE),
+              "uniqid" => $obj->getUniqid(),
+              "timestamp_add" => $obj->getTimestamp_add(),
+              "timestamp_updated" => $obj->getTimestamp_updated(),
+              "name" => $obj->getName(),
+              "classe" => $obj->getClasse(Content::FORMAT_OBJECT)->getName(),
+              "story" => $obj->getStory(),
+              "historical" => $obj->getHistorical(),
+              "alignment" => $obj->getAlignment(),
+              "level" => $obj->getLevel(),
+              "trait" => $obj->getTrait(Content::FORMAT_BADGE),
+              "other_info" => $obj->getOther_info(),
+              "age" => $obj->getAge(Content::FORMAT_VIEW),
+              "size" => $obj->getSize(Content::FORMAT_VIEW),
+              "weight" => $obj->getWeight(Content::FORMAT_VIEW),
+              "life" => $obj->getLife(Content::FORMAT_VIEW),
+              "pa" => $obj->getPa(Content::FORMAT_VIEW),
+              "pm" => $obj->getPm(Content::FORMAT_VIEW),
+              "po" => $obj->getPo(Content::FORMAT_VIEW),
+              "ini" => $obj->getIni(Content::FORMAT_VIEW),
+              "invocation" => $obj->getInvocation(Content::FORMAT_VIEW),
+              "touch" => $obj->getTouch(Content::FORMAT_VIEW),
+              "ca" => $obj->getCa(Content::FORMAT_VIEW),
+              "dodge_pa" => $obj->getDodge_pa(Content::FORMAT_VIEW),
+              "dodge_pm" => $obj->getDodge_pm(Content::FORMAT_VIEW),
+              "fuite" => $obj->getFuite(Content::FORMAT_VIEW),
+              "tacle" => $obj->getTacle(Content::FORMAT_VIEW),
+              "vitality" => $obj->getVitality(Content::FORMAT_VIEW),
+              "sagesse" => $obj->getSagesse(Content::FORMAT_VIEW),
+              "strong" => $obj->getStrong(Content::FORMAT_VIEW),
+              "intel" => $obj->getIntel(Content::FORMAT_VIEW),
+              "agi" => $obj->getAgi(Content::FORMAT_VIEW),
+              "chance" => $obj->getChance(Content::FORMAT_VIEW),
+              "res_neutre" => $obj->getRes_neutre(Content::FORMAT_VIEW),
+              "res_terre" => $obj->getRes_terre(Content::FORMAT_VIEW),
+              "res_feu" => $obj->getRes_feu(Content::FORMAT_VIEW),
+              "res_air" => $obj->getRes_air(Content::FORMAT_VIEW),
+              "res_eau" => $obj->getRes_eau(Content::FORMAT_VIEW),
+              "acrobatie" => $obj->getAcrobatie(Content::FORMAT_VIEW),
+              "discretion" => $obj->getDiscretion(Content::FORMAT_VIEW),
+              "escamotage" => $obj->getEscamotage(Content::FORMAT_VIEW),
+              "athletisme" => $obj->getAthletisme(Content::FORMAT_VIEW),
+              "intimidation" => $obj->getIntimidation(Content::FORMAT_VIEW),
+              "arcane" => $obj->getArcane(Content::FORMAT_VIEW),
+              "histoire" => $obj->getHistoire(Content::FORMAT_VIEW),
+              "investigation" => $obj->getInvestigation(Content::FORMAT_VIEW),
+              "nature" => $obj->getNature(Content::FORMAT_VIEW),
+              "religion" => $obj->getReligion(Content::FORMAT_VIEW),
+              "dressage" => $obj->getDressage(Content::FORMAT_VIEW),
+              "medecine" => $obj->getMedecine(Content::FORMAT_VIEW),
+              "perception" => $obj->getPerception(Content::FORMAT_VIEW),
+              "perspicacite" => $obj->getPerspicacite(Content::FORMAT_VIEW),
+              "survie" => $obj->getSurvie(Content::FORMAT_VIEW),
+              "persuasion" => $obj->getPersuasion(Content::FORMAT_VIEW),
+              "representation" => $obj->getRepresentation(Content::FORMAT_VIEW),
+              "supercherie" => $obj->getSupercherie(Content::FORMAT_VIEW),
+              "kamas" => $obj->getKamas(Content::FORMAT_BADGE),
+              "drop_" => $obj->getDrop_(Content::FORMAT_BADGE),
+              "other_equipment" => $obj->getOther_equipment(),
+              "other_consomable" => $obj->getOther_consomable(),
+              "other_spell" => $obj->getOther_spell(),
+              "logo" => $obj->getClasse(Content::FORMAT_OBJECT)->getPath_img_logo(Content::FORMAT_IMAGE, "img-back-30"),
+              'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='npc' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+              'edit' => $edit,
+              'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=".$obj->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
+              'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
             );
 
-            $return['return'] = "success";
+            $return['state'] = true;
           }else {
             $return['error'] = 'Impossible de récupérer les données';
           }
@@ -226,43 +218,6 @@ class ControllerNpc extends Controller{
     echo json_encode($return);
     flush();
   }
-  public function getFromUniqid(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('npc', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid'])){
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-        $managerS = new NpcManager();
-
-        // Récupération de l'objet
-          if($managerS->existsUniqid($_REQUEST['uniqid'])){
-
-            $obj = $managerS->getFromUniqid($_REQUEST['uniqid']);
-            $return['value'] = array(
-              'visual' => $obj->getVisual(Content::FORMAT_MODIFY),
-              "title" => $obj->getName(Content::FORMAT_MODIFY)
-            );
-            $return['return'] = "success";
-          }else {
-            $return['error'] = 'Impossible de récupérer les données';
-          }
-      }
-
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-
   public function getPdf(){
     $currentUser = ControllerConnect::getCurrentUser();
     if(!$currentUser->getRight('npc', User::RIGHT_READ)){
@@ -301,7 +256,7 @@ class ControllerNpc extends Controller{
   public function getJean(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'state' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -749,7 +704,7 @@ class ControllerNpc extends Controller{
   public function add(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -1212,94 +1167,10 @@ class ControllerNpc extends Controller{
             $obj->setTimestamp_updated();
             
             if($manager->add($obj)){
-              $return['return'] = "success";
-              $return['script'] = "Npc.open('".$obj->getUniqid()."')";
+              $return['state'] = true;
+              $return['script'] = "Npc.open('".$obj->getUniqid()."', Controller.DISPLAY_MODIFY)";
             }else {
               $return['error'] = 'Impossible d\'ajouter l\'objet';
-            }
-      }
-
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function update(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('npc', User::RIGHT_WRITE)){
-      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid'], $_REQUEST['type'], $_REQUEST['value'])){
-        $return['error'] = 'Impossible de récupérer les données';
-
-      } else {
-
-            $manager = new NpcManager(); // A modifier
-
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-                $method = "set".ucfirst($_REQUEST['type']);
-
-                if(method_exists($obj,$method)){
-                    $result = $obj->$method($_REQUEST['value']);
-                    if($result == "success"){
-                      $obj->setTimestamp_updated(time());
-                      $manager->update($obj);
-                      $return['return'] = "success";
-                    } else {
-                      $return['error'] = $result;
-                    }
-
-                } else {
-                  $return['error'] = "Aucun type correspondant dans l'objet";
-                }
-
-            } else {
-              $return['error'] = 'Impossible de récupérer l\'objet.';
-            }
-
-      }
-
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function remove(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('npc', User::RIGHT_WRITE)){
-      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid']))
-      {
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-          // Récupération des objets
-            $manager = new NpcManager();
-
-          // Récupération de l'objet
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-              $manager->delete($obj);
-              $return['return'] = "success";
-
-            } else {
-              $return['error'] = 'Cet objet n\'existe pas.';
             }
       }
 

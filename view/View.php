@@ -10,7 +10,7 @@ class View
                         "crossorigin" => "anonymous",
                         "integrity" => "sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
                     ],
-                    "https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css",
+                    "https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css",
                     "https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css",
                     [
                         "link" => "https://use.fontawesome.com/releases/v5.3.1/css/all.css",
@@ -82,19 +82,21 @@ class View
                         "integrity" => ""
                     ],
                     "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js", // Fancybox
+                    "src/js/ajax/controller.js", // Ini et function
                     "src/js/", // Ini et function
                     "src/js/plugin/upload/",
                     "src/js/ajax/",
                     "src/js/ckeditor5/", //https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js
                     "src/js/plugin/",
-                    "src/js/plugin/table-bootstrap-export/",
                     "src/js/plugin/table-bootstrap-export/libs/",
-                    "src/js/plugin/table-bootstrap-export/libs/pdfmake/",
+                    "src/js/plugin/table-bootstrap-export/tableExport.min.js",
+                    "https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js",
                     "https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js",
                     "https://unpkg.com/bootstrap-table@1.18.2/dist/locale/bootstrap-table-fr-FR.min.js",
                     "https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js",
                     "https://cdn.jsdelivr.net/gh/wenzhixin/bootstrap-table-examples@master/utils/natural-sorting/dist/natural-sorting.js",
                     "https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/filter-control/bootstrap-table-filter-control.min.js",
+                    "https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js",
                     "https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/toolbar/bootstrap-table-toolbar.min.js",
                     "https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/resizable/bootstrap-table-resizable.min.js",
                     "https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.js"
@@ -248,16 +250,16 @@ class View
         $css_shadow = ""; if($shadow){ $css_shadow = "shadow-box-1 shadow-box-2-hover"; }
         switch ($type) {
             case View::TYPE_BTN_BACK:
-                return "btn form-control-".$color."-focus ".$css_shadow." text-white text-".$color."-d-2-hover back-". $color . "-d-2 back-" . $color .  "-hover";
+                return "btn form-control form-control-main-focus-".$color."-focus ".$css_shadow." text-white text-".$color."-d-2-hover back-". $color . "-d-2 back-" . $color .  "-hover";
 
             case View::TYPE_BTN_BORDER:
-                return "btn form-control-".$color."-focus -solid border-2 text-white-hover text-".$color."-d-2 ".$css_shadow." border-". $color . "-d-2 back-white back-" . $color .  "-d-2-hover";
+                return "btn form-control form-control-main-focus-".$color."-focus -solid border-2 text-white-hover text-".$color."-d-2 ".$css_shadow." border-". $color . "-d-2 back-white back-" . $color .  "-d-2-hover";
 
             case View::TYPE_BTN_UNDERLINE:
-                return "form-control-".$color."-focus border-solid border-none text-".$color."-d-2 text-".$color."-l-1-hover border-bottom-2-hover ".$css_shadow." border-". $color . "-l-1";
+                return "form-control form-control-main-focus-".$color."-focus border-solid border-none text-".$color."-d-2 text-".$color."-l-1-hover border-bottom-2-hover ".$css_shadow." border-". $color . "-l-1";
             
                 case View::TYPE_BTN_TEXT:
-                return "btn form-control-".$color."-focus ".$css_shadow." text-grey-d-2 back-". $color . "-l-3 back-" . $color .  "-l-4-hover";
+                return "btn form-control form-control-main-focus-".$color."-focus ".$css_shadow." text-grey-d-2 back-". $color . "-l-3 back-" . $color .  "-l-4-hover";
         }
     }
 

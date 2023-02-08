@@ -1,4 +1,4 @@
-class Section {
+class Section extends Controller{
 
     static add(url_name)
     {
@@ -34,8 +34,8 @@ class Section {
                 if(data.script != ""){
                     $('body').append("<script>"+data.script+"</script>");
                 }
-                if(data['return'] == 'success'){
-                    MsgAlert("Ajout de la section", 'La section ' + title + ' a bien été ajouté.', "success" , 2000);
+                if(data.state){
+                    MsgAlert("Ajout de la section", 'La section ' + title + ' a bien été ajouté.', "green" , 2000);
                     $("#modal").modal("hide");
                     $('#modal #type').val("");
                     $('#modal #title').val("");
@@ -75,12 +75,12 @@ class Section {
                 }
             },
         }).on('fileuploaddone', function(e, data){
-            if(data.result.state == 'success'){
+            if(data.result.state){
                 $('#progressBar').attr("aria-valuenow",100);
                 $('#progressBar').css('width', '100%');
                 $('#progressBar').text("Fichier reçu");
                 $('#progressBar').removeClass('bg-info').addClass('bg-success');
-                MsgAlert("Ajout de la section", 'La section ' + title + ' a bien été ajouté.', "success" , 2000);
+                MsgAlert("Ajout de la section", 'La section ' + title + ' a bien été ajouté.', "green" , 2000);
                 $("#modal").modal("hide");
                 $('#modal #type').val("");
                 $('#modal #title').val("");
@@ -158,11 +158,11 @@ class Section {
             },
             function(data, status)
             {
-                if(data['script'] != ""){
-                    $('body').append("<script>"+data['script']+"</script>");
+                if(data.script != ""){
+                    $('body').append("<script>"+data.script+"</script>");
                 }
-                if(data['return'] == "success"){
-                    MsgAlert("Mise à jour de la section", '', "success" , 3000);
+                if(data.state){
+                    MsgAlert("Mise à jour de la section", '', "green" , 3000);
                 } else {
                     MsgAlert("Echec de la mise à jour", 'Erreur : ' + data['error'], "danger" , 4000);
                 }
@@ -184,9 +184,9 @@ class Section {
                     if(data.script != ""){
                         $('body').append("<script>"+data.script+"</script>");
                     }
-                    if(data.return == 'success'){
+                    if(data.state){
                         $("#section"+uniqid).html("");
-                        MsgAlert("Suppression de la section", 'La section a bien été supprimé.', "success" , 3000);
+                        MsgAlert("Suppression de la section", 'La section a bien été supprimé.', "green" , 3000);
                     } else {
                         MsgAlert("Echec de la suppresion", 'Erreur : ' + data.error, "danger" , 4000);
                     }
@@ -328,7 +328,6 @@ class Section {
             },
             function(data, status)
             {
-                console.log(data);
                 if(data.script != ""){
                     $('body').append("<script>"+data.script +   "</script>");
                 }

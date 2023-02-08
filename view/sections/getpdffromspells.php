@@ -49,7 +49,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                 data-action = <?=ControllerSearch::SEARCH_DONE_GET_SPELL?>
                                 data-limit = 10
                                 data-only_usable = true
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 id="getSpell<?=$this->getUniqid()?>" 
                                 placeholder="Rechercher un sort">
                         <label for="getSpell<?=$this->getUniqid()?>">Rechercher un sort</label>
@@ -67,10 +67,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             function getPdfFromListUniqidsSpells(){
                 var uniqids = "";
                 document.querySelectorAll("#showResume<?=$this->getUniqid()?> [data-uniqid]").forEach(function(element){
-                    console.log(element);
                     uniqids += element.getAttribute("data-uniqid") + "|";
                 });
-                console.log(uniqids);
                 if(uniqids != ""){
                     window.open('index.php?c=spell&a=getPdf&uniqids='+uniqids, '_blank')
                 } else {

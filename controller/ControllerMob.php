@@ -1,21 +1,6 @@
 <?php
 class ControllerMob extends Controller{
 
-  public function countAll(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'success',
-      'value' => "",
-      'error' => 'erreur inconnue',
-    ];
-    if(!$currentUser->getRight('mob', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-      $manager = new MobManager();
-      $return["value"] = $manager->countAll();
-    }
-    echo json_encode($return);
-    flush();
-  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     $bookmarks = $currentUser->getBookmark();
@@ -36,10 +21,14 @@ class ControllerMob extends Controller{
 
       foreach ($objects as $key => $obj) {
 
-        if(isset($bookmarks["Mob-".$obj->getUniqid()])){
-          $bookmark_icon = "fas";
-        } else {
-          $bookmark_icon = "far";
+        $bookmark_icon = "far";
+        if($currentUser->in_bookmark($obj)){
+            $bookmark_icon = "fas";
+        }
+
+        $edit = "";
+        if($currentUser->getRight('mob', User::RIGHT_WRITE)){
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Mob.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
         }
 
         $json[] = array(
@@ -80,12 +69,12 @@ class ControllerMob extends Controller{
           'path_img' => $obj->getPath_img(Content::FORMAT_IMAGE, "img-back-50"),
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
           'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='mob' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
-          'edit' => "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Mob.open('{$obj->getUniqid()}')\"><i class='far fa-edit'></i></a>",
+          'edit' => $edit,
           'resume' => "<div class='size-0-8 col'><div>{$obj->getPa(Content::FORMAT_ICON)}</div><div>{$obj->getPm(Content::FORMAT_ICON)}</div><div>{$obj->getPo(Content::FORMAT_ICON)}</div><div>{$obj->getIni(Content::FORMAT_ICON)}</div><div>{$obj->getTouch(Content::FORMAT_ICON)}</div></div>",
           'resumeattack' => "<div class='size-0-8 col'><div>{$obj->getVitality(Content::FORMAT_ICON)}</div><div>{$obj->getSagesse(Content::FORMAT_ICON)}</div><div>{$obj->getStrong(Content::FORMAT_ICON)}</div><div>{$obj->getIntel(Content::FORMAT_ICON)}</div><div>{$obj->getAgi(Content::FORMAT_ICON)}</div><div>{$obj->getChance(Content::FORMAT_ICON)}</div></div>",
           'resumedefend' => "<div class='size-0-8 col'><div>{$obj->getCa(Content::FORMAT_ICON)}</div><div>{$obj->getFuite(Content::FORMAT_ICON)}</div><div>{$obj->getTacle(Content::FORMAT_ICON)}</div><div>{$obj->getDodge_pa(Content::FORMAT_ICON)}</div><div>{$obj->getDodge_pm(Content::FORMAT_ICON)}</div></div>",
           'resumeres' => "<div class='size-0-8 col'><div>{$obj->getRes_neutre(Content::FORMAT_ICON)}</div><div>{$obj->getRes_terre(Content::FORMAT_ICON)}</div><div>{$obj->getRes_feu(Content::FORMAT_ICON)}</div><div>{$obj->getRes_air(Content::FORMAT_ICON)}</div><div>{$obj->getRes_eau(Content::FORMAT_ICON)}</div></div>",
-          'detailView' => $obj->getVisual(Content::FORMAT_CARD)
+          'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
         );
       }
 
@@ -99,7 +88,7 @@ class ControllerMob extends Controller{
     $bookmarks = $currentUser->getBookmark();
 
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => [],
       'error' => 'erreur inconnue'
     ];
@@ -117,10 +106,14 @@ class ControllerMob extends Controller{
           if($manager->existsUniqid($_REQUEST['uniqid'])){
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
 
-            if(isset($bookmarks["Mob-".$obj->getUniqid()])){
-              $bookmark_icon = "fas";
-            } else {
-              $bookmark_icon = "far";
+            $bookmark_icon = "far";
+            if($currentUser->in_bookmark($obj)){
+                $bookmark_icon = "fas";
+            }
+
+            $edit = "";
+            if($currentUser->getRight('mob', User::RIGHT_WRITE)){
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Mob.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -161,51 +154,15 @@ class ControllerMob extends Controller{
               'path_img' => $obj->getPath_img(Content::FORMAT_IMAGE, "img-back-50"),
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='mob' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
-              'edit' => "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Mob.open('{$obj->getUniqid()}')\"><i class='far fa-edit'></i></a>",
+              'edit' => $edit,
               'resume' => "<div class='size-0-8 col'><div>{$obj->getPa(Content::FORMAT_ICON)}</div><div>{$obj->getPm(Content::FORMAT_ICON)}</div><div>{$obj->getPo(Content::FORMAT_ICON)}</div><div>{$obj->getIni(Content::FORMAT_ICON)}</div><div>{$obj->getTouch(Content::FORMAT_ICON)}</div></div>",
               'resumeattack' => "<div class='size-0-8 col'><div>{$obj->getVitality(Content::FORMAT_ICON)}</div><div>{$obj->getSagesse(Content::FORMAT_ICON)}</div><div>{$obj->getStrong(Content::FORMAT_ICON)}</div><div>{$obj->getIntel(Content::FORMAT_ICON)}</div><div>{$obj->getAgi(Content::FORMAT_ICON)}</div><div>{$obj->getChance(Content::FORMAT_ICON)}</div></div>",
               'resumedefend' => "<div class='size-0-8 col'><div>{$obj->getCa(Content::FORMAT_ICON)}</div><div>{$obj->getFuite(Content::FORMAT_ICON)}</div><div>{$obj->getTacle(Content::FORMAT_ICON)}</div><div>{$obj->getDodge_pa(Content::FORMAT_ICON)}</div><div>{$obj->getDodge_pm(Content::FORMAT_ICON)}</div></div>",
               'resumeres' => "<div class='size-0-8 col'><div>{$obj->getRes_neutre(Content::FORMAT_ICON)}</div><div>{$obj->getRes_terre(Content::FORMAT_ICON)}</div><div>{$obj->getRes_feu(Content::FORMAT_ICON)}</div><div>{$obj->getRes_air(Content::FORMAT_ICON)}</div><div>{$obj->getRes_eau(Content::FORMAT_ICON)}</div></div>",
-              'detailView' => $obj->getVisual(Content::FORMAT_CARD)
+              'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
             );
 
-            $return['return'] = "success";
-          }else {
-            $return['error'] = 'Impossible de récupérer les données';
-          }
-      }
-
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function getFromUniqid(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('mob', User::RIGHT_READ)){
-      $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid'])){
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-        $managerS = new MobManager();
-
-        // Récupération de l'objet
-          if($managerS->existsUniqid($_REQUEST['uniqid'])){
-
-            $obj = $managerS->getFromUniqid($_REQUEST['uniqid']);
-            $return['value'] = array(
-              'visual' => $obj->getVisual(Content::FORMAT_MODIFY),
-              "title" => $obj->getName(Content::FORMAT_MODIFY)
-            );
-            $return['return'] = "success";
+            $return['state'] = true;
           }else {
             $return['error'] = 'Impossible de récupérer les données';
           }
@@ -219,7 +176,7 @@ class ControllerMob extends Controller{
   public function add(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => "",
@@ -255,9 +212,9 @@ class ControllerMob extends Controller{
           );
             
             if($manager->add($object)){
-              $return['return'] = "success";
+              $return['state'] = true;
               $return['unqiid'] = $object->getUniqid();
-              $return['script'] = "Mob.open('".$object->getUniqid()."')";
+              $return['script'] = "Mob.open('".$object->getUniqid()."', Controller.DISPLAY_MODIFY)";
             }else {
               $return['error'] = 'Impossible d\'ajouter l\'objet';
             }
@@ -272,95 +229,10 @@ class ControllerMob extends Controller{
     echo json_encode($return);
     flush();
   }
-  public function update(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('mob', User::RIGHT_WRITE)){
-      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid'], $_REQUEST['type'], $_REQUEST['value'])){
-        $return['error'] = 'Impossible de récupérer les données';
-
-      } else {
-
-            $manager = new MobManager(); // A modifier
-
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-                $method = "set".ucfirst($_REQUEST['type']);
-
-                if(method_exists($obj,$method)){
-                    $result = $obj->$method($_REQUEST['value']);
-                    if($result == "success"){
-                      $obj->setTimestamp_updated(time());
-                      $manager->update($obj);
-                      $return['return'] = "success";
-                    } else {
-                      $return['error'] = $result;
-                    }
-
-                } else {
-                  $return['error'] = "Aucun type correspondant dans l'objet";
-                }
-
-            } else {
-              $return['error'] = 'Impossible de récupérer l\'objet.';
-            }
-
-      }
-
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-  public function remove(){
-    $currentUser = ControllerConnect::getCurrentUser();
-    $return = [
-      'return' => 'echec',
-      'value' => "",
-      'error' => 'erreur inconnue',
-      'script' => ""
-    ];
-    if(!$currentUser->getRight('mob', User::RIGHT_WRITE)){
-      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
-
-      if(!isset($_REQUEST['uniqid']))
-      {
-        $return['error'] = 'Impossible de récupérer les données';
-      } else {
-
-          // Récupération des objets
-            $manager = new MobManager();
-
-          // Récupération de l'objet
-            if($manager->existsUniqid($_REQUEST['uniqid'])){
-
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
-              $manager->delete($obj);
-              $return['return'] = "success";
-
-            } else {
-              $return['error'] = 'Cet objet n\'existe pas.';
-            }
-      }
-    
-    }
-
-    echo json_encode($return);
-    flush();
-  }
-
   public function getJeanMob(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'state' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -417,7 +289,6 @@ class ControllerMob extends Controller{
     echo json_encode($return);
     flush();
   }
-
   protected function generate($level, $powerful = 4, $name = "Mob", $speficific_main = []){
     $is_intel = false;
     if(isset($speficific_main['intel'])){
@@ -646,7 +517,53 @@ class ControllerMob extends Controller{
     $obj->setTimestamp_updated();
     return $obj;
   }
+  public function getSpellList(){
+    $currentUser = ControllerConnect::getCurrentUser();
+    $return = [
+      'state' => false,
+      'value' => "",
+      'error' => 'erreur inconnue',
+      'script' => ""
+    ];
 
+    if(!$currentUser->getRight('mob', User::RIGHT_READ)){
+      $return['error'] = "Vous n'avez pas les droits pour modifier cet objet";} else {
+      
+      if(!isset($_REQUEST['uniqid'])){
+        $return['error'] = 'Impossible de récupérer les données';
+      } else {
+
+          // Récupération des objets
+            $manager = new MobManager();
+
+          // Récupération de l'objet
+            if($manager->existsUniqid($_REQUEST['uniqid'])){
+
+              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
+              $return['state'] = true;
+              
+              $text = "Sort ";
+              if(View::isVowel($obj->getName())){
+                $text .= "de l'";
+              } else {
+                $text .= "du ";
+              }
+                
+              $return['value'] = [
+                "content" => $obj->getSpell(Content::DISPLAY_RESUME),
+                "title" => $text .$obj->getName()
+              ];
+
+            } else {
+              $return['error'] = 'Cet objet n\'existe pas.';
+            }
+      }
+
+    }
+
+    echo json_encode($return);
+    flush();
+  }
   public function search($term, $action = ControllerSearch::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
     $currentUser = ControllerConnect::getCurrentUser();
     if(!$currentUser->getRight('mob', User::RIGHT_READ)){
@@ -695,4 +612,3 @@ class ControllerMob extends Controller{
     return $array;
   }
 }
- 

@@ -43,7 +43,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                     accept=".<?=implode(",.", FileManager::getListeExtention(FileManager::FORMAT_IMG, FileManager::FORMAT_AUDIO, FileManager::FORMAT_VIDEO, FileManager::FORMAT_PDF, FileManager::FORMAT_DOCUMENT, FileManager::FORMAT_TABLEUR, FileManager::FORMAT_SLIDER))?>"
                     capture="environnement"> 
                     <p>Ajouter un fichier à cette page</p>
-                    <input class="file-input form-control form-control-sm" name="file" type="file" hidden>
+                    <input class="file-input form-control form-control-main-focus form-control form-control-main-focus-sm" name="file" type="file" hidden>
                     <input type="hidden" name="title" id="title_copy" value="">
                     <input type="hidden" name="uniqid" value="<?=$template_vars['uniqid_page']?>">
                 </form>

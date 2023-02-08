@@ -36,7 +36,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 
     ob_start(); ?>
         <div class="form-floating m-2">
-            <input id="option" placeholder="" type="text" class="form-control form-control-sm" >
+            <input id="option" placeholder="" type="text" class="form-control form-control-main-focus form-control form-control-main-focus-sm" >
             <label class="size-0-8">Indiquer du site vers lequel pointera l'IFRAME</label>
         </div>
     <?php $template["option"] = ob_get_clean();

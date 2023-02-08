@@ -54,7 +54,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             data-classes="table-no-bordered" 
             data-remember-order='true'
             data-locale="fr-FR"
-            data-show-export="true" 
+            data-show-export="true"
             data-show-refresh="true"
             data-show-fullscreen="true"
             data-show-columns="true"
@@ -143,7 +143,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     </div>
                     <div class="modal-body">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" placeholder="nom">
+                            <input type="text" class="form-control form-control-main-focus" id="name" placeholder="nom">
                             <label for="name">Nom de la créature</label>
                         </div>
                         <div class="form-floating mb-2">
@@ -204,12 +204,12 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     Mob.open(row.uniqid);
                     $('#table').bootstrapTable('collapseAllRows');
                 },
-                exportTypes: ['pdf','excel','xlsx','doc','png','csv','xml','json','sql','txt']
+                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
             });
 
-            $('#table tbody').on('click', function () {
-                if($(document.activeElement).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(document.activeElement).blur();
+            $('#table tbody').on('click', function (e) {
+                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
+                    $(e.target).blur();
                 }
             });
 

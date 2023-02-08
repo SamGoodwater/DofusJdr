@@ -40,7 +40,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             C'est à dire qu'elles sont différentes en fonction du niveau, des caractéristiques et de la puissance de la créature.</p>
         <div id="createjean">
             <div class="form-floating">
-                <input type="text" class="form-control" id="name" placeholder="nom">
+                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="nom">
                 <label for="name">Nom de la créature</label>
             </div>
             <div class="form-floating mb-2">

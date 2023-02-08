@@ -62,7 +62,7 @@ class User extends Content
                                 placeholder="Email" 
                                 maxlength="100"
                                 type="mail" 
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 value="<?=$this->_email?>">
                         </div>
                     <?php return ob_get_clean();
@@ -82,7 +82,7 @@ class User extends Content
                                 placeholder="Pseudo" 
                                 maxlength="120"
                                 type="text" 
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 value="<?=$this->_pseudo?>">
                         </div>
                     <?php return ob_get_clean();
@@ -90,6 +90,9 @@ class User extends Content
                 default:
                     return $this->_pseudo;
             }
+        }
+        public function getName(int $format = Content::FORMAT_BRUT){
+            return $this->getPseudo($format);
         }
         public function gethash(int $format = Content::FORMAT_BRUT){
             return $this->_hash;
@@ -102,7 +105,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_classe" class="form-label pe-2">Droits sur les classes</label><?=$this->getRight_classe(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_classe');" type="range" class="form-range" value="<?=$this->_right_classe?>" min="0" max="2" step="1" id="right_classe">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_classe');" type="range" class="form-range border-secondary" value="<?=$this->_right_classe?>" min="0" max="2" step="1" id="right_classe">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -143,7 +146,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_consumable" class="form-label pe-2">Droits sur les consommables</label><?=$this->getRight_consumable(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_consumable');" type="range" class="form-range" value="<?=$this->_right_consumable?>" min="0" max="2" step="1" id="right_consumable">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_consumable');" type="range" class="form-range border-secondary" value="<?=$this->_right_consumable?>" min="0" max="2" step="1" id="right_consumable">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -183,7 +186,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_item" class="form-label pe-2">Droits sur les équipements</label><?=$this->getRight_item(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_item');" type="range" class="form-range" value="<?=$this->_right_item?>" min="0" max="2" step="1" id="right_item">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_item');" type="range" class="form-range border-secondary" value="<?=$this->_right_item?>" min="0" max="2" step="1" id="right_item">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -223,7 +226,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_mob" class="form-label pe-2">Droits sur les créatures</label><?=$this->getRight_mob(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_mob');" type="range" class="form-range" value="<?=$this->_right_mob?>" min="0" max="2" step="1" id="right_mob">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_mob');" type="range" class="form-range border-secondary" value="<?=$this->_right_mob?>" min="0" max="2" step="1" id="right_mob">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -263,7 +266,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_npc" class="form-label pe-2">Droits sur les PNJ</label><?=$this->getRight_npc(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_npc');" type="range" class="form-range" value="<?=$this->_right_npc?>" min="0" max="2" step="1" id="right_npc">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_npc');" type="range" class="form-range border-secondary" value="<?=$this->_right_npc?>" min="0" max="2" step="1" id="right_npc">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -303,7 +306,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_page" class="form-label pe-2">Droits sur les pages</label><?=$this->getRight_page(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_page');" type="range" class="form-range" value="<?=$this->_right_page?>" min="0" max="2" step="1" id="right_page">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_page');" type="range" class="form-range border-secondary" value="<?=$this->_right_page?>" min="0" max="2" step="1" id="right_page">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -343,7 +346,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_section" class="form-label pe-2">Droits sur les sections</label><?=$this->getRight_section(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_section');" type="range" class="form-range" value="<?=$this->_right_section?>" min="0" max="2" step="1" id="right_section">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_section');" type="range" class="form-range border-secondary" value="<?=$this->_right_section?>" min="0" max="2" step="1" id="right_section">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -383,7 +386,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_shop" class="form-label pe-2">Droits sur les hôtels de vente</label><?=$this->getRight_shop(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_shop');" type="range" class="form-range" value="<?=$this->_right_shop?>" min="0" max="2" step="1" id="right_shop">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_shop');" type="range" class="form-range border-secondary" value="<?=$this->_right_shop?>" min="0" max="2" step="1" id="right_shop">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -423,7 +426,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_spell" class="form-label pe-2">Droits sur les sorts</label><?=$this->getRight_spell(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_spell');" type="range" class="form-range" value="<?=$this->_right_spell?>" min="0" max="2" step="1" id="right_spell">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_spell');" type="range" class="form-range border-secondary" value="<?=$this->_right_spell?>" min="0" max="2" step="1" id="right_spell">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -463,7 +466,7 @@ class User extends Content
                         <div>
                             <div style="width:350px">
                                 <label for="right_user" class="form-label pe-2">Droits sur les utilisateurs</label><?=$this->getRight_user(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_user');" type="range" class="form-range" value="<?=$this->_right_user?>" min="0" max="2" step="1" id="right_user">
+                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_user');" type="range" class="form-range border-secondary" value="<?=$this->_right_user?>" min="0" max="2" step="1" id="right_user">
                             </div>
                         </div>
                     <?php return ob_get_clean();
@@ -508,7 +511,7 @@ class User extends Content
                                     id='password<?=$this->getId()?>' 
                                     placeholder="•••••••••" 
                                     type="password" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     maxlength="500" 
                                     value="">
                             </div>
@@ -518,7 +521,7 @@ class User extends Content
                                     id='newpassword<?=$this->getId()?>' 
                                     placeholder="•••••••••" 
                                     type="password" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     maxlength="500" 
                                     value="">
                             </div>
@@ -528,7 +531,7 @@ class User extends Content
                                     id='repeatnewpassword<?=$this->getId()?>' 
                                     placeholder="•••••••••" 
                                     type="password" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     maxlength="500" 
                                     value="">
                             </div>
@@ -596,10 +599,13 @@ class User extends Content
             }
         }
         
-        public function getVisual(int $format = Content::FORMAT_BRUT){
+        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
 
-            switch ($format) {
-                case Content::FORMAT_MODIFY:      
+            //OPTIONS
+            if($size < 100){$size = 300;}
+
+            switch ($display) {
+                case Content::DISPLAY_MODIFY:      
                     ob_start(); ?>
                         <div class="card mb-3">
                             <p class='size-0-7 mb-1'>Utilisateur <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Dernière connexion le <?=$this->getLast_connexion(Content::DATE_FR);?> à <?=$this->getLast_connexion(Content::TIME_FR);?></p>
@@ -620,17 +626,31 @@ class User extends Content
                         </div>
                     <?php return ob_get_clean();
 
-                case  Content::FORMAT_CARD:      
+                case Content::DISPLAY_CARD:      
                     ob_start(); ?>
                         <div class="card mb-3 p-3">
-                            <p class='size-0-7 mb-1'>Utilisateur <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Dernière connexion le <?=$this->getLast_connexion(Content::DATE_FR);?> à <?=$this->getLast_connexion(Content::TIME_FR);?></p>
-                            <p><?=$this->getPseudo()?> | <?=$this->getEmail()?></p>
-                            <h3>Droits</h3>
+                            <p class='size-0-7 mb-1'>Utilisateur·trice <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Dernière connexion le <?=$this->getLast_connexion(Content::DATE_FR);?> à <?=$this->getLast_connexion(Content::TIME_FR);?></p>
+                            <div class="row">
+                                <div class="col">
+                                    <h4><?=$this->getPseudo()?></h4>
+                                    <p class="text-grey-d-2 size-0-8"><?=$this->getEmail()?></p>
+                                </div>
+                                <div class="col-auto">
+                                    <?php if($this->getRight('user', User::RIGHT_WRITE)){ ?>
+                                        <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="User.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY);"><i class='far fa-edit'></i></a>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                            <div class="nav-item-divider back-main"></div>
+                            <h6>Droits</h6>
                             <?php if($this->getRight("user", User::RIGHT_WRITE)){ ?>
                                 <?=$this->getRights(Content::FORMAT_BADGE)?>
                             <?php } ?>
                         </div>
                     <?php return ob_get_clean();
+
+                default:
+                    return "Erreur : format de display non reconnu";
             }
 
         }
@@ -656,16 +676,14 @@ class User extends Content
                     return $bookmarks;
                 break;
 
-                case Content::FORMAT_CARD:
+                case Content::DISPLAY_CARD:
                     ob_start(); 
                     if(!empty($bookmarks)){?>
                         <div class="d-flex flex-row flex-wrap align-content-stretch justify-content-start ">
                             <?php foreach ($bookmarks as $bookmark) { ?>
-                                <div class="m-3 position-relative">
-                                    <a style="position:absolute;top:5px;right:5px;z-index:1;" onclick="User.changeBookmark(this);" data-classe='<?=strtolower(get_class($bookmark))?>' data-uniqid="<?=$bookmark->getUniqid()?>" title="Détacher du grimoire"><i class="fas fa-bookmark text-main-d-2 text-main-hover"></i></a>
-                                    <?= $bookmark->getVisual(Content::FORMAT_RESUME); ?>
-                                </div>
-                                <div class="nav-item-divider back-secondary-d-2"></div>                             
+                                <div class="mx-3 my-1">
+                                    <?= $bookmark->getVisual(Content::DISPLAY_RESUME); ?>
+                                </div>                       
                             <?php } ?>
                         </div>
                     <?php }
@@ -689,11 +707,20 @@ class User extends Content
                 break;
             }
         }
+        public function in_bookmark(Object $object){
+            $bookmarks = $this->getBookmark(Content::FORMAT_ARRAY);
+            foreach ($bookmarks as $bookmark) {
+                if($bookmark->getUniqid() == $object->getUniqid() && get_class($bookmark) == get_class($object)){
+                    return true;
+                }
+            }
+            return false;
+        }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function setToken($data){
             $this->_token = $data;
-            return "success";
+            return true;
         }    
         public function setLast_connexion($data = ''){
             if(empty($data)){
@@ -710,26 +737,26 @@ class User extends Content
                     }
                 }
                 $this->_last_connexion = $date->format('U');
-                return "success";
+                return true;
             }
         }
         public function setEmail($data){
             $this->_email = $data;
-            return "success";
+            return true;
         }
         public function setPseudo($data){
             $this->_pseudo = $data;
-            return "success";
+            return true;
         }
         public function setHash($data){
             $this->_hash = $data;
-            return "success";
+            return true;
         }
 
         public function setRight_classe($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_classe = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_classe = self::RIGHT_NO;
                 return "right_classe est incorrect";
@@ -738,7 +765,7 @@ class User extends Content
         public function setRight_consumable($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_consumable = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_consumable = self::RIGHT_NO;
                 return "right_consumable est incorrect";
@@ -747,7 +774,7 @@ class User extends Content
         public function setRight_item($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_item = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_item = self::RIGHT_NO;
                 return "right_item est incorrect";
@@ -756,7 +783,7 @@ class User extends Content
         public function setRight_mob($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_mob = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_mob = self::RIGHT_NO;
                 return "right_mob est incorrect";
@@ -765,7 +792,7 @@ class User extends Content
         public function setRight_npc($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_npc = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_npc = self::RIGHT_NO;
                 return "right_npc est incorrect";
@@ -774,7 +801,7 @@ class User extends Content
         public function setRight_page($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_page = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_page = self::RIGHT_NO;
                 return "right_page est incorrect";
@@ -783,7 +810,7 @@ class User extends Content
         public function setRight_section($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_section = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_section = self::RIGHT_NO;
                 return "right_section est incorrect";
@@ -792,7 +819,7 @@ class User extends Content
         public function setRight_shop($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_shop = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_shop = self::RIGHT_NO;
                 return "right_shop est incorrect";
@@ -801,7 +828,7 @@ class User extends Content
         public function setRight_spell($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_spell = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_spell = self::RIGHT_NO;
                 return "right_spell est incorrect";
@@ -810,7 +837,7 @@ class User extends Content
         public function setRight_user($data){
             if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
                 $this->_right_user = $data;
-                return "success";
+                return true;
             } else {
                 $this->_right_user = self::RIGHT_NO;
                 return "right_user est incorrect";
@@ -819,7 +846,7 @@ class User extends Content
 
         public function setPassword($data){
             $this->_hash = password_hash($data, PASSWORD_BCRYPT);
-            return "success";
+            return true;
         }
 
         public function setCookie($type, bool $data){

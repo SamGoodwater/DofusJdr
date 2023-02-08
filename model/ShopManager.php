@@ -172,6 +172,23 @@ class ShopManager extends Manager
         }
         return $return;
     }
+    public function getLinkConsumableFromItem(Shop $shop , Consumable $consumable){
+        $req = $this->_bdd->prepare('SELECT *, link_shop_consumable.price AS price_link FROM link_shop_consumable INNER JOIN shop ON link_shop_consumable.id_shop = shop.id WHERE link_shop_consumable.id_shop = ? AND link_shop_consumable.id_item = ? ORDER BY link_shop_consumable.price');
+        $req->execute(array($shop->getId(), $consumable->getId()));
+        $link = $req->fetch(PDO::FETCH_ASSOC);
+        if(empty($link)){return "";}
+        $return = array();
+        $manager = new ConsumableManager;
+        if($manager->existsId($link["id_consumable"])){
+            $return = [
+                "obj" => $manager->getFromId($link["id_consumable"]),
+                "price" => $link["price"],
+                "quantity" => $link['quantity'],    
+                "comment" => $link['comment']
+            ];
+        }
+        return $return;
+    }
     public function existsLinkConsumable(Shop $shop, Consumable $consumable){
         $req = $this->_bdd->prepare('SELECT id FROM link_shop_consumable WHERE id_shop = ? AND id_consumable = ?');
         $req->execute(array($shop->getId(), $consumable->getId()));
@@ -253,6 +270,24 @@ class ShopManager extends Manager
             }
         }
         return $return;
+    }
+    public function getLinkItemFromItem(Shop $shop , Item $item){
+        $req = $this->_bdd->prepare('SELECT *, link_shop_item.price AS price_link FROM link_shop_item INNER JOIN shop ON link_shop_item.id_shop = shop.id WHERE link_shop_item.id_shop = ? AND link_shop_item.id_item = ? ORDER BY link_shop_item.price');
+        $req->execute(array($shop->getId(), $item->getId()));
+        $link = $req->fetchAll(PDO::FETCH_ASSOC)[0];
+        if(empty($link)){return array();}
+        $return = array();
+        $manager = new ItemManager;
+        if($manager->existsId($link["id_item"])){
+            $return = [
+                "obj" => $manager->getFromId($link["id_item"]),
+                "price" => $link["price_link"],
+                "quantity" => $link['quantity'],    
+                "comment" => $link['comment']
+            ];
+            return $return;
+        }
+        return array();
     }
     public function existsLinkItem(Shop $shop, Item $item){
         $req = $this->_bdd->prepare('SELECT id FROM link_shop_item WHERE id_shop = ? AND id_item = ?');

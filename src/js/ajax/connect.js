@@ -36,8 +36,7 @@ class Connect {
             },
             function(data, status)
             {
-                console.log(data);
-                if(data.state == "success"){
+                if(data.state){
                     MsgAlert("Préférences enregistrées", '', "green" , 4000);
                     var cookie = "cookie_preference="+data.cookie.preference+"; path=/; expires="+data.cookie.date+";"; 
                     document.cookie = cookie;
@@ -89,12 +88,12 @@ class Connect {
                 if(data.script != ""){
                     $('body').append("<script>"+data.script+"</script>");
                 }
-                if(data.state == 'success'){
-                    console.log(data);
+                if(data.state){
                     $("#userVisual").html(data.value.header);
                     Page.build(Page.RESPONSIVE, data.value.title,  data.value.modal, data.value.size, false);
                     $('#modalConnexionUser #email').val("");
                     $('#modalConnexionUser #password').val("");
+                    $('#table').bootstrapTable('refresh');
                     if(data.cookie != ""){
                         var cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 
                         document.cookie = cookie;
@@ -119,7 +118,7 @@ class Connect {
                 if(data.script != ""){
                     $('body').append("<script>"+data.script+"</script>");
                 }
-                if(data.state == 'success'){
+                if(data.state){
                     $("#userVisual").html(data.value.header);
                     Page.build(Page.RESPONSIVE, data.value.title,  data.value.modal, data.value.size, false);
                     var cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 

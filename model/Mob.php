@@ -61,7 +61,7 @@ class Mob extends Content
                                 placeholder="Nom de la créature" 
                                 maxlength="300" 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_name?>">
                             <label class="size-0-8">Nom de la créature</label>
                         </div>
@@ -80,7 +80,7 @@ class Mob extends Content
                             <textarea 
                                 placeholder=""
                                 onchange="Mob.update('<?=$this->getUniqid();?>', this, 'description');" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 maxlength="20000"><?=$this->_description?></textarea>
                             <label class="size-0-8">Description</label>
                         </div>
@@ -100,13 +100,13 @@ class Mob extends Content
                                 onchange="Mob.update('<?=$this->getUniqid();?>', this, 'level');" 
                                 data-bs-toggle='tooltip' data-bs-placement='bottom' title="Niveau de la créature"
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_level?>">
                         </div>
                     <?php return ob_get_clean();
                 
                 case Content::FORMAT_BADGE:
-                    return "<span id='level' data-formule='".$this->_level."' class='badge back-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du niveau de la créature\">Niveau {$this->_level}</span>";
+                    return "<span id='level' data-formule='".$this->_level."' class='badge back-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Niveau de la créature\">Niveau {$this->_level}</span>";
 
                                     
                 case Content::FORMAT_LIST:
@@ -134,7 +134,7 @@ class Mob extends Content
                     }
                    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du niveau de la créature\">{$this->_level}</span>";
+                    return "<span class='text-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Niveau de la créature\">{$this->_level}</span>";
                 
                 default:
                     return $this->_level;
@@ -150,7 +150,7 @@ class Mob extends Content
                                 onchange="Mob.update('<?=$this->getUniqid();?>', this, 'life');" 
                                 data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul des points de vie de la créature"
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_life?>">
                         </div>
                     <?php return ob_get_clean();
@@ -165,8 +165,8 @@ class Mob extends Content
 
                     return "<span id='life' ".$data." data-formule='".$this->_life."' class='badge back-life-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul des points de vie de la créature\">{$this->_life} Points de vie</span>";
                    
-                case Content::FORMAT_ICON:
-                    return "<span class='text-life-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul des points de vie de la créature\">{$this->_life} <i class='fab fa-heart'></i></span>";
+                    case Content::FORMAT_ICON:
+                        return "<span class='text-life' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Points de vie\">{$this->_life} <img class='icon' src='medias/icons/life.svg'></span>";
                 
                 default:
                     return $this->_life;
@@ -184,7 +184,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'pa');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul des PA de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_pa?>">
                             </div>
                         </div>
@@ -219,7 +219,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'pm');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul des PM de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_pm?>">        
                             </div>
                         </div>
@@ -254,7 +254,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'po');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de portée de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_po?>">        
                             </div>
                         </div>
@@ -289,7 +289,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'ini');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'initiative de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_ini?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">1d20 + mod. Intel + Bonus</p>
@@ -325,7 +325,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'touch');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de touche de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_touch?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">Bonus</p>
@@ -361,7 +361,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'vitality');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur de vitalité de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_vitality?>">
                             </div>
                         </div>
@@ -396,7 +396,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'sagesse');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur de sagesse de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_sagesse?>">
                             </div>
                         </div>
@@ -431,7 +431,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'strong');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur de force de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_strong?>">
                             </div>
                         </div>
@@ -466,7 +466,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'intel');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur d'intelligence de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_intel?>">
                             </div>
                         </div>
@@ -501,7 +501,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'agi');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur d'agilité de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_agi?>">
                             </div>
                         </div>
@@ -536,7 +536,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'chance');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur de chance de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_chance?>">
                             </div>
                         </div>
@@ -571,7 +571,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'ca');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de la classe d'armure de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_ca?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">1d20 + mod. Vitalité + Bonus</p>
@@ -607,7 +607,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'fuite');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de fuite de la créature"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_fuite?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">1d20 + mod. Agilité + Bonus</p>
@@ -643,7 +643,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'tacle');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de tacle de la créature"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_tacle?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">1d20 + mod. Chance + Bonus</p>
@@ -679,7 +679,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'dodge_pa');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PA de la créature"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_dodge_pa?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">1d20 + mod. Sagesse + Bonus</p>
@@ -715,7 +715,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'dodge_pm');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PM de la créature"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_dodge_pm?>">
                             </div>
                             <p class="text-grey-d-1 size-0-9">1d20 + mod. Sagesse + Bonus</p>
@@ -751,7 +751,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_neutre');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance neutre de la créature"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_neutre?>">
                             </div>
                         </div>
@@ -786,7 +786,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_terre');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance terre de la créature"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_terre?>">
                             </div>
                         </div>
@@ -821,7 +821,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_feu');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance feu de la créature"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_feu?>">
                             </div>
                         </div>
@@ -856,7 +856,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_air');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance air de la créature"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_air?>">
                             </div>
                         </div>
@@ -891,7 +891,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_eau');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance eau de la créature"
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$this->_res_eau?>">
                             </div>
                         </div>
@@ -925,7 +925,7 @@ class Mob extends Content
                                     onchange="Mob.update('<?=$this->getUniqid();?>', this, 'zone');" 
                                     placeholder="Zone de vie de la créature"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_zone?>">
                             </div>
                         </div>
@@ -986,7 +986,7 @@ class Mob extends Content
                                 placeholder="Traits de la classe" 
                                 maxlength="3000" 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_trait?>">
                             <label class="size-0-8">Traits de la créature</label>
                         </div>
@@ -1105,7 +1105,7 @@ class Mob extends Content
                                         data-action = <?=ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_MOB?>
                                         data-limit = 10
                                         data-only_usable = false
-                                        class="form-control" 
+                                        class="form-control form-control-main-focus" 
                                         id="addSpell<?=$this->getUniqid()?>" 
                                         placeholder="Rechercher un sort">
                                 <label for="addSpell<?=$this->getUniqid()?>">Rechercher un sort</label>
@@ -1113,26 +1113,24 @@ class Mob extends Content
                             <span id="search-sign"></span>
                         </div>
                         <script>autocomplete_load("#addSpell<?=$this->getUniqid()?>");</script>
-                        <?=$this->getSpell(Content::FORMAT_LIST, true)?>
+                        <?=$this->getSpell(Content::DISPLAY_RESUME, true)?>
                     <?php return ob_get_clean();
 
-                case Content::FORMAT_LIST:
+                case Content::DISPLAY_RESUME:
                     ob_start(); 
                     if(!empty($spells)){?>
-                             <div>
-                            <div id="list-spell" class="d-flex flex-row justify-content-around flex-wrap">
+                        <div>
+                            <div class="d-flex flex-row justify-content-around flex-wrap">
                                 <?php foreach ($spells as $spell) { ?>
-                                    <div style="position:relative;width:300px;">
+                                    <div class="m-2" style="position:relative;width:300px;">
                                         <?php if($display_remove){ ?>
                                             <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
                                                 <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher ce sort de cette créature" class="p-4 <?=View::getCss(View::TYPE_BTN_UNDERLINE, "red")?>" onclick="if (confirm('Etes vous sûr d\'étacher le sort de cette créature ?')){Mob.update('<?=$this->getUniqid()?>',{action:'remove', uniqid:'<?=$spell['obj']->getUniqid()?>'},'spell', IS_VALUE);}"><i class="fas fa-times"></i></a>
                                             </div>
                                         <?php } ?>
-                                        <?= $spell['obj']->getVisual(Content::FORMAT_LINK, $this->getId());?>
+                                        <?= $spell['obj']->getVisual(Content::DISPLAY_RESUME);?>
                                     </div>
                                 <?php } ?>
-                            </div>
-                            <div id="show-spell<?=$this->getId()?>" class="m-1">
                             </div>
                         </div>
                     <?php }
@@ -1253,19 +1251,34 @@ class Mob extends Content
             }
         }
 
-        public function getVisual(int $format = Content::FORMAT_BRUT){
+        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
 
-            switch ($format) {
-                case Content::FORMAT_MODIFY:      
+            $user = ControllerConnect::getCurrentUser();
+            $bookmark_icon = "far";
+            if($user->in_bookmark($this)){
+                $bookmark_icon = "fas";
+            }
+
+            //OPTIONS
+                if($size < 100){$size = 300;}
+
+            switch ($display) {
+                case Content::DISPLAY_MODIFY:      
                     ob_start(); ?>
                         <div class="card mb-3">
                             <div class="row g-0">
-                                <div class="col-md-2">
-                                    <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-200H-allL")?>
+                                <div class="col-auto">
+                                    <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-200")?>
+                                    <div class="text-center mt-2">
+                                        <?=$this->getPowerful(Content::FORMAT_BADGE)?>
+                                        <?=$this->getHostility(Content::FORMAT_MODIFY)?>
+                                    </div>
                                 </div>
-                                <div class="col-md-10">
-                               
-                                        <a class="text-grey-d-3" data-bs-toggle="collapse" href="#collapse<?=$this->getUniqid()?>" role="button" aria-expanded="false" aria-controls="collapseExample">Comment calculer les caractéristiques ?</a>
+                                <div class="col">
+                                        <div class="d-flex justify-content-between">
+                                            <a class="text-grey-d-3" data-bs-toggle="collapse" href="#collapse<?=$this->getUniqid()?>" role="button" aria-expanded="false" aria-controls="collapseExample">Comment calculer les caractéristiques ?</a>
+                                            <?=$this->getUsable(Content::FORMAT_MODIFY)?>
+                                        </div>
                                         <div class="collapse mb-2 size-0-9 text-grey-d-1" id="collapse<?=$this->getUniqid()?>">
                                             <p>
                                                 Certaines caractéristiques découlent des autres caractéristiques notamment du niveau de la créature.<br>
@@ -1283,7 +1296,7 @@ class Mob extends Content
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-4 .col-sm-12">
+                                            <div class="col-auto">
                                                 <?=$this->getLevel(Content::FORMAT_MODIFY)?>
                                                 <?=$this->getIni(Content::FORMAT_MODIFY)?>
                                                 <?=$this->getLife(Content::FORMAT_MODIFY)?>
@@ -1291,11 +1304,8 @@ class Mob extends Content
                                                 <?=$this->getPm(Content::FORMAT_MODIFY)?>
                                                 <?=$this->getPo(Content::FORMAT_MODIFY)?>
                                                 <?=$this->getTouch(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getHostility(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getPowerful(Content::FORMAT_BADGE)?>
-                                                <?=$this->getUsable(Content::FORMAT_MODIFY)?>
                                             </div>  
-                                            <div class="col-4 .col-sm-12">
+                                            <div class="col-auto">
                                                 <?=$this->getVitality(Content::FORMAT_MODIFY);?>
                                                 <?=$this->getSagesse(Content::FORMAT_MODIFY);?>
                                                 <?=$this->getStrong(Content::FORMAT_MODIFY);?>
@@ -1303,12 +1313,14 @@ class Mob extends Content
                                                 <?=$this->getAgi(Content::FORMAT_MODIFY);?>
                                                 <?=$this->getChance(Content::FORMAT_MODIFY);?>
                                             </div>   
-                                            <div class="col-4 .col-sm-12">
+                                            <div class="col-auto">
                                                 <?=$this->getCa(Content::FORMAT_MODIFY);?>
                                                 <?=$this->getFuite(Content::FORMAT_MODIFY);?>
                                                 <?=$this->getTacle(Content::FORMAT_MODIFY);?>
                                                 <?=$this->getDodge_pa(Content::FORMAT_MODIFY);?>
                                                 <?=$this->getDodge_pm(Content::FORMAT_MODIFY);?>
+                                            </div> 
+                                            <div class="col-auto">
                                                 <?=$this->getRes_neutre(Content::FORMAT_MODIFY);?>
                                                 <?=$this->getRes_terre(Content::FORMAT_MODIFY);?>
                                                 <?=$this->getRes_feu(Content::FORMAT_MODIFY);?>
@@ -1318,35 +1330,41 @@ class Mob extends Content
                                         </div>
                                         <div class="nav-item-divider back-main-d-1"></div>
                                         <p class='size-0-7 mb-1'>Mob <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
-                                        <p class="card-text"><?=$this->getTrait(Content::FORMAT_MODIFY);?></p>
-                                        <p class="card-text"><?=$this->getDescription(Content::FORMAT_MODIFY);?></p>
-                                        <p class="card-text"><?=$this->getSpell();?></p>
-                                        <p class="card-text"><?=$this->getZone(Content::FORMAT_MODIFY);?></p>
-                                        <p class="card-text"><?=$this->getSpell(Content::FORMAT_MODIFY)?></p>
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Mob.remove('<?=$this->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
+                            <div class="card-text my-2"><?=$this->getTrait(Content::FORMAT_MODIFY);?></div>
+                            <div class="card-text my-2"><?=$this->getDescription(Content::FORMAT_MODIFY);?></div>
+                            <div class="card-text my-2"><?=$this->getZone(Content::FORMAT_MODIFY);?></div>
+                            <div class="card-text my-2"><?=$this->getSpell(Content::FORMAT_MODIFY)?></div>
+                            <div class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Mob.remove('<?=$this->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
                         </div>
                     <?php return ob_get_clean();
                 break;
 
-                case Content::FORMAT_RESUME:
+                case Content::DISPLAY_RESUME:
                     ob_start(); ?>
-                        <div style="width: 300px;">
+                        <div style="width: <?=$size?>px;">
                             <div style="position:relative;">
-                                <div ondblclick="Mob.open('<?=$this->getUniqid()?>');" class="card-hover-linked card p-2 m-1" style="width: 300px;" >
+                                <div ondblclick="Mob.open('<?=$this->getUniqid()?>');" class="card-hover-linked card border-secondary-d-2 border p-2 m-1" style="width: <?=$size?>px;" >
                                     <div class="d-flex flew-row flex-nowrap justify-content-start">
-                                        <div class="d-flex flew-row flex-nowrap justify-content-start">
+                                        <div>
                                             <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                                            <p class="bold ms-1"><?=$this->getName()?></p>
                                         </div>
-                                        <div class="card-body m-1 p-0">
-                                            <p class="mt-1 size-0-7 text-level"><?=$this->getLevel(Content::FORMAT_ICON)?></p> 
-                                            <p><?=$this->getHostility(Content::FORMAT_BADGE)?></p>
+                                        <div class="m-1 p-0">
+                                            <p class="bold ms-1"><?=$this->getName()?></p>
+                                            <div class="d-flex flex-wrap justify-content-around align-items-start">
+                                                <p class="mt-1 text-level short-badge-150"><?=$this->getLevel(Content::FORMAT_BADGE)?></p> 
+                                                <div> <?=$this->getPowerful(Content::FORMAT_ICON)?></div>
+                                                <p class="short-badge-100"><?=$this->getHostility(Content::FORMAT_BADGE)?></p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-between ms-auto">
+                                            <a onclick='User.changeBookmark(this);' data-classe='mob' data-uniqid='<?=$this->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
+                                            <p class="align-self-end"><a class="btn-text-secondary" title="Afficher les sorts" onclick="Mob.getSpellList('<?=$this->getUniqid()?>');"><i class="fas fa-magic"></i></a></p>
                                         </div>
                                     </div>
-                                    <div class="justify-content-center d-flex"><?=$this->getTrait(Content::FORMAT_BADGE)?></div>
+                                    <div class="justify-content-center flex-wrap d-flex short-badge-150"><?=$this->getTrait(Content::FORMAT_BADGE)?></div>
                                     <div class="card-hover-showed">
                                         <div class="d-flex justify-content-around flex-wrap">
                                             <div class="col-auto">
@@ -1356,7 +1374,6 @@ class Mob extends Content
                                                 <div><?=$this->getIni(Content::FORMAT_ICON)?></div>
                                                 <div><?=$this->getLife(Content::FORMAT_ICON)?></div>
                                                 <div><?=$this->getTouch(Content::FORMAT_ICON)?></div>
-                                                <div> <?=$this->getPowerful(Content::FORMAT_ICON)?></div>
                                             </div>
                                             <div class="col-auto">
                                                 <div><?=$this->getVitality(Content::FORMAT_ICON);?></div>
@@ -1388,15 +1405,15 @@ class Mob extends Content
                     <?php return ob_get_clean();
                 break;
 
-                case  Content::FORMAT_CARD:      
+                case  Content::DISPLAY_CARD:      
                     ob_start(); ?>
                         <div class="card mb-3" id="mob<?=$this->getUniqid()?>">
                             <div class="row g-0">
-                                <div class="col-md-2">
+                                <div class="col-auto">
                                     <a style="position:relative;top:5px;left:5px;" href="<?=$this->getPath_img()?>" download="<?=$this->getName().'.'.substr(strrchr($this->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-                                    <?=$this->getPath_img(Content::FORMAT_FANCY, "img-back-200H-allL")?>
+                                    <?=$this->getPath_img(Content::FORMAT_FANCY, "img-back-200")?>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col">
                                     <div class="card-body">
                                         <div class="row justify-content-between">
                                             <div class="col-auto">
@@ -1435,63 +1452,66 @@ class Mob extends Content
                                                 <div><?=$this->getRes_air(Content::FORMAT_BADGE);?></div>
                                                 <div><?=$this->getRes_eau(Content::FORMAT_BADGE);?></div>
                                             </div>                
-                                            <div class="col-auto">
-                                                <div><a class='text-main-d-2 text-main-l-3-hover' onclick="Mob.open('<?=$this->getUniqid()?>')"><i class='far fa-edit'></i> Modifier</a></div>
-                                                <div><?=$this->getUsable(Content::FORMAT_MODIFY)?></div>
-                                            </div> 
                                         </div>
                                         <div class="nav-item-divider back-main-d-1"></div>
-                                        <div class="row">
-                                            <div class="col-10">
-                                                <h5 class="card-title"><?=$this->getName()?></h5>
-                                            </div>
-                                            <div class="col-2"><?=$this->getUsable(Content::FORMAT_MODIFY)?></div>
+                                        <div class="d-flex justify-content-between">
+                                            <h3><?=$this->getName()?></h3>
+                                            <div>
+                                                <?=$this->getUsable(Content::FORMAT_BADGE)?>
+                                                <?php if($user->getRight('mob', User::RIGHT_WRITE)){ ?>
+                                                    <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Mob.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY);"><i class='far fa-edit'></i></a>
+                                                <?php } ?>
+                                            </div> 
                                         </div>
-                                        <p class="card-text"><small class="text-muted"><?=$this->getDescription()?></small></p>
-                                        <p class="card-text"><small class="text-muted"><?=$this->getZone(Content::FORMAT_TEXT)?></small></p>
-                                        <p class="card-text"><?=$this->getSpell(Content::FORMAT_LIST)?></p>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="mx-3">
+                                <p class="card-text my-2"><?=$this->getDescription()?></p>
+                                <p class="card-text my-2"><small class="text-muted">Zone : <?=$this->getZone(Content::FORMAT_TEXT)?></small></p>
+                                <p class="card-text my-2"><?=$this->getSpell(Content::DISPLAY_RESUME)?></p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
                 break;
-            }
 
+                default:
+                    return "Erreur : format de display non reconnu";
+            }
         }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function setName($data){
             $this->_name = $data;
-            return "success";
+            return true;
         }
         public function setDescription($data){
             $this->_description = $data;
-            return "success";
+            return true;
         }
         public function setLevel($data){
             $this->_level = $data;
-            return "success";
+            return true;
         }
         public function setVitality($data){
             $this->_vitality = $data;
-            return "success";
+            return true;
         }
         public function setPa($data){
             $this->_pa = $data;
-            return "success";
+            return true;
         }
         public function setPm($data){
             $this->_pm = $data;
-            return "success";
+            return true;
         }
         public function setPo($data){
             $this->_po = $data;
-            return "success";
+            return true;
         }
         public function setIni($data){
             $this->_ini = $data;
-            return "success";
+            return true;
         }
         public function setTouch($data){
             if(empty($data)){
@@ -1499,80 +1519,80 @@ class Mob extends Content
             } else {
                 $this->_touch = $data;
             }
-            return "success";
+            return true;
         }
         public function setLife($data){
             $this->_life = $data;
-            return "success";
+            return true;
         }
         public function setSagesse($data){
             $this->_sagesse = $data;
-            return "success";
+            return true;
         }
         public function setStrong($data){
             $this->_strong = $data;
-            return "success";
+            return true;
         }
         public function setIntel($data){
             $this->_intel = $data;
-            return "success";
+            return true;
         }
         public function setAgi($data){
             $this->_agi = $data;
-            return "success";
+            return true;
         }
         public function setChance($data){
             $this->_chance = $data;
-            return "success";
+            return true;
         }
         public function setCa($data){
             $this->_ca = $data;
-            return "success";
+            return true;
         }
         public function setFuite($data){
             $this->_fuite = $data;
-            return "success";
+            return true;
         }
         public function setTacle($data){
             $this->_tacle = $data;
-            return "success";
+            return true;
         }
         public function setDodge_pa($data){
             $this->_dodge_pa = $data;
-            return "success";
+            return true;
         }
         public function setDodge_pm($data){
             $this->_dodge_pm = $data;
-            return "success";
+            return true;
         }
         public function setRes_neutre($data){
             $this->_res_neutre = $data;
-            return "success";
+            return true;
         }
         public function setRes_terre($data){
             $this->_res_terre = $data;
-            return "success";
+            return true;
         }
         public function setRes_feu($data){
             $this->_res_feu = $data;
-            return "success";
+            return true;
         }
         public function setRes_air($data){
             $this->_res_air = $data;
-            return "success";
+            return true;
         }
         public function setRes_eau($data){
             $this->_res_eau = $data;
-            return "success";
+            return true;
         }
         public function setZone($data){
             $this->_zone = $data;
-            return "success";
+            return true;
         }
         public function setHostility($data){
             if(in_array($data, Mob::HOSTILITY)){
                 $this->_hostility = $data;
-                return "success";
+                return true;
             } else {
                 $this->_hostility = Mob::HOSTILITY["neutre"];
                 return "Erreur : donnée non valide;";
@@ -1580,14 +1600,14 @@ class Mob extends Content
         }
         public function setTrait($data){
             $this->_trait = $data;
-            return "success";
+            return true;
         }
         public function setPath_image($data){
             if(is_file($data)){
                 $file = New File($data);
                 if(FileManager::isImage($file)){
                     $this->_path_img = $data;
-                    return "success";
+                    return true;
                 } else {
                     return "Le fichier doit être une image.";
                 }
@@ -1597,7 +1617,7 @@ class Mob extends Content
         }
         public function setUsable($data){
             $this->_usable = $this->returnBool($data);
-            return "success";
+            return true;
         }
 
         /* Data = array(

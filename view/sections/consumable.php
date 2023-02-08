@@ -125,7 +125,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             <label for="floatingSelect">Catérogie du consommable</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" placeholder="Nom du consommable">
+                            <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom du consommable">
                             <label for="floatingInput">Nom du consommable</label>
                         </div>
                     </div>
@@ -145,11 +145,11 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     Consumable.open(row.uniqid);
                     $('#table').bootstrapTable('collapseAllRows');
                 },
-                exportTypes: ['pdf','excel','xlsx','doc','png','csv','xml','json','sql','txt']
+                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
             });
-            $('#table tbody').on('click', function () {
-                if($(document.activeElement).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(document.activeElement).blur();
+            $('#table tbody').on('click', function (e) {
+                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
+                    $(e.target).blur();
                 }
             });
 

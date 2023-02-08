@@ -61,7 +61,7 @@ class Classe extends Content
                                 placeholder="Nom de la classe" 
                                 maxlength="300" 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_name?>">
                             <label class="size-0-8">Nom de la classe</label>
                         </div>
@@ -79,7 +79,7 @@ class Classe extends Content
                             <textarea 
                                 placeholder=""
                                 onchange="Classe.update('<?=$this->getUniqid();?>', this, 'description_fast');" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 maxlength="500"><?=$this->_description_fast?></textarea>
                             <label class="size-0-8">Description succincte</label>
                         </div>
@@ -405,7 +405,7 @@ class Classe extends Content
                 case Content::FORMAT_MODIFY:
                     ob_start(); ?>
                         <div class="dropdown">
-                            <a class="" type="button" id="dropdownDisplay<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getWeapons_of_choice(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
+                            <a class="d-flex align-items-center" type="button" id="dropdownDisplay<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getWeapons_of_choice(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
                             <div class="dropdown-menu" aria-labelledby="dropdownDisplay<?=$this->getId()?>"> <?php
                                 foreach (Classe::WEAPONS as $name => $weapons) { ?>
                                     <a class="dropdown-item" onclick="Classe.update('<?=$this->getUniqid()?>', <?=$weapons?>, 'weapons_of_choice', <?=Controller::IS_VALUE?>);$('#dropdownDisplay<?=$this->getId()?>').html($(this).html());"><span class='badge back-blue-d-2'><?=$name?></span></a>
@@ -416,14 +416,14 @@ class Classe extends Content
     
                 case Content::FORMAT_BADGE:
                     if(in_array($this->_weapons_of_choice, Classe::WEAPONS)){
-                        return "<div class='d-flex'><div data-bs-toggle='tooltip' data-bs-placement='bottom' title='Arme de prédilection' class='img-back-30 me-1' style=\"background-image:url('".$path."')\"></div class='ms-2'>".array_search($this->_weapons_of_choice, Classe::WEAPONS)."</div>";
+                        return "<div class='d-flex pe-1'><div data-bs-toggle='tooltip' data-bs-placement='bottom' title='Arme de prédilection'><img class='icon me-1' src='".$path."'>".array_search($this->_weapons_of_choice, Classe::WEAPONS)."</div>";
                     } else  {
                         return "";
                     }
 
                 case Content::FORMAT_ICON:
                     if(in_array($this->_weapons_of_choice, Classe::WEAPONS)){
-                        return "<div data-bs-toggle='tooltip' data-bs-placement='bottom' title='Arme de prédilection' class='img-back-30' style=\"background-image:url('".$path."')\"></div>";
+                        return "<div data-bs-toggle='tooltip' data-bs-placement='bottom' title='Arme de prédilection'><img class='icon' src='".$path."'></div>";
                     } else  {
                         return "";
                     }
@@ -449,7 +449,7 @@ class Classe extends Content
                                 placeholder="Traits de la classe" 
                                 maxlength="3000" 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_trait?>">
                             <label class="size-0-8">Traits de la classe</label>
                         </div>
@@ -598,7 +598,7 @@ class Classe extends Content
                     return $this->_usable;
             }
         }
-        public function getSpell(int $format = Content::FORMAT_BRUT, $display_remove = false){
+        public function getSpell(int $format = Content::FORMAT_BRUT, $display_remove = false, $size = 300){
             $manager = new ClasseManager();
             $spells = $manager->getLinkSpell($this);
             
@@ -615,7 +615,7 @@ class Classe extends Content
                                         data-parameter = "<?=$this->getUniqid()?>"
                                         data-action = <?=ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_CLASSE?>
                                         data-limit = 10
-                                        class="form-control" 
+                                        class="form-control form-control-main-focus" 
                                         id="addSpell<?=$this->getUniqid()?>" 
                                         placeholder="Rechercher un sort">
                                 <label for="addSpell<?=$this->getUniqid()?>">Rechercher un sort</label>
@@ -623,149 +623,158 @@ class Classe extends Content
                             <span id="search-sign"></span>
                         </div>
                         <script>autocomplete_load("#addSpell<?=$this->getUniqid()?>");</script>
-                        <?=$this->getSpell(Content::FORMAT_LIST, true)?>
+                        <?=$this->getSpell(Content::DISPLAY_RESUME, true)?>
                     <?php return ob_get_clean();
 
-                case Content::FORMAT_LIST:
+                case Content::DISPLAY_RESUME:
                     ob_start(); 
-                    if(!empty($spells)){?>
-                        <div>
-                            <div id="list-spell" class="d-flex flex-row justify-content-around flex-wrap">
-                                <?php foreach ($spells as $spell) { ?>
-                                    <div style="position:relative;width:300px;">
-                                        <?php if($display_remove){ ?>
-                                            <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
-                                                <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher ce sort de cette classe" class="p-4 <?=View::getCss(View::TYPE_BTN_UNDERLINE, "red")?>" onclick="if (confirm('Etes vous sûr d\'étacher le sort de cette classe ?')){Classe.update('<?=$this->getUniqid()?>',{action:'remove', uniqid:'<?=$spell->getUniqid()?>'},'spell', IS_VALUE);}"><i class="fas fa-times"></i></a>
-                                            </div>
-                                        <?php } ?>
-                                        <?= $spell->getVisual(Content::FORMAT_LINK, $this->getId());?>
-                                    </div>
-                                <?php } ?>
+                        if(!empty($spells)){?>
+                            <div>
+                                <div class="d-flex flex-row justify-content-around flex-wrap">
+                                    <?php foreach ($spells as $spell) { ?>
+                                        <div style="position:relative;width:<?=$size?>px;">
+                                            <?php if($display_remove){ ?>
+                                                <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
+                                                    <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher ce sort de cette classe" class="p-4 <?=View::getCss(View::TYPE_BTN_UNDERLINE, "red")?>" onclick="if (confirm('Etes vous sûr d\'étacher le sort de cette classe ?')){Classe.update('<?=$this->getUniqid()?>',{action:'remove', uniqid:'<?=$spell->getUniqid()?>'},'spell', IS_VALUE);}"><i class="fas fa-times"></i></a>
+                                                </div>
+                                            <?php } ?>
+                                            <?= $spell->getVisual(Content::DISPLAY_RESUME);?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
                             </div>
-                            <div id="show-spell<?=$this->getId()?>" class="m-1">
-                            </div>
-                        </div>
-                    <?php }
-                    return ob_get_clean();
-
-                case Content::FORMAT_RESUME:
-                    ob_start(); 
-                    if(!empty($spells)){?>
-                        <div>
-                            <div id="list-spell" class="d-flex flex-row justify-content-around flex-wrap">
-                                <?php foreach ($spells as $spell) { ?>
-                                    <div style="position:relative;width:300px;">
-                                        <?= $spell->getVisual(Content::FORMAT_RESUME);?>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    <?php }
+                        <?php }
                     return ob_get_clean();
                     
                 case Content::FORMAT_ARRAY:
                     return $spells;
             }
         }
-        public function getVisual(int $format = Content::FORMAT_BRUT){
+        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
+            $user = ControllerConnect::getCurrentUser();
+            $bookmark_icon = "far";
+            if($user->in_bookmark($this)){
+                $bookmark_icon = "fas";
+            }
 
-            switch ($format) {
-                case Content::FORMAT_MODIFY:      
+            //OPTIONS
+            if($size < 100){$size = 300;}
+
+            switch ($display) {
+                case Content::DISPLAY_MODIFY:      
                     ob_start(); ?>
                         <div class="card mb-3">
                             <div class="row g-0">
-                                <div class="col-md-2"><?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-200H-allL")?></div>
-                                <div class="col-md-10">
+                                <div class="col-auto"><?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-200")?></div>
+                                <div class="col">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col">
                                                 <p class="text-main-l-2 size-0-8">Arme priviligiée :</p>
                                                 <?=$this->getWeapons_of_choice(Content::FORMAT_MODIFY)?>
                                                 <?=$this->getTrait(Content::FORMAT_MODIFY)?>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-auto">
                                                 <?=$this->getUsable(Content::FORMAT_MODIFY)?>
                                             </div>
                                         </div>
                                         <div class="nav-item-divider back-main-d-1"></div>
-                                        <p class='size-0-7 mb-1'>Classe <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
-                                        <p class="card-text"><?=$this->getDescription_fast(Content::FORMAT_MODIFY);?></p>
-                                        <p class="card-text"><?=$this->getDescription(Content::FORMAT_MODIFY);?></p>
-                                        <p class="card-text"><?=$this->getLife(Content::FORMAT_MODIFY);?></p>
-                                        <p class="card-text"><?=$this->getSpecificity(Content::FORMAT_MODIFY);?></p>
-                                        <p class="card-text"><?=$this->getSpell(Content::FORMAT_MODIFY);?></p>
+                                        <p class='size-0-7 mb-2'>Classe <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
+                                        <p class="card-text my-2"><?=$this->getDescription_fast(Content::FORMAT_MODIFY);?></p>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row g-0 mx-4">
+                                <p class="card-text my-2"><?=$this->getDescription(Content::FORMAT_MODIFY);?></p>
+                                <p class="card-text my-2"><?=$this->getLife(Content::FORMAT_MODIFY);?></p>
+                                <p class="card-text my-2"><?=$this->getSpecificity(Content::FORMAT_MODIFY);?></p>
+                                <p class="card-text my-2"><?=$this->getSpell(Content::FORMAT_MODIFY);?></p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
                 break;
 
-                case  Content::FORMAT_CARD:      
+                case  Content::DISPLAY_CARD:      
                     ob_start(); ?>
                         <div class="card mb-3">
                             <div class="row g-0">
-                                <div class="col-md-2">
+                                <div class="col-auto">
                                     <a style="position:relative;top:5px;left:5px;" href="<?=$this->getPath_img()?>" download="<?=$this->getName().'.'.substr(strrchr($this->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-                                    <?=$this->getPath_img(Content::FORMAT_FANCY, "img-back-200H-allL")?>
+                                    <?=$this->getPath_img(Content::FORMAT_FANCY, "img-back-200")?>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-10">
+                                            <div class="col">
                                                 <?=$this->getTrait(Content::FORMAT_BADGE)?>
                                                 <p class="text-main-l-2 size-0-8">Arme priviligiée :</p>
                                                 <?=$this->getWeapons_of_choice(Content::FORMAT_BADGE)?>
                                             </div>
-                                            <div class="col-2"><?=$this->getUsable(Content::FORMAT_MODIFY)?></div>                      
+                                            <div class="col-auto ms-auto">
+                                                <?=$this->getUsable(Content::FORMAT_BADGE)?>
+                                                <?php if($user->getRight('classe', User::RIGHT_WRITE)){ ?>
+                                                    <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Classe.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY);"><i class='far fa-edit'></i></a>
+                                                <?php } ?>
+                                            </div>                      
                                         </div>
                                         <div class="nav-item-divider back-main-d-1"></div>
                                         <h5 class="card-title"><?=$this->getName()?></h5>
                                         <p class="card-text"><small class="text-muted"><?=$this->getDescription_fast()?></small></p>
                                         <p class="card-text"><?=$this->getDescription()?></p>
-                                        <p class="text-main-d-3 text-bold mt-2">Spécificités de la classe</p>
-                                        <p class="card-text"><?=$this->getSpecificity()?></p>
-                                        <p class="text-main-d-3 text-bold mt-2">Gestion des points de vie</p>
-                                        <p class="card-text"><?=$this->getLife()?></p>
-                                        <div class="nav-item-divider back-main-d-1"></div>
-                                        <p class="card-text"><?=$this->getSpell(Content::FORMAT_LIST)?></p>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row g-0 mx-4">
+                                <p class="text-main-d-2 size-1-2 text-bold mt-4 mb-2">Spécificités de la classe</p>
+                                <p class="card-text"><?=$this->getSpecificity()?></p>
+                                <p class="text-main-d-2 size-1-2 text-bold mt-4 mb-2">Gestion des points de vie</p>
+                                <p class="card-text"><?=$this->getLife()?></p>
+                                <div class="nav-item-divider back-main-d-1"></div>
+                                <p class="card-text"><?=$this->getSpell(Content::DISPLAY_RESUME)?></p>
                             </div>
                         </div>
                     <?php return ob_get_clean();
                 break;
                 
-                case Content::FORMAT_RESUME:
+                case Content::DISPLAY_RESUME:
                     ob_start(); ?>
-                        <div style="width: 300px;">
+                        <div style="width: <?=$size?>px;">
                             <div style="position:relative;">
-                                <div ondblclick="Classe.open('<?=$this->getUniqid()?>');" class="card-hover-linked card p-2 m-1" style="width: 300px;" >
+                                <div ondblclick="Classe.open('<?=$this->getUniqid()?>');" class="card-hover-linked card border-secondary-d-2 border p-2 m-1" style="width: <?=$size?>px;" >
                                     <div class="d-flex flew-row flex-nowrap justify-content-start">
-                                        <div class="d-flex flew-row flex-nowrap justify-content-start">
+                                        <div>
                                             <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                                            <p class="bold ms-1"><?=$this->getName() . " : ".  $this->getId()?></p>
                                         </div>
-                                        <div class="card-body m-1 p-0 d-flex justify-content-between">
-                                            <p><?=$this->getWeapons_of_choice(Content::FORMAT_BADGE)?></p>
+                                        <div class="mx-2 d-flex flex-column justify-content-between">
+                                            <div class="d-flex flex-nowrap justify-content-between">
+                                                <p class="bold ms-1"><?=$this->getName()?></p>
+                                                <div class="me-1"><?=$this->getWeapons_of_choice(Content::FORMAT_ICON)?></div>
+                                            </div>
+                                            <div class="size-0-7 text-grey-d-2"><?=$this->getDescription_fast()?></div>
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-between ms-auto">
+                                            <a onclick='User.changeBookmark(this);' data-classe='classe' data-uniqid='<?=$this->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
                                             <p class="align-self-end"><a class="btn-text-secondary" title="Afficher les sorts" onclick="Classe.getSpellList('<?=$this->getUniqid()?>');"><i class="fas fa-magic"></i></a></p>
+                                            <a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=classe&a=getPdf&uniqid=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i></a>
                                         </div>
                                     </div>
-                                    <div class="justify-content-center d-flex"><?=$this->getTrait(Content::FORMAT_BADGE)?></div>
+                                    <div class="justify-content-center d-flex short-badge-150 flex-wrap"><?=$this->getTrait(Content::FORMAT_BADGE)?></div>
                                     <div class="card-hover-showed">
                                         <p class="card-text"><small class="text-muted"><?=$this->getDescription_fast()?></small></p>
                                         <p class="card-text"><?=$this->getDescription()?></p>
-                                        <p class="text-main-d-3 text-bold mt-2">Spécificités de la classe</p>
+                                        <p class="text-main-d-2 size-1-2 text-bold mt-4 mb-2">Spécificités de la classe</p>
                                         <p class="card-text"><?=$this->getSpecificity()?></p>
-                                        <p class="text-main-d-3 text-bold mt-2">Gestion des points de vie</p>
+                                        <p class="text-main-d-2 size-1-2 text-bold mt-4 mb-2">Gestion des points de vie</p>
                                         <p class="card-text"><?=$this->getLife()?></p>
-                                        <div class="nav-item-divider back-main-d-1"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     <?php return ob_get_clean();
                 break;
+
+                default:
+                    return "Erreur : format de display non reconnu";
             }
 
         }
@@ -773,38 +782,38 @@ class Classe extends Content
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥S
         public function setName($data){
             $this->_name = $data;
-            return "success";
+            return true;
         }
         public function setDescription_fast($data){
             $this->_description_fast = $data;
-            return "success";
+            return true;
         }
         public function setDescription($data){
             $this->_description = $data;
-            return "success";
+            return true;
         }
         public function setSpecificity($data){
             $this->_specificity = $data;
-            return "success";
+            return true;
         }
         public function setLife($data){
             $this->_life = $data;
-            return "success";
+            return true;
         }
         public function setWeapons_of_choice($data){
             $this->_weapons_of_choice = $data;
-            return "success";
+            return true;
         }
         public function setTrait($data){
             $this->_trait = $data;
-            return "success";
+            return true;
         }
         public function setPath_image($data){
             if(is_file($data)){
                 $file = New File($data);
                 if(FileManager::isImage($file)){
                     $this->_path_img = $data;
-                    return "success";
+                    return true;
                 } else {
                     return "Le fichier doit être une image.";
                 }
@@ -817,7 +826,7 @@ class Classe extends Content
                 $file = New File($data);
                 if(FileManager::isImage($file)){
                     $this->_path_img_logo = $data;
-                    return "success";
+                    return true;
                 } else {
                     return "Le fichier doit être une image.";
                 }
@@ -827,7 +836,7 @@ class Classe extends Content
         }
         public function setUsable($data){
             $this->_usable = $this->returnBool($data);
-            return "success";
+            return true;
         }
 
         /* Data = array(
@@ -846,14 +855,14 @@ class Classe extends Content
                     switch ($data['action']) {
                         case 'add':
                             if($managerC->addLinkSpell($this, $spell)){
-                                return "success";
+                                return true;
                             }else{
                                 return "Erreur lors de l'ajout du sort";
                             }
                
                         case "remove":
                             if($managerC->removeLinkSpell($this, $spell)){
-                                return "success";
+                                return true;
                             }else{
                                 return "Erreur lors de la suppression du sort";
                             }

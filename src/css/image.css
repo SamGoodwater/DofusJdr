@@ -89,6 +89,41 @@
     width: 100%;
     height: 200px;
 }
+.img-back-180H-allL{
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 180px;
+}
+.img-back-170H-allL{
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 170px;
+}
+.img-back-150H-allL{
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 150px;
+}
+.img-back-130H-allL{
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 130px;
+}
+.img-back-120H-allL{
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 120px;
+}
 .img-back-100H-allL{
     background-size: cover;
     background-position: center center;

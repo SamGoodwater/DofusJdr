@@ -67,12 +67,12 @@ class Consumable extends Content
                         <div class="form-floating mb-1">
                             <input 
                                 onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'name');" 
-                                placeholder="Nom du consommable" 
+                                placeholder="Nom" 
                                 maxlength="300" 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_name?>">
-                            <label class="size-0-8">Nom du consommable</label>
+                            <label class="size-0-8">Nom</label>
                         </div>
                     <?php return ob_get_clean();
                 
@@ -89,7 +89,7 @@ class Consumable extends Content
                             <textarea 
                                 placeholder=""
                                 onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'description');" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 maxlength="20000"><?=$this->_description?></textarea>
                             <label class="size-0-8">Description</label>
                         </div>
@@ -107,7 +107,7 @@ class Consumable extends Content
                             <textarea 
                                 placeholder=""
                                 onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'effect');" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 maxlength="20000"><?=$this->_effect?></textarea>
                             <label class="size-0-8">Effets</label>
                         </div>
@@ -128,7 +128,7 @@ class Consumable extends Content
                                 data-bs-toggle='tooltip' data-bs-placement='bottom' title="Niveau à partir duquel il est possible d'apprendre d'utiliser le consommable"
                                 min="0" max="200" 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 value="<?=$this->_level?>">
                         </div>
                     <?php return ob_get_clean();
@@ -151,7 +151,7 @@ class Consumable extends Content
                             <textarea 
                                 placeholder=""
                                 onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'recepe');" 
-                                class="form-control" 
+                                class="form-control form-control-main-focus" 
                                 maxlength="20000"><?=$this->_recepe?></textarea>
                             <label class="size-0-8">Recette</label>
                         </div>
@@ -166,14 +166,14 @@ class Consumable extends Content
                 case Content::FORMAT_MODIFY:
                     ob_start(); ?>
                         <div class="mb-1 text-po-d-4">
-                            <label>Prix estimé du consommable</label>
+                            <label>Prix estimé</label>
                             <div class="input-group">
                                 <div class="input-group-text back-kamas text-white">K</div>
                                 <input 
                                     onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'price');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix estimé du consommable"
+                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix estimé"
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="<?=$this->_price?>">
                             </div>
                         </div>
@@ -294,67 +294,122 @@ class Consumable extends Content
             }
         }
 
-        public function getVisual(int $format = Content::FORMAT_BRUT){
+        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
+            $user = ControllerConnect::getCurrentUser();
+            $bookmark_icon = "far";
+            if($user->in_bookmark($this)){
+                $bookmark_icon = "fas";
+            }
 
-            switch ($format) {
-                case Content::FORMAT_MODIFY:      
+            //OPTIONS
+            if($size < 100){$size = 300;}
+
+            switch ($display) {
+                case Content::DISPLAY_MODIFY:      
                     ob_start(); ?>
                         <div class="card mb-3">
                             <div class="row g-0">
-                                <div class="col-md-2"><?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-200H-allL")?></div>
-                                <div class="col-md-10">
+                                <div class="col-auto"><?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-150")?></div>
+                                <div class="col">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col-auto">
+                                                <div class="d-flex justify-content-start flex-wrap">
+                                                    <div class="me-4"><?=$this->getLevel(Content::FORMAT_MODIFY)?></div>
+                                                    <div><?=$this->getPrice(Content::FORMAT_MODIFY)?></div>
+                                                </div>   
+                                            </div>
+                                            <div class="col-auto d-flex flex-column justify-content-center">
                                                 <?=$this->getType(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getLevel(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getPrice(Content::FORMAT_MODIFY)?>
                                                 <?=$this->getRarity(Content::FORMAT_MODIFY)?>
+                                            </div>  
+                                            <div class="col-auto ms-auto">
                                                 <?=$this->getUsable(Content::FORMAT_MODIFY)?>
-                                            </div>            
+                                            </div>   
                                         </div>
-                                        <div class="nav-item-divider back-main-d-1"></div>
-                                        <p class='size-0-7 mb-1'>Consommable <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
-                                        <p class="card-text"><?=$this->getEffect(Content::FORMAT_MODIFY);?></p>
-                                        <p class="card-text"><?=$this->getDescription(Content::FORMAT_MODIFY);?></p>
-                                        <p class="card-text"><?=$this->getRecepe(Content::FORMAT_MODIFY);?></p>
                                     </div>
+                                    <div class="nav-item-divider back-main-d-1"></div>
+                                    <p class='size-0-7 mb-2'>Consommable <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
                                 </div>
                             </div>
+                            <p class="card-text m-3"><?=$this->getEffect(Content::FORMAT_MODIFY);?></p>
+                            <p class="card-text m-3"><?=$this->getDescription(Content::FORMAT_MODIFY);?></p>
+                            <p class="card-text m-3"><?=$this->getRecepe(Content::FORMAT_MODIFY);?></p>
                             <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Consumable.remove('<?=$this->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
                         </div>
                     <?php return ob_get_clean();
                 break;
 
-                case  Content::FORMAT_CARD:      
+                case  Content::DISPLAY_CARD:      
                     ob_start(); ?>
                         <div class="card mb-3">
                             <div class="row g-0">
-                                <div class="col-md-2">
+                                <div class="col-auto">
                                     <a style="position:relative;top:5px;left:5px;" href="<?=$this->getPath_img()?>" download="<?=$this->getName().'.'.substr(strrchr($this->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-                                    <?=$this->getPath_img(Content::FORMAT_FANCY, "img-back-200H-allL")?>
+                                    <?=$this->getPath_img(Content::FORMAT_FANCY, "img-back-150")?>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-10">
-                                                <p class="d-flex flex-row justify-content-between">
-                                                    <span class="me-1"><?=$this->getType(Content::FORMAT_BADGE)?></span>
-                                                    <span class="ms-1"><?=$this->getLevel(Content::FORMAT_BADGE)?></span>
+                                            <div class="col">
+                                                <p class="d-flex flex-row justify-content-start flex-wrap">
+                                                    <span class="m-1"><?=$this->getType(Content::FORMAT_BADGE)?></span>
+                                                    <span class="m-1"><?=$this->getLevel(Content::FORMAT_BADGE)?></span>
+                                                    <span class="m-1"><?=$this->getPrice(Content::FORMAT_BADGE)?></span>
+                                                    <span class="m-1"><?=$this->getRarity(Content::FORMAT_BADGE)?></span>
                                                 </p>
-                                                <?=$this->getPrice(Content::FORMAT_BADGE)?>
-                                                <?=$this->getRarity(Content::FORMAT_BADGE)?>
                                             </div>
-                                            <div class="col-2"><?=$this->getUsable(Content::FORMAT_MODIFY)?></div>                      
+                                            <div class="col-auto">
+                                                <?=$this->getUsable(Content::FORMAT_BADGE)?>
+                                                <?php if($user->getRight('consumable', User::RIGHT_WRITE)){ ?>
+                                                    <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Consumable.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY);"><i class='far fa-edit'></i></a>
+                                                <?php } ?>
+                                            </div>                     
                                         </div>
                                         <div class="nav-item-divider back-main-d-1"></div>
                                         <h5 class="card-title"><?=$this->getName()?></h5>
                                         <p class="card-text"><?=$this->getEffect()?></p>
-                                        <p class="card-text"><small class="text-muted"><?=$this->getDescription()?></small></p>
-                                        <?php if(!empty($this->getRecepe())){ ?>
-                                            <div class="nav-item-divider back-main-d-1"></div>
-                                            <p class="card-text"><small class="text-muted"><?=$this->getRecepe()?></small></p>
-                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="card-text"><small class="text-muted"><?=$this->getDescription()?></small></p>
+                                <?php if(!empty($this->getRecepe())){ ?>
+                                    <div class="nav-item-divider back-main-d-1"></div>
+                                    <p class="card-text"><small class="text-muted"><?=$this->getRecepe()?></small></p>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    <?php return ob_get_clean();
+                break;
+
+                case Content::DISPLAY_RESUME:
+                    ob_start(); ?>
+                        <div style="width: <?=$size?>px;">
+                            <div style="position:relative;">
+                                <div ondblclick="Consumable.open('<?=$this->getUniqid()?>');" class="card-hover-linked card border-secondary-d-2 border p-2 m-1" style="width: <?=$size?>px;" >
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
+                                        </div>
+                                        <div class="col">
+                                            <p class="bold ms-1"><?=$this->getName()?></p>
+                                            <p class="row">
+                                                <span class="col-auto me-1 mt-1 short-badge-150"><?=$this->getType(Content::FORMAT_BADGE)?></span>
+                                                <span class="col-auto me-1 mt-1 short-badge-150"><?=$this->getLevel(Content::FORMAT_BADGE)?></span>
+                                                <span class="col-auto me-1 mt-1 short-badge-150"><?=$this->getPrice(Content::FORMAT_BADGE)?></span>
+                                                <span class="col-auto me-1 mt-1 short-badge-150"><?=$this->getRarity(Content::FORMAT_BADGE)?></span>
+                                            </p>
+                                        </div>
+                                        <div class="col-auto d-flex flex-column justify-content-between ms-auto">
+                                            <a onclick='User.changeBookmark(this);' data-classe='consumable' data-uniqid='<?=$this->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="card-hover-showed">
+                                        <p class="card-text"><?=$this->getEffect()?></p>
+                                        <div class="nav-item-divider back-main-d-1"></div>
+                                        <p class="card-text"><small class="size-0-9 text-secondary-d-3"><?=$this->getDescription()?></small></p>
+                                        <p class="card-text"><small class="text-muted size-0-7 text-grey-d-2"><?=$this->getRecepe()?></small></p>
                                     </div>
                                 </div>
                             </div>
@@ -362,34 +417,8 @@ class Consumable extends Content
                     <?php return ob_get_clean();
                 break;
 
-                case Content::FORMAT_RESUME:
-                    ob_start(); ?>
-                        <div style="width: 300px;">
-                            <div style="position:relative;">
-                                <div ondblclick="Consumable.open('<?=$this->getUniqid()?>');" class="card-hover-linked card p-2 m-1" style="width: 300px;" >
-                                    <div class="d-flex flew-row flex-nowrap justify-content-start">
-                                        <div class="d-flex flew-row flex-nowrap justify-content-start">
-                                            <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                                            <p class="bold ms-1"><?=$this->getName()?></p>
-                                        </div>
-                                        <div class="card-body m-1 p-0">
-                                            <p><?=$this->getType(Content::FORMAT_BADGE)?></p>
-                                            <p><?=$this->getLevel(Content::FORMAT_BADGE)?></p>
-                                            <p><?=$this->getRarity(Content::FORMAT_BADGE)?></p>
-                                            <p><?=$this->getPrice(Content::FORMAT_ICON)?></p>
-                                        </div>
-                                    </div>
-                                    <div class="card-hover-showed">
-                                        <p class="card-text"><?=$this->getEffect()?></p>
-                                        <div class="nav-item-divider back-main-d-1"></div>
-                                        <p class="card-text"><small class="text-muted"><?=$this->getDescription()?></small></p>
-                                        <p class="card-text"><small class="text-muted size-0-7 text-grey-d-1"><?=$this->getRecepe()?></small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                break;
+                default:
+                    return "Erreur : format de display non reconnu";
             }
         }
 
@@ -397,43 +426,43 @@ class Consumable extends Content
         public function setType($data){
             if(in_array($data, Consumable::TYPE_LIST)){
                 $this->_type = $data;
-                return "success";
+                return true;
             } else {
                 return "Type est incorrect";
             }
         }
         public function setName($data){
             $this->_name = $data;
-            return "success";
+            return true;
         }
         public function setDescription($data){
             $this->_description = $data;
-            return "success";
+            return true;
         }
         public function setEffect($data){
             $this->_effect = $data;
-            return "success";
+            return true;
         }
         public function setLevel($data){
             if(is_numeric($data)){
                 $this->_level = $data;
-                return "success";
+                return true;
             } else {
                 return "La valeur doit être un nombre";
             }
         }
         public function setRecepe($data){
             $this->_recepe = $data;
-            return "success";
+            return true;
         }
         public function setPrice($data){
             $this->_price = $data;
-            return "success";
+            return true;
         }
         public function setRarity($data){
             if(in_array($data, Item::RARITY_LIST)){
                 $this->_rarity = $data;
-                return "success";
+                return true;
             } else {
                 $this->_rarity = Item::RARITY_LIST["Très répandu"];
                 return "Erreur : donnée non valide;";
@@ -444,7 +473,7 @@ class Consumable extends Content
                 $file = New File($data);
                 if(FileManager::isImage($file)){
                     $this->_path_img = $data;
-                    return "success";
+                    return true;
                 } else {
                     return "Le fichier doit être une image.";
                 }
@@ -454,6 +483,6 @@ class Consumable extends Content
         }
         public function setUsable($data){
             $this->_usable = $this->returnBool($data);
-            return "success";
+            return true;
         }
 }

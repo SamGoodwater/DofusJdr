@@ -34,7 +34,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 
     ob_start(); ?>
         <div class="mb-3 text-center text-white no-border border-bottom-3-hover border-solid border-blue-grey-d-3-hover">
-            <input id='fileupload' name="file" class="form-control form-control-sm inputfile m-0 p-0" accept="image/*" type="file">
+            <input id='fileupload' name="file" class="form-control form-control-main-focus form-control form-control-main-focus-sm inputfile m-0 p-0" accept="image/*" type="file">
             <label for="fileupload" class="m-0 p-0 text-blue-grey-d-3"><i style="padding:10px 12px;" class="fas fa-file-upload font-size-1-3 circle text-white-hover back-blue-grey-d-3-hover back-white text-blue-grey-d-3"></i><br><span class='font-size-0-7'>Ajouter une image</span></label>
             <p class="text-main-l-1 size-0-8 mt-2"><span>Attention, la section est créé dès que l'image est chargé. Il n'y a pas besoin de cliquer sur Ajouter</span></p>
             <div class="progress"><div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>

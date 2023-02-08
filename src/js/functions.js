@@ -37,7 +37,7 @@ const copyToClipboard = str => {
     document.getSelection().addRange(selected);   // Restore the original selection
   }
   if(VERBAL_MODE){console.log('COPY : '+str);}
-  MsgAlert("Le lien a bien été copié","", "success" , 3000);
+  MsgAlert("Le lien a bien été copié","", "green" , 3000);
 };
 
 function detailFormatter(index, row){ // Permet d'afficher les détails dans les tableaux
@@ -184,9 +184,7 @@ function detailFormatter(index, row){ // Permet d'afficher les détails dans les
 // Permet de modifier le badge associer à un élément lorsqu'un range est modifié
   function changeRangeText(input){
     var value = input.value;
-    console.log("changeRangeText : " + value);
     var span = $(input).parent().find("span");
-    console.log(span)
     switch (value) {
         case '0':
             span.text("Aucun");
@@ -234,3 +232,48 @@ function detailFormatter(index, row){ // Permet d'afficher les détails dans les
       return Page.SIZE_XXL;
     }
   }
+
+  function minmaxDice(){
+    var number_dice = $("#number_dice").val();
+    if(number_dice == 0 || number_dice == ""){
+        number_dice = 1;
+    }
+    var type_dice = $("#type_dice").val();
+    if(type_dice == 0 || type_dice == ""){
+        type_dice = 6;
+    }
+    var add_int = $("#add_int").val();
+    if(add_int == 0 || add_int == ""){
+        add_int = 0;
+    }
+    var min = 0;
+    var max = 0;
+    for(var i = 0; i < number_dice; i++){
+        max += parseInt(type_dice);
+        min += parseInt(1);
+    }
+    min += parseInt(add_int);
+    max += parseInt(add_int);
+    $("#min-max").html("Minimum : " + min + " | Maximum : " + max);
+
+}
+function rollDice() {
+    var number_dice = $("#number_dice").val();
+    if(number_dice == 0 || number_dice == ""){
+        number_dice = 1;
+    }
+    var type_dice = $("#type_dice").val();
+    if(type_dice == 0 || type_dice == ""){
+        type_dice = 6;
+    }
+    var add_int = $("#add_int").val();
+    if(add_int == 0 || add_int == ""){
+        add_int = 0;
+    }
+    var result = 0;
+    for(var i = 0; i < number_dice; i++){
+        result += Math.floor(Math.random() * type_dice) + 1;
+    }
+    result += parseInt(add_int);
+    $("#result_dice").html(result);
+}

@@ -164,8 +164,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     document.querySelectorAll("#cat").forEach(function(cat) {
                         
                         var selector = $(cat).attr('data-catselect');
-                        console.log(selector);
-                        console.log($(cat).attr('data-check'));
                         if($(cat).attr('data-check') == "1"){
                             document.querySelectorAll("[data-cat=\""+selector+"\"]").forEach(function(item) {
                                 $(item).show("slow");

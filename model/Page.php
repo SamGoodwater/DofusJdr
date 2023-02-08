@@ -43,7 +43,7 @@ class Page extends Content
                     ob_start(); ?>
                         <div class="input-field m-1">
                             <input 
-                                class='form-control form-control-main-l-3-focus' 
+                                class='form-control form-control-main-focus' 
                                 onchange="Page.update(<?=$this->getUniqid()?>, this, 'name');" 
                                 placeholder="Nom de la page" 
                                 type="text"
@@ -63,7 +63,7 @@ class Page extends Content
                         <div class="input-field m-1">
                             <label>Nom de l'URL de la page</label>
                             <input 
-                                class='form-control form-control-main-l-3-focus' 
+                                class='form-control form-control-main-focus' 
                                 onchange="Page.update(<?=$this->getUniqid()?>, this, 'url_name');" 
                                 placeholder="Nom visible dans l'URL de la page" 
                                 type="text" 
@@ -86,7 +86,7 @@ class Page extends Content
                         <input 
                             onchange="Page.update(<?=$this->getUniqid();?>, this, 'order_num');"  
                             style="width:80px" 
-                            class='form-control form-control-main-l-3-focus' 
+                            class='form-control form-control-main-focus' 
                             type="number" 
                             min='0' 
                             value="<?=$this->_order_num?>">
@@ -113,11 +113,11 @@ class Page extends Content
             $managerS = new SectionManager();
             return $managerS->getAllFromPage($this);            
         }
-        public function getVisual(int $format = Content::FORMAT_BRUT){
+        public function getVisual(int $display = Content::DISPLAY_CARD){
             $user = ControllerConnect::getCurrentUser();
            
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
+            switch ($display) {
+                case Content::DISPLAY_MODIFY:
                     ob_start(); ?>
                         <div class="sortablebis">
 
@@ -199,7 +199,7 @@ class Page extends Content
                         <label >Sélectionner un type de section</label>
                     </div>
                     <div class="form-floating m-2">
-                        <input id="title" placeholder="" type="text" class="form-control form-control-sm">
+                        <input id="title" placeholder="" type="text" class="form-control form-control-main-focus form-control form-control-main-focus-sm">
                         <label class="size-0-8">Titre de la section</label>
                     </div>
 

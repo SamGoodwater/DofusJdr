@@ -31,7 +31,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-baseline">
                     <div class="d-flex flex-row justify-content-evenly align-items-baseline mb-3 position-relative">
-                        <a onclick="User.getBookmark(true);" class="btn-text-secondary text-center mx-1" title="Ouvrir le grimoire - ctrl + b" type="button">
+                        <a onclick="User.getBookmark(true);" class="btn-text-secondary text-center mx-1" title="Ouvrir le grimoire (ctrl + b)" type="button">
                             <i class="fas fa-book size-1-2"></i>
                             <span class="size-0-8">Grimoire</span>
                         </a>
@@ -66,16 +66,19 @@
     </div>
 
     <div class="offcanvas offcanvas-start back-main-l-4" data-bs-scroll="true" tabindex="-1" id="offcanvasbookmark" aria-labelledby="offcanvasbookmark">
-        <div class="offcanvas-header">
-            <a id="back-bookmark" class="btn-text-main size-1-4" onclick="User.getBookmark();"><i class="fas fa-chevron-circle-left"></i></a>
-            <h4 class="offcanvas-title text-secondary-d-2"></h4>
-            <div>
-                <a id="btn-fullscreen" class="btn-text-main size-1-4" onclick="Page.offCanvasFullscreen();"><i class="fas fa-expand"></i></a>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div class="offcanvas-header">
+                <a id="back-bookmark" class="btn-text-main size-1-4 me-2" onclick="User.getBookmark();"><i class="fas fa-chevron-circle-left"></i></a>
+                <h4 class="offcanvas-title text-secondary-d-2"></h4>
+                <div>
+                    <a id="btn-fullscreen" title="Agrandir" class="btn-text-main size-1-4" onclick="Page.offCanvasFullscreen();"><i class="fas fa-expand"></i></a>
+                    <button type="button" title="Fermer le Grimoire (Echap)" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
             </div>
-        </div>
-        <div class="offcanvas-body">
-        </div>
+            <div class="offcanvas-body row border-none border-solid border-main-l-2-hover border-right-5 border-main-l-3 p-2 m-0" id="offCanvas_zone_resizable">
+                <div id="offcanvas-content" class="col">
+
+                </div>
+            </div>
     </div>
 
     <div id="modal" class="modal" tabindex="-1">
@@ -138,11 +141,11 @@
                 <div class="modal-body justify-content-center text-center">
                     <p>
                         <div class="input-group mb-3">
-                            <input onchange="minmaxDice()" type="text" class="form-control" placeholder="nombre de dé" id="number_dice">
+                            <input onchange="minmaxDice()" type="text" class="form-control form-control-main-focus" placeholder="nombre de dé" id="number_dice">
                             <span class="input-group-text">D</span>
-                            <input onchange="minmaxDice()" type="text" class="form-control" placeholder="Type du dé" id="type_dice">
+                            <input onchange="minmaxDice()" type="text" class="form-control form-control-main-focus" placeholder="Type du dé" id="type_dice">
                             <span class="input-group-text"> + </span>
-                            <input onchange="minmaxDice()" type="text" class="form-control" placeholder="ajoute fixe" id="add_int">
+                            <input onchange="minmaxDice()" type="text" class="form-control form-control-main-focus" placeholder="ajoute fixe" id="add_int">
                         </div>
                     </p>
                     <p class="text-grey-d-1 size-0-8" id="min-max"></p>
@@ -175,12 +178,6 @@
                 }
             }
             Connect.getHeader(false);
-
-            $( "#sortable" ).sortable({
-                update: function( event, ui ) {
-                    Page.updateOrder_num();
-                }
-            });
             
         });
 
@@ -206,50 +203,20 @@
             });
         });
 
-        function minmaxDice(){
-            var number_dice = $("#number_dice").val();
-            if(number_dice == 0 || number_dice == ""){
-                number_dice = 1;
+        // Redimensionnement de la zone de bookmark #offcanvasbookmark grâce à la souris et au clic et à la zone #offCanvas_zone_resizable avec un min de 350px et un max de la largeur de l'écran
+        $("#offCanvas_zone_resizable").resizable({
+            handles: "e",
+            minWidth: 350,
+            maxWidth: $(window).width() - 50,
+            resize: function (event, ui) {
+                $("#offcanvasbookmark").css("width", ui.size.width);
+                $("#offcanvasbookmark").css("max-width", ui.size.width);
             }
-            var type_dice = $("#type_dice").val();
-            if(type_dice == 0 || type_dice == ""){
-                type_dice = 6;
-            }
-            var add_int = $("#add_int").val();
-            if(add_int == 0 || add_int == ""){
-                add_int = 0;
-            }
-            var min = 0;
-            var max = 0;
-            for(var i = 0; i < number_dice; i++){
-                max += parseInt(type_dice);
-                min += parseInt(1);
-            }
-            min += parseInt(add_int);
-            max += parseInt(add_int);
-            $("#min-max").html("Minimum : " + min + " | Maximum : " + max);
+        });
 
-        }
-        function rollDice() {
-            var number_dice = $("#number_dice").val();
-            if(number_dice == 0 || number_dice == ""){
-                number_dice = 1;
-            }
-            var type_dice = $("#type_dice").val();
-            if(type_dice == 0 || type_dice == ""){
-                type_dice = 6;
-            }
-            var add_int = $("#add_int").val();
-            if(add_int == 0 || add_int == ""){
-                add_int = 0;
-            }
-            var result = 0;
-            for(var i = 0; i < number_dice; i++){
-                result += Math.floor(Math.random() * type_dice) + 1;
-            }
-            result += parseInt(add_int);
-            $("#result_dice").html(result);
-        }
+
+
+
     </script>
 
 </body>

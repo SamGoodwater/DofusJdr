@@ -60,7 +60,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
         <script>
             $(document).ready(function(){ 
-                var containtModal = "<div><input type=\"hidden\" id=\"type\" value=\"text.php\"><div class=\"form-floating m-2\"><input id=\"title\" placeholder='' type='text' class='form-control form-control-sm'><label class='size-0-8'>Titre du nouveau paragraphe</label></div><div class='text-right m-2'><a onclick=\"Section.add('home')\" class=\"btn btn-sm btn-border-secondary\">Ajouter</a></div></div>";
+                var containtModal = "<div><input type=\"hidden\" id=\"type\" value=\"text.php\"><div class=\"form-floating m-2\"><input id=\"title\" placeholder='' type='text' class='form-control form-control-main-focus form-control form-control-main-focus-sm'><label class='size-0-8'>Titre du nouveau paragraphe</label></div><div class='text-right m-2'><a onclick=\"Section.add('home')\" class=\"btn btn-sm btn-border-secondary\">Ajouter</a></div></div>";
                 Page.build(Page.RESPONSIVE, "Ajouter un paragraphe", containtModal);
 
                 $( ".sortablebis" ).sortable({

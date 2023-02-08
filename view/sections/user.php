@@ -102,15 +102,15 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     </div>
                     <div class="modal-body">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="email" placeholder="Email">
+                            <input type="text" class="form-control form-control-main-focus" id="email" placeholder="Email">
                             <label for="email">Email</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input onchange="verifPassword();" type="password" class="form-control" id="password" placeholder="Mot de passe ou Passe-phrase">
+                            <input onchange="verifPassword();" type="password" class="form-control form-control-main-focus" id="password" placeholder="Mot de passe ou Passe-phrase">
                             <label for="password">Mot de passe ou Passe-phrase</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input onchange="verifPassword();" type="password" class="form-control" id="password_repeat" placeholder="Réécrire le mot de passe ou la passe-phrase">
+                            <input onchange="verifPassword();" type="password" class="form-control form-control-main-focus" id="password_repeat" placeholder="Réécrire le mot de passe ou la passe-phrase">
                             <label for="password_repeat">Réécrire le mot de passe ou la passe-phrase</label>
                         </div>
                         <p id="display_error" class="bold text-red-d-3 size-0-8"></p>
@@ -131,11 +131,11 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     User.open(row.uniqid);
                     $('#table').bootstrapTable('collapseAllRows');
                 },
-                exportTypes: ['pdf','excel','xlsx','doc','png','csv','xml','json','sql','txt']
+                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
             });
-            $('#table tbody').on('click', function () {
-                if($(document.activeElement).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(document.activeElement).blur();
+            $('#table tbody').on('click', function (e) {
+                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
+                    $(e.target).blur();
                 }
             });
             

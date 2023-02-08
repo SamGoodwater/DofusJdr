@@ -5,7 +5,7 @@ class ControllerSection extends Controller{
   public function add(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -33,7 +33,7 @@ class ControllerSection extends Controller{
           $obj->setOrder_num($order);
           $obj->setTimestamp_add();
           $obj->setTimestamp_updated();
-          $return['return'] = "success";
+          $return['state'] = true;
           $manager->add($obj);
         }else {
           $return['error'] = "Impossible de récupérer la référence de la page.";
@@ -51,7 +51,7 @@ class ControllerSection extends Controller{
   public function update(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -68,10 +68,10 @@ class ControllerSection extends Controller{
 
           if(method_exists($obj,$method)){
               $result = $obj->$method($_REQUEST['value']);
-              if($result == "success"){
+              if($result){
                 $obj->setTimestamp_updated(time());
                 $manager->update($obj);
-                $return['return'] = "success";
+                $return['state'] = true;
               } else {
                 $return['error'] = $result;
               }
@@ -120,7 +120,7 @@ class ControllerSection extends Controller{
                 $obj->setOrder_num($order);
                 $obj->setTimestamp_add();
                 $obj->setTimestamp_updated();
-                $return['return'] = "success";
+                $return['state'] = true;
 
                   $dirname = FileManager::formatPath(Page::PATH_FILE, true, true).$obj->getUniqid();
 
@@ -166,7 +166,7 @@ class ControllerSection extends Controller{
   public function remove(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
-      'return' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -187,7 +187,7 @@ class ControllerSection extends Controller{
               $item = $manager->getFromUniqid($_REQUEST['uniqid']);
               $page = $item->getUniqid_page(Content::FORMAT_OBJECT);
               $manager->delete($item);
-              $return['return'] = "success";
+              $return['state'] = true;
               $return['script'] = "Page.show('".$page->getUrl_name()."');";
 
             } else {

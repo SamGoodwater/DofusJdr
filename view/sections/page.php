@@ -54,7 +54,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     placeholder="Nom de la page" 
                     maxlength="300" 
                     type="text" 
-                    class="form-control form-control-sm">
+                    class="form-control form-control-main-focus form-control form-control-main-focus-sm">
             </div>
             <div> <!-- Catégorie -->
                 <p><small class="size-0-8 text-grey-d-1">Emplacement dans le menu</small></p>
@@ -143,7 +143,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                 placeholder="Nom de la page" 
                                 maxlength="300" 
                                 type="text" 
-                                class="form-control form-control-sm" 
+                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                 value="<?=$page->getName()?>">
                         </td>
                         <td> <!-- URL -->
@@ -155,7 +155,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                     maxlength="300" 
                                     type="text"
                                     pattern="^([a-zA-Z]|_|-|[0-9])*$" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$page->getUrl_name()?>">
                             </div>
                             <p><small class="size-0-8">Le nom doit ne doit pas contenir de caractérère spécial ni d'espace.</small></p>
@@ -216,7 +216,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                     placeholder="Nom de la page" 
                                     maxlength="300" 
                                     type="text" 
-                                    class="form-control form-control-sm" 
+                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                     value="<?=$page->getName()?>">
                             </td>
                             <td> <!-- URL -->
@@ -228,7 +228,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                         maxlength="300" 
                                         type="text"
                                         pattern="^([a-zA-Z]|_|-|[0-9])*$" 
-                                        class="form-control form-control-sm" 
+                                        class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                         value="<?=$page->getUrl_name()?>">
                                 </div>
                                 <p><small class="size-0-8">Le nom doit ne doit pas contenir de caractérère spécial ni d'espace.</small></p>
@@ -281,7 +281,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                         placeholder="Nom de la page" 
                                         maxlength="300" 
                                         type="text" 
-                                        class="form-control form-control-sm" 
+                                        class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                         value="<?=$page_child->getName()?>">
                                 </td>
                                 <td> <!-- URL -->
@@ -293,7 +293,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                             maxlength="300" 
                                             type="text"
                                             pattern="^([a-zA-Z]|_|-|[0-9])*$" 
-                                            class="form-control form-control-sm" 
+                                            class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
                                             value="<?=$page_child->getUrl_name()?>">
                                     </div>
                                     <p><small class="size-0-8">Le nom doit ne doit pas contenir de caractérère spécial ni d'espace.</small></p>
@@ -342,7 +342,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             $( function() {
                 $('#btn-update-order').hide();
                 $('#table').bootstrapTable({
-                    exportTypes: ['pdf','excel','xlsx','doc','png','csv','xml','json','sql','txt'],
+                    exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"],
                 });
 
                 $( "#sortable" ).sortable({

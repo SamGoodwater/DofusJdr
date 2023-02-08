@@ -199,7 +199,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             <label for="floatingSelect">Catérogie de l'équipement</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" placeholder="Nom de l'équipement">
+                            <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom de l'équipement">
                             <label for="floatingInput">Nom de l'équipement</label>
                         </div>
                     </div>
@@ -216,14 +216,14 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
             $('#table').bootstrapTable({
                 onDblClickRow: function (row, $element, field) {
-                    Item.open(row.uniqid);
+                    Item.open(row.uniqid, Controller.DISPLAY_CARD);
                     $('#table').bootstrapTable('collapseAllRows');
                 },
-                exportTypes: ['pdf','excel','xlsx','doc','png','csv','xml','json','sql','txt']
+                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
             });
-            $('#table tbody').on('click', function () {
-                if($(document.activeElement).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(document.activeElement).blur();
+            $('#table tbody').on('click', function (e) {
+                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
+                    $(e.target).blur();
                 }
             });
 

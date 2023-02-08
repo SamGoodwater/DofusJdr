@@ -113,7 +113,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                                     placeholder="Nom de la classe" 
                                     maxlength="300" 
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control form-control-main-focus" 
                                     value="">
                                 <label class="size-0-8">Nom</label>
                             </div>
@@ -139,14 +139,13 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                         Classe.open(row.uniqid);
                         $('#table').bootstrapTable('collapseAllRows');
                     },
-                    exportTypes: ['pdf','excel','xlsx','doc','png','csv','xml','json','sql','txt']
+                    exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
                 });
-                $('#table tbody').on('click', function () {
-                if($(document.activeElement).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(document.activeElement).blur();
-                }
-            });
-
+                $('#table tbody').on('click', function (e) {
+                    if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
+                        $(e.target).blur();
+                    }
+                });
             </script>
         <?php $template["content"] = ob_get_clean();
     }

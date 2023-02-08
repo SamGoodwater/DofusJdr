@@ -81,7 +81,7 @@ class Section extends Content
             case Content::FORMAT_MODIFY:
                 ob_start(); ?>
                     <input 
-                        class='form-control form-control-main-l-3-focus' 
+                        class='form-control form-control-main-focus' 
                         onchange="Section.update('<?=$this->getUniqid()?>', this, 'title');" 
                         placeholder="titre de la section" 
                         type="text"
@@ -114,7 +114,7 @@ class Section extends Content
                     <input 
                         onchange="Section.update('<?=$this->getId();?>', this, 'order_num');"  
                         style="width:80px" 
-                        class='form-control form-control-main-l-3-focus' 
+                        class='form-control form-control-main-focus' 
                         type="number" 
                         min='0' 
                         value="<?=$this->_order_num?>">
@@ -126,10 +126,10 @@ class Section extends Content
         }
     }
     
-    public function getVisual(int $format = Content::FORMAT_BRUT){
+    public function getVisual(int $display = Content::DISPLAY_CARD){
 
-        switch ($format) {
-            case Content::FORMAT_MODIFY:
+        switch ($display) {
+            case Content::DISPLAY_MODIFY:
                 $template_vars = [
                     'get' => Section::GET_SECTION_CONTENT,
                     'content' => $this->getContent(),

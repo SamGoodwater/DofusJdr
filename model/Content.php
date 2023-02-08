@@ -5,6 +5,18 @@ abstract class Content
     use CheckingFunctions, ColorConversion, SecurityFct;
     
     //Format GETTERS
+
+    const DISPLAY_CARD = 0;
+    const DISPLAY_RESUME = 1;
+    const DISPLAY_MODIFY = 2;
+    const DISPLAY_FULL = 3;
+    const DISPLAY = [
+        self::DISPLAY_MODIFY => "Modifier",
+        self::DISPLAY_CARD => "Carte",
+        self::DISPLAY_RESUME => "Résumé",
+        self::DISPLAY_FULL => "Complet",
+    ];
+
     const FORMAT_BRUT = 0;
     const FORMAT_VIEW = 1;
     const FORMAT_MODIFY = 2;
@@ -17,9 +29,7 @@ abstract class Content
     const FORMAT_LIST = 9;
     const FORMAT_TEXT = 10;
     const FORMAT_PATH = 11;
-    const FORMAT_CARD = 12;
     const FORMAT_LINK = 13;
-    const FORMAT_RESUME = 14;
 
     //Date
     const DATE_DB = "Y-m-d";
@@ -78,14 +88,14 @@ abstract class Content
     public function setId($data){
         if($data > 0){
             $this->_id = $data;
-            return "success";
+            return true;
         } else {
             return "Id est incorrect";
         }
     }
     public function setUniqid($data){
         $this->_uniqid = $data;
-        return "success";
+        return true;
     }    
     public function setTimestamp_add($data = ''){
         if(empty($data)){
@@ -102,7 +112,7 @@ abstract class Content
                 }
             }
             $this->_timestamp_add = $date->format('U');
-            return "success";
+            return true;
         }
     }
     public function setTimestamp_updated($data = ''){
@@ -120,7 +130,7 @@ abstract class Content
                 }
             }
             $this->_timestamp_updated = $date->format('U');
-            return "success";
+            return true;
         }
     }
 

@@ -8,7 +8,7 @@ class ControllerFile extends Controller{
 
   public function remove(){
     $return = [
-      'return ' => 'echec',
+      'state' => false,
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => ""
@@ -34,7 +34,7 @@ class ControllerFile extends Controller{
               }
               if(FileManager::remove($path)){
                 $return['script'] = "$('#".$file->getName(Content::FORMAT_BRUT, false)."').parent().remove();";
-                $return['return'] = "success";
+                $return['state'] = true;
               }
             }
             $return['error'] = "Impossible de supprimer le fichier";

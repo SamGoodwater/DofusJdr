@@ -149,7 +149,7 @@ class File {
             if(data.script != ""){
                 $('body').append("<script>"+data.script+"</script>");
             }
-            if(data.return == 'success'){
+            if(data.state){
                 MsgAlert("Le fichier est uploadé.", '', "green" , 3000);
             } else {
                 MsgAlert("Impossible d'uploader le fichier", 'Erreur : ' + data.error, "danger" , 4000);
@@ -168,14 +168,14 @@ class File {
                 },
                 function(data, status)
                 {
-                    if(data['script'] != ""){
-                        $('body').append("<script>"+data['script']+"</script>");
+                    if(data.script != ""){
+                        $('body').append("<script>"+data.script+"</script>");
                     }
-                    if(data['return'] == 'success'){
-                        MsgAlert("Suppression du fichier", "Le fichier a bien été supprimé.", "success" , 3000);
+                    if(data.state){
+                        MsgAlert("Suppression du fichier", "Le fichier a bien été supprimé.", "green" , 3000);
                     } else {
                         $('#display_error').text(data['error']);
-                        MsgAlert("Echec de la suppresion", 'Erreur : ' + data['error'], "red-d-3" , 4000);
+                        MsgAlert("Echec de la suppresion", 'Erreur : ' + data.error, "red-d-3" , 4000);
                     }
                 },
                 "json"

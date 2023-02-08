@@ -60,7 +60,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 <label for="level">Niveau du ou de la PNJ</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control" id="name" placeholder="nom">
+                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="nom">
                 <label for="name">Nom du ou de la PNJ</label>
                 <p><small>Facultatif</small></p>
             </div>
