@@ -183,7 +183,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         </div>
                     </div>
                     <div class="modal-footer modal-footer d-flex flex-row justify-content-between">
-                        <button type="button" class="<?=View::getCss(View::TYPE_BTN_BORDER, "grey", false)?>" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn-border-grey" data-bs-dismiss="modal">Close</button>
                         <button type="button" onclick="Npc.add();" class="btn btn-border-secondary">Créer</button>
                     </div>
                 </div>

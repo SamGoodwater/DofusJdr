@@ -11,12 +11,15 @@
     <title>JDR Dofus</title>
     <meta name="keywords" content=""/>
 
-    <?php View::includeCss(); ?>
+    <?php Router::includeCss(); ?>
 
 </head>
 
 <body>
     <div id="MsgAlert" style='z-index:10000'></div>
+    <div id="onloadDisplay" style="z-index:10001">
+        <div class='d-flex justify-content-center'><div class='spinner-border text-main-d-2' role='status'><span class='visually-hidden'>Loading...</span></div></div>
+    </div>
     
     <div class='dashboard'>
         <div class="dashboard-nav">
@@ -157,7 +160,7 @@
     </div>
 
 
-    <?php View::includeJS();?>
+    <?php Router::includeJS();?>
 
     <script>
         $('.cookie-bar').hide();
@@ -166,23 +169,20 @@
         <?php } ?>
 
         $(document).ready(function(){ 
-            // Renvoi vers la page en hash
-            if(window.location.hash == ""){
-                Page.show("home");
+            // Renvoi vers la page demandée
+            let parts = window.location.pathname.split('/').filter(function(value) {
+                return value !== '' && value !== null && typeof value !== 'undefined';
+            });
+            if(parts.length = 1){
+                Page.show(parts[0]);
+            } else if(parts.length == 2) {
+                Page.show(parts[0], parts[1]);
             } else {
-                var hash = window.location.hash.substr(1).split('&');
-                if(hash.length == 2){
-                    Page.show(hash[0], hash[1]);
-                } else {
-                    Page.show(hash[0]);
-                }
+                Page.show("home");
             }
             Connect.getHeader(false);
-            
-        });
 
-        const mobileScreen = window.matchMedia("(max-width: 990px )"); // Pour le menu
-        $(document).ready(function () {
+            const mobileScreen = window.matchMedia("(max-width: 990px )"); // Pour le menu
 
             $(".dashboard-nav-dropdown-toggle").click(function () {
                 $(this).closest(".dashboard-nav-dropdown")
@@ -201,21 +201,19 @@
                     $(".dashboard").toggleClass("dashboard-compact");
                 }
             });
+
+            // Redimensionnement de la zone de bookmark #offcanvasbookmark grâce à la souris et au clic et à la zone #offCanvas_zone_resizable avec un min de 350px et un max de la largeur de l'écran
+            $("#offCanvas_zone_resizable").resizable({
+                handles: "e",
+                minWidth: 350,
+                maxWidth: $(window).width() - 50,
+                resize: function (event, ui) {
+                    $("#offcanvasbookmark").css("width", ui.size.width);
+                    $("#offcanvasbookmark").css("max-width", ui.size.width);
+                }
+            });
+
         });
-
-        // Redimensionnement de la zone de bookmark #offcanvasbookmark grâce à la souris et au clic et à la zone #offCanvas_zone_resizable avec un min de 350px et un max de la largeur de l'écran
-        $("#offCanvas_zone_resizable").resizable({
-            handles: "e",
-            minWidth: 350,
-            maxWidth: $(window).width() - 50,
-            resize: function (event, ui) {
-                $("#offcanvasbookmark").css("width", ui.size.width);
-                $("#offcanvasbookmark").css("max-width", ui.size.width);
-            }
-        });
-
-
-
 
     </script>
 

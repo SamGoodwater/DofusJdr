@@ -20,7 +20,7 @@
                     <div class='dashboard-nav-dropdown-menu'>
                         <?php foreach ($manager->getAllFromCategory($page->getUniqid()) as $page_child) { 
                             if($page_child->getPublic() || $currentUser->getRight('page', User::RIGHT_READ)){ ?>
-                                <a class="size-0-9 dashboard-nav-dropdown-item" href="<?='#'.$page_child->getUrl_name()?>" onclick="Page.show('<?=$page_child->getUrl_name()?>');return false;"><?=$page_child->getName()?></a>
+                                <a class="size-0-9 dashboard-nav-dropdown-item" href="<?=$page_child->getUrl_name()?>" onclick="Page.show('<?=$page_child->getUrl_name()?>');return false;"><?=$page_child->getName()?></a>
                         <?php }
                         } ?>
                     </div>
@@ -31,12 +31,12 @@
                 
                 if($page->getPublic() || $currentUser->getRight('page', User::RIGHT_READ)){ ?>
                 
-                    <a href="<?='#'.$page->getUrl_name()?>" onclick="Page.show('<?=$page->getUrl_name()?>'); return false;" data-uniqid="<?=$page->getUniqid()?>" class="menu-item-selector dashboard-nav-item grid">
+                    <a href="<?=$page->getUrl_name()?>" onclick="Page.show('<?=$page->getUrl_name()?>'); return false;" data-uniqid="<?=$page->getUniqid()?>" class="menu-item-selector dashboard-nav-item grid">
                         <span><?=$page->getName()?></span>
                     </a>
                     <?php foreach ($manager->getAllFromCategory($page->getUniqid()) as $page_child) { 
                         if($page_child->getPublic() || $currentUser->getRight('page', User::RIGHT_READ)){ ?>
-                            <a href="<?='#'.$page_child->getUrl_name()?>" onclick="Page.show('<?=$page_child->getUrl_name()?>');return false;" data-uniqid="<?=$page_child->getUniqid()?>" class="menu-item-selector dashboard-nav-item grid">
+                            <a href="<?=$page_child->getUrl_name()?>" onclick="Page.show('<?=$page_child->getUrl_name()?>');return false;" data-uniqid="<?=$page_child->getUniqid()?>" class="menu-item-selector dashboard-nav-item grid">
                                 <span class="item-child size-0-9" ><?=$page_child->getName()?></span>
                             </a>
                         <?php }
@@ -56,6 +56,6 @@
         <a onclick="Page.show('cgu');">CGU</a>
     </div>
     <div class="p-2 size-0-8 text-main-l-4 text-center">
-        JDR Dofus version β 1.1 <?=date("Y");?>
+        JDR Dofus version β 1.2 <?=date("Y");?>
     </div>
 </nav>

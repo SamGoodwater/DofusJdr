@@ -1,5 +1,5 @@
 <?php
-    if($_SERVER['HTTP_HOST'] == '127.0.0.1' || $_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == 'dofusjdr') { // LOCAL
+    if($_SERVER['HTTP_HOST'] == '127.0.0.1' || $_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == 'dofus.jdr') { // LOCAL
         $conf_host = "localhost";
         $conf_login = "root";
         $conf_password = "";

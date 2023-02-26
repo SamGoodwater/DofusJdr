@@ -29,31 +29,31 @@ class Spell extends Controller{
         ); 
     }
 
-    static showResume(uniqid, dest, format = DISPLAY_CARD, ecrase = false) {
-        var URL = 'index.php?c=spell&a=getResume';
+    // static showResume(uniqid, dest, format = DISPLAY_CARD, ecrase = false) {
+    //     var URL = 'index.php?c=spell&a=getResume';
     
-        $.post(URL,
-            {
-                uniqid:uniqid,
-                format:format
-            },
-            function(data, status)
-            {
-                if(data.state){
-                    if(ecrase){
-                        $(dest).html("");
-                        $(dest).html(data.return);
-                        $(dest).show("slow");
-                    } else {
-                        $(dest).append(data.return);
-                    }
-                    $('[data-toggle="tooltip"]').tooltip();
-                } else {
-                    MsgAlert("Impossible de récupérer le sort", 'Erreur : ' + data.error, "danger" , 4000);
-                }
-            },
-            "json"
-        ); 
-    }
+    //     $.post(URL,
+    //         {
+    //             uniqid:uniqid,
+    //             format:format
+    //         },
+    //         function(data, status)
+    //         {
+    //             if(data.state){
+    //                 if(ecrase){
+    //                     $(dest).html("");
+    //                     $(dest).html(data.return);
+    //                     $(dest).show("slow");
+    //                 } else {
+    //                     $(dest).append(data.return);
+    //                 }
+    //                 $('[data-toggle="tooltip"]').tooltip();
+    //             } else {
+    //                 MsgAlert("Impossible de récupérer le sort", 'Erreur : ' + data.error, "danger" , 4000);
+    //             }
+    //         },
+    //         "json"
+    //     ); 
+    // }
 
 }

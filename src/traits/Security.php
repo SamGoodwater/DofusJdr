@@ -50,4 +50,42 @@ trait SecurityFct
             file_put_contents($this->_security_path_token_file, implode("", $valid_tokens));
         }
 
+        function securite($data, $hard_secure = false){ // Permet de protéger toutes les données reçu depuis la base de donnée
+            if(is_array($data)){
+                foreach ($data as $key => $value) {
+                    $new_data[$key] =   $this->securite($value);
+                }
+                return $new_data;
+            } else {
+                if(is_string($data)){
+                    if($hard_secure){
+                        $data = trim($data);
+                        $data = stripslashes($data);
+                        $data = strip_tags($data);
+                        $data = $this->removeScript($data);
+                        $data = htmlspecialchars_decode($data, ENT_QUOTES);
+                        return $data;
+                    } else {
+                        return htmlspecialchars_decode($data, ENT_QUOTES);
+                    }
+                } else {
+                    return $data;
+                }
+                
+            }
+        }
+    
+        function removeScript($text){
+            // suppression des balises <script>
+            $text = preg_replace('#<script(.*)/script>#Ui', '', $text);
+            // suppression des balises <iframe>
+            $text = preg_replace('#<iframe(.*)/iframe>#Ui', '', $text);
+            // suppression des balises <form>
+            $text = preg_replace('#<form(.*)/form>#Ui', '', $text);
+            // suppression des attributs js
+            $text = preg_replace('#on[a-zA-Z]*(=|:)#Ui', '', $text);
+    
+            return $text;
+        }
+
 }

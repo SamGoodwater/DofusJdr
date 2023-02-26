@@ -149,7 +149,8 @@ class Page extends Controller{
     }
 
     static show(url_name, settings){
-        var spinner = "<div class='d-flex justify-content-center'><div class='spinner-border' role='status'><span class='visually-hidden'>Loading...</span></div></div>";
+        $("#onloadDisplay").show("slow");
+        var spinner = "<div class='d-flex justify-content-center'><div class='text-main-d-2 spinner-border' role='status'><span class='visually-hidden'>Loading...</span></div></div>";
         $(".dashboard-app #content").html(spinner);
         $(".dashboard-app #title").html("");
         $(".dashboard-nav").removeClass("mobile-show");
@@ -178,12 +179,13 @@ class Page extends Controller{
                     $(".dashboard-app #title").show("fade");
                     if(data)
                     Page.build(Page.RESPONSIVE, data.modal_title, data.modal_html);
-                    var hash = url_name;
-                    if(settings !="" && settings != undefined && settings != null){hash += "&" + settings;}
-                    window.location.hash = hash;
+                    var url = url_name;
+                    if(settings !="" && settings != undefined && settings != null){url += "/" + settings;}
+                    window.history.pushState({path:url},'',url);
                 } else {
                     MsgAlert("Impossible d'afficher la page", data.error, "danger" , 7000);
                 }
+                $("#onloadDisplay").hide("slow");
             },
             "json"
         ); 
@@ -222,7 +224,7 @@ class Page extends Controller{
                 if(data.state){
                     MsgAlert("Ajout d'une page", 'La page ' + name + ' a bien été ajouté.', "green" , 3000);
                     $('.addpage #name').val("");
-                    window.location.hash = data.link;
+                    window.history.pushState({path:data.link},'',data.link);
                     location.reload();
                 } else {
                     MsgAlert("Echec de l'ajout", 'Erreur : ' + data.error, "danger" , 4000);

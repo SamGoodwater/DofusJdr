@@ -3,7 +3,7 @@ class ControllerConsumable extends Controller{
 
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
-    $bookmarks = $currentUser->getBookmark();
+    
 
     if(!$currentUser->getRight('consumable', User::RIGHT_READ)){
       $json = "Vous n'avez pas les droits pour lire cet objet";}else{
@@ -22,14 +22,14 @@ class ControllerConsumable extends Controller{
 
         foreach ($objs as $obj) {
 
-          $bookmark_icon = "far";
+          $bookmark_icon = View::STYLE_ICON_REGULAR;
           if($currentUser->in_bookmark($obj)){
-              $bookmark_icon = "fas";
+              $bookmark_icon = View::STYLE_ICON_SOLID;
           }
 
           $edit = "";
           if($currentUser->getRight('consumable', User::RIGHT_WRITE)){
-            $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Consumable.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+            $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Consumable.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
           }
 
           $json[] = array(
@@ -60,7 +60,7 @@ class ControllerConsumable extends Controller{
   }
   public function getArrayFromUniqid(){
     $currentUser = ControllerConnect::getCurrentUser();
-    $bookmarks = $currentUser->getBookmark();
+    
     $return = [
       'state' => false,
       'value' => [],
@@ -80,14 +80,14 @@ class ControllerConsumable extends Controller{
           if($manager->existsUniqid($_REQUEST['uniqid'])){
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
 
-            $bookmark_icon = "far";
+            $bookmark_icon = View::STYLE_ICON_REGULAR;
             if($currentUser->in_bookmark($obj)){
-                $bookmark_icon = "fas";
+                $bookmark_icon = View::STYLE_ICON_SOLID;
             }
 
             $edit = "";
             if($currentUser->getRight('consumable', User::RIGHT_WRITE)){
-              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Consumable.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Consumable.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -154,7 +154,7 @@ class ControllerConsumable extends Controller{
             
             if($manager->add($object)){
               $return['state'] = true;
-              $return['script'] = "Consumable.open('".$object->getUniqid()."', Controller.DISPLAY_MODIFY);";
+              $return['script'] = "Consumable.open('".$object->getUniqid()."', Controller.DISPLAY_EDITABLE);";
             }else {
               $return['error'] = 'Impossible d\'ajouter l\'objet';
             }

@@ -30,13 +30,7 @@ class ControllerConnect extends Controller{
             } else {
                 return new User([
                     'pseudo' => 'guest',
-                    'right_classe' => User::RIGHT_READ,
-                    'right_consumable' => User::RIGHT_READ,
-                    'right_item' => User::RIGHT_READ,
-                    'right_mob' => User::RIGHT_READ,
-                    'right_npc' => User::RIGHT_READ,
-                    'right_shop' => User::RIGHT_READ,
-                    'right_spell' => User::RIGHT_READ
+                    'rights' => User::RIGHT
                 ]);
             }
         }
@@ -142,7 +136,7 @@ class ControllerConnect extends Controller{
                         </ul>
                     </div>
                 <?php $return["header"] = ob_get_clean();
-                $return["modal"] = $user->getVisual(Content::FORMAT_MODIFY);
+                $return["modal"] = $user->getVisual(Content::FORMAT_EDITABLE);
                 $return["size"] = "fl";
                 $return["title"] = "Compte";
 

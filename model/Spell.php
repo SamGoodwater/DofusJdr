@@ -2,7 +2,7 @@
 class Spell extends Content
 {
     public function __construct(array $donnees){
-        $this->hydrate($donnees);
+        parent::__construct($donnees);
         if(file_exists("medias/spells/".$this->getUniqid().".svg")){
             $this->setPath_image("medias/spells/".$this->getUniqid().".svg");
         }
@@ -102,33 +102,77 @@ class Spell extends Content
         private $_is_magic = true;
         private $_powerful = 1;
         private $_path_img="medias/spells/default.svg";
-        private $_usable=false;
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function getName(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <input 
-                                onchange="Spell.update('<?=$this->getUniqid();?>', this, 'name');" 
-                                placeholder="Nom du sort" 
-                                maxlength="300" 
-                                type="text" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_name?>">
-                            <label class="size-0-8">Nom du sort</label>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:  
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Spell",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "name",
+                            "label" => "Nom",
+                            "placeholder" => "Nom du sort",
+                            "value" => $this->_name,
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_name;
             }
-
+        }
+        public function getLevel(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Spell",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "level",
+                            "label" => "Niveau",
+                            "placeholder" => "Niveau à partir duquel il est possible d'apprendre le sort",
+                            "tooltip" => "Niveau à partir duquel il est possible d'apprendre le sort",
+                            "value" => $this->_level,
+                            "color" => View::getColorFromLetter($this->_level, true) . "-d-3"
+                        ], 
+                        write: false);
+                
+                case Content::FORMAT_BADGE:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Niveau {$this->_level}",
+                            "color" => View::getColorFromLetter($this->_level) . "-d-3",
+                            "tooltip" => "Niveau à partir duquel il est possible d'apprendre le sort",
+                            "style" => View::STYLE_OUTLINE
+                        ], 
+                        write: false);
+                
+                case Content::FORMAT_ICON:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_level,
+                            "color" => "",
+                            "tooltip" => "Niveau à partir duquel il est possible d'apprendre le sort",
+                            "style" => View::STYLE_NONE,
+                            "class" => "text-".View::getColorFromLetter($this->_level) . "-d-3"
+                        ], 
+                        write: false);
+                
+                default:
+                    return $this->_level;
+            }
         }
         public function getDescription(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="mb-1">
                             <p>Description</p>
@@ -225,7 +269,7 @@ class Spell extends Content
         }
         public function getEffect(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="mb-1">
                             <p>Effets</p>
@@ -320,55 +364,52 @@ class Spell extends Content
                     return html_entity_decode($this->_effect);
             }
         }
-        public function getLevel(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-<?=View::getColorFromLetter($this->_level, true)?>-d-3">
-                            <label>Niveau du sort</label>
-                            <input 
-                                onchange="Spell.update('<?=$this->getUniqid();?>', this, 'level');" 
-                                data-bs-toggle='tooltip' data-bs-placement='bottom' title="Niveau à partir duquel il est possible d'apprendre le sort"
-                                min="0" max="200" 
-                                type="number" 
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                value="<?=$this->_level?>">
-                            </div>
-                    <?php return ob_get_clean();
-                
-                case Content::FORMAT_BADGE:
-                    return "<span class='badge back-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title='Niveau à partir duquel il est possible d'apprendre le sort'>Niveau {$this->_level}</span>";
-                   
-                case Content::FORMAT_ICON:
-                    return "<span class='text-".View::getColorFromLetter($this->_level, true)."-d-3 badge-outline border border-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Niveau à partir duquel il est possible d'apprendre le sort\">Niv. {$this->_level}</span>";
-                
-                default:
-                    return $this->_level;
-            }
-        }
         public function getPo(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-po-d-2">
-                            <label>Portée du sort</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-po text-white"><img class="icon" src="medias/icons/po.png"></div>
-                                <input 
-                                    onchange="Spell.update('<?=$this->getUniqid();?>', this, 'po');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title='Portée du sort (en case)'
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_po?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Spell",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "po",
+                            "label" => "Portée",
+                            "placeholder" => "Portée du sort",
+                            "tooltips" => "Portée du sort (en case)",
+                            "value" => $this->_po,
+                            "color" => "po-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "po.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "color_icon" => "po-d-4"
+                        ], 
+                        write: false);
+                
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-po-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title='Portée du sort'>{$this->_po} PO</span>";
-                    
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_po} PO",
+                            "color" => "po-d-2",
+                            "tooltip" => "Portée du sort (en case)",
+                            "style" => View::STYLE_BACK
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-po-d-2 badge back-white border border-po-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Portée du sort\">{$this->_po} <img class='icon' src='medias/icons/po.png'></span>";
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "po.png",
+                            "color" => "po-d-2",
+                            "tooltip" => "Portée du sort (en case)",
+                            "content" => $this->_po,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_po;
@@ -376,7 +417,7 @@ class Spell extends Content
         }
         public function getPo_editable(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     $checked = ""; 
                     if($this->_po_editable){ $checked = "checked"; } else { $checked = ""; }
                     ob_start(); ?>
@@ -419,7 +460,7 @@ class Spell extends Content
         }
         public function getPa(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="mb-1 text-pa-d-2">
                             <label>Coût en point d'action du sort</label>
@@ -452,7 +493,7 @@ class Spell extends Content
         }
         public function getCast_per_turn(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="mb-1 text-cast-per-turn-d-2">
                             <label>Nombre de lancer par tour</label>
@@ -480,7 +521,7 @@ class Spell extends Content
         }
         public function getSight_line(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     $checked = ""; 
                     if($this->_sight_line){ $checked = "checked"; } else { $checked = ""; }
                     ob_start(); ?>
@@ -517,7 +558,7 @@ class Spell extends Content
         }
         public function getNumber_between_two_cast(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="mb-1 text-number-between-two-cast-d-2">
                             <label>Nombre de tour entre deux lancer de sort</label>
@@ -545,7 +586,7 @@ class Spell extends Content
         }
         public function getElement(int $format = Content::FORMAT_BRUT, $option = ""){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="dropdown">
                             <a type="button" id="dropdownDisplay<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getElement(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
@@ -667,7 +708,7 @@ class Spell extends Content
         }
         public function getCategory(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="dropdown">
                             <a type="button" id="dropdownCategory<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getCategory(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
@@ -697,13 +738,13 @@ class Spell extends Content
             }
 
             switch ($format) { 
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="d-flex flex-column align-items-center">
                             <?php if(!empty($this->_id_invocation)){ ?>
                                 <div style="position:relative;width: <?=$size?>px;">
                                     <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
-                                        <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher cette créature de ce sort" class="p-4 <?=View::getCss(View::TYPE_BTN_UNDERLINE, "red")?>" onclick="if (confirm('Etes vous sûr d\'étacher la créature de ce sort ?')){Spell.update('<?=$this->getUniqid();?>', 0, 'id_invocation', IS_VALUE);}"><i class="fas fa-times"></i></a>
+                                        <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher cette créature de ce sort" class="p-4 btn-underline-red" onclick="if (confirm('Etes vous sûr d\'étacher la créature de ce sort ?')){Spell.update('<?=$this->getUniqid();?>', 0, 'id_invocation', IS_VALUE);}"><i class="fas fa-times"></i></a>
                                     </div>
                                     <?=$this->getId_invocation(Content::DISPLAY_RESUME)?>
                                 </div>
@@ -756,7 +797,7 @@ class Spell extends Content
         }
         public function getIs_magic(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     $checked = ""; 
                     if($this->_is_magic){ $checked = "checked"; } else { $checked = ""; }
                     ob_start(); ?>
@@ -789,7 +830,7 @@ class Spell extends Content
         }
         public function getPowerful(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="dropdown">
                             <a type="button" id="dropdownPowerful<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getPowerful(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
@@ -835,7 +876,7 @@ class Spell extends Content
                 case  Content::FORMAT_BRUT:
                     return $path;
                 break;
-                case  Content::FORMAT_MODIFY:
+                case  Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="text-center">
                             <div id='showFile_path_image' class='m-2 d-flex justify-content-center'><?=$this->getPath_img(Content::FORMAT_FANCY, 'img-back-180');?></div>
@@ -869,36 +910,6 @@ class Spell extends Content
                 break;
             }
         }
-        public function getUsable(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    $checked = ""; 
-                    if($this->_usable){ $checked = "checked"; } else { $checked = ""; }
-                    ob_start(); ?>
-                        <div style="width:initial;" class="form-check form-switch my-1">
-                            <input onchange="Spell.update('<?=$this->getUniqid();?>', this, 'usable', <?=Controller::IS_CHECKBOX?>);"  type="checkbox" class="form-check-input back-main-d-1 border-main-d-1" <?=$checked?> id="customSwitchUsable<?=$this->getId()?>">
-                            <label class="custom-control-label" for="customSwitchUsable<?=$this->getUniqid()?>"><?=$this->getUsable(Content::FORMAT_BADGE);?></label>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    if($this->_usable){ 
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet a été adapté au jdr\" class='badge back-green-d-3'>Adapté au jdr</span>";
-                    } else { 
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier\" class='badge back-red-d-3'>Non adapté au jdr</span>";
-                    }
-
-                case Content::FORMAT_ICON:
-                    if($this->_usable){ 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet a été adapté au jdr\" class='fas fa-check text-green-d-3'></i>";
-                    } else { 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier\" class='fas fa-times text-red-d-3'></i>";
-                    }
-                    
-                default:
-                    return $this->_usable;
-            }
-        }
 
         public function getFrequency(int $format = Content::FORMAT_BRUT){
             $number_between_two_cast = $this->getNumber_between_two_cast();
@@ -920,7 +931,7 @@ class Spell extends Content
             $types = $manager->getLinkType($this);
             
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div>
                             <div class="btn-group">
@@ -967,169 +978,6 @@ class Spell extends Content
                     return $types;
                 
             }
-        }
-
-        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
-            $user = ControllerConnect::getCurrentUser();
-            $bookmark_icon = "far";
-            if($user->in_bookmark($this)){
-                $bookmark_icon = "fas";
-            }
-
-            //OPTIONS
-                if($size < 100){$size = 300;}
-
-            switch ($display) {
-                case Content::DISPLAY_MODIFY:      
-                    ob_start(); ?>
-                        <div class="card mb-3">
-                            <div class="row g-0">
-                                <div class="col-auto">
-                                    <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-150")?>
-                                    <div class="text-center m-2">
-                                        <?=$this->getPowerful(Content::FORMAT_MODIFY)?>
-                                        <?=$this->getUsable(Content::FORMAT_MODIFY)?>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col">
-                                                <?=$this->getLevel(Content::FORMAT_MODIFY)?>
-                                                <div class="d-flex justify-content-start align-content-start flex-wrap">
-                                                    <div class="m-1"><?=$this->getCategory(Content::FORMAT_MODIFY)?></div>
-                                                    <div class="m-1"><?=$this->getElement(Content::FORMAT_MODIFY)?></div>
-                                                </div>
-                                                <div class="m-1"><?=$this->getType(Content::FORMAT_MODIFY)?></div>
-                                                <div class="m-1"><?=$this->getIs_magic(Content::FORMAT_MODIFY)?></div>
-                                            </div>  
-                                            <div class="col">
-                                                <?=$this->getPa(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getPo(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getPo_editable(Content::FORMAT_MODIFY)?>
-                                            </div>   
-                                            <div class="col">
-                                                <?=$this->getCast_per_turn(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getNumber_between_two_cast(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getSight_line(Content::FORMAT_MODIFY)?>
-                                            </div>            
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="nav-item-divider <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
-                                <p class='size-0-7 mb-1'>Sort <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
-                                <p class="card-text mb-2"><?=$this->getEffect(Content::FORMAT_MODIFY)?></p>
-                                <p class="card-text  my-2"><?=$this->getDescription(Content::FORMAT_MODIFY)?></p>
-                                <div class="nav-item-divider <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
-                                <div class="my-2"><?=$this->getId_invocation(Content::FORMAT_MODIFY)?></div>
-                            </div>
-                            <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Spell.remove('<?=$this->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
-                        </div>
-                    <?php return ob_get_clean();
-
-                case Content::DISPLAY_CARD:      
-                    ob_start(); ?>
-                        <div class="card p-2 m-2 border-2 <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "border")?>">
-                            <div class="row g-0">
-                                <div class="col-md-2">
-                                    <a style="position:relative;top:5px;left:5px;" href="<?=$this->getPath_img()?>" download="<?=$this->getName().'.'.substr(strrchr($this->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-                                    <?=$this->getPath_img(Content::FORMAT_FANCY, "img-back-120")?>
-                                </div>
-                                <div class="col-md-10">
-                                    <div class="card-body">
-                                        <div class="d-flex flex-wrap mb-2">
-                                            <div class="mx-2"><?=$this->getLevel(Content::FORMAT_BADGE)?></div>
-                                            <div class="mx-2"><?=$this->getIs_magic(Content::FORMAT_BADGE)?></div>
-                                            <div class="mx-2"><?=$this->getCategory(Content::FORMAT_BADGE)?></div>
-                                            <div class="mx-2"><?=$this->getPowerful(Content::FORMAT_BADGE)?></div>
-                                            <div class="mx-2"><?=$this->getElement(Content::FORMAT_BADGE)?></div>
-                                            <div class="mx-2"><?=$this->getType(Content::FORMAT_BADGE)?></div>
-                                        </div>
-                                        <div class="row justify-content-between">
-                                            <div class="col-auto">
-                                                <div><?=$this->getPa(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getPo_editable(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getPo(Content::FORMAT_BADGE)?></div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div><?=$this->getCast_per_turn(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getSight_line(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getNumber_between_two_cast(Content::FORMAT_BADGE)?></div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <?=$this->getUsable(Content::FORMAT_BADGE)?>
-                                                <?php if($user->getRight('spell', User::RIGHT_WRITE)){ ?>
-                                                    <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Spell.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY);"><i class='far fa-edit'></i></a>
-                                                <?php } ?>
-                                            </div>                      
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="nav-item-divider <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
-                                <h5 class="card-title"><?=$this->getName()?></h5>
-                                <p class="card-text"><?=$this->getEffect()?></p>
-                                <p class="card-text"><small class="text-muted"><?=$this->getDescription()?></small></p>
-                                <div class="nav-item-divider <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
-                                <div class="d-flex justify-content-center"><?=$this->getId_invocation(Content::DISPLAY_RESUME)?></div>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-
-                case Content::DISPLAY_RESUME:
-                    ob_start(); ?>
-                        <div style="position:relative;width: <?=$size?>px;">
-                            <div ondblclick="Spell.open('<?=$this->getUniqid()?>');" class="card-hover-linked card p-2 m-1 <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>-l-5 <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>-l-4-hover border-solid border-2 <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "border")?>-d-2" style="width: <?=$size?>px;" >
-                                <div class="d-flex flew-row flex-nowrap">
-                                    <div>
-                                        <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                                        <p class="mt-1"><?=$this->getLevel(Content::FORMAT_ICON)?></p> 
-                                    </div>
-
-                                    <div class="card-body m-1 p-0">
-                                        <div class="d-flex flew-row justify-content-between ">
-                                            <p class="bold"><?=$this->getName()?></p>
-                                            <div class="d-flex flex-row align-content-center">
-                                                <div style="height:18px;"><?=$this->getPo_editable(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getPa(Content::FORMAT_ICON)?></div>
-                                            </div>
-                                        </div>
-                                        <p class="d-flex flex-row justify-content-around align-items-center">
-                                            <?=$this->getPo(Content::FORMAT_ICON)?> 
-                                            <?=$this->getSight_line(Content::FORMAT_ICON)?> 
-                                            <?=$this->getFrequency(Content::FORMAT_BADGE)?>
-                                        </p>
-                                    </div>
-                                    <div class="d-flex flex-column justify-content-between ms-auto">
-                                        <a onclick='User.changeBookmark(this);' data-classe='spell' data-uniqid='<?=$this->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
-                                        <a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i></a>
-                                    </div>
-                                </div>
-                                <div class="card-hover-showed">
-                                    <div class="d-flex flex-row justify-content-around align-items-baseline flex-wrap">
-                                        <?=$this->getIs_magic(Content::FORMAT_BADGE)?>
-                                        <?=$this->getType(Content::FORMAT_BADGE)?>
-                                        <?=$this->getCategory(Content::FORMAT_BADGE)?>
-                                        <?=$this->getPowerful(Content::FORMAT_BADGE)?>
-                                        <?=$this->getElement(Content::FORMAT_BADGE)?>
-                                    </div>
-                                    <?=$this->getEffect()?>
-                                    <div class="nav-item-divider <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
-                                    <?=$this->getDescription()?>
-                                    <?php if(!empty($this->getId_invocation())){ ?>
-                                        <div class="nav-item-divider <?=$this->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
-                                        <div style="margin:-4px;"><?=$this->getId_invocation(Content::DISPLAY_RESUME, size:290)?></div>
-                                    <?php } ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-         
-                default:
-                    return "Erreur : format de display non reconnu";
-        }
-
         }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
@@ -1226,10 +1074,6 @@ class Spell extends Content
             } else {
                 return "Le fichier n'est pas valide.";
             }
-        }
-        public function setUsable($data){
-            $this->_usable = $this->returnBool($data);
-            return true;
         }
 
         /* Data = array(

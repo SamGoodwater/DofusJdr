@@ -142,13 +142,13 @@ class File extends Content
             }
         }
     
-        public function getVisual(int $format = Content::FORMAT_BRUT, string $css = "", bool $is_dowload = false, File $thumbnail = null){
+        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300, string $css = '', bool $is_download = false, ?File $thumbnail = null) {
             if(empty($this->getPath())){
                 return "";
             }
 
             $dowload = "";
-            if($is_dowload){
+            if($is_download){
                 $dowload = "href='".$this->getPath()."' target='_blank'";
             }
             $thumbnail_path = $this->getPath();
@@ -160,7 +160,7 @@ class File extends Content
                 }
             }
             
-            switch ($format) {
+            switch ($display) {
                 case Content::FORMAT_ICON:
                     if (FileManager::isImage($this)){
                         ob_start(); ?>

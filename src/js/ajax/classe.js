@@ -32,6 +32,7 @@ class Classe extends Controller{
     }
 
     static getSpellList(uniqid){
+        $("#onloadDisplay").show("slow");
         let URL = 'index.php?c=classe&a=getSpellList';
         $.post(URL,{
                 uniqid:uniqid
@@ -42,6 +43,7 @@ class Classe extends Controller{
                 } else {
                     MsgAlert("Impossible de récupérer la liste des sorts", 'Erreur : ' + data.error, "danger" , 4000);
                 }
+                $("#onloadDisplay").hide("slow");
             },
             "json"
         ); 

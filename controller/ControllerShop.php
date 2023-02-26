@@ -3,7 +3,7 @@ class ControllerShop extends Controller{
 
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
-    $bookmarks = $currentUser->getBookmark();
+    
 
       $json = array();  
       if(!$currentUser->getRight('shop', User::RIGHT_READ)){
@@ -14,14 +14,14 @@ class ControllerShop extends Controller{
 
         foreach ($objs AS $obj) {
 
-          $bookmark_icon = "far";
+          $bookmark_icon = View::STYLE_ICON_REGULAR;
           if($currentUser->in_bookmark($obj)){
-              $bookmark_icon = "fas";
+              $bookmark_icon = View::STYLE_ICON_SOLID;
           }
 
           $edit = "";
           if($currentUser->getRight('shop', User::RIGHT_WRITE)){
-            $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Shop.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+            $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Shop.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
           }
 
           $json[] = array(
@@ -49,7 +49,7 @@ class ControllerShop extends Controller{
   }
   public function getArrayFromUniqid(){
     $currentUser = ControllerConnect::getCurrentUser();
-    $bookmarks = $currentUser->getBookmark();
+    
 
     $return = [
       'state' => false,
@@ -69,14 +69,14 @@ class ControllerShop extends Controller{
           if($manager->existsUniqid($_REQUEST['uniqid'])){
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
 
-            $bookmark_icon = "far";
+            $bookmark_icon = View::STYLE_ICON_REGULAR;
             if($currentUser->in_bookmark($obj)){
-                $bookmark_icon = "fas";
+                $bookmark_icon = View::STYLE_ICON_SOLID;
             }
 
             $edit = "";
             if($currentUser->getRight('shop', User::RIGHT_WRITE)){
-              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Shop.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Shop.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -168,7 +168,7 @@ class ControllerShop extends Controller{
             
             if($manager->add($object)){
               $return['state'] = true;
-              $return['script'] = "Shop.open('".$object->getUniqid()."', Controller.DISPLAY_MODIFY);";
+              $return['script'] = "Shop.open('".$object->getUniqid()."', Controller.DISPLAY_EDITABLE);";
             }else {
               $return['error'] = 'Impossible d\'ajouter l\'objet';
             }

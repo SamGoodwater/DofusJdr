@@ -9,7 +9,7 @@ const CKEDITOR5 = Array;
 
 const FORMAT_BRUT = 0;
 const FORMAT_VIEW = 1;
-const FORMAT_MODIFY = 2;
+const FORMAT_EDITABLE = 2;
 const FORMAT_ICON = 3;
 const FORMAT_BADGE = 4;
 const FORMAT_OBJECT = 5;
@@ -40,6 +40,12 @@ jQuery(document).ready(function($) {
 });
 
 function init() {
+
+	// Fonctionne pas - sencé recharge la page quand on revient en arrière dans l'historique du navigateur
+	window.addEventListener("popstate", function(event) {
+		location.reload();
+	});
+
 	$('.selectpicker').selectpicker;
 	
 	$('.draggable').draggable();

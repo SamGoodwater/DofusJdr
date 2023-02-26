@@ -346,7 +346,7 @@
     display: none;
     position: absolute;
     width: inherit;
-    background-color: inherit;
+    background: inherit;
     border: inherit;
     z-index: 1100;
     top: 99%;

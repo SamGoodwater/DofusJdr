@@ -4,7 +4,7 @@ class UserManager extends Manager
 
 // GET
     public function getAll(){
-        $requete = "SELECT * FROM user INNER JOIN user_right ON user.id = user_right.id_user";
+        $requete = "SELECT * FROM user";
         $req = $this->_bdd->prepare($requete);
         $req->execute();
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
@@ -15,21 +15,21 @@ class UserManager extends Manager
         }
     }
     public function getFromId($id){
-        $post = $this->_bdd->prepare('SELECT * FROM user INNER JOIN user_right ON user.id = user_right.id_user WHERE id = ?');
+        $post = $this->_bdd->prepare('SELECT * FROM user WHERE id = ?');
         $post->execute(array($id));
         $req = $post->fetch(PDO::FETCH_ASSOC);
         if(empty($req)){return "";}
         return new User($req);
     }
     public function getFromUniqid($uniqid){
-        $post = $this->_bdd->prepare('SELECT * FROM user INNER JOIN user_right ON user.id = user_right.id_user WHERE uniqid = ?');
+        $post = $this->_bdd->prepare('SELECT * FROM user WHERE uniqid = ?');
         $post->execute(array($uniqid));
         $req = $post->fetch(PDO::FETCH_ASSOC);
         if(empty($req)){return "";}
         return new User($req);
     }
     public function getFromEmail($email){
-        $post = $this->_bdd->prepare('SELECT * FROM user INNER JOIN user_right ON user.id = user_right.id_user WHERE email = ?');
+        $post = $this->_bdd->prepare('SELECT * FROM user WHERE email = ?');
         $post->execute(array($email));
         $req = $post->fetch(PDO::FETCH_ASSOC);
         if(empty($req)){return "";}
@@ -71,7 +71,7 @@ class UserManager extends Manager
     }
 
     public function getMatch($emailOrPseudo, $password){
-        $req = $this->_bdd->prepare('SELECT * FROM user INNER JOIN user_right ON user.id = user_right.id_user WHERE pseudo = :emailOrPseudo OR email = :emailOrPseudo');
+        $req = $this->_bdd->prepare('SELECT * FROM user WHERE pseudo = :emailOrPseudo OR email = :emailOrPseudo');
         $req->execute(array("emailOrPseudo" => $emailOrPseudo));
         $ret = $req->fetch(PDO::FETCH_ASSOC);
         if(empty($ret)){
@@ -112,6 +112,12 @@ class UserManager extends Manager
 // WRITE
     public function add(User $object){
 
+        if(json_encode($object->getRIghts()) && json_last_error() === JSON_ERROR_NONE){
+            $rights = $object->getRights();
+        } else {
+            $rights = json_decode($object->getRights());
+        }
+
         $req = $this->_bdd->prepare('INSERT INTO user(
                     uniqid,
                     timestamp_add,
@@ -119,7 +125,9 @@ class UserManager extends Manager
                     token,
                     email,
                     pseudo,
-                    hash
+                    hash,
+                    rights,
+                    is_admin
                    )
             VALUES (
                     :uniqid,
@@ -128,32 +136,21 @@ class UserManager extends Manager
                     :token,
                     :email,
                     :pseudo,
-                    :hash
+                    :hash,
+                    :rights,
+                    :is_admin
                 )');
    
-        $req->execute(array(
+        return $req->execute(array(
             "uniqid" => $object->getUniqid(),
             "timestamp_add" => $object->getTimestamp_add(),
             "last_connexion" => $object->getLast_connexion(),
             "token" => $object->getToken(),
             "email" => $object->getEmail(),
             "pseudo" => $object->getPseudo(),
-            "hash" => $object->getHash()
-        ));
-
-        // $req = $this->_bdd->prepare("SELECT id FROM user ORDER BY id DESC LIMIT 1");
-        $req = $this->_bdd->prepare("SELECT Max(id) FROM user");
-        $req->execute();
-        $id = $req->fetch(PDO::FETCH_NUM)[0];
-        $req = $this->_bdd->prepare('INSERT INTO user_right(
-                    id_user
-                )
-            VALUES (
-                    :id_user
-                )');
-                        
-        return $req->execute(array(
-            "id_user" => $id
+            "hash" => $object->getHash(),
+            "rights" => $rights,
+            "is_admin" => $object->getIs_admin()
         ));
     }
     public function update(User $object){
@@ -165,10 +162,12 @@ class UserManager extends Manager
                     token=:token,
                     email=:email,
                     pseudo=:pseudo,
-                    hash=:hash
+                    hash=:hash,
+                    rights=:rights,
+                    is_admin=:is_admin
             WHERE id=:id');
 
-        $req->execute(array(
+        $result = $req->execute(array(
             "id" => $object->getId(),
             "uniqid" => $object->getUniqid(),
             "timestamp_add" => $object->getTimestamp_add(),
@@ -176,36 +175,20 @@ class UserManager extends Manager
             "token" => $object->getToken(),
             "email" => $object->getEmail(),
             "pseudo" => $object->getPseudo(),
-            "hash" => $object->getHash()
+            "hash" => $object->getHash(),
+            "rights" => $object->getRights(),
+            "is_admin" => $object->getIs_admin()
         ));
 
-        $req = $this->_bdd->prepare('UPDATE user_right SET
-            right_classe=:right_classe,
-            right_consumable=:right_consumable,
-            right_item=:right_item,
-            right_mob=:right_mob,
-            right_npc=:right_npc,
-            right_page=:right_page,
-            right_section=:right_section,
-            right_shop=:right_shop,
-            right_spell=:right_spell,
-            right_user=:right_user
-        WHERE id_user=:id_user');
-
-        return $req->execute(array(
-            "id_user" => $object->getId(),
-            "right_classe" => $object->getRight_classe(),
-            "right_consumable" => $object->getRight_consumable(),
-            "right_item" => $object->getRight_item(),
-            "right_mob" => $object->getRight_mob(),
-            "right_npc" => $object->getRight_npc(),
-            "right_page" => $object->getRight_page(),
-            "right_section" => $object->getRight_section(),
-            "right_shop" => $object->getRight_shop(),
-            "right_spell" => $object->getRight_spell(),
-            "right_user" => $object->getRight_user()
-        ));	
-
+        if($result){
+            $currentUser = ControllerConnect::getCurrentUser();
+            if($currentUser->getUniqid() == $object->getUniqid()){
+                ControllerConnect::setCurrentUser($object);       
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
     public function remove(User $object){
         $req = $this->_bdd->prepare('DELETE FROM user WHERE uniqid = :uniqid');

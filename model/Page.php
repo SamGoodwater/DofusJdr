@@ -2,9 +2,6 @@
 class Page extends Content
 {
     const PATH_FILE = "medias/page";
-    public function __construct(array $donnees) {
-        $this->hydrate($donnees);
-    }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ CONTANTE  ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
 
@@ -36,10 +33,12 @@ class Page extends Content
         private $_public = 1;
         private $_is_editable = 1;
 
+        protected $_usable = true; // surcharge de la variable de Content
+
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function getName(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="input-field m-1">
                             <input 
@@ -58,7 +57,7 @@ class Page extends Content
         }
         public function getUrl_name(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="input-field m-1">
                             <label>Nom de l'URL de la page</label>
@@ -81,7 +80,7 @@ class Page extends Content
         }
         public function getOrder_num(int $format = Content::FORMAT_BRUT){
             switch ($format) {
-                case Content::FORMAT_MODIFY:
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <input 
                             onchange="Page.update(<?=$this->getUniqid();?>, this, 'order_num');"  
@@ -113,11 +112,11 @@ class Page extends Content
             $managerS = new SectionManager();
             return $managerS->getAllFromPage($this);            
         }
-        public function getVisual(int $display = Content::DISPLAY_CARD){
+        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
             $user = ControllerConnect::getCurrentUser();
            
             switch ($display) {
-                case Content::DISPLAY_MODIFY:
+                case Content::DISPLAY_EDITABLE:
                     ob_start(); ?>
                         <div class="sortablebis">
 
@@ -126,7 +125,7 @@ class Page extends Content
                                 <p><a data-bs-toggle="collapse" onclick="Section.getVisual('<?=$this->getUniqid()?>', true);">Ajouter une section pour commencer.</a></p>
                             <?php }
 
-                            $format = Content::FORMAT_BRUT; if($this->getIs_editable()){$format = Content::FORMAT_MODIFY;}
+                            $format = Content::FORMAT_BRUT; if($this->getIs_editable()){$format = Content::FORMAT_EDITABLE;}
                             foreach ($this->getSection() as $section__) { ?>
                                 <?= $section__->getVisual($format); ?>      
                             <?php } ?>

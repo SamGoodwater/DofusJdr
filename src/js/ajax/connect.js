@@ -50,6 +50,7 @@ class Connect {
     }
 
     static getHeader(show_modal = true){
+        $("#onloadDisplay").show("slow");
         var URL = 'index.php?c=connect&a=getVisual';
         $.post(URL,
             {is_flush:true},
@@ -57,11 +58,13 @@ class Connect {
             {
                 $("#userVisual").html(data.header);
                 Page.build(Page.RESPONSIVE, data.title, data.modal, data.size, show_modal)
+                $("#onloadDisplay").hide("slow");
             },
             "json"
         ); 
     }
     static connect(){
+        $("#onloadDisplay").show("slow");
         var URL = 'index.php?c=connect&a=connexion';
         var email = $('#modalConnexionUser #email').val();
         var password = $('#modalConnexionUser #password').val();
@@ -102,11 +105,14 @@ class Connect {
                     $('#display_error').text(data.error);
                     MsgAlert("Echec de l'ajout", 'Erreur : ' + data.error, "danger" , 4000);
                 }
+                $("#onloadDisplay").hide("slow");
             },
             "json"
         ); 
     }
     static disconnect(){
+        $("#onloadDisplay").show("slow");
+        
         var URL = 'index.php?c=connect&a=disconnect';
 
         $('#display_error').text("");
@@ -126,6 +132,7 @@ class Connect {
                 } else {
                     $('#display_error').text(data.error);
                 }
+                $("#onloadDisplay").hide("slow");
             },
             "json"
         ); 

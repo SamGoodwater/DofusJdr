@@ -43,12 +43,15 @@ class User extends Controller{
     }
 
     static getBookmark(show = true){
+        $("#onloadDisplay").show("slow");
+
         var URL = 'index.php?c=user&a=getBookmark';
         $.post(URL,
             {},
             function(data, status)
             {
                 Page.buildOffcanvas("Grimoire", data.visual, Page.PLACEMENT_TOP, show);
+                $("#onloadDisplay").hide("slow");
             },
             "json"
         ); 
@@ -102,4 +105,42 @@ class User extends Controller{
         ); 
     }
 
+    static updatePassword(uniqid){
+        var URL = 'index.php?c=user&a=updatePassword';
+        var current_password = $('#modalUpdatePassword #password'.uniqid).val();
+        var password = $('#modalUpdatePassword #newpassword'.uniqid).val();
+        var password_repeat = $('#modalUpdatePassword #newpassword_repeat' . uniqid).val();
+
+        if(password == "" || password_repeat	== ""){
+            $('#display_error').text("Veuillez remplir tous les champs");
+            return false;
+        }
+
+        $('#display_error').text("");
+        
+        $.post(URL,
+            {
+                uniqid:uniqid,
+                current_password:current_password,
+                new_password:new_password,
+                new_password_repeat:password_repeat
+            },
+            function(data, status)
+            {
+                if(data.script != ""){
+                    $('body').append("<script>"+data.script+"</script>");
+                }
+                if(data.state){
+                    MsgAlert("Modification du mot de passe", "Le mot de passe a bien été modifié.", "green" , 3000);
+                    $('#modalUpdatePassword #password').val("");
+                    $('#modalUpdatePassword #password_repeat').val("");
+                    $('#modalUpdatePassword').modal("hide");
+                } else {
+                    $('#display_error').text(data['error']);
+                    MsgAlert("Echec de la modification", 'Erreur : ' + data.error, "danger" , 4000);
+                }
+            },
+            "json"
+        ); 
+    }
 }

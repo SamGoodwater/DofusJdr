@@ -3,7 +3,7 @@ class ControllerSpell extends Controller{
 
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
-    $bookmarks = $currentUser->getBookmark();
+    
 
     $json = array();  
     if(!$currentUser->getRight('spell', User::RIGHT_READ)){
@@ -61,14 +61,14 @@ class ControllerSpell extends Controller{
           </div>
         <?php $resume = ob_get_clean();
         
-        $bookmark_icon = "far";
+        $bookmark_icon = View::STYLE_ICON_REGULAR;
         if($currentUser->in_bookmark($obj)){
-            $bookmark_icon = "fas";
+            $bookmark_icon = View::STYLE_ICON_SOLID;
         }
 
         $edit = "";
         if($currentUser->getRight('spell', User::RIGHT_WRITE)){
-          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
         }
 
         $json[] = array(
@@ -108,7 +108,7 @@ class ControllerSpell extends Controller{
   }
   public function getArrayFromUniqid(){
     $currentUser = ControllerConnect::getCurrentUser();
-    $bookmarks = $currentUser->getBookmark();
+    
 
     $return = [
       'state' => false,
@@ -138,14 +138,14 @@ class ControllerSpell extends Controller{
               </div>
             <?php $resume = ob_get_clean();
 
-            $bookmark_icon = "far";
+            $bookmark_icon = View::STYLE_ICON_REGULAR;
             if($currentUser->in_bookmark($obj)){
-                $bookmark_icon = "fas";
+                $bookmark_icon = View::STYLE_ICON_SOLID;
             }
 
             $edit = "";
             if($currentUser->getRight('spell', User::RIGHT_WRITE)){
-              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -310,7 +310,7 @@ class ControllerSpell extends Controller{
             
             if($manager->add($object)){
               $return['state'] = true;
-              $return['script'] = "Spell.open('".$object->getUniqid()."', Controller.DISPLAY_MODIFY)";
+              $return['script'] = "Spell.open('".$object->getUniqid()."', Controller.DISPLAY_EDITABLE)";
             }else {
               $return['error'] = 'Impossible d\'ajouter l\'objet';
             }

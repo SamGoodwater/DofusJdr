@@ -12,8 +12,8 @@ class ControllerUser extends Controller{
 
       foreach ($objs AS $obj) {
         $edit = "";
-        if($currentUser->getRight('user', User::RIGHT_WRITE)){
-          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+        if($currentUser->getRight('user', User::RIGHT_WRITE) && $obj->getIs_admin()){
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
         }
 
         $json[] = array(
@@ -55,8 +55,8 @@ class ControllerUser extends Controller{
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
 
             $edit = "";
-            if($currentUser->getRight('user', User::RIGHT_WRITE)){
-              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_MODIFY)\"><i class='far fa-edit'></i></a>";
+            if($currentUser->getRight('user', User::RIGHT_WRITE) && $obj->getIs_admin()){
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -91,7 +91,7 @@ class ControllerUser extends Controller{
       'error' => 'erreur inconnue',
       'script' => ""
     ];
-    if(!$currentUser->getRight('user', User::RIGHT_WRITE)){
+    if(!$currentUser->getRight('user', User::RIGHT_WRITE) && $currentUser->getIs_admin()){
       $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
 
       if(!isset($_REQUEST['email'], $_REQUEST['password'], $_REQUEST['password_repeat'])){
@@ -118,10 +118,60 @@ class ControllerUser extends Controller{
 
               if($manager->add($object)){
                 $return['state'] = true;
-                $return['script'] = "User.open('".$object->getUniqid()."', Controller.DISPLAY_MODIFY)";
+                $return['script'] = "User.open('".$object->getUniqid()."', Controller.DISPLAY_EDITABLE)";
               }else {
                 $return['error'] = 'Impossible d\'ajouter l\'objet';
               }
+            }
+        }
+      }
+
+    }
+
+    echo json_encode($return);
+    flush();
+  }
+
+  public function updatePassword²(){
+    $currentUser = ControllerConnect::getCurrentUser();
+    $return = [
+      'state' => false,
+      'value' => "",
+      'error' => 'erreur inconnue',
+      'script' => ""
+    ];
+
+    if(!$currentUser->getRight('user', User::RIGHT_WRITE) && $currentUser->getIs_admin() && $currentUser->getUniqid() != $_REQUEST['uniqid']){
+      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
+
+      if(!isset($_REQUEST['uniqid'], $_REQUEST['new_password'], $_REQUEST['new_password_repeat'], $_REQUEST['current_password'])){
+        $return['error'] = 'Impossible de récupérer les données';
+      } else {
+
+        if($_REQUEST['new_password'] != $_REQUEST['new_password_repeat']){
+          $return['error'] = 'Les deux mots de passe doivent être identiques.';
+        } else {
+
+            $manager = new UserManager();
+
+            if($manager->existsUniqid($_REQUEST['uniqid'])){
+              $object = $manager->getFromUniqid($_REQUEST['uniqid']);
+
+              if($manager->getMatch($object->getEmail(), $_REQUEST['current_password'])){
+
+                $object->setPassword($_REQUEST["new_password"]);
+                if($manager->update($object)){
+                  $return['state'] = true;
+                  $return['script'] = "User.open('".$object->getUniqid()."', Controller.DISPLAY_EDITABLE)";
+                  
+                }else {
+                  $return['error'] = 'Impossible d\'ajouter l\'objet';
+                }
+              } else {
+                $return['error'] = "Le mot de passe actuel est incorrect.";
+              }
+            } else {
+              $return['error'] = "L'objet n'existe pas.";
             }
         }
       }

@@ -2,8 +2,7 @@
 class Mob extends Content
 {
     public function __construct(array $donnees){
-        $this->hydrate($donnees);
-
+        parent::__construct($donnees);
         if(file_exists("medias/mobs/".$this->getUniqid().".svg")){
             $this->setPath_image("medias/mobs/".$this->getUniqid().".svg");
         }
@@ -48,65 +47,78 @@ class Mob extends Content
         private $_hostility="";
         private $_trait="";
         private $_path_img="medias/mobs/default.svg";
-        private $_usable=false;
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function getName(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <input 
-                                onchange="Mob.update('<?=$this->getUniqid();?>', this, 'name');" 
-                                placeholder="Nom de la créature" 
-                                maxlength="300" 
-                                type="text" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_name?>">
-                            <label class="size-0-8">Nom de la créature</label>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:  
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "name",
+                            "label" => "Nom",
+                            "placeholder" => "Nom de la créature",
+                            "value" => $this->_name,
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_name;
             }
-
         }
         public function getDescription(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <textarea 
-                                placeholder=""
-                                onchange="Mob.update('<?=$this->getUniqid();?>', this, 'description');" 
-                                class="form-control form-control-main-focus" 
-                                maxlength="20000"><?=$this->_description?></textarea>
-                            <label class="size-0-8">Description</label>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/textarea",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "description",
+                            "label" => "Description",
+                            "maxlenght" => "2000",
+                            "placeholder" => "",
+                            "value" => $this->_description
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_description;
             }
         }
         public function getLevel(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-<?=View::getColorFromLetter($this->_level, true)?>-d-3">
-                            <label>Niveau</label>
-                            <input 
-                                onchange="Mob.update('<?=$this->getUniqid();?>', this, 'level');" 
-                                data-bs-toggle='tooltip' data-bs-placement='bottom' title="Niveau de la créature"
-                                type="text" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_level?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "level",
+                            "label" => "Niveau",
+                            "placeholder" => "Niveau de la créature",
+                            "tooltip" => "Niveau de la créature",
+                            "value" => $this->_level,
+                            "color" => View::getColorFromLetter($this->_level, true) . "-d-3"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
-                    return "<span id='level' data-formule='".$this->_level."' class='badge back-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Niveau de la créature\">Niveau {$this->_level}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Niveau {$this->_level}",
+                            "color" => View::getColorFromLetter($this->_level) . "-d-3",
+                            "tooltip" => "Niveau de la créature",
+                            "style" => View::STYLE_OUTLINE
+                        ], 
+                        write: false);
 
                                     
                 case Content::FORMAT_LIST:
@@ -134,61 +146,101 @@ class Mob extends Content
                     }
                    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Niveau de la créature\">{$this->_level}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_level,
+                            "color" => "",
+                            "tooltip" => "Niveau de la créature",
+                            "style" => View::STYLE_NONE,
+                            "class" => "text-".View::getColorFromLetter($this->_level) . "-d-3"
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_level;
             }
         }
         public function getLife(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-life-d-2">
-                            <label>Points de vie</label>
-                            <input 
-                                onchange="Mob.update('<?=$this->getUniqid();?>', this, 'life');" 
-                                data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul des points de vie de la créature"
-                                type="text" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_life?>">
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "life",
+                            "label" => "Points de vie",
+                            "placeholder" => "Points de vie de la créature",
+                            "tooltips" => "Calcul des points de vie de la créature",
+                            "value" => $this->_life,
+                            "color" => "life-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "heart",
+                            "style_icon" => View::STYLE_ICON_SOLID
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_life."' ";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_life, $i)."' ";
                         }
                     }
 
-                    return "<span id='life' ".$data." data-formule='".$this->_life."' class='badge back-life-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul des points de vie de la créature\">{$this->_life} Points de vie</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_life} Points de vie",
+                            "color" => "life-d-2",
+                            "tooltip" => "Calcul des points de vie de la créature",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data,
+                            "id" => "life"
+                        ], 
+                        write: false);
                    
                     case Content::FORMAT_ICON:
-                        return "<span class='text-life' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Points de vie\">{$this->_life} <img class='icon' src='medias/icons/life.svg'></span>";
+                        return $view->dispatch(
+                            template_name : "icon",
+                            data : [
+                                "style" => View::STYLE_ICON_MEDIA,
+                                "icon" => "life.svg",
+                                "color" => "life-d-2",
+                                "tooltip" => "Calcul des points de vie de la créature",
+                                "content" => $this->_life,
+                                "content_placement" => "before"
+                            ], 
+                            write: false); 
                 
                 default:
                     return $this->_life;
             }
         }
         public function getPa(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-pa-d-4">
-                            <label>Points d'actione</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-pa-d-2 text-white"><img class='icon' src='medias/icons/pa.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'pa');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul des PA de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_pa?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "pa",
+                            "label" => "Points d'action",
+                            "placeholder" => "Points d'action",
+                            "tooltips" => "Calcul des points d'action",
+                            "value" => $this->_pa,
+                            "color" => "pa-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "icon" => "pa.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "6 + bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -198,32 +250,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='pa' ".$data." data-formule='".$this->_pa."' class='badge back-pa-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul des PA de la créature\">{$this->_pa} PA</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_pa} PA",
+                            "color" => "pa-d-2",
+                            "tooltip" => "Calcul des points d'action",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
                    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-pa-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul des PA de la créature\">{$this->_pa} <img class='icon' src='medias/icons/pa.png'></span>";
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "pa.png",
+                            "color" => "pa-d-2",
+                            "tooltip" => "Calcul des points d'action",
+                            "content" => $this->_pa,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_pa;
             }
         }
         public function getPm(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-pm-d-4">
-                            <label>Points de mouvement</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-pm-d-2 text-white"><img class='icon' src='medias/icons/pm.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'pm');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul des PM de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_pm?>">        
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "pm",
+                            "label" => "Points de mouvement",
+                            "placeholder" => "Points de mouvement",
+                            "tooltips" => "Calcul des points de mouvement",
+                            "value" => $this->_pm,
+                            "color" => "pm-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "pm.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "3 + bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -233,32 +309,57 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='pm' ".$data." data-formule='".$this->_pm."' class='badge back-pm-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul des PM de la créature\">{$this->_pm} PM</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_pm} PM",
+                            "color" => "pm-d-2",
+                            "tooltip" => "Calcul des points de mouvement",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-pm-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul des PM de la créature\">{$this->_pm} <img class='icon' src='medias/icons/pm.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "pm.png",
+                            "color" => "pm-d-2",
+                            "tooltip" => "Calcul des points de mouvement",
+                            "content" => $this->_pm,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_pm;
             }
         }
         public function getPo(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-po-d-4">
-                            <label>Bonus de portée</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-po-d-2 text-white"><img class='icon' src='medias/icons/po.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'po');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de portée de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_po?>">        
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "po",
+                            "label" => "Bonus de portée",
+                            "placeholder" => "Bonus de portée",
+                            "tooltips" => "Bonus de portée",
+                            "value" => $this->_po,
+                            "color" => "po-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "po.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "color_icon" => "po-d-4",
+                            "comment" => "1 + bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -268,33 +369,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='po' ".$data." data-formule='".$this->_po."' class='badge back-po-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de portée de la créature\">{$this->_po} PO</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_po} PO",
+                            "color" => "po-d-2",
+                            "tooltip" => "Bonus de portée",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-po-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de portée de la créature\">{$this->_po} <img class='icon' src='medias/icons/po.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "po.png",
+                            "color" => "po-d-2",
+                            "tooltip" => "Bonus de portée",
+                            "content" => $this->_po,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_po;
             }
         }
         public function getIni(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-ini-d-4">
-                            <label>Bonus d'Initiative</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-ini-d-2 text-white"><img class='icon' src='medias/icons/ini.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'ini');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'initiative de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_ini?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">1d20 + mod. Intel + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "ini",
+                            "label" => "Bonus d'initiative",
+                            "placeholder" => "Bonus d'initiative",
+                            "tooltips" => "Bonus d'initiative",
+                            "value" => $this->_ini,
+                            "color" => "ini-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "ini.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "1d20 + mod. Intel + Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -304,33 +428,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='ini' ".$data." data-formule='".$this->_ini."' class='badge back-ini-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'initiative de la créature\">{$this->_ini} Initiative</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_ini} Initiative",
+                            "color" => "ini-d-2",
+                            "tooltip" => "Bonus d'initiative",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-ini-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'initiative de la créature\">{$this->_ini} <img class='icon' src='medias/icons/ini.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "ini.png",
+                            "color" => "ini-d-2",
+                            "tooltip" => "Bonus d'initiative",
+                            "content" => $this->_ini,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_ini;
             }
         }
         public function getTouch(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-touch-d-4">
-                            <label>Bonus de Touche</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-touch text-white"><img class='icon' src='medias/icons/touch.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'touch');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de touche de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_touch?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "touch",
+                            "label" => "Bonus de touche",
+                            "placeholder" => "Bonus de touche",
+                            "tooltips" => "Bonus de touche",
+                            "value" => $this->_touch,
+                            "color" => "touch-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "touch.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -340,33 +487,57 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='touch' ".$data." data-formule='".$this->_touch."' class='badge back-touch' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de touche de la créature\">{$this->_touch} Bonus de Touche</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_touch} Bonus de Touche",
+                            "color" => "touch-d-2",
+                            "tooltip" => "Bonus de touche",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-touch-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de touche de la créature\">{$this->_touch} <img class='icon-sm' src='medias/icons/touch.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "touch.png",
+                            "color" => "touch-d-2",
+                            "tooltip" => "Bonus de touche",
+                            "content" => $this->_touch,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_touch;
             }
         }
         public function getVitality(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-vitality-d-4">
-                            <label>Mod. Vitalité</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-vitality-d-4 text-white"><img class='icon' src='medias/icons/vitality.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'vitality');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur de vitalité de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_vitality?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "vitality",
+                            "label" => "Vitalité",
+                            "placeholder" => "Vitalité",
+                            "tooltips" => "Vitalité",
+                            "value" => $this->_touch,
+                            "color" => "touch-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "vitality.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "Bonus"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
                     if($level['same'] != true){
@@ -375,32 +546,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='vitality' ".$data." data-formule='".$this->_vitality."' class='badge back-vitality-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de vitalité de la créature\">{$this->_vitality} Mod. Vitalité</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_vitality} Vitalité",
+                            "color" => "vitality-d-2",
+                            "tooltip" => "Vitalité",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-vitality-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de vitalité de la créature\">{$this->_vitality} <img class='icon' src='medias/icons/vitality.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "vitality.png",
+                            "color" => "vitality-d-2",
+                            "tooltip" => "Vitalité",
+                            "content" => $this->_vitality,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_vitality;
             }
         }
         public function getSagesse(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-sagesse-d-4">
-                            <label>Mod. Sagesse</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-sagesse-d-4 text-white"><img class='icon' src='medias/icons/sagesse.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'sagesse');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur de sagesse de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_sagesse?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "sagesse",
+                            "label" => "Sagesse",
+                            "placeholder" => "Sagesse",
+                            "tooltips" => "Sagesse",
+                            "value" => $this->_sagesse,
+                            "color" => "sagesse-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "sagesse.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -410,33 +605,57 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='sagesse' ".$data." data-formule='".$this->_sagesse."' class='badge back-sagesse-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de sagesse de la créature\">{$this->_sagesse} Mod. Sagesse</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_sagesse} Sagesse",
+                            "color" => "sagesse-d-2",
+                            "tooltip" => "Sagesse",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-sagesse-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de sagesse de la créature\">{$this->_sagesse} <img class='icon' src='medias/icons/sagesse.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "sagesse.png",
+                            "color" => "sagesse-d-2",
+                            "tooltip" => "Sagesse",
+                            "content" => $this->_sagesse,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_sagesse;
             }
         }
         public function getStrong(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-force-d-4">
-                            <label>Mod. Force</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-force-d-4 text-white"><img class='icon' src='medias/icons/force.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'strong');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur de force de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_strong?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "strong",
+                            "label" => "Force",
+                            "placeholder" => "Force",
+                            "tooltips" => "Force",
+                            "value" => $this->_strong,
+                            "color" => "strong-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "force.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "Bonus"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
                     if($level['same'] != true){
@@ -445,32 +664,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='strong' ".$data." data-formule='".$this->_strong."' class='badge back-force-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de force de la créature\">{$this->_strong} Mod. Force</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_strong} Force",
+                            "color" => "strong-d-2",
+                            "tooltip" => "Force",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-force-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de force de la créature\">{$this->_strong} <img class='icon' src='medias/icons/force.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "force.png",
+                            "color" => "strong-d-2",
+                            "tooltip" => "Force",
+                            "content" => $this->_strong,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_strong;
             }
         }
         public function getIntel(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-intel-d-4">
-                            <label>Mod. Intelligence</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-intel-d-4 text-white"><img class='icon' src='medias/icons/intel.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'intel');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur d'intelligence de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_intel?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "intel",
+                            "label" => "Intelligence",
+                            "placeholder" => "Intelligence",
+                            "tooltips" => "Intelligence",
+                            "value" => $this->_intel,
+                            "color" => "intel-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "intel.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -480,32 +723,55 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='intel' ".$data." data-formule='".$this->_intel."' class='badge back-intel-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur d'intelligence de la créature\">{$this->_intel} Mod. Intel</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_intel} Intel",
+                            "color" => "intel-d-2",
+                            "tooltip" => "Intelligence",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-intel-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur d'intelligence de la créature\">{$this->_intel} <img class='icon' src='medias/icons/intel.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "intel.png",
+                            "color" => "intel-d-2",
+                            "tooltip" => "Intelligence",
+                            "content" => $this->_intel,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
                 default:
                     return $this->_intel;
             }
         }
         public function getAgi(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-agi-d-4">
-                            <label>Mod. Agilité</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-agi-d-4 text-white"><img class='icon' src='medias/icons/agi.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'agi');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur d'agilité de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_agi?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "agi",
+                            "label" => "Agilité",
+                            "placeholder" => "Agilité",
+                            "tooltips" => "Agilité",
+                            "value" => $this->_agi,
+                            "color" => "agi-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "agi.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -515,32 +781,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='agi' ".$data." data-formule='".$this->_agi."' class='badge back-agi-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur d'agilité de la créature\">{$this->_agi} Mod. Agi</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_agi} Agi",
+                            "color" => "agi-d-2",
+                            "tooltip" => "Agilité",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-agi-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur d'agilité de la créature\">{$this->_agi} <img class='icon' src='medias/icons/agi.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "agi.png",
+                            "color" => "agi-d-2",
+                            "tooltip" => "Agilité",
+                            "content" => $this->_agi,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_agi;
             }
         }
         public function getChance(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-chance-d-4">
-                            <label>Mod. Chance</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-chance-d-4 text-white"><img class='icon' src='medias/icons/chance.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'chance');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Calcul du modificateur de chance de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_chance?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "chance",
+                            "label" => "Chance",
+                            "placeholder" => "Chance",
+                            "tooltips" => "Chance",
+                            "value" => $this->_chance,
+                            "color" => "chance-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "chance.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -550,33 +840,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='chance' ".$data." data-formule='".$this->_chance."' class='badge back-chance-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de chance de la créature\">{$this->_chance} Mod. Chance</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_chance} Chance",
+                            "color" => "chance-d-2",
+                            "tooltip" => "Chance",
+                            "style" => View::STYLE_BACK,
+                            "data" => $data
+                        ], 
+                        write: false);
+ 
                 case Content::FORMAT_ICON:
-                    return "<span class='text-chance-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de chance de la créature\">{$this->_chance} <img class='icon' src='medias/icons/chance.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "chance.png",
+                            "color" => "chance-d-2",
+                            "tooltip" => "Chance",
+                            "content" => $this->_chance,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_chance;
             }
         }
         public function getCa(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-ca-d-4">
-                            <label>Bonus de Classe d'armure</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-grey text-white"><img class='icon' src='medias/icons/ca.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'ca');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de la classe d'armure de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_ca?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">1d20 + mod. Vitalité + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "ca",
+                            "label" => "Bonus de classe d'armure",
+                            "placeholder" => "Bonus de classe d'armure",
+                            "tooltips" => "Bonus de classe d'armure",
+                            "value" => $this->_ca,
+                            "color" => "ca-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "ca.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "1d20 + mod. Vitalité + Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -586,33 +899,58 @@ class Mob extends Content
                         }
                     }
 
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_ca} CA",
+                            "color" => "ca-d-2",
+                            "tooltip" => "Bonus de classe d'armure",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                     return "<span id='ca' ".$data." data-formule='".$this->_ca."' class='badge back-ca-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de la classe d'armure de la créature\">{$this->_ca} CA</span>";
                    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-ca-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de la classe d'armure de la créature\">{$this->_ca} <img class='icon' src='medias/icons/ca.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "ca.png",
+                            "color" => "ca-d-2",
+                            "tooltip" => "Bonus de classe d'armure",
+                            "content" => $this->_ca,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_ca;
             }
         }
         public function getFuite(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-fuite-d-4">
-                            <label>Bonus de Fuite</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-fuite-d-4 text-white"><img class='icon' src='medias/icons/fuite.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'fuite');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de fuite de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_fuite?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">1d20 + mod. Agilité + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "fuite",
+                            "label" => "Bonus de fuite",
+                            "placeholder" => "Bonus de fuite",
+                            "tooltips" => "Bonus de fuite",
+                            "value" => $this->_fuite,
+                            "color" => "fuite-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "fuite.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "1d20 + mod. Agilité + Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -622,33 +960,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='fuite' ".$data." data-formule='".$this->_fuite."' class='badge back-fuite-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de fuite de la créature\">{$this->_fuite} Fuite</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_fuite} Fuite",
+                            "color" => "fuite-d-2",
+                            "tooltip" => "Bonus de fuite",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-fuite-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de fuite de la créature\">{$this->_fuite} <img class='icon' src='medias/icons/fuite.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "fuite.png",
+                            "color" => "fuite-d-2",
+                            "tooltip" => "Bonus de fuite",
+                            "content" => $this->_fuite,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_fuite;
             }
         }
         public function getTacle(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-tacle-d-4">
-                            <label>Bonus de Tacle</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-tacle-d-4 text-white"><img class='icon' src='medias/icons/tacle.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'tacle');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de tacle de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_tacle?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">1d20 + mod. Chance + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "tacle",
+                            "label" => "Bonus de tacle",
+                            "placeholder" => "Bonus de tacle",
+                            "tooltips" => "Bonus de tacle",
+                            "value" => $this->_tacle,
+                            "color" => "tacle-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "tacle.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "1d20 + mod. Chance + Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -658,33 +1019,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='tacle' ".$data." data-formule='".$this->_tacle."' class='badge back-tacle-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de tacle de la créature\">{$this->_tacle} Tacle</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_tacle} Tacle",
+                            "color" => "tacle-d-2",
+                            "tooltip" => "Bonus de tacle",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-tacle-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de tacle de la créature\">{$this->_tacle} <img class='icon' src='medias/icons/tacle.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "tacle.png",
+                            "color" => "tacle-d-2",
+                            "tooltip" => "Bonus de tacle",
+                            "content" => $this->_tacle,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_tacle;
             }
         }
         public function getDodge_pa(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-pa-d-4">
-                            <label>Bonus d'Esquive PA</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-pa-d-4 text-white"><img class='icon' src='medias/icons/dodge_pa.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'dodge_pa');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PA de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_dodge_pa?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">1d20 + mod. Sagesse + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "dodge_pa",
+                            "label" => "Bonus d'Esquive PA",
+                            "placeholder" => "Bonus d'Esquive PA",
+                            "tooltips" => "Bonus d'Esquive PA",
+                            "value" => $this->_dodge_pa,
+                            "color" => "pa-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "dodge_pa.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "1d20 + mod. Sagesse + Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -694,33 +1078,56 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='dodge_pa' ".$data." data-formule='".$this->_dodge_pa."' class='badge back-pa-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'Esquive PA de la créature\">{$this->_dodge_pa} Esquive PA</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_dodge_pa} Esquive PA",
+                            "color" => "pa-d-2",
+                            "tooltip" => "Bonus d'Esquive PA",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-pa-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'Esquive PA de la créature\">{$this->_dodge_pa} <img class='icon' src='medias/icons/dodge_pa.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "dodge_pa.png",
+                            "color" => "pa-d-2",
+                            "tooltip" => "Bonus d'Esquive PA",
+                            "content" => $this->_dodge_pa,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_dodge_pa;
             }
         }
         public function getDodge_pm(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-pm-d-4">
-                            <label>Bonus d'Esquive PM</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-pm-d-4 text-white"><img class='icon' src='medias/icons/dodge_pm.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'dodge_pm');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PM de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_dodge_pm?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">1d20 + mod. Sagesse + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "dodge_pm",
+                            "label" => "Bonus d'Esquive PM",
+                            "placeholder" => "Bonus d'Esquive PM",
+                            "tooltips" => "Bonus d'Esquive PM",
+                            "value" => $this->_dodge_pm,
+                            "color" => "pm-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "dodge_pm.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA,
+                            "comment" => "1d20 + mod. Sagesse + Bonus"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -730,32 +1137,55 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='dodge_pm' ".$data." data-formule='".$this->_dodge_pm."' class='badge back-pm-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'Esquive PM de la créature\">{$this->_dodge_pm} Esquive PM</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_dodge_pm} Esquive PM",
+                            "color" => "pm-d-2",
+                            "tooltip" => "Bonus d'Esquive PM",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-pm-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'Esquive PM de la créature\">{$this->_dodge_pm} <img class='icon' src='medias/icons/dodge_pm.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "dodge_pm.png",
+                            "color" => "pm-d-2",
+                            "tooltip" => "Bonus d'Esquive PM",
+                            "content" => $this->_dodge_pm,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_dodge_pm;
             }
         }
         public function getRes_neutre(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-black">
-                            <label>Resistance neutre</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-grey-d-4 text-white"><img class='icon' src='medias/icons/res_neutre.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_neutre');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance neutre de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_neutre?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_neutre",
+                            "label" => "Résistance neutre",
+                            "placeholder" => "Résistance neutre",
+                            "tooltips" => "Résistance neutre",
+                            "value" => $this->_res_neutre,
+                            "color" => "black",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_neutre.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -765,32 +1195,55 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='res_neutre' ".$data." data-formule='".$this->_res_neutre."' class='badge back-grey-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance neutre de la créature\">{$this->_res_neutre} Résistance Neutre</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_neutre} Résistance Neutre",
+                            "color" => "grey-d-4",
+                            "tooltip" => "Résistance neutre",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-black' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance neutre de la créature\">{$this->_res_neutre} <img class='icon' src='medias/icons/res_neutre.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_neutre.png",
+                            "color" => "grey-d-4",
+                            "tooltip" => "Résistance neutre",
+                            "content" => $this->_res_neutre,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_res_neutre;
             }
         }
         public function getRes_terre(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-force-d-4">
-                            <label>Resistance terre</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-force-d-4 text-white"><img class='icon' src='medias/icons/res_terre.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_terre');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance terre de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_terre?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_terre",
+                            "label" => "Résistance terre",
+                            "placeholder" => "Résistance terre",
+                            "tooltips" => "Résistance terre",
+                            "value" => $this->_res_terre,
+                            "color" => "force-d-4",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_terre.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -800,32 +1253,55 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='res_terre' ".$data." data-formule='".$this->_res_terre."' class='badge back-force-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance terre de la créature\">{$this->_res_terre} Résistance terre</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_terre} Résistance Terre",
+                            "color" => "force-d-4",
+                            "tooltip" => "Résistance terre",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-force-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance terre de la créature\">{$this->_res_terre} <img class='icon' src='medias/icons/res_terre.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_terre.png",
+                            "color" => "force-d-4",
+                            "tooltip" => "Résistance terre",
+                            "content" => $this->_res_terre,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_res_terre;
             }
         }
         public function getRes_feu(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-intel-d-4">
-                            <label>Resistance feu</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-intel-d-4 text-white"><img class='icon' src='medias/icons/res_feu.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_feu');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance feu de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_feu?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_feu",
+                            "label" => "Résistance feu",
+                            "placeholder" => "Résistance feu",
+                            "tooltips" => "Résistance feu",
+                            "value" => $this->_res_feu,
+                            "color" => "intel-d-4",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_feu.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -835,32 +1311,55 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='res_feu' ".$data." data-formule='".$this->_res_feu."' class='badge back-intel-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance feu de la créature\">{$this->_res_feu} Résistance feu</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_feu} Résistance Feu",
+                            "color" => "intel-d-4",
+                            "tooltip" => "Résistance feu",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-intel-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance feu de la créature\">{$this->_res_feu} <img class='icon' src='medias/icons/res_feu.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_feu.png",
+                            "color" => "intel-d-4",
+                            "tooltip" => "Résistance feu",
+                            "content" => $this->_res_feu,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_res_feu;
             }
         }
         public function getRes_air(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-agi-d-4">
-                            <label>Resistance air</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-agi-d-4 text-white"><img class='icon' src='medias/icons/res_air.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_air');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance air de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_air?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_air",
+                            "label" => "Résistance air",
+                            "placeholder" => "Résistance air",
+                            "tooltips" => "Résistance air",
+                            "value" => $this->_res_air,
+                            "color" => "agi-d-4",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_air.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -870,32 +1369,55 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='res_air' ".$data." data-formule='".$this->_res_air."' class='badge back-agi-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance air de la créature\">{$this->_res_air} Résistance air</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_air} Résistance Air",
+                            "color" => "agi-d-4",
+                            "tooltip" => "Résistance air",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-agi-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance air de la créature\">{$this->_res_air} <img class='icon' src='medias/icons/res_air.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_air.png",
+                            "color" => "agi-d-4",
+                            "tooltip" => "Résistance air",
+                            "content" => $this->_res_air,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_res_air;
             }
         }
         public function getRes_eau(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-chance-d-4">
-                            <label>Resistance eau</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-chance-d-4 text-white"><img class='icon' src='medias/icons/res_eau.png'></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'res_eau');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance eau de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_eau?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_eau",
+                            "label" => "Résistance eau",
+                            "placeholder" => "Résistance eau",
+                            "tooltips" => "Résistance eau",
+                            "value" => $this->_res_eau,
+                            "color" => "chance-d-4",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_eau.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
                     $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
@@ -905,39 +1427,55 @@ class Mob extends Content
                         }
                     }
 
-                    return "<span id='res_eau' ".$data." data-formule='".$this->_res_eau."' class='badge back-chance-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance eau de la créature\">{$this->_res_eau} Résistance eau</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_eau} Résistance Eau",
+                            "color" => "chance-d-4",
+                            "tooltip" => "Résistance eau",
+                            "style" => View::STYLE_OUTLINE,
+                            "data" => $data
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-chance-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance eau de la créature\">{$this->_res_eau} <img class='icon' src='medias/icons/res_eau.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_eau.png",
+                            "color" => "chance-d-4",
+                            "tooltip" => "Résistance eau",
+                            "content" => $this->_res_eau,
+                            "content_placement" => "before"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_res_eau;
             }
         }
         public function getZone(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <div class="input-group">
-                                <div class="input-group-text back-main-d-2 text-white"><i class="fas fa-map-marker-alt"></i></div>
-                                <input 
-                                    onchange="Mob.update('<?=$this->getUniqid();?>', this, 'zone');" 
-                                    placeholder="Zone de vie de la créature"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_zone?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-
-                case Content::FORMAT_TEXT:
-                    ob_start(); ?>
-                        <p>
-                            <i class="fas fa-map-marker-alt text-main-d-2 me-2"></i>
-                            <?=$this->_zone?>
-                        </p>
-                    <?php ob_get_clean(); 
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "zone",
+                            "label" => "Zone de vie",
+                            "placeholder" => "Zone de vie",
+                            "tooltips" => "Zone de vie",
+                            "value" => $this->_zone,
+                            "color" => "main-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "map-marker-alt",
+                            "style_icon" => View::STYLE_ICON_SOLID
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_zone;
@@ -945,22 +1483,41 @@ class Mob extends Content
 
         }
         public function getHostility(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="dropdown">
-                            <a class="" type="button" id="hostility<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getHostility(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
-                            <div class="dropdown-menu" aria-labelledby="hostility<?=$this->getId()?>"> <?php
-                                foreach (Mob::HOSTILITY as $name => $hostility) { ?>
-                                    <a class="dropdown-item" onclick="Mob.update('<?=$this->getUniqid()?>', <?=$hostility?>, 'hostility', <?=Controller::IS_VALUE?>);$('#dropdownDisplay<?=$this->getId()?>').html($(this).html());"><span class='badge back-main-d-2'><?=$name?></span></a>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    $items = [];
+                    foreach (Mob::HOSTILITY as $name => $value) {
+                        $items[] = [
+                            "onclick" => "Mob.update('".$this->getUniqid()."', ".$value.", 'hostility', ".Controller::IS_VALUE.");",
+                            "display" => $name,
+                            "class" => "badge-outline border-".View::getColorFromLetter($value, true)."-d-2",
+                        ];
+                    }
+
+                    return $view->dispatch(
+                        template_name : "dropdown",
+                        data : [
+                            "tooltips" => "Hostilité de la créature",
+                            "label" => $this->getHostility(),
+                            "size" => View::SIZE_SM,
+                            "data" => $items,
+                            "comment" => "Hostilité : " . implode(", ", array_keys(Mob::HOSTILITY)),
+                        ], 
+                        write: false);
     
                 case Content::FORMAT_BADGE:
                     if(in_array($this->_hostility, Mob::HOSTILITY)){
-                        return "<span class='badge back-white border border-main-d-3 text-main-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Agréssivité de la créature\">".array_search($this->_hostility, Mob::HOSTILITY)."</span>";
+                        return $view->dispatch(
+                            template_name : "badge",
+                            data : [
+                                "content" => array_search($this->_hostility, Mob::HOSTILITY),
+                                "color" => View::getColorFromLetter($this->_hostility, true)."-d-2",
+                                "tooltip" => "Agressivité de la créature : " . implode(", ", array_keys(Mob::HOSTILITY)),
+                                "style" => View::STYLE_OUTLINE
+                            ], 
+                            write: false);
+                            
                     } else  {
                         return "";
                     }
@@ -977,28 +1534,39 @@ class Mob extends Content
             }
         }
         public function getTrait(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <input 
-                                onchange="Mob.update('<?=$this->getUniqid();?>', this, 'trait');" 
-                                placeholder="Traits de la classe" 
-                                maxlength="3000" 
-                                type="text" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_trait?>">
-                            <label class="size-0-8">Traits de la créature</label>
-                        </div>
-                        <span class="size-0-8 text-grey">Séparer les différents traits par des virgules.</span>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/textarea",
+                        data : [
+                            "class_name" => "Mob",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "trait",
+                            "label" => "Traits",
+                            "value" => $this->_trait,
+                            "placeholder" => "Traits",
+                            "style" => View::STYLE_INPUT_FLOATING,
+                            "comment" => "Séparer les différents traits par des virgules."
+                        ], 
+                        write: false);
 
                 case Content::FORMAT_BADGE:
                     ob_start(); ?>
-                        <div class="mt-1 d-flex flex-row justify-content-start"> <?php
-                            foreach (explode(",", $this->_trait) as $trait) { ?>
-                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="Trait <?=$trait?>" class="me-1 badge back-<?=View::getColorFromLetter($trait)?>-d-1"><?=ucfirst(trim($trait))?></span>
-                            <?php } ?>                            
+                        <div class="d-flex flex-row justify-content-around"> <?php
+                            foreach (explode(",", $this->_trait) as $trait) { 
+                                $view->dispatch(
+                                    template_name : "badge",
+                                    data : [
+                                        "color" => View::getColorFromLetter($trait) . "-d-1",
+                                        "content" => $trait,
+                                        "style" => View::STYLE_BACK,
+                                        "tooltip" => "Trait ".$trait,
+                                        "tooltip_placement" => "top"
+                                    ], 
+                                    write: true);
+                                ?>
+                                <?php } ?>                            
                         </div>
                     <?php return ob_get_clean();
 
@@ -1022,7 +1590,7 @@ class Mob extends Content
                 case  Content::FORMAT_BRUT:
                     return $path;
                 break;
-                case  Content::FORMAT_MODIFY:
+                case  Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="text-center">
                             <div id='showFile_path_image' class='m-2 d-flex justify-content-center'><?=$this->getPath_img(Content::FORMAT_FANCY, 'img-back-180');?></div>
@@ -1056,89 +1624,51 @@ class Mob extends Content
                 break;
             }
         }
-        public function getUsable(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    $checked = ""; 
-                    if($this->_usable){ $checked = "checked"; } else { $checked = ""; }
-                    ob_start(); ?>
-                        <div style="width:initial;" class="form-check form-switch my-1">
-                            <input onchange="Mob.update('<?=$this->getUniqid();?>', this, 'usable', <?=Controller::IS_CHECKBOX?>);"  type="checkbox" class="form-check-input back-main-d-1 border-main-d-1" <?=$checked?> id="customSwitchUsable<?=$this->getId()?>">
-                            <label class="custom-control-label" for="customSwitchUsable<?=$this->getUniqid()?>"><?=$this->getUsable(Content::FORMAT_BADGE);?></label>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    if($this->_usable){ 
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet a été adapté au jdr\" class='badge back-green-d-3'>Adapté au jdr</span>";
-                    } else { 
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier\" class='badge back-red-d-3'>Non adapté au jdr</span>";
-                    }
 
-                case Content::FORMAT_ICON:
-                    if($this->_usable){ 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet a été adapté au jdr\" class='fas fa-check text-green-d-3'></i>";
-                    } else { 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier\" class='fas fa-times text-red-d-3'></i>";
-                    }
-                    
-                default:
-                    return $this->_usable;
-            }
-        }
-
-        public function getSpell(int $format = Content::FORMAT_BRUT, $display_remove = false){
+        public function getSpell(int $format = Content::FORMAT_BRUT, $display_remove = false, $size = 300){
             $manager = new MobManager();
             $spells = $manager->getLinkSpell($this);
             
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <h6 class="mt-1">Ajouter des sorts</h6>
-                        <div class="d-flex flex-row justify-content-evenly align-items-baseline mb-3 position-relative">
-                            <div class="form-floating w-100">
-                                <input  type="text" 
-                                        data-url = "index.php?c=search&a=search"
-                                        data-search_in = <?=ControllerSearch::SEARCH_IN_SPELL?>
-                                        data-minlenght = 3
-                                        data-parameter = "<?=$this->getUniqid()?>"
-                                        data-action = <?=ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_MOB?>
-                                        data-limit = 10
-                                        data-only_usable = false
-                                        class="form-control form-control-main-focus" 
-                                        id="addSpell<?=$this->getUniqid()?>" 
-                                        placeholder="Rechercher un sort">
-                                <label for="addSpell<?=$this->getUniqid()?>">Rechercher un sort</label>
-                            </div>
-                            <span id="search-sign"></span>
-                        </div>
-                        <script>autocomplete_load("#addSpell<?=$this->getUniqid()?>");</script>
-                        <?=$this->getSpell(Content::DISPLAY_RESUME, true)?>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    $view = new View();
+                    $html = $view->dispatch(
+                        template_name : "input/search",
+                        data : [
+                            "id" => "addSpell" . $this->getUniqid(),
+                            "title" => "Ajouter un sort",
+                            "label" => "Rechercher un sort",
+                            "placeholder" => "Rechercher un sort",
+                            "search_in" => ControllerSearch::SEARCH_IN_SPELL,
+                            "parameter" => $this->getUniqid(),
+                            "action" => ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_MOB,
+                        ], 
+                        write: false);
+
+                    return $html . $this->getSpell(Content::DISPLAY_RESUME, true);
 
                 case Content::DISPLAY_RESUME:
-                    ob_start(); 
-                    if(!empty($spells)){?>
-                        <div>
-                            <div class="d-flex flex-row justify-content-around flex-wrap">
-                                <?php foreach ($spells as $spell) { ?>
-                                    <div class="m-2" style="position:relative;width:300px;">
-                                        <?php if($display_remove){ ?>
-                                            <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
-                                                <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher ce sort de cette créature" class="p-4 <?=View::getCss(View::TYPE_BTN_UNDERLINE, "red")?>" onclick="if (confirm('Etes vous sûr d\'étacher le sort de cette créature ?')){Mob.update('<?=$this->getUniqid()?>',{action:'remove', uniqid:'<?=$spell['obj']->getUniqid()?>'},'spell', IS_VALUE);}"><i class="fas fa-times"></i></a>
-                                            </div>
-                                        <?php } ?>
-                                        <?= $spell['obj']->getVisual(Content::DISPLAY_RESUME);?>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    <?php }
-                    return ob_get_clean();
-
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($spells)){
+                        return $view->dispatch(
+                            template_name : "spell/list",
+                            data : [
+                                "spells" => $spells,
+                                "is_removable" => $display_remove,
+                                "uniqid" => $this->getUniqid(),
+                                "class_name" => "Mob",
+                                "size" => $size
+                            ], 
+                            write: true);
+                    }
+                    return "";
                 case Content::FORMAT_ARRAY:
-                    if(!empty($spells)){return $spells;}else{return [];}
-                        
+                    if(!empty($spells)){
+                        return $spells;
+                    }
+                    return [];
+                default:
+                    return $spells;
             }
         }
 
@@ -1224,17 +1754,38 @@ class Mob extends Content
             if($powerful > 7){$powerful = 7;}
             if($powerful < 1){$powerful = 1;}
             
+            $view = new View();
             switch ($format) {
                 case Content::FORMAT_BADGE:
                     if(in_array($powerful, [1,2,3,4,5,6,7])){
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Puissance d'une créature sur 7 niveaux en fonction de ces sorts\" class='badge back-deep-purple-d-3'>Puissance ".$powerful."</span>";
+                        return $view->dispatch(
+                            template_name : "badge",
+                            data : [
+                                "content" => "Puissance ".$powerful,
+                                "color" => "deep-purple-d-3",
+                                "tooltip" => "Puissance d'une créature sur 7 niveaux en fonction de ces sorts",
+                                "style" => View::STYLE_BACK
+                            ], 
+                            write: false);
+
                     } else {
                         return "";
                     }
 
                 case Content::FORMAT_ICON:
                     if(in_array($powerful, [1,2,3,4,5,6,7])){
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Puissance d'une créature sur 7 niveaux en fonction de ces sorts\" class='badge back-deep-purple-d-3'><i class='fas fa-fist-raised'></i> ".$powerful."</span>";
+                        return $view->dispatch(
+                            template_name : "icon",
+                            data : [
+                                "style" => View::STYLE_ICON_SOLID,
+                                "icon" => "fist-raised",
+                                "color" => "deep-purple-d-3",
+                                "tooltip" => "Puissance d'une créature sur 7 niveaux en fonction de ces sorts",
+                                "content" => $powerful,
+                                "content_placement" => "before"
+                            ], 
+                            write: false);
+
                     } else {
                         return "";
                     }
@@ -1248,235 +1799,6 @@ class Mob extends Content
 
                 default:
                     return $powerful;
-            }
-        }
-
-        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
-
-            $user = ControllerConnect::getCurrentUser();
-            $bookmark_icon = "far";
-            if($user->in_bookmark($this)){
-                $bookmark_icon = "fas";
-            }
-
-            //OPTIONS
-                if($size < 100){$size = 300;}
-
-            switch ($display) {
-                case Content::DISPLAY_MODIFY:      
-                    ob_start(); ?>
-                        <div class="card mb-3">
-                            <div class="row g-0">
-                                <div class="col-auto">
-                                    <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-200")?>
-                                    <div class="text-center mt-2">
-                                        <?=$this->getPowerful(Content::FORMAT_BADGE)?>
-                                        <?=$this->getHostility(Content::FORMAT_MODIFY)?>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                        <div class="d-flex justify-content-between">
-                                            <a class="text-grey-d-3" data-bs-toggle="collapse" href="#collapse<?=$this->getUniqid()?>" role="button" aria-expanded="false" aria-controls="collapseExample">Comment calculer les caractéristiques ?</a>
-                                            <?=$this->getUsable(Content::FORMAT_MODIFY)?>
-                                        </div>
-                                        <div class="collapse mb-2 size-0-9 text-grey-d-1" id="collapse<?=$this->getUniqid()?>">
-                                            <p>
-                                                Certaines caractéristiques découlent des autres caractéristiques notamment du niveau de la créature.<br>
-                                                Pour les calculer, les formules sont indiqués sous la forme suivant [n * + / ou - caractéristique].
-                                            </p>
-                                            <ul class="size-0-9 text-grey-d-1">
-                                                <li>n est nombre entier</li>
-                                                <li>L'opérateur est * ou / pour les mutiplications ou divisions et + ou - pour les additions ou soustractions</li>
-                                                <li>La caractéristique fait référence à la valeur d'une autre caractéristique.</li>
-                                            </ul>
-                                            <p>
-                                                Lorsque le résultat n'est pas un nombre entier, il faut troncaturer le résultat, c'est à dire arrondir à l'inférieur.
-                                                Par exemple, si pour les PM de la créature la formule est [niveau / 3] et le niveau est 11, alors le résultat sera 11/3 = 3,66, soit 3 PM.
-                                            </p>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-auto">
-                                                <?=$this->getLevel(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getIni(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getLife(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getPa(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getPm(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getPo(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getTouch(Content::FORMAT_MODIFY)?>
-                                            </div>  
-                                            <div class="col-auto">
-                                                <?=$this->getVitality(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getSagesse(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getStrong(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getIntel(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getAgi(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getChance(Content::FORMAT_MODIFY);?>
-                                            </div>   
-                                            <div class="col-auto">
-                                                <?=$this->getCa(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getFuite(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getTacle(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getDodge_pa(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getDodge_pm(Content::FORMAT_MODIFY);?>
-                                            </div> 
-                                            <div class="col-auto">
-                                                <?=$this->getRes_neutre(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getRes_terre(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getRes_feu(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getRes_air(Content::FORMAT_MODIFY);?>
-                                                <?=$this->getRes_eau(Content::FORMAT_MODIFY);?>
-                                            </div>            
-                                        </div>
-                                        <div class="nav-item-divider back-main-d-1"></div>
-                                        <p class='size-0-7 mb-1'>Mob <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text my-2"><?=$this->getTrait(Content::FORMAT_MODIFY);?></div>
-                            <div class="card-text my-2"><?=$this->getDescription(Content::FORMAT_MODIFY);?></div>
-                            <div class="card-text my-2"><?=$this->getZone(Content::FORMAT_MODIFY);?></div>
-                            <div class="card-text my-2"><?=$this->getSpell(Content::FORMAT_MODIFY)?></div>
-                            <div class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Mob.remove('<?=$this->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
-                        </div>
-                    <?php return ob_get_clean();
-                break;
-
-                case Content::DISPLAY_RESUME:
-                    ob_start(); ?>
-                        <div style="width: <?=$size?>px;">
-                            <div style="position:relative;">
-                                <div ondblclick="Mob.open('<?=$this->getUniqid()?>');" class="card-hover-linked card border-secondary-d-2 border p-2 m-1" style="width: <?=$size?>px;" >
-                                    <div class="d-flex flew-row flex-nowrap justify-content-start">
-                                        <div>
-                                            <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                                        </div>
-                                        <div class="m-1 p-0">
-                                            <p class="bold ms-1"><?=$this->getName()?></p>
-                                            <div class="d-flex flex-wrap justify-content-around align-items-start">
-                                                <p class="mt-1 text-level short-badge-150"><?=$this->getLevel(Content::FORMAT_BADGE)?></p> 
-                                                <div> <?=$this->getPowerful(Content::FORMAT_ICON)?></div>
-                                                <p class="short-badge-100"><?=$this->getHostility(Content::FORMAT_BADGE)?></p>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex flex-column justify-content-between ms-auto">
-                                            <a onclick='User.changeBookmark(this);' data-classe='mob' data-uniqid='<?=$this->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
-                                            <p class="align-self-end"><a class="btn-text-secondary" title="Afficher les sorts" onclick="Mob.getSpellList('<?=$this->getUniqid()?>');"><i class="fas fa-magic"></i></a></p>
-                                        </div>
-                                    </div>
-                                    <div class="justify-content-center flex-wrap d-flex short-badge-150"><?=$this->getTrait(Content::FORMAT_BADGE)?></div>
-                                    <div class="card-hover-showed">
-                                        <div class="d-flex justify-content-around flex-wrap">
-                                            <div class="col-auto">
-                                                <div><?=$this->getPa(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getPm(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getPo(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getIni(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getLife(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getTouch(Content::FORMAT_ICON)?></div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div><?=$this->getVitality(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getSagesse(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getStrong(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getIntel(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getAgi(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getChance(Content::FORMAT_ICON);?></div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div><?=$this->getCa(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getFuite(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getTacle(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getDodge_pa(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getDodge_pm(Content::FORMAT_ICON);?></div>
-                                            </div> 
-                                            <div class="col-auto">
-                                                <div><?=$this->getRes_neutre(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getRes_terre(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getRes_feu(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getRes_air(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getRes_eau(Content::FORMAT_ICON);?></div>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                break;
-
-                case  Content::DISPLAY_CARD:      
-                    ob_start(); ?>
-                        <div class="card mb-3" id="mob<?=$this->getUniqid()?>">
-                            <div class="row g-0">
-                                <div class="col-auto">
-                                    <a style="position:relative;top:5px;left:5px;" href="<?=$this->getPath_img()?>" download="<?=$this->getName().'.'.substr(strrchr($this->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-                                    <?=$this->getPath_img(Content::FORMAT_FANCY, "img-back-200")?>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body">
-                                        <div class="row justify-content-between">
-                                            <div class="col-auto">
-                                                <div><?=$this->getLevel(Content::FORMAT_LIST)?></div>
-                                                <div><?=$this->getLife(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getTouch(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getHostility(Content::FORMAT_BADGE)?></div>
-                                                <div> <?=$this->getPowerful(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getTrait(Content::FORMAT_BADGE);?></div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div><?=$this->getPa(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getPm(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getPo(Content::FORMAT_BADGE)?></div>
-                                                <div><?=$this->getIni(Content::FORMAT_BADGE)?></div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div><?=$this->getVitality(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getSagesse(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getStrong(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getIntel(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getAgi(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getChance(Content::FORMAT_BADGE);?></div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div><?=$this->getCa(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getFuite(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getTacle(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getDodge_pa(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getDodge_pm(Content::FORMAT_BADGE);?></div>
-                                            </div> 
-                                            <div class="col-auto">
-                                                <div><?=$this->getRes_neutre(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getRes_terre(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getRes_feu(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getRes_air(Content::FORMAT_BADGE);?></div>
-                                                <div><?=$this->getRes_eau(Content::FORMAT_BADGE);?></div>
-                                            </div>                
-                                        </div>
-                                        <div class="nav-item-divider back-main-d-1"></div>
-                                        <div class="d-flex justify-content-between">
-                                            <h3><?=$this->getName()?></h3>
-                                            <div>
-                                                <?=$this->getUsable(Content::FORMAT_BADGE)?>
-                                                <?php if($user->getRight('mob', User::RIGHT_WRITE)){ ?>
-                                                    <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Mob.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY);"><i class='far fa-edit'></i></a>
-                                                <?php } ?>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mx-3">
-                                <p class="card-text my-2"><?=$this->getDescription()?></p>
-                                <p class="card-text my-2"><small class="text-muted">Zone : <?=$this->getZone(Content::FORMAT_TEXT)?></small></p>
-                                <p class="card-text my-2"><?=$this->getSpell(Content::DISPLAY_RESUME)?></p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                break;
-
-                default:
-                    return "Erreur : format de display non reconnu";
             }
         }
 
@@ -1614,10 +1936,6 @@ class Mob extends Content
             } else {
                 return "Le fichier n'est pas valide.";
             }
-        }
-        public function setUsable($data){
-            $this->_usable = $this->returnBool($data);
-            return true;
         }
 
         /* Data = array(

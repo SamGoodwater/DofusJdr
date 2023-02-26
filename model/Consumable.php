@@ -2,7 +2,7 @@
 class Consumable extends Content
 {
     public function __construct(array $donnees){
-        $this->hydrate($donnees);
+        parent::__construct($donnees);
         if(file_exists("medias/consumables/".$this->getUniqid().".svg")){
             $this->setPath_image("medias/consumables/".$this->getUniqid().".svg");
         }
@@ -32,26 +32,43 @@ class Consumable extends Content
         private $_price=0;
         private $_rarity=5;
         private $_path_img="medias/consumables/default.svg";
-        private $_usable=false;
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function getType(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="dropdown">
-                            <a class="" type="button" id="dropdownDisplay<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getType(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownDisplay<?=$this->getId()?>">
-                                <?php foreach (Consumable::TYPE_LIST as $key => $type) { ?>
-                                    <a class="dropdown-item" onclick="Consumable.update('<?=$this->getUniqid()?>', <?=$type?>, 'type', <?=Controller::IS_VALUE?>);$('#dropdownDisplay<?=$this->getId()?>').html($(this).html());"><span class='badge back-<?=View::getColorFromLetter($type)?>-d-2'><?=ucfirst($key)?></span></a>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    $items = [];
+                    foreach (Consumable::TYPE_LIST as $name => $type) {
+                        $items[] = [
+                            "display" => ucfirst($name),
+                            "onclick" => "Consumable.update('".$this->getUniqid()."', '".$type."', 'type',".Controller::IS_VALUE.")",
+                            "class" => "badge back-".View::getColorFromLetter($type)."-d-2"
+                        ];
+                    }
+
+                    return $view->dispatch(
+                        template_name : "dropdown",
+                        data : [
+                            "label" => $this->getType(Content::FORMAT_BADGE),
+                            "tooltip" => "Type de consommable",
+                            "items" => $items,
+                            "id" => "type_{$this->getUniqid()}",
+                        ], 
+                        write: false);
 
                 case Content::FORMAT_BADGE:
                     if(in_array($this->_type, Consumable::TYPE_LIST)){
-                        return "<span class='badge back-".View::getColorFromLetter($this->_type)."-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Type de consommable\">".array_search($this->_type, Consumable::TYPE_LIST)."</span>";
+                        return $view->dispatch(
+                            template_name : "badge",
+                            data : [
+                                "content" => ucfirst(array_search($this->_type, Consumable::TYPE_LIST)),
+                                "color" => View::getColorFromLetter($this->_type) . "-d-2",
+                                "tooltip" => "Type de consommable",
+                                "style" => View::STYLE_BACK
+                            ], 
+                            write: false);
+
                     } else  {
                         return "";
                     }
@@ -61,151 +78,220 @@ class Consumable extends Content
             }
         }
         public function getName(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <input 
-                                onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'name');" 
-                                placeholder="Nom" 
-                                maxlength="300" 
-                                type="text" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_name?>">
-                            <label class="size-0-8">Nom</label>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:  
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Consumable",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "name",
+                            "label" => "Nom",
+                            "placeholder" => "Nom du consommable",
+                            "value" => $this->_name,
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_name;
             }
-
         }
         public function getDescription(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <textarea 
-                                placeholder=""
-                                onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'description');" 
-                                class="form-control form-control-main-focus" 
-                                maxlength="20000"><?=$this->_description?></textarea>
-                            <label class="size-0-8">Description</label>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/textarea",
+                        data : [
+                            "class_name" => "Consumable",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "description",
+                            "label" => "Description",
+                            "maxlenght" => "2000",
+                            "placeholder" => "",
+                            "value" => $this->_description
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_description;
             }
         }
         public function getEffect(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <textarea 
-                                placeholder=""
-                                onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'effect');" 
-                                class="form-control form-control-main-focus" 
-                                maxlength="20000"><?=$this->_effect?></textarea>
-                            <label class="size-0-8">Effets</label>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    $view = new View(View::TEMPLATE_SNIPPET);
+                    return $view->dispatch(
+                        template_name : "input/textarea",
+                        data : [
+                            "class_name" => "Consumable",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "effect",
+                            "label" => "Effets",
+                            "maxlenght" => "1000",
+                            "tooltips" => "Effets du consommable",
+                            "placeholder" => "",
+                            "value" => $this->_effect
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_effect;
             }
         }
         public function getLevel(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-<?=View::getColorFromLetter($this->_level, true)?>-d-3">
-                            <label>Niveau du consommable</label>
-                            <input 
-                                onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'level');" 
-                                data-bs-toggle='tooltip' data-bs-placement='bottom' title="Niveau à partir duquel il est possible d'apprendre d'utiliser le consommable"
-                                min="0" max="200" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_level?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Consumable",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "level",
+                            "label" => "Niveau",
+                            "placeholder" => "Niveau",
+                            "tooltip" => "Niveau à partir duquel il est possible de fabriquer le consommable",
+                            "value" => $this->_level,
+                            "color" => View::getColorFromLetter($this->_level, true) . "-d-3"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Niveau à partir duquel il est possible d'utiliser le consommable\">Niveau {$this->_level}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Niveau {$this->_level}",
+                            "color" => View::getColorFromLetter($this->_level) . "-d-3",
+                            "tooltip" => "Niveau à partir duquel il est possible de fabriquer le consommable",
+                            "style" => View::STYLE_OUTLINE
+                        ], 
+                        write: false);
                    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Niveau à partir duquel il est possible d'utiliser le consommable\">{$this->_level}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_level,
+                            "color" => "",
+                            "tooltip" => "Niveau à partir duquel il est possible de fabriquer le consommable",
+                            "style" => View::STYLE_NONE,
+                            "class" => "text-".View::getColorFromLetter($this->_level) . "-d-3"
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_level;
             }
         }
         public function getRecepe(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <textarea 
-                                placeholder=""
-                                onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'recepe');" 
-                                class="form-control form-control-main-focus" 
-                                maxlength="20000"><?=$this->_recepe?></textarea>
-                            <label class="size-0-8">Recette</label>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/textarea",
+                        data : [
+                            "class_name" => "Consumable",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "recepe",
+                            "label" => "Recette",
+                            "maxlenght" => "1000",
+                            "placeholder" => "",
+                            "tooltips" => "Recette de fabrication du consommable",
+                            "value" => $this->_recepe
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_recepe;
             }
         }
         public function getPrice(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-po-d-4">
-                            <label>Prix estimé</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-kamas text-white">K</div>
-                                <input 
-                                    onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'price');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix estimé"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_price?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Consumable",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "price",
+                            "label" => "Prix estimé",
+                            "placeholder" => "Prix estimé",
+                            "tooltip" => "Prix estimé",
+                            "value" => $this->_price,
+                            "color" => "kamas-d-3",
+                            "style" => View::STYLE_INPUT_ICON,
+                            'icon' => "kamas.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-kamas-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Prix estimé du consommable\">{$this->_price} kamas</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_price} kamas",
+                            "color" => "kamas-d-4",
+                            "tooltip" => "Prix estimé du consommable",
+                            "style" => View::STYLE_BACK
+                        ], 
+                        write: false);
                    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-po-d-4' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Prix estimé du consommable\">{$this->_price} <img class='icon' src='medias/icons/kamas.png'></span>";
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "kamas.png",
+                            "color" => "kamas-d-3",
+                            "tooltip" => "Prix estimé du consommable",
+                            "content" => $this->_price,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
                 
                 default:
                     return $this->_price;
             }
         }
         public function getRarity(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="dropdown">
-                            <a class="" type="button" id="rarity<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getRarity(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
-                            <div class="dropdown-menu" aria-labelledby="rarity<?=$this->getId()?>"> <?php
-                                foreach (Item::RARITY_LIST as $name => $rarity) { ?>
-                                    <a class="dropdown-item" onclick="Consumable.update('<?=$this->getUniqid()?>', <?=$rarity?>, 'rarity', <?=Controller::IS_VALUE?>);$('#rarity<?=$this->getId()?>').html($(this).html());"><span class='badge back-<?=View::getColorFromLetter($name)?>-d-2'><?=$name?></span></a>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    $items = [];
+                    foreach (Item::RARITY_LIST as $name => $rarity) {
+                        $items[] = [
+                            "display" => ucfirst($name),
+                            "onclick" => "Consumable.update('{$this->getUniqid()}', {$rarity}, 'rarity', ".Controller::IS_VALUE.")",
+                            "class" => "badge back-".View::getColorFromLetter($rarity)."-d-2"
+                        ];
+                    }
+                    return $view->dispatch(
+                        template_name : "dropdown",
+                        data : [
+                            "label" => $this->getRarity(Content::FORMAT_BADGE),
+                            "tooltip" => "Rareté du consommable",
+                            "items" => $items,
+                            "id" => "rarity_{$this->getUniqid()}",
+                        ], 
+                        write: false);
     
                 case Content::FORMAT_BADGE:
                     if(in_array($this->_rarity, Item::RARITY_LIST)){
-                        return "<span class='badge back-".View::getColorFromLetter(array_search($this->_rarity, Item::RARITY_LIST))."-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Rareté de l'équipement\">".array_search($this->_rarity, Item::RARITY_LIST)."</span>";
+                        return $view->dispatch(
+                            template_name : "badge",
+                            data : [
+                                "content" => ucfirst(array_search($this->_rarity, Item::RARITY_LIST)),
+                                "color" => View::getColorFromLetter(array_search($this->_rarity, Item::RARITY_LIST)) . "-d-2",
+                                "tooltip" => "Rareté du consommable",
+                                "style" => View::STYLE_BACK
+                            ], 
+                            write: false);
+
                     } else  {
                         return "";
                     }
@@ -229,7 +315,7 @@ class Consumable extends Content
                 case  Content::FORMAT_BRUT:
                     return $path;
                 break;
-                case  Content::FORMAT_MODIFY:
+                case  Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div class="text-center">
                             <div id='showFile_path_image' class='m-2 d-flex justify-content-center'><?=$this->getPath_img(Content::FORMAT_FANCY, 'img-back-180');?></div>
@@ -261,164 +347,6 @@ class Consumable extends Content
                 default:
                     return $path;
                 break;
-            }
-        }
-        public function getUsable(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    $checked = ""; 
-                    if($this->_usable){ $checked = "checked"; } else { $checked = ""; }
-                    ob_start(); ?>
-                        <div style="width:initial;" class="form-check form-switch my-1">
-                            <input onchange="Consumable.update('<?=$this->getUniqid();?>', this, 'usable', <?=Controller::IS_CHECKBOX?>);"  type="checkbox" class="form-check-input back-main-d-1 border-main-d-1" <?=$checked?> id="customSwitchUsable<?=$this->getId()?>">
-                            <label class="custom-control-label" for="customSwitchUsable<?=$this->getUniqid()?>"><?=$this->getUsable(Content::FORMAT_BADGE);?></label>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    if($this->_usable){ 
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet a été adapté au jdr\" class='badge back-green-d-3'>Adapté au jdr</span>";
-                    } else { 
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier\" class='badge back-red-d-3'>Non adapté au jdr</span>";
-                    }
-
-                case Content::FORMAT_ICON:
-                    if($this->_usable){ 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet a été adapté au jdr\" class='fas fa-check text-green-d-3'></i>";
-                    } else { 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title=\"L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier\" class='fas fa-times text-red-d-3'></i>";
-                    }
-                    
-                default:
-                    return $this->_usable;
-            }
-        }
-
-        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
-            $user = ControllerConnect::getCurrentUser();
-            $bookmark_icon = "far";
-            if($user->in_bookmark($this)){
-                $bookmark_icon = "fas";
-            }
-
-            //OPTIONS
-            if($size < 100){$size = 300;}
-
-            switch ($display) {
-                case Content::DISPLAY_MODIFY:      
-                    ob_start(); ?>
-                        <div class="card mb-3">
-                            <div class="row g-0">
-                                <div class="col-auto"><?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-150")?></div>
-                                <div class="col">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-auto">
-                                                <div class="d-flex justify-content-start flex-wrap">
-                                                    <div class="me-4"><?=$this->getLevel(Content::FORMAT_MODIFY)?></div>
-                                                    <div><?=$this->getPrice(Content::FORMAT_MODIFY)?></div>
-                                                </div>   
-                                            </div>
-                                            <div class="col-auto d-flex flex-column justify-content-center">
-                                                <?=$this->getType(Content::FORMAT_MODIFY)?>
-                                                <?=$this->getRarity(Content::FORMAT_MODIFY)?>
-                                            </div>  
-                                            <div class="col-auto ms-auto">
-                                                <?=$this->getUsable(Content::FORMAT_MODIFY)?>
-                                            </div>   
-                                        </div>
-                                    </div>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <p class='size-0-7 mb-2'>Consommable <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
-                                </div>
-                            </div>
-                            <p class="card-text m-3"><?=$this->getEffect(Content::FORMAT_MODIFY);?></p>
-                            <p class="card-text m-3"><?=$this->getDescription(Content::FORMAT_MODIFY);?></p>
-                            <p class="card-text m-3"><?=$this->getRecepe(Content::FORMAT_MODIFY);?></p>
-                            <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Consumable.remove('<?=$this->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
-                        </div>
-                    <?php return ob_get_clean();
-                break;
-
-                case  Content::DISPLAY_CARD:      
-                    ob_start(); ?>
-                        <div class="card mb-3">
-                            <div class="row g-0">
-                                <div class="col-auto">
-                                    <a style="position:relative;top:5px;left:5px;" href="<?=$this->getPath_img()?>" download="<?=$this->getName().'.'.substr(strrchr($this->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-                                    <?=$this->getPath_img(Content::FORMAT_FANCY, "img-back-150")?>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col">
-                                                <p class="d-flex flex-row justify-content-start flex-wrap">
-                                                    <span class="m-1"><?=$this->getType(Content::FORMAT_BADGE)?></span>
-                                                    <span class="m-1"><?=$this->getLevel(Content::FORMAT_BADGE)?></span>
-                                                    <span class="m-1"><?=$this->getPrice(Content::FORMAT_BADGE)?></span>
-                                                    <span class="m-1"><?=$this->getRarity(Content::FORMAT_BADGE)?></span>
-                                                </p>
-                                            </div>
-                                            <div class="col-auto">
-                                                <?=$this->getUsable(Content::FORMAT_BADGE)?>
-                                                <?php if($user->getRight('consumable', User::RIGHT_WRITE)){ ?>
-                                                    <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Consumable.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY);"><i class='far fa-edit'></i></a>
-                                                <?php } ?>
-                                            </div>                     
-                                        </div>
-                                        <div class="nav-item-divider back-main-d-1"></div>
-                                        <h5 class="card-title"><?=$this->getName()?></h5>
-                                        <p class="card-text"><?=$this->getEffect()?></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="card-text"><small class="text-muted"><?=$this->getDescription()?></small></p>
-                                <?php if(!empty($this->getRecepe())){ ?>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <p class="card-text"><small class="text-muted"><?=$this->getRecepe()?></small></p>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                break;
-
-                case Content::DISPLAY_RESUME:
-                    ob_start(); ?>
-                        <div style="width: <?=$size?>px;">
-                            <div style="position:relative;">
-                                <div ondblclick="Consumable.open('<?=$this->getUniqid()?>');" class="card-hover-linked card border-secondary-d-2 border p-2 m-1" style="width: <?=$size?>px;" >
-                                    <div class="row">
-                                        <div class="col-auto">
-                                            <?=$this->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                                        </div>
-                                        <div class="col">
-                                            <p class="bold ms-1"><?=$this->getName()?></p>
-                                            <p class="row">
-                                                <span class="col-auto me-1 mt-1 short-badge-150"><?=$this->getType(Content::FORMAT_BADGE)?></span>
-                                                <span class="col-auto me-1 mt-1 short-badge-150"><?=$this->getLevel(Content::FORMAT_BADGE)?></span>
-                                                <span class="col-auto me-1 mt-1 short-badge-150"><?=$this->getPrice(Content::FORMAT_BADGE)?></span>
-                                                <span class="col-auto me-1 mt-1 short-badge-150"><?=$this->getRarity(Content::FORMAT_BADGE)?></span>
-                                            </p>
-                                        </div>
-                                        <div class="col-auto d-flex flex-column justify-content-between ms-auto">
-                                            <a onclick='User.changeBookmark(this);' data-classe='consumable' data-uniqid='<?=$this->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="card-hover-showed">
-                                        <p class="card-text"><?=$this->getEffect()?></p>
-                                        <div class="nav-item-divider back-main-d-1"></div>
-                                        <p class="card-text"><small class="size-0-9 text-secondary-d-3"><?=$this->getDescription()?></small></p>
-                                        <p class="card-text"><small class="text-muted size-0-7 text-grey-d-2"><?=$this->getRecepe()?></small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                break;
-
-                default:
-                    return "Erreur : format de display non reconnu";
             }
         }
 
@@ -480,9 +408,5 @@ class Consumable extends Content
             } else {
                 return "Le fichier n'est pas valide.";
             }
-        }
-        public function setUsable($data){
-            $this->_usable = $this->returnBool($data);
-            return true;
         }
 }

@@ -49,7 +49,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <?php }
             
             foreach ($sections as $section) { ?>
-                <?= $section->getVisual(Content::FORMAT_MODIFY); ?>      
+                <?= $section->getVisual(Content::FORMAT_EDITABLE); ?>      
             <?php } ?>
 
         </div>

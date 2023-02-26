@@ -1,14 +1,30 @@
 <?php
 class User extends Content
 {
+
     public function __construct(array $donnees){
-        $this->hydrate($donnees);
+        parent::__construct($donnees);
+
+        if(isset($donnees['rights'])){
+            if($donnees['rights'] == ""){
+                $this->setRights();
+            }
+        }
+        if($this->_last_connexion == 0){
+            $this->setLast_connexion();
+        }
     }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ CONSTANTES ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         const RIGHT_NO = 0;
         const RIGHT_READ = 1;
         const RIGHT_WRITE = 2;
+
+        const RIGHT_TYPE = [
+            "aucun" => self::RIGHT_NO,
+            "lecture" => self::RIGHT_READ,
+            "écriture" => self::RIGHT_WRITE
+        ];
 
         const COOKIE_REQUISITE = 0;
         const COOKIE_CONNEXION = 1;
@@ -19,18 +35,24 @@ class User extends Content
         private $_email='';
         private $_pseudo='Invité';
         private $_hash='';
-        private $_last_connexion='';
+        private $_last_connexion= 0 ;
+        private $_rights = null;
+        private $_is_admin = false;
 
-        private $_right_classe = self::RIGHT_NO;
-        private $_right_consumable = self::RIGHT_NO;
-        private $_right_item = self::RIGHT_NO;
-        private $_right_mob = self::RIGHT_NO;
-        private $_right_npc = self::RIGHT_NO;
-        private $_right_page = self::RIGHT_NO;
-        private $_right_section = self::RIGHT_NO;
-        private $_right_shop = self::RIGHT_NO;
-        private $_right_spell = self::RIGHT_NO;
-        private $_right_user = self::RIGHT_NO;
+        const RIGHT = [
+            "classe" => User::RIGHT_READ,
+            "consumable" => User::RIGHT_READ,
+            "item" => User::RIGHT_READ,
+            "mob" => User::RIGHT_READ,
+            "npc" => User::RIGHT_READ,
+            "page" => User::RIGHT_READ,
+            "section" => User::RIGHT_READ,
+            "shop" => User::RIGHT_READ,
+            "spell" => User::RIGHT_READ,
+            "user" => User::RIGHT_NO
+        ];
+
+        protected $_usable = true; // surcharge de la variable de Content
 
         private $_cookie = [
             self::COOKIE_REQUISITE => true,
@@ -52,40 +74,43 @@ class User extends Content
             }
         }
         public function getEmail(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1">
-                            <p class="size-0-9">Email</p>
-                            <input 
-                                onchange="User.update('<?=$this->getUniqid();?>', this, 'email');" 
-                                placeholder="Email" 
-                                maxlength="100"
-                                type="mail" 
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                value="<?=$this->_email?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:  
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "User",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "email",
+                            "label" => "Email",
+                            "placeholder" => "Email de l'utilisatrice·teur",
+                            "value" => $this->_email,
+                            "parttern" => "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", 
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_email;
             }
         }
         public function getPseudo(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1">
-                            <p class="size-0-9">Pseudo</p>
-                            <input 
-                                onchange="User.update('<?=$this->getUniqid();?>', this, 'pseudo');" 
-                                placeholder="Pseudo" 
-                                maxlength="120"
-                                type="text" 
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                value="<?=$this->_pseudo?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:  
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "User",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "pseudo",
+                            "label" => "Pseudo",
+                            "placeholder" => "Pseudo de l'utilisatrice·teur",
+                            "value" => $this->_pseudo,
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_pseudo;
@@ -97,563 +122,314 @@ class User extends Content
         public function gethash(int $format = Content::FORMAT_BRUT){
             return $this->_hash;
         }
-
-        public function getRight_classe(int $format = Content::FORMAT_BRUT){
+        public function getIs_admin(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_classe" class="form-label pe-2">Droits sur les classes</label><?=$this->getRight_classe(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_classe');" type="range" class="form-range border-secondary" value="<?=$this->_right_classe?>" min="0" max="2" step="1" id="right_classe">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/checkbox",
+                        data : [
+                            "class_name" => ucfirst(get_class($this)),
+                            "uniqid" => $this->getUniqid(),
+                            "id" => "is_admin_" . $this->getUniqid(),
+                            "input_name" => "is_admin",
+                            "label" => $this->getIs_admin(Content::FORMAT_BADGE),
+                            "checked" => $this->returnBool($this->_is_admin),
+                            "style" => View::STYLE_CHECK_SWITCH
+                        ], 
+                        write: false);
                     
                 case Content::FORMAT_BADGE:
-                    switch ($this->_right_classe) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les classes";
-                            $text = "Classes <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les classes";
-                            $text = "Classes <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les classes";
-                            $text = "Classes <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-                    
-                default:
-                    return $this->_right_classe;
-            }
-        }
-        public function getRight_consumable(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_consumable" class="form-label pe-2">Droits sur les consommables</label><?=$this->getRight_consumable(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_consumable');" type="range" class="form-range border-secondary" value="<?=$this->_right_consumable?>" min="0" max="2" step="1" id="right_consumable">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    switch ($this->_right_consumable) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les consommables";
-                            $text = "Consommables <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les consommables";
-                            $text = "Consommables <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les consommables";
-                            $text = "Consommables <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-
-                default:
-                    return $this->_right_consumable;
-            }
-        }
-        public function getRight_item(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_item" class="form-label pe-2">Droits sur les équipements</label><?=$this->getRight_item(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_item');" type="range" class="form-range border-secondary" value="<?=$this->_right_item?>" min="0" max="2" step="1" id="right_item">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    switch ($this->_right_item) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les équipements";
-                            $text = "Equipements <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les équipements";
-                            $text = "Equipements <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les équipements";
-                            $text = "Equipements <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-                    
-                default:
-                    return $this->_right_item;
-            }
-        }
-        public function getRight_mob(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_mob" class="form-label pe-2">Droits sur les créatures</label><?=$this->getRight_mob(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_mob');" type="range" class="form-range border-secondary" value="<?=$this->_right_mob?>" min="0" max="2" step="1" id="right_mob">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    switch ($this->_right_mob) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les créatures";
-                            $text = "Créatures <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les créatures";
-                            $text = "Créatures <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les créatures";
-                            $text = "Créatures <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-
-                default:
-                    return $this->_right_mob;
-            }
-        }
-        public function getRight_npc(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_npc" class="form-label pe-2">Droits sur les PNJ</label><?=$this->getRight_npc(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_npc');" type="range" class="form-range border-secondary" value="<?=$this->_right_npc?>" min="0" max="2" step="1" id="right_npc">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    switch ($this->_right_npc) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les PNJ";
-                            $text = "PNJ <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les PNJ";
-                            $text = "PNJ <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les PNJ";
-                            $text = "PNJ <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-
-                default:
-                    return $this->_right_npc;
-            }
-        }   
-        public function getRight_page(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_page" class="form-label pe-2">Droits sur les pages</label><?=$this->getRight_page(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_page');" type="range" class="form-range border-secondary" value="<?=$this->_right_page?>" min="0" max="2" step="1" id="right_page">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    switch ($this->_right_page) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les pages";
-                            $text = "Pages <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les pages";
-                            $text = "Pages <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les pages";
-                            $text = "Pages <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-                    
-                default:
-                    return $this->_right_page;
-            }
-        }
-        public function getRight_section(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_section" class="form-label pe-2">Droits sur les sections</label><?=$this->getRight_section(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_section');" type="range" class="form-range border-secondary" value="<?=$this->_right_section?>" min="0" max="2" step="1" id="right_section">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    switch ($this->_right_section) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les sections";
-                            $text = "Section <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les sections";
-                            $text = "Section <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les sections";
-                            $text = "Section <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-                    
-                default:
-                    return $this->_right_section;
-            }
-        }
-        public function getRight_shop(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_shop" class="form-label pe-2">Droits sur les hôtels de vente</label><?=$this->getRight_shop(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_shop');" type="range" class="form-range border-secondary" value="<?=$this->_right_shop?>" min="0" max="2" step="1" id="right_shop">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    switch ($this->_right_shop) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les hôtels de vente";
-                            $text = "HdV <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les hôtels de vente";
-                            $text = "HdV <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les hôtels de vente";
-                            $text = "HdV <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-
-                default:
-                    return $this->_right_shop;
-            }
-        }
-        public function getRight_spell(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_spell" class="form-label pe-2">Droits sur les sorts</label><?=$this->getRight_spell(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_spell');" type="range" class="form-range border-secondary" value="<?=$this->_right_spell?>" min="0" max="2" step="1" id="right_spell">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    switch ($this->_right_spell) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les sorts";
-                            $text = "Sorts <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les sorts";
-                            $text = "Sorts <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les sorts";
-                            $text = "Sorts <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-                    
-                default:
-                    return $this->_right_spell;
-            }
-        }
-        public function getRight_user(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div style="width:350px">
-                                <label for="right_user" class="form-label pe-2">Droits sur les utilisateurs</label><?=$this->getRight_user(Content::FORMAT_BADGE)?>
-                                <input onchange="changeRangeText(this);User.update('<?=$this->getUniqid();?>', this, 'right_user');" type="range" class="form-range border-secondary" value="<?=$this->_right_user?>" min="0" max="2" step="1" id="right_user">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    switch ($this->_right_user) {
-                        case self::RIGHT_NO:
-                            $color = "grey";
-                            $title = "Aucun droit sur les utilisateurs";
-                            $text = "Utilisateurs·trices  <i class='fas fa-exclamation-triangle'></i>";
-                        break;
-                        case self::RIGHT_READ:
-                            $color = "blue";
-                            $title = "Lecture seule sur les utilisateurs";
-                            $text = "Utilisateurs·trices <i class='fas fa-book-open'></i>";
-                        break;
-                        case self::RIGHT_WRITE:
-                            $color = "green";
-                            $title = "Lecture et écriture sur les utilisateurs";
-                            $text = "Utilisateurs·trices <i class='fas fa-edit'></i>";
-                        break;
-                        default:
-                            return "Erreur";
-                    }
-                    ob_start(); ?>
-                        <span data-bs-toggle='tooltip' data-bs-placement='top' title="<?=$title?>" class='badge-outline text-<?=$color?>-d-3 border-<?=$color?>-d-3'><?=$text?></span>
-                    <?php return ob_get_clean();
-
-                default:
-                    return $this->_right_user;
-            }
-        }
-
-        public function getPassword(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div>
-                            <div class="form-group">
-                                <label>Mot de passe actuel</label>
-                                <input 
-                                    id='password<?=$this->getId()?>' 
-                                    placeholder="•••••••••" 
-                                    type="password" 
-                                    class="form-control form-control-main-focus" 
-                                    maxlength="500" 
-                                    value="">
-                            </div>
-                            <div class="form-group">
-                                <label>Nouveau mot de passe</label>
-                                <input 
-                                    id='newpassword<?=$this->getId()?>' 
-                                    placeholder="•••••••••" 
-                                    type="password" 
-                                    class="form-control form-control-main-focus" 
-                                    maxlength="500" 
-                                    value="">
-                            </div>
-                            <div class="form-group">
-                                <label>Répéter le nouveau mot de passe</label>
-                                <input 
-                                    id='repeatnewpassword<?=$this->getId()?>' 
-                                    placeholder="•••••••••" 
-                                    type="password" 
-                                    class="form-control form-control-main-focus" 
-                                    maxlength="500" 
-                                    value="">
-                            </div>
-                            <div class="text-center"><a class="btn btn-sm btn-border-main" onclick="User.updatePassword(<?=$this->getId()?>);">Modifier</a></div>
-                        </div>
-                    <?php return ob_get_clean();
-                
-                default:
-                    return "";
-            }
-        }
-        public function getRight($objet, int $right = User::RIGHT_WRITE){
-            $method = "getRight_".strtolower($objet);
-            if(method_exists($this,$method)){
-                $right_val = $this->$method();
-                if($right_val == self::RIGHT_WRITE){
-                    return true;
-                }elseif($right_val == self::RIGHT_READ){
-                    if($right_val == $right || $right == self::RIGHT_NO){
-                        return true;
+                    if($this->_is_admin){ 
+                        return $view->dispatch(
+                            template_name : "badge",
+                            data : [
+                                "content" => "Admin",
+                                "color" => "secondary-d-1",
+                                "style" => View::STYLE_BACK,
+                                "tooltip" => "L'utilisateur·trice est adminitrateur·trice"
+                            ], 
+                            write: false);
+    
                     } else {
-                        return false;
+                        return $view->dispatch(
+                            template_name : "badge",
+                            data : [
+                                "content" => "Modérateur",
+                                "color" => "grey-d-1",
+                                "style" => View::STYLE_BACK,
+                                "tooltip" => "L'utilisateur·trice n'est pas adminitrateur·trice"
+                            ], 
+                            write: false);
                     }
-                }elseif($right_val == self::RIGHT_NO){
-                    if($right == self::RIGHT_NO){
-                        return true;
-                    } else {
-                        return false;
+    
+                case Content::FORMAT_ICON:
+                    if($this->_is_admin){
+    
+                        return $view->dispatch(
+                            template_name : "icon",
+                            data : [
+                                "style" => View::STYLE_ICON_SOLID,
+                                "icon" => "user-cog",
+                                "color" => "secondary-d-3",
+                                "tooltip" => "L'utilisateur·trice est adminitrateur·trice"
+                            ], 
+                            write: false); 
+    
+                    } else { 
+    
+                        return $view->dispatch(
+                            template_name : "icon",
+                            data : [
+                                "style" => View::STYLE_ICON_SOLID,
+                                "icon" => "user-lock",
+                                "color" => "grey-d-3",
+                                "tooltip" => "L'utilisateur·trice n'est pas adminitrateur·trice"
+                            ], 
+                            write: false);
                     }
-                } else {
-                    return false;
-                }
-
-            }else{
-                return "Ce droit n'existe pas";
-            }
-        }
-
-        public function getRights(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_MODIFY:
-                      ob_start(); ?>
-                        <div class="m-3">
-                           <?php foreach (get_class_methods($this) as $value) {
-                                if(strpos($value, "getRight_") !== false){
-                                    echo $this->$value(Content::FORMAT_MODIFY);
-                                }
-                            } ?>
-                        </div>
-                    <?php return ob_get_clean();
-
-                case Content::FORMAT_BADGE:
-                    ob_start(); ?>
-                        <div class="d-flex flex-row justify-content-between">
-                            <?php foreach (get_class_methods($this) as $value) {
-                                if(strpos($value, "getRight_") !== false){
-                                    echo $this->$value(Content::FORMAT_BADGE);
-                                }
-                            } ?>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                    
                 default:
-                    return "";
+                    return $this->_is_admin;
             }
         }
         
-        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
-
-            //OPTIONS
-            if($size < 100){$size = 300;}
-
-            switch ($display) {
-                case Content::DISPLAY_MODIFY:      
+        public function getPassword(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
-                        <div class="card mb-3">
-                            <p class='size-0-7 mb-1'>Utilisateur <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Dernière connexion le <?=$this->getLast_connexion(Content::DATE_FR);?> à <?=$this->getLast_connexion(Content::TIME_FR);?></p>
-                            <?=$this->getPseudo(Content::FORMAT_MODIFY)?>
-                            <?=$this->getEmail(Content::FORMAT_MODIFY)?>
-                            <?php if($this->getRight("user", User::RIGHT_WRITE)){ ?>
-                                <h3>ToolsBox</h3>
-                                <div class="flex-row justify-content-start align-item-baseline mb-2">
-                                    <a onclick="Tools.req('savedb', '<?=$this->generateAndSaveToken()?>');" class="btn-sm btn btn-back-main">Sauver la base de donnée</a>
-                                    <a onclick="Tools.req('verifAndCreatePageNeeded', '<?=$this->generateAndSaveToken()?>');" class="btn-sm btn btn-back-main">Vérifier et créer les pages obligatoires</a>
-                                </div>
-                               
-                                <h3>Modifier les droits</h3>
-                                <?=$this->getRights(Content::FORMAT_MODIFY)?>
-                            <?php } ?>
-                            <h3>Modifier le mot de passe</h3>
-                            <?=$this->getPassword(Content::FORMAT_MODIFY)?>
-                        </div>
-                    <?php return ob_get_clean();
+                    <div>
 
-                case Content::DISPLAY_CARD:      
-                    ob_start(); ?>
-                        <div class="card mb-3 p-3">
-                            <p class='size-0-7 mb-1'>Utilisateur·trice <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Dernière connexion le <?=$this->getLast_connexion(Content::DATE_FR);?> à <?=$this->getLast_connexion(Content::TIME_FR);?></p>
-                            <div class="row">
-                                <div class="col">
-                                    <h4><?=$this->getPseudo()?></h4>
-                                    <p class="text-grey-d-2 size-0-8"><?=$this->getEmail()?></p>
-                                </div>
-                                <div class="col-auto">
-                                    <?php if($this->getRight('user', User::RIGHT_WRITE)){ ?>
-                                        <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="User.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY);"><i class='far fa-edit'></i></a>
-                                    <?php } ?>
-                                </div>
-                            </div>
-                            <div class="nav-item-divider back-main"></div>
-                            <h6>Droits</h6>
-                            <?php if($this->getRight("user", User::RIGHT_WRITE)){ ?>
-                                <?=$this->getRights(Content::FORMAT_BADGE)?>
-                            <?php } ?>
-                        </div>
-                    <?php return ob_get_clean();
+                    <?php $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "is_onchange" => false,
+                            "label" => "Mot de passec / passphrase actuel",
+                            "color" => "main",
+                            "value" => "",
+                            "placeholder" => "•••••••••",
+                            "type" => "password",
+                            "id" => "password" . $this->getUniqid(),
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: true); ?>
 
+                    <?php $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "is_onchange" => false,
+                            "label" => "Nouveau Mot de passec /nouvelle  passphrase",
+                            "color" => "main",
+                            "value" => "",
+                            "placeholder" => "•••••••••",
+                            "type" => "password",
+                            "id" => "newpassword" . $this->getUniqid(),
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: true); ?>
+
+                    <?php $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "is_onchange" => false,
+                            "label" => "Répéter le nouveau Mot de passec / la nouvelle passphrase",
+                            "color" => "main",
+                            "value" => "",
+                            "placeholder" => "•••••••••",
+                            "type" => "password",
+                            "id" => "repeatnewpassword" . $this->getUniqid(),
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: true); ?>
+
+                        <div class="text-center"><a class="btn btn-sm btn-border-main" onclick="User.updatePassword(<?=$this->getUniqid()?>);">Modifier</a></div>
+                    </div>
+                    <?php return ob_get_clean();
+                
                 default:
-                    return "Erreur : format de display non reconnu";
+                    return "";
+            }
+        }
+
+        // Retourne si l'utilisateur à un certain droit sur un objet
+        public function getRight(string $objet, int $right = User::RIGHT_WRITE){
+            if($this->getIs_admin()){
+                return true;
+            }
+            $rights = $this->getRights(Content::FORMAT_ARRAY);
+            if(!array_key_exists($objet,$rights)){
+                return false;
+            }
+            if($rights[$objet] == $right || $rights[$objet] == User::RIGHT_WRITE){
+                return true;
+            } else {
+                return false;
+            }
+        }
+        // Retourne les droits d'un utilisateur sur tout ou un objet
+        public function getRights(int $format = Content::FORMAT_BRUT, string $type = "all"){
+            $view = new View();
+            $badge_right_no = $view->dispatch(
+                template_name : "badge",
+                data : [
+                    "content" => "<i class='fas fa-exclamation-triangle'></i> Aucun",
+                    "color" => "grey-d-3",
+                    "tooltip" => "Aucun droit",
+                    "style" => View::STYLE_OUTLINE,
+                ], 
+                write: false);
+            $badge_right_read = $view->dispatch(
+                template_name : "badge",
+                data : [
+                    "content" => "<i class='fas fa-book-open'></i> Lecture",
+                    "color" => "blue-d-3",
+                    "tooltip" => "Droit de lecture",
+                    "style" => View::STYLE_OUTLINE,
+                ], 
+                write: false);
+            $badge_right_write = $view->dispatch(
+                template_name : "badge",
+                data : [
+                    "content" => "<i class='fas fa-edit'></i> Écriture",
+                    "color" => "green-d-3",
+                    "tooltip" => "Droit d'écriture",
+                    "style" => View::STYLE_OUTLINE,
+                ], 
+                write: false);
+
+            $rights = unserialize($this->_rights);
+            if(!is_array($rights)){
+                $rights = [];
+            }
+            if($type != "all" && isset(User::RIGHT[$type])){
+                $rights = [$type => $rights[$type]];
             }
 
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                      ob_start(); ?>
+                        <div class="m-3">
+                           <?php foreach ($rights as $right_name => $value) {
+                                if(isset(User::RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){?>
+                                    <h6>Droit concernant <?=ucfirst($right_name)?></h6>
+                                    <?php foreach (User::RIGHT_TYPE as $type) {
+                                        $checked = false; if($value == $type){ $checked = true;}
+                                        $badge = $badge_right_no;
+                                        switch ($type) {
+                                            case self::RIGHT_READ:
+                                                $badge = $badge_right_read; break;
+                                            case self::RIGHT_WRITE:
+                                                $badge = $badge_right_write; break;
+                                            default: 
+                                                $badge = $badge_right_no; break;
+                                        }
+                                        $view->dispatch(
+                                            template_name : "input/checkbox",
+                                            data : [
+                                                "onchange" => "User.update('".$this->getUniqid()."', ['".$right_name."',".$type."], 'rights', ".Controller::IS_VALUE.");",
+                                                "name" => "right_".$right_name,
+                                                "color" => "secondary-d-2",
+                                                "id" => "right_".$right_name."_" . $this->getUniqid(),
+                                                "label" => $badge,
+                                                "checked" => $checked,
+                                                "style" => View::STYLE_CHECK_RADIO,
+                                                'is_inline' => true
+                                            ], 
+                                            write: true);
+                                        }
+                                }
+                            } ?>
+                        </div>
+                    <?php return ob_get_clean();
+
+                case Content::FORMAT_BADGE:
+                    ob_start(); ?>
+                        <div class="m-3">
+                            <?php foreach ($rights as $right_name => $value) {
+                                if(isset(User::RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){ ?>
+                                    <h6>Droit concernant <?=ucfirst($right_name)?></h6>
+                                    <?php switch ($value) {
+                                        case self::RIGHT_NO:
+                                            $color = "grey";
+                                            $title = "Aucun droit concernant les ".$right_name;
+                                            $text = "Aucun <i class='fas fa-exclamation-triangle'></i>";
+                                        break;
+                                        case self::RIGHT_READ:
+                                            $color = "blue";
+                                            $title = "Lecture seule concernant les ".$right_name;
+                                            $text = "Lecture <i class='fas fa-book-open'></i>";
+                                        break;
+                                        case self::RIGHT_WRITE:
+                                            $color = "green";
+                                            $title = "Lecture et écriture concernant les ".$right_name;
+                                            $text = "Ecriture & Lecture <i class='fas fa-edit'></i>";
+                                        break;
+                                        default:
+                                            return "Erreur";
+                                    }
+                                    $view->dispatch(
+                                        template_name : "badge",
+                                        data : [
+                                            "content" => $text,
+                                            "color" => $color."-d-3",
+                                            "tooltip" => $title,
+                                            "style" => View::STYLE_OUTLINE,
+                                        ], 
+                                        write: true);
+                                }
+                            } ?>
+                        </div>
+                    <?php return ob_get_clean();
+
+                case Content::FORMAT_ICON:
+                    ob_start(); ?>
+                        <div class="m-3">
+                            <?php foreach ($rights as $right_name => $value) {
+                                if(isset(User::RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){
+                                    switch ($value) {
+                                        case self::RIGHT_NO:
+                                            $color = "grey";
+                                            $title = "Aucun droit concernant les ".$right_name;
+                                            $icon = "exclamation-triangle";
+                                        break;
+                                        case self::RIGHT_READ:
+                                            $color = "blue";
+                                            $title = "Lecture seule concernant les ".$right_name;
+                                            $icon = "book-open";
+                                        break;
+                                        case self::RIGHT_WRITE:
+                                            $color = "green";
+                                            $title = "Lecture et écriture concernant les ".$right_name;
+                                            $icon = "edit";
+                                        break;
+                                        default:
+                                            return "Erreur";
+                                    }
+                                    $view->dispatch(
+                                        template_name : "icon",
+                                        data : [
+                                            "style" => View::STYLE_ICON_SOLID,
+                                            "content" => ucfirst($right_name),
+                                            "content_placement" => "before",
+                                            "icon" => $icon,
+                                            "color" => $color."-d-3",
+                                            "tooltip" => $title
+                                        ], 
+                                        write: true);
+                                }
+                            } ?>
+                        </div>
+                    <?php return ob_get_clean();
+
+                case Content::FORMAT_ARRAY:
+                    return $rights;
+                
+                default:
+                    return $this->_rights;
+            }
         }
+        
         public function isConnect(){
             if($this->getEmail() != ""){
                 return true;
@@ -669,6 +445,7 @@ class User extends Content
             }
         }
         public function getBookmark($format = Content::FORMAT_BRUT){
+            $view = new View();
             $bookmarks = $this->_bookmark;
 
             switch ($format) {
@@ -752,96 +529,58 @@ class User extends Content
             $this->_hash = $data;
             return true;
         }
+        public function setIs_admin($data){
+            $this->_is_admin = $this->returnBool($data);
+            return true;
+        }
 
-        public function setRight_classe($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_classe = $data;
-                return true;
-            } else {
-                $this->_right_classe = self::RIGHT_NO;
-                return "right_classe est incorrect";
+        public function setRights(array | string | null $data = null, string | null $right = null, int $value = User::RIGHT_NO){
+            $new_right = array();
+            if(is_array($data)){
+                // Si ça vient de l'update du controller
+                if(isset(User::RIGHT[$data[0]]) && in_array($data[1], User::RIGHT_TYPE)){
+                    $new_right[$data[0]] = $data[1];
+                } else {
+                    // Si data est un tableau de droits composé du nom du droit en key et de la valeur en value
+                    foreach ($data as $right_name => $data_value) {
+                        if(isset(User::RIGHT[$right_name]) && in_array($data_value, User::RIGHT_TYPE)){
+                            $new_right[$right_name] = $data_value;
+                        }
+                    }
+                }
+            } elseif(!empty($data) && @unserialize($data)) {
+                // Si ça vient de la base de donnée
+                $data_check = unserialize($data);
+                foreach ($data_check as $right_name => $data_value) {
+                    if(isset(User::RIGHT[$right_name]) && in_array($data_value, User::RIGHT_TYPE)){
+                        $new_right[$right_name] = $data_value;
+                    }
+                }
+            } elseif(empty($data) && empty($right) && empty($value)){
+                $new_right = User::RIGHT;
             }
-        }
-        public function setRight_consumable($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_consumable = $data;
-                return true;
-            } else {
-                $this->_right_consumable = self::RIGHT_NO;
-                return "right_consumable est incorrect";
+
+            // Si on veut modifier un droit en particulier
+            if(isset(User::RIGHT[$right]) && in_array($value, User::RIGHT_TYPE)) {
+                $new_right[$right] = $value;
             }
-        }
-        public function setRight_item($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_item = $data;
-                return true;
-            } else {
-                $this->_right_item = self::RIGHT_NO;
-                return "right_item est incorrect";
+
+            $old_right = unserialize($this->getRights());
+            if(is_array($old_right)){
+                foreach ($old_right as $name => $value) {
+                    if(!isset($new_right[$name])){
+                        $new_right[$name] = $value;
+                    }
+                }
             }
-        }
-        public function setRight_mob($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_mob = $data;
-                return true;
-            } else {
-                $this->_right_mob = self::RIGHT_NO;
-                return "right_mob est incorrect";
+            foreach (User::RIGHT as $name => $value) {
+                if(!isset($new_right[$name])){
+                    $new_right[$name] = $value;
+                }
             }
-        }
-        public function setRight_npc($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_npc = $data;
-                return true;
-            } else {
-                $this->_right_npc = self::RIGHT_NO;
-                return "right_npc est incorrect";
-            }
-        }
-        public function setRight_page($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_page = $data;
-                return true;
-            } else {
-                $this->_right_page = self::RIGHT_NO;
-                return "right_page est incorrect";
-            }
-        }
-        public function setRight_section($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_section = $data;
-                return true;
-            } else {
-                $this->_right_section = self::RIGHT_NO;
-                return "right_section est incorrect";
-            }
-        }
-        public function setRight_shop($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_shop = $data;
-                return true;
-            } else {
-                $this->_right_shop = self::RIGHT_NO;
-                return "right_shop est incorrect";
-            }
-        }
-        public function setRight_spell($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_spell = $data;
-                return true;
-            } else {
-                $this->_right_spell = self::RIGHT_NO;
-                return "right_spell est incorrect";
-            }
-        }
-        public function setRight_user($data){
-            if($data == self::RIGHT_NO || self::RIGHT_READ || self::RIGHT_WRITE){
-                $this->_right_user = $data;
-                return true;
-            } else {
-                $this->_right_user = self::RIGHT_NO;
-                return "right_user est incorrect";
-            }
+            ksort($new_right); // Tri par ordre alphabétique les clés du tableau
+            $this->_rights = serialize($new_right);
+            return true;
         }
 
         public function setPassword($data){

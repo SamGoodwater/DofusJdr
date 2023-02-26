@@ -2,16 +2,16 @@
 
 abstract class Content
 {
-    use CheckingFunctions, ColorConversion, SecurityFct;
+    use CheckingFunctions, ColorFct, SecurityFct;
     
     //Format GETTERS
 
     const DISPLAY_CARD = 0;
     const DISPLAY_RESUME = 1;
-    const DISPLAY_MODIFY = 2;
+    const DISPLAY_EDITABLE = 2;
     const DISPLAY_FULL = 3;
     const DISPLAY = [
-        self::DISPLAY_MODIFY => "Modifier",
+        self::DISPLAY_EDITABLE => "Modifier",
         self::DISPLAY_CARD => "Carte",
         self::DISPLAY_RESUME => "Résumé",
         self::DISPLAY_FULL => "Complet",
@@ -19,7 +19,7 @@ abstract class Content
 
     const FORMAT_BRUT = 0;
     const FORMAT_VIEW = 1;
-    const FORMAT_MODIFY = 2;
+    const FORMAT_EDITABLE = 2;
     const FORMAT_ICON = 3;
     const FORMAT_BADGE = 4;
     const FORMAT_OBJECT = 5;
@@ -46,8 +46,19 @@ abstract class Content
 
     protected $_id ='';
     protected $_uniqid ='';
-    protected $_timestamp_add='';
-    protected $_timestamp_updated='';
+    protected $_timestamp_add=0;
+    protected $_timestamp_updated=0;
+    protected $_usable = false;
+
+    function __construct(array $donnees = []){
+        $this->hydrate($donnees);
+        if($this->_timestamp_add == 0){
+            $this->setTimestamp_add();
+        }
+        if($this->_timestamp_updated == 0){
+            $this->setTimestamp_updated();
+        } 
+    }
 
     protected function hydrate(array $donnees){
         foreach($donnees as $champ => $valeur){
@@ -83,6 +94,77 @@ abstract class Content
           return date($format, $this->_timestamp_updated);
         } else {
             return $this->_timestamp_updated;
+        }
+    }
+    public function getUsable(int $format = Content::FORMAT_BRUT){
+        $view = new View();
+        switch ($format) {
+            case Content::FORMAT_EDITABLE:
+                return $view->dispatch(
+                    template_name : "input/checkbox",
+                    data : [
+                        "class_name" => ucfirst(get_class($this)),
+                        "uniqid" => $this->getUniqid(),
+                        "id" => "usable_" . $this->getUniqid(),
+                        "input_name" => "usable",
+                        "label" => $this->getUsable(Content::FORMAT_BADGE),
+                        "checked" => $this->returnBool($this->_usable),
+                        "style" => View::STYLE_CHECK_SWITCH
+                    ], 
+                    write: false);
+                
+            case Content::FORMAT_BADGE:
+                if($this->_usable){ 
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Adapté au jdr",
+                            "color" => "green-d-3",
+                            "style" => View::STYLE_BACK,
+                            "tooltip" => "L'objet a été adapté au jdr"
+                        ], 
+                        write: false);
+
+                } else {
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Non adapté au jdr",
+                            "color" => "red-d-3",
+                            "style" => View::STYLE_BACK,
+                            "tooltip" => "L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier"
+                        ], 
+                        write: false);
+                }
+
+            case Content::FORMAT_ICON:
+                if($this->_usable){
+
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_SOLID,
+                            "icon" => "check",
+                            "color" => "green-d-3",
+                            "tooltip" => "L'objet a été adapté au jdr"
+                        ], 
+                        write: false); 
+
+                } else { 
+
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_SOLID,
+                            "icon" => "times",
+                            "color" => "red-d-3",
+                            "tooltip" => "L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier"
+                        ], 
+                        write: false);
+                }
+                
+            default:
+                return $this->_usable;
         }
     }
     public function setId($data){
@@ -133,29 +215,49 @@ abstract class Content
             return true;
         }
     }
-
-
-
-    protected function securite($string){ // Permet de protéger toutes les données reçu depuis la base de donnée
-        if(is_array($string))
-        {
-            foreach ($string AS $key => $value) {
-                if(is_array($value)) {
-                    $string[$key] = $this->securite($value);
-                }
-                else {
-                    $string[$key] = htmlspecialchars($value);
-                }
-                return $string;
-            }
-        }
-        else
-        {
-            return htmlspecialchars($string);
-        }
+    public function setUsable($data){
+        $this->_usable = $this->returnBool($data);
+        return true;
     }
-    public function isConforme(Array $champs_requis = array()){
-        $retour = true;
+
+    public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300) {
+        $user = ControllerConnect::getCurrentUser();
+        $bookmark_icon = View::STYLE_ICON_REGULAR;
+        if($user->in_bookmark($this)){
+            $bookmark_icon = View::STYLE_ICON_SOLID;
+        }
+
+        //OPTIONS
+        if($size < 100){$size = 300;}
+
+        $view = new View(View::TEMPLATE_DISPLAY);
+        $className = strtolower(get_class($this));
+        switch ($display) {
+            case Content::DISPLAY_EDITABLE:
+                $template_name = $className."/editable";
+            break;
+
+            case  Content::DISPLAY_CARD:      
+                $template_name =  $className."/card";
+            break;
+            case Content::DISPLAY_RESUME: 
+                $template_name = $className."/resume"; 
+            break;
+
+            default:
+                return "Erreur : format de display non reconnu";
+        }
+
+        return $view->dispatch(
+            template_name : $template_name,
+            data : [
+                "obj" => $this,
+                "user" => $user,
+                "bookmark_icon" => $bookmark_icon,
+                "size" => $size
+            ], 
+            write: false);
+
     }
 
     static function removeSpecialCaractere($string){ // Enlève tout les accents et les caractères spéciaux

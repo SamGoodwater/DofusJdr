@@ -1,11 +1,6 @@
 <?php
 class Section extends Content
 {
- 
-    public function __construct(array $donnees){
-        $this->hydrate($donnees);
-    }
-
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ CONTANTE  ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         const GET_SECTION_CONTENT = 0;
         const GET_SECTION_DESCRIPTION = 1;
@@ -17,12 +12,14 @@ class Section extends Content
         private $_content ='';
         private $_order_num='';
 
+        protected $_usable = true; // surcharge de la variable de Content
+
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
     public function getType(int $format = Content::FORMAT_BRUT){
         $manager = new SectionManager;
 
         switch ($format) {
-            case Content::FORMAT_MODIFY:
+            case Content::FORMAT_EDITABLE:
                 ob_start(); ?>
                     <div class="dropdown">
                         <a class="" type="button" id="dropdownDisplay<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getType(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
@@ -78,7 +75,7 @@ class Section extends Content
     }
     public function getTitle(int $format = Content::FORMAT_BRUT){
         switch ($format) {
-            case Content::FORMAT_MODIFY:
+            case Content::FORMAT_EDITABLE:
                 ob_start(); ?>
                     <input 
                         class='form-control form-control-main-focus' 
@@ -95,7 +92,7 @@ class Section extends Content
     }
     public function getContent(int $format = Content::FORMAT_BRUT){
         switch ($format) {
-            case Content::FORMAT_MODIFY:
+            case Content::FORMAT_EDITABLE:
                 ob_start(); ?>
                     <div class="form-group">
                         <div  id="content<?=$this->getUniqid()?>"><?=html_entity_decode($this->_content)?></div>
@@ -109,7 +106,7 @@ class Section extends Content
     }
     public function getOrder_num(int $format = Content::FORMAT_BRUT){
         switch ($format) {
-            case Content::FORMAT_MODIFY:
+            case Content::FORMAT_EDITABLE:
                 ob_start(); ?>
                     <input 
                         onchange="Section.update('<?=$this->getId();?>', this, 'order_num');"  
@@ -126,10 +123,10 @@ class Section extends Content
         }
     }
     
-    public function getVisual(int $display = Content::DISPLAY_CARD){
+    public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
 
         switch ($display) {
-            case Content::DISPLAY_MODIFY:
+            case Content::DISPLAY_EDITABLE:
                 $template_vars = [
                     'get' => Section::GET_SECTION_CONTENT,
                     'content' => $this->getContent(),

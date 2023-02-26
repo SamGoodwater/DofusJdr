@@ -1,14 +1,27 @@
-# FORCER HTTPS
-#RewriteEngine On
-#RewriteCond %{HTTPS} off
-#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+Options +FollowSymLinks
+RewriteEngine On
 
-# ONLINE
-#ErrorDocument 404 /index.php
-#ErrorDocument 404 /view/maintenance.php
+# Si l'URL ne contient pas "index.php" et que la requête n'est pas un répertoire ou un fichier existant
+RewriteCond %{REQUEST_URI} !^/(index\.php|images|css|js)/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 
-# OFFLINE
-ErrorDocument 404 /jdrdofus/index.php
-#ErrorDocument 404 /ProjectFounil/view/maintenance.php
+# Réécrivez l'URL en incluant les paramètres c, a et p
+RewriteRule ^([^/]+)/([^/]+)/([^/]+)/?$ index.php?c=$1&a=$2&p=$3 [L,QSA]
+RewriteRule ^([^/]+)/([^/]+)/([^/]+):([^/]+)/?$ index.php?c=$1&a=$2&$3=$4 [L,QSA]
 
-Options -Indexes
+# Si l'URL ne contient pas "index.php" et que la requête n'est pas un répertoire ou un fichier existant
+RewriteCond %{REQUEST_URI} !^/(index\.php|images|css|js)/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Réécrivez l'URL en incluant les paramètres c et a
+RewriteRule ^([^/]+)/([^/]+)/?$ index.php?c=$1&a=$2 [L,QSA]
+
+# Si l'URL ne contient pas "index.php" et que la requête n'est pas un répertoire ou un fichier existant
+RewriteCond %{REQUEST_URI} !^/(index\.php|images|css|js)/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Réécrivez l'URL en incluant les paramètres url_name pour l'affichage des pages de bases
+RewriteRule ^([^/]+)/?$ index.php?url_name=$1 [L,QSA]

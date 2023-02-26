@@ -1,9 +1,6 @@
 <?php
 class Npc extends Content
 {
-    public function __construct(array $donnees){
-        $this->hydrate($donnees);
-    }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         private $_name='PNJ';
@@ -68,6 +65,8 @@ class Npc extends Content
         private $_other_consomable='';
         private $_other_spell='';
         
+        protected $_usable = true; // surcharge de la variable de Content
+
         // équipement
         // consomable
         // Spell
@@ -75,26 +74,28 @@ class Npc extends Content
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
 
         public function getName(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1">
-                            <p class="size-0-9">Nom</p>
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'name');" 
-                                placeholder="Nom du ou de la PNJ" 
-                                maxlength="50"
-                                type="text" 
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                value="<?=$this->_name?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:  
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "name",
+                            "label" => "Nom",
+                            "placeholder" => "Nom du ou de la PNJ",
+                            "value" => $this->_name,
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_name;
             }
         }
         public function getClasse(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $manager = New ClasseManager;
             if(!empty($this->_classe)){
                 if($manager->existsUniqid($this->_classe)){
@@ -107,214 +108,185 @@ class Npc extends Content
             }
 
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="dropdown">
-                            <a class="" type="button" id="dropdownDisplay<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getClasse(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownDisplay<?=$this->getId()?>"> <?php
-                                foreach ($manager->getAll() AS $classe) { ?>
-                                    <a class="dropdown-item" onclick="Npc.update('<?=$this->getUniqid()?>', '<?=$classe->getUniqid()?>', 'classe', <?=Controller::IS_VALUE?>);$('#dropdownDisplay<?=$this->getId()?>').html($(this).html());"><span class='badge back-main-d-2'><?=$classe->getName()?></span></a>
-                                <?php } ?>
-                            </div>
-                        </div> <?php
-                    return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    $items = [];
+                    foreach ($manager->getAll() as $classe) {
+                        $items[] = [
+                            "onclick" => "Npc.update('".$this->getUniqid()."', '".$classe->getUniqid()."', 'classe', ".Controller::IS_VALUE.");",
+                            "display" => $classe,
+                            "class" => "badge back-main-d-2",
+                        ];
+                    }
+
+                    return $view->dispatch(
+                        template_name : "dropdown",
+                        data : [
+                            "tooltips" => "Classe du ou de la PNJ",
+                            "label" => $this->getClasse(Content::FORMAT_BADGE),
+                            "size" => View::SIZE_SM,
+                            "data" => $items
+                        ], 
+                        write: false);
 
                 case Content::FORMAT_OBJECT:
                     return $object;
 
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-main-d-2 data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Classe du ou de la PNJ\">{$object->getName()}</span>";
-                
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $object->getName(),
+                            "color" => "main-d-2",
+                            "tooltip" => "Classe du ou de la PNJ",
+                            "style" => View::STYLE_BACK
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_classe;
             }
         }
         public function getStory(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1">
-                            <p>Histoire</p>
-                            <div  id="story<?=$this->getUniqid()?>"><?=html_entity_decode($this->_story)?></div>
-                            <a id="saveCkeditor" class='p-1 back-grey-l-2-hover' onclick="Npc.update('<?=$this->getUniqid()?>', CKEDITOR5['story<?=$this->getUniqid()?>'].getData(), 'story', <?=Controller::IS_VALUE?>)"><small><i class="fas fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
-                        </div>
-                        <script>
-                            ClassicEditor
-                                .create( document.querySelector('#story<?=$this->getUniqid()?>'), { 
-                                    autosave: {
-                                        waitingTime: 10000, // in ms
-                                        save(editor) {
-                                            Npc.update('<?=$this->getUniqid()?>', editor.getData(), 'story', IS_VALUE);
-                                        }
-                                    },
-                                    toolbar: {
-                                        items: [
-                                            'undo',
-                                            'redo',
-                                            '|',
-                                            'heading',
-                                            'alignment',
-                                            'fontSize',
-                                            'fontFamily',
-                                            '|',
-                                            'fontColor',
-                                            'fontBackgroundColor',
-                                            'highlight',
-                                            '|',
-                                            'link',
-                                            'insertTable',
-                                            'imageInsert',
-                                            '|',
-                                            'bold',
-                                            'italic',
-                                            'strikethrough',
-                                            'underline',
-                                            'subscript',
-                                            'superscript',
-                                            '|',
-                                            'bulletedList',
-                                            'numberedList',
-                                            'todoList',
-                                            '|',
-                                            'outdent',
-                                            'indent',
-                                            '|',
-                                            'specialCharacters',
-                                            'imageUpload',
-                                            '|',
-                                            'mediaEmbed',
-                                            'horizontalLine',
-                                            'blockQuote',
-                                            '|',
-                                            'removeFormat',
-                                            'htmlEmbed',
-                                            'code',
-                                            'sourceEditing',
-                                            'findAndReplace'
-                                        ]
-                                    },
-                                    language: 'fr',
-                                    image: {
-                                        toolbar: [
-                                            'imageTextAlternative',
-                                            'imageStyle:inline',
-                                            'imageStyle:block',
-                                            'imageStyle:side',
-                                            'linkImage'
-                                        ]
-                                    },
-                                    table: {
-                                        contentToolbar: [
-                                            'tableColumn',
-                                            'tableRow',
-                                            'mergeTableCells',
-                                            'tableCellProperties',
-                                            'tableProperties'
-                                        ]
-                                    },
-                                    licenseKey: '', 
-                                } )
-                                .then( newEditor => {
-                                    CKEDITOR5['story<?=$this->getUniqid()?>'] = newEditor;
-                                    $(".ck-file-dialog-button button").off("click");
-                                    $(".ck-file-dialog-button button").unbind('click');
-                                } )
-                                .catch( error => {
-                                    console.error( 'Oops, something went wrong!' );
-                                    console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-                                    console.warn( 'Build id: 2jnb9i33ls8a-f2lnu5o5jd3g' );
-                                    console.error( error );
-                                } );
-                        </script>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/ckeditor",
+                        data : [
+                            "class_name" => "npc",
+                            "id" => "story".$this->getUniqid(),
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "story",
+                            "label" => "Histoire",
+                            "value" => $this->_story
+                        ], 
+                        write: false);
                 
                 default:
                     return html_entity_decode($this->_story);
             }
         }
         public function getHistorical(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1">
-                            <p class="size-0-9">Historique</p>
-                            <textarea 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'historical');" 
-                                placeholder="Histoire du ou de la PNJ" 
-                                maxlength="255"
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                rows="3"><?=$this->_historical?></textarea>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/textarea",
+                        data : [
+                            "class_name" => "npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "historical",
+                            "label" => "Historique",
+                            "maxlenght" => "2000",
+                            "placeholder" => "",
+                            "value" => $this->_historical
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_historical;
             }
         }
         public function getAlignment(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1">
-                            <p class="size-0-9">Alignement</p>
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'alignment');" 
-                                placeholder="Alignement du ou de la PNJ" 
-                                maxlength="500"
-                                type="text" 
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                value="<?=$this->_alignment?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "alignement",
+                            "label" => "Alignement",
+                            "placeholder" => "ALignement du ou de la PNJ",
+                            "value" => $this->_name,
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
 
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-grey-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Alignement\">{$this->_alignment}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_alignment,
+                            "color" => "grey-d-2",
+                            "tooltip" => "Alignement du ou de la PNJ",
+                            "style" => View::STYLE_BACK
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_alignment;
             }
         }
         public function getLevel(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-<?=View::getColorFromLetter($this->_level, true)?>-d-3">
-                            <label>Niveau du ou de la PNJ</label>
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'level');" 
-                                data-bs-toggle='tooltip' data-bs-placement='bottom' title="Niveau du ou de la PNJ"
-                                type="text" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_level?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "level",
+                            "label" => "Niveau",
+                            "placeholder" => "Niveau",
+                            "tooltip" => "Niveau du ou de la PNJ",
+                            "value" => $this->_level,
+                            "color" => View::getColorFromLetter($this->_level, true) . "-d-3"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Niveau du ou de la PNJ\">Niveau {$this->_level}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Niveau {$this->_level}",
+                            "color" => View::getColorFromLetter($this->_level) . "-d-3",
+                            "tooltip" => "Niveau du ou de la PNJ",
+                            "style" => View::STYLE_OUTLINE
+                        ], 
+                        write: false);
                    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-".View::getColorFromLetter($this->_level, true)."-d-3' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Niveau du ou de la PNJ\">{$this->_level}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_level,
+                            "color" => "",
+                            "tooltip" => "Niveau du ou de la PNJ",
+                            "style" => View::STYLE_NONE,
+                            "class" => "text-".View::getColorFromLetter($this->_level) . "-d-3"
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_level;
             }
         }
         public function getTrait(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            $trait_classe = $this->getClasse(Content::FORMAT_OBJECT)->getTrait(Content::FORMAT_ARRAY);
+            $trait_npc = explode(",", $this->_trait);
+            $traits = array_combine($trait_classe, $trait_npc);
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'trait');" 
-                                placeholder="Traits du joueur" 
-                                maxlength="3000" 
-                                type="text" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_trait?>">
-                            <label class="size-0-8">Traits du ou de la PNJ</label>
-                        </div>
-                        <span class="size-0-8 text-grey">Séparer les différents traits par des virgules.</span>
-                        <?php if(!empty($this->getClasse(Content::FORMAT_OBJECT)->getTrait())){ ?>
+                case Content::FORMAT_EDITABLE:
+                    ob_start();
+                        $view->dispatch(
+                            template_name : "input/textarea",
+                            data : [
+                                "class_name" => "Npc",
+                                "uniqid" => $this->getUniqid(),
+                                "input_name" => "trait",
+                                "label" => "Traits",
+                                "value" => $this->_trait,
+                                "placeholder" => "Traits",
+                                "style" => View::STYLE_INPUT_FLOATING,
+                                "comment" => "Séparer les différents traits par des virgules."
+                            ], 
+                            write: true);
+
+                        if(!empty($this->getClasse(Content::FORMAT_OBJECT)->getTrait())){ ?>
                             <p>Traits propre à la classe : <?=$this->getClasse(Content::FORMAT_OBJECT)->getTrait(Content::FORMAT_BADGE)?></p>
                         <?php }
                     return ob_get_clean();
@@ -322,9 +294,19 @@ class Npc extends Content
                 case Content::FORMAT_BADGE:
                     ob_start(); ?>
                         <div class="d-flex flex-row justify-content-around"> <?php
-                            foreach (explode(",", $this->_trait) as $trait) { ?>
-                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="Trait <?=$trait?>" class="badge back-main-d-1"><?=$trait?></span>
-                            <?php } ?>                            
+                            foreach ($traits as $trait) { 
+                                $view->dispatch(
+                                    template_name : "badge",
+                                    data : [
+                                        "color" => View::getColorFromLetter($trait) . "-d-1",
+                                        "content" => $trait,
+                                        "style" => View::STYLE_BACK,
+                                        "tooltip" => "Trait ".$trait,
+                                        "tooltip_placement" => "top"
+                                    ], 
+                                    write: true);
+                                ?>
+                                <?php } ?>                            
                         </div>
                     <?php return ob_get_clean();
 
@@ -337,172 +319,118 @@ class Npc extends Content
 
         }
         public function getOther_info(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1">
-                            <p>Caractères et autres informations</p>
-                            <div  id="other_info<?=$this->getUniqid()?>"><?=html_entity_decode($this->_other_info)?></div>
-                            <a id="saveCkeditor" class='p-1 back-grey-l-2-hover' onclick="Npc.update('<?=$this->getUniqid()?>', CKEDITOR5['other_info<?=$this->getUniqid()?>'].getData(), 'other_info', <?=Controller::IS_VALUE?>)"><small><i class="fas fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
-                        </div>
-                        <script>
-                            ClassicEditor
-                                .create( document.querySelector('#other_info<?=$this->getUniqid()?>'), { 
-                                    autosave: {
-                                        waitingTime: 10000, // in ms
-                                        save(editor) {
-                                            Npc.update('<?=$this->getUniqid()?>', editor.getData(), 'other_info', IS_VALUE);
-                                        }
-                                    },
-                                    toolbar: {
-                                        items: [
-                                            'undo',
-                                            'redo',
-                                            '|',
-                                            'heading',
-                                            'alignment',
-                                            'fontSize',
-                                            'fontFamily',
-                                            '|',
-                                            'fontColor',
-                                            'fontBackgroundColor',
-                                            'highlight',
-                                            '|',
-                                            'link',
-                                            'insertTable',
-                                            'imageInsert',
-                                            '|',
-                                            'bold',
-                                            'italic',
-                                            'strikethrough',
-                                            'underline',
-                                            'subscript',
-                                            'superscript',
-                                            '|',
-                                            'bulletedList',
-                                            'numberedList',
-                                            'todoList',
-                                            '|',
-                                            'outdent',
-                                            'indent',
-                                            '|',
-                                            'specialCharacters',
-                                            'imageUpload',
-                                            '|',
-                                            'mediaEmbed',
-                                            'horizontalLine',
-                                            'blockQuote',
-                                            '|',
-                                            'removeFormat',
-                                            'htmlEmbed',
-                                            'code',
-                                            'sourceEditing',
-                                            'findAndReplace'
-                                        ]
-                                    },
-                                    language: 'fr',
-                                    image: {
-                                        toolbar: [
-                                            'imageTextAlternative',
-                                            'imageStyle:inline',
-                                            'imageStyle:block',
-                                            'imageStyle:side',
-                                            'linkImage'
-                                        ]
-                                    },
-                                    table: {
-                                        contentToolbar: [
-                                            'tableColumn',
-                                            'tableRow',
-                                            'mergeTableCells',
-                                            'tableCellProperties',
-                                            'tableProperties'
-                                        ]
-                                    },
-                                    licenseKey: '',
-                                } )
-                                .then( newEditor => {
-                                    CKEDITOR5['other_info<?=$this->getUniqid()?>'] = newEditor;
-                                    $(".ck-file-dialog-button button").off("click");
-                                    $(".ck-file-dialog-button button").unbind('click');
-                                } )
-                                .catch( error => {
-                                    console.error( 'Oops, something went wrong!' );
-                                    console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-                                    console.warn( 'Build id: 2jnb9i33ls8a-f2lnu5o5jd3g' );
-                                    console.error( error );
-                                } );
-                        </script>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/ckeditor",
+                        data : [
+                            "class_name" => "npc",
+                            "id" => "other_info".$this->getUniqid(),
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "other_info",
+                            "label" => "Caractères et autres informations",
+                            "value" => $this->_other_info
+                        ], 
+                        write: false);
                 
                 default:
                     return html_entity_decode($this->_other_info);
             }
         }
         public function getAge(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1">
-                            <p class="size-0-9">Age</p>
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'age');" 
-                                placeholder="Age du ou de la PNJ" 
-                                maxlength="50"
-                                type="text" 
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                value="<?=$this->_age?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "age",
+                            "label" => "Age",
+                            "placeholder" => "Age du ou de la PNJ",
+                            "maxlength" => "50",
+                            "value" => $this->_age,
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
-                    return "<span>Age : {$this->_age} ans</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Age : {$this->_age} ans",
+                            "color" => "grey-d-1",
+                            "tooltip" => "Age du ou de la PNJ",
+                            "style" => View::STYLE_BACK
+                        ], 
+                        write: false);
                    
                 default:
                     return $this->_age;
             }
         }
         public function getSize(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1">
-                            <p class="size-0-9">Taille</p>
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'size');" 
-                                placeholder="Taille du ou de la PNJ" 
-                                maxlength="50"
-                                type="text" 
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                value="<?=$this->_size?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "size",
+                            "label" => "Taille",
+                            "placeholder" => "Taille du ou de la PNJ",
+                            "maxlength" => "50",
+                            "value" => $this->_size,
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
-                    return "<span>Taille : {$this->_size}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Taille : {$this->_size}",
+                            "color" => "grey-d-1",
+                            "tooltip" => "Taille du ou de la PNJ",
+                            "style" => View::STYLE_BACK
+                        ], 
+                        write: false);
                    
                 default:
                     return $this->_size;
             }
         }
         public function getWeight(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1">
-                            <p class="size-0-9">Poids</p>
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'weight');" 
-                                placeholder="Poids du ou de la PNJ" 
-                                maxlength="50"
-                                type="text" 
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                value="<?=$this->_weight?>">
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "weight",
+                            "label" => "Poids",
+                            "placeholder" => "Poids du ou de la PNJ",
+                            "value" => $this->_weight,
+                            "style" => View::STYLE_INPUT_FLOATING
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
-                    return "<span>Poids : {$this->_weight}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Poids : {$this->_age} kg",
+                            "color" => "grey-d-1",
+                            "tooltip" => "Poids du ou de la PNJ",
+                            "style" => View::STYLE_BACK
+                        ], 
+                        write: false);
                    
                 default:
                     return $this->_weight;
@@ -510,1454 +438,2268 @@ class Npc extends Content
         }
 
         public function getLife(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1">
-                            <p class="text-life size-0-9">Poins de vie</p>
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'life');" 
-                                placeholder="Points de vie du ou de la PNJ" 
-                                maxlength="50"
-                                type="text" 
-                                class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                value="<?=$this->_life?>">
-                        </div>
-                    <?php return ob_get_clean();
-                
-                case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-life border-1 border-solid">
-                            <div class="m-2">
-                                <h6 class="m-0 text-life"><?=$this->_life?> points de vie</h6>
-                                <p class="text-grey-d-2 size-0-8">Dès de classe + mod. Vitalité * niveau + bonus d'équipement</p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "life",
+                            "label" => "Points de vie",
+                            "placeholder" => "Points de vie du ou de la PNJ",
+                            "tooltips" => "Calcul des points de vie",
+                            "value" => $this->_life,
+                            "color" => "life-d-2",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "life.svg",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_BADGE:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_life} Points de vie",
+                            "color" => "life-d-2",
+                            "tooltip" => "Calcul des points de vie",
+                            "style" => View::STYLE_BACK,
+                            "id" => "life"
+                        ], 
+                        write: false);
 
                 case Content::FORMAT_ICON:
-                    return "<span class='text-life' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Points de vie\">{$this->_life} <img class='icon' src='medias/icons/life.svg'></span>";
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "life.svg",
+                            "color" => "life-d-2",
+                            "tooltip" => "Calcul des points de vie",
+                            "content" => $this->_life,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
+                case Content::FORMAT_VIEW:
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_life} Points de vie",
+                            "color" => "life-d-2",
+                            "tooltip" => "Calcul des points de vie",
+                            "comment" => "Dès de classe + mod. Vitalité * niveau + bonus d'équipement"
+                        ], 
+                        write: false);
                    
                 default:
                     return $this->_life;
             }
         }
         public function getPa(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1 text-pa">
-                            <label class="text-pa size-0-9">PA</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-pa text-white"><img class='icon' src='medias/icons/pa.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'pa');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="PA du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_pa?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "pa",
+                            "label" => "PA",
+                            "placeholder" => "Points d'action du ou de la PNJ",
+                            "tooltips" => "PA",
+                            "value" => $this->_pa,
+                            "color" => "pa",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "pa.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-pa' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"PA du ou de la PNJ\">PA {$this->_pa}</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_pa} PA",
+                            "color" => "pa",
+                            "tooltip" => "PA",
+                            "style" => View::STYLE_BACK,
+                            "id" => "pa"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-pa' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"PA du ou de la PNJ\">{$this->_pa} <img class='icon' src='medias/icons/pa.png'></span>";
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "pa.png",
+                            "color" => "pa",
+                            "tooltip" => "PA",
+                            "content" => $this->_pm,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
                 
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-pa border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-pa"><?=$this->_pa?> PA</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonus d'équipement</p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_pa} PA",
+                            "color" => "pa",
+                            "tooltip" => "Points d'action",
+                            "comment" => "Bonus d'équipement"
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_pa;
             }
         }
         public function getPm(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1 text-pm">
-                            <label class="text-pm size-0-9">PM</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-pm text-white"><img class='icon' src='medias/icons/pm.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'pm');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="PM du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_pm?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "pm",
+                            "label" => "PM",
+                            "placeholder" => "Points de mouvement du ou de la PNJ",
+                            "tooltips" => "PM",
+                            "value" => $this->_pm,
+                            "color" => "pm",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "pm.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-pm' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"PM du ou de la PNJ\">PM {$this->_pm}</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_pm} PM",
+                            "color" => "pm",
+                            "tooltip" => "PM",
+                            "style" => View::STYLE_BACK,
+                            "id" => "pm"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-pm' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"PM du ou de la PNJ\">{$this->_pm} <img class='icon' src='medias/icons/pm.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "pm.png",
+                            "color" => "pm",
+                            "tooltip" => "PM",
+                            "content" => $this->_pm,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-pm border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-pm"><?=$this->_pm?> PM</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonus d'équipement</p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_pm} PM",
+                            "color" => "pm",
+                            "tooltip" => "Points de mouvement",
+                            "comment" => "Bonus d'équipement"
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_pm;
             }
         }
         public function getPo(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1 text-pm">
-                            <label class="text-po size-0-9">Bonus de PO</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-po text-white"><img class='icon' src='medias/icons/po.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'po');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="PO du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_po?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "po",
+                            "label" => "PO",
+                            "placeholder" => "Portée du ou de la PNJ",
+                            "tooltips" => "PO",
+                            "value" => $this->_po,
+                            "color" => "po",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "po.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-po' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"PO du ou de la PNJ\">PO {$this->_po}</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_po} PO",
+                            "color" => "po",
+                            "tooltip" => "PO",
+                            "style" => View::STYLE_BACK,
+                            "id" => "po"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-po' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"PO du ou de la PNJ\">{$this->_po} <img class='icon' src='medias/icons/po.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "po.png",
+                            "color" => "po",
+                            "tooltip" => "PO",
+                            "content" => $this->_po,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-po border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-po"><?=$this->_po?> PO</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonus d'équipement</p>
-                            </div> 
-                        </div>       
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_po} PO",
+                            "color" => "po",
+                            "tooltip" => "Portée",
+                            "comment" => "Bonus d'équipement"
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_po;
             }
         }
         public function getIni(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_ini + $this->getIntel();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1 text-ini">
-                            <label class="size-0-9">Initiative</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-ini text-white"><img class='icon' src='medias/icons/ini.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'ini');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'initiative du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_ini?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9"><?=$this->getIntel(Content::FORMAT_BADGE)?> + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "ini",
+                            "label" => "Initiative",
+                            "placeholder" => "Initiative du ou de la PNJ",
+                            "tooltips" => "Initiative",
+                            "value" => $this->_ini,
+                            "color" => "ini",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "ini.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-ini' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'initiative du ou de la PNJ\">{$this->_ini} Bonus d'initiative</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_ini} Initiative",
+                            "color" => "ini",
+                            "tooltip" => "Bonus d'Initiative",
+                            "style" => View::STYLE_BACK,
+                            "id" => "ini"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-ini' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'initiative du ou de la PNJ\">{$this->_ini} <img class='icon' src='medias/icons/ini.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "ini.png",
+                            "color" => "ini",
+                            "tooltip" => "Bonus d'Initiative",
+                            "content" => $this->_ini,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-ini border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-ini"><?=$total?> Ini</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getIni(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Initiative",
+                            "color" => "ini",
+                            "tooltip" => "Initiative",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " + " . $this->getIni(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_ini;
             }
         }
         public function getInvocation(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_invocation + 1;
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1 text-invocation">
-                            <label class="size-0-9">Invocation</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-invocation text-white"><img class='icon' src='medias/icons/invocation.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'invocation');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre d'invocation du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_ini?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">1 + Bonus de l'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "invocation",
+                            "label" => "Nb d'invocation",
+                            "placeholder" => "Portée du ou de la PNJ",
+                            "tooltips" => "Nb d'invocation",
+                            "value" => $this->_invocation,
+                            "color" => "invocation",
+                            "comment" => "1 + Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "invocation.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-invocation' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Nombre d'invocation du ou de la PNJ\">{$total} Invocations</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_invocation} Invocations",
+                            "color" => "invocation",
+                            "tooltip" => "Bonus d'Invocations",
+                            "style" => View::STYLE_BACK,
+                            "id" => "invocation"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-invocation' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Nombre d'invocation du ou de la PNJ\">{$total} <img class='icon' src='medias/icons/invocation.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "invocation.png",
+                            "color" => "invocation",
+                            "tooltip" => "Bonus d'Invocations",
+                            "content" => $this->_invocation,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-invocation border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-invocation"><?=$total?> Invocation</h6>
-                                <p class="text-grey-d-2 size-0-8">1 + Bonus de l'équipement</p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
-                default:
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Invocations",
+                            "color" => "invocation",
+                            "tooltip" => "Nb d'Invocations",
+                            "comment" => "1 + " . $this->getInvocation(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
+
+                 default:
                     return $this->_invocation;
             }
         }
         public function getTouch(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="m-1 text-touch">
-                            <label class="size-0-9">Touche</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-touch text-white"><img class='icon' src='medias/icons/touch.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'touch');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de touche du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_touch?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus de l'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "touch",
+                            "label" => "Bonus de touche",
+                            "placeholder" => "Bonus de touche du ou de la PNJ",
+                            "tooltips" => "Bonus de touche",
+                            "value" => $this->_touch,
+                            "color" => "touch",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "touch.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-touch' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de touche du ou de la PNJ\">+ {$this->_touch} Touche</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_touch} Touche",
+                            "color" => "touch",
+                            "tooltip" => "Bonus de touche",
+                            "style" => View::STYLE_BACK,
+                            "id" => "touch"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-touch' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de touche du ou de la PNJ\">{$this->_touch} <img class='icon' src='medias/icons/touch.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "touch.png",
+                            "color" => "touch",
+                            "tooltip" => "Bonus de touche",
+                            "content" => $this->_touch,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-touch border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-touch">+ <?=$this->_touch?> Touche</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonus de l'équipement</p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_touch} Touche",
+                            "color" => "touch",
+                            "tooltip" => "Bonus de touche",
+                            "comment" => $this->getTouch(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_touch;
             }
         }
         public function getCa(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = 10 + $this->_ca + $this->getVitality();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-ca">
-                            <label>Bonus de Classe d'armure</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-grey text-white"><img class='icon' src='medias/icons/ca.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'ca');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de la classe d'armure du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_ca?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">10 + <?=$this->getVitality(Content::FORMAT_BADGE)?> + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "ca",
+                            "label" => "Bonus de CA",
+                            "placeholder" => "Classe d'armure du ou de la PNJ",
+                            "tooltips" => "Bonus de Classe d'armure",
+                            "value" => $this->_ca,
+                            "color" => "ca-d-4",
+                            "comment" => $this->getVitality(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "ca.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-ca' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de la classe d'armure du ou de la PNJ\">10 + {$this->_ca} Bonus de CA</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_ca} CA",
+                            "color" => "ca-d-4",
+                            "tooltip" => "Bonus de Classe d'armure",
+                            "style" => View::STYLE_BACK,
+                            "id" => "ca"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-ca' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de la classe d'armure du ou de la PNJ\">10 + {$this->_ca} <img class='icon' src='medias/icons/ca.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "ca.png",
+                            "color" => "ca-d-4",
+                            "tooltip" => "Bonus de Classe d'armure",
+                            "content" => $this->_ca,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-ca border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-ca"><?=$total?> CA</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getVitality(Content::FORMAT_BADGE)?> + <?=$this->getCa(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} CA",
+                            "color" => "ca-d-4",
+                            "tooltip" => "Classe d'armure",
+                            "comment" => $this->getVitality(Content::FORMAT_BADGE) . " + " . $this->getCa(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_ca;
             }
         }
         public function getDodge_pa(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = 10 + $this->_dodge_pa + $this->getSagesse();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-pa">
-                            <label>Bonus d'Esquive PA</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-pa text-white"><img class='icon' src='medias/icons/dodge_pa.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'dodge_pa');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PA du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_dodge_pa?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">10 + <?=$this->getSagesse(Content::FORMAT_BADGE)?> + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "dodge_pa",
+                            "label" => "Bonus d'esquive PA",
+                            "placeholder" => "Bonus d'esquive PA du ou de la PNJ",
+                            "tooltips" => "Bonus d'Esquive PA",
+                            "value" => $this->_ca,
+                            "color" => "pa",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "dodge_pa.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-pa' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'Esquive PA du ou de la PNJ\">10 + {$this->_dodge_pa} Bonus d'Esquive PA</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_dodge_pa} Esquive PA",
+                            "color" => "pa",
+                            "tooltip" => "Bonus d'Esquive PA",
+                            "style" => View::STYLE_BACK,
+                            "id" => "dodge_pa"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-pa' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'Esquive PA du ou de la PNJ\">10 + {$this->_dodge_pa} <img class='icon' src='medias/icons/dodge_pa.png'></span>";
-               
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "dodge_pa.png",
+                            "color" => "pa",
+                            "tooltip" => "Bonus d'Esquive PA",
+                            "content" => $this->_dodge_pa,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-pa border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-pa"><?=$total?> Esquive PA</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getDodge_pa(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Esquive PA",
+                            "color" => "pa",
+                            "tooltip" => "Esquive PA",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " + " . $this->getDodge_pa(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_dodge_pa;
             }
         }
         public function getDodge_pm(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = 10 + $this->_dodge_pm + $this->getSagesse();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-pm">
-                            <label>Bonus d'Esquive PM</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-pm text-white"><img class='icon' src='medias/icons/dodge_pm.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'dodge_pm');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PM du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_dodge_pm?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">10 + <?=$this->getSagesse(Content::FORMAT_BADGE)?> + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "dodge_pm",
+                            "label" => "Bonus d'esquive PM",
+                            "placeholder" => "Bonus d'esquive PM du ou de la PNJ",
+                            "tooltips" => "Bonus d'Esquive PM",
+                            "value" => $this->_ca,
+                            "color" => "pm",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "dodge_pm.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-pm' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'Esquive PM du ou de la PNJ\">10 + {$this->_dodge_pm} Bonus d'Esquive PM</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_dodge_pm} Esquive PM",
+                            "color" => "pm",
+                            "tooltip" => "Bonus d'Esquive PM",
+                            "style" => View::STYLE_BACK,
+                            "id" => "dodge_pm"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-pm' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'Esquive PM du ou de la PNJ\">10 + {$this->_dodge_pm} <img class='icon' src='medias/icons/dodge_pm.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "dodge_pm.png",
+                            "color" => "pm",
+                            "tooltip" => "Bonus d'Esquive PM",
+                            "content" => $this->_dodge_pm,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-pm border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-pm"><?=$total?> Esquive PM</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getDodge_pm(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();    
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Esquive PM",
+                            "color" => "pm",
+                            "tooltip" => "Esquive PM",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " + " . $this->getDodge_pm(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_dodge_pm;
             }
         }
         public function getFuite(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_fuite + $this->getAgi();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-fuite">
-                            <label>Bonus Fuite</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-fuite text-white"><img class='icon' src='medias/icons/fuite.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'fuite');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de fuite du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_fuite?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9"><?=$this->getAgi(Content::FORMAT_BADGE)?> + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "fuite",
+                            "label" => "Bonus de Fuite",
+                            "placeholder" => "Bonus de Fuite du ou de la PNJ",
+                            "tooltips" => "Bonus de Fuite",
+                            "value" => $this->_fuite,
+                            "color" => "fuite",
+                            "comment" => $this->getAgi(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "fuite.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-fuite' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de fuite du ou de la PNJ\">{$this->_fuite} Bonus de fuite</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_fuite} Fuite",
+                            "color" => "fuite",
+                            "tooltip" => "Bonus de Fuite",
+                            "style" => View::STYLE_BACK,
+                            "id" => "fuite"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-fuite' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de fuite du ou de la PNJ\">{$this->_fuite} <img class='icon' src='medias/icons/fuite.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "fuite.png",
+                            "color" => "fuite",
+                            "tooltip" => "Bonus de Fuite",
+                            "content" => $this->_fuite,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-fuite border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-fuite"><?=$total?> Fuite</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getFuite(Content::FORMAT_BADGE)?></p>
-                            </div>    
-                        </div>    
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Fuite",
+                            "color" => "fuite",
+                            "tooltip" => "Fuite",
+                            "comment" => $this->getAgi(Content::FORMAT_BADGE) . " + " . $this->getFuite(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_fuite;
             }
         }
         public function getTacle(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_tacle + $this->getChance();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-tacle">
-                            <label>Bonus Tacle</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-tacle text-white"><img class='icon' src='medias/icons/tacle.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'tacle');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de tacle du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_tacle?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9"><?=$this->getChance(Content::FORMAT_BADGE)?> + Bonus</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "tacle",
+                            "label" => "Bonus de Tacle",
+                            "placeholder" => "Bonus de Tacle du ou de la PNJ",
+                            "tooltips" => "Bonus de Tacle",
+                            "value" => $this->_tacle,
+                            "color" => "tacle",
+                            "comment" => $this->getChance(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "tacle.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-tacle' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de tacle du ou de la PNJ\">{$this->_tacle} Bonus de tacle</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_tacle} Tacle",
+                            "color" => "tacle",
+                            "tooltip" => "Bonus de Tacle",
+                            "style" => View::STYLE_BACK,
+                            "id" => "tacle"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-tacle' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de tacle du ou de la PNJ\">{$this->_tacle} <img class='icon' src='medias/icons/tacle.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "tacle.png",
+                            "color" => "tacle",
+                            "tooltip" => "Bonus de Tacle",
+                            "content" => $this->_tacle,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-tacle border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-tacle"><?=$total?> Tacle</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getTacle(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Tacle",
+                            "color" => "tacle",
+                            "tooltip" => "Tacle",
+                            "comment" => $this->getChance(Content::FORMAT_BADGE) . " + " . $this->getTacle(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_tacle;
             }
         }
         public function getVitality(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-vitality">
-                            <label>Mod. Vitalité</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-vitality text-white"><img class='icon' src='medias/icons/vitality.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'vitality');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de vitalité du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_vitality?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "vitality",
+                            "label" => "Vitalité",
+                            "placeholder" => "Vitalité du ou de la PNJ",
+                            "tooltips" => "Vitalité",
+                            "value" => $this->_vitality,
+                            "color" => "vitality",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "vitality.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-vitality' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de valité du ou de la PNJ\">{$this->_vitality} Mod. Vitalité</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_vitality} Vitalité",
+                            "color" => "vitality",
+                            "tooltip" => "Vitalité",
+                            "style" => View::STYLE_BACK,
+                            "id" => "vitality"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-vitality' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de vitalité du ou de la PNJ\">{$this->_vitality} <img class='icon' src='medias/icons/vitality.png'></span>";
-                    
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "vitality.png",
+                            "color" => "vitality",
+                            "tooltip" => "Vitalité",
+                            "content" => $this->_vitality,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-vitality border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-vitality"><?=$this->_vitality?> Mod. Vitalité</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div> 
-                        </div>       
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_vitality} Vitalité",
+                            "color" => "vitality",
+                            "tooltip" => "Vitalité",
+                            "comment" => $this->getVitality(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_vitality;
             }
         }
         public function getSagesse(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-sagesse">
-                            <label>Mod. Sagesse</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-sagesse text-white"><img class='icon' src='medias/icons/sagesse.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'sagesse');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de sagesse du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_sagesse?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "sagesse",
+                            "label" => "Sagesse",
+                            "placeholder" => "Sagesse du ou de la PNJ",
+                            "tooltips" => "Sagesse",
+                            "value" => $this->_sagesse,
+                            "color" => "sagesse",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "sagesse.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-sagesse' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de sagesse du ou de la PNJ\">{$this->_sagesse} Mod. Sagesse</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_sagesse} Sagesse",
+                            "color" => "sagesse",
+                            "tooltip" => "Sagesse",
+                            "style" => View::STYLE_BACK,
+                            "id" => "sagesse"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-sagesse' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de sagesse du ou de la PNJ\">{$this->_sagesse} <img class='icon' src='medias/icons/sagesse.png'></span>";
-                    
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "sagesse.png",
+                            "color" => "sagesse",
+                            "tooltip" => "Sagesse",
+                            "content" => $this->_sagesse,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-sagesse"><?=$this->_sagesse?> Mod. Sagesse</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div> 
-                        </div>       
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_sagesse} Sagesse",
+                            "color" => "sagesse",
+                            "tooltip" => "Sagesse",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_sagesse;
             }
         }
         public function getStrong(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-strong">
-                            <label>Mod. Force</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-strong text-white"><img class='icon' src='medias/icons/force.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'strong');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de force du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_strong?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "strong",
+                            "label" => "Force",
+                            "placeholder" => "Force du ou de la PNJ",
+                            "tooltips" => "Force",
+                            "value" => $this->_strong,
+                            "color" => "strong",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "strong.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-strong' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de force du ou de la PNJ\">{$this->_strong} Mod. Force</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_strong} Force",
+                            "color" => "strong",
+                            "tooltip" => "Force",
+                            "style" => View::STYLE_BACK,
+                            "id" => "strong"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-strong' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de force du ou de la PNJ\">{$this->_strong} <img class='icon' src='medias/icons/force.png'></span>";
-                    
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "strong.png",
+                            "color" => "strong",
+                            "tooltip" => "Force",
+                            "content" => $this->_strong,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-strong border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-strong"><?=$this->_strong?> Mod. Force</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus de Force</p>
-                            </div>  
-                        </div>      
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_strong} Force",
+                            "color" => "strong",
+                            "tooltip" => "Force",
+                            "comment" => $this->getStrong(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_strong;
             }
         }
         public function getIntel(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-intel">
-                            <label>Mod. Intelligence</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-intel text-white"><img class='icon' src='medias/icons/intel.png'></i></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'intel');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur d'intelligence du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_intel?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "intel",
+                            "label" => "Intelligence",
+                            "placeholder" => "Intelligence du ou de la PNJ",
+                            "tooltips" => "Intelligence",
+                            "value" => $this->_intel,
+                            "color" => "intel",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "intel.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-intel' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur d'intelligence du ou de la PNJ\">{$this->_intel} Mod. Intelligence</span>";
-                    
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_intel} Intelligence",
+                            "color" => "intel",
+                            "tooltip" => "Intelligence",
+                            "style" => View::STYLE_BACK,
+                            "id" => "intel"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-intel' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur d'intelligence du ou de la PNJ\">{$this->_intel} <img class='icon' src='medias/icons/intel.png'></span>";
-                    
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "intel.png",
+                            "color" => "intel",
+                            "tooltip" => "Intelligence",
+                            "content" => $this->_intel,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-intel"><?=$this->_intel?> Mod. Intelligence</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_intel} Intelligence",
+                            "color" => "intel",
+                            "tooltip" => "Intelligence",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_intel;
             }
         }
         public function getAgi(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-agi">
-                            <label>Mod. Agilité</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-agi text-white"><img class='icon' src='medias/icons/agi.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'agi');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur d'agilité du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_agi?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "agi",
+                            "label" => "Agilité",
+                            "placeholder" => "Agilité du ou de la PNJ",
+                            "tooltips" => "Agilité",
+                            "value" => $this->_agi,
+                            "color" => "agi",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "agi.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-agi' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur d'agilité du ou de la PNJ\">{$this->_agi} Mod. Agilité</span>";
-                    
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_agi} Agilité",
+                            "color" => "agi",
+                            "tooltip" => "Agilité",
+                            "style" => View::STYLE_BACK,
+                            "id" => "agi"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-agi' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur d'agilité du ou de la PNJ\">{$this->_agi} <img class='icon' src='medias/icons/agi.png'></span>";
-                    
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "agi.png",
+                            "color" => "agi",
+                            "tooltip" => "Agilité",
+                            "content" => $this->_agi,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-agi border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-agi"><?=$this->_agi?> Mod. Agilité</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_agi} Agilité",
+                            "color" => "agi",
+                            "tooltip" => "Agilité",
+                            "comment" => $this->getAgi(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_agi;
             }
         }
         public function getChance(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-chance">
-                            <label>Mod. Chance</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-chance text-white"><img class='icon' src='medias/icons/chance.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'chance');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de chance du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_chance?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "chance",
+                            "label" => "Chance",
+                            "placeholder" => "Chance du ou de la PNJ",
+                            "tooltips" => "Chance",
+                            "value" => $this->_chance,
+                            "color" => "chance",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "chance.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-chance' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de chance du ou de la PNJ\">{$this->_chance} Mod. Chance</span>";
-                    
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_chance} Chance",
+                            "color" => "chance",
+                            "tooltip" => "Chance",
+                            "style" => View::STYLE_BACK,
+                            "id" => "chance"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-chance' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Calcul du modificateur de chance du ou de la PNJ\">{$this->_chance} <img class='icon' src='medias/icons/chance.png'></span>";
-                    
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "chance.png",
+                            "color" => "chance",
+                            "tooltip" => "Chance",
+                            "content" => $this->_chance,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-chance border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-chance"><?=$this->_chance?> Mod. Chance</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_chance} Chance",
+                            "color" => "chance",
+                            "tooltip" => "Chance",
+                            "comment" => $this->getChance(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_chance;
             }
         }  
         public function getRes_neutre(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-neutre">
-                            <label>Resistance neutre</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-neutre text-white"><img class='icon' src='medias/icons/res_neutre.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_neutre');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance neutre du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_neutre?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_neutre",
+                            "label" => "Résistance neutre",
+                            "placeholder" => "Résistance neutre du ou de la PNJ",
+                            "tooltips" => "Résistance neutre",
+                            "value" => $this->_res_neutre,
+                            "color" => "neutre-d-2",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_neutre.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-neutre' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance neutre du ou de la PNJ\">{$this->_res_neutre} Résistance Neutre</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_neutre} Résistance neutre",
+                            "color" => "neutre-d-2",
+                            "tooltip" => "Résistance neutre",
+                            "style" => View::STYLE_BACK,
+                            "id" => "res_neutre"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-neutre' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance neutre du ou de la PNJ\">{$this->_res_neutre} <img class='icon' src='medias/icons/res_neutre.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_neutre.png",
+                            "color" => "neutre-d-2",
+                            "tooltip" => "Résistance neutre",
+                            "content" => $this->_res_neutre,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-neutre border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="text-neutre"><?=$this->_res_neutre?> Res. neutre</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div>
-                        </div> 
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_res_neutre} Résistance neutre",
+                            "color" => "neutre",
+                            "tooltip" => "Résistance neutre",
+                            "comment" => $this->getRes_neutre(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_res_neutre;
             }
         }
         public function getRes_terre(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-terre">
-                            <label>Resistance terre</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-terre text-white"><img class='icon' src='medias/icons/res_terre.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_terre');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance terre du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_terre?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_terre",
+                            "label" => "Résistance terre",
+                            "placeholder" => "Résistance terre du ou de la PNJ",
+                            "tooltips" => "Résistance terre",
+                            "value" => $this->_res_terre,
+                            "color" => "terre",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_terre.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-terre' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance terre du ou de la PNJ\">{$this->_res_terre} Résistance Terre</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_terre} Résistance terre",
+                            "color" => "terre",
+                            "tooltip" => "Résistance terre",
+                            "style" => View::STYLE_BACK,
+                            "id" => "res_terre"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-terre' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance terre du ou de la PNJ\">{$this->_res_terre} <img class='icon' src='medias/icons/res_terre.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_terre.png",
+                            "color" => "terre",
+                            "tooltip" => "Résistance terre",
+                            "content" => $this->_res_terre,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-terre border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-terre"><?=$this->_res_terre?> Res. Force</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_res_terre} Résistance terre",
+                            "color" => "terre",
+                            "tooltip" => "Résistance terre",
+                            "comment" => $this->getRes_terre(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_res_terre;
             }
         }
         public function getRes_feu(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-feu">
-                            <label>Resistance feu</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-feu text-white"><img class='icon' src='medias/icons/res_feu.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_feu');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance feu du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_feu?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_feu",
+                            "label" => "Résistance feu",
+                            "placeholder" => "Résistance feu du ou de la PNJ",
+                            "tooltips" => "Résistance feu",
+                            "value" => $this->_res_feu,
+                            "color" => "feu",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_feu.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-feu' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance feu du ou de la PNJ\">{$this->_res_feu} Résistance Feu</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_feu} Résistance feu",
+                            "color" => "feu",
+                            "tooltip" => "Résistance feu",
+                            "style" => View::STYLE_BACK,
+                            "id" => "res_feu"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-feu' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance feu du ou de la PNJ\">{$this->_res_feu} <img class='icon' src='medias/icons/res_feu.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_feu.png",
+                            "color" => "feu",
+                            "tooltip" => "Résistance feu",
+                            "content" => $this->_res_feu,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-feu border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-feu"><?=$this->_res_feu?> Res. Feu</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_res_feu} Résistance feu",
+                            "color" => "feu",
+                            "tooltip" => "Résistance feu",
+                            "comment" => $this->getRes_feu(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_res_feu;
             }
         }
         public function getRes_air(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-air">
-                            <label>Resistance air</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-air text-white"><img class='icon' src='medias/icons/res_air.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_air');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance air du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_air?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_air",
+                            "label" => "Résistance air",
+                            "placeholder" => "Résistance air du ou de la PNJ",
+                            "tooltips" => "Résistance air",
+                            "value" => $this->_res_air,
+                            "color" => "air",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_air.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-air' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance air du ou de la PNJ\">{$this->_res_air} Résistance Air</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_air} Résistance air",
+                            "color" => "air",
+                            "tooltip" => "Résistance air",
+                            "style" => View::STYLE_BACK,
+                            "id" => "res_air"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-air' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance air du ou de la PNJ\">{$this->_res_air} <img class='icon' src='medias/icons/res_air.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_air.png",
+                            "color" => "air",
+                            "tooltip" => "Résistance air",
+                            "content" => $this->_res_air,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-air border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-air"><?=$this->_res_air?> Res. Air</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_res_air} Résistance air",
+                            "color" => "air",
+                            "tooltip" => "Résistance air",
+                            "comment" => $this->getRes_air(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_res_air;
             }
         }
         public function getRes_eau(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1 text-eau">
-                            <label>Resistance eau</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-eau text-white"><img class='icon' src='medias/icons/res_eau.png'></div>
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'res_eau');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance eau du ou de la PNJ"
-                                    type="text" 
-                                    class="form-control form-control-main-focus form-control form-control-main-focus-sm" 
-                                    value="<?=$this->_res_eau?>">
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Bonus d'équipement</p>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "res_eau",
+                            "label" => "Résistance eau",
+                            "placeholder" => "Résistance eau du ou de la PNJ",
+                            "tooltips" => "Résistance eau",
+                            "value" => $this->_res_eau,
+                            "color" => "eau",
+                            "comment" => "Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "res_eau.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-eau' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance eau du ou de la PNJ\">{$this->_res_eau} Résistance Eau</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_res_eau} Résistance eau",
+                            "color" => "eau",
+                            "tooltip" => "Résistance eau",
+                            "style" => View::STYLE_BACK,
+                            "id" => "res_eau"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_ICON:
-                    return "<span class='text-eau' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Résistance eau du ou de la PNJ\">{$this->_res_eau} <img class='icon' src='medias/icons/res_eau.png'></span>";
-                
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "res_eau.png",
+                            "color" => "eau",
+                            "tooltip" => "Résistance eau",
+                            "content" => $this->_res_eau,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-eau border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-eau"><?=$this->_res_eau?> Res. Eau</h6>
-                                <p class="text-grey-d-2 size-0-8">Bonnus d'équipement</p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$this->_res_eau} Résistance eau",
+                            "color" => "eau",
+                            "tooltip" => "Résistance eau",
+                            "comment" => $this->getRes_eau(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_res_eau;
             }
         }
         public function getAcrobatie(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_acrobatie + $this->getAgi();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-agi">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'acrobatie');" 
-                                placeholder="Bonus d'acrobatie" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_acrobatie?>">
-                            <label class="size-0-8">Bonus d'acrobatie</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "acrobatie",
+                            "label" => "Bonus d'Acrobatie",
+                            "placeholder" => "Bonus d'Acrobatie du ou de la PNJ",
+                            "tooltips" => "Bonus d'Acrobatie",
+                            "value" => $this->_acrobatie,
+                            "color" => "agi",
+                            "comment" => $this->getAgi(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-agi' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'acrobatie du ou de la PNJ\">{$this->_acrobatie} Bonus d'acrobatie</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_acrobatie} Bonus d'Acrobatie",
+                            "color" => "agi",
+                            "tooltip" => "Bonus d'Acrobatie",
+                            "style" => View::STYLE_BACK,
+                            "id" => "acrobatie"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-agi border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-agi"><?=$total?> Acrobatie</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getAcrobatie(Content::FORMAT_BADGE)?></p>
-                            </div>        
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Acrobatie",
+                            "color" => "agi",
+                            "tooltip" => "Acrobatie",
+                            "comment" => $this->getAgi(Content::FORMAT_BADGE) . " + " . $this->getAcrobatie(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_acrobatie;
             }
         }
         public function getDiscretion(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_discretion + $this->getAgi();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-agi">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'discretion');" 
-                                placeholder="Bonus de discretion" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_discretion?>">
-                            <label class="size-0-8">Bonus de discretion</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "discretion",
+                            "label" => "Bonus de Discrétion",
+                            "placeholder" => "Bonus de Discrétion du ou de la PNJ",
+                            "tooltips" => "Bonus de Discrétion",
+                            "value" => $this->_discretion,
+                            "color" => "agi",
+                            "comment" => $this->getAgi(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-agi' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de discretion du ou de la PNJ\">{$this->_discretion} Bonus de discretion</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_discretion} Bonus de Discrétion",
+                            "color" => "agi",
+                            "tooltip" => "Bonus de Discrétion",
+                            "style" => View::STYLE_BACK,
+                            "id" => "discretion"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-agi border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-agi"><?=$total?> Discretion</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getDiscretion(Content::FORMAT_BADGE)?></p>
-                            </div>  
-                        </div>      
-                    <?php return ob_get_clean();
-                
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Discrétion",
+                            "color" => "agi",
+                            "tooltip" => "Discrétion",
+                            "comment" => $this->getAgi(Content::FORMAT_BADGE) . " + " . $this->getDiscretion(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
+
                 default:
                     return $this->_discretion;
             }
         }
         public function getEscamotage(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_escamotage + $this->getAgi();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-agi">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'escamotage');" 
-                                placeholder="Bonus d'escamotage" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_escamotage?>">
-                            <label class="size-0-8">Bonus d'escamotage</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "escamotage",
+                            "label" => "Bonus d'Escamotage",
+                            "placeholder" => "Bonus d'Escamotage du ou de la PNJ",
+                            "tooltips" => "Bonus d'Escamotage",
+                            "value" => $this->_escamotage,
+                            "color" => "agi",
+                            "comment" => $this->getAgi(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-agi' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'escamotage du ou de la PNJ\">{$this->_escamotage} Bonus d'escamotage</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_escamotage} Bonus d'Escamotage",
+                            "color" => "agi",
+                            "tooltip" => "Bonus d'Escamotage",
+                            "style" => View::STYLE_BACK,
+                            "id" => "escamotage"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-agi border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-agi"><?=$total?> Escamotage</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getAgi(Content::FORMAT_BADGE)?> + <?=$this->getEscamotage(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Escamotage",
+                            "color" => "agi",
+                            "tooltip" => "Escamotage",
+                            "comment" => $this->getAgi(Content::FORMAT_BADGE) . " + " . $this->getEscamotage(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_escamotage;
             }
         }
         public function getAthletisme(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_athletisme + $this->getStrong();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-for">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'athletisme');" 
-                                placeholder="Bonus d'athletisme" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_athletisme?>">
-                            <label class="size-0-8">Bonus d'athletisme</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "athletisme",
+                            "label" => "Bonus d'Athletisme",
+                            "placeholder" => "Bonus d'Athletisme du ou de la PNJ",
+                            "tooltips" => "Bonus d'Athletisme",
+                            "value" => $this->_athletisme,
+                            "color" => "strong",
+                            "comment" => $this->getStrong(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-force' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'athletisme du ou de la PNJ\">{$this->_athletisme} Bonus d'athletisme</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_athletisme} Bonus d'Athletisme",
+                            "color" => "strong",
+                            "tooltip" => "Bonus d'Athletisme",
+                            "style" => View::STYLE_BACK,
+                            "id" => "athletisme"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-strong border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-strong"><?=$total?> Athletisme</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getStrong(Content::FORMAT_BADGE)?> + <?=$this->getAthletisme(Content::FORMAT_BADGE)?></p>
-                            </div> 
-                        </div>       
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Athletisme",
+                            "color" => "strong",
+                            "tooltip" => "Athletisme",
+                            "comment" => $this->getStrong(Content::FORMAT_BADGE) . " + " . $this->getAthletisme(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_athletisme;
             }
         }
         public function getIntimidation(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_intimidation + $this->getStrong();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-strong">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'intimidation');" 
-                                placeholder="Bonus d'intimidation" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_intimidation?>">
-                            <label class="size-0-8">Bonus d'intimidation</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "intimidation",
+                            "label" => "Bonus d'Intimidation",
+                            "placeholder" => "Bonus d'Intimidation du ou de la PNJ",
+                            "tooltips" => "Bonus d'Intimidation",
+                            "value" => $this->_intimidation,
+                            "color" => "strong",
+                            "comment" => $this->getStrong(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-strong' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'intimidation du ou de la PNJ\">{$this->_intimidation} Bonus d'intimidation</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_intimidation} Bonus d'Intimidation",
+                            "color" => "strong",
+                            "tooltip" => "Bonus d'Intimidation",
+                            "style" => View::STYLE_BACK,
+                            "id" => "intimidation"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-strong border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-strong"><?=$total?> Intimidation</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getStrong(Content::FORMAT_BADGE)?> + <?=$this->getIntimidation(Content::FORMAT_BADGE)?></p>
-                            </div>   
-                        </div>     
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Intimidation",
+                            "color" => "strong",
+                            "tooltip" => "Intimidation",
+                            "comment" => $this->getStrong(Content::FORMAT_BADGE) . " + " . $this->getIntimidation(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_intimidation;
             }
         }
         public function getArcane(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_arcane + $this->getIntel();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-intel">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'arcane');" 
-                                placeholder="Bonus d'arcane" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_arcane?>">
-                            <label class="size-0-8">Bonus d'arcane</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "arcane",
+                            "label" => "Bonus d'Arcane",
+                            "placeholder" => "Bonus d'Arcane du ou de la PNJ",
+                            "tooltips" => "Bonus d'Arcane",
+                            "value" => $this->_arcane,
+                            "color" => "intel",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-intel' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'arcane du ou de la PNJ\">{$this->_arcane} Bonus d'arcane</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_arcane} Bonus d'Arcane",
+                            "color" => "intel",
+                            "tooltip" => "Bonus d'Arcane",
+                            "style" => View::STYLE_BACK,
+                            "id" => "arcane"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-intel"><?=$total?> Arcane</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getArcane(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Arcane",
+                            "color" => "intel",
+                            "tooltip" => "Arcane",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " + " . $this->getArcane(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_arcane;
             }
         }
         public function getHistoire(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_histoire + $this->getIntel();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-intel">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'histoire');" 
-                                placeholder="Bonus d'histoire" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_histoire?>">
-                            <label class="size-0-8">Bonus d'histoire</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "histoire",
+                            "label" => "Bonus d'Histoire",
+                            "placeholder" => "Bonus d'Histoire du ou de la PNJ",
+                            "tooltips" => "Bonus d'Histoire",
+                            "value" => $this->_histoire,
+                            "color" => "intel",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-intel' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'histoire du ou de la PNJ\">{$this->_histoire} Bonus d'histoire</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_histoire} Bonus d'Histoire",
+                            "color" => "intel",
+                            "tooltip" => "Bonus d'Histoire",
+                            "style" => View::STYLE_BACK,
+                            "id" => "histoire"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-intel"><?=$total?> Histoire</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getHistoire(Content::FORMAT_BADGE)?></p>
-                            </div>    
-                        </div>    
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Histoire",
+                            "color" => "intel",
+                            "tooltip" => "Histoire",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " + " . $this->getHistoire(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_histoire;
             }
         }
         public function getInvestigation(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_investigation + $this->getIntel();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-intel">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'investigation');" 
-                                placeholder="Bonus d'investigation" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_investigation?>">
-                            <label class="size-0-8">Bonus d'investigation</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "investigation",
+                            "label" => "Bonus d'Investigation",
+                            "placeholder" => "Bonus d'Investigation du ou de la PNJ",
+                            "tooltips" => "Bonus d'Investigation",
+                            "value" => $this->_investigation,
+                            "color" => "intel",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-intel' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus d'investigation du ou de la PNJ\">{$this->_investigation} Bonus d'investigation</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_investigation} Bonus d'Investigation",
+                            "color" => "intel",
+                            "tooltip" => "Bonus d'Investigation",
+                            "style" => View::STYLE_BACK,
+                            "id" => "investigation"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-intel"><?=$total?> Investigation</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getInvestigation(Content::FORMAT_BADGE)?></p>
-                            </div>    
-                        </div>    
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Investigation",
+                            "color" => "intel",
+                            "tooltip" => "Investigation",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " + " . $this->getInvestigation(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_investigation;
             }
         }
         public function getReligion(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_religion + $this->getIntel();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-intel">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'religion');" 
-                                placeholder="Bonus de religion" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_religion?>">
-                            <label class="size-0-8">Bonus de religion</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "religion",
+                            "label" => "Bonus d'Religion",
+                            "placeholder" => "Bonus d'Religion du ou de la PNJ",
+                            "tooltips" => "Bonus d'Religion",
+                            "value" => $this->_religion,
+                            "color" => "intel",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-intel' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de religion du ou de la PNJ\">{$this->_religion} Bonus de religion</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_religion} Bonus d'Religion",
+                            "color" => "intel",
+                            "tooltip" => "Bonus d'Religion",
+                            "style" => View::STYLE_BACK,
+                            "id" => "religion"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-intel"><?=$total?> Religion</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getReligion(Content::FORMAT_BADGE)?></p>
-                            </div>  
-                        </div>      
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Religion",
+                            "color" => "intel",
+                            "tooltip" => "Religion",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " + " . $this->getReligion(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_religion;
             }
         }
         public function getNature(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_nature + $this->getIntel();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-intel">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'nature');" 
-                                placeholder="Bonus de nature" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_nature?>">
-                            <label class="size-0-8">Bonus de nature</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "nature",
+                            "label" => "Bonus de Nature",
+                            "placeholder" => "Bonus de Nature du ou de la PNJ",
+                            "tooltips" => "Bonus de Nature",
+                            "value" => $this->_nature,
+                            "color" => "intel",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-intel' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de nature du ou de la PNJ\">{$this->_nature} Bonus de nature</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_nature} Bonus de Nature",
+                            "color" => "intel",
+                            "tooltip" => "Bonus de Nature",
+                            "style" => View::STYLE_BACK,
+                            "id" => "nature"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-intel border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-intel"><?=$total?> Nature</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getIntel(Content::FORMAT_BADGE)?> + <?=$this->getNature(Content::FORMAT_BADGE)?></p>
-                            </div>       
-                        </div> 
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Nature",
+                            "color" => "intel",
+                            "tooltip" => "Nature",
+                            "comment" => $this->getIntel(Content::FORMAT_BADGE) . " + " . $this->getNature(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_nature;
             }
         }
         public function getDressage(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_dressage + $this->getSagesse();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-sagesse">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'dressage');" 
-                                placeholder="Bonus de dressage" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_dressage?>">
-                            <label class="size-0-8">Bonus de dressage</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "dressage",
+                            "label" => "Bonus de Dressage",
+                            "placeholder" => "Bonus de Dressage du ou de la PNJ",
+                            "tooltips" => "Bonus de Dressage",
+                            "value" => $this->_dressage,
+                            "color" => "sagesse",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-sagesse' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de dressage du ou de la PNJ\">{$this->_dressage} Bonus de dressage</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_dressage} Bonus de Dressage",
+                            "color" => "sagesse",
+                            "tooltip" => "Bonus de Dressage",
+                            "style" => View::STYLE_BACK,
+                            "id" => "dressage"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-sagesse"><?=$total?> Dressage</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getDressage(Content::FORMAT_BADGE)?></p>
-                            </div> 
-                        </div>       
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Dressage",
+                            "color" => "sagesse",
+                            "tooltip" => "Dressage",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " + " . $this->getDressage(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_dressage;
             } 
         }
         public function getMedecine(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_medecine + $this->getSagesse();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-sagesse">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'medecine');" 
-                                placeholder="Bonus de médecine" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_medecine?>">
-                            <label class="size-0-8">Bonus de médecine</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "medecine",
+                            "label" => "Bonus de Medecine",
+                            "placeholder" => "Bonus de Medecine du ou de la PNJ",
+                            "tooltips" => "Bonus de Medecine",
+                            "value" => $this->_medecine,
+                            "color" => "sagesse",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-sagesse' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de dressage du ou de la PNJ\">{$this->_medecine} Bonus de dressage</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_medecine} Bonus de Medecine",
+                            "color" => "sagesse",
+                            "tooltip" => "Bonus de Medecine",
+                            "style" => View::STYLE_BACK,
+                            "id" => "medecine"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-sagesse"><?=$total?> Dressage</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getMedecine(Content::FORMAT_BADGE)?></p>
-                            </div> 
-                        </div>       
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Medecine",
+                            "color" => "sagesse",
+                            "tooltip" => "Medecine",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " + " . $this->getMedecine(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_medecine;
             }
         }
         public function getPerception(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_perception + $this->getSagesse();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-sagesse">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'perception');" 
-                                placeholder="Bonus de perception" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_perception?>">
-                            <label class="size-0-8">Bonus de perception</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "perception",
+                            "label" => "Bonus de Perception",
+                            "placeholder" => "Bonus de Perception du ou de la PNJ",
+                            "tooltips" => "Bonus de Perception",
+                            "value" => $this->_perception,
+                            "color" => "sagesse",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-sagesse' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de perception du ou de la PNJ\">{$this->_perception} Bonus de perception</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_perception} Bonus de Perception",
+                            "color" => "sagesse",
+                            "tooltip" => "Bonus de Perception",
+                            "style" => View::STYLE_BACK,
+                            "id" => "perception"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-sagesse"><?=$total?> Perception</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getPerception(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>        
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Perception",
+                            "color" => "sagesse",
+                            "tooltip" => "Perception",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " + " . $this->getPerception(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_perception;
             }
         }
         public function getPerspicacite(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_perspicacite + $this->getSagesse();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-sagesse">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'perspicacite');" 
-                                placeholder="Bonus de perspicacité" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_perspicacite?>">
-                            <label class="size-0-8">Bonus de perspicacité</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "perspicacite",
+                            "label" => "Bonus de Perspicacité",
+                            "placeholder" => "Bonus de Perspicacité du ou de la PNJ",
+                            "tooltips" => "Bonus de Perspicacité",
+                            "value" => $this->_perspicacite,
+                            "color" => "sagesse",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-sagesse' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de perspicacité du ou de la PNJ\">{$this->_perspicacite} Bonus de perspicacité</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_perspicacite} Bonus de Perspicacité",
+                            "color" => "sagesse",
+                            "tooltip" => "Bonus de Perspicacité",
+                            "style" => View::STYLE_BACK,
+                            "id" => "perspicacite"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-sagesse"><?=$total?> Perspicacité</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getPerspicacite(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Perspicacité",
+                            "color" => "sagesse",
+                            "tooltip" => "Perspicacité",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " + " . $this->getPerspicacite(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_perspicacite;
             }
         }
         public function getSurvie(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_survie + $this->getSagesse();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-sagesse">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'survie');" 
-                                placeholder="Bonus de survie" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_survie?>">
-                            <label class="size-0-8">Bonus de survie</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "survie",
+                            "label" => "Bonus de Survie",
+                            "placeholder" => "Bonus de Survie du ou de la PNJ",
+                            "tooltips" => "Bonus de Survie",
+                            "value" => $this->_survie,
+                            "color" => "sagesse",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-sagesse' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de survie du ou de la PNJ\">{$this->_survie} Bonus de survie</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_survie} Bonus de Survie",
+                            "color" => "sagesse",
+                            "tooltip" => "Bonus de Survie",
+                            "style" => View::STYLE_BACK,
+                            "id" => "survie"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-sagesse border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-sagesse"><?=$total?> Survie</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + <?=$this->getSurvie(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Survie",
+                            "color" => "sagesse",
+                            "tooltip" => "Survie",
+                            "comment" => $this->getSagesse(Content::FORMAT_BADGE) . " + " . $this->getSurvie(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_survie;
             }
         }
         public function getPersuasion(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_persuasion + $this->getChance();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-chance">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'persuasion');" 
-                                placeholder="Bonus de persuasion" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_persuasion?>">
-                            <label class="size-0-8">Bonus de persuasion</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "persuasion",
+                            "label" => "Bonus de Persuasion",
+                            "placeholder" => "Bonus de Persuasion du ou de la PNJ",
+                            "tooltips" => "Bonus de Persuasion",
+                            "value" => $this->_persuasion,
+                            "color" => "chance",
+                            "comment" => $this->getChance(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-chance' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de persuasion du ou de la PNJ\">{$this->_persuasion} Bonus de persuasion</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_persuasion} Bonus de Persuasion",
+                            "color" => "chance",
+                            "tooltip" => "Bonus de Persuasion",
+                            "style" => View::STYLE_BACK,
+                            "id" => "persuasion"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-chance border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-chance"><?=$total?> Persuasion</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getPersuasion(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Persuasion",
+                            "color" => "chance",
+                            "tooltip" => "Persuasion",
+                            "comment" => $this->getChance(Content::FORMAT_BADGE) . " + " . $this->getPersuasion(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_persuasion;
             }
         }
         public function getRepresentation(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_representation + $this->getChance();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-chance">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'representation');" 
-                                placeholder="Bonus de représentation" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_representation?>">
-                            <label class="size-0-8">Bonus de représentation</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "representation",
+                            "label" => "Bonus de Représentation",
+                            "placeholder" => "Bonus de Représentation du ou de la PNJ",
+                            "tooltips" => "Bonus de Représentation",
+                            "value" => $this->_representation,
+                            "color" => "chance",
+                            "comment" => $this->getChance(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-chance' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de représentation du ou de la PNJ\">{$this->_representation} Bonus de représentation</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_representation} Bonus de Représentation",
+                            "color" => "chance",
+                            "tooltip" => "Bonus de Représentation",
+                            "style" => View::STYLE_BACK,
+                            "id" => "representation"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-chance border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-chance"><?=$total?> Représentation</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getRepresentation(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Représentation",
+                            "color" => "chance",
+                            "tooltip" => "Représentation",
+                            "comment" => $this->getChance(Content::FORMAT_BADGE) . " + " . $this->getRepresentation(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_representation;
@@ -1965,33 +2707,48 @@ class Npc extends Content
             }   
         }
         public function getSupercherie(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             $total = $this->_supercherie + $this->getChance();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="form-floating mb-1 text-chance">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'supercherie');" 
-                                placeholder="Bonus de supercherie" 
-                                type="number" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_supercherie?>">
-                            <label class="size-0-8">Bonus de supercherie</label>
-                        </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "supercherie",
+                            "label" => "Bonus de Supercherie",
+                            "placeholder" => "Bonus de Supercherie du ou de la PNJ",
+                            "tooltips" => "Bonus de Supercherie",
+                            "value" => $this->_supercherie,
+                            "color" => "chance",
+                            "comment" => $this->getChance(Content::FORMAT_BADGE) . " Bonus d'équipement",
+                            "style" => View::STYLE_INPUT_BASIC
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-chance' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Bonus de supercherie du ou de la PNJ\">{$this->_supercherie} Bonus de supercherie</span>";
-                   
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_supercherie} Bonus de Supercherie",
+                            "color" => "chance",
+                            "tooltip" => "Bonus de Supercherie",
+                            "style" => View::STYLE_BACK,
+                            "id" => "supercherie"
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
-                    ob_start(); ?>
-                        <div class="card border-chance border-1 border-solid" style="width: 18rem;">
-                            <div class="m-2">
-                                <h6 class="m-0 text-chance"><?=$total?> Supercherie</h6>
-                                <p class="text-grey-d-2 size-0-8"><?=$this->getChance(Content::FORMAT_BADGE)?> + <?=$this->getSupercherie(Content::FORMAT_BADGE)?></p>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => "{$total} Supercherie",
+                            "color" => "chance",
+                            "tooltip" => "Supercherie",
+                            "comment" => $this->getChance(Content::FORMAT_BADGE) . " + " . $this->getSupercherie(Content::FORMAT_BADGE)
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_supercherie;
@@ -1999,54 +2756,84 @@ class Npc extends Content
             }
         }
         public function getKamas(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                    <div class="m-1">
-                        <div class="form-floating mb-1 text-kamas">
-                                <input 
-                                    onchange="Npc.update('<?=$this->getUniqid();?>', this, 'kamas');" 
-                                    placeholder="Kamas" 
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_kamas?>">
-                                <label class="size-0-8">Kamas</label>
-                            </div>
-                            <p class="text-grey-d-1 size-0-9">Kamas possédés par le ou la PNJ</p>
-                    </div>
-                    <?php return ob_get_clean();
-                
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "kamas",
+                            "label" => "Kamas",
+                            "placeholder" => "Nb de Kamas du ou de la PNJ",
+                            "tooltips" => "Kamas",
+                            "value" => $this->_kamas,
+                            "color" => "kamas-d-3",
+                            "style" => View::STYLE_INPUT_ICON,
+                            "size" => View::SIZE_SM,
+                            "icon" => "kamas.png",
+                            "style_icon" => View::STYLE_ICON_MEDIA
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-kamas' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Kamas possédés par le ou la PNJ\">{$this->_kamas} Kamas</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_kamas} Kamas",
+                            "color" => "kamas-d-3",
+                            "tooltip" => "Nb de Kamas",
+                            "style" => View::STYLE_BACK,
+                            "id" => "kamas"
+                        ], 
+                        write: false);
 
                 case Content::FORMAT_ICON:
-                    return "<span class='badge back-kamas' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Kamas possédés par le ou la PNJ\">{$this->_kamas} <img class='icon' src='medias/icons/kamas.png'></span>";
-    
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => View::STYLE_ICON_MEDIA,
+                            "icon" => "kamas.png",
+                            "color" => "kamas-d-3",
+                            "tooltip" => "Kamas",
+                            "content" => $this->_kamas,
+                            "content_placement" => "before"
+                        ], 
+                        write: false); 
+
                 default:
                     return $this->_kamas;
-
             }
         }
         public function getDrop_(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                    <div class="w-100 m-1">
-                        <div class="form-floating mb-1 text-grey-d-2">
-                            <input 
-                                onchange="Npc.update('<?=$this->getUniqid();?>', this, 'drop_');" 
-                                placeholder="Objets récupérables" 
-                                type="text" 
-                                class="form-control form-control-main-focus" 
-                                value="<?=$this->_drop_?>">
-                            <label class="size-0-8">Objets récupérables</label>
-                        </div>
-                        <p class="text-grey-d-1 size-0-9">Objets récupérables du ou de la PNJ</p>
-                    </div>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Npc",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "drop_",
+                            "label" => "Objets Récupérables",
+                            "placeholder" => "Objets récupérables du ou de la PNJ",
+                            "value" => $this->_drop_,
+                            "style" => View::STYLE_INPUT_FLOATING,
+                            "comment" => "Objets récupérables du ou de la PNJ"
+                        ], 
+                        write: false);
                 
                 case Content::FORMAT_BADGE:
-                    return "<span class='badge back-grey-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Objets récupérables du ou de la PNJ\">{$this->_drop_}</span>";
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_drop_,
+                            "color" => "grey-d-2",
+                            "tooltip" => "Objets récupérables du ou de la PNJ",
+                            "style" => View::STYLE_OUTLINE
+                        ], 
+                        write: false);
 
                 default:
                     return $this->_drop_;
@@ -2055,682 +2842,64 @@ class Npc extends Content
         }
 
         public function getOther_equipment(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1">
-                            <p>Autres équipements</p>
-                            <div  id="other_equipment<?=$this->getUniqid()?>"><?=html_entity_decode($this->_other_equipment)?></div>
-                            <a id="saveCkeditor" class='p-1 back-grey-l-2-hover' onclick="Npc.update('<?=$this->getUniqid()?>', CKEDITOR5['other_equipment<?=$this->getUniqid()?>'].getData(), 'other_equipment', <?=Controller::IS_VALUE?>)"><small><i class="fas fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
-                        </div>
-                        <script>
-                            ClassicEditor
-                                .create( document.querySelector('#other_equipment<?=$this->getUniqid()?>'), { 
-                                    autosave: {
-                                        waitingTime: 10000, // in ms
-                                        save(editor) {
-                                            Npc.update('<?=$this->getUniqid()?>', editor.getData(), 'other_equipment', IS_VALUE);
-                                        }
-                                    },
-                                    toolbar: {
-                                        items: [
-                                            'undo',
-                                            'redo',
-                                            '|',
-                                            'heading',
-                                            'alignment',
-                                            'fontSize',
-                                            'fontFamily',
-                                            '|',
-                                            'fontColor',
-                                            'fontBackgroundColor',
-                                            'highlight',
-                                            '|',
-                                            'link',
-                                            'insertTable',
-                                            'imageInsert',
-                                            '|',
-                                            'bold',
-                                            'italic',
-                                            'strikethrough',
-                                            'underline',
-                                            'subscript',
-                                            'superscript',
-                                            '|',
-                                            'bulletedList',
-                                            'numberedList',
-                                            'todoList',
-                                            '|',
-                                            'outdent',
-                                            'indent',
-                                            '|',
-                                            'specialCharacters',
-                                            'imageUpload',
-                                            '|',
-                                            'mediaEmbed',
-                                            'horizontalLine',
-                                            'blockQuote',
-                                            '|',
-                                            'removeFormat',
-                                            'htmlEmbed',
-                                            'code',
-                                            'sourceEditing',
-                                            'findAndReplace'
-                                        ]
-                                    },
-                                    language: 'fr',
-                                    image: {
-                                        toolbar: [
-                                            'imageTextAlternative',
-                                            'imageStyle:inline',
-                                            'imageStyle:block',
-                                            'imageStyle:side',
-                                            'linkImage'
-                                        ]
-                                    },
-                                    table: {
-                                        contentToolbar: [
-                                            'tableColumn',
-                                            'tableRow',
-                                            'mergeTableCells',
-                                            'tableCellProperties',
-                                            'tableProperties'
-                                        ]
-                                    },
-                                    licenseKey: '',
-                                } )
-                                .then( newEditor => {
-                                    CKEDITOR5['other_equipment<?=$this->getUniqid()?>'] = newEditor;
-                                    $(".ck-file-dialog-button button").off("click");
-                                    $(".ck-file-dialog-button button").unbind('click');
-                                } )
-                                .catch( error => {
-                                    console.error( 'Oops, something went wrong!' );
-                                    console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-                                    console.warn( 'Build id: 2jnb9i33ls8a-f2lnu5o5jd3g' );
-                                    console.error( error );
-                                } );
-                        </script>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/ckeditor",
+                        data : [
+                            "class_name" => "npc",
+                            "id" => "other_equipment".$this->getUniqid(),
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "other_equipment",
+                            "label" => "Autres équipements",
+                            "value" => $this->_other_equipment
+                        ], 
+                        write: false);
                 
                 default:
                     return html_entity_decode($this->_other_equipment);
             }
         }
         public function getOther_spell(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1">
-                            <p>Autres sorts</p>
-                            <div  id="other_spell<?=$this->getUniqid()?>"><?=html_entity_decode($this->_other_spell)?></div>
-                            <a id="saveCkeditor" class='p-1 back-grey-l-2-hover' onclick="Npc.update('<?=$this->getUniqid()?>', CKEDITOR5['other_spell<?=$this->getUniqid()?>'].getData(), 'other_spell', <?=Controller::IS_VALUE?>)"><small><i class="fas fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
-                        </div>
-                        <script>
-                            ClassicEditor
-                                .create( document.querySelector('#other_spell<?=$this->getUniqid()?>'), { 
-                                    autosave: {
-                                        waitingTime: 10000, // in ms
-                                        save(editor) {
-                                            Npc.update('<?=$this->getUniqid()?>', editor.getData(), 'other_spell', IS_VALUE);
-                                        }
-                                    },
-                                    toolbar: {
-                                        items: [
-                                            'undo',
-                                            'redo',
-                                            '|',
-                                            'heading',
-                                            'alignment',
-                                            'fontSize',
-                                            'fontFamily',
-                                            '|',
-                                            'fontColor',
-                                            'fontBackgroundColor',
-                                            'highlight',
-                                            '|',
-                                            'link',
-                                            'insertTable',
-                                            'imageInsert',
-                                            '|',
-                                            'bold',
-                                            'italic',
-                                            'strikethrough',
-                                            'underline',
-                                            'subscript',
-                                            'superscript',
-                                            '|',
-                                            'bulletedList',
-                                            'numberedList',
-                                            'todoList',
-                                            '|',
-                                            'outdent',
-                                            'indent',
-                                            '|',
-                                            'specialCharacters',
-                                            'imageUpload',
-                                            '|',
-                                            'mediaEmbed',
-                                            'horizontalLine',
-                                            'blockQuote',
-                                            '|',
-                                            'removeFormat',
-                                            'htmlEmbed',
-                                            'code',
-                                            'sourceEditing',
-                                            'findAndReplace'
-                                        ]
-                                    },
-                                    language: 'fr',
-                                    image: {
-                                        toolbar: [
-                                            'imageTextAlternative',
-                                            'imageStyle:inline',
-                                            'imageStyle:block',
-                                            'imageStyle:side',
-                                            'linkImage'
-                                        ]
-                                    },
-                                    table: {
-                                        contentToolbar: [
-                                            'tableColumn',
-                                            'tableRow',
-                                            'mergeTableCells',
-                                            'tableCellProperties',
-                                            'tableProperties'
-                                        ]
-                                    },
-                                    licenseKey: '',
-                                } )
-                                .then( newEditor => {
-                                    CKEDITOR5['other_spell<?=$this->getUniqid()?>'] = newEditor;
-                                    $(".ck-file-dialog-button button").off("click");
-                                    $(".ck-file-dialog-button button").unbind('click');
-                                } )
-                                .catch( error => {
-                                    console.error( 'Oops, something went wrong!' );
-                                    console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-                                    console.warn( 'Build id: 2jnb9i33ls8a-f2lnu5o5jd3g' );
-                                    console.error( error );
-                                } );
-                        </script>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/ckeditor",
+                        data : [
+                            "class_name" => "npc",
+                            "id" => "other_spell".$this->getUniqid(),
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "other_spell",
+                            "label" => "Autres sorts",
+                            "value" => $this->_other_spell
+                        ], 
+                        write: false);
                 
                 default:
                     return html_entity_decode($this->_other_spell);
             }
         }
         public function getOther_consomable(int $format = Content::FORMAT_BRUT){
+            $view = new View();
             switch ($format) {
-                case Content::FORMAT_MODIFY:
-                    ob_start(); ?>
-                        <div class="mb-1">
-                            <p>Autres consommables</p>
-                            <div  id="other_consomable<?=$this->getUniqid()?>"><?=html_entity_decode($this->_other_consomable)?></div>
-                            <a id="saveCkeditor" class='p-1 back-grey-l-2-hover' onclick="Npc.update('<?=$this->getUniqid()?>', CKEDITOR5['other_consomable<?=$this->getUniqid()?>'].getData(), 'other_consomable', <?=Controller::IS_VALUE?>)"><small><i class="fas fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
-                        </div>
-                        <script>
-                            ClassicEditor
-                                .create( document.querySelector('#other_consomable<?=$this->getUniqid()?>'), { 
-                                    autosave: {
-                                        waitingTime: 10000, // in ms
-                                        save(editor) {
-                                            Npc.update('<?=$this->getUniqid()?>', editor.getData(), 'other_consomable', IS_VALUE);
-                                        }
-                                    },
-                                    toolbar: {
-                                        items: [
-                                            'undo',
-                                            'redo',
-                                            '|',
-                                            'heading',
-                                            'alignment',
-                                            'fontSize',
-                                            'fontFamily',
-                                            '|',
-                                            'fontColor',
-                                            'fontBackgroundColor',
-                                            'highlight',
-                                            '|',
-                                            'link',
-                                            'insertTable',
-                                            'imageInsert',
-                                            '|',
-                                            'bold',
-                                            'italic',
-                                            'strikethrough',
-                                            'underline',
-                                            'subscript',
-                                            'superscript',
-                                            '|',
-                                            'bulletedList',
-                                            'numberedList',
-                                            'todoList',
-                                            '|',
-                                            'outdent',
-                                            'indent',
-                                            '|',
-                                            'specialCharacters',
-                                            'imageUpload',
-                                            '|',
-                                            'mediaEmbed',
-                                            'horizontalLine',
-                                            'blockQuote',
-                                            '|',
-                                            'removeFormat',
-                                            'htmlEmbed',
-                                            'code',
-                                            'sourceEditing',
-                                            'findAndReplace'
-                                        ]
-                                    },
-                                    language: 'fr',
-                                    image: {
-                                        toolbar: [
-                                            'imageTextAlternative',
-                                            'imageStyle:inline',
-                                            'imageStyle:block',
-                                            'imageStyle:side',
-                                            'linkImage'
-                                        ]
-                                    },
-                                    table: {
-                                        contentToolbar: [
-                                            'tableColumn',
-                                            'tableRow',
-                                            'mergeTableCells',
-                                            'tableCellProperties',
-                                            'tableProperties'
-                                        ]
-                                    },
-                                    licenseKey: '',
-                                } )
-                                .then( newEditor => {
-                                    CKEDITOR5['other_consomable<?=$this->getUniqid()?>'] = newEditor;
-                                    $(".ck-file-dialog-button button").off("click");
-                                    $(".ck-file-dialog-button button").unbind('click');
-                                } )
-                                .catch( error => {
-                                    console.error( 'Oops, something went wrong!' );
-                                    console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-                                    console.warn( 'Build id: 2jnb9i33ls8a-f2lnu5o5jd3g' );
-                                    console.error( error );
-                                } );
-                        </script>
-                    <?php return ob_get_clean();
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/ckeditor",
+                        data : [
+                            "class_name" => "npc",
+                            "id" => "other_consomable".$this->getUniqid(),
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "other_consomable",
+                            "label" => "Autres consomables",
+                            "value" => $this->_other_consomable
+                        ], 
+                        write: false);
                 
                 default:
                     return html_entity_decode($this->_other_consomable);
             }
-        }
-
-        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
-            $user = ControllerConnect::getCurrentUser();
-            $bookmark_icon = "far";
-            if($user->in_bookmark($this)){
-                $bookmark_icon = "fas";
-            }
-            $classe = $this->getClasse(Content::FORMAT_OBJECT);
-
-            //OPTIONS
-            if($size < 100){$size = 300;}
-
-            switch ($display) {
-                case Content::DISPLAY_MODIFY:      
-                    ob_start(); ?>
-                        <div class="card mb-3">
-                            <p class='size-0-7 m-1'>PNJ <?=$this->getId(Content::FORMAT_BADGE);?> | Créé le <?=$this->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$this->getTimestamp_updated(Content::DATE_FR);?></p>
-                                <div class="row m-2">
-                                    <div class="col-auto">
-                                        <h6 class="text-center">Classe</h6>
-                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getVisual(Content::DISPLAY_RESUME)?>
-                                        <p class="mt-4 text-center"><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i> Générer un pdf</a></p>
-                                    </div>
-                                    <div class="col ms-4">
-                                        <div class="d-flex justify-content-between align-items-baseline">
-                                            <p class="text-center"><?=$this->getLevel(Content::FORMAT_MODIFY)?></p>
-                                        </div>
-                                        <div class="d-flex flex-row">
-                                            <?=$this->getAge(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getSize(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getWeight(Content::FORMAT_MODIFY)?>
-                                        </div>
-                                        <?=$this->getAlignment(Content::FORMAT_MODIFY)?>
-                                        <?=$this->getHistorical(Content::FORMAT_MODIFY)?>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Caractèristiques</h4>
-                                    <div class="d-flex flex-row justify-content-between">
-                                        <?=$this->getLife(Content::FORMAT_MODIFY)?>
-                                        <?=$this->getPA(Content::FORMAT_MODIFY)?>
-                                        <?=$this->getPM(Content::FORMAT_MODIFY)?>
-                                        <?=$this->getPO(Content::FORMAT_MODIFY)?>
-                                        <?=$this->getIni(Content::FORMAT_MODIFY)?>
-                                        <?=$this->getInvocation(Content::FORMAT_MODIFY)?>
-                                        <?=$this->getTouch(Content::FORMAT_MODIFY)?>
-                                    </div>
-                                    <div class="row justify-content-around">
-                                        <div class="col-auto">
-                                            <?=$this->getVitality(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getSagesse(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getStrong(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getIntel(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getAgi(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getChance(Content::FORMAT_MODIFY)?>
-                                        </div>
-                                        <div class="col-auto">
-                                            <?=$this->getCa(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getDodge_pa(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getDodge_pm(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getFuite(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getTacle(Content::FORMAT_MODIFY)?>
-                                        </div>
-                                        <div class="col-auto">
-                                            <?=$this->getRes_neutre(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getRes_terre(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getRes_feu(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getRes_air(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getRes_eau(Content::FORMAT_MODIFY)?>
-                                        </div>
-                                    </div>
-
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Compétences</h4>
-                                    <div class="row">
-                                        <div class="col-auto my-2">
-                                            <p class="text-agi">Dépendant de l'agilité</p>
-                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getAgi(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                                            <?=$this->getAcrobatie(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getDiscretion(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getEscamotage(Content::FORMAT_MODIFY)?>
-                                            <p class="text-force mt-2">Dépendant de la Force</p>
-                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getStrong(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                                            <?=$this->getAthletisme(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getIntimidation(Content::FORMAT_MODIFY)?>
-                                        </div>
-                                        <div class="col-auto my-2">
-                                            <p class="text-intel">Dépendant de l'Intelligence</p>
-                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getIntel(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                                            <?=$this->getArcane(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getHistoire(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getInvestigation(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getNature(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getReligion(Content::FORMAT_MODIFY)?>
-                                        </div>
-                                        <div class="col-auto my-2">
-                                            <p class="text-sagesse">Dépendant de la Sagesse</p>
-                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getSagesse(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                                            <?=$this->getDressage(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getMedecine(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getPerception(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getPerspicacite(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getSurvie(Content::FORMAT_MODIFY)?>
-                                        </div>
-                                        <div class="col-auto my-2">
-                                            <p class="text-chance">Dépendant de la Chance</p>
-                                            <p class="text-grey-d-1 size-0-9 mb-2"><?=$this->getChance(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                                            <?=$this->getPersuasion(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getRepresentation(Content::FORMAT_MODIFY)?>
-                                            <?=$this->getSupercherie(Content::FORMAT_MODIFY)?>
-                                        </div>
-                                    </div>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Informations</h4>
-                                    <p class="card-text my-2"><?=$this->getStory(Content::FORMAT_MODIFY);?></p>
-                                    <p class="card-text my-2"><?=$this->getOther_info(Content::FORMAT_MODIFY);?></p>
-                                    <div class="d-flex flex-row justify-content-between my-2">
-                                        <?=$this->getDrop_(Content::FORMAT_MODIFY)?>
-                                        <?=$this->getKamas(Content::FORMAT_MODIFY)?>
-                                    </div>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Sorts</h4>
-                                    <p class="card-text my-2"><?=$this->getClasse(Content::FORMAT_OBJECT)->getSpell(Content::FORMAT_BADGE);?></p>
-                                    <p class="card-text my-2"><?=$this->getOther_spell(Content::FORMAT_MODIFY);?></p>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Equipements</h4>
-                                    <p class="card-text my-2"><?=$this->getOther_equipment(Content::FORMAT_MODIFY);?></p>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Consommables</h4>
-                                    <p class="card-text my-2"><?=$this->getOther_consomable(Content::FORMAT_MODIFY);?></p>
-                                </div>
-                                <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Npc.remove('<?=$this->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
-                        </div>
-                    <?php return ob_get_clean();
-
-                case  Content::DISPLAY_CARD:      
-                    ob_start(); ?>
-                        <div class="card mb-3">
-                                <div class="d-flex flex-row justify-content-between align-items-start m-2">
-                                    <div>
-                                        <h6 class="text-center">Classe</h6>
-                                        <?=$this->getClasse(Content::FORMAT_OBJECT)->getVisual(Content::DISPLAY_RESUME)?>
-                                    </div>
-                                    <div>
-                                        <div class="d-flex justify-content-between align-items-baseline">
-                                            <h4><?=$this->getName()?></h4>
-                                            <p class="text-center"><?=$this->getLevel(Content::FORMAT_BADGE)?></p>
-                                        </div>
-                                        <p>
-                                            <?=$this->getAge(Content::FORMAT_BADGE)?>
-                                            <?=$this->getSize(Content::FORMAT_BADGE)?>
-                                            <?=$this->getWeight(Content::FORMAT_BADGE)?>
-                                        </p>
-                                        <p><span class="size-0-8 text-grey-d-2">Alignement : </span><?=$this->getAlignment()?></p>
-                                        <p><span class="size-0-8 text-grey-d-2">Historique : </span><?=$this->getHistorical()?></p>
-                                    </div>
-                                    <div class="m-2">
-                                        <?php if($user->getRight('npc', User::RIGHT_WRITE)){ ?>
-                                            <p><a class='text-main-d-2 text-main-l-3-hover' onclick="Npc.open('<?=$this->getUniqid()?>', Controller.DISPLAY_MODIFY)"><i class='far fa-edit'></i> Modifier</a></p>
-                                        <?php } ?>
-                                        <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i> Générer un pdf</a></p>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Caractèristiques</h4>
-                                    <div class="m-1 d-flex flex-row justify-content-between align-items-center">
-                                        <p class="m-1"><?=$this->getLife(Content::FORMAT_VIEW)?></p>
-                                        <p class="m-1"><?=$this->getPA(Content::FORMAT_VIEW)?></p>
-                                        <p class="m-1"><?=$this->getPM(Content::FORMAT_VIEW)?></p>
-                                        <p class="m-1"><?=$this->getPO(Content::FORMAT_VIEW)?></p>
-                                    </div>
-                                    <div class="m-1 mb-2 d-flex flex-row justify-content-between align-items-center">
-                                        <p class="m-1"><?=$this->getIni(Content::FORMAT_VIEW)?></p>
-                                        <p class="m-1"><?=$this->getInvocation(Content::FORMAT_VIEW)?></p>
-                                        <p class="m-1"><?=$this->getTouch(Content::FORMAT_VIEW)?></p>
-                                    </div>
-                                    <div class="row justify-content-around">
-                                        <div class="col-auto">
-                                            <p class="m-1"><?=$this->getVitality(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getSagesse(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getStrong(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getIntel(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getAgi(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getChance(Content::FORMAT_VIEW)?></p>
-                                        </div>
-                                        <div class="col-auto">
-                                            <p class="m-1"><?=$this->getCa(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getDodge_pa(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getDodge_pm(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getFuite(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getTacle(Content::FORMAT_VIEW)?></p>
-                                        </div>
-                                        <div class="col-auto">
-                                            <p class="m-1"><?=$this->getRes_neutre(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getRes_terre(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getRes_feu(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getRes_air(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getRes_eau(Content::FORMAT_VIEW)?></p>
-                                        </div>
-                                    </div>
-
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Compétences</h4>
-                                    <div class="row">
-                                        <div class="col-auto my-2">
-                                            <p class="text-agi mb-2">Dépendant de l'agilité</p>
-                                            <p class="m-1"><?=$this->getAcrobatie(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getDiscretion(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getEscamotage(Content::FORMAT_VIEW)?></p>
-                                            <p class="text-force my-2">Dépendant de la Force</p>
-                                            <p class="m-1"><?=$this->getAthletisme(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getIntimidation(Content::FORMAT_VIEW)?></p>
-                                        </div>
-                                        <div class="col-auto mb-2 mt-3">
-                                            <p class="text-intel mb-2">Dépendant de l'Intelligence</p>
-                                            <p class="m-1"><?=$this->getArcane(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getHistoire(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getInvestigation(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getNature(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getReligion(Content::FORMAT_VIEW)?></p>
-                                        </div>
-                                        <div class="col-auto my-2">
-                                            <p class="text-sagesse mb-2">Dépendant de la Sagesse</p>
-                                            <p class="m-1"><?=$this->getDressage(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getMedecine(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getPerception(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getPerspicacite(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getSurvie(Content::FORMAT_VIEW)?></p>
-                                        </div>
-                                        <div class="col-auto my-2">
-                                            <p class="text-chance mb-2">Dépendant de la Chance</p>
-                                            <p class="m-1"><?=$this->getPersuasion(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getRepresentation(Content::FORMAT_VIEW)?></p>
-                                            <p class="m-1"><?=$this->getSupercherie(Content::FORMAT_VIEW)?></p>
-                                        </div>
-                                    </div>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Informations</h4>
-                                    <p class="card-text"><?=$this->getStory();?></p>
-                                    <p class="card-text"><?=$this->getOther_info();?></p>
-                                    <div class="d-flex flex-row justify-content-between">
-                                        <?=$this->getDrop_()?>
-                                        <?=$this->getKamas()?>
-                                    </div>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Sorts</h4>
-                                    <p class="card-text"><?=$this->getClasse(Content::FORMAT_OBJECT)->getSpell(Content::FORMAT_LIST);?></p>
-                                    <p class="card-text"><?=$this->getOther_spell();?></p>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Equipements</h4>
-                                    <p class="card-text"><?=$this->getOther_equipment();?></p>
-                                    <div class="nav-item-divider back-main-d-1"></div>
-                                    <h4 class="text-main-d-1 text-center">Consommables</h4>
-                                    <p class="card-text"><?=$this->getOther_consomable();?></p>
-                                </div>
-                        </div>
-                    <?php return ob_get_clean();
-
-                case Content::DISPLAY_RESUME:
-                    ob_start(); ?>
-                        <div style="width: <?=$size?>px;">
-                            <div style="position:relative;">
-                                <div ondblclick="Npc.open('<?=$this->getUniqid()?>');" class="card-hover-linked card p-2 m-1 border-secondary-d-2 border" style="width: <?=$size?>px;" >
-                                    <div class="d-flex flew-row flex-nowrap justify-content-start">
-                                        <div>
-                                            <?=$classe->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                                        </div>
-                                        <div class="m-1">
-                                            <p class="bold ms-1"><?=$this->getName()?></p>
-                                            <div class="d-flex align-items-baseline">
-                                                <h6>Classe : <?=$this->getClasse(Content::FORMAT_OBJECT)->getName()?></h6>
-                                                <div class="ms-3 text-center short-badge-150"><?=$this->getLevel(Content::FORMAT_BADGE)?></div>
-                                            </div>
-                                        </div>
-                                        <div class="ms-auto align-self-end">
-                                            <a onclick='User.changeBookmark(this);' data-classe='npc' data-uniqid='<?=$this->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
-                                            <p><a class="btn-text-secondary" title="Afficher les sorts" onclick="Classe.getSpellList('<?=$classe->getUniqid()?>');"><i class="fas fa-magic"></i></a></p>
-                                            <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$this->getUniqid()?>'><i class='fas fa-file-pdf'></i></a></p>
-                                        </div>
-                                    </div>
-                                    <div class="justify-content-center d-flex short-badge-150 flex-wrap"><?=$this->getTrait(Content::FORMAT_BADGE)?></div>
-                                    <div class="card-hover-showed">
-                                        <p class="size-0-8 short-badge-150">
-                                            <?=$this->getAge(Content::FORMAT_BADGE)?>
-                                            <?=$this->getSize(Content::FORMAT_BADGE)?>
-                                            <?=$this->getWeight(Content::FORMAT_BADGE)?>
-                                        </p>
-                                        <p class="size-0-8"><span class="size-0-8 text-grey-d-2">Alignement : </span><?=$this->getAlignment()?></p>
-                                        <p class="size-0-8"><span class="size-0-8 text-grey-d-2">Historique : </span><?=$this->getHistorical()?></p>
-                                        <div class="d-flex justify-content-around flex-wrap">
-                                            <div class="col-auto">
-                                                <div><?=$this->getPa(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getPm(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getPo(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getIni(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getLife(Content::FORMAT_ICON)?></div>
-                                                <div><?=$this->getTouch(Content::FORMAT_ICON)?></div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div><?=$this->getVitality(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getSagesse(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getStrong(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getIntel(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getAgi(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getChance(Content::FORMAT_ICON);?></div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div><?=$this->getCa(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getFuite(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getTacle(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getDodge_pa(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getDodge_pm(Content::FORMAT_ICON);?></div>
-                                            </div> 
-                                            <div class="col-auto">
-                                                <div><?=$this->getRes_neutre(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getRes_terre(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getRes_feu(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getRes_air(Content::FORMAT_ICON);?></div>
-                                                <div><?=$this->getRes_eau(Content::FORMAT_ICON);?></div>
-                                            </div> 
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-auto my-1">
-                                                <p class="m-1"><?=$this->getAcrobatie(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getDiscretion(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getEscamotage(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getAthletisme(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getIntimidation(Content::FORMAT_VIEW)?></p>
-                                            </div>
-                                            <div class="col-auto my-1">
-                                                <p class="m-1"><?=$this->getArcane(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getHistoire(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getInvestigation(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getNature(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getReligion(Content::FORMAT_VIEW)?></p>
-                                            </div>
-                                            <div class="col-auto my-1">
-                                                <p class="m-1"><?=$this->getDressage(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getMedecine(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getPerception(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getPerspicacite(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getSurvie(Content::FORMAT_VIEW)?></p>
-                                            </div>
-                                            <div class="col-auto my-1">
-                                                <p class="m-1"><?=$this->getPersuasion(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getRepresentation(Content::FORMAT_VIEW)?></p>
-                                                <p class="m-1"><?=$this->getSupercherie(Content::FORMAT_VIEW)?></p>
-                                            </div>
-                                    </div>
-                                        <p class="card-text text-grey-d-2"><?=$this->getStory();?></p>
-                                        <div class="nav-item-divider back-main-d-1"></div>
-                                            <p class="card-text text-grey"><?=$this->getOther_info();?></p>
-                                            <div class="d-flex flex-row justify-content-between">
-                                                <?=$this->getDrop_()?>
-                                                <?=$this->getKamas()?>
-                                            </div>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                break;
-                default:
-                    return "Erreur : format de display non reconnu";
-            }
-
         }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥

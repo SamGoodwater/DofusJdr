@@ -55,7 +55,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <?php } ?>
                 </ul>
             </div>
-            <div class="dropdown">
+            <div class="dropdown mx-2">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Elements des sorts</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
                     <?php $checked = "";
@@ -70,7 +70,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </ul>
             </div>
             
-            <div class="dropdown">
+            <div class="dropdown mx-2">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="levelsort" data-bs-toggle="dropdown" aria-expanded="false">Affichage par niveau</a>
                 <ul class="dropdown-menu p-4" aria-labelledby="levelsort">
                     <?php $checked = "";
@@ -174,7 +174,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         </div>
                     </div>
                     <div class="modal-footer modal-footer d-flex flex-row justify-content-between">
-                        <button type="button" class="<?=View::getCss(View::TYPE_BTN_BORDER, "grey", false)?>" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn-border-grey" data-bs-dismiss="modal">Close</button>
                         <button type="button" onclick="Spell.add();" class="btn btn-border-secondary">Créer</button>
                     </div>
                 </div>

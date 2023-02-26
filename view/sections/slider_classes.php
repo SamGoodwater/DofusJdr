@@ -70,7 +70,7 @@ if(!isset($template_vars['uniqid_page'])){ $template_vars['uniqid_page'] = "";}
                             <p class="specificity size-0-8 text-white"><?=$classe->getSpecificity()?></p>
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex justify-content-start">
-                                    <div class="state"><?=$classe->getUsable(Content::FORMAT_MODIFY);?></div>
+                                    <div class="state"><?=$classe->getUsable(Content::FORMAT_EDITABLE);?></div>
                                 </div>
                                 <p class="text-center size-0-6 text-grey-d-2">Ajouté le <?=$classe->getTimestamp_add(Content::DATE_FR)?><br>Mis à jour le <?=$classe->getTimestamp_updated(Content::DATE_FR)?></p>
                                 <a class="btn btn-sm btn-back-main align-self-end" onclick="Classe.open('<?=$classe->getUniqid()?>')"><i class="fa-regular fa-pen-to-square"></i> Modifier</a>

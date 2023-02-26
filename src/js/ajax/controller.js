@@ -3,12 +3,14 @@ class Controller {
 
     static DISPLAY_CARD = 0;
     static DISPLAY_RESUME = 1;
-    static DISPLAY_MODIFY = 2;
+    static DISPLAY_EDITABLE = 2;
     static DISPLAY_FULL = 3;
 
     static MODEL_NAME = "";
 
     static open(uniqid, display = Controller.DISPLAY_CARD){
+        $("#onloadDisplay").show("slow");
+
         var URL = 'index.php?c='+this.MODEL_NAME+'&a=getFromUniqid';
         $.post(URL,
             {
@@ -22,6 +24,8 @@ class Controller {
                 } else {
                     MsgAlert("Impossible de récupérer l'élément", 'Erreur : ' + data.error, "danger" , 4000);
                 }
+
+                $("#onloadDisplay").hide("slow");
             },
             "json"
         ); 
