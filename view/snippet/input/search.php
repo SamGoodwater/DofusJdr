@@ -6,8 +6,8 @@
     if(!isset($search_in)) {throw new Exception("search_in is not set");}else{if(!is_numeric($search_in)) {throw new Exception("search_in is not set");}}
     
     // Conseillé
-    if(!isset($label)) {$label = "";}else{if(!is_string($label)) {$label = "";}}
-    if(!isset($placeholder)) { $placeholder = "Rechercher";}else{if(!is_string($placeholder)) {$placeholder = "Rechercher";}}
+    if(!isset($label)) {$label = "";}else{if(!is_string($label) && !is_numeric($content)) {$label = "";}}
+    if(!isset($placeholder)) { $placeholder = "Rechercher";}else{if(!is_string($placeholder) && !is_numeric($content)) {$placeholder = "Rechercher";}}
     if(!isset($id)) { $id = "search_".$uniqid;}else{if(!is_string($id)) {$id = "search_".$uniqid;}}
 
     // Optionnel - valeur par défault ok
@@ -15,12 +15,12 @@
     if(!isset($css)) { $css = "";}else{if(!is_string($css)) {$css = "";}}
     if(!isset($minlenght)) {$minlenght = 3;}else{if(!is_numeric($minlenght)) {$minlenght = 3;}}
     if(!isset($limit)) {$limit = 10;}else{if(!is_numeric($limit)) {$limit = 10;}}
-    if(!isset($color)) { $color = "main";}else{if(!View::isValidColor($color)) {$color = "main";}}
-    if(!isset($title)) { $title = "";}else{if(!is_string($title)) {$title = "";}}
+    if(!isset($color)) { $color = "main";}else{if(!Style::isValidColor($color)) {$color = "main";}}
+    if(!isset($title)) { $title = "";}else{if(!is_string($title) && !is_numeric($content)) {$title = "";}}
     if(!isset($class)) { $class = "";}else{if(!is_string($class)) {$class = "";}}
-    if(!isset($comment)) { $comment = "";}else{if(!is_string($comment)) {$comment = "";}}
-    if(!isset($tooltip)) { $tooltip = "";}else{if(!is_string($tooltip)) {$tooltip = "";}}
-    if(!isset($tooltip_placement)) { $tooltip_placement = "bottom";}else{if(!is_string($tooltip_placement)) {$tooltip_placement = "bottom";}}
+    if(!isset($comment)) { $comment = "";}else{if(!is_string($comment) && !is_numeric($content)) {$comment = "";}}
+    if(!isset($tooltip)) { $tooltip = "";}else{if(!is_string($tooltip) && !is_numeric($content)) {$tooltip = "";}}
+    if(!isset($tooltip_placement)) { $tooltip_placement = Style::DIRECTION_BOTTOM;}else{if(!in_array($tooltip_placement, [Style::DIRECTION_BOTTOM, Style::DIRECTION_TOP, Style::DIRECTION_RIGHT, Style::DIRECTION_LEFT])) {$tooltip_placement = Style::DIRECTION_BOTTOM;}}
 ?>
 
 <div>
@@ -37,7 +37,7 @@
                     data-action = <?=$action?>
                     data-limit = <?=$limit?>
                     data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>"
-                    class="form-control form-control-<?=View::getColorWithoutShade($color)?>-focus <?=$class?>" 
+                    class="form-control form-control-<?=Style::getColorWithoutShade($color)?>-focus <?=$class?>" 
                     id="<?=$id?>" 
                     <?=$data?>
                     style="<?=$css?>"

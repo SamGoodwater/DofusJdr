@@ -1,4 +1,4 @@
-<td valign="top" width="33%" class="spacing <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "box")?>">
+<td valign="top" width="33%" class="spacing <?=$obj->getElement(Content::FORMAT_TEXT, "box")?>">
     <table align="left">
         <tr>
             <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getPath_img(); ?>
@@ -36,9 +36,9 @@
             </td>
         </tr>
         <tr>
-            <td class="badge" style="color:white;background-color:<?=View::COLOR_TO_HEX[View::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE, "_")]."-d-2"]?>;"><?=ucfirst($obj->getElement(Content::FORMAT_COLOR_VERBALE, "_"))?></td>
+            <td class="badge" style="color:white;background-color:<?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_TEXT, "_")]."-d-2"]?>;"><?=ucfirst($obj->getElement(Content::FORMAT_TEXT, "_"))?></td>
             <td><?php foreach ($obj->getType(Content::FORMAT_TEXT) as $key => $type) { ?>
-                    <span class="badge" style="background-color:<?=View::COLOR_TO_HEX[View::getColorFromLetter($key) . '-d-2']?>;color:white;"><?=$type?></span>
+                    <span class="badge" style="background-color:<?=Style::COLOR_TO_HEX[Style::getColorFromLetter($key) . '-d-2']?>;color:white;"><?=$type?></span>
                 <?php } ?>
             </td>
         </tr>

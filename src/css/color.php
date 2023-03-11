@@ -1,7 +1,7 @@
 <?php 
 
-cssDynamicWriteColors(View::COLOR_ALLOWED);
-cssDynamicWriteColors(View::COLOR_CUSTOM);
+cssDynamicWriteColors(Style::COLOR_ALLOWED);
+cssDynamicWriteColors(Style::COLOR_CUSTOM);
 function cssDynamicWriteColors(array $colors){
     $types = array(
         "text",

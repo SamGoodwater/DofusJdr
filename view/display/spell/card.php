@@ -4,11 +4,11 @@
 
 // Conseillé
     if(!isset($user)) {$user = ControllerConnect::getCurrentUser();}else{if(get_class($user) != "User") {$user = ControllerConnect::getCurrentUser();}}
-    if(!isset($bookmark_icon)) {$bookmark_icon =  View::STYLE_ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  View::STYLE_ICON_REGULAR;}}
+    if(!isset($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}}
     if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
 ?>
 
-<div class="card p-2 m-2 border-2 <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "border")?>">
+<div class="card p-2 m-2 border-2 <?=$obj->getElement(Content::FORMAT_TEXT, "border")?>">
     <div class="row g-0">
         <div class="col-md-2">
             <a style="position:relative;top:5px;left:5px;" href="<?=$obj->getPath_img()?>" download="<?=$obj->getName().'.'.substr(strrchr($obj->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
@@ -31,9 +31,8 @@
                         <div><?=$obj->getPo(Content::FORMAT_BADGE)?></div>
                     </div>
                     <div class="col-auto">
-                        <div><?=$obj->getCast_per_turn(Content::FORMAT_BADGE)?></div>
+                        <div><?=$obj->getFrequency(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getSight_line(Content::FORMAT_BADGE)?></div>
-                        <div><?=$obj->getNumber_between_two_cast(Content::FORMAT_BADGE)?></div>
                     </div>
                     <div class="col-auto">
                         <?=$obj->getUsable(Content::FORMAT_BADGE)?>
@@ -46,11 +45,11 @@
         </div>
     </div>
     <div>
-        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
+        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
         <h5 class="card-title"><?=$obj->getName()?></h5>
         <p class="card-text"><?=$obj->getEffect()?></p>
         <p class="card-text"><small class="text-muted"><?=$obj->getDescription()?></small></p>
-        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
+        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
         <div class="d-flex justify-content-center"><?=$obj->getId_invocation(Content::DISPLAY_RESUME)?></div>
     </div>
 </div>

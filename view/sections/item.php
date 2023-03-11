@@ -95,7 +95,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         <li>
                             <div class="form-check form-check-inline">
                                 <input <?=$checked?> onchange="refreshUsable('#sortableItems');" class="form-check-input selectorType" type="checkbox" id="CheckboxType<?=$type_?>" value="<?=$type_?>">
-                                <label class="form-check-label badge back-<?=View::getColorFromLetter($type_)?>-d-2 text-white" for="CheckboxType<?=$type_?>"><?=ucfirst($key)?></label>
+                                <label class="form-check-label badge back-<?=Style::getColorFromLetter($type_)?>-d-2 text-white" for="CheckboxType<?=$type_?>"><?=ucfirst($key)?></label>
                             </div>
                         </li>
                     <?php } ?>
@@ -110,7 +110,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         <li>
                             <div class="form-check form-check-inline">
                                 <input <?=$checked?> onchange="refreshUsable('#sortableItems');" class="form-check-input selectorLevel" type="checkbox" id="CheckboxLevel<?=$i?>" value="<?=$i?>">
-                                <label class="form-check-label badge back-<?=View::getColorFromLetter($i, true)?>-d-3" for="CheckboxLevel<?=$i?>">Niveau <?=$i?></label>
+                                <label class="form-check-label badge back-<?=Style::getColorFromLetter($i, true)?>-d-3" for="CheckboxLevel<?=$i?>">Niveau <?=$i?></label>
                             </div>
                         </li>
                     <?php } ?>

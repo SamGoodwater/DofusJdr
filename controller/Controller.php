@@ -2,7 +2,7 @@
 
 abstract class Controller{
 
-  use CheckingFunctions, SecurityFct, calcStats;
+  use CheckingFct, SecurityFct, CalcStats;
 
   const IS_INPUT = 0;
   const IS_VALUE = 1;

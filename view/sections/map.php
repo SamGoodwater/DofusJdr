@@ -106,7 +106,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 
                 <?php foreach ($img AS $key => $list) { ?>
     
-                    <button id="cat" onclick="checkCat(this);" data-catselect="<?=$key?>" data-check="1" data-color="<?=View::getColorFromLetter($key)?>" class="btn btn-sm border-<?=View::getColorFromLetter($key)?>-d-4 form-control-<?=View::getColorFromLetter($key)?>-focus"><?=ucfirst($key)?></button>
+                    <button id="cat" onclick="checkCat(this);" data-catselect="<?=$key?>" data-check="1" data-color="<?=Style::getColorFromLetter($key)?>" class="btn btn-sm border-<?=Style::getColorFromLetter($key)?>-d-4 form-control-<?=Style::getColorFromLetter($key)?>-focus"><?=ucfirst($key)?></button>
                 
                 <?php } ?>
                 
@@ -117,7 +117,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         
                         <div class="card m-1" data-cat="<?=$key?>" style="width: 15rem;">
                             <a data-fancybox='gallery' href='<?=$file_name->getPath()?>'><img src="<?=$file_name->getPath()?>" class="card-img-top" alt="<?=ucfirst($file_name->getName(Content::FORMAT_BRUT, false))?>"></a>
-                            <span style="position:absolute;bottom:3px;right:3px;" class="badge back-<?=View::getColorFromLetter($key)?>-d-4 text-white"><?=ucfirst($key)?></span>
+                            <span style="position:absolute;bottom:3px;right:3px;" class="badge back-<?=Style::getColorFromLetter($key)?>-d-4 text-white"><?=ucfirst($key)?></span>
                             <a style="position:absolute;top:5px;left:5px;" href="<?=$file_name->getPath()?>" download="<?=$file_name->getName().'.'.substr(strrchr($file_name->getPath(),'.'),1);?>"><i class=" p-1 fas fa-download text-white text-main-l-1-hover shadow-text-3"></i></a>  
                         </div>
     

@@ -1,7 +1,7 @@
 <?php
 
 abstract class Manager{
-    use CheckingFunctions, SecurityFct;
+    use CheckingFct, SecurityFct;
 
     protected $_bdd = array();
 

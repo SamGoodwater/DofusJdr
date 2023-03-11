@@ -2,7 +2,7 @@
 
 abstract class Content
 {
-    use CheckingFunctions, ColorFct, SecurityFct;
+    use CheckingFct, SecurityFct;
     
     //Format GETTERS
 
@@ -109,7 +109,7 @@ abstract class Content
                         "input_name" => "usable",
                         "label" => $this->getUsable(Content::FORMAT_BADGE),
                         "checked" => $this->returnBool($this->_usable),
-                        "style" => View::STYLE_CHECK_SWITCH
+                        "style" => Style::CHECK_SWITCH
                     ], 
                     write: false);
                 
@@ -120,7 +120,7 @@ abstract class Content
                         data : [
                             "content" => "Adapté au jdr",
                             "color" => "green-d-3",
-                            "style" => View::STYLE_BACK,
+                            "style" => Style::STYLE_BACK,
                             "tooltip" => "L'objet a été adapté au jdr"
                         ], 
                         write: false);
@@ -131,7 +131,7 @@ abstract class Content
                         data : [
                             "content" => "Non adapté au jdr",
                             "color" => "red-d-3",
-                            "style" => View::STYLE_BACK,
+                            "style" => Style::STYLE_BACK,
                             "tooltip" => "L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier"
                         ], 
                         write: false);
@@ -143,7 +143,7 @@ abstract class Content
                     return $view->dispatch(
                         template_name : "icon",
                         data : [
-                            "style" => View::STYLE_ICON_SOLID,
+                            "style" => Style::ICON_SOLID,
                             "icon" => "check",
                             "color" => "green-d-3",
                             "tooltip" => "L'objet a été adapté au jdr"
@@ -155,7 +155,7 @@ abstract class Content
                     return $view->dispatch(
                         template_name : "icon",
                         data : [
-                            "style" => View::STYLE_ICON_SOLID,
+                            "style" => Style::ICON_SOLID,
                             "icon" => "times",
                             "color" => "red-d-3",
                             "tooltip" => "L'objet n'a pas encore été adapté au jdr - N'hésitez pas à le modifier"
@@ -222,9 +222,9 @@ abstract class Content
 
     public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300) {
         $user = ControllerConnect::getCurrentUser();
-        $bookmark_icon = View::STYLE_ICON_REGULAR;
+        $bookmark_icon = Style::ICON_REGULAR;
         if($user->in_bookmark($this)){
-            $bookmark_icon = View::STYLE_ICON_SOLID;
+            $bookmark_icon = Style::ICON_SOLID;
         }
 
         //OPTIONS

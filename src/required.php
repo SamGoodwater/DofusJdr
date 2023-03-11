@@ -1,52 +1,26 @@
 <?php
-// ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺ SETTINGs ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺
-    require_once('src/conf.php');
-    // Dompdf
-    require_once 'src/php/dompdf/autoload.inc.php';
 
-// ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺ TRAITs ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺
-    foreach(scandir("src/traits/") as $file) {
-        $path_parts = pathinfo($file);
-        $file = "src/traits/" . $file;
-        if(file_exists($file) && $path_parts['extension'] == "php"){
-            require_once($file);
+// ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺ AUTRES ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺
+    // Ajouter des dossiers ou des fichiers au tableau
+    $to_require = [
+        "src/php/traits/",
+        "src/php/traits/module/",
+        "src/php/conf.php"
+    ];
+
+    foreach ($to_require as $dir) {
+        if(is_dir($dir) && file_exists($dir)){
+            foreach(scandir($dir) as $file) {
+                if($file != "." && $file != ".."){
+                    if(file_exists($dir.$file) && pathinfo($dir.$file, PATHINFO_EXTENSION) == "php"){
+                        require_once $dir.$file;
+                    }
+                }
+            }
+        }elseif(is_file($dir) && file_exists($dir) && pathinfo($dir, PATHINFO_EXTENSION) == "php"){
+            require_once $dir;
         }
     }
 
-// ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺ FONCTION ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺
-    function secureURL($string){
-        $string = trim(str_replace("../","",str_replace(";","",str_replace("%","",$string))));
-        return $string;
-    }
-
-// ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺ Chargement auto des classes ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺
-    spl_autoload_register(function($class) {
-
-        $dirs = array(
-            "controller/",
-            "model/",
-            "view/"
-        );
-        foreach(scandir("controller/") as $file) {
-            $path = "controller/" . $file . '/';
-            if(is_dir($path) && $file != "." && $file != ".."){
-                $dirs[] = $path;
-            }
-        }
-        foreach(scandir("model/") as $file) {
-            $path = "model/" . $file . '/';
-            if(is_dir($path) && $file != "." && $file != ".."){
-                $dirs[] = $path;
-            }
-        }
-        foreach( $dirs as $dir ) {
-            if (file_exists($dir.$class.'.php')) {
-                require_once($dir.$class.'.php');
-                return;
-            }
-        }
-    });
-
-// ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺ Chargement des classes ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺
-    require_once('src/php/File.php');
-    require_once('src/php/FileManager.php');
+// ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺ AUTOLOAD des CLASSES via Composer ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺
+    require_once "vendor/autoload.php";

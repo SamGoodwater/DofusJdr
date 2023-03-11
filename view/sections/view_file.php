@@ -54,7 +54,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
             <script>
                 File.loadFileUpload('#fileupload');
             </script>  
-        </div> 
+        </div>
     <?php $template["option"] = ob_get_clean();
 
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){

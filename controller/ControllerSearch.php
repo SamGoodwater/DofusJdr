@@ -18,6 +18,9 @@ class ControllerSearch extends Controller{
   public const SEARCH_DONE_ADD_SPELL_TO_MOB = 4;
   public const SEARCH_DONE_ADD_SPELL_TO_CLASSE = 5;
   public const SEARCH_DONE_GET_SPELL = 6;
+  public const SEARCH_DONE_ADD_SPELL_TO_NPC = 7;
+  public const SEARCH_DONE_ADD_ITEM_TO_NPC = 8;
+  public const SEARCH_DONE_ADD_CONSUMABLE_TO_NPC = 9;
 
 
   public function search(){

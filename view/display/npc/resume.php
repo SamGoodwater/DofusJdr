@@ -4,7 +4,7 @@
 
 // Conseillé
     if(!isset($user)) {$user = ControllerConnect::getCurrentUser();}else{if(get_class($user) != "User") {$user = ControllerConnect::getCurrentUser();}}
-    if(!isset($bookmark_icon)) {$bookmark_icon =  View::STYLE_ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  View::STYLE_ICON_REGULAR;}}
+    if(!isset($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}}
     if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
 
     $classe = $obj->getClasse(Content::FORMAT_OBJECT);
@@ -98,15 +98,27 @@
                         <p class="m-1"><?=$obj->getRepresentation(Content::FORMAT_VIEW)?></p>
                         <p class="m-1"><?=$obj->getSupercherie(Content::FORMAT_VIEW)?></p>
                     </div>
-            </div>
+                </div>
                 <p class="card-text text-grey-d-2"><?=$obj->getStory();?></p>
                 <div class="nav-item-divider back-main-d-1"></div>
-                    <p class="card-text text-grey"><?=$obj->getOther_info();?></p>
-                    <div class="d-flex flex-row justify-content-between">
-                        <?=$obj->getDrop_()?>
-                        <?=$obj->getKamas()?>
-                    </div>
+                <p class="card-text text-grey"><?=$obj->getOther_info();?></p>
+                <div class="d-flex flex-row justify-content-between">
+                    <?=$obj->getDrop_()?>
+                    <?=$obj->getKamas()?>
                 </div>
+                <div class="nav-item-divider back-main-d-1"></div>
+                <h4 class="pt-2 text-center">Sorts</h4>
+                <div class="dy-2 px-1"><?=$obj->getSpell(Content::DISPLAY_RESUME);?></div>
+                <div class="dy-2 px-1"><?=$obj->getOther_spell();?></div>
+                <div class="nav-item-divider back-main-d-1"></div>
+                <h4 class="pt-2 text-center">Equipement</h4>
+                <div class="dy-2 px-1"><?=$obj->getItem();?></div>
+                <div class="dy-2 px-1"><?=$obj->getOther_item();?></div>
+                <div class="nav-item-divider back-main-d-1"></div>
+                <h4 class="pt-2 text-center">Consommables</h4>
+                <div class="dy-2 px-1"><?=$obj->getConsumable();?></div>
+                <div class="dy-2 px-1"><?=$obj->getOther_consomable();?></div>
+            </div>
         </div>
     </div>
 </div>

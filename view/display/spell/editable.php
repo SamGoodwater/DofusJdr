@@ -4,7 +4,7 @@
 
 // Conseillé
     if(!isset($user)) {$user = ControllerConnect::getCurrentUser();}else{if(get_class($user) != "User") {$user = ControllerConnect::getCurrentUser();}}
-    if(!isset($bookmark_icon)) {$bookmark_icon =  View::STYLE_ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  View::STYLE_ICON_REGULAR;}}
+    if(!isset($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}}
     if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
 ?>
 
@@ -42,11 +42,11 @@
                 </div>
             </div>
         </div>
-        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
+        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
         <p class='size-0-7 mb-1'>Sort <?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$obj->getTimestamp_updated(Content::DATE_FR);?></p>
         <p class="card-text mb-2"><?=$obj->getEffect(Content::FORMAT_EDITABLE)?></p>
         <p class="card-text  my-2"><?=$obj->getDescription(Content::FORMAT_EDITABLE)?></p>
-        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
+        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
         <div class="my-2"><?=$obj->getId_invocation(Content::FORMAT_EDITABLE)?></div>
     </div>
     <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Spell.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>

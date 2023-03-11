@@ -73,7 +73,7 @@
                 font-size: 10px;
             }
             .box-calcule{
-                color:<?=View::COLOR_TO_HEX['grey-d-3']?>;
+                color:<?=Style::COLOR_TO_HEX['grey-d-3']?>;
                 font-size: 8px;
                 padding: 1px;
                 margin: 0px;
@@ -92,204 +92,204 @@
                 border-radius: 5px;
             }
             .box-level{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['level'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['level'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-level .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['level'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-d-3']?>;
             }
             .box-pa{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['pa'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['pa'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pa'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pa'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-pa .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['pa'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pa'].'-d-3']?>;
             }
             .box-pm{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['pm'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['pm'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pm'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pm'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-pm .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['pm'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pm'].'-d-3']?>;
             }
             .box-po{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['po'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['po'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-po .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['po'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-3']?>;
             }
             .box-ini{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['ini'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['ini'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ini'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ini'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-ini .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['ini'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ini'].'-d-3']?>;
             }
             .box-touch{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['touch'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['touch'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['touch'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['touch'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-touch .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['touch'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['touch'].'-d-3']?>;
             }
             .box-life{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['life'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['life'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['life'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['life'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-life .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['life'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['life'].'-d-3']?>;
             }
             .box-dodge_pm{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['dodge_pm'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['dodge_pm'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pm'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pm'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-dodge_pm .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['dodge_pm'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pm'].'-d-3']?>;
             }
             .box-dodge_pa{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['dodge_pa'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['dodge_pa'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pa'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pa'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-dodge_pa .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['dodge_pa'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pa'].'-d-3']?>;
             }
             .box-ca{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['ca'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['ca'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ca'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ca'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-ca .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['ca'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ca'].'-d-3']?>;
             }
             .box-fuite{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['fuite'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['fuite'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['fuite'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['fuite'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-fuite .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['fuite'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['fuite'].'-d-3']?>;
             }
             .box-tacle{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['tacle'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['tacle'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['tacle'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['tacle'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-tacle .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['tacle'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['tacle'].'-d-3']?>;
             }
             .box-strong{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['strong'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['strong'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['strong'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['strong'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-strong .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['strong'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['strong'].'-d-3']?>;
             }
             .box-intel{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['intel'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['intel'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['intel'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['intel'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-intel .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['intel'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['intel'].'-d-3']?>;
             }
             .box-chance{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['chance'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['chance'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['chance'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['chance'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-chance .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['chance'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['chance'].'-d-3']?>;
             }
             .box-agi{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['agi'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['agi'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['agi'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['agi'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-agi .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['agi'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['agi'].'-d-3']?>;
             }
             .box-shield{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['shield'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['shield'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['shield'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['shield'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-shield .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['shield'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['shield'].'-d-3']?>;
             }
 
             .box-neutre{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['neutre'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['neutre'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['neutre'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['neutre'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-neutre .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['neutre'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['neutre'].'-d-3']?>;
             }
             .box-vitality{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['vitality'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['vitality'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['vitality'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['vitality'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-vitality .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['vitality'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['vitality'].'-d-3']?>;
             }
             .box-sagesse{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['sagesse'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['sagesse'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['sagesse'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['sagesse'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-sagesse .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['sagesse'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['sagesse'].'-d-3']?>;
             }
             .box-terre{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['terre'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['terre'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['terre'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['terre'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-terre .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['terre'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['terre'].'-d-3']?>;
             }
             .box-feu{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['feu'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['feu'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['feu'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['feu'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-feu .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['feu'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['feu'].'-d-3']?>;
             }
             .box-eau{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['eau'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['eau'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['eau'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['eau'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-eau .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['eau'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['eau'].'-d-3']?>;
             }
             .box-air{
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['air'].'-l-5']?>;
-                border: 2px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['air'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['air'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['air'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-air .enavant2{
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['air'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['air'].'-d-3']?>;
             }
             .box-terre-feu{
                 background-color: #fff3e0;
@@ -361,53 +361,53 @@
                 vertical-align: baseline;
             }
             .magic{
-                background-color: <?=View::COLOR_TO_HEX['purple-d-2']?>;   
+                background-color: <?=Style::COLOR_TO_HEX['purple-d-2']?>;   
                 color:white;
                 font-size: 0.8em;
                 margin-top: 5px;
                 font-weight: 800;
-                border: 1px solid <?=View::COLOR_TO_HEX['purple-d-2']?>; 
+                border: 1px solid <?=Style::COLOR_TO_HEX['purple-d-2']?>; 
             }
             .physic{
-                background-color: <?=View::COLOR_TO_HEX['brown-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX['brown-d-2']?>;
                 color:white;
                 font-size: 0.8em;
                 margin-top: 5px;
                 font-weight: 800;
-                border: 1px solid <?=View::COLOR_TO_HEX['brown-d-2']?>; 
+                border: 1px solid <?=Style::COLOR_TO_HEX['brown-d-2']?>; 
             }
             .powerfull{
-                background-color: <?=View::COLOR_TO_HEX['deep-purple-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX['deep-purple-d-3']?>;
                 color:white;
                 font-size: 0.8em;
                 margin-top: 5px;
                 font-weight: 800;
-                border: 1px solid <?=View::COLOR_TO_HEX['deep-purple-d-3']?>; 
+                border: 1px solid <?=Style::COLOR_TO_HEX['deep-purple-d-3']?>; 
             }
 
             .po{
                 font-size: 1em;
                 font-weight: 800;
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['po'].'-d-2']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-2']?>;
             }
             .pa{
                 font-size: 1.3em;
                 font-weight: 800;
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['pa'].'-d-5']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pa'].'-d-5']?>;
             }
             .level{
                 font-size: 1em;
                 font-weight: 800;
-                color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['level'].'-d-2']?>;
-                border: 1px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['level'].'-d-2']?>;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-d-2']?>;
+                border: 1px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-d-2']?>;
                 background-color: white;
             }
             .frequency{
                 font-size: 1em;
                 font-weight: 600;
                 color: white;
-                border: 1px solid <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['po'].'-d-2']?>;
-                background-color: <?=View::COLOR_TO_HEX[View::COLOR_CUSTOM['po'].'-d-2']?>;
+                border: 1px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-2']?>;
             }
           
             .colored {

@@ -1,0 +1,29 @@
+{
+    "name": "goodwater/dofusjdr",
+    "description": "Ce jeu de rôle est un mode de Donjon & Dragon où les règles ont été adapté au monde des douze, c'est à dire à l'univers du jeu vidéo Dofus.",
+    "type": "project",
+    "license": "libre",
+    "autoload": {
+        "psr-4": {
+            "": [
+                    "src/php/",
+                    "controller/", 
+                    "model/",
+                    "controller/module/", 
+                    "model/module/"
+                ]
+        }
+    },
+    "authors": [
+        {
+            "name": "SamGoodwater"
+        }
+    ],
+    "require": {
+        "calcinai/php-imagick": "^0.1.2",
+        "dompdf/dompdf": "^2.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.2"
+    }
+}

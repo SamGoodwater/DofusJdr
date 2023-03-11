@@ -11,7 +11,7 @@ function cssDynamicWriteColor(){
 
     ?><style>
         <?php 
-        $colors = View::COLOR_ALLOWED;
+        $colors = Style::COLOR_ALLOWED;
         $colors[] = "main";$colors[] = "secondary";$colors[] = "tertiary";
         foreach ($colors as $color) {
             foreach ($types as $type) {

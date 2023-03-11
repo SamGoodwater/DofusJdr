@@ -6,12 +6,12 @@
     if(!isset($id)) { $id = "ckeditor_".$uniqid;}else{if(!is_string($id)) {$id = "ckeditor_".$uniqid;}}
 
     // Conseillé
-    if(!isset($label)) {$label = "";}else{if(!is_string($label)) {$label = "";}}
-    if(!isset($value)) { $value = "";}else{if(!is_string($value)) {$value = "";}}
+    if(!isset($label)) {$label = "";}else{if(!is_string($label) && !is_numeric($content)) {$label = "";}}
+    if(!isset($value)) { $value = "";}else{if(!is_string($value) && !is_numeric($content)) {$value = "";}}
 
     // Optionnel - valeur par défault ok
-    if(!isset($comment)) { $comment = "";}else{if(!is_string($comment)) {$comment = "";}}
-    if(!isset($color)) { $color = "main";}else{if(!View::isValidColor($color)) {$color = "main";}}
+    if(!isset($comment)) { $comment = "";}else{if(!is_string($comment) && !is_numeric($content)) {$comment = "";}}
+    if(!isset($color)) { $color = "main";}else{if(!Style::isValidColor($color)) {$color = "main";}}
     if(!isset($class)) { $class = "";}else{if(!is_string($class)) {$class = "";}}
     if(!isset($data)) { $data = "";}else{if(!is_string($data)) {$data = "";}}
     if(!isset($css)) { $css = "";}else{if(!is_string($css)) {$css = "";}}

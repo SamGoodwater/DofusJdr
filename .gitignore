@@ -1,5 +1,7 @@
 *.sql
 src/conf.php
+src\conf.php
 conf.php
-src/conf.php
 medias/safeDir/token.txt
+
+/vendor/

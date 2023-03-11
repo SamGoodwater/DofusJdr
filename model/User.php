@@ -87,7 +87,7 @@ class User extends Content
                             "placeholder" => "Email de l'utilisatrice·teur",
                             "value" => $this->_email,
                             "parttern" => "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", 
-                            "style" => View::STYLE_INPUT_FLOATING
+                            "style" => Style::INPUT_FLOATING
                         ], 
                         write: false);
                 
@@ -108,7 +108,7 @@ class User extends Content
                             "label" => "Pseudo",
                             "placeholder" => "Pseudo de l'utilisatrice·teur",
                             "value" => $this->_pseudo,
-                            "style" => View::STYLE_INPUT_FLOATING
+                            "style" => Style::INPUT_FLOATING
                         ], 
                         write: false);
                 
@@ -135,7 +135,7 @@ class User extends Content
                             "input_name" => "is_admin",
                             "label" => $this->getIs_admin(Content::FORMAT_BADGE),
                             "checked" => $this->returnBool($this->_is_admin),
-                            "style" => View::STYLE_CHECK_SWITCH
+                            "style" => Style::CHECK_SWITCH
                         ], 
                         write: false);
                     
@@ -146,7 +146,7 @@ class User extends Content
                             data : [
                                 "content" => "Admin",
                                 "color" => "secondary-d-1",
-                                "style" => View::STYLE_BACK,
+                                "style" => Style::STYLE_BACK,
                                 "tooltip" => "L'utilisateur·trice est adminitrateur·trice"
                             ], 
                             write: false);
@@ -157,7 +157,7 @@ class User extends Content
                             data : [
                                 "content" => "Modérateur",
                                 "color" => "grey-d-1",
-                                "style" => View::STYLE_BACK,
+                                "style" => Style::STYLE_BACK,
                                 "tooltip" => "L'utilisateur·trice n'est pas adminitrateur·trice"
                             ], 
                             write: false);
@@ -169,7 +169,7 @@ class User extends Content
                         return $view->dispatch(
                             template_name : "icon",
                             data : [
-                                "style" => View::STYLE_ICON_SOLID,
+                                "style" => Style::ICON_SOLID,
                                 "icon" => "user-cog",
                                 "color" => "secondary-d-3",
                                 "tooltip" => "L'utilisateur·trice est adminitrateur·trice"
@@ -181,7 +181,7 @@ class User extends Content
                         return $view->dispatch(
                             template_name : "icon",
                             data : [
-                                "style" => View::STYLE_ICON_SOLID,
+                                "style" => Style::ICON_SOLID,
                                 "icon" => "user-lock",
                                 "color" => "grey-d-3",
                                 "tooltip" => "L'utilisateur·trice n'est pas adminitrateur·trice"
@@ -211,7 +211,7 @@ class User extends Content
                             "placeholder" => "•••••••••",
                             "type" => "password",
                             "id" => "password" . $this->getUniqid(),
-                            "style" => View::STYLE_INPUT_BASIC
+                            "style" => Style::INPUT_BASIC
                         ], 
                         write: true); ?>
 
@@ -225,7 +225,7 @@ class User extends Content
                             "placeholder" => "•••••••••",
                             "type" => "password",
                             "id" => "newpassword" . $this->getUniqid(),
-                            "style" => View::STYLE_INPUT_BASIC
+                            "style" => Style::INPUT_BASIC
                         ], 
                         write: true); ?>
 
@@ -239,7 +239,7 @@ class User extends Content
                             "placeholder" => "•••••••••",
                             "type" => "password",
                             "id" => "repeatnewpassword" . $this->getUniqid(),
-                            "style" => View::STYLE_INPUT_BASIC
+                            "style" => Style::INPUT_BASIC
                         ], 
                         write: true); ?>
 
@@ -276,7 +276,7 @@ class User extends Content
                     "content" => "<i class='fas fa-exclamation-triangle'></i> Aucun",
                     "color" => "grey-d-3",
                     "tooltip" => "Aucun droit",
-                    "style" => View::STYLE_OUTLINE,
+                    "style" => Style::STYLE_OUTLINE,
                 ], 
                 write: false);
             $badge_right_read = $view->dispatch(
@@ -285,7 +285,7 @@ class User extends Content
                     "content" => "<i class='fas fa-book-open'></i> Lecture",
                     "color" => "blue-d-3",
                     "tooltip" => "Droit de lecture",
-                    "style" => View::STYLE_OUTLINE,
+                    "style" => Style::STYLE_OUTLINE,
                 ], 
                 write: false);
             $badge_right_write = $view->dispatch(
@@ -294,7 +294,7 @@ class User extends Content
                     "content" => "<i class='fas fa-edit'></i> Écriture",
                     "color" => "green-d-3",
                     "tooltip" => "Droit d'écriture",
-                    "style" => View::STYLE_OUTLINE,
+                    "style" => Style::STYLE_OUTLINE,
                 ], 
                 write: false);
 
@@ -333,7 +333,7 @@ class User extends Content
                                                 "id" => "right_".$right_name."_" . $this->getUniqid(),
                                                 "label" => $badge,
                                                 "checked" => $checked,
-                                                "style" => View::STYLE_CHECK_RADIO,
+                                                "style" => Style::CHECK_RADIO,
                                                 'is_inline' => true
                                             ], 
                                             write: true);
@@ -374,7 +374,7 @@ class User extends Content
                                             "content" => $text,
                                             "color" => $color."-d-3",
                                             "tooltip" => $title,
-                                            "style" => View::STYLE_OUTLINE,
+                                            "style" => Style::STYLE_OUTLINE,
                                         ], 
                                         write: true);
                                 }
@@ -409,7 +409,7 @@ class User extends Content
                                     $view->dispatch(
                                         template_name : "icon",
                                         data : [
-                                            "style" => View::STYLE_ICON_SOLID,
+                                            "style" => Style::ICON_SOLID,
                                             "content" => ucfirst($right_name),
                                             "content_placement" => "before",
                                             "icon" => $icon,

@@ -4,16 +4,16 @@
 
 // Conseillé
     if(!isset($user)) {$user = ControllerConnect::getCurrentUser();}else{if(get_class($user) != "User") {$user = ControllerConnect::getCurrentUser();}}
-    if(!isset($bookmark_icon)) {$bookmark_icon =  View::STYLE_ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  View::STYLE_ICON_REGULAR;}}
+    if(!isset($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}}
     if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
 ?>
 
 <div style="position:relative;width: <?=$size?>px;">
-    <div ondblclick="Spell.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card p-2 m-1 <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>-l-5 <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>-l-4-hover border-solid border-2 <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "border")?>-d-2" style="width: <?=$size?>px;" >
+    <div ondblclick="Spell.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card p-2 m-1 <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>-l-5 <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>-l-4-hover border-solid border-2 <?=$obj->getElement(Content::FORMAT_TEXT, "border")?>-d-2" style="width: <?=$size?>px;" >
         <div class="d-flex flew-row flex-nowrap">
             <div>
                 <?=$obj->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
-                <p class="mt-1"><?=$obj->getLevel(Content::FORMAT_ICON)?></p> 
+                <p class="mt-1"><?=$obj->getLevel(Content::FORMAT_BADGE)?></p> 
             </div>
 
             <div class="card-body m-1 p-0">
@@ -44,10 +44,10 @@
                 <?=$obj->getElement(Content::FORMAT_BADGE)?>
             </div>
             <?=$obj->getEffect()?>
-            <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
+            <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
             <?=$obj->getDescription()?>
             <?php if(!empty($obj->getId_invocation())){ ?>
-                <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_COLOR_VERBALE, "back")?>"></div>
+                <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
                 <div style="margin:-4px;"><?=$obj->getId_invocation(Content::DISPLAY_RESUME, size:290)?></div>
             <?php } ?>
         </div>

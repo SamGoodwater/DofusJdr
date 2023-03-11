@@ -155,7 +155,8 @@ class Router {
                         "src/js/", // Ini et function
                         "src/js/plugin/upload/",
                         "src/js/ajax/",
-                        "src/js/ckeditor5/", //https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js
+                        "src/js/ajax/module",
+                        "src/js/plugin/ckeditor5/", //https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js
                         "src/js/plugin/",
                         "src/js/plugin/table-bootstrap-export/libs/",
                         "src/js/plugin/table-bootstrap-export/tableExport.min.js",

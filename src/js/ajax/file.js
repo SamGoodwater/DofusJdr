@@ -7,7 +7,7 @@ class File {
                     data-viewimgpath="medias/page/"
                     data-dropable="true" 
                     data-dropzone="#collapse"
-                    accept=".<?=implode(",.", FileManager::getListeExtention(FileManager::FORMAT_IMG, FileManager::FORMAT_AUDIO, FileManager::FORMAT_VIDEO, FileManager::FORMAT_PDF, FileManager::FORMAT_WORD, FileManager::FORMAT_EXCEL, FileManager::FORMAT_POWERPOINT))?>"
+                    accept=".<?=implode(",.", FileManager::getListeExtention(FileManager::FORMAT_IMG, FileManager::FORMAT_AUDIO, FileManager::FORMAT_VIDEO, FileManager::FORMAT_PDF, FileManager::FORMAT_WORD, FileManager::FORMAT_TABLEUR, FileManager::FORMAT_POWERPOINT))?>"
                     capture="environnement"> 
                     <p>Ajouter un fichier à cette page</p>
                     <input class="file-input form-control form-control-sm" name="file" type="file" hidden>
