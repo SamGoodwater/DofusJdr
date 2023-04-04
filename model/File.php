@@ -1,6 +1,6 @@
 <?php
 
-class File extends Content
+class File
 {
     private $_path = '';
     private $_name = '';
@@ -131,117 +131,148 @@ class File extends Content
         }
         public function getThumbnail(){
             if($this->existThumbnail()){
-                return new File($this->getDirname() . "thumb/" . $this->getName());
+                return new File($this->getDirname() . $this->getName(with_extention:false) ."_thumb". $this->getExtention());
             }
         }
         public function existThumbnail(){
-            if(file_exists($this->getDirname() . "thumb/" . $this->getName())){
+            if(file_exists($this->getDirname() . $this->getName(with_extention:false) ."_thumb". $this->getExtention())){
                 return true;
             } else {
                 return false;
             }
         }
     
-        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300, string $css = '', bool $is_download = false, ?File $thumbnail = null) {
+        public function getVisual(Style $style = new Style()) {
+            $view = new View();
             if(empty($this->getPath())){
                 return "";
             }
 
             $dowload = "";
-            if($is_download){
+            if($style->getIs_download()){
                 $dowload = "href='".$this->getPath()."' target='_blank'";
             }
-            $thumbnail_path = $this->getPath();
-            if(!empty($thumbnail)){
-                if(FileManager::isImage($thumbnail)){
-                    $thumbnail_path = $thumbnail->getPath();
-                } else {
-                    $thumbnail_path = $this->getPath();
+
+            $thumbnail = new File($this->getPath());
+            if($style->getUse_thumbnail()){
+                if(!empty($style->getOther_thumbnail())){
+                    $thumbnail = $style->getOther_thumbnail();
+                } elseif($this->existThumbnail()){
+                    $thumbnail = $this->getThumbnail();
                 }
             }
+
+            if (FileManager::isImage($this)){
+                $data = Style::ICONS_FILE[FileManager::FORMAT_IMG];
+            } elseif (FileManager::isPdf($this)) {
+                $data = Style::ICONS_FILE[FileManager::FORMAT_PDF];
+            } elseif (FileManager::isDocument($this)) {
+                $data = Style::ICONS_FILE[FileManager::FORMAT_DOCUMENT];
+            } elseif (FileManager::isTableur($this)) {
+                $data = Style::ICONS_FILE[FileManager::FORMAT_TABLEUR];
+            } elseif (FileManager::isSlider($this)) {
+                $data = Style::ICONS_FILE[FileManager::FORMAT_SLIDER];
+            } elseif (FileManager::isArchive($this)) {
+                $data = Style::ICONS_FILE[FileManager::FORMAT_ARCHIVE];
+            } elseif (FileManager::isAudio($this)) {
+                $data = Style::ICONS_FILE[FileManager::FORMAT_AUDIO];
+            } elseif (FileManager::isVideo($this)) {
+                $data = Style::ICONS_FILE[FileManager::FORMAT_VIDEO];
+            } else {
+                $data = Style::ICONS_FILE[FileManager::FORMAT_OTHER];
+            }
             
-            switch ($display) {
+            switch ($style->getDisplay()) {
                 case Content::FORMAT_ICON:
-                    if (FileManager::isImage($this)){
-                        ob_start(); ?>
-                            <a  class='text-brown-d-2 <?=$css?>' data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$this->getName()?>"><i class="fas fa-file-image"></i></a>   
-                        <?php return ob_get_clean();
-                    } elseif (FileManager::isPdf($this)) {
-                        ob_start(); ?>
-                            <a <?=$dowload?> class='text-red-d-2 <?=$css?>' data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$this->getName()?>"><i class='fas fa-file-pdf'></i></a>   
-                        <?php return ob_get_clean();
-                    } elseif (FileManager::isDocument($this)) {
-                        ob_start(); ?>
-                            <a <?=$dowload?> class='text-blue-d-2 <?=$css?>' data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$this->getName()?>"><i class="fas fa-file-word"></i></a>   
-                        <?php return ob_get_clean();
-                    } elseif (FileManager::isTableur($this)) {
-                        ob_start(); ?>
-                            <a <?=$dowload?> class='text-green-d-2 <?=$css?>' data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$this->getName()?>"><i class="fas fa-file-excel"></i></a>   
-                        <?php return ob_get_clean();
-                    } elseif (FileManager::isSlider($this)) {
-                        ob_start(); ?>
-                            <a <?=$dowload?> class='text-orange-d-2 <?=$css?>' data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$this->getName()?>"><i class="fas fa-file-powerpoint"></i></a>   
-                        <?php return ob_get_clean();
-                    } elseif (FileManager::isArchive($this)) {
-                        ob_start(); ?>
-                            <a <?=$dowload?> class='text-amber-d-2 <?=$css?>' data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$this->getName()?>"><i class="fas fa-file-archive"></i></a>   
-                        <?php return ob_get_clean();
-                    } elseif (FileManager::isAudio($this)) {
-                        ob_start(); ?>
-                            <a <?=$dowload?> class='text-purple-d-2 <?=$css?>' data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$this->getName()?>"><i class="fas fa-file-audio"></i></a>   
-                        <?php return ob_get_clean();
-                    } elseif (FileManager::isVideo($this)) {
-                        ob_start(); ?>
-                            <a <?=$dowload?> class='text-main-d-2 <?=$css?>' data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$this->getName()?>"><i class="fas fa-file-video"></i></a>   
-                        <?php return ob_get_clean();
-                    } else {
-                        ob_start(); ?>
-                            <a <?=$dowload?> class='text-grey-d-2 <?=$css?>' data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$this->getName()?>"><i class="fas fa-file"></i></a>   
-                        <?php return ob_get_clean();
+                    if(FileManager::isImage($this)){
+                        $dirname = str_replace("medias/", "", $this->getDirname());
+                        return $view->dispatch(
+                            template_name : "icon",
+                            data : [
+                                "style" => Style::ICON_MEDIA,
+                                "icon" => $this->getName(),
+                                "dirfile" => $dirname,
+                                "tooltip" => $this->getName(),
+                                "class" => $style->getClass(), 
+                                "size" => $style->getSize()
+                            ], 
+                            write: false);
                     }
-                break;
+
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_SOLID,
+                            "icon" => $data["icon"],
+                            "color" => $data["color"],
+                            "tooltip" => key($data),
+                            "content" => "",
+                            "class" => $style->getClass()
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_BADGE:
+                    $style_badge = $style;
+                    $style_badge->setDisplay(Content::FORMAT_ICON);
+
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->getVisual($style_badge)} {$this->getName()}",
+                            "color" => $data["color"],
+                            "tooltip" => key($data),
+                            "style" => Style::STYLE_OUTLINE,
+                            "class" => $style->getClass()
+                        ], 
+                        write: false);
+                
 
                 case Content::FORMAT_VIEW:
-                    $icon =""; $color = "";
-                    if (FileManager::isImage($this)){
-                        if(empty($css)){ $css = 'img-back-120';}
+                    if(FileManager::isImage($this)){
+                        if(empty($style->getClass())){ $css = 'img-back-120';} else {$css = $style->getClass();}
                         ob_start(); ?>
                             <a id="<?=$this->getName(Content::FORMAT_BRUT, false)?>" class="d-flex justify-content-center" data-fancybox='gallery' href='<?=$this->getPath()?>' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html='true' title="<?=$this->getName()?><br><small>Cliquez pour ouvrir</small>">
-                                <div class='<?=$css?>'  style="background-image:url('<?=$thumbnail_path?>')"></div>
+                                <div class='<?=$css?>'  style="background-image:url('<?=$thumbnail->getPath()?>')"></div>
                             </a>
                         <?php return ob_get_clean();
-
                     } elseif (FileManager::isPdf($this)) {
+                        $width = "100%"; $height = 1150;
+                        if(!empty($style->getWidth())){ $width = $style->getWidth();}
+                        if(!empty($style->getHeight()) && $style->getHeight() != "100%"){ $height = $style->getHeight();}
+
                         ob_start(); ?>
-                            <embed src="<?=$this->getPath()?>" width="100%" height="1150" type='application/pdf'/>
+                            <embed src="<?=$this->getPath()?>" width="<?=$width?>" height="<?=$height?>" type='application/pdf'/>
                         <?php return ob_get_clean();
                     } elseif (FileManager::isDocument($this)) {
+                        $width = "100%"; $height = 1150;
+                        if(!empty($style->getWidth())){ $width = $style->getWidth();}
+                        if(!empty($style->getHeight())){ $height = $style->getHeight();}
+
                         if($this->getExtention() == "doc" || $this->getExtention() == "docx"){
-                            ob_start(); //('.ppt' '.pptx' '.doc', '.docx', '.xls', '.xlsx') ?>
-                                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=<?=$_SERVER['SERVER_NAME'].'/'.$this->getPath()?>' width="100%" height="1150" frameborder='0'></iframe>
+                            ob_start(); ?>
+                                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=<?=$_SERVER['SERVER_NAME'].'/'.$this->getPath()?>' width="<?=$width?>" height="<?=$height?>" frameborder='0'></iframe>
                             <?php return ob_get_clean();
                         }
-                        $icon = "fas fa-file-word";
-                        $color = "blue";
                     } elseif (FileManager::isTableur($this)) {
+                        $width = "100%"; $height = 1150;
+                        if(!empty($style->getWidth())){ $width = $style->getWidth();}
+                        if(!empty($style->getHeight())){ $height = $style->getHeight();}
+
                         if($this->getExtention() == "xls" || $this->getExtention() == "xlsx"){
-                            ob_start(); //('.ppt' '.pptx' '.doc', '.docx', '.xls', '.xlsx') ?>
-                                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=<?=$_SERVER['SERVER_NAME'].'/'.$this->getPath()?>' width="100%" height="1150" frameborder='0'></iframe>
+                            ob_start(); ?>
+                                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=<?=$_SERVER['SERVER_NAME'].'/'.$this->getPath()?>' width="<?=$width?>" height="<?=$height?>" frameborder='0'></iframe>
                             <?php return ob_get_clean();
                         }
-                        $icon = "fas fa-file-excel";
-                        $color = "green";
                     } elseif (FileManager::isSlider($this)) {
+                        $width = "100%"; $height = 1150;
+                        if(!empty($style->getWidth())){ $width = $style->getWidth();}
+                        if(!empty($style->getHeight())){ $height = $style->getHeight();}
+
                         if($this->getExtention() == "ppt" || $this->getExtention() == "pptx"){
-                            ob_start(); //('.ppt' '.pptx' '.doc', '.docx', '.xls', '.xlsx') ?>
-                                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=<?=$_SERVER['SERVER_NAME'].'/'.$this->getPath()?>' width="100%" height="1150" frameborder='0'></iframe>
+                            ob_start();?>
+                                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=<?=$_SERVER['SERVER_NAME'].'/'.$this->getPath()?>' width="<?=$width?>" height="<?=$height?>" frameborder='0'></iframe>
                             <?php return ob_get_clean();
                         }
-                        $icon = "fas fa-file-powerpoint";
-                        $color = "orange";
-                    } elseif (FileManager::isArchive($this)) {
-                        $icon = "fas fa-file-archive";
-                        $color = "amber";
                     } elseif (FileManager::isAudio($this)) {
                         ob_start(); ?>
                             <audio controls src="<?=$this->getPath()?>">
@@ -249,65 +280,71 @@ class File extends Content
                             </audio>
                         <?php return ob_get_clean();
                     } elseif (FileManager::isVideo($this)) {
+                        $width = 320; $height = 240;
+                        if(!empty($style->getWidth())){ $width = $style->getWidth();}
+                        if(!empty($style->getHeight())){ $height = $style->getHeight();}
                         ob_start(); ?>
-                            <video width="320" height="240" controls>
+                            <video width="<?=$width?>" height="<?=$height?>" controls>
                                 <source src="<?=$this->getPath()?>" type="video/<?=$this->getExtention()?>">
                                 Votre navigateur ne supporte pas le visionnage des vidéos
                             </video>
                         <?php return ob_get_clean();
-                    } else {
-                        $icon = "fas fa-file";
-                        $color = "grey";
                     }
 
                     ob_start(); ?>
                         <a id="<?=$this->getName(Content::FORMAT_BRUT, false)?>" class="text-center" <?=$dowload?> data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html='true' title="<?=$this->getName()?><br><small>Cliquez pour télécharger</small>">
-                            <p><i class='<?=$icon?> text-<?=$color?>-d-2 font-size-2 <?=$css?>'></i></p>
-                            <p style="width: 5rem;" class='badge text-white back-<?=$color?>-d-2 overflow-hidden text-truncate font-weight-bold mt-1'><?=$this->getName()?></p>
+                            <p><i class='fas fa-<?=$data["icon"]?> text-<?=$data["color"]?>-d-2 font-size-2 <?=$style->getClass()?>'></i></p>
+                            <p style="width: 5rem;" class='badge text-white back-<?=$data["color"]?>-d-2 overflow-hidden text-truncate font-weight-bold mt-1'><?=$this->getName()?></p>
                         </a> 
                     <?php return ob_get_clean();
                 
                 default:
-                    $icon =""; $color = "";
-                    if (FileManager::isImage($this)){
-                        if(empty($css)){ $css = 'img-back-50';}
-                        ob_start(); ?>
-                            <a class="d-flex justify-content-center" data-fancybox='gallery' href='<?=$this->getPath()?>' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html='true' title="<?=$this->getName()?><br><small>Cliquez pour ouvrir</small>">
-                                <div class='<?=$css?>'  style="background-image:url('<?=$thumbnail_path?>')"></div>
-                            </a>
-                        <?php return ob_get_clean();
-                    } elseif (FileManager::isPdf($this)) {
-                        $icon = "fas fa-file-pdf";
-                        $color = "red";
-                    } elseif (FileManager::isDocument($this)) {
-                        $icon = "fas fa-file-word";
-                        $color = "blue";
-                    } elseif (FileManager::isTableur($this)) {
-                        $icon = "fas fa-file-excel";
-                        $color = "green";
-                    } elseif (FileManager::isSlider($this)) {
-                        $icon = "fas fa-file-powerpoint";
-                        $color = "orange";
-                    } elseif (FileManager::isArchive($this)) {
-                        $icon = "fas fa-file-archive";
-                        $color = "amber";
-                    } elseif (FileManager::isAudio($this)) {
-                        $icon = "fas fa-file-audio";
-                        $color = "purple";
-                    } elseif (FileManager::isVideo($this)) {
-                        $icon = "fas fa-file-video";
-                        $color = "indigo";
-                    } else {
-                        $icon = "fas fa-file";
-                        $color = "grey";
-                    }
+                    $style->setDisplay(Content::FORMAT_ICON);
 
-                    ob_start(); ?>
-                        <a id="<?=$this->getName(Content::FORMAT_BRUT, false)?>" class="text-center" <?=$dowload?> data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html='true' title="<?=$this->getName()?><br><small>Cliquez pour télécharger</small>">
-                            <p><i class='<?=$icon?> text-<?=$color?>-d-2 font-size-2 <?=$css?>'></i></p>
-                            <p style="width: 5rem;" class='badge text-white back-<?=$color?>-d-2 overflow-hidden text-truncate font-weight-bold mt-1'><?=$this->getName()?></p>
-                        </a> 
-                    <?php return ob_get_clean();
+                    if(FileManager::isImage($this)){
+                        $style->setClass("img-back-50");
+                        return $this->getVisual($style);
+                    } elseif (FileManager::isAudio($this)) {
+                        // Utilisation d'amplitude JS pour générer un lecteur audio en html et JS très simple. Un seul bouton play/pause
+                        ob_start();?>
+                            <div class="glob-player">
+                                <div class="glob-btn">
+                                    <span class="btn amplitude-play-pause btn-back-<?=Style::ICONS_FILE[FileManager::FORMAT_AUDIO]["color"]?>" amplitude-main-play-pause="true"><i class=" fas fa fa-play" aria-hidden="true"></i> <i class="fas fa fa-pause" aria-hidden="true"></i></span>
+                                </div>
+                                <div>
+                                    <div class="meta-name" amplitude-song-info="name" amplitude-main-song-info="true"></div>
+                                    <progress class="amplitude-song-played-progress" amplitude-main-song-played-progress="true" id="song-played-progress"></progress>
+                                </div>
+                            </div>
+                            <script>
+                                Amplitude.init({
+                                    "songs": [
+                                        {
+                                            "name": "<?=$this->getName(with_extention:false)?>",
+                                            "url": "<?=$this->getPath()?>",
+                                        }
+                                    ],
+                                    callbacks: {
+                                        //pour démarrer la lecture à cuaque fois que l'on passe au morceau suivant ou préc
+                                        song_change: function () {
+                                            Amplitude.play();
+                                        }
+                                    }
+                                });
+                            </script>
+                        <?php return ob_get_clean();
+                        
+                    } elseif (FileManager::isVideo($this)) {
+                        ob_start();?>
+                            <div>
+                                <video width="50" height="50">
+                                    <source src=”<?=$this->getPath();?>” type=video/<?=$this->getExtention();?>>
+                                </video>
+                            </div>
+                        <?php return ob_get_clean();
+                    } else {
+                        return $this->getVisual($style);
+                    }
             }   
             
         }

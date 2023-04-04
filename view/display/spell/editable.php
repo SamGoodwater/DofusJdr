@@ -11,7 +11,7 @@
 <div class="card mb-3">
     <div class="row g-0">
         <div class="col-auto">
-            <?=$obj->getPath_img(Content::FORMAT_IMAGE, "img-back-150")?>
+            <?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_EDITABLE, "class" => "img-back-150"]))?>
             <div class="text-center m-2">
                 <?=$obj->getPowerful(Content::FORMAT_EDITABLE)?>
                 <?=$obj->getUsable(Content::FORMAT_EDITABLE)?>

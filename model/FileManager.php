@@ -22,32 +22,34 @@ class FileManager extends Manager{
         foreach($donnees as $champ => $valeur){
           $method = "set".ucfirst($champ);
 
-          if(method_exists($this,$method))
-          {
+          if(method_exists($this,$method)){
               $this->$method($valeur);
           }
         }
     }
     public function setFile(array $file){
         $this->_file = $file;
+        return true;
     }
     public function setDirname(string $dirname){
         $this->_dirname = $dirname;
+        return true;
     }
     public function setFormatallowed(array $formatallowed){
         if(is_array($formatallowed)){
             $extensions = self::getListeExtention(self::FORMAT_ALL);
             foreach ($formatallowed as $format) {
                 if(!in_array($format, $extensions)){
-                    return "Une des extentions n'est pas valides.";
+                    throw new Exception("Une des extentions n'est pas valides.");
                 }
             }
             $this->_formatallowed = $formatallowed;
-            return "true";
+            return true;
         }
-        return "Les extentions ne sont pas valides.";
+        throw new Exception("Les extentions ne sont pas valides.");
     }
     public function setName(string $name){
+        $name = str_replace("." . pathinfo($name, PATHINFO_EXTENSION), "", $name);
         $this->_name = $name;
     }
     public function getFile(){
@@ -82,14 +84,14 @@ class FileManager extends Manager{
 
                 // Copie du fichier télécharger
                     $fileObj = New File($this->getFile()['name']);
-                    if(!empty($name)){
-                        $path =  $dirname . $name . "." . $extension_upload;
+                    if(!empty($this->getName())){
+                        $path =  $dirname . $this->getName() . "." . $extension_upload;
                     } else {
                         $path =  $dirname . FileManager::formatPath($this->getFile()['name'], false, false);
                     }
 
                     if(FileManager::isImage($fileObj) && class_exists('Imagick')){
-                        $success = FileManager::WriteImageAfterCompressAnd2PNG($this->getFile()['tmp_name'], $path);
+                        $success = FileManager::add($this->getFile()['tmp_name'], $path);
                     } else {
                         $success = move_uploaded_file($this->getFile()['tmp_name'], $path);
                     }
@@ -134,7 +136,8 @@ class FileManager extends Manager{
             'jpx',
             'jpm',
             'mj2',
-            'ico'
+            'ico',
+            'jfif'
         );
         const FORMAT_VIDEO = "video";
         const FILE_EXTENTION_VIDEO = array(
@@ -353,64 +356,80 @@ class FileManager extends Manager{
             }
         }
         
-        static function WriteImageAfterCompressAnd2PNG($path_read, $path_write){ // Ecrit après avoir convertit une image en png et la redimention (max 800 * 800) puis la compresse si besoins (- de 2Mo)
-            if(is_file($path_read))
-            {
-                $nom = explode('.', $path_write)[1];
-                if(strtolower($nom) != 'png'){
-                    $path_write = $nom . '.png';
-                }
+        static function add(string $path_read, string $dir_dest, string $rename = "", bool $compress = true, bool $set_format_png = true, bool $resize = true, bool | string $thumbnail = "auto"){ // Ecrit après avoir convertit une image en png et la redimention (max 800 * 800) puis la compresse si besoins (- de 2Mo)
+            $dir_dest = FileManager::formatPath($dir_dest, false, true);
+            if(is_file($path_read)){
+                $file_read = new File($path_read);
+                $name = $file_read->getName(with_extention: false);
+                if($rename != ""){$name = $rename;}
+                $file_write = new File($dir_dest . "/" . $name . $file_read->getExtention());
     
-                $im = new Imagick($path_read);
-                $success = $im->thumbnailImage(800,800, true);
-                if($success == false)
-                {
-                    return false;
-                }
-                if($im->getImageLength() > 5000000)
-                {
-                    $success = $im->setCompressionQuality(20);
-                    if($success == false)
-                    {
-                        return false;
+                $success = FileManager::write(
+                    path_read: $file_read->getPath(),
+                    path_write: $file_write->getPath(),
+                    compress: $compress,
+                    set_format_png: $set_format_png,
+                    resize: $resize
+                );
+
+                if(file_exists($file_write->getPath()) && $success){
+
+                    if($thumbnail == "auto" || $thumbnail == true){
+                        $new_file = new File($file_write->getPath());
+
+                        if($new_file->getSize() > 1000000 || $thumbnail == true){
+                            $file_thumbnail = new File($dir_dest . $name . "_thumb". $file_read->getExtention());
+                            FileManager::write(
+                                path_read: $new_file->getPath(),
+                                path_write: $file_thumbnail->getPath(),
+                                compress: $compress,
+                                set_format_png: $set_format_png,
+                                resize: $resize,
+                                is_thumbnail: true
+                            );
+                        }
                     }
-                }
-                    $success = $im->setImageFormat("png");
-                    if($success == false)
-                    {
-                        return false;
-                    }
-                $success = $im->writeImage($path_write);
-                if($success)
-                {
+
                     return true;
                 } else {
                     return false;
                 }
+
             } else {
                 return false;
             }
         }
-
-        static function createThumbnail(File $file, $dir_dest){
-            FileManager::formatPath($dir_dest, false, true);
-            if(FileManager::isImage($file) && class_exists("Imagick")){
-                $im = new Imagick($file->getPath());
-                if(!$im->thumbnailImage(400,400, true)){
-                    return false;
-                }
-                    $n = 0;
-                    while ($im->getImageLength() <= 100000) {
-                        if($n > 5){break;}
-                        if(!$im->setCompressionQuality(20)){
-                            return false;
-                        }
-                        $n++;
+        static function write(string $path_read, string $path_write, bool $compress = true, bool $set_format_png = true, bool $resize = true, bool $is_thumbnail = false){
+                $im = new Imagick($path_read);
+                
+                if($set_format_png){
+                    if($im->setImageFormat("png") == false){
+                        return false;
                     }
-                return $im->writeImage($dir_dest . $file->getName(Content::FORMAT_BRUT, false). "_thumb." . $file->getExtention());
-            } else {
-                return false;
-            }
+                }
+                if($resize){
+                    $ratio = $im->getImageWidth() / $im->getImageHeight();
+                    if($ratio > 1){
+                        $im->resizeImage(800,800/$ratio,Imagick::FILTER_LANCZOS,1, true);
+                    } else {
+                        $im->resizeImage(800*$ratio,800,Imagick::FILTER_LANCZOS,1, true);
+                    }
+                }  
+                if($compress){
+                    for ($i=10; $i < 90; $i += 10) { 
+                        if($im->getImageLength() > 1000000){
+                            if($im->setCompressionQuality(100 - $i) == false){
+                                return false;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                if($is_thumbnail){
+                    $im->thumbnailImage(150,150, true);
+                }
+                return $im->writeImage($path_write);
         }
 
     // Autres
@@ -445,13 +464,13 @@ class FileManager extends Manager{
                         $newpath = FileManager::formatPath($path_parts['dirname'] . '/' . $newname, false, false);
                         return true;
                     }else{
-                        return "Impossible de renommer le fichier.";
+                        throw new Exception("Impossible de renommer le fichier.");
                     }
                 } else {
-                    return "Un fichier portant ce nom existe déjà.";
+                    throw new Exception("Un fichier portant ce nom existe déjà.");
                 }
             } else {
-                return "Le fichier cible n'existe pas.";
+                throw new Exception("Le fichier cible n'existe pas.");
             }
         }
         static function move(string $path, string $newdir, bool $remove = true){
@@ -597,5 +616,32 @@ class FileManager extends Manager{
             } else {
                 return false;
             }
+        }
+
+        static function findExtention(string $path, string $format = FileManager::FORMAT_ALL){
+            if(file_exists($path)){
+                $path_parts = pathinfo($path);
+                if(isset($path_parts['extension'])){
+                    return $path_parts['extension'];
+                }
+            }
+            $extensions = FileManager::getListeExtention($format);
+            foreach ($extensions as $extension) {
+                if(file_exists($path .'.'. $extension)){
+                    return $extension;
+                }
+            }
+            return "";
+        }
+
+        static function solveNameFromPaternAndObject(Object $obj, string $patern){
+            preg_match_all("/\[(\w+)\]/", $patern, $fcs_name);
+            foreach ($fcs_name[1] as $fc_name) {
+                $method = "get".ucfirst($fc_name);
+                if(method_exists($obj, $method)){
+                    $patern = str_replace("[".$fc_name."]", $obj->$method(), $patern);
+                }
+            }
+            return $patern;
         }
 }

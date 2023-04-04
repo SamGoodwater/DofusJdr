@@ -113,6 +113,7 @@ class ControllerConnect extends Controller{
                 "size" => "lg",
                 "title" => "",
                 "header" => "",
+                "header_mobile" => "",
                 "modal" => ""
             ];
 
@@ -135,7 +136,40 @@ class ControllerConnect extends Controller{
                             <li><a class="dropdown-item" onclick="Connect.disconnect();">Deconnexion</a></li>
                         </ul>
                     </div>
-                <?php $return["header"] = ob_get_clean();
+                    <?php $return["header"] = ob_get_clean();
+                        ob_start(); ?>
+                        <div class="dropup-center dropup">
+                            <button type="button"  class="dropdown-toggle border-none back-transparent" data-bs-toggle="dropdown" aria-expanded="false">
+                                <?php View::shortcutDispatch(
+                                    template_type: View::TEMPLATE_SNIPPET,
+                                    template_name : "icon",
+                                    data : [
+                                        "style" => Style::ICON_SOLID,
+                                        "icon" => "user",
+                                        "color" => "secondary",
+                                        "is_btn" => true,
+                                        "btn_type" => Style::STYLE_TEXT,
+                                        "size" => "size-1-3",
+                                        "tooltip" => "Accèder à mon compte",
+                                        "onclick" => "",
+                                        "content" => "Mon compte",
+                                        "content_placement" => Style::POSITION_BOTTOM
+                                    ], 
+                                    write: true); ?>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li class="italic text-center"><?=$user->getPseudo()?></li>
+                                <li class="item-divider-main"></li>
+                                <li><a class="dropdown-item" onclick="User.open('<?=$user->getUniqid()?>');">Paramètres</a></li>
+                                <?php if($user->getRight("page", User::RIGHT_WRITE)){ ?>
+                                    <li><a class="dropdown-item" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
+                                <?php } ?>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" onclick="Connect.disconnect();">Deconnexion</a></li>
+                            </ul>
+                        </div>
+                    <?php $return["header_mobile"] = ob_get_clean();
+
                 $return["modal"] = $user->getVisual(Content::FORMAT_EDITABLE);
                 $return["size"] = "fl";
                 $return["title"] = "Compte";
@@ -146,6 +180,26 @@ class ControllerConnect extends Controller{
                         <button type="button" onclick="Connect.getHeader(true);" class="btn btn-sm btn-back-secondary">Connexion</button>
                     </div>
                 <?php $return["header"] = ob_get_clean();
+                ob_start(); ?>
+                    <div>
+                        <?php View::shortcutDispatch(
+                            template_type: View::TEMPLATE_SNIPPET,
+                            template_name : "icon",
+                            data : [
+                                "style" => Style::ICON_SOLID,
+                                "icon" => "user",
+                                "color" => "secondary",
+                                "is_btn" => true,
+                                "btn_type" => Style::STYLE_TEXT,
+                                "size" => "size-1-3",
+                                "tooltip" => "Se connecter ou créer un compte",
+                                "onclick" => "Connect.getHeader(true);",
+                                "content" => "Se connecter",
+                                "content_placement" => Style::POSITION_BOTTOM
+                            ], 
+                            write: true); ?>
+                    </div>
+                <?php $return["header_mobile"] = ob_get_clean();
                 ob_start(); ?>
                     <div class="text-center">
                         <div id="modalConnexionUser">

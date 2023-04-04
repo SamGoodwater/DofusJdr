@@ -24,8 +24,8 @@
                                 <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Dissocier cet objet de cet hôtel de vente" class="btn-underline-red" style="position:absolute;top:10px;right:10px;z-index:10;" onclick="if (confirm('Etes vous sûr dissocier l\'objet de cet hôtel de vente ?')){<?=ucfirst($class_name)?>.update('<?=$uniqid?>',{action:'remove', uniqid:'<?=$link['obj']->getUniqid()?>'},'<?=$input_name?>', IS_VALUE);}"><i class="fas fa-times"></i></a>
                             </div>
                         <?php } ?>
-                        <a class="text-left" style="position:absolute;top:5px;left:5px;" href="<?=$link["obj"]->getPath_img()?>" download="<?=$link["obj"]->getName().'.'.substr(strrchr($link["obj"]->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-                        <?=$link["obj"]->getPath_img(Content::FORMAT_FANCY, "img-back-100H-allL")?>
+                        <a class="text-left" style="position:absolute;top:5px;left:5px;" href="<?=$link["obj"]->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>" download="<?=$link["obj"]->getName().'.'.substr(strrchr($link["obj"]->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
+                        <?=$link["obj"]->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-70"]))?>
                         <div class="card-body position-relative" id="view<?=$link['obj']->getUniqid()?>">
                             <span class="ms-1 position-absolute" style="top:-14px;left:5px;"><?=$link["obj"]->getLevel(Content::FORMAT_BADGE)?></span> 
                             <?php if(!empty($link['quantity'])){ ?>
@@ -33,7 +33,7 @@
                                     <?=$link['quantity']?><span class="visually-hidden">unread messages</span>
                                 </span>
                             <?php } ?>
-                            <h5 class="card-title"><?=$link["obj"]->getName()?></h5>
+                            <h2 class="card-title"><?=$link["obj"]->getName()?></h2>
                             <div class="row justify-content-between">
                                 <p class="d-flex flex-row justify-content-between flex-wrap">
                                     <span class="me-1"><?=$link["obj"]->getType(Content::FORMAT_BADGE)?></span>
@@ -65,22 +65,22 @@
                     </div>
                     <?php if($is_editable && ($user->getRight($input_name, User::RIGHT_WRITE) || $user->Is_admin())){ ?>
                         <div class="card-body" id="modify<?=$link['obj']->getUniqid()?>">
-                            <h5 class="card-title"><?=$link["obj"]->getName()?></h5>
+                            <h2 class="card-title"><?=$link["obj"]->getName()?></h2>
                             <div class="form-floating mb-3">
-                                <input value="<?=$link['quantity']?>" id="quantityInput<?=$link['obj']->getUniqid()?>" onchange="Shop.update('<?=$uniqid?>',{action:'update', uniqid:'<?=$link['obj']->getUniqid()?>', quantity:$(this).val()},'consumable', IS_VALUE);" type="text" class="form-control form-control-main-focus" placeholder="Quantité">
+                                <input value="<?=$link['quantity']?>" id="quantityInput<?=$link['obj']->getUniqid()?>" onchange="Shop.update('<?=$uniqid?>',{action:'update', uniqid:'<?=$link['obj']->getUniqid()?>', quantity:$(this).val()},'<?=$input_name?>', IS_VALUE, true);" type="text" class="form-control form-control-main-focus" placeholder="Quantité">
                                 <label for="quantityInput<?=$link['obj']->getUniqid()?>">Quantité</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input value="<?=$link['price']?>" id="priceInput<?=$link['obj']->getUniqid()?>" onchange="Shop.update('<?=$uniqid?>',{action:'update', uniqid:'<?=$link['obj']->getUniqid()?>', price:$(this).val()},'consumable', IS_VALUE);" type="text" class="form-control form-control-main-focus" placeholder="Prix">
+                                <input value="<?=$link['price']?>" id="priceInput<?=$link['obj']->getUniqid()?>" onchange="Shop.update('<?=$uniqid?>',{action:'update', uniqid:'<?=$link['obj']->getUniqid()?>', price:$(this).val()},'<?=$input_name?>', IS_VALUE, true);" type="text" class="form-control form-control-main-focus" placeholder="Prix">
                                 <label for="priceInput<?=$link['obj']->getUniqid()?>">Prix</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input value="<?=$link['comment']?>" id="commentInput<?=$link['obj']->getUniqid()?>" onchange="Shop.update('<?=$uniqid?>',{action:'update', uniqid:'<?=$link['obj']->getUniqid()?>', comment:$(this).val()},'consumable', IS_VALUE);" type="text" class="form-control form-control-main-focus" placeholder="Commentaire">
+                                <input value="<?=$link['comment']?>" id="commentInput<?=$link['obj']->getUniqid()?>" onchange="Shop.update('<?=$uniqid?>',{action:'update', uniqid:'<?=$link['obj']->getUniqid()?>', comment:$(this).val()},'<?=$input_name?>', IS_VALUE, true);" type="text" class="form-control form-control-main-focus" placeholder="Commentaire">
                                 <label for="commentInput<?=$link['obj']->getUniqid()?>">Commentaire</label>
                             </div>
                             <div>
                                 <?php if($user->getRight($input_name, User::RIGHT_WRITE) || $user->Is_admin()){ ?>
-                                    <a class="btn btn-sm btn-back-secondary" onclick="<?=ucfirst($input_name)?>.open('<?=$link['obj']->getUniqid()?>', <?php Content::DISPLAY_EDITABLE ?>);">Modifier l'objet</a>
+                                    <a class="btn btn-sm btn-text-secondary" onclick="<?=ucfirst($input_name)?>.open('<?=$link['obj']->getUniqid()?>', Controller.DISPLAY_EDITABLE);">Editer l'objet</a>
                                 <?php } ?>
                             </div>
                             <div class="nav-divider back-main-d-1"></div>

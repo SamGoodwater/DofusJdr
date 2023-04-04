@@ -47,8 +47,8 @@ if(!isset($template_vars['uniqid_page'])){ $template_vars['uniqid_page'] = "";}
                     <div id="slider-<?=$classe->getUniqid()?>" data-name="<?=$classe->getName()?>" class="slider-custom">
                         <div class="slider-image d-flex">
                             <?php $n_img = 0; ?>
-                            <a class="img-slider" data-fancybox='gallery' href='<?=$classe->getPath_img()?>'>
-                                <div class='img-back-350 borderImage' style="background-image:url('<?=$classe->getPath_img()?>')"></div>
+                            <a class="img-slider" data-fancybox='gallery' href='<?=$classe->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>'>
+                                <div class='img-back-350 borderImage' style="background-image:url('<?=$classe->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>')"></div>
                             </a>
                         </div>
                         <?php if($n_img > 1){?> 

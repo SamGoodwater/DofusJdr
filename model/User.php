@@ -298,8 +298,12 @@ class User extends Content
                 ], 
                 write: false);
 
-            $rights = unserialize($this->_rights);
-            if(!is_array($rights)){
+            if($this->isSerialized($this->_rights)){
+                $rights = unserialize($this->_rights);
+                if(!is_array($rights)){
+                    $rights = [];
+                }
+            } else {
                 $rights = [];
             }
             if($type != "all" && isset(User::RIGHT[$type])){
@@ -312,7 +316,7 @@ class User extends Content
                         <div class="m-3">
                            <?php foreach ($rights as $right_name => $value) {
                                 if(isset(User::RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){?>
-                                    <h6>Droit concernant <?=ucfirst($right_name)?></h6>
+                                    <h5 class="m-0 mt-2">Droit concernant <?=ucfirst($right_name)?></h5>
                                     <?php foreach (User::RIGHT_TYPE as $type) {
                                         $checked = false; if($value == $type){ $checked = true;}
                                         $badge = $badge_right_no;
@@ -348,7 +352,7 @@ class User extends Content
                         <div class="m-3">
                             <?php foreach ($rights as $right_name => $value) {
                                 if(isset(User::RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){ ?>
-                                    <h6>Droit concernant <?=ucfirst($right_name)?></h6>
+                                    <h5 class="m-0 mt-2">Droit concernant <?=ucfirst($right_name)?></h5>
                                     <?php switch ($value) {
                                         case self::RIGHT_NO:
                                             $color = "grey";
@@ -411,7 +415,7 @@ class User extends Content
                                         data : [
                                             "style" => Style::ICON_SOLID,
                                             "content" => ucfirst($right_name),
-                                            "content_placement" => "before",
+                                            "content_placement" => Style::POSITION_LEFT,
                                             "icon" => $icon,
                                             "color" => $color."-d-3",
                                             "tooltip" => $title
@@ -518,8 +522,12 @@ class User extends Content
             }
         }
         public function setEmail($data){
+            if($this->isEmail($data)){
             $this->_email = $data;
             return true;
+            } else {
+                throw new Exception("L'email n'est pas valide");
+            }
         }
         public function setPseudo($data){
             $this->_pseudo = $data;
@@ -538,7 +546,7 @@ class User extends Content
             $new_right = array();
             if(is_array($data)){
                 // Si ça vient de l'update du controller
-                if(isset(User::RIGHT[$data[0]]) && in_array($data[1], User::RIGHT_TYPE)){
+                if(isset(User::RIGHT[reset($data)]) && in_array($data[1], User::RIGHT_TYPE)){
                     $new_right[$data[0]] = $data[1];
                 } else {
                     // Si data est un tableau de droits composé du nom du droit en key et de la valeur en value
@@ -564,8 +572,11 @@ class User extends Content
             if(isset(User::RIGHT[$right]) && in_array($value, User::RIGHT_TYPE)) {
                 $new_right[$right] = $value;
             }
-
-            $old_right = unserialize($this->getRights());
+            if($this->isSerialized($this->getRights())){
+                $old_right = unserialize($this->getRights());
+            } else {
+                $old_right = array();
+            }
             if(is_array($old_right)){
                 foreach ($old_right as $name => $value) {
                     if(!isset($new_right[$name])){
@@ -607,7 +618,7 @@ class User extends Content
                             if($managerU->addBookmark($this, $obj)){
                                 return true;
                             }else{
-                                return "Erreur lors de l'ajout du favoris";
+                                throw new Exception("Erreur lors de l'ajout du favoris");
                             }
                         }
                     }
@@ -619,13 +630,13 @@ class User extends Content
                             if($managerU->removeBookmark($this, $obj)){
                                 return true;
                             }else{
-                                return "Erreur lors de la suppression du favoris";
+                                throw new Exception("Erreur lors de la suppression du favoris");
                             }   
                         }
                     }
                     return true;
                 default:
-                    return "L'action n'est pas valide";
+                    throw new Exception("L'action n'est pas valide");
             }
         }
         public function setBookmarkArray(Array $array){

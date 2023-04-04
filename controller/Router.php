@@ -80,6 +80,7 @@ class Router {
                     "crossorigin" => "anonymous",
                     "integrity" => "sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
                 ],
+                "src/css/include_manually/init.css",
                 "https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css",
                 "https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css",
                 [
@@ -88,6 +89,7 @@ class Router {
                 ],
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css",
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/panzoom.css",
+                "src/css/shortcuts",
                 "src/css/",
                 "src/css/plugin/"
             ];?>
@@ -123,7 +125,7 @@ class Router {
                 }
             } ?>
 
-            <?php  require_once "src/css/color.php";
+            <?php  require_once "src/css/shortcuts/color.php";
         }
         static function includeJS(){  
             if($_SESSION['JqueryAppel'] == false ){?>
@@ -150,12 +152,12 @@ class Router {
                             "crossorigin" => "anonymous",
                             "integrity" => ""
                         ],
+                        "https://cdn.jsdelivr.net/npm/amplitudejs@5.3.2/dist/amplitude.js", // Amplitude JS, outil d'aide à la création d'un lecteur
                         "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js", // Fancybox
-                        "src/js/ajax/controller.js", // Ini et function
                         "src/js/", // Ini et function
                         "src/js/plugin/upload/",
                         "src/js/ajax/",
-                        "src/js/ajax/module",
+                        "src/js/ajax/modules",
                         "src/js/plugin/ckeditor5/", //https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js
                         "src/js/plugin/",
                         "src/js/plugin/table-bootstrap-export/libs/",

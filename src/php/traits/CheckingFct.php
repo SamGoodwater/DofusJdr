@@ -67,7 +67,7 @@ trait CheckingFct
       }
     }
 
-    function is_serialized($var ) {
+    function isSerialized($var ) {
         if (!is_string($var) || $var == '') {
             return false;
         }
@@ -79,6 +79,7 @@ trait CheckingFct
         }
         return true;
     } 
+    
   
 }
   

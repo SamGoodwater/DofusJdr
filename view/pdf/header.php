@@ -432,7 +432,7 @@
             <table width="100%">
                 <tr width="100%">
                     <td align="left" width="30%" class="size-0-7 text-grey">Fiche générée le <?=date("d/m/Y")?> à <?=date("H:i")?></td>
-                    <td align="center" width="30%" class="size-0-7 text-grey">Tout droit réservé JDR Dofus &#x3B1; &copy; <?php echo date("Y");?></td>
+                    <td align="center" width="30%" class="size-0-7 text-grey"><?=$GLOBALS['project']['name']?> &#x3B1; <?php echo date("Y");?></td>
                     <td align="center" width="30%"><span class="pagenum"></span></td>
                 </tr>
             </table>

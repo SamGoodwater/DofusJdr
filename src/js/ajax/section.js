@@ -1,4 +1,5 @@
 class Section extends Controller{
+    static MODEL_NAME = "section";
 
     static add(url_name)
     {
@@ -319,22 +320,21 @@ class Section extends Controller{
     //     });
     // }
 
-    // static getVisual(uniqid, show_modal = true){
-    //     var URL = 'index.php?c=section&a=getVisual';
-    //     $.post(URL,
-    //         {
-    //             uniqid:uniqid,
-    //             is_flush:true
-    //         },
-    //         function(data, status)
-    //         {
-    //             if(data.script != ""){
-    //                 $('body').append("<script>"+data.script +   "</script>");
-    //             }
-    //             Page.build(Page.RESPONSIVE, data.title,  data.modal.html, data.size, show_modal);
-    //         },
-    //         "json"
-    //     ); 
-    // }
+    static getVisual(uniqid, show_modal = true){
+        var URL = 'index.php?c=section&a=getVisual';
+        $.post(URL,
+            {
+                uniqid:uniqid,
+            },
+            function(data, status)
+            {
+                if(data.script != ""){
+                    $('body').append("<script>"+data.script +   "</script>");
+                }
+                Page.build(Page.RESPONSIVE, data.title,  data.modal.html, data.size, show_modal);
+            },
+            "json"
+        ); 
+    }
 
 }

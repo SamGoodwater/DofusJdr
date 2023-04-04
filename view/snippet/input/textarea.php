@@ -48,9 +48,7 @@
                 <?=$autocomplete ? "autocomplete" : ""?>
                 <?=$data?>
                 style="<?=$css?>"
-                id="<?=$id?>">
-                <?=$value?>
-            </textarea>
+                id="<?=$id?>"><?=$value?></textarea>
             <label for="<?=$id?>" class="size-0-8 text-<?=$color?>-d-2"><?=$label?></label>
         </div> 
         

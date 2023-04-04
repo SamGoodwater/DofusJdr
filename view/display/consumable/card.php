@@ -11,8 +11,8 @@
 <div class="card mb-3">
     <div class="row g-0">
         <div class="col-auto">
-            <a style="position:relative;top:5px;left:5px;" href="<?=$obj->getPath_img()?>" download="<?=$obj->getName().'.'.substr(strrchr($obj->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-            <?=$obj->getPath_img(Content::FORMAT_FANCY, "img-back-150")?>
+            <a style="position:relative;top:5px;left:5px;" href="<?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>" download="<?=$obj->getName().'.'.substr(strrchr($obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
+            <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-150"]))?>
         </div>
         <div class="col">
             <div class="card-body">
@@ -33,7 +33,7 @@
                     </div>                     
                 </div>
                 <div class="nav-item-divider back-main-d-1"></div>
-                <h5 class="card-title"><?=$obj->getName()?></h5>
+                <h2 class="card-title"><?=$obj->getName()?></h2>
                 <p class="card-text"><?=$obj->getEffect()?></p>
             </div>
         </div>

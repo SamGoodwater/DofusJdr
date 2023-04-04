@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="msapplication-tap-highlight" content="no">
-    <meta name="description" content="">
-    <link rel="icon" type="image/svg" href="medias/logos/logo_dice_20.svg"/>
+    <meta name="description" content="<?=$GLOBALS['project']['description']?>">
+    <link rel="icon" type="image/svg" href="<?=$GLOBALS['project']['logo_mini']?>"/>
     <!-- <link rel="shortcut icon" type="image/x-icon" href="medias/logos/logo_mini.ico" /> -->
-    <title>JDR Dofus</title>
+    <title><?=$GLOBALS['project']['name']?></title>
     <meta name="keywords" content=""/>
 
     <?php Router::includeCss(); ?>
@@ -21,57 +21,153 @@
         <div class='d-flex justify-content-center'><div class='spinner-border text-main-d-2' role='status'><span class='visually-hidden'>Loading...</span></div></div>
     </div>
     
-    <div class='dashboard'>
-        <div class="dashboard-nav">
-            <?php include "menu.php"?>
-        </div>
+    <div class='app app-extend'>
+        <nav class="app-nav">
+            <div class="app-nav-content" ><?php include "menu.php"?></div>
+        </nav>
 
-        <div class='dashboard-app'>
-            <header class='dashboard-toolbar'> <!-- ENTETE -->
-                <div class="row flex-nowrap align-items-center">
-                    <a href="#!" class="menu-toggle" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu"><i class="fas fa-bars"></i></a>
-                    <h3 id="title" class="ps-3 text-main-d-1"></h3>
-                </div>
-                <div class="d-flex flex-row justify-content-between align-items-baseline">
-                    <div class="d-flex flex-row justify-content-evenly align-items-baseline mb-3 position-relative">
-                        <a onclick="User.getBookmark(true);" class="btn-text-secondary text-center mx-1" title="Ouvrir le grimoire (ctrl + b)" type="button">
-                            <i class="fas fa-book size-1-2"></i>
-                            <span class="size-0-8">Grimoire</span>
-                        </a>
-                        <input type="text" 
-                            style="max-width: 300px;"
-                            data-url = "index.php?c=search&a=search"
-                            data-search_in = <?=ControllerSearch::SEARCH_IN_ALL?>
-                            data-minlenght = 3
-                            data-action = <?=ControllerSearch::SEARCH_DONE_REDIRECT?>
-                            data-limit = 5
-                            data-only_usable = true
-                            class="form-control text-main-d-3 form-control-sm" 
-                            id="globalsearch" 
-                            placeholder="Recherche ...">
-                        <span id="search-sign"></span>
+        <div class="app-toolbar-and-content">
+            <div class="app-toolbar-content">
+                <header class='app-toolbar'> <!-- ENTETE -->
+                    <div class="app-toolbar-title">
+                        <a onclick="toogleMenu();" class="menu-toggle"><i class="fas fa-bars"></i></a>
+                        <h1 id="title"></h1>
                     </div>
-                    <script>
-                        window.onload = function () {
-                            autocomplete_load("#globalsearch");
-                        };
-                    </script>
-                    <a class="size-1-4 btn-text-secondary ms-2" onclick="$('#diceroller').modal('show');"><i class="fas fa-dice"></i></a>
-                    <div id="userVisual" class="ms-3"></div>
+                    <div class="app-toolbar-nav">
+                        <div class="mx-2">
+                            <input type="text" 
+                                style="max-width: 300px;"
+                                data-url = "index.php?c=search&a=search"
+                                data-search_in = <?=ControllerSearch::SEARCH_IN_ALL?>
+                                data-minlenght = 3
+                                data-action = <?=ControllerSearch::SEARCH_DONE_REDIRECT?>
+                                data-limit = 5
+                                data-only_usable = true
+                                class="form-control text-main-d-3 form-control-sm" 
+                                id="globalsearch" 
+                                placeholder="Recherche ...">
+                            <span id="search-sign"></span>
+                            <script>
+                                window.onload = function () {
+                                    autocomplete_load("#globalsearch");
+                                };
+                            </script>
+                        </div>
+                        <a class="mx-2"><?php
+                            View::shortcutDispatch(
+                                template_type: View::TEMPLATE_SNIPPET,
+                                template_name : "icon",
+                                data : [
+                                    "style" => Style::ICON_SOLID,
+                                    "icon" => "book",
+                                    "color" => "secondary",
+                                    "is_btn" => true,
+                                    "btn_type" => Style::STYLE_TEXT,
+                                    "size" => "size-1-3",
+                                    "tooltip" => "Ouvrir le grimoire (ctrl + b)",
+                                    "onclick" => "User.getBookmark(true);",
+                                    "content" => "Grimoire",
+                                    "content_placement" => Style::POSITION_BOTTOM
+                                ], 
+                                write: true);
+                        ?></a>
+                        <a class="mx-2"><?php
+                            View::shortcutDispatch(
+                                template_type: View::TEMPLATE_SNIPPET,
+                                template_name : "icon",
+                                data : [
+                                    "style" => Style::ICON_SOLID,
+                                    "icon" => "dice",
+                                    "color" => "secondary",
+                                    "is_btn" => true,
+                                    "btn_type" => Style::STYLE_TEXT,
+                                    "size" => "size-1-3",
+                                    "tooltip" => "Lanceur de dé",
+                                    "onclick" => "$('#diceroller').modal('show');"
+                                ], 
+                                write: true);
+                        ?></a>
+                        <div id="userVisual" class="ms-3"></div>
+                    </div>
+                </header>
+                <div class="app-toolbar-mobile">
+                    <a class="mx-2"><?php
+                        View::shortcutDispatch(
+                            template_type: View::TEMPLATE_SNIPPET,
+                            template_name : "icon",
+                            data : [
+                                "style" => Style::ICON_SOLID,
+                                "icon" => "bars",
+                                "color" => "secondary",
+                                "is_btn" => true,
+                                "btn_type" => Style::STYLE_TEXT,
+                                "size" => "size-1-3",
+                                "tooltip" => "Ouvrir le Menu",
+                                "onclick" => "toogleMenu()",
+                                "content" => "Menu",
+                                "content_placement" => Style::POSITION_BOTTOM
+                            ], 
+                            write: true);
+                    ?></a>
+                    <a class="mx-2"><?php
+                        View::shortcutDispatch(
+                            template_type: View::TEMPLATE_SNIPPET,
+                            template_name : "icon",
+                            data : [
+                                "style" => Style::ICON_SOLID,
+                                "icon" => "book",
+                                "color" => "secondary",
+                                "is_btn" => true,
+                                "btn_type" => Style::STYLE_TEXT,
+                                "size" => "size-1-3",
+                                "tooltip" => "Ouvrir le grimoire (ctrl + b)",
+                                "onclick" => "User.getBookmark(true)",
+                                "content" => "Grimoire",
+                                "content_placement" => Style::POSITION_BOTTOM
+                            ], 
+                            write: true);
+                    ?></a>
+                    <a class="mx-2"><?php
+                        View::shortcutDispatch(
+                            template_type: View::TEMPLATE_SNIPPET,
+                            template_name : "icon",
+                            data : [
+                                "style" => Style::ICON_SOLID,
+                                "icon" => "search",
+                                "color" => "secondary",
+                                "is_btn" => true,
+                                "btn_type" => Style::STYLE_TEXT,
+                                "size" => "size-1-3",
+                                "tooltip" => "Rechercher sur le site",
+                                "onclick" => "Page.showSearchbar();",
+                                "content" => "Rechercher",
+                                "content_placement" => Style::POSITION_BOTTOM
+                            ], 
+                            write: true);
+                    ?></a>
+                    <a id="account_btn_toolbar_mobile" class="mx-2"></a>
                 </div>
-            </header>
-            <div class='dashboard-content'>
+            </div>
+
+            <div class='app-content'>
                 <div id="content" class='container'>
 
                 </div>
             </div>
+            <footer>
+                <div >
+                    <p>Ces explications sont tirés en très grandes parties de <a class="text-main text-main-d-2-hover" href="https://solomonk.fr/fr/">Solomonk</a> pour la partie concernant Dofus et de <a class="text-main text-main-d-2-hover" href="https://5e-drs.fr/">5e-DRS</a> pour la partie concernant Donjon & Dragon.</p>
+                    <p>Nous vous invitons à vous y référer si certains points ne vous parraissent pas claire ou pour plus de détails.</p>
+                    <p>Vous êtes inviter à aider la développement du JDR. N'hésitez pas à modifier les différentes sections en respectant <a class="text-main text-main-d-2-hover" href="http://jdr.iota21.fr/#contribuer">la charte de modification.</a></p>
+                </div>
+            </footer>
         </div>
     </div>
 
     <div class="offcanvas offcanvas-start back-main-l-4" data-bs-scroll="true" tabindex="-1" id="offcanvasbookmark" aria-labelledby="offcanvasbookmark">
             <div class="offcanvas-header">
                 <a id="back-bookmark" class="btn-text-main size-1-4 me-2" onclick="User.getBookmark();"><i class="fas fa-chevron-circle-left"></i></a>
-                <h4 class="offcanvas-title text-secondary-d-2"></h4>
+                <h2 class="offcanvas-title text-secondary-d-2"></h2>
                 <div>
                     <a id="btn-fullscreen" title="Agrandir" class="btn-text-main size-1-4" onclick="Page.offCanvasFullscreen();"><i class="fas fa-expand"></i></a>
                     <button type="button" title="Fermer le Grimoire (Echap)" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -88,7 +184,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title w-100 me-3"></h5>
+                    <h2 class="modal-title w-100"></h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -98,7 +194,7 @@
     </div>
 
     <div class="cookie-bar">
-        <div class="container d-flex flex-row align-items-center">
+        <div class="mx-5 d-flex flex-column-reverse flex-md-row align-items-center">
             <div>
                 <p>Ce site recquière l'utilisation de certains cookies pour fonctionner, d'autres sont optionnelles. Lesquels acceptes-vous ?</p>
                 <ul>
@@ -129,7 +225,7 @@
                 <button onclick="Connect.setCookie(false,{'connexion':true, 'bookmark':true});" class="btn btn-sm btn-border-green my-2">Tout accepter</button>
                 <button onclick="Connect.setCookie(true);" class="btn btn-sm btn-border-secondary my-2">Accepter les cookies cochés</button>
                 <button onclick="Connect.setCookie(false,{'connexion':false, 'bookmark':false});" class="btn btn-sm btn-border-red my-2">Tout rejeter</button>
-                <p><small class="size-0-7 text-grey-d-3 my-2">Aucun cookie n'est utilisé à des fins commerciales, statistiques ou pour récupérer quelconque information. <a href="" onclick="">En savoir plus</a></small></p>
+                <p><small class="size-0-7 text-grey-d-3 my-2">Aucun cookie n'est utilisé à des fins commerciales, statistiques ou pour récupérer quelconque information. <a onclick="Page.show('cgu');">En savoir plus</a></small></p>
             </div>
         </div>
     </div>
@@ -138,7 +234,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title w-100 me-3"><i class="fas fa-dice"></i> Jet de dés</h5>
+                    <h2 class="modal-title w-100"><i class="fas fa-dice"></i> Jet de dés</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body justify-content-center text-center">
@@ -181,27 +277,7 @@
                 Page.show("home");
             }
             Connect.getHeader(false);
-
-            const mobileScreen = window.matchMedia("(max-width: 990px )"); // Pour le menu
-
-            $(".dashboard-nav-dropdown-toggle").click(function () {
-                $(this).closest(".dashboard-nav-dropdown")
-                    .toggleClass("show")
-                    .find(".dashboard-nav-dropdown")
-                    .removeClass("show");
-                $(this).parent()
-                    .siblings()
-                    .removeClass("show");
-            });
-            $(".menu-toggle").click(function () {
-                if (mobileScreen.matches) {
-
-                    $(".dashboard-nav").toggleClass("mobile-show");
-                } else {
-                    $(".dashboard").toggleClass("dashboard-compact");
-                }
-            });
-
+            
             // Redimensionnement de la zone de bookmark #offcanvasbookmark grâce à la souris et au clic et à la zone #offCanvas_zone_resizable avec un min de 350px et un max de la largeur de l'écran
             $("#offCanvas_zone_resizable").resizable({
                 handles: "e",
@@ -218,5 +294,4 @@
     </script>
 
 </body>
-
 </html>

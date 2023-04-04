@@ -29,9 +29,9 @@ class Page extends Content
         private $_url_name='';
         private $_order_num = 10;
         private $_category = 0; // Si 0 à 3 catégorie de base, si UNIQID sous catégorie d'une autre page si -1 non catégorisé
-        private $_is_dropdown = 0;
-        private $_public = 1;
-        private $_is_editable = 1;
+        private $_is_dropdown = false;
+        private $_public = true;
+        private $_is_editable = true;
 
         protected $_usable = true; // surcharge de la variable de Content
 
@@ -136,12 +136,6 @@ class Page extends Content
                                     <a onclick="Section.getVisual('<?=$this->getUniqid()?>', true);" class="size-2 text-main-d-3 text-main-d-1-hover mx-3"><i class="far fa-plus-square"></i></a>
                                 </div>   
                         <?php } ?>
-
-                        <div class="size-0-9 text-main-l-3 m-3 text-center">
-                            <p>Ces explications sont tirés en très grandes parties de <a class="text-main text-main-d-2-hover" href="https://solomonk.fr/fr/">Solomonk</a> pour la partie concernant Dofus et de <a class="text-main text-main-d-2-hover" href="https://5e-drs.fr/">5e-DRS</a> pour la partie concernant Donjon & Dragon.</p>
-                            <p>Nous vous invitons à vous y référer si certains points ne vous parraissent pas claire ou pour plus de détails.</p>
-                            <p>Vous êtes inviter à aider la développement du JDR. N'hésitez pas à modifier les différentes sections en respectant <a class="text-main text-main-d-2-hover" href="http://jdr.iota21.fr/#contribuer">la charte de modification.</a></p>
-                        </div>
 
                         <script>
                             $( ".sortablebis" ).sortable({
@@ -262,7 +256,7 @@ class Page extends Content
                 $this->_url_name = $data;
                 return true;
             } else {
-                return "Erreur : des caractères non pris en charge ont été trouvés.";
+                throw new Exception("Des caractères non pris en charge ont été trouvés.");
             }
         }
         public function setOrder_num($data){
@@ -270,7 +264,7 @@ class Page extends Content
                 $this->_order_num = $data;
                 return true;
             } else {
-                return "Order_num de la page est incorrect";
+                throw new Exception("L'ordre de la page est incorrect.");
             }
         }
         public function setSection($data){ // Data = array(x,y). Si x = add alors ajout section type y 
@@ -278,10 +272,10 @@ class Page extends Content
             $mS = New SectionManager();
 
             if(!is_array($data)){
-                return "La valeur n'est pas correcte";
+                throw new Exception("La valeur n'est pas correcte");
             }
             if(!isset($data[0])){
-                return "La valeur X n'est pas correcte";
+                throw new Exception("La valeur X n'est pas correcte");
             }                
 
             if($data[0] == "add"){
@@ -298,14 +292,14 @@ class Page extends Content
                         $mS->add($section);
                         return true;
                     }else {
-                        return "La valeur ne doit pas être nulle.";
+                        throw new Exception("La valeur ne doit pas être nulle.");
                     }
                 }else {
-                    return "La valeur Y n'est pas correcte";
+                    throw new Exception("La valeur Y n'est pas correcte");
                 }
 
             } else {
-                return "La valeur X n'est pas correcte";
+                throw new Exception("La valeur X n'est pas correcte");
             }
         }
         public function setCategory($data){

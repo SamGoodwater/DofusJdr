@@ -11,8 +11,8 @@
 <div class="card p-2 m-2 border-2 <?=$obj->getElement(Content::FORMAT_TEXT, "border")?>">
     <div class="row g-0">
         <div class="col-md-2">
-            <a style="position:relative;top:5px;left:5px;" href="<?=$obj->getPath_img()?>" download="<?=$obj->getName().'.'.substr(strrchr($obj->getPath_img(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-            <?=$obj->getPath_img(Content::FORMAT_FANCY, "img-back-120")?>
+            <a style="position:relative;top:5px;left:5px;" href="<?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>" download="<?=$obj->getName().'.'.substr(strrchr($obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
+            <?= $obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-120"]));?>
         </div>
         <div class="col-md-10">
             <div class="card-body">
@@ -46,7 +46,7 @@
     </div>
     <div>
         <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
-        <h5 class="card-title"><?=$obj->getName()?></h5>
+        <h2 class="card-title"><?=$obj->getName()?></h2>
         <p class="card-text"><?=$obj->getEffect()?></p>
         <p class="card-text"><small class="text-muted"><?=$obj->getDescription()?></small></p>
         <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>

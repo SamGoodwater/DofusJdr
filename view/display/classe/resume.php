@@ -13,7 +13,7 @@
         <div ondblclick="Classe.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card border-secondary-d-2 border p-2 m-1" style="width: <?=$size?>px;" >
             <div class="d-flex flew-row flex-nowrap justify-content-start">
                 <div>
-                    <?=$obj->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
+                    <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
                 </div>
                 <div class="mx-2 d-flex flex-column justify-content-between">
                     <div class="d-flex flex-nowrap justify-content-between">

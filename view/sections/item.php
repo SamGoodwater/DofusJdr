@@ -186,7 +186,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Création d'un équipement</h5>
+                        <h2 class="modal-title">Création d'un équipement</h2>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

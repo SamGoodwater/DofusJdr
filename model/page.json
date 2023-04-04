@@ -1,0 +1,90 @@
+{
+    "name" : "page",
+    "property" : {
+        "id" : {
+            "default" : null,
+            "type" : "int(11)",
+            "null" : false,
+            "description" : "",
+            "auto_increment" : true
+        },
+        "uniqid": {
+            "default" : null,
+            "type" : "varchar",
+            "max" : 100,
+            "null" : false,
+            "description" : ""
+        },
+        "timestamp_add": {
+            "default" : null,
+            "type" : "int",
+            "max" : 100000000000000,
+            "null" : false,
+            "description" : ""
+        },
+        "timestamp_updated": {
+            "default" : null,
+            "type" : "int",
+            "max" : 100000000000000,
+            "null" : false,
+            "description" : ""
+        },
+        "name": {
+            "default" : "",
+            "type" : "text",
+            "null" : false,
+            "description" : ""
+        },
+        "url_name": {
+            "default" : "",
+            "type" : "varchar",
+            "null" : false,
+            "description" : ""
+        },
+        "order_num": {
+            "default" : 10,
+            "type" : "int",
+            "null" : true,
+            "description" : ""
+        },
+        "category": {
+            "default" : 0,
+            "type" : "varchar",
+            "max" : 255,
+            "null" : false,
+            "description" : "",
+            "only_list" : false,
+            "list" :{
+                "0" : "Débuter",
+                "1" : "Bibliothèques",
+                "2" : "Outils",
+                "3" :"Autres"
+            }
+        },
+        "is_dropdown": {
+            "default" : false,
+            "type" : "bool",
+            "null" : false,
+            "description" : ""
+        },
+        "public": {
+            "default" : true,
+            "type" : "bool",
+            "null" : false,
+            "description" : ""
+        },
+        "is_editable": {
+            "default" : true,
+            "type" : "bool",
+            "null" : false,
+            "description" : ""
+        },
+        "usable": {
+            "default" : false,
+            "type" : "bool",
+            "null" : false,
+            "description" : ""
+        }
+    }
+
+}

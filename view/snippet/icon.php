@@ -3,12 +3,35 @@
     if(!isset($icon)) {throw new Exception("icon is not set");}else{if(!is_string($icon)) {throw new Exception("icon is not set");}}
     
     // Conseillé
+    if(!isset($is_btn)) { $is_btn = false;}else{if(!is_bool($is_btn)) {$is_btn = false;}}
+    if($is_btn){
+        if(!isset($btn_type)) { $btn_type = Style::STYLE_TEXT;}else{if(!in_array($btn_type, [Style::STYLE_BACK, Style::STYLE_BORDER, STYLE::STYLE_UNDERLINE, Style::STYLE_TEXT])) {$btn_type = Style::STYLE_TEXT;}}
+        $btn_type = "btn-".$btn_type."-";
+    } else {
+        $btn_type = "text-";
+    }
     if(!isset($color)) { $color = "main";}else{if(!Style::isValidColor($color)) {$color = "main";}}
     if(!isset($content)) { $content = "";}else{if(!is_string($content) && !is_numeric($content)) {$content = "";}}
     if(!isset($style)) { $style = Style::ICON_SOLID;}else{if(!in_array($style, [Style::ICON_REGULAR, Style::ICON_SOLID, Style::ICON_MEDIA])) {$style = Style::ICON_SOLID;}}
-
+    if(!isset($dirfile)) { $dirfile = "icons/";}else{if(!is_string($dirfile) && !is_string($dirfile)) {$dirfile = "icons/";}}
+    $dirfile = str_replace("../", "/", $dirfile);$dirfile = str_replace("./", "/", $dirfile);
+    if(!isset($size)) { $size = "";}else{if(!in_array($size, [Style::SIZE_SM, Style::SIZE_LG, '', Style::SIZE_XL]) && !is_string($size) && !is_numeric($size)) {$size = "xl";}}
+    if($style != Style::ICON_MEDIA){
+        switch ($size) {
+            case Style::SIZE_XL:
+                $size = "size-2";
+            break;
+            case Style::SIZE_LG:
+                $size = "size-1-5";
+            break;
+            case Style::SIZE_SM:
+                $size = "size-0-8";
+            break;
+        }
+    }
+    
     // Optionnel - valeur par défault ok
-    if(!isset($content_placement)) { $content_placement = "before";}else{if(!in_array($content_placement, ["before", "after"])) {$content_placement = "before";}}
+    if(!isset($content_placement)) { $content_placement = Style::POSITION_LEFT;}else{if(!in_array($content_placement, [Style::POSITION_BOTTOM, Style::POSITION_LEFT, Style::POSITION_RIGHT, Style::POSITION_TOP])) {$content_placement = Style::POSITION_LEFT;}}
     if(!isset($class)) { $class = "";}else{if(!is_string($class)) {$class = "";}}
     if(!isset($id)) { $id = "";}else{if(!is_string($id)) {$id = "";}}
     if(!isset($data)) { $data = "";}else{if(!is_string($data)) {$data = "";}}
@@ -18,19 +41,33 @@
     if(isset($href)){$href = "href=\"" . $href. "\"";}else{$href = "";}
     if(isset($onclick)){$onclick = "onclick=\"". $onclick. ";\"";}else{$onclick = "";}
 
-    $content_before = ""; $content_after = "";
-    if($content_placement == "after"){
-        $content_after = "<span class='ms-1'>".$content."</span>";;
-    } else {
-        $content_before = "<span class='me-1'>".$content."</span>";
+    $content_before = ""; $content_after = "";$top_bottom_class = "";
+
+    switch ($content_placement) {
+        case Style::POSITION_BOTTOM:
+            $top_bottom_class = "d-flex flex-column align-items-center";
+            $content_after = "<span class='size-0-7 position-relative light' style='top:-1px;'>".$content."</span>";
+        break;
+        case Style::POSITION_TOP:
+            $top_bottom_class = "d-flex flex-column align-items-center";
+            $content_before = "<span class='size-0-7 position-relative light' style='bottom:-1px;'>".$content."</span>";
+        break;
+        case Style::POSITION_LEFT:
+            $content_before = "<span class='me-1'>".$content."</span>";
+        break;
+        case Style::POSITION_RIGHT:
+            $content_after = "<span class='ms-1'>".$content."</span>";
+        break;
     }
 
     if($style == Style::ICON_MEDIA){ ?>
 
-        <span><i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="text-<?=$color?> <?=$class?>"><?=$content_before?><img class='icon' src='medias/icons/<?=$icon?>'><?=$content_after?></i></span>
+        <span class="<?=$top_bottom_class?>">
+            <i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$btn_type.$color?> <?=$class?>"><?=$content_before?><img class='icon icon-<?=$size?>' src='medias/<?=$dirfile.$icon?>'><?=$content_after?></i>
+        </span>
         
     <?php } else { ?>
 
-        <span><?=$content_before?><i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$style?> fa-<?=$icon?> text-<?=$color?> <?=$class?>"></i><?=$content_after?></span>
+        <span class="<?=$top_bottom_class?>"><?=$content_before?><i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$style?> fa-<?=$icon?> <?=$btn_type.$color?> <?=$class?> <?=$size?>"></i><?=$content_after?></span>
         
     <?php }

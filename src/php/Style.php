@@ -1,6 +1,21 @@
 <?php 
 class Style {
-    use SecurityFct, ColorFct;
+    use SecurityFct, ColorFct, CheckingFct;
+
+    function __construct(array $donnees = []){
+        $this->hydrate($donnees);
+    }
+
+    protected function hydrate(array $donnees){
+        foreach($donnees as $champ => $valeur){
+          $method = "set".ucfirst($champ);
+
+          if(method_exists($this,$method))
+          {
+              $this->$method($this->securite($valeur));
+          }
+        }
+    }
 
     // Constante générale 
     
@@ -404,65 +419,68 @@ class Style {
 
     const ICONS_FILE = [
         FileManager::FORMAT_ARCHIVE => [
-            "icon" => "fas fa-file-archive",
+            "icon" => "file-archive",
             "color" => "amber"
         ],
         FileManager::FORMAT_AUDIO => [
-            "icon" => "fas fa-file-audio",
+            "icon" => "file-audio",
             "color" => "purple"
         ],
         FileManager::FORMAT_VIDEO => [
-            "icon" => "fas fa-file-video",
+            "icon" => "file-video",
             "color" => "indigo"
         ],
         FileManager::FORMAT_PDF => [
-            "icon" => "fas fa-file-pdf",
+            "icon" => "file-pdf",
             "color" => "red"
         ],
         FileManager::FORMAT_DOCUMENT => [
-            "icon" => "fas fa-file-word",
+            "icon" => "file-word",
             "color" => "blue"
         ],
         FileManager::FORMAT_TABLEUR => [
-            "icon" => "fas fa-file-excel",
+            "icon" => "file-excel",
             "color" => "green"
         ],
         FileManager::FORMAT_SLIDER => [
-            "icon" => "fas fa-file-powerpoint",
+            "icon" => "file-powerpoint",
             "color" => "orange"
         ],
         FileManager::FORMAT_IMG => [
-            "icon" => "fas fa-file-image",
+            "icon" => "file-image",
             "color" => "cyan"
         ],
         FileManager::FORMAT_OTHER => [
-            "icon" => "fas fa-file",
+            "icon" => "file",
             "color" => "grey"
         ]
     ];
 
-    private $_format = Content::FORMAT_BRUT;
+    private $_format = Content::FORMAT_VIEW;
 
     private $_form = Style::FORM_SQUARE;
 
-    private $_height = "all";
-    private $_width = "all";
+    private $_height = "100%";
+    private $_width = "100%";
     private $_border_size = 0;
     private $_border_color = "main";
     private $_border_direction = Style::DIRECTION_ALL;
     private $_shadow = 0;
     private $_blur = 0;
     private $_color = "";
+    private $_size = "";
 
     private $_tooltip = "";
     private $_tooltip_placement = Style::DIRECTION_BOTTOM;
 
     private $_is_fancy = false;
     private $_is_download = false;
-    private $_is_thumbnail = false;
+    private $_use_thumbnail = true;
+    private $_other_thumbnail = null;
     private $_is_removable = false;
 
     private $_css = "";
+    private $_class = "";
     private $_id = "";
 
     // Getters
@@ -470,6 +488,9 @@ class Style {
         return $this->_css;
     }
     public function getFormat(){
+        return $this->_format;
+    }    
+    public function getDisplay(){ // Equivalent à getFormat
         return $this->_format;
     }
     public function getHeight(){
@@ -496,6 +517,9 @@ class Style {
     public function getColor(){
         return $this->_color;
     }
+    public function getSize(){
+        return $this->_size;
+    }
     public function getTooltip(){
         return $this->_tooltip;
     }
@@ -508,14 +532,20 @@ class Style {
     public function getIs_download(){
         return $this->_is_download;
     }
-    public function getIs_thumbnail(){
-        return $this->_is_thumbnail;
+    public function getUse_thumbnail(){
+        return $this->_use_thumbnail;
+    }
+    public function getOther_thumbnail(){
+        return $this->_other_thumbnail;
     }
     public function getIs_removable(){
         return $this->_is_removable;
     }
     public function getId(){
         return $this->_id;
+    }
+    public function getClass(){
+        return $this->_class;
     }
 
     public function getBackgroundStyleForImage(){
@@ -534,7 +564,14 @@ class Style {
         if(is_numeric($format)){
             $this->_format = $format;
         } else {
-            $format = Content::FORMAT_BRUT;
+            $this->_format = Content::FORMAT_VIEW;
+        }
+    }
+    public function setDisplay(int $format){
+        if(is_numeric($format)){
+            $this->_format = $format;
+        } else {
+            $this->_format = Content::FORMAT_VIEW;
         }
     }
     public function setHeight(string | int $height){
@@ -567,67 +604,98 @@ class Style {
         }
     }
     public function setBorder(int $border_size){ // Border bow de 0 à 5 pour la force 0 pas de bordure
-        if(!in_array($border_size, [0, 1, 2, 3, 4, 5])){ $border_size = 0; }
-        $this->_shadow = $this->securite($border_size);
+        if(!in_array($border_size, [0, 1, 2, 3, 4, 5])){ 
+            $border_size = 0; 
+        } else {
+            $this->_border_size = $this->securite($border_size);
+        }
     }
     public function setShadow(string $shadow){ // Shadow bow de 0 à 5 pour la force 0 pas d'ombre
-        if(!in_array($shadow, [0, 1, 2, 3, 4, 5])){ $shadow = 0; }
-        $this->_shadow = $this->securite($shadow);
+        if(!in_array($shadow, [0, 1, 2, 3, 4, 5])){ 
+            $shadow = 0; 
+        } else {
+                $this->_shadow = $this->securite($shadow);
+        }
     }
     public function setBlur(string $blur){ // Shadow bow de 0 à 5 pour la force 0 pas d'ombre
-        if(!in_array($blur, [0, 1, 2, 3, 4, 5])){ $blur = 0; }
-        $this->_blur = $this->securite($blur);
+        if(!in_array($blur, [0, 1, 2, 3, 4, 5])){ 
+            $blur = 0; 
+        } else {
+              $this->_blur = $this->securite($blur);
+        }
+      
     }
     public function setColor(string $color){
         if(Style::isValidColor($color)){
             $this->_color = $this->securite($color);
+        } else {
+            $this->_color = "main";
         }
-        $this->_color = "main";
+    }
+    public function setSize(string | int $size){
+        $this->_size = $size;
     }
     public function setTooltip(string $tooltip){
         if(is_string($tooltip) && !empty($tooltip)){
             $this->_tooltip = $this->securite($tooltip);
+        } else {
+            $this->_tooltip = "";
         }
-        $this->_tooltip = "";
     }
     public function setTooltipPlacement(string $tooltip_placement){
         if(!in_array($tooltip_placement,  [Style::DIRECTION_TOP, Style::DIRECTION_BOTTOM, Style::DIRECTION_LEFT, Style::DIRECTION_RIGHT])){
             $tooltip_placement = Style::DIRECTION_BOTTOM;
+        } else {
+            $tooltip_placement = $this->securite($tooltip_placement);
         }
-        $this->_tooltip_placement = $this->securite($tooltip_placement);
     }
     public function setIs_fancy(bool $is_fancy){
         if(is_bool($is_fancy)){
-            $this->_is_fancy = $this->securite($is_fancy);
+            $this->_is_fancy = $this->returnBool($is_fancy);
         } else { 
             $this->_is_fancy = false;
         }
     }
     public function setIs_download(bool $is_download){
         if(is_bool($is_download)){
-            $this->_is_download = $this->securite($is_download);
+            $this->_is_download = $this->returnBool($is_download);
         } else { 
             $this->_is_download = false;
         }
     }
-    public function setIs_thumbnail(bool $is_thumbnail){
-        if(is_bool($is_thumbnail)){
-            $this->_is_thumbnail = $this->securite($is_thumbnail);
+    public function setUse_thumbnail(bool $use_thumbnail){
+        if(is_bool($use_thumbnail)){
+            $this->_use_thumbnail = $this->returnBool($use_thumbnail);
         } else { 
-            $this->_is_thumbnail = false;
+            $this->_use_thumbnail = true;
+        }
+    }
+    public function setOther_thumbnail(File $other_thumbnail){
+        if(file_exists($other_thumbnail->getPath())){
+            $this->_other_thumbnail = $this->securite($other_thumbnail);
+        } else { 
+            $this->_other_thumbnail = null;
         }
     }
     public function setIs_removable(bool $is_removable){
         if(is_bool($is_removable)){
-            $this->_is_removable = $this->securite($is_removable);
+            $this->_is_removable = $this->returnBool($is_removable);
         } else { 
             $this->_is_removable = false;
         }
     }
-    public function setId(string $id){
-        if(is_string($id) && !empty($id)){
+    public function setId(string | int $id){
+        if(is_string($id) || is_numeric($id)){
             $this->_id = $this->securite($id);
+        }else{
+            $this->_id = "";
         }
-        $this->_id = "";
+    }
+    public function setClass(string | int $class){
+        if(is_string($class) || is_numeric($class)){
+            $this->_class = $this->securite($class);
+        } else {
+            $this->_class = "";
+        }
     }
 }

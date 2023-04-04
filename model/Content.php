@@ -6,10 +6,10 @@ abstract class Content
     
     //Format GETTERS
 
-    const DISPLAY_CARD = 0;
-    const DISPLAY_RESUME = 1;
-    const DISPLAY_EDITABLE = 2;
-    const DISPLAY_FULL = 3;
+    const DISPLAY_CARD = 100;
+    const DISPLAY_RESUME = 101;
+    const DISPLAY_EDITABLE = 102;
+    const DISPLAY_FULL = 103;
     const DISPLAY = [
         self::DISPLAY_EDITABLE => "Modifier",
         self::DISPLAY_CARD => "Carte",
@@ -19,17 +19,15 @@ abstract class Content
 
     const FORMAT_BRUT = 0;
     const FORMAT_VIEW = 1;
-    const FORMAT_EDITABLE = 2;
+    const FORMAT_EDITABLE = 102;
     const FORMAT_ICON = 3;
     const FORMAT_BADGE = 4;
     const FORMAT_OBJECT = 5;
-    const FORMAT_IMAGE = 6;
-    const FORMAT_ARRAY = 7;
-    const FORMAT_FANCY = 8;
-    const FORMAT_LIST = 9;
-    const FORMAT_TEXT = 10;
-    const FORMAT_PATH = 11;
-    const FORMAT_LINK = 13;
+    const FORMAT_ARRAY = 6;
+    const FORMAT_LIST = 7;
+    const FORMAT_TEXT = 8;
+    const FORMAT_PATH = 9;
+    const FORMAT_LINK = 10;
 
     //Date
     const DATE_DB = "Y-m-d";
@@ -44,11 +42,28 @@ abstract class Content
     // Autocomplete
     const AUTOCOMPLETE_SEPARATOR = "*|*";
 
+    const FILES = [];
+    // EXCEMPLE
+    // const FILES = [
+    //     "img" => [
+    //         "type" => FileManager::FORMAT_IMG,
+    //         "default" => "medias/classes/default.png",
+    //         "dir" => "medias/classes/",
+    //         "preferential format" => "png",
+    //         'naming' => "[uniqid]"
+    //     ],
+    //     ...
+    // ]
+
+    const PATH_FILE_GENERAL_DEFAULT = "medias/no_file_found_logo.png";
+
     protected $_id ='';
     protected $_uniqid ='';
     protected $_timestamp_add=0;
     protected $_timestamp_updated=0;
     protected $_usable = false;
+    protected $_files = [];
+    
 
     function __construct(array $donnees = []){
         $this->hydrate($donnees);
@@ -57,7 +72,31 @@ abstract class Content
         }
         if($this->_timestamp_updated == 0){
             $this->setTimestamp_updated();
-        } 
+        }
+        
+        $className = strtolower(get_class($this));
+        if(!empty($className::FILES)){
+            foreach($className::FILES as $name => $data){
+                if(isset($data['naming']) && isset($data['dir']) && isset($data['type']) && isset($data['default']) && !empty($data['naming']) && !empty($data['dir']) && !empty($data['type']) && !empty($data['default'])){
+                    $path = FileManager::formatPath($data['dir']);
+                    $path .= FileManager::solveNameFromPaternAndObject($this,$data['naming']);
+                    if(isset($data['preferential format']) && !empty($data['preferential format'])){
+                        if(file_exists($path . "." . $data['preferential format'])){
+                            $path .= "." . $data['preferential format'];
+                        }
+                    } else {
+                        $path .= "." . FileManager::findExtention($path, $data["type"]);
+                    }
+                    if(file_exists($path)){
+                        $this->_files[$name] = new File($path);
+                    } elseif(file_exists($data["default"])) {
+                        $this->_files[$name] = new File($data["default"]);
+                    } else {
+                        $this->_files[$name] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                    }
+                }
+            }
+        }
     }
 
     protected function hydrate(array $donnees){
@@ -167,12 +206,59 @@ abstract class Content
                 return $this->_usable;
         }
     }
+    public function getFile(string $name_file, Style $style = new Style([])){
+        $className = strtolower(get_class($this));
+        $view = new View();
+        if(isset($this->_files[$name_file])){
+            $file = $this->_files[$name_file];
+        } else {
+            throw new Exception("Ce nom de fichier n'est pas associé à cet objet.");
+        }
+
+        if($file->getPath() == $className::FILES[$name_file]["default"] || $file->getPath() == Content::PATH_FILE_GENERAL_DEFAULT){
+            $style->setIs_removable(false);
+        } else {
+            $style->setIs_removable(true);
+        }
+        switch ($style->getDisplay()) {
+            case  Content::FORMAT_BRUT:
+                return $file->getPath();
+
+            case Content::FORMAT_OBJECT:
+                return $file;
+
+            case  Content::DISPLAY_EDITABLE:
+                $style->setFormat(Content::FORMAT_VIEW);
+                ob_start();
+                    echo $file->getVisual($style);
+                    if($style->getIs_removable()){
+                        ?><div class="text-center"><a onclick="File.remove('<?=$file->getPath();?>');" class="btn-sm btn-text-red">Supprimer l'image</a></div><?php
+                    }
+                    $view->dispatch(
+                        template_name : "input/file",
+                        data : [
+                            "url" => "index.php?c=".strtolower($className)."&a=upload",
+                            "uniqid" => $this->getUniqid(),
+                            "label" => "Modifier l'Image",
+                            "view_img_path" => $file->getPath(),
+                            "extention_available" => FileManager::getListeExtention(FileManager::FORMAT_IMG),
+                            "name_file" => $name_file
+                        ], 
+                        write: true);
+                return ob_get_clean();
+
+            case Content::FORMAT_VIEW:
+                $style->setIs_download(true);
+
+        }
+        return $file->getVisual($style);
+    }
     public function setId($data){
         if($data > 0){
             $this->_id = $data;
             return true;
         } else {
-            return "Id est incorrect";
+            throw new Exception("Id est incorrect");
         }
     }
     public function setUniqid($data){
@@ -245,7 +331,7 @@ abstract class Content
             break;
 
             default:
-                return "Erreur : format de display non reconnu";
+                throw new Exception("Erreur : format de display non reconnu");
         }
 
         return $view->dispatch(
@@ -260,7 +346,7 @@ abstract class Content
 
     }
 
-    static function removeSpecialCaractere($string){ // Enlève tout les accents et les caractères spéciaux
+    static function removeSpecialCaractere(string | int $string){ // Enlève tout les accents et les caractères spéciaux
         $caracteres = array('à' => 'a', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', '@' => 'a',
         'È' => 'e', 'É' => 'e', 'Ê' => 'e', 'Ë' => 'e', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', '€' => 'e',
         'Ì' => 'i', 'Í' => 'i', 'Î' => 'i', 'Ï' => 'i', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i',
@@ -282,7 +368,7 @@ abstract class Content
 
         return $string;
     }
-    static function getMinMaxFromFormule($formule){
+    static function getMinMaxFromFormule(string | int $formule){
         $count_min = 0;
         $count_max = 0;
         $same = false;
@@ -338,7 +424,7 @@ abstract class Content
             "same" => $same
         ];
     }
-    static function getValueFromFormule($formule, $var){
+    static function getValueFromFormule(string | int $formule, string | int $var){
         $var = intval(str_replace(' ', '', $var));
         $val = 0;
         if(!preg_match_all("/\[(.*)\]/i", $formule, $matches, PREG_SET_ORDER)){

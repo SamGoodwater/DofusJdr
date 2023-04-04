@@ -3,7 +3,7 @@
         <table width="100%" valign="middle" align="left">
             <tr>
                 <td width="15%" class="starter center">
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getPath_img(); ?>
+                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
                     <img src="<?=$img?>" height="100"><br>
                     Arme priviligiée<br>
                     <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getWeapons_of_choice(Content::FORMAT_PATH); ?>

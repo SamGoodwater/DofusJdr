@@ -15,7 +15,7 @@
         <div ondblclick="Npc.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card p-2 m-1 border-secondary-d-2 border" style="width: <?=$size?>px;" >
             <div class="d-flex flew-row flex-nowrap justify-content-start">
                 <div>
-                    <?=$classe->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
+                    <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
                 </div>
                 <div class="m-1">
                     <p class="bold ms-1"><?=$obj->getName()?></p>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="ms-auto align-self-end">
                     <a onclick='User.changeBookmark(this);' data-classe='npc' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
-                    <p><a class="btn-text-secondary" title="Afficher les sorts" onclick="Classe.getSpellList('<?=$classe->getUniqid()?>');"><i class="fas fa-magic"></i></a></p>
+                    <p><a class="btn-text-secondary" title="Afficher les sorts" onclick="Npc.getSpellList('<?=$obj->getUniqid()?>');"><i class="fas fa-magic"></i></a></p>
                     <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$obj->getUniqid()?>'><i class='fas fa-file-pdf'></i></a></p>
                 </div>
             </div>
@@ -106,18 +106,6 @@
                     <?=$obj->getDrop_()?>
                     <?=$obj->getKamas()?>
                 </div>
-                <div class="nav-item-divider back-main-d-1"></div>
-                <h4 class="pt-2 text-center">Sorts</h4>
-                <div class="dy-2 px-1"><?=$obj->getSpell(Content::DISPLAY_RESUME);?></div>
-                <div class="dy-2 px-1"><?=$obj->getOther_spell();?></div>
-                <div class="nav-item-divider back-main-d-1"></div>
-                <h4 class="pt-2 text-center">Equipement</h4>
-                <div class="dy-2 px-1"><?=$obj->getItem();?></div>
-                <div class="dy-2 px-1"><?=$obj->getOther_item();?></div>
-                <div class="nav-item-divider back-main-d-1"></div>
-                <h4 class="pt-2 text-center">Consommables</h4>
-                <div class="dy-2 px-1"><?=$obj->getConsumable();?></div>
-                <div class="dy-2 px-1"><?=$obj->getOther_consomable();?></div>
             </div>
         </div>
     </div>

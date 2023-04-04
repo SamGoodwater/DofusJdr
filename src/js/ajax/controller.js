@@ -1,10 +1,10 @@
 
 class Controller {
 
-    static DISPLAY_CARD = 0;
-    static DISPLAY_RESUME = 1;
-    static DISPLAY_EDITABLE = 2;
-    static DISPLAY_FULL = 3;
+    static DISPLAY_CARD = 100;
+    static DISPLAY_RESUME = 101;
+    static DISPLAY_EDITABLE = 102;
+    static DISPLAY_FULL = 103;
 
     static MODEL_NAME = "";
 
@@ -31,7 +31,8 @@ class Controller {
         ); 
     }
     
-    static update(uniqid, input, type, value_type = IS_INPUT, fct = ""){
+    static update(uniqid, input, type, value_type = IS_INPUT, fct = "", reopen_modal = false){
+        let this_ = this;
         var URL = 'index.php?c='+this.MODEL_NAME+'&a=update';
         var value = 0;
     
@@ -95,7 +96,10 @@ class Controller {
                     $('body').append("<script>"+data.script+"</script>");
                 }
                 if(data.state){
-                    Item.updateDisplayRow(uniqid);
+                    this_.updateDisplayRow(uniqid);
+                    if($("#modal").hasClass("show") && reopen_modal){
+                        this_.open(uniqid, Controller.DISPLAY_EDITABLE);
+                    }
                     MsgAlert("Mise à jour de l'objet", '', "green" , 3000);
                 } else {
                     MsgAlert("Echec de la mise à jour", 'Erreur : ' + data.error, "danger" , 4000);

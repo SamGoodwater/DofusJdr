@@ -2,9 +2,10 @@
     // Obligatoire
     if(!isset($url)) {throw new Exception("url is not set");}else{if(!is_string($url)) {throw new Exception("url is not set");}}
     if(!isset($uniqid)) {throw new Exception("uniqid is not set");}else{if(!is_string($uniqid)) {throw new Exception("uniqid is not set");}}
+    if(!isset($name_file)) {throw new Exception("name_file is not set");}else{if(!is_string($name_file) && !is_numeric($name_file)) {throw new Exception("name_file is not set");}}
     
     // Conseillé
-    if(!isset($label)) { $label = "";}else{if(!is_string($label) && !is_numeric($label)) {$label = "";}}
+    if(!isset($label)) { $label = "";}else{if(!is_string($label) && !is_string($label)) {$label = "";}}
     if(!isset($view_img_path)) { $view_img_path = "";}else{if(!is_string($view_img_path) && !is_numeric($view_img_path)) {$view_img_path = "";}}
     if(!isset($is_dropbable)) { $is_dropbable = true;}else{if(!is_bool($is_dropbable)) {$is_dropbable = true;}}
     if(!isset($extention_available)) { $extention_available = FileManager::getListeExtention(FileManager::FORMAT_IMG, FileManager::FORMAT_AUDIO, FileManager::FORMAT_VIDEO, FileManager::FORMAT_PDF, FileManager::FORMAT_DOCUMENT, FileManager::FORMAT_TABLEUR, FileManager::FORMAT_SLIDER);}else{if(!is_array($extention_available)) {$extention_available = FileManager::getListeExtention(FileManager::FORMAT_IMG, FileManager::FORMAT_AUDIO, FileManager::FORMAT_VIDEO, FileManager::FORMAT_PDF, FileManager::FORMAT_DOCUMENT, FileManager::FORMAT_TABLEUR, FileManager::FORMAT_SLIDER);}}
@@ -38,6 +39,7 @@
             <p><?=$label?></p>
             <input class="file-input form-control form-control-<?=$color?>-focus form-control" name="file" type="file" hidden>
             <input name="uniqid" type="hidden" value="<?=$uniqid?>" hidden>
+            <input name="name_file" type="hidden" value="<?=$name_file?>" hidden>
             <?php foreach($parameters as $key => $value){ ?>
                 <input type="hidden" name="<?=$key?>" value="<?=$value?>">
             <?php } ?>

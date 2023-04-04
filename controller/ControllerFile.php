@@ -23,7 +23,6 @@ class ControllerFile extends Controller{
         $path = FileManager::formatPath($_REQUEST['path'], false, false);
         if (strpos($path, "..") !== false || strpos($path, "/.") !== false || strpos($path, "./") !== false  || strpos($path, ".\\") !== false  || strpos($path, "\\.") !== false) {
           $return['error'] = "Par sécuirté, il n'est pas possible de manipuler le chemin lors de la suppression.";
-
         } else {
           $file = new File($path);
           if(FileManager::inMedias($file)){

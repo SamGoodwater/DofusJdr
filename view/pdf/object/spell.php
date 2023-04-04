@@ -1,7 +1,7 @@
 <td valign="top" width="33%" class="spacing <?=$obj->getElement(Content::FORMAT_TEXT, "box")?>">
     <table align="left">
         <tr>
-            <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getPath_img(); ?>
+            <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
             <td width="20%"><img src="<?=$img?>" height="50"></td>
             <td width="80%" class="relative baseline left" align="left">
                 <div>

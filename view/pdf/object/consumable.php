@@ -1,7 +1,7 @@
 <td>
     <table border="0" cellspacing="0">
         <tr>
-            <?php $img =  $_SERVER["DOCUMENT_ROOT"]."/".$obj['obj']->getPath_img(); ?>
+            <?php $img =  $_SERVER["DOCUMENT_ROOT"]."/".$obj['obj']->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
             <td align="left"><img src="<?=$img?>" height="50"></td>
             <td><h3><?=$obj['obj']->getName()?></h3></td>
         </tr>

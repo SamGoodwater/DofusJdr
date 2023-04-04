@@ -18,6 +18,8 @@ abstract class Controller{
   const SIZE_FL = -1;
   const RESPONSIVE = "responsive";
 
+  const DIR_IMG = "";
+
   protected $_model_name = "";
   protected $_manager_name = "";
   public function __construct(){
@@ -126,6 +128,70 @@ abstract class Controller{
 
     }
 
+    echo json_encode($return);
+    flush();
+  }
+  public function upload(){
+    $return = [
+      'state' => false,
+      'value' => "",
+      'error' => 'erreur inconnue',
+      'script' => ""
+    ];
+    $currentUser = ControllerConnect::getCurrentUser();
+    if(!$currentUser->getRight($this->_model_name, User::RIGHT_WRITE)){
+      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
+
+        if(isset($_REQUEST['name_file'], $_REQUEST['uniqid'], $_FILES['file'])){
+          $manager = new $this->_manager_name();
+
+          if($manager->existsUniqid($_REQUEST['uniqid'])){
+            $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
+
+            if(isset(ucfirst($this->_model_name)::FILES[$_REQUEST['name_file']])){
+              $data = ucfirst($this->_model_name)::FILES[$_REQUEST['name_file']];
+
+              if(isset($data['naming']) && isset($data['dir']) && isset($data['type']) && isset($data['default']) && !empty($data['naming']) && !empty($data['dir']) && !empty($data['type']) && !empty($data['default'])){
+                  $dirname = FileManager::formatPath($data['dir'], true, true);
+                  $name = FileManager::solveNameFromPaternAndObject($obj, $data['naming']);
+                  
+                  $fileManager = new FileManager(array(
+                    "dirname" => $dirname,
+                    "file" => $_FILES["file"],
+                    "name" => $name
+                  ));
+                  $fileManager->setFormatallowed(FileManager::getListeExtention(FileManager::FORMAT_IMG));
+                  $result = $fileManager->upload();
+                  
+                  if($result["state"]){
+                      $return['value'] = $result["path"];
+                      $obj->setTimestamp_add();
+                      $obj->setTimestamp_updated();
+                      $manager->update($obj);
+                      $return['state'] = true;
+                      $return['script'] = ucfirst($this->_model_name) . ".open('".$obj->getUniqid()."', Controller.DISPLAY_EDITABLE);";
+
+                  } else {
+                    $return['error'] = $result['error'];
+                  }
+
+              } else {
+                $return['error'] = "Impossible de récupérer les données de l'objet.";
+              }
+
+            } else {  
+              $return['error'] = "Aucun fichier correspondant dans l'objet";
+            }
+
+          }else {
+            $return['error'] = "Impossible de récupérer la référence de l'object.";
+          }
+
+        } else {
+          $return['error'] = "Pas de fichier envoyé";
+        }
+    }
+    
     echo json_encode($return);
     flush();
   }

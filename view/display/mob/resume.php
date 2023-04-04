@@ -13,14 +13,14 @@
         <div ondblclick="Mob.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card border-secondary-d-2 border p-2 m-1" style="width: <?=$size?>px;" >
             <div class="d-flex flew-row flex-nowrap justify-content-start">
                 <div>
-                    <?=$obj->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
+                    <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
                 </div>
                 <div class="m-1 p-0">
                     <p class="bold ms-1"><?=$obj->getName()?></p>
-                    <div class="d-flex flex-wrap justify-content-around align-items-start">
+                    <div class="d-flex flex-wrap justify-content-around align-items-baseline">
                         <p class="mt-1 text-level short-badge-150"><?=$obj->getLevel(Content::FORMAT_BADGE)?></p> 
-                        <div> <?=$obj->getPowerful(Content::FORMAT_ICON)?></div>
-                        <p class="short-badge-100"><?=$obj->getHostility(Content::FORMAT_BADGE)?></p>
+                        <div class="mt-1 mx-2"> <?=$obj->getPowerful(Content::FORMAT_ICON)?></div>
+                        <p class="mt-1 short-badge-100"><?=$obj->getHostility(Content::FORMAT_BADGE)?></p>
                     </div>
                 </div>
                 <div class="d-flex flex-column justify-content-between ms-auto">

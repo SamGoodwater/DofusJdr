@@ -10,6 +10,7 @@
 
 <div class="card mb-3">
     <div class="d-flex flex-row justify-content-between align-items-start m-2">
+        <div><?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-120"]));?></div>
         <div>
             <h6 class="text-center">Classe</h6>
             <?=$obj->getClasse(Content::FORMAT_OBJECT)->getVisual(Content::DISPLAY_RESUME)?>

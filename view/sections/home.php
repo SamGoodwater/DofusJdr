@@ -45,7 +45,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
             <?php if(empty($sections)){ ?>
                 <p>La page est vide <i class="fas fa-sad-tear"></i></p>
-                <p><a data-bs-toggle="collapse" onclick="$('#modal').modal('show')" >Ajouter un paragraphe pour commencer.</a></p>
+                <p><a data-bs-toggle="collapse" onclick="Section.getVisual('<?=$pageTemp->getUniqid()?>',true);" >Ajouter un paragraphe pour commencer.</a></p>
             <?php }
             
             foreach ($sections as $section) { ?>
@@ -55,7 +55,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         </div>
 
         <div class="text-right">
-            <a onclick="$('#modal').modal('show')" class="size-2 text-main-d-3 text-main-d-1-hover mx-3"><i class="far fa-plus-square"></i></a>
+            <a onclick="Section.getVisual('<?=$pageTemp->getUniqid()?>',true);" class="size-2 text-main-d-3 text-main-d-1-hover mx-3"><i class="far fa-plus-square"></i></a>
         </div>
 
         <script>

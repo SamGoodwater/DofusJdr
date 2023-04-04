@@ -12,12 +12,12 @@
     <div ondblclick="Spell.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card p-2 m-1 <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>-l-5 <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>-l-4-hover border-solid border-2 <?=$obj->getElement(Content::FORMAT_TEXT, "border")?>-d-2" style="width: <?=$size?>px;" >
         <div class="d-flex flew-row flex-nowrap">
             <div>
-                <?=$obj->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
+                <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
                 <p class="mt-1"><?=$obj->getLevel(Content::FORMAT_BADGE)?></p> 
             </div>
 
             <div class="card-body m-1 p-0">
-                <div class="d-flex flew-row justify-content-between ">
+                <div class="d-flex flex-row justify-content-between ">
                     <p class="bold"><?=$obj->getName()?></p>
                     <div class="d-flex flex-row align-content-center">
                         <div style="height:18px;"><?=$obj->getPo_editable(Content::FORMAT_ICON)?></div>
@@ -37,11 +37,11 @@
         </div>
         <div class="card-hover-showed">
             <div class="d-flex flex-row justify-content-around align-items-baseline flex-wrap">
-                <?=$obj->getIs_magic(Content::FORMAT_BADGE)?>
-                <?=$obj->getType(Content::FORMAT_BADGE)?>
-                <?=$obj->getCategory(Content::FORMAT_BADGE)?>
-                <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
-                <?=$obj->getElement(Content::FORMAT_BADGE)?>
+                <div class="me-1 mb-1"><?=$obj->getIs_magic(Content::FORMAT_BADGE)?></div>
+                <div class="me-1 mb-1"><?=$obj->getType(Content::FORMAT_BADGE)?></div>
+                <div class="me-1 mb-1"><?=$obj->getCategory(Content::FORMAT_BADGE)?></div>
+                <div class="me-1 mb-1"><?=$obj->getPowerful(Content::FORMAT_BADGE)?></div>
+                <div class="me-1 mb-1"><?=$obj->getElement(Content::FORMAT_BADGE)?></div>
             </div>
             <?=$obj->getEffect()?>
             <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>

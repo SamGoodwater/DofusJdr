@@ -143,7 +143,7 @@ class Section extends Content
                         }
                     }
                     ob_start(); ?>
-                        <div id="section<?=$this->getUniqid()?>" class="sectionselector mb-4" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
+                        <section id="section<?=$this->getUniqid()?>" class="sectionselector mb-4" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
                             <div class="section-title d-flex flex-row justify-content-between">
                                 <h3 class="text-secondary-l-2" style="width:initial;"><?=$this->getTitle()?></h3>
                                 <div class="section-options row justify-content-between text-right">
@@ -157,16 +157,16 @@ class Section extends Content
                             <div class="sectionContentSelector">
                                 <?=$template["content"]?>
                             </div>
-                        </div>
+                        </section>
                     <?php return ob_get_clean();
                 } else {
                     ob_start(); ?>
-                        <div id="section<?=$this->getUniqid()?>">
+                        <section id="section<?=$this->getUniqid()?>">
                             <p>Erreur : Aucun template associé à la section
                                 <a class="btn btn-sm btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fas fa-trash"></i> Supprimer la section</a>
                             </p>
                             <p><small class="text-grey-d-1">Impossible d'accéder au template lié à cette section. Le lien est manquant ou corrompu. Si l'erreur persiste après avoir ressayer de la recréer, veuillez contacter l'administrateur·trice du site.</small></p>
-                        </div>
+                        </section>
                     <?php return ob_get_clean();
                 }
 
@@ -181,20 +181,20 @@ class Section extends Content
                     include SectionManager::PATH_SECTION . $this->getType();
                     
                     ob_start(); ?>
-                        <div>
+                        <section>
                             <h3 class="text-main-d-4"><?=$this->getTitle()?></h3>
                             <div><?=$template["content"]?></div>
-                        </div>
+                        </section>
                     <?php return ob_get_clean();
 
                 } else {
                     ob_start(); ?>
-                        <div id="section<?=$this->getUniqid()?>">
+                        <section id="section<?=$this->getUniqid()?>">
                             <p>Erreur : Aucun template associé à la section
                                 <a class="btn btn-sm btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fas fa-trash"></i> Supprimer la section</a>
                             </p>
                             <p><small class="text-grey-d-1">Impossible d'accéder au template lié à cette section. Le lien est manquant ou corrompu. Si l'erreur persiste après avoir ressayer de la recréer, veuillez contacter l'administrateur·trice du site.</small></p>
-                        </div>
+                        </section>
                     <?php return ob_get_clean();
                 }     
         }
@@ -206,7 +206,7 @@ class Section extends Content
                 $this->_type = $data;
                 return true;
             } else {
-                return "Aucun fichier associé à la section";
+                throw new Exception("Le type de section n'existe pas");
             }
         }
         public function setUniqid_page(string $data){
@@ -215,7 +215,7 @@ class Section extends Content
                 $this->_uniqid_page = $data;
                 return true;
             } else {
-                return "La page n'existe pas";
+                throw new Exception("La page n'existe pas");
             }
         }
         public function setTitle(string $data){
@@ -231,7 +231,8 @@ class Section extends Content
                 $this->_order_num = $data;
                 return true;
             } else {
-                return "Order_num de la section est incorrect";
+                $data = 0;
+                return false;
             }
         }
 }

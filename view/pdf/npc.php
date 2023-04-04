@@ -2,7 +2,7 @@
 
         <table width="100%" valign="middle" cellspacing="2">
             <tr width="100%" style="text-align:center;"> <!-- LIGNE -->
-                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getClasse(Content::FORMAT_OBJECT)->getPath_img(); ?>
+                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getClasse(Content::FORMAT_OBJECT)->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
                 <td width="15%" rowspan="2" align="left"><img src="<?=$img?>" height="100"></td>
                 <td><h2><?=$obj->getName()?></h2></td>
                 <td border="1" class="border-shield back-shield text-shield" width="10%"><h3><span class="starter">Niveau : </span><?=$obj->getLevel()?></h3></td>

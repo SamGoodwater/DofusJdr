@@ -63,7 +63,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <div class="sectionContentSelector">
             <?php if(file_exists($template_vars['content'])){
                 $file = New File($template_vars['content']);
-                echo $file->getVisual(Content::FORMAT_VIEW, "img-back-450H-allL");
+                echo $file->getVisual(new Style(['display' => Content::FORMAT_VIEW, "class" => "img-back-450H-allL", "size" => Style::SIZE_XL]));
             } else {
                 echo "Le fichier n'existe pas;";
             }?>

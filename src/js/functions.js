@@ -277,3 +277,6 @@ function rollDice() {
     result += parseInt(add_int);
     $("#result_dice").html(result);
 }
+
+// Met la première lettre en majuscule
+function ucFirst(str) {return str && str[0].toUpperCase() + str.slice(1);}

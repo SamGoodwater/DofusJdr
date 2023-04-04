@@ -1,5 +1,7 @@
 class Page extends Controller{
 
+    static MODEL_NAME = "page";
+
     SIZE_SM = 576;
     SIZE_MD = 768;
     SIZE_LG = 993;
@@ -92,7 +94,7 @@ class Page extends Controller{
                 html += "</div>";
 
             if(show){
-                $(".dashboard-content").append(html);
+                $(".app-content").append(html);
                 $('[data-toggle="tooltip"]').tooltip();
             }
         }
@@ -151,9 +153,11 @@ class Page extends Controller{
     static show(url_name, settings){
         $("#onloadDisplay").show("slow");
         var spinner = "<div class='d-flex justify-content-center'><div class='text-main-d-2 spinner-border' role='status'><span class='visually-hidden'>Loading...</span></div></div>";
-        $(".dashboard-app #content").html(spinner);
-        $(".dashboard-app #title").html("");
-        $(".dashboard-nav").removeClass("mobile-show");
+        $(".app-content #content").html(spinner);
+        $(".app-toolbar #title").html("");
+        if($(".app").hasClass("app-compacted")){
+            toogleMenu(true);
+        }
 
         var URL = 'index.php?c=page&a=show';
         $.post(URL,
@@ -168,16 +172,15 @@ class Page extends Controller{
                     $('body').append("<script>"+data.script+"</script>");
                 }
                 if(data.state){
-                    $(".dashboard-app #content").hide();
-                    $(".dashboard-app #title").hide();
-                    $(".dashboard-app #content").html("");
-                    $(".dashboard-app #title").html("");
-                    $(".dashboard-app #content").html(data.html);
-                    $(".dashboard-app #title").html(data.title);
+                    $(".app-content #content").hide();
+                    $(".app-toolbar #title").hide();
+                    $(".app-content #content").html("");
+                    $(".app-toolbar #title").html("");
+                    $(".app-content #content").html(data.html);
+                    $(".app-toolbar #title").html(data.title);
                     document.title = data.title;
-                    $(".dashboard-app #content").show("fold");
-                    $(".dashboard-app #title").show("fade");
-                    if(data)
+                    $(".app-content #content").show("fold");
+                    $(".app-toolbar #title").show("fade");
                     Page.build(Page.RESPONSIVE, data.modal_title, data.modal_html);
                     var url = url_name;
                     if(settings !="" && settings != undefined && settings != null){url += "/" + settings;}
@@ -259,6 +262,12 @@ class Page extends Controller{
             },
             "json"
         ); 
+    }
+
+    static showSearchbar(){
+        var html = $("#globalsearch").parent().html();
+        Page.build(Page.RESPONSIVE, "Recherche", html, this.SIZE_SM, true);
+        autocomplete_load("#modal #globalsearch");
     }
 
 

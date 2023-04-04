@@ -7,21 +7,21 @@ const IS_CKEDITOR = 3;
 const IS_PATH_FILE = 4;
 const CKEDITOR5 = Array;
 
+const DISPLAY_CARD = 0;
+const DISPLAY_RESUME = 1;
+const DISPLAY_EDITABLE = 2;
+const DISPLAY_FULL = 3;
 const FORMAT_BRUT = 0;
 const FORMAT_VIEW = 1;
 const FORMAT_EDITABLE = 2;
 const FORMAT_ICON = 3;
 const FORMAT_BADGE = 4;
 const FORMAT_OBJECT = 5;
-const FORMAT_IMAGE = 6;
-const FORMAT_ARRAY = 7;
-const FORMAT_FANCY = 8;
-const FORMAT_LIST = 9;
-const FORMAT_TEXT = 10;
-const FORMAT_PATH = 11;
-const DISPLAY_CARD = 12;
-const FORMAT_LINK = 13;
-const DISPLAY_RESUME = 14;
+const FORMAT_ARRAY = 6;
+const FORMAT_LIST = 7;
+const FORMAT_TEXT = 8;
+const FORMAT_PATH = 9;
+const FORMAT_LINK = 10;
 
 jQuery(document).ready(function($) {
 
@@ -30,10 +30,6 @@ jQuery(document).ready(function($) {
 	[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {
 		new SelectFx(el);
 	} );
-
-	$('#menuToggle').on('click', function(event) {
-		$('body').toggleClass('open');
-	});
 
 	$('[data-bd-toggle="tooltip"]').tooltip();
 	
@@ -84,4 +80,23 @@ $(window).on("keyup keydown", function (e) {
 		User.getBookmark();
 		keys = {};
 	}
+});
+
+function toogleMenu($forced_closed = false){
+	if($('.app').hasClass('app-extend') || $forced_closed){
+		$(".app").removeClass("app-extend").addClass("app-fold");
+		$(".app-nav").hide("drop", 300);
+	} else {
+		$(".app").removeClass("app-fold").addClass("app-extend");
+		$(".app-nav").show("drop", 300);
+	}
+}
+$(document).ready(function() {
+    $(window).resize(function() {
+        if ($(window).width() < 992) {
+            $(".app").addClass("app-compacted");
+        } else {
+            $(".app").removeClass("app-compacted");
+        }
+    });
 });

@@ -57,6 +57,7 @@ class Connect {
             function(data, status)
             {
                 $("#userVisual").html(data.header);
+                $("#account_btn_toolbar_mobile").html(data.header_mobile);
                 Page.build(Page.RESPONSIVE, data.title, data.modal, data.size, show_modal)
                 $("#onloadDisplay").hide("slow");
             },
@@ -101,6 +102,7 @@ class Connect {
                         var cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 
                         document.cookie = cookie;
                     }
+                    Connect.getHeader(false);
                 } else {
                     $('#display_error').text(data.error);
                     MsgAlert("Echec de l'ajout", 'Erreur : ' + data.error, "danger" , 4000);
@@ -129,6 +131,7 @@ class Connect {
                     Page.build(Page.RESPONSIVE, data.value.title,  data.value.modal, data.value.size, false);
                     var cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 
                     document.cookie = cookie;
+                    location.reload();
                 } else {
                     $('#display_error').text(data.error);
                 }

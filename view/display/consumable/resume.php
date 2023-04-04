@@ -13,7 +13,7 @@
         <div ondblclick="Consumable.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card border-secondary-d-2 border p-2 m-1" style="width: <?=$size?>px;" >
             <div class="row">
                 <div class="col-auto">
-                    <?=$obj->getPath_img(Content::FORMAT_IMAGE, "img-back-50")?>
+                    <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
                 </div>
                 <div class="col">
                     <p class="bold ms-1"><?=$obj->getName()?></p>

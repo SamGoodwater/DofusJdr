@@ -6,7 +6,7 @@
         <td>
             <table width="100%" valign="middle" border=0>
                 <tr width="100%" style="text-align:center;" border=0> <!-- LIGNE -->
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getPath_img(); ?>
+                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
                     <td width="15%" rowspan="2"><img src="<?=$img?>" height="100"></td>
                     <td><h2><?=$obj->getName()?></h2></td>
                     <td class="box-level"><h3><span class="starter">Niveau : </span><b class="enavant2"><?=$obj->getLevel()?></b></h3></td>

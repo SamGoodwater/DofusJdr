@@ -4,8 +4,9 @@
     // Ajouter des dossiers ou des fichiers au tableau
     $to_require = [
         "src/php/traits/",
-        "src/php/traits/module/",
-        "src/php/conf.php"
+        "src/php/traits/modules/",
+        "src/php/conf.php",
+        "src/php/settings.php"
     ];
 
     foreach ($to_require as $dir) {

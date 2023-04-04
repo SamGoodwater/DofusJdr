@@ -16,17 +16,17 @@ class ControllerPage extends Controller{
     ];
     $currentUser = ControllerConnect::getCurrentUser();
 
-    if(isset($_REQUEST["url_name"])){
-      $url_name = $_REQUEST["url_name"];
-      $settings = "";
-      if(isset($_REQUEST['settings'])){
-        $settings = $_REQUEST['settings'];
-      }
       $manager = new PageManager;
+      if(isset($_REQUEST["url_name"])){
+        $url_name = $_REQUEST["url_name"];
+      } else {
+        $url_name = "";
+      }
+
       if($manager->existsUrl_name($url_name)){
 
         $page = $manager->getFromUrl_name($url_name);
-        if($page->getPublic() || $currentUser->getRight('page', User::RIGHT_READ)){
+        if($page->getPublic() || $currentUser->getRight('page', User::RIGHT_WRITE)){
             $title = $page->getName();
             $content = $page->getVisual(Content::FORMAT_EDITABLE);
             $modal = $page->getModal();
@@ -59,9 +59,6 @@ class ControllerPage extends Controller{
       $return["html"] = $content;
       $return["title"] = $title;
       $return["state"] = true;
-    } else {
-      $return["error"] = "Données manquantes.";
-    }
 
     echo json_encode($return);
     flush();
@@ -75,7 +72,8 @@ class ControllerPage extends Controller{
       'value' => "",
       'error' => 'erreur inconnue',
       'script' => "",
-      "link" => ""
+      "link" => "",
+      "uniqid" => ""
     ];
     if($currentUser->getRight('page', User::RIGHT_WRITE)){
 
@@ -112,6 +110,7 @@ class ControllerPage extends Controller{
         $manager->add($obj);
           
         $return['link'] = $obj->getUrl_name();
+        $return['uniqid'] = $obj->getUniqid();
         $return['state'] = true;
       } else {
         $return['error'] = "Les données ne sont pas complètes.";
@@ -140,27 +139,26 @@ class ControllerPage extends Controller{
 
         $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
 
-        if(!in_array($obj->getUniqid(), Page::UNIQID_NO_EDIT)){
-          $method = "set".ucfirst($_REQUEST['type']);
-
-          if(method_exists($obj,$method)){
-              $result = $obj->$method($_REQUEST['value']);
-              if($result){
-                $obj->setTimestamp_updated(time());
-                $manager->update($obj);
-                $return['state'] = true;
-              } else {
-                $return['error'] = $result;
-              }
-
-          } else {
-            $return['error'] = "Aucun type correspondant dans l'objet";
-          }
-
+        if(in_array($obj->getUniqid(), Page::UNIQID_NO_EDIT) && in_array($_REQUEST['type'], ["url_name", "uniqid", "is_dropdown", "public"])){
+            $return['error'] = "Cet élément ne peut pas être modifier.";
         } else {
-          $return['error'] = "Cette page ne peut pas être modifier.";
-        }
 
+            $method = "set".ucfirst($_REQUEST['type']);
+
+            if(method_exists($obj,$method)){
+                $result = $obj->$method($_REQUEST['value']);
+                if($result){
+                  $obj->setTimestamp_updated(time());
+                  $manager->update($obj);
+                  $return['state'] = true;
+                } else {
+                  $return['error'] = $result;
+                }
+  
+            } else {
+              $return['error'] = "Aucun type correspondant dans l'objet";
+            }
+        }
       }
     } else {
       $return['error'] = "Impossible d'écrire l'objet";

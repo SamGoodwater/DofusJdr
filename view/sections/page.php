@@ -46,7 +46,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
 
-        <h3>Ajouter une page</h3>
+        <h3  class="mb-3">Ajouter une page</h3>
         <div class="d-flex justify-content-between align-item-baseline addpage">
             <div> <!-- Nom -->
                 <input 
@@ -86,10 +86,11 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <label class="form-check-label" for="switcheditableadd"><i class="fas fa-pen-square"></i></label>
                 </div>
             </div>
+            <p><a class="btn btn-sm btn-back-secondary mb-2" onclick="Page.add();">Ajouter la page</a></p>
         </div>
-        <p><a class="btn btn-sm btn-back-secondary mb-2" onclick="Page.add();">Ajouter la page</a></p>
 
-        <div class='nav-item-divider back-main-d-1 m-4'></div>
+        <div class='item-divider-main'></div>
+
         <h3>Modifier les pages</h3>
 
         <table 
@@ -138,7 +139,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         </td>
                         <td> <!-- Nom -->
                             <input 
-                                <?=$disabled?>
                                 onchange="Page.update('<?=$page->getUniqid();?>', this, 'name');" 
                                 placeholder="Nom de la page" 
                                 maxlength="300" 
@@ -161,7 +161,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             <p><small class="size-0-8">Le nom doit ne doit pas contenir de caractérère spécial ni d'espace.</small></p>
                         </td>
                         <td> <!-- Catégorie -->
-                            <select <?=$disabled?> onchange="Page.update('<?=$page->getUniqid()?>', this, 'category');" class="form-select form-select-sm" aria-label=".form-select-sm">
+                            <select onchange="Page.update('<?=$page->getUniqid()?>', this, 'category');" class="form-select form-select-sm" aria-label=".form-select-sm">
                                 <?php $selected = ""; if($page->getCategory() < 0){$selected = "selected";} ?>
                                 <option <?=$selected?> value="-1">Ne pas afficher</option>
                                 <?php foreach ($categories_available as $number_category => $name_category) {
@@ -180,7 +180,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         </td>
                         <td> <!-- Is_editable -->
                             <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, il est possible d'ajouter des sections à la page.">
-                                <input <?=$disabled?> onchange="Page.update('<?=$page->getUniqid();?>', this, 'is_editable', <?=Controller::IS_CHECKBOX?>);" <?=$checked_editable?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditable<?=$page->getUniqid()?>">
+                                <input onchange="Page.update('<?=$page->getUniqid();?>', this, 'is_editable', <?=Controller::IS_CHECKBOX?>);" <?=$checked_editable?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditable<?=$page->getUniqid()?>">
                                 <label class="form-check-label" for="switcheditable<?=$page->getUniqid()?>"><i class="fas fa-pen-square"></i></label>
                             </div>
                         </td>
@@ -211,7 +211,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             </td>
                             <td> <!-- Nom -->
                                 <input 
-                                    <?=$disabled?>
                                     onchange="Page.update('<?=$page->getUniqid();?>', this, 'name');" 
                                     placeholder="Nom de la page" 
                                     maxlength="300" 
@@ -234,7 +233,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                 <p><small class="size-0-8">Le nom doit ne doit pas contenir de caractérère spécial ni d'espace.</small></p>
                             </td>
                             <td> <!-- Catégorie -->
-                                <select <?=$disabled?> onchange="Page.update('<?=$page->getUniqid()?>', this, 'category');" class="form-select form-select-sm" aria-label=".form-select-sm">
+                                <select onchange="Page.update('<?=$page->getUniqid()?>', this, 'category');" class="form-select form-select-sm" aria-label=".form-select-sm">
                                     <?php $selected = ""; if($page->getCategory() < 0){$selected = "selected";} ?>
                                     <option <?=$selected?> value="-1">Ne pas afficher</option>
                                     <?php foreach ($categories_available as $number_category => $name_category) {
@@ -245,7 +244,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             </td>
                             <td> <!-- Dropdown -->
                                 <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, les pages filles seront sous forme de liste déroulante. Attention cette page n'est plus accessible directement depuis le menu.">
-                                    <input <?=$disabled?> onchange="Page.update('<?=$page->getUniqid();?>', this, 'is_dropdown', <?=Controller::IS_CHECKBOX?>);" <?=$checked_dropdown?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switchdropdown<?=$page->getUniqid()?>">
+                                    <input onchange="Page.update('<?=$page->getUniqid();?>', this, 'is_dropdown', <?=Controller::IS_CHECKBOX?>);" <?=$checked_dropdown?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switchdropdown<?=$page->getUniqid()?>">
                                     <label class="form-check-label" for="switchdropdown<?=$page->getUniqid()?>"><i class="fas fa-caret-square-down"></i></label>
                                 </div>
                             </td>
@@ -257,7 +256,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             </td>
                             <td> <!-- Is_editable -->
                                 <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, il est possible d'ajouter des sections à la page.">
-                                    <input <?=$disabled?> onchange="Page.update('<?=$page->getUniqid();?>', this, 'is_editable', <?=Controller::IS_CHECKBOX?>);" <?=$checked_editable?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditable<?=$page->getUniqid()?>">
+                                    <input onchange="Page.update('<?=$page->getUniqid();?>', this, 'is_editable', <?=Controller::IS_CHECKBOX?>);" <?=$checked_editable?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditable<?=$page->getUniqid()?>">
                                     <label class="form-check-label" for="switcheditable<?=$page->getUniqid()?>"><i class="fas fa-pen-square"></i></label>
                                 </div>
                             </td>
@@ -276,7 +275,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                 </td>
                                 <td> <!-- Nom -->
                                     <input 
-                                        <?=$disabled?>
                                         onchange="Page.update('<?=$page_child->getUniqid();?>', this, 'name');" 
                                         placeholder="Nom de la page" 
                                         maxlength="300" 
@@ -299,7 +297,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                     <p><small class="size-0-8">Le nom doit ne doit pas contenir de caractérère spécial ni d'espace.</small></p>
                                 </td>
                                 <td> <!-- Catégorie -->
-                                    <select <?=$disabled?> onchange="Page.update('<?=$page_child->getUniqid()?>', this, 'category');" class="form-select form-select-sm" aria-label=".form-select-sm">
+                                    <select onchange="Page.update('<?=$page_child->getUniqid()?>', this, 'category');" class="form-select form-select-sm" aria-label=".form-select-sm">
                                         <?php $selected = ""; if($page_child->getCategory() < 0){$selected = "selected";} ?>
                                         <option <?=$selected?> value="-1">Ne pas afficher</option>
                                         <?php foreach ($categories_available as $number_category => $name_category) {
@@ -317,7 +315,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                 </td>
                                 <td> <!-- Is_editable -->
                                     <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, il est possible d'ajouter des sections à la page.">
-                                        <input <?=$disabled?> onchange="Page.update('<?=$page_child->getUniqid();?>', this, 'is_editable', <?=Controller::IS_CHECKBOX?>);" <?=$checked_editable?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditable<?=$page_child->getUniqid()?>">
+                                        <input onchange="Page.update('<?=$page_child->getUniqid();?>', this, 'is_editable', <?=Controller::IS_CHECKBOX?>);" <?=$checked_editable?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditable<?=$page_child->getUniqid()?>">
                                         <label class="form-check-label" for="switcheditable<?=$page_child->getUniqid()?>"><i class="fas fa-pen-square"></i></label>
                                     </div>
                                 </td>

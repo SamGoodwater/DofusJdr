@@ -117,7 +117,7 @@ class PageManager extends Manager{
         LIMIT 20');
        
         $req->execute(array("term" => $term));
-        $result =  $req->fetchAll();
+        $result = $req->fetchAll();
         
         if(!empty($result)){
             return $this->bdd2objects($result);
