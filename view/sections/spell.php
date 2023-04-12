@@ -127,6 +127,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <thead>
                 <tr>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="edit"></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="pdf"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>

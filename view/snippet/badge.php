@@ -12,6 +12,7 @@
     if(!isset($data)) { $data = "";}else{if(!is_string($data)) {$data = "";}}
     if(!isset($css)) { $css = "";}else{if(!is_string($css)) {$css = "";}}
     if(!isset($tooltip)) { $tooltip = "";}else{if(!is_string($tooltip) && !is_numeric($content)) {$tooltip = "";}}
+    if(!isset($tooltip_with_content)) { $tooltip_with_content = true;}else{if(!is_bool($tooltip_with_content)) {$tooltip_with_content = true;}}
     if(!isset($tooltip_placement)) { $tooltip_placement = Style::DIRECTION_BOTTOM;}else{if(!in_array($tooltip_placement, [Style::DIRECTION_BOTTOM, Style::DIRECTION_TOP, Style::DIRECTION_RIGHT, Style::DIRECTION_LEFT])) {$tooltip_placement = Style::DIRECTION_BOTTOM;}}
     if(isset($href)){$href = "href=\"" . $href. "\"";}else{$href = "";}
     if(isset($onclick)){$onclick = "onclick=\"". $onclick. ";\"";}else{$onclick = "";}
@@ -29,6 +30,7 @@
             $style = "";
         break;
     }
+    if($tooltip_with_content && $tooltip != ""){$tooltip = $tooltip . " : " . $content;}
 ?>
 
-<span style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$style?> <?=$class?>"><?=$content?></span>
+<span style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$style?> <?=$class?>"><?=$content?></span>

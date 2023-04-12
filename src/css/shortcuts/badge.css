@@ -3,7 +3,7 @@
     background-color: var(--main-d-2);
     color:white;
     }
-    [class^="short-badge-"] .badge-outline, [class^="short-badge-"] .badge{
+    [class*="short-badge-"] .badge-outline, [class*="short-badge-"] .badge{
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

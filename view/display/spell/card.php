@@ -8,7 +8,7 @@
     if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
 ?>
 
-<div class="card p-2 m-2 border-2 <?=$obj->getElement(Content::FORMAT_TEXT, "border")?>">
+<div class="card p-2 m-2 border-2 border-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>">
     <div class="row g-0">
         <div class="col-md-2">
             <a style="position:relative;top:5px;left:5px;" href="<?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>" download="<?=$obj->getName().'.'.substr(strrchr($obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
@@ -45,11 +45,11 @@
         </div>
     </div>
     <div>
-        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
+        <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
         <h2 class="card-title"><?=$obj->getName()?></h2>
         <p class="card-text"><?=$obj->getEffect()?></p>
         <p class="card-text"><small class="text-muted"><?=$obj->getDescription()?></small></p>
-        <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
+        <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
         <div class="d-flex justify-content-center"><?=$obj->getId_invocation(Content::DISPLAY_RESUME)?></div>
     </div>
 </div>

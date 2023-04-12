@@ -186,7 +186,7 @@ class Mob extends Content
                         write: false);
 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_life."' ";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_life."' data-text=' Points de vie'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_life, $i)."' ";
@@ -245,7 +245,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_pa."' data-text=' PA'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_pa, $i)."' ";
@@ -304,7 +304,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_pm."' data-text=' PM'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_pm, $i)."' ";
@@ -364,7 +364,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_po."' data-text=' PA'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_po, $i)."' ";
@@ -423,7 +423,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_ini."' data-text=' Ini'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_ini, $i)."' ";
@@ -482,7 +482,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_touch."' data-text=' Touche'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_touch, $i)."' ";
@@ -541,7 +541,7 @@ class Mob extends Content
                         write: false);
 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_vitality."' data-text=' Vitalité'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_vitality, $i)."' ";
@@ -600,7 +600,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_sagesse."' data-text=' Sagesse'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_sagesse, $i)."' ";
@@ -659,7 +659,7 @@ class Mob extends Content
                         write: false);
 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_strong."' data-text=' Force'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_strong, $i)."' ";
@@ -718,7 +718,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_intel."' data-text=' Intel'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_intel, $i)."' ";
@@ -776,7 +776,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_agi."' data-text=' Agi'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_agi, $i)."' ";
@@ -835,7 +835,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_chance."' data-text=' Chance'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_chance, $i)."' ";
@@ -894,7 +894,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_ca."' data-text=' CA'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_ca, $i)."' ";
@@ -955,7 +955,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_fuite."' data-text=' Fuite'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_fuite, $i)."' ";
@@ -1014,7 +1014,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_tacle."' data-text=' Tacle'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_tacle, $i)."' ";
@@ -1073,7 +1073,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_dodge_pa."' data-text=' Esquive PA'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_dodge_pa, $i)."' ";
@@ -1132,7 +1132,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_dodge_pm."' data-text=' Esquive PM'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_dodge_pm, $i)."' ";
@@ -1190,7 +1190,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_res_neutre."' data-text=' Résistance Neutre'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_res_neutre, $i)."' ";
@@ -1248,7 +1248,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_res_terre."' data-text=' Résistance Terre'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_res_terre, $i)."' ";
@@ -1306,7 +1306,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_res_feu."' data-text=' Résistance Feu'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_res_feu, $i)."' ";
@@ -1364,7 +1364,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_res_air."' data-text=' Résistance Air'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_res_air, $i)."' ";
@@ -1422,7 +1422,7 @@ class Mob extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "";
+                    $level = Content::getMinMaxFromFormule($this->getLevel());$data = "data-formule='".$this->_res_eau."' data-text=' Résistance Eau'";
                     if($level['same'] != true){
                         for($i=$level['min']; $i<=$level['max']; $i++){
                             $data .= " data-level".$i."='".Content::getValueFromFormule($this->_res_eau, $i)."' ";

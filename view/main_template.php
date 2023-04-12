@@ -148,6 +148,9 @@
                     <a id="account_btn_toolbar_mobile" class="mx-2"></a>
                 </div>
             </div>
+            <div class="app-btn-show-toolbar-footer" style="display: none;">
+                <a onclick="toogleToolbar(false);toogleFooter(false)"><i class="fas fa-caret-down"></i></a>
+            </div>
 
             <div class='app-content'>
                 <div id="content" class='container'>
@@ -215,7 +218,7 @@
                     <li>
                         <div class="form-check">
                             <input class="form-check-input form-control-main-focus back-main-l-2 border-main" type="checkbox" checked id="cookie-bookmark">
-                            <label class="form-check-label" for="cookie-bookmark">Cookies du Bookmark</label>
+                            <label class="form-check-label" for="cookie-bookmark">Cookies du Grimoire</label>
                         </div>
                         <p><small class="size-0-7 text-grey-d-3">Ce sont les cookies permettant d'enregistrer (sans avoir de compte) différents élèments dans son bookmark.</small></p>
                     </li>

@@ -37,6 +37,7 @@
     if(!isset($data)) { $data = "";}else{if(!is_string($data)) {$data = "";}}
     if(!isset($css)) { $css = "";}else{if(!is_string($css)) {$css = "";}}
     if(!isset($tooltip)) { $tooltip = "";}else{if(!is_string($tooltip) && !is_numeric($content)) {$tooltip = "";}}
+    if(!isset($tooltip_with_content)) { $tooltip_with_content = true;}else{if(!is_bool($tooltip_with_content)) {$tooltip_with_content = true;}}
     if(!isset($tooltip_placement)) { $tooltip_placement = Style::DIRECTION_BOTTOM;}else{if(!in_array($tooltip_placement, [Style::DIRECTION_BOTTOM, Style::DIRECTION_TOP, Style::DIRECTION_RIGHT, Style::DIRECTION_LEFT])) {$tooltip_placement = Style::DIRECTION_BOTTOM;}}
     if(isset($href)){$href = "href=\"" . $href. "\"";}else{$href = "";}
     if(isset($onclick)){$onclick = "onclick=\"". $onclick. ";\"";}else{$onclick = "";}
@@ -59,15 +60,16 @@
             $content_after = "<span class='ms-1'>".$content."</span>";
         break;
     }
+    if($tooltip_with_content && $tooltip != ""){$tooltip = $tooltip . " : " . $content;}
 
     if($style == Style::ICON_MEDIA){ ?>
 
         <span class="<?=$top_bottom_class?>">
-            <i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$btn_type.$color?> <?=$class?>"><?=$content_before?><img class='icon icon-<?=$size?>' src='medias/<?=$dirfile.$icon?>'><?=$content_after?></i>
+            <i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$btn_type.$color?> <?=$class?>"><?=$content_before?><img class='icon icon-<?=$size?>' src='medias/<?=$dirfile.$icon?>'><?=$content_after?></i>
         </span>
         
     <?php } else { ?>
 
-        <span class="<?=$top_bottom_class?>"><?=$content_before?><i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$style?> fa-<?=$icon?> <?=$btn_type.$color?> <?=$class?> <?=$size?>"></i><?=$content_after?></span>
+        <span class="<?=$top_bottom_class?>"><?=$content_before?><i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$style?> fa-<?=$icon?> <?=$btn_type.$color?> <?=$class?> <?=$size?>"></i><?=$content_after?></span>
         
     <?php }

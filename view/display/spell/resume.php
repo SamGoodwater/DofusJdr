@@ -9,7 +9,7 @@
 ?>
 
 <div style="position:relative;width: <?=$size?>px;">
-    <div ondblclick="Spell.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card p-2 m-1 <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>-l-5 <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>-l-4-hover border-solid border-2 <?=$obj->getElement(Content::FORMAT_TEXT, "border")?>-d-2" style="width: <?=$size?>px;" >
+    <div ondblclick="Spell.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card p-2 m-1 back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>-l-5 back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>-l-4-hover" style="width: <?=$size?>px;" >
         <div class="d-flex flew-row flex-nowrap">
             <div>
                 <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
@@ -44,10 +44,10 @@
                 <div class="me-1 mb-1"><?=$obj->getElement(Content::FORMAT_BADGE)?></div>
             </div>
             <?=$obj->getEffect()?>
-            <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
+            <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
             <?=$obj->getDescription()?>
             <?php if(!empty($obj->getId_invocation())){ ?>
-                <div class="nav-item-divider <?=$obj->getElement(Content::FORMAT_TEXT, "back")?>"></div>
+                <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
                 <div style="margin:-4px;"><?=$obj->getId_invocation(Content::DISPLAY_RESUME, size:290)?></div>
             <?php } ?>
         </div>

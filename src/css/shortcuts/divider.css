@@ -1,4 +1,4 @@
-[class^="item-divider"] {
+[class*="item-divider"] {
     height: 1px;
     margin: 1rem 0;
     overflow: hidden;

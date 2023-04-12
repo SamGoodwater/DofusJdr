@@ -145,7 +145,7 @@ class Section extends Content
                     ob_start(); ?>
                         <section id="section<?=$this->getUniqid()?>" class="sectionselector mb-4" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
                             <div class="section-title d-flex flex-row justify-content-between">
-                                <h3 class="text-secondary-l-2" style="width:initial;"><?=$this->getTitle()?></h3>
+                                <h1 class="text-secondary-l-2 mb-3 light" style="width:initial;"><?=$this->getTitle()?></h1>
                                 <div class="section-options row justify-content-between text-right">
                                     <div>
                                         <a data-bs-toggle="tooltip" data-bs-placement="left" title="Modifier la section" onclick="Section.showEdit('<?=$this->getUniqid()?>');" class="text-main-d-3 text-main-d-1-hover"><i class="fas fa-edit"></i></a>
@@ -182,7 +182,7 @@ class Section extends Content
                     
                     ob_start(); ?>
                         <section>
-                            <h3 class="text-main-d-4"><?=$this->getTitle()?></h3>
+                            <h1 class="text-main-d-4 mb-3 light"><?=$this->getTitle()?></h1>
                             <div><?=$template["content"]?></div>
                         </section>
                     <?php return ob_get_clean();

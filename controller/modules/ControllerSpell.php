@@ -97,6 +97,7 @@ class ControllerSpell extends Controller{
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
           'resume' => $resume,
           'edit' => $edit,
+          'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
           'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
         );
       }
@@ -174,6 +175,7 @@ class ControllerSpell extends Controller{
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'resume' => $resume,
               'edit' => $edit,
+              'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
               'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
             );
 
@@ -188,39 +190,6 @@ class ControllerSpell extends Controller{
     echo json_encode($return);
     flush();
   }
-  // public function getResume(){
-  //   $currentUser = ControllerConnect::getCurrentUser();
-  //   $return = [
-  //     'state' => false,
-  //     'return' => "",
-  //     'error' => 'erreur inconnue'
-  //   ];
-  //   if(!$currentUser->getRight('spell', User::RIGHT_READ)){
-  //     $return['error'] = "Vous n'avez pas les droits pour lire cet objet";}else{
-
-  //     if(!isset($_REQUEST['uniqid'])){
-  //       $return['error'] = 'Impossible de récupérer les données';
-  //     } else {
-
-  //       $managerS = new SpellManager();
-
-  //       // Récupération de l'objet
-  //         if($managerS->existsUniqid($_REQUEST['uniqid'])){
-
-  //           $spell = $managerS->getFromUniqid($_REQUEST['uniqid']);
-  //           $format = ""; if(isset($_REQUEST['format'])){$format = $_REQUEST['format'];}else{$format = Content::DISPLAY_CARD;}
-  //           $return["return"] = $spell->getVisual($format);
-  //           $return['state'] = true;
-  //         }else {
-  //           $return['error'] = 'Impossible de récupérer les données';
-  //         }
-  //     }
-
-  //   }
-
-  //   echo json_encode($return);
-  //   flush();
-  // }
 
   public function getPdf(){
     $currentUser = ControllerConnect::getCurrentUser();
@@ -245,7 +214,7 @@ class ControllerSpell extends Controller{
           $spells = [];
           foreach($uniqids as $uniqid) {
             if($manager->existsUniqid($uniqid)){
-              $spells[] = $manager->getFromUniqid($uniqid);
+              $spells[] = $manager->getFromUniqid($uniqid);    
             }
           }
 
@@ -255,9 +224,9 @@ class ControllerSpell extends Controller{
             $dompdf = new Dompdf\Dompdf($options);
             $dompdf->getOptions()->setChroot($_SERVER["DOCUMENT_ROOT"]);
             $html = "";
-            require "view/pdf/header.php";
-            $html .= $content;
-            require "view/pdf/spell.php";
+            require "view/pdf/header2.php";
+            // $html .= $content;
+            // require "view/pdf/spell.php";
             $html .= $content . "</body></html>";
             $dompdf->loadHtml($html, 'UTF-8');
   

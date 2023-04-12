@@ -646,7 +646,7 @@ class Spell extends Content
                     return $this->_number_between_two_cast;
             }
         }
-        public function getElement(int $format = Content::FORMAT_BRUT, $option = ""){
+        public function getElement(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
@@ -685,9 +685,16 @@ class Spell extends Content
                         return "";
                     }
 
+                case Content::FORMAT_COLOR_VERBALE:
+                    if(isset(self::ELEMENT[$this->_element])){
+                        return strtolower(self::ELEMENT[$this->_element]['color']);
+                    } else {
+                        return "";
+                    }
+
                 case Content::FORMAT_TEXT:
                     if(isset(self::ELEMENT[$this->_element])){
-                        return ucfirst(self::ELEMENT[$this->_element]['name']);
+                        return strtolower(self::ELEMENT[$this->_element]['name']);
                     } else {
                         return "";
                     }

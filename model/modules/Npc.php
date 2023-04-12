@@ -113,7 +113,7 @@ class Npc extends Content
         public function getName(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
-                case Content::DISPLAY_RESUME:  
+                case Content::DISPLAY_EDITABLE:  
                     return $view->dispatch(
                         template_name : "input/text",
                         data : [

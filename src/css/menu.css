@@ -30,6 +30,7 @@
     top: 0;
     bottom: 0;
     background-color: var(--main-l-4);
+    background: radial-gradient(circle, var(--main-l-4) 0%, var(--main-l-3) 100%);;
     color: var(--main-d-3);
     overflow-y: scroll;
     overflow-x: hidden;
@@ -78,9 +79,32 @@
   .app-nav a {
     font-weight: 600;
   }
-  .app-nav .app-nav-item:hover {
-    background: rgba(255, 255, 255, 0.2);
+  .app-nav .app-nav-item:hover, .app-nav-dropdown .dropdown-item:hover {
     color: var(--secondary-d-2);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5.5px);
+    -webkit-backdrop-filter: blur(5.5px);
+    border: 1px solid rgba(255, 255, 255, 0.69);
+  }
+  .app-nav .app-nav-item::before, .app-nav-dropdown .dropdown-item::before {
+      content: '';
+      /* background: rgba(255, 255, 255, 0.2); */
+      background: var(--secondary-l-5);
+      opacity: 0.2;
+      width: 0%;
+      height: 0%;
+      top: 0%;
+      left: 0%;
+      transform: skew(45deg);
+      position: absolute;
+      transition: left 0.5s ease;
+  }
+  .app-nav .app-nav-item:hover::before, .app-nav-dropdown .dropdown-item:hover::before {
+      left: 150%;
+      width: 60%;
+      height: 100%;
   }
   .app-nav .app-nav-item {
     padding: 7px;
@@ -104,10 +128,6 @@
     transition: all ease-out 0.5s;
     font-weight: 400;
     font-size: 0.9rem;
-  }
-  .app-nav-dropdown .dropdown-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: var(--secondary-d-2);
   }
   .app-nav-dropdown {
     display: flex;
@@ -238,6 +258,9 @@
         z-index: 3;
       }
 
+      .app-toolbar-content.hidden{
+        display: none;
+      }
 
 /* --------------------------- C O N T E N T --------------------------- */
     .app-content {
@@ -265,6 +288,43 @@
       z-index:2;
       box-shadow: 3px -2px 3px rgba(0, 0, 0, 0.2);
       margin: 0;
+    }
+    footer.hidden{
+      display: none;
+    }
+
+  /* --------------------------- B T N   T O O L B A R   F O O T E R --------------------------- */
+    .app-btn-show-toolbar-footer{
+      position: fixed;
+      top: -40px;
+      right: -40px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: var(--secondary-d-2);
+      box-shadow: 3px -3px 3px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+      transition: all ease-out 0.5s;
+    }
+
+    .app-btn-show-toolbar-footer a{
+      bottom: 11px;
+      left: 20px;
+      position: absolute;
+      font-size: 1.2rem;
+      color: white!important;
+      transform: rotate(90deg);
+      transition: all ease-out 0.5s;
+    }
+    .app-btn-show-toolbar-footer:hover{
+      top: -20px;
+      right: -20px;
+    }
+    .app-btn-show-toolbar-footer:hover a{
+      transform: rotate(0deg);
+      font-size: 1.8rem;
+      bottom: 14px;
+      left: 26px;
     }
 
   /* RESPONSIVE */

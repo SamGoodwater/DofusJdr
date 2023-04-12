@@ -1,4 +1,4 @@
-<td valign="top" width="33%" class="spacing <?=$obj->getElement(Content::FORMAT_TEXT, "box")?>">
+<td valign="top" width="33%" class="spacing box-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>">
     <table align="left">
         <tr>
             <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
@@ -36,7 +36,7 @@
             </td>
         </tr>
         <tr>
-            <td class="badge" style="color:white;background-color:<?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_TEXT, "_")]."-d-2"]?>;"><?=ucfirst($obj->getElement(Content::FORMAT_TEXT, "_"))?></td>
+            <td class="badge" style="color:white;background-color:<?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE)]."-d-2"]?>;"><?=ucfirst($obj->getElement(Content::FORMAT_TEXT))?></td>
             <td><?php foreach ($obj->getType(Content::FORMAT_TEXT) as $key => $type) { ?>
                     <span class="badge" style="background-color:<?=Style::COLOR_TO_HEX[Style::getColorFromLetter($key) . '-d-2']?>;color:white;"><?=$type?></span>
                 <?php } ?>
