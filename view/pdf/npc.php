@@ -2,11 +2,17 @@
 
         <table width="100%" valign="middle" cellspacing="2">
             <tr width="100%" style="text-align:center;"> <!-- LIGNE -->
-                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getClasse(Content::FORMAT_OBJECT)->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
+                <?php 
+                    $file_img = New File($obj->getFile('logo', new Style(['format' => Content::FORMAT_BRUT])));
+                    $img = "data:image/".$file_img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file_img->getPath()));
+                ?>
                 <td width="15%" rowspan="2" align="left"><img src="<?=$img?>" height="100"></td>
                 <td><h2><?=$obj->getName()?></h2></td>
                 <td border="1" class="border-shield back-shield text-shield" width="10%"><h3><span class="starter">Niveau : </span><?=$obj->getLevel()?></h3></td>
-                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/logos/logo.png"; ?>
+                <?php 
+                    $file_img = New File($GLOBALS['project']['logo']);
+                    $img = "data:image/".$file_img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file_img->getPath()));
+                ?>
                 <td width="15%" align="right"><img src="<?=$img?>" height="50"></td>
             </tr>
             <tr> <!-- LIGNE -->
@@ -43,33 +49,28 @@
                 </td>
                 <td class="center back-pa border-pa">
                     <span class="starter">PA</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/pa.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['pa']?>" height="17">
                     <span class="enavant text-pa"><?=$obj->getPa()?></span>
                 </td>
                 <td class="center back-pm border-pm">
                     <span class="starter">PM</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/pm.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['pm']?>" height="17">
                     <span class="enavant text-pm"><?=$obj->getPm()?></span>
                 </td>
                 <td class="center back-po border-po">
                     <span class="starter">PO</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/po.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['po']?>" height="17">
                     <span class="enavant text-pm"><?=$obj->getPo()?></span>
                 </td>
                 <td class="center back-ini border-ini">
                     <span class="starter">Ini</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/ini.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['ini']?>" height="17">
                     <span class="enavant text-ini"><?=$obj->getIni() + $obj->getIntel()?></span><br>
                     <span class="starter"><?=$obj->getIni()?> (bonus) + <?=$obj->getIntel()?> (mod. Intel)</span>
                 </td>
                 <td class="center back-invocation border-invocation">
                     <span class="starter">Invocation</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/invocation.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['invocation']?>" height="17">
                     <span class="enavant text-invocation"><?=1+$obj->getInvocation()?></span><br>
                     <span class="starter">1 + <?=$obj->getInvocation()?> (bonus)</span>
                 </td>
@@ -87,36 +88,31 @@
                 </td>
                 <td class="center back-ca border-ca">
                     <span class="starter">CA</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/ca.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['ca']?>" height="17">
                     <span class="enavant text-ca"><?=10+$obj->getCa()+$obj->getVitality()?></span><br>
                     <span class="starter">10 + <?=$obj->getCa()?> (bonus) + <?=$obj->getVitality()?> (mod. Vitalité)</span>
                 </td>
                 <td class="center back-pa border-pa">
                     <span class="starter">Esquive PA</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/dodge_pa.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['dodge_pa']?>" height="17">
                     <span class="enavant text-pa"><?=10+$obj->getDodge_pa()+$obj->getSagesse()?></span><br>
                     <span class="starter">10 + <?=$obj->getDodge_pa()?> (bonus) + <?=$obj->getSagesse()?> (mod. Sagesse)</span>
                 </td>
                 <td class="center back-pm border-pm">
                     <span class="starter">Esquive PM</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/dodge_pm.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['dodge_pm']?>" height="17">
                     <span class="enavant text-pm"><?=10+$obj->getDodge_pm()+$obj->getSagesse()?></span><br>
                     <span class="starter">10 + <?=$obj->getDodge_pm()?> (bonus) + <?=$obj->getSagesse()?> (mod. Sagesse)</span>
                 </td>
                 <td class="center back-fuite border-fuite">
                     <span class="starter">Fuite</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/fuite.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['fuite']?>" height="17">
                     <span class="enavant text-fuite"><?=$obj->getFuite()+$obj->getAgi()?></span><br>
                     <span class="starter"><?=$obj->getFuite()?> (bonus) + <?=$obj->getAgi()?> (mod. Agi)</span>
                 </td>
                 <td class="center back-tacle border-tacle">
                     <span class="starter">Tacle</span><br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/tacle.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['tacle']?>" height="17">
                     <span class="enavant text-tacle"><?=$obj->getTacle()+$obj->getChance()?></span><br>
                     <span class="starter"><?=$obj->getTacle()?> (bonus) + <?=$obj->getChance()?> (mod. Chance)</span>
                 </td>
@@ -130,48 +126,42 @@
                         <tr> <!-- LIGNE -->
                             <td width="150px" class="center back-vitality border-vitality">
                                 <span class="starter">Mod. Vitalité</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/vitality.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['vitality']?>" height="17">
                                 <span class="enavant text-vitality"><?=$obj->getVitality()?></span>
                             </td>
                         </tr>
                         <tr> <!-- LIGNE -->
                             <td width="150px" class="center back-sagesse border-sagesse">
                                 <span class="starter">Mod. Sagesse</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/sagesse.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['sagesse']?>" height="17">
                                 <span class="enavant text-sagesse"><?=$obj->getSagesse()?></span>
                             </td>
                         </tr>
                         <tr> <!-- LIGNE -->
                             <td width="150px" class="center back-force border-force">
                                 <span class="starter">Mod. Force</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/force.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['force']?>" height="17">
                                 <span class="enavant text-force"><?=$obj->getStrong()?></span>
                             </td>
                         </tr>
                         <tr> <!-- LIGNE -->
                             <td width="150px" class="center back-intel border-intel">
                                 <span class="starter">Mod. Intel</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/intel.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['intel']?>" height="17">
                                 <span class="enavant text-intel"><?=$obj->getIntel()?></span>
                             </td>
                         </tr>
                         <tr> <!-- LIGNE -->
                             <td width="150px" class="center back-agi border-agi">
                                 <span class="starter">Mod. Agi</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/agi.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['agi']?>" height="17">
                                 <span class="enavant text-agi"><?=$obj->getAgi()?></span>
                             </td>
                         </tr>
                         <tr> <!-- LIGNE -->
                             <td width="150px" class="center back-chance border-chance">
                                 <span class="starter">Mod. Chance</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/chance.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['chance']?>" height="17">
                                 <span class="enavant text-chance"><?=$obj->getChance()?></span>
                             </td>
                         </tr>
@@ -325,40 +315,35 @@
                         <tr> <!-- LIGNE -->
                             <td width="70px" class="center back-neutre border-neutre">
                                 <span class="starter">Res. Neutre</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/res_neutre.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['res_neutre']?>" height="17">
                                 <span class="enavant text-neutre"><?=$obj->getRes_neutre()?></span>
                             </td>
                         </tr>
                         <tr> <!-- LIGNE -->
                             <td width="70px" class="center back-terre border-terre">
                                 <span class="starter">Res. Terre</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/res_terre.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['res_terre']?>" height="17">
                                 <span class="enavant text-terre"><?=$obj->getRes_terre()?></span>
                             </td>
                         </tr>
                         <tr> <!-- LIGNE -->
                             <td width="70px" class="center back-feu border-feu">
                                 <span class="starter">Res. Feu</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/res_feu.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['res_feu']?>" height="17">
                                 <span class="enavant text-feu"><?=$obj->getRes_feu()?></span>
                             </td>
                         </tr>
                         <tr> <!-- LIGNE -->
                             <td width="70px" class="center back-air border-air">
                                 <span class="starter">Res. Air</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/res_air.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['res_air']?>" height="17">
                                 <span class="enavant text-air"><?=$obj->getRes_air()?></span>
                             </td>
                         </tr>
                         <tr> <!-- LIGNE -->
                             <td width="70px" class="center back-eau border-eau">
                                 <span class="starter">Res. Eau</span><br>
-                                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/res_eau.png"; ?>
-                                <img src="<?=$img?>" height="17">
+                                <img src="<?=$icons['res_eau']?>" height="17">
                                 <span class="enavant text-eau"><?=$obj->getRes_eau()?></span>
                             </td>
                         </tr>
@@ -377,8 +362,7 @@
                 <td width="100px" class="right back-kamas border-kamas">
                     <span class="starter center">Kamas</span><br>
                     <span class="enavant text-kamas"><?=$obj->getKamas()?></span>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/icons/kamas.png"; ?>
-                    <img src="<?=$img?>" height="17">
+                    <img src="<?=$icons['kamas']?>" height="17">
                 </td>
             </tr>
             <tr> <!-- LIGNE -->

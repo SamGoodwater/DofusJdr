@@ -21,7 +21,7 @@ class Consumable extends Content
             "type" => FileManager::FORMAT_IMG,
             "default" => "medias/modules/consumables/default.svg",
             "dir" => "medias/modules/consumables/",
-            "preferential format" => "svg",
+            "preferential_format" => "svg",
             "naming" => "[uniqid]"
         ]
     ];

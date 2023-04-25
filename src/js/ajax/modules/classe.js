@@ -4,8 +4,8 @@ class Classe extends Controller{
     
     static add(){
         var URL = 'index.php?c=classe&a=add';
-        var name = $('#modalAdd #name').val();
-        var weapons = $('#modalAdd #weapons').val();
+        var name = $('#modal #addClasse #name').val();
+        var weapons = $('#modal #addClasse #weapons').val();
         
         $.post(URL,
             {
@@ -19,9 +19,9 @@ class Classe extends Controller{
                 }
                 if(data.state){
                     MsgAlert("Ajout de la classe", 'La classe ' + name + ' a bien été ajouté.', "green" , 3000);
-                    $('#modalAdd #weapons').val("");
-                    $('#modalAdd #name').val("");
-                    $('#modalAdd').modal('hide');
+                    $('#modal #addClasse #weapons').val("");
+                    $('#modal #addClasse #name').val("");
+                    $('#modal').modal('hide');
                     $("#table").bootstrapTable("refresh");
                 } else {
                     MsgAlert("Echec de l'ajout", 'Erreur : ' + data.error, "danger" , 4000);

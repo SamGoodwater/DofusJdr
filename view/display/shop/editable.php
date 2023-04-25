@@ -36,5 +36,5 @@
         <h3>Consommables</h3>
         <?=$obj->getConsumable(Content::DISPLAY_EDITABLE)?>
     </div>
-    <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Shop.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
+    <p class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-border-red' onclick="Shop.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
 </div>

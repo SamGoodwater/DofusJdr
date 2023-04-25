@@ -116,13 +116,13 @@
     align-items: center;
   }
   .app-nav .app-nav-item .item-child {
-    padding-left: 30px;
+    padding-left: 20px;
     transition: all ease-out 0.5s;
     font-weight: 400;
   }
   .app-nav-dropdown .dropdown-item {
     min-height: 40px;
-    padding: 8px 20px 8px 70px;
+    padding: 8px 20px 8px 50px;
     display: flex;
     align-items: center;
     transition: all ease-out 0.5s;
@@ -190,7 +190,7 @@
       align-items: center;
       padding: 8px 27px;
       box-shadow: 3px 3px 5px rgba(0, 0, 0  , 0.2);
-      background-color: #dfdfdf;
+      background: radial-gradient(circle,  #dfdfdf 0%, #fdfdfd 100%);
       z-index: 2;
       transition: all 0.4s ease;
       min-height: var(--hight-toolbar);
@@ -248,7 +248,7 @@
         align-items: baseline;
         padding: 5px;
         border-radius: 5%;
-        background-color: #dfdfdf;
+        background: radial-gradient(circle,  #dfdfdf 0%, #fdfdfd 100%);
         position: fixed;
         bottom: 0;
         left: 0;

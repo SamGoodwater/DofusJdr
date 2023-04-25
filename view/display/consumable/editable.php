@@ -10,7 +10,7 @@
 
 <div class="card mb-3">
     <div class="row g-0">
-        <div class="col-auto"><?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-150"]))?></div>
+        <div class="col-auto"><?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_EDITABLE, "class" => "img-back-150"]))?></div>
         <div class="col">
             <div class="card-body">
                 <div class="row">
@@ -36,5 +36,5 @@
     <p class="card-text m-3"><?=$obj->getEffect(Content::FORMAT_EDITABLE);?></p>
     <p class="card-text m-3"><?=$obj->getDescription(Content::FORMAT_EDITABLE);?></p>
     <p class="card-text m-3"><?=$obj->getRecepe(Content::FORMAT_EDITABLE);?></p>
-    <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Consumable.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
+    <p class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-border-red' onclick="Consumable.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
 </div>

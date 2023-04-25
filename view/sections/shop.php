@@ -38,7 +38,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
     $total = $manager->countAll();
 
     ob_start(); ?>
-        <button type="button" class="btn-sm btn btn-border-secondary" data-bs-toggle="modal" data-bs-target="#modalAddShop">Nouvel Hôtel de Vente</button>
+        <button type="button" class="btn-sm btn btn-border-secondary" onclick="Page.build(true, 'Création d\'un hôtel de vente', $('#addShop'), Page.SIZE_MD, true);">Nouvel Hôtel de Vente</button>
 
         <table 
             id="table"
@@ -82,11 +82,11 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th data-sortable="false" data-visible="true" data-field="logo"><i class="fas fa-image"></i></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="name">Nom</th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-filter-control="input" data-field="description">Description</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="location">Localisation</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="price">Prix mpyen</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="seller">Marchant</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="description">Description</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="location">Localisation</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="price">Prix mpyen</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="seller">Marchant</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
                 </tr>
@@ -98,24 +98,15 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> Hôtels de vente. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
-        <div class="modal fade" id="modalAddShop" tabindex="-1" aria-labelledby="modalAddShop" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">Création d'un hôtel de vente</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom de l'hôtel de vente">
-                            <label for="floatingInput">Nom de l'hôtel de vente</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer modal-footer d-flex flex-row justify-content-between">
-                        <button type="button" class="btn-border-grey" data-bs-dismiss="modal">Close</button>
-                        <button type="button" onclick="Shop.add();" class="btn btn-border-secondary">Créer</button>
-                    </div>
-                </div>
+
+        <div id="addShop" style="display:none;">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom de l'hôtel de vente">
+                <label for="floatingInput">Nom de l'hôtel de vente</label>
+            </div>
+            <div class="modal-footer d-flex flex-row justify-content-between">
+                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Shop.add();" class="btn btn-sm btn-back-secondary">Créer</button>
             </div>
         </div>
 

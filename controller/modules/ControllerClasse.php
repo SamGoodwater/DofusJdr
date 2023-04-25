@@ -35,10 +35,9 @@ class ControllerClasse extends Controller{
           'life' => $obj->getLife(),
           'specificity' => $obj->getSpecificity(),
           'weapons_of_choice' => "<div class='d-flex justify-content-center'>".$obj->getWeapons_of_choice(Content::FORMAT_ICON)."</div>",
-          'spell' => $obj->getSpell(),
           'trait' => $obj->getTrait(Content::FORMAT_BADGE),
           'path_img_logo' => $obj->getFile("logo", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
-          'path_img_logo' => $obj->getFile("logo", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
+          'path_img' => $obj->getFile("img", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
           'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='classe' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
           'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=classe&a=getPdf&uniqid=".$obj->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
@@ -95,10 +94,9 @@ class ControllerClasse extends Controller{
               'life' => $obj->getLife(),
               'specificity' => $obj->getSpecificity(),
               'weapons_of_choice' => "<div class='d-flex justify-content-center'>".$obj->getWeapons_of_choice(Content::FORMAT_ICON)."</div>",
-              'spell' => $obj->getSpell(),
               'trait' => $obj->getTrait(Content::FORMAT_BADGE),
               'path_img_logo' => $obj->getFile("logo", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
-              'path_img_logo' => $obj->getFile("logo", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
+              'path_img' => $obj->getFile("img", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='classe' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=classe&a=getPdf&uniqid=".$obj->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
@@ -127,12 +125,19 @@ class ControllerClasse extends Controller{
         // Récupération de l'objet
           if($manager->existsUniqid($_REQUEST['uniqid'])){
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
+            $name = $obj->getName();
 
             // instantiate and use the dompdf class
-            $dompdf = new Dompdf\Dompdf();
-            $dompdf->getOptions()->setChroot($_SERVER["DOCUMENT_ROOT"]);
-            // $dompdf->getOptions()->setIsFontSubsettingEnabled(true);
-            // $dompdf->getOptions()->setDpi(80);
+            define('DOMPDF_MEMORY_LIMIT', '512M');
+            define('DOMPDF_MAX_EXECUTION_TIME', 180); // 180 secondes (3 minutes)
+
+            $options = new Dompdf\Options();
+            $options->set('isRemoteEnabled', true);
+            $options->set('isPhpEnabled', true);
+            $options->set('isFontSubsettingEnabled', true);
+            $dompdf = new Dompdf\Dompdf($options);
+            $dompdf->setBasePath($_SERVER["DOCUMENT_ROOT"]);
+
             $html = "";
             require "view/pdf/header.php";
             $html .= $content;
@@ -147,7 +152,7 @@ class ControllerClasse extends Controller{
             $dompdf->render();
     
             // Output the generated PDF to Browser
-            $dompdf->stream($obj->getName().".pdf", array("Attachment" => false));
+            $dompdf->stream($name.".pdf", array("Attachment" => false));
             return true;
           }
       }
@@ -171,7 +176,7 @@ class ControllerClasse extends Controller{
       if(in_array($_REQUEST['weapons_of_choice'], Classe::WEAPONS)){
         if($_REQUEST['name'] != ""){
 
-            if($mS->existsName($_REQUEST['name']) == false){
+            if($mS->existsName($_REQUEST['name']) == false && !empty(trim($_REQUEST['name']))){
                 $classe = new Classe([
                   'name' => trim($_REQUEST['name']),
                   'weapons_of_choice' => $_REQUEST['weapons_of_choice'],

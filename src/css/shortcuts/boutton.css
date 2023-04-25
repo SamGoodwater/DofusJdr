@@ -44,56 +44,56 @@
     color: white;
   }
   .btn-back-main{
-    border: 1px solid var(--main-d-2);
+    border: 2px solid var(--main-d-2);
     background-color: var(--main-d-2);
   }
   .btn-back-main:hover{
     background-color: var(--main-l-3);
-    border: 1px solid var(--main-l-3);
+    border: 2px solid var(--main-l-3);
     color: var(--main-d-4);
   }
   .btn-back-secondary{
-    border: 1px solid var(--secondary-d-2);
+    border: 2px solid var(--secondary-d-2);
     background-color: var(--secondary-d-2);
   }
   .btn-back-secondary:hover{
-    border: 1px solid var(--secondary-l-3);
+    border: 2px solid var(--secondary-l-3);
     background-color: var(--secondary-l-3);
     color: var(--secondary-d-4);
   }
   .btn-back-tertiary{
-    border: 1px solid var(--tertiary-d-2);
+    border: 2px solid var(--tertiary-d-2);
     background-color: var(--tertiary-d-2);
   }
   .btn-back-tertiary:hover{
-    border: 1px solid var(--tertiary-l-3);
+    border: 2px solid var(--tertiary-l-3);
     background-color: var(--tertiary-l-3);
     color: var(--tertiary-d-4);
   }
   .btn-back-red{
-    border: 1px solid var(--red-d-2);
+    border: 2px solid var(--red-d-2);
     background-color: var(--red-d-2);
   }
   .btn-back-red:hover{
-    border: 1px solid var(--red-l-3);
+    border: 2px solid var(--red-l-3);
     background-color: var(--red-l-3);
     color: var(--red-d-4);
   }
   .btn-back-green{
-    border: 1px solid var(--green-d-2);
+    border: 2px solid var(--green-d-2);
     background-color: var(--green-d-2);
   }
   .btn-back-green:hover{
-    border: 1px solid var(--green-l-3);
+    border: 2px solid var(--green-l-3);
     background-color: var(--green-l-3);
     color: var(--green-d-4);
   }
   .btn-back-grey{
-    border: 1px solid var(--grey-d-2);
+    border: 2px solid var(--grey-d-2);
     background-color: var(--grey-d-2);
   }
   .btn-back-grey:hover{
-    border: 1px solid var(--grey-l-3);
+    border: 2px solid var(--grey-l-3);
     background-color: var(--grey-l-3);
     color: var(--grey-d-4);
   }

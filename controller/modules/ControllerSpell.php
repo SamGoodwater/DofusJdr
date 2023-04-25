@@ -217,16 +217,21 @@ class ControllerSpell extends Controller{
               $spells[] = $manager->getFromUniqid($uniqid);    
             }
           }
-
             // instantiate and use the dompdf class
+            define('DOMPDF_MEMORY_LIMIT', '512M');
+            define('DOMPDF_MAX_EXECUTION_TIME', 180); // 180 secondes (3 minutes)
+
             $options = new Dompdf\Options();
             $options->set('isRemoteEnabled', true);
+            $options->set('isPhpEnabled', true);
+            $options->set('isFontSubsettingEnabled', true);
             $dompdf = new Dompdf\Dompdf($options);
-            $dompdf->getOptions()->setChroot($_SERVER["DOCUMENT_ROOT"]);
+            $dompdf->setBasePath($_SERVER["DOCUMENT_ROOT"]);
+
             $html = "";
-            require "view/pdf/header2.php";
-            // $html .= $content;
-            // require "view/pdf/spell.php";
+            require "view/pdf/header.php";
+            $html .= $content;
+            require "view/pdf/spell.php";
             $html .= $content . "</body></html>";
             $dompdf->loadHtml($html, 'UTF-8');
   
@@ -261,7 +266,7 @@ class ControllerSpell extends Controller{
       } else {
         $manager = new SpellManager();
 
-        if($manager->existsName($_REQUEST['name']) == false){
+        if($manager->existsName($_REQUEST['name']) == false && !empty(trim($_REQUEST['name']))){
           $object = new Spell([
             'name' => trim($_REQUEST['name']),
             'level' => 1,

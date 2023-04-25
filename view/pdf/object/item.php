@@ -1,7 +1,10 @@
 <td>
     <table border="0" cellspacing="0">
         <tr>
-            <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj['obj']->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
+            <?php 
+                $file_img = New File($obj['obj']->getFile('logo', new Style(['format' => Content::FORMAT_BRUT])));
+                $img = "data:image/".$file_img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file_img->getPath()));
+            ?>
             <td align="left"><img src="<?=$img?>" height="50"></td>
             <td><h3><?=$obj['obj']->getName()?></h3></td>
         </tr>
@@ -12,8 +15,7 @@
         </tr>
         <tr>
             <td><span class="starter"><?=$obj['obj']->getRarity(Content::FORMAT_BADGE)?></span></td>
-            <?php $img =  $_SERVER["DOCUMENT_ROOT"]."/medias/icons/kamas.png"; ?>
-            <td><span class="text-kamas"><?=$obj['price']?></span> <img src="<?=$img?>" height="17"></td>
+            <td><span class="text-kamas"><?=$obj['price']?></span> <img src="<?=$icons['kamas']?>" height="17"></td>
         </tr>
         <tr>
             <td colspan="2"><?=$obj['obj']->getEffect()?></td>

@@ -37,7 +37,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
     $manager = new NpcManager();
     $total = $manager->countAll();
     ob_start(); ?>
-        <button type="button" class="btn btn-sm btn-back-secondary me-2" data-bs-toggle="modal" data-bs-target="#modalAddNpc">Nouveau / Nouvelle PNJ</button>
+        <button type="button" class="btn btn-sm btn-back-secondary me-2" onclick="Page.build(true, 'Création d\'un·e personnage non joueur·euse', $('#addNpc'), Page.SIZE_MD, true);">Nouveau / Nouvelle PNJ</button>
 
         <table 
             id="table"
@@ -83,7 +83,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th data-sortable="false" data-visible="true" data-field="logo"><i class="fas fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="select" data-field="classe">Classe</th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-filter-control="select" data-field="level">Niveau</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="name">Nom</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="story">Histoire<br>du ou de la PNJ</th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="historical">Historique</th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="alignment">Alignement</th>
@@ -149,44 +149,34 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> PNJ. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
-        <div class="modal fade" id="modalAddNpc" tabindex="-1" aria-labelledby="modalAddNpc" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">Création d'un ou d'une PNJ</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom du ou de la PNJ">
-                            <label for="floatingInput">Nom du ou de la PNJ</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <select class="form-select" id="classe" aria-label="Floating label select example">
-                                <?php $classeManager = new ClasseManager();
-                                    foreach ($classeManager->getAll() as $classe) {
-                                        echo "<option value='".$classe->getUniqid()."'>".$classe->getName()."</option>";      
-                                    }
-                                ?>
-                            </select>
-                            <label for="floatingSelect">Classe du ou de la PNJ</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <select class="form-select" id="level" aria-label="Niveau du ou de la PNJ">
-                                <?php 
-                                    for ($i=1; $i <= 20 ; $i++) {
-                                        echo "<option value='".$i."'>Niveau ".$i."</option>";      
-                                    }
-                                ?>
-                            </select>
-                            <label for="level">Niveau du ou de la PNJ</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer modal-footer d-flex flex-row justify-content-between">
-                        <button type="button" class="btn-border-grey" data-bs-dismiss="modal">Close</button>
-                        <button type="button" onclick="Npc.add();" class="btn btn-border-secondary">Créer</button>
-                    </div>
-                </div>
+        <div id="addNpc" style="display:none;">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom du ou de la PNJ">
+                <label for="floatingInput">Nom du ou de la PNJ</label>
+            </div>
+            <div class="form-floating mb-2">
+                <select class="form-select" id="classe" aria-label="Floating label select example">
+                    <?php $classeManager = new ClasseManager();
+                        foreach ($classeManager->getAll() as $classe) {
+                            echo "<option value='".$classe->getUniqid()."'>".$classe->getName()."</option>";      
+                        }
+                    ?>
+                </select>
+                <label for="floatingSelect">Classe du ou de la PNJ</label>
+            </div>
+            <div class="form-floating mb-2">
+                <select class="form-select" id="level" aria-label="Niveau du ou de la PNJ">
+                    <?php 
+                        for ($i=1; $i <= 20 ; $i++) {
+                            echo "<option value='".$i."'>Niveau ".$i."</option>";      
+                        }
+                    ?>
+                </select>
+                <label for="level">Niveau du ou de la PNJ</label>
+            </div>
+            <div class="modal-footer d-flex flex-row justify-content-between">
+                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Npc.add();" class="btn btn-sm btn-back-secondary">Créer</button>
             </div>
         </div>
 

@@ -228,9 +228,19 @@ class ControllerNpc extends Controller{
         // Récupération de l'objet
           if($managerS->existsUniqid($_REQUEST['uniqid'])){
             $obj = $managerS->getFromUniqid($_REQUEST['uniqid']);
+            $name = $obj->getName();
+
             // instantiate and use the dompdf class
-            $dompdf = new Dompdf\Dompdf();
-            $dompdf->getOptions()->setChroot($_SERVER["DOCUMENT_ROOT"]);
+            define('DOMPDF_MEMORY_LIMIT', '512M');
+            define('DOMPDF_MAX_EXECUTION_TIME', 180); // 180 secondes (3 minutes)
+
+            $options = new Dompdf\Options();
+            $options->set('isRemoteEnabled', true);
+            $options->set('isPhpEnabled', true);
+            $options->set('isFontSubsettingEnabled', true);
+            $dompdf = new Dompdf\Dompdf($options);
+            $dompdf->setBasePath($_SERVER["DOCUMENT_ROOT"]);
+
             $html = "";
             require "view/pdf/header.php";
             $html .= $content;
@@ -244,7 +254,7 @@ class ControllerNpc extends Controller{
             // Render the HTML as PDF
             $dompdf->render();
             
-            $dompdf->stream($obj->getName().".pdf", array("Attachment" => false));
+            $dompdf->stream($name.".pdf", array("Attachment" => false));
             return true;
           }
       }

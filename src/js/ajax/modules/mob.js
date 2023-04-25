@@ -3,31 +3,31 @@ class Mob extends Controller{
     
     static add(){
         var URL = 'index.php?c=mob&a=add';
-        var name = $('#modalAddMob #name').val();
-        var level = $('#modalAddMob #level').val();
-        var powerful = $('#modalAddMob #powerful').val();
+        var name = $('#modal #addMob #name').val();
+        var level = $('#modal #addMob #level').val();
+        var powerful = $('#modal #addMob #powerful').val();
         var intel = "";
-        if($('#modalAddMob #intel').is(':checked')){
+        if($('#modal #ddMob #intel').is(':checked')){
             intel = true;
         }
         var strong = "";
-        if($('#modalAddMob #strong').is(':checked')){
+        if($('#modal #addMob #strong').is(':checked')){
             strong = true;
         }
         var chance = "";
-        if($('#modalAddMob #chance').is(':checked')){
+        if($('#modal #addMob #chance').is(':checked')){
             chance = true;
         }
         var agi = "";
-        if($('#modalAddMob #agi').is(':checked')){
+        if($('#modal #addMob #agi').is(':checked')){
             agi = true;
         }
         var sagesse = "";
-        if($('#modalAddMob #sagesse').is(':checked')){
+        if($('#modal #addMob #sagesse').is(':checked')){
             sagesse = true;
         }
         var vitality = "";
-        if($('#modalAddMob #vitality').is(':checked')){
+        if($('#modal #addMob #vitality').is(':checked')){
             vitality = true;
         }
         
@@ -50,16 +50,16 @@ class Mob extends Controller{
                 }
                 if(data.state){
                     MsgAlert("Ajout de la créature", 'La créature ' + name + ' a bien été ajouté.', "green" , 3000);
-                    $('#modalAddMob #name').val("");
-                    $('#modalAddMob #level').val(1);
-                    $('#modalAddMob #powerful').val(4);
-                    $('#modalAddMob #intel').attr('checked', false);
-                    $('#modalAddMob #strong').attr('checked', false);
-                    $('#modalAddMob #chance').attr('checked', false);
-                    $('#modalAddMob #agi').attr('checked', false);
-                    $('#modalAddMob #sagesse').attr('checked', false);
-                    $('#modalAddMob #vitality').attr('checked', false);
-                    $('#modalAddMob').modal("hide");
+                    $('#modal #addMob #name').val("");
+                    $('#modal #addMob #level').val(1);
+                    $('#modal #addMob #powerful').val(4);
+                    $('#modal #addMob #intel').attr('checked', false);
+                    $('#modal #addMob #strong').attr('checked', false);
+                    $('#modal #addMob #chance').attr('checked', false);
+                    $('#modal #addMob #agi').attr('checked', false);
+                    $('#modal #addMob #sagesse').attr('checked', false);
+                    $('#modal #addMob #vitality').attr('checked', false);
+                    $('#modal').modal("hide");
                     $('#table').bootstrapTable('refresh');
                     Mob.updateDisplayRow(data.value.uniqid);
                 } else {

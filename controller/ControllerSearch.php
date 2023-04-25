@@ -10,6 +10,7 @@ class ControllerSearch extends Controller{
   public const SEARCH_IN_NPC = 6;
   public const SEARCH_IN_SHOP = 7;
   public const SEARCH_IN_CONSUMABLE = 8;
+  public const SEARCH_IN_CAPABILITY = 9;
 
   public const SEARCH_DONE_REDIRECT = 0;
   public const SEARCH_DONE_ADD_CONSUMABLE_TO_SHOP = 1;
@@ -21,6 +22,9 @@ class ControllerSearch extends Controller{
   public const SEARCH_DONE_ADD_SPELL_TO_NPC = 7;
   public const SEARCH_DONE_ADD_ITEM_TO_NPC = 8;
   public const SEARCH_DONE_ADD_CONSUMABLE_TO_NPC = 9;
+  public const SEARCH_DONE_ADD_CAPABILITY_TO_CLASSE = 10;
+  public const SEARCH_DONE_ADD_CAPABILITY_TO_NPC = 11;
+  public const SEARCH_DONE_ADD_CAPABILITY_TO_MOB = 12;
 
 
   public function search(){

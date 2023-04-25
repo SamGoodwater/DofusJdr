@@ -40,6 +40,7 @@ class User extends Content
         private $_is_admin = false;
 
         const RIGHT = [
+            "capability" => User::RIGHT_READ,
             "classe" => User::RIGHT_READ,
             "consumable" => User::RIGHT_READ,
             "item" => User::RIGHT_READ,

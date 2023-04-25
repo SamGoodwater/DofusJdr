@@ -142,7 +142,7 @@ class ControllerConsumable extends Controller{
           $type = $_REQUEST["type"];
         }
 
-        if($manager->existsName($_REQUEST['name']) == false){
+        if($manager->existsName($_REQUEST['name']) == false && !empty(trim($_REQUEST['name']))){
           $object = new Consumable([
             'name' => trim($_REQUEST['name']),
             'level' => 1,

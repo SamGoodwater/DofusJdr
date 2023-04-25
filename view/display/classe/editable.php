@@ -32,5 +32,6 @@
         <div class="my-3"><?=$obj->getLife(Content::FORMAT_EDITABLE);?></div>
         <div class="my-3"><?=$obj->getSpecificity(Content::FORMAT_EDITABLE);?></div>
         <div class="my-3"><?=$obj->getSpell(Content::FORMAT_EDITABLE);?></div>
+        <div class="my-3"><?=$obj->getCapability(Content::FORMAT_EDITABLE);?></div>
     </div>
 </div>

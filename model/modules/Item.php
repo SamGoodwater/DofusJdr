@@ -6,7 +6,7 @@ class Item extends Content
             "type" => FileManager::FORMAT_IMG,
             "default" => "medias/modules/items/default.svg",
             "dir" => "medias/modules/items/",
-            "preferential format" => "svg",
+            "preferential_format" => "svg",
             "naming" => "[uniqid]"
         ]
     ];

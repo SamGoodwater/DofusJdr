@@ -1,15 +1,14 @@
 <?php
 
-use Dompdf\Css\Color;
-
 class Spell extends Content
 {
+    const EXPRESSION_CAC = ["1","0", "1,5", "1.5", "1,5m", "1.5m", "1m5", "1 mètre 5", "1 mètre 50", "1m50", "1mètre 50", "1mètre 5"];
     const FILES = [
         "logo" => [
             "type" => FileManager::FORMAT_IMG,
             "default" => "medias/modules/spells/default.svg",
             "dir" => "medias/modules/spells/",
-            "preferential format" => "svg",
+            "preferential_format" => "svg",
             "naming" => "[uniqid]"
         ]
     ];
@@ -367,11 +366,11 @@ class Spell extends Content
                     <?php return ob_get_clean();
                     
                 case Content::FORMAT_BADGE:
-                    if($this->_po_editable && !in_array($this->getPO(), ["1","0"])){ // Sort à distance Avec portée modifiable
+                    if($this->_po_editable && !in_array($this->getPO(), Spell::EXPRESSION_CAC)){ // Sort à distance Avec portée modifiable
                         $content = "PO modifiable";
                         $tooltip = "La portée du sort est modifiable";
                         $color = "po_editable-d-2";
-                    } elseif(in_array($this->getPO(), ["1","0"])) { // Sort au CàC
+                    } elseif(in_array($this->getPO(), Spell::EXPRESSION_CAC)) { // Sort au CàC
                         $content = "CàC";
                         $tooltip = "Le sort est un sort de corps à corps - c'est à dire un sort avec un rayon d'action d'1m50 maximum.";
                         $color = "red-d-2";
@@ -391,10 +390,10 @@ class Spell extends Content
                         write: false);
 
                 case Content::FORMAT_ICON:
-                    if($this->_po_editable && !in_array($this->getPO(), ["1","0"])){ // Sort à distance Avec portée modifiable
+                    if($this->_po_editable && !in_array($this->getPO(), Spell::EXPRESSION_CAC)){ // Sort à distance Avec portée modifiable
                         $icon = "po_editable.png";
                         $tooltip = "La portée du sort est modifiable";
-                    } elseif(in_array($this->getPO(), ["1","0"])) { // Sort au CàC
+                    } elseif(in_array($this->getPO(), Spell::EXPRESSION_CAC)) { // Sort au CàC
                         $icon = "cac.png";
                         $tooltip = "Le sort est un sort de corps à corps - c'est à dire un sort avec un rayon d'action d'1m50 maximum.";
                     }else{ // Sort à distane sans portée modifiable
@@ -411,12 +410,12 @@ class Spell extends Content
                         write: false); 
 
                 case Content::FORMAT_PATH:
-                    if($this->_po_editable && !in_array($this->getPO(), ["1","0"])){ // Sort à distance Avec portée modifiable
-                        return "/medias/modules/icons/po_editable.png";
-                    } elseif(in_array($this->getPO(), ["1","0"])) { // Sort au CàC
-                        return "/medias/modules/icons/cac.png";
+                    if($this->_po_editable && !in_array($this->getPO(), Spell::EXPRESSION_CAC)){ // Sort à distance Avec portée modifiable
+                        return "medias/icons/po_editable.png";
+                    } elseif(in_array($this->getPO(), Spell::EXPRESSION_CAC)) { // Sort au CàC
+                        return "medias/icons/cac.png";
                     } else { 
-                        return "/medias/modules/icons/po_no_editable.png";   
+                        return "medias/icons/po_no_editable.png";   
                     }
                     
                 default:
@@ -586,9 +585,9 @@ class Spell extends Content
 
                 case Content::FORMAT_PATH:
                     if($this->_sight_line){ 
-                        return "/medias/modules/icons/sight_line.png";
+                        return "medias/icons/sight_line.png";
                     } else { 
-                        return "/medias/modules/icons/no_sight_line.png";
+                        return "medias/icons/no_sight_line.png";
                     }
                     
                 default:

@@ -27,23 +27,30 @@ class Page extends Controller{
                 size = this.SIZE_MD;    
             break;
             case "lg":
-                size = this.SIZE_lg;    
+                size = this.SIZE_LG;    
             break;
             case "xl":
-                size = this.SIZE_XL;    
+                size = this.SIZE_XL;
             break;
             case "xxl":
                 size = this.SIZE_XXL;    
             break;
-            case "FL":
+            case "fl":
                 size = this.SIZE_FL;    
-            break;
-            default:
-                size = this.SIZE_MD;
             break;
         }
 
-        if(size == this.SIZE_XXL && is_modal){size = this.SIZE_XL;} // XXL is not supported by bootstrap modal
+        if(size >= this.SIZE_XXL && is_modal){size = this.SIZE_XL;} // XXL is not supported by bootstrap modal
+
+        var clone = null;
+        if (content.jquery) {
+            // La variable est un objet jQuery (sélecteur)
+            clone = content.clone();
+            clone.show();
+          } else {
+            // La variable ne contient pas un objet jQuery (probablement du code HTML)
+            clone = content;
+          }
 
         if(is_modal == this.RESPONSIVE){
             if(getSizeScreen() <= this.SIZE_MD) {
@@ -76,7 +83,7 @@ class Page extends Controller{
             $("#modal .modal-title").html("");
             $("#modal .modal-body").html("");
             $("#modal .modal-title").html(title);
-            $("#modal .modal-body").html(content);
+            $("#modal .modal-body").html(clone);
 
             if(show){
                 $('#modal').modal('hide');
@@ -90,7 +97,7 @@ class Page extends Controller{
             let html = "<div class='undercontent'>";
                     html += "<div><button onclick='$(\".undercontent\").remove();' class='btn-text-main size-2-5 position-absolute' style='top:0px;right:0px;z-index:21'><i class='fas fa-times-circle'></i></button></div>";
                     html += "<div>"+title+"</div>";
-                    html+= "<div>"+content+"</div>";
+                    html+= "<div>"+clone+"</div>";
                 html += "</div>";
 
             if(show){
@@ -199,6 +206,7 @@ class Page extends Controller{
         let name = $('.addpage #name').val();
         let category = $('.addpage #category').val();
         let is_dropdown = 0;
+        let value = 0;
         if ($('.addpage #switchdropdownadd').is(":checked")) {
             value = 1;
         }

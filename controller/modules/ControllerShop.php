@@ -117,11 +117,19 @@ class ControllerShop extends Controller{
         // Récupération de l'objet
           if($manager->existsUniqid($_REQUEST['uniqid'])){
             $shop = $manager->getFromUniqid($_REQUEST['uniqid']);
+            $name = $shop->getName();
+
             // instantiate and use the dompdf class
+            define('DOMPDF_MEMORY_LIMIT', '512M');
+            define('DOMPDF_MAX_EXECUTION_TIME', 180); // 180 secondes (3 minutes)
+
             $options = new Dompdf\Options();
             $options->set('isRemoteEnabled', true);
+            $options->set('isPhpEnabled', true);
+            $options->set('isFontSubsettingEnabled', true);
             $dompdf = new Dompdf\Dompdf($options);
-            $dompdf->getOptions()->setChroot($_SERVER["DOCUMENT_ROOT"]);
+            $dompdf->setBasePath($_SERVER["DOCUMENT_ROOT"]);
+
             $html = "";
             require "view/pdf/header.php";
             $html .= $content;
@@ -136,7 +144,7 @@ class ControllerShop extends Controller{
             $dompdf->render();
 
             // Output the generated PDF to Browser
-            $dompdf->stream($obj->getName().".pdf", array("Attachment" => false));
+            $dompdf->stream($name.".pdf", array("Attachment" => false));
             return true;
           }
       }

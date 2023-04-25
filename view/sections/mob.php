@@ -40,7 +40,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end">
-            <button type="button" class="me-2 btn btn-sm btn-back-secondary" data-bs-toggle="modal" data-bs-target="#modalAddMob">Ajouter une créature</button>
+            <button type="button" class="me-2 btn btn-sm btn-back-secondary" onclick="Page.build(true, 'Création d\'une créature', $('#addMob'), Page.SIZE_MD, true);">Ajouter une créature</button>
             <div class="form-check form-switch">
                 <input onchange="refreshUsable(this);" class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
                 <label class="form-check-label" for="flexSwitchCheckChecked">Afficher seulement les créatures compatibles avec le JDR</label>
@@ -88,8 +88,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fas fa-image"></i></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="name">Nom</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="level"><span class="text-level">Niveau</span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="level"><span class="text-level">Niveau</span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="powerful"><span class="text-deep-purple-d-3">Puissance</span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="life"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Points de vie"><i class='fab fa-gratipay text-life'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resume"></th>
@@ -120,8 +120,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="res_eau"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance eau"><img class='icon' src='medias/icons/res_eau.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="spell"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Sorts"><i class='fas fa-magic text-main-d-1'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="trait"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Traits">Traits</span></th>
-                    <th data-sortable="false" data-visible="false" data-filter-control="input" data-field="description">Description</th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-filter-control="input" data-field="zone"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Zone de vie"><i class='fas fa-map-marker-alt text-main-d-2'></i></span></th>
+                    <th data-sortable="false" data-visible="false"  data-field="description">Description</th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="zone"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Zone de vie"><i class='fas fa-map-marker-alt text-main-d-2'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fas fa-check text-green-d-3'></i> JDR</span></th>
@@ -134,65 +134,55 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> créatures. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
-        <div class="modal fade" id="modalAddMob" tabindex="-1" aria-labelledby="modalAddMob" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">Création d'une créature</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control form-control-main-focus" id="name" placeholder="nom">
-                            <label for="name">Nom de la créature</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <select class="form-select" id="level" aria-label="Niveau du ou de la PNJ">
-                                <?php 
-                                    for ($i=1; $i <= 20 ; $i++) {
-                                        echo "<option value='".$i."'>Niveau ".$i."</option>";      
-                                    }
-                                ?>
-                            </select>
-                            <label for="level">Niveau du ou de la PNJ</label>
-                        </div>
-                        <div class="my-2">
-                            <label for="powerful" class="form-label badge back-deep-purple-d-3">Puissance <span id="powerful_value">4</span></label>
-                            <input onchange="$('#powerful_value').text($(this).val());" type="range" class="form-range" min="1" max="7" step="1" value="4" id="powerful">
-                            <p><small>Sur une échelle de 7 valeurs, avec 1 étant une créature extrémement faible et 7 une créature extrément forte.</small></p>
-                        </div>
-                        <div class="my-2">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="intel">
-                                <label class="form-check-label" for="intel">Intelligence <img class='icon-sm' src='medias/icons/intel.png'></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="strong">
-                                <label class="form-check-label" for="strong">Force <img class='icon-sm' src='medias/icons/force.png'></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="chance">
-                                <label class="form-check-label" for="chance">Chance <img class='icon-sm' src='medias/icons/chance.png'></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="agi">
-                                <label class="form-check-label" for="agi">Agilité <img class='icon-sm' src='medias/icons/agi.png'></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="sagesse">
-                                <label class="form-check-label" for="sagesse">Sagesse <img class='icon-sm' src='medias/icons/sagesse.png'></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="vitality">
-                                <label class="form-check-label" for="vitality">Vitalité <img class='icon-sm' src='medias/icons/vitality.png'></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer modal-footer d-flex flex-row justify-content-between">
-                        <button type="button" class="btn-border-grey" data-bs-dismiss="modal">Close</button>
-                        <button type="button" onclick="Mob.add();" class="btn btn-border-secondary">Créer</button>
-                    </div>
+        <div id="addMob" style="display:none;">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="nom">
+                <label for="name">Nom de la créature</label>
+            </div>
+            <div class="form-floating mb-2">
+                <select class="form-select" id="level" aria-label="Niveau du ou de la PNJ">
+                    <?php 
+                        for ($i=1; $i <= 20 ; $i++) {
+                            echo "<option value='".$i."'>Niveau ".$i."</option>";      
+                        }
+                    ?>
+                </select>
+                <label for="level">Niveau du ou de la PNJ</label>
+            </div>
+            <div class="my-2">
+                <label for="powerful" class="form-label badge back-deep-purple-d-3">Puissance <span id="powerful_value">4</span></label>
+                <input onchange="$('#powerful_value').text($(this).val());" type="range" class="form-range" min="1" max="7" step="1" value="4" id="powerful">
+                <p><small>Sur une échelle de 7 valeurs, avec 1 étant une créature extrémement faible et 7 une créature extrément forte.</small></p>
+            </div>
+            <div class="my-2">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="intel">
+                    <label class="form-check-label" for="intel">Intelligence <img class='icon-sm' src='medias/icons/intel.png'></label>
                 </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="strong">
+                    <label class="form-check-label" for="strong">Force <img class='icon-sm' src='medias/icons/force.png'></label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="chance">
+                    <label class="form-check-label" for="chance">Chance <img class='icon-sm' src='medias/icons/chance.png'></label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="agi">
+                    <label class="form-check-label" for="agi">Agilité <img class='icon-sm' src='medias/icons/agi.png'></label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="sagesse">
+                    <label class="form-check-label" for="sagesse">Sagesse <img class='icon-sm' src='medias/icons/sagesse.png'></label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="vitality">
+                    <label class="form-check-label" for="vitality">Vitalité <img class='icon-sm' src='medias/icons/vitality.png'></label>
+                </div>
+            </div>
+            <div class="modal-footer d-flex flex-row justify-content-between">
+                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Mob.add();" class="btn btn-sm btn-back-secondary">Créer</button>
             </div>
         </div>
 

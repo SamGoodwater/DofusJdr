@@ -190,7 +190,7 @@ class ControllerMob extends Controller{
       } else {
         $manager = new MobManager();
 
-        if($manager->existsName($_REQUEST['name']) == false){
+        if($manager->existsName($_REQUEST['name']) == false && !empty(trim($_REQUEST['name']))){
           if(isset($_REQUEST['intel'])){$intel = $this->returnBool($_REQUEST['intel']);} else {$intel = false;}
           if(isset($_REQUEST['strong'])){$strong = $this->returnBool($_REQUEST['strong']);} else {$strong = false;}
           if(isset($_REQUEST['chance'])){$chance = $this->returnBool($_REQUEST['chance']);} else {$chance = false;}
@@ -396,8 +396,8 @@ class ControllerMob extends Controller{
     }
 
     $life =  $this::calcExp(Controller::BALANCE_LIFE['mob']['expression'], ['level' => $level]);
-    $random = rand(-0.1 * $life, 0.1 * $life);
-    $life = round( (1+($coef-1)*1.7) * $life + $random);
+    $random = (int) rand(round(-0.1 * $life), round(0.1 * $life));
+    $life = (int) round( (1+($coef-1)*1.7) * $life + $random);
     $life += $vitality * $level;
     if($life < Controller::BALANCE_LIFE['mob']['min']){$life = Controller::BALANCE_LIFE['mob']['min'];}
 

@@ -416,6 +416,8 @@ class NpcManager extends Manager
         $this->removeAllLinkConsumableFromNpc($object);    
         $this->removeAllLinkItemFromNpc($object);    
         $this->removeAllLinkSpellFromNpc($object);    
+        $this->removeAllLinkCapabilityFromNpc($object);    
+
         $req = $this->_bdd->prepare('DELETE FROM npc WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }
@@ -630,6 +632,60 @@ class NpcManager extends Manager
     public function removeAllLinkSpellFromSpell(Spell $spell){
         $req = $this->_bdd->prepare('DELETE FROM link_npc_spell WHERE id_spell = :id');
         return $req->execute(array("id" =>  $spell->getId()));
+    }
+
+ // Link Capability
+    public function getLinkCapability(Npc $npc){
+        $req = $this->_bdd->prepare('   SELECT *, link_npc_capability.id AS link_id 
+                                        FROM link_npc_capability
+                                        INNER JOIN capability ON link_npc_capability.id_capability = capability.id
+                                        WHERE id_npc = ?
+                                        ORDER BY capability.level ASC');
+        $req->execute(array($npc->getId()));
+        $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        if(empty($ret)){return "";}
+        $return = array();
+        foreach ($ret as $link) {
+            $return[] = new Capability($this->securite($link));
+        }
+        return $return;
+    }
+    public function existsLinkCapability(Npc $npc, Capability $capability){
+        $req = $this->_bdd->prepare('SELECT id FROM link_npc_capability WHERE id_npc = ? AND id_capability = ?');
+        $req->execute(array($npc->getId(), $capability->getId()));
+        return $req->rowCount();
+    }
+    public function addLinkCapability(Npc $npc, Capability $capability){
+        if($this->existsLinkCapability($npc, $capability)){return false;}
+        $req = $this->_bdd->prepare('INSERT INTO link_npc_capability(
+                    id_npc,
+                    id_capability
+                )
+            VALUES (
+                    :id_npc,
+                    :id_capability
+                )');
+
+        return $req->execute(array(
+            "id_npc" => $npc->getId(),
+            "id_capability"=> $capability->getId()
+        ));
+
+        // Renvoi le dernier ingredient ajouté
+        $post = $this->_bdd->prepare('SELECT id FROM link_npc_capability ORDER BY id DESC LIMIT 1');
+        return $post->execute();
+    }
+    public function removeLinkCapability(Npc $npc, Capability $capability){
+        $req = $this->_bdd->prepare('DELETE FROM link_npc_capability WHERE id_npc = :id_npc AND id_capability = :id_capability');
+        return $req->execute(array("id_npc" =>  $npc->getId(), "id_capability" =>  $capability->getId()));
+    }
+    public function removeAllLinkCapabilityFromNpc(Npc $npc){
+        $req = $this->_bdd->prepare('DELETE FROM link_npc_capability WHERE id_npc = :id');
+        return $req->execute(array("id" =>  $npc->getId()));
+    }
+    public function removeAllLinkCapabilityFromCapability(Capability $capability){
+        $req = $this->_bdd->prepare('DELETE FROM link_npc_capability WHERE id_capability = :id');
+        return $req->execute(array("id" =>  $capability->getId()));
     }
 
 // OTHER

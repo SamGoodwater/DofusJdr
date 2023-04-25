@@ -1,6 +1,8 @@
 <?php
 class ControllerTools extends Controller{
   public function savedb(){
+    $timing_allow_backup = 60; // minutes
+    $days_keeping_db = 90; // days
     $return = [
       'state' => false,
       'value' => ""
@@ -14,7 +16,7 @@ class ControllerTools extends Controller{
     $headers = getallheaders();
     $token = str_replace('Bearer ', '', $headers['Authorization']);
 
-    if (time() - $time_last_backup >= 3600) {
+    if (time() - $time_last_backup >= $timing_allow_backup * 60) {
       if(isset($token)) {
         if($this->isTokenValid($token)) {
 
@@ -52,7 +54,7 @@ class ControllerTools extends Controller{
             $n = 0;
             foreach ($files as $file) {
                 if (is_file($file)) {
-                    if ($now - filemtime($file) >= 30 * 24 * 60 * 60) { // 30 jours
+                    if ($now - filemtime($file) >= $days_keeping_db * 24 * 60 * 60) {
                         unlink($file);
                         $n++;
                     }
@@ -70,12 +72,11 @@ class ControllerTools extends Controller{
           $return["value"] = "Le token est invalide";
         }
       } else {
-        $return["value"] = "Le token est invalide";
+        $return["value"] = "Le token est manquant";
       }
     } else {
       $return["value"] = "La dernière sauvegarde a été faite il y a moins d'une heure.";
     }
-
     echo json_encode($return);
     flush();
   }

@@ -37,7 +37,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
         $total = $manager->countAll();
 
         ob_start(); ?>
-            <a class="btn btn-back-secondary mb-2" onclick="$('#modalAdd').modal('show');">Ajouter une classe</a>
+            <a class="btn back-grey text-d-2 mb-2" onclick="return false; Page.build(true, 'Création d\'une classe', $('#addClasse'), Page.SIZE_MD, true);">Ajouter une classe</a>
             <table 
                 id="table"
                 class="table table-striped"
@@ -81,13 +81,13 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                         <th data-sortable="false" data-visible="true" data-field="path_img_logo"><i class="fas fa-image"></i></th>
                         <th data-sortable="false" data-visible="false" data-field="path_img"><i class="fas fa-image"></i></th>
-                        <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="name">Nom</th>
-                        <th class="text-center" data-sortable="false" data-visible="true" data-filter-control="input" data-field="description_fast">Description<br>succinte</th>
+                        <th class="text-center" data-sortable="true" data-visible="true" data-field="name">Nom</th>
+                        <th class="text-center" data-sortable="false" data-visible="true" data-field="description_fast">Description<br>succinte</th>
                         <th class="text-center" data-sortable="true" data-visible="true" data-field="weapons_of_choice">Arme de prédilection</th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="trait"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Traits du mod">Traits</span></th>
-                        <th class="text-center" data-sortable="false" data-visible="false" data-filter-control="input" data-field="description">Description</th>
-                        <th class="text-center" data-sortable="false" data-visible="false" data-filter-control="input" data-field="life">Gestion de la vitalité</th>
-                        <th class="text-center" data-sortable="false" data-visible="false" data-filter-control="input" data-field="specificity">Spécificités</th>
+                        <th class="text-center" data-sortable="false" data-visible="false" data-field="description">Description</th>
+                        <th class="text-center" data-sortable="false" data-visible="false" data-field="life">Gestion de la vitalité</th>
+                        <th class="text-center" data-sortable="false" data-visible="false" data-field="specificity">Spécificités</th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
                         <th class="text-center" data-sortable="true" data-visible="false" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fas fa-check text-green-d-3'></i> JDR</span></th>
@@ -99,37 +99,28 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
             </table>
             <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> classes. Le chargement du tableau peut prendre quelques minutes.</p>
 
-            <div id="modalAdd" class="modal" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h2 class="modal-title">Ajouter une classe</h2>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-floating mb-1">
-                                <input 
-                                    id="name"
-                                    placeholder="Nom de la classe" 
-                                    maxlength="300" 
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="">
-                                <label class="size-0-8">Nom</label>
-                            </div>
-                            <div class="form-floating">
-                                <select class="form-select" id="weapons">
-                                    <?php foreach (Classe::WEAPONS as $name => $weapons) { ?>
-                                        <option value="<?=$weapons?>"><?=$name?></option>
-                                    <?php } ?>
-                                </select>
-                                <label >Arme de prédilection</label>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-border-secondary" onclick="Classe.add();">Ajouter</button>
-                        </div>
-                    </div>
+            <div id="addClasse" style="display:none;">
+                <div class="form-floating mb-1">
+                    <input 
+                        id="name"
+                        placeholder="Nom de la classe" 
+                        maxlength="300" 
+                        type="text" 
+                        class="form-control form-control-main-focus" 
+                        value="">
+                    <label class="size-0-8">Nom</label>
+                </div>
+                <div class="form-floating">
+                    <select class="form-select" id="weapons">
+                        <?php foreach (Classe::WEAPONS as $name => $weapons) { ?>
+                            <option value="<?=$weapons?>"><?=$name?></option>
+                        <?php } ?>
+                    </select>
+                    <label >Arme de prédilection</label>
+                </div>
+                <div class="modal-footer d-flex flex-row justify-content-between">
+                    <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-back-secondary" onclick="Classe.add();">Ajouter</button>
                 </div>
             </div>
 

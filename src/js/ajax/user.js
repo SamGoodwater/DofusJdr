@@ -4,10 +4,10 @@ class User extends Controller{
 
     static add(){
         var URL = 'index.php?c=user&a=add';
-        var email = $('#modalAddUser #email').val();
-        var password = $('#modalAddUser #password').val();
-        var password_repeat = $('#modalAddUser #password_repeat').val();
-        var pseudo = $('#modalAddUser #pseudot').val();
+        var email = $('#modal #addUser #email').val();
+        var password = $('#modal #addUser #password').val();
+        var password_repeat = $('#modal #addUser #password_repeat').val();
+        var pseudo = $('#modal #addUser #pseudot').val();
 
         if(email == "" || password == "" || password_repeat	== ""){
             $('#display_error').text("Veuillez remplir tous les champs");
@@ -30,8 +30,8 @@ class User extends Controller{
                 }
                 if(data.state){
                     MsgAlert("Ajout d'un·e utilisateur·trice", "L'utilisateur·trice a bien été ajouté.", "green" , 3000);
-                    $('#modalAddUser #pseudo').val("");
-                    $('#modalAddUser').modal("hide");
+                    $('#modal #addUser #pseudo').val("");
+                    $('#modal').modal("hide");
                     $('#table').bootstrapTable('refresh');
                 } else {
                     $('#display_error').text(data['error']);

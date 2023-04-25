@@ -85,7 +85,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end" id="sortableItems">
-            <button type="button" class="me-2 btn-sm btn btn-back-secondary" data-bs-toggle="modal" data-bs-target="#modalAddItem">Ajouter un équipement</button>
+            <button type="button" class="me-2 btn-sm btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un équipement', $('#addItem'), Page.SIZE_MD, true);">Ajouter un équipement</button>
             <div class="dropdown">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="typesort" data-bs-toggle="dropdown" aria-expanded="false">Catégorie d'équipement</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
@@ -163,11 +163,11 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="type">Catégorie</th>
                     <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fas fa-image"></i></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="name">Nom</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="select" data-field="level"><span class="text-level">Niveau</span></th>
-                    <th data-sortable="true" data-visible="false" data-filter-control="input" data-field="description">Description</th>
-                    <th data-sortable="true" data-visible="false" data-filter-control="input" data-field="effect">Effet</th>
-                    <th data-sortable="true" data-visible="false" data-filter-control="input" data-field="recepe">Recette</th>
+                    <th data-sortable="true" data-visible="false"  data-field="description">Description</th>
+                    <th data-sortable="true" data-visible="false"  data-field="effect">Effet</th>
+                    <th data-sortable="true" data-visible="false"  data-field="recepe">Recette</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="rarity"><span class="text-grey" data-bs-toggle='tooltip' data-bs-placement='bottom' title="Rareté de l'équipement">Rareté</span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="price"><span class="text-kamas" data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix estimé de l'équipement"><img class='icon' src='medias/icons/kamas.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
@@ -182,32 +182,22 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> équipements. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
-        <div class="modal fade" id="modalAddItem" tabindex="-1" aria-labelledby="modalAddItem" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">Création d'un équipement</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating mb-2">
-                            <select class="form-select" id="type" aria-label="Floating label select example">
-                                <?php foreach (Item::TYPE_LIST as $key => $type) {
-                                        echo "<option value='".$type."'>".ucfirst($key)."</option>";      
-                                    } ?>
-                            </select>
-                            <label for="floatingSelect">Catérogie de l'équipement</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom de l'équipement">
-                            <label for="floatingInput">Nom de l'équipement</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer modal-footer d-flex flex-row justify-content-between">
-                        <button type="button" class="btn-border-grey" data-bs-dismiss="modal">Close</button>
-                        <button type="button" onclick="Item.add();" class="btn btn-border-secondary">Créer</button>
-                    </div>
-                </div>
+        <div id="addItem" style="display:none;">
+            <div class="form-floating mb-2">
+                <select class="form-select" id="type" aria-label="Floating label select example">
+                    <?php foreach (Item::TYPE_LIST as $key => $type) {
+                            echo "<option value='".$type."'>".ucfirst($key)."</option>";      
+                        } ?>
+                </select>
+                <label for="floatingSelect">Catérogie de l'équipement</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom de l'équipement">
+                <label for="floatingInput">Nom de l'équipement</label>
+            </div>
+            <div class="modal-footer d-flex flex-row justify-content-between">
+                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Item.add();" class="btn btn-sm btn-back-secondary">Créer</button>
             </div>
         </div>
 

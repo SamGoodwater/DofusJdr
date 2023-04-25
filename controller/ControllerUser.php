@@ -132,7 +132,7 @@ class ControllerUser extends Controller{
     flush();
   }
 
-  public function updatePassword²(){
+  public function updatePassword(){
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
       'state' => false,
@@ -372,6 +372,22 @@ class ControllerUser extends Controller{
     ];
   }
 
+  public function verifAndUpdateRights(User $user){
+    $manager = new UserManager();
+    $rights = $user->getRights(Content::FORMAT_ARRAY);
+    $has_edited = false;
+    foreach (User::RIGHT as $name => $value) {
+      if(!isset($rights[$name])){
+        $user->setRights($name, $value);
+        $has_edited = true;
+      }
+    }
+    if($has_edited){
+      $manager->update($user);
+      ControllerConnect::setCurrentUser($user);
+    }
+  }
+
   public function search($term, $action = ControllerSearch::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
     $currentUser = ControllerConnect::getCurrentUser();
     if(!$currentUser->getRight('user', User::RIGHT_READ)){
@@ -414,4 +430,3 @@ class ControllerUser extends Controller{
     return $array;
   }
 }
- 

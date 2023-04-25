@@ -15,6 +15,7 @@ class ControllerConnect extends Controller{
             }
             self::setInUserCookie_preference();
             $userController = new ControllerUser;
+            $userController->verifAndUpdateRights(ControllerConnect::getCurrentUser());
             $userController->setBookmark();
         }
         static function isConnect(){
@@ -25,14 +26,16 @@ class ControllerConnect extends Controller{
             }
         }
         static function getCurrentUser(){
+            $controller = new ControllerConnect;
             if(ControllerConnect::isConnect()){
-                return unserialize($_SESSION['user']);
-            } else {
-                return new User([
-                    'pseudo' => 'guest',
-                    'rights' => User::RIGHT
-                ]);
+                if($controller->isSerialized($_SESSION['user'])){
+                    return unserialize($_SESSION['user']);
+                }
             }
+            return new User([
+                'pseudo' => 'guest',
+                'rights' => User::RIGHT
+            ]);
         }
         static function setCurrentUser(User $user){
             $_SESSION['user'] = serialize($user);
@@ -373,7 +376,6 @@ class ControllerConnect extends Controller{
                 new AlertManager(new Alert("Dernière connexion de " . $user->getPseudo(),"Dernière connexion le " . $user->getLast_connexion(Content::DATE_FR) . " à " .  $user->getLast_connexion(Content::TIME_FR),"",Alert::ALERT_INFO,6000));
                 return true;
         }
-
 }
 
 

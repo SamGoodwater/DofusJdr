@@ -4,9 +4,9 @@ class Npc extends Controller{
     
     static add(){
         var URL = 'index.php?c=npc&a=add';
-        var name = $('#modalAddNpc #name').val();
-        var classe = $('#modalAddNpc #classe').val();
-        var level = $('#modalAddNpc #level').val();
+        var name = $('#modal #addNpc #name').val();
+        var classe = $('#modal #addNpc #classe').val();
+        var level = $('#modal #addNpc #level').val();
         
         $.post(URL,
             {
@@ -21,10 +21,10 @@ class Npc extends Controller{
                 }
                 if(data.state){
                     MsgAlert("Ajout d'un ou d'une PNJ", 'Le ou la PNJ ' + name + ' a bien été ajouté.', "green" , 3000);
-                    $('#modalAddNpc #classe').val("");
-                    $('#modalAddNpc #name').val("");
-                    $('#modalAddNpc #level').val("");
-                    $('#modalAddNpc').modal("hide");
+                    $('#modal #addNpc #classe').val("");
+                    $('#modal #addNpc #name').val("");
+                    $('#modal #addNpc #level').val("");
+                    $('#modal').modal("hide");
                     $('#table').bootstrapTable('refresh');
                 } else {
                     $('#display_error').text(data['error']);

@@ -128,6 +128,7 @@ class SpellManager extends Manager
         $req = $this->_bdd->prepare('SELECT *
         FROM spell        
         WHERE ( description like :term 
+            OR effect like :term 
             OR name like :term ) '.$usable . $limit.'');
         
         $req->execute(array("term" => $term));
@@ -256,7 +257,7 @@ class SpellManager extends Manager
     public function delete(Spell $object){
         $managerUser = new UserManager();
         $managerUser->removeBookmarkFromObj($object);
-
+        $this->removeAllLinkTypeFromSpell($object);
         $req = $this->_bdd->prepare('DELETE FROM spell WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }
@@ -304,7 +305,7 @@ class SpellManager extends Manager
         $req = $this->_bdd->prepare('DELETE FROM link_spell_type WHERE id_spell = :id_spell AND type = :type');
         return $req->execute(array("id_spell" =>  $spell->getId(), "type" =>  $type));
     }
-    public function removeAllLinkTypeFromShop(Spell $spell){
+    public function removeAllLinkTypeFromSpell(Spell $spell){
         $req = $this->_bdd->prepare('DELETE FROM link_spell_type WHERE id_spell = :id');
         return $req->execute(array("id" =>  $spell->getId()));
     }

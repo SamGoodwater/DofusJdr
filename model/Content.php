@@ -9,11 +9,13 @@ abstract class Content
     const DISPLAY_CARD = 100;
     const DISPLAY_RESUME = 101;
     const DISPLAY_EDITABLE = 102;
+    const DISPLAY_LIST = 104;
     const DISPLAY_FULL = 103;
     const DISPLAY = [
         self::DISPLAY_EDITABLE => "Modifier",
         self::DISPLAY_CARD => "Carte",
         self::DISPLAY_RESUME => "Résumé",
+        self::DISPLAY_LIST => "Liste",
         self::DISPLAY_FULL => "Complet",
     ];
 
@@ -49,7 +51,7 @@ abstract class Content
     //         "type" => FileManager::FORMAT_IMG,
     //         "default" => "medias/classes/default.png",
     //         "dir" => "medias/classes/",
-    //         "preferential format" => "png",
+    //         "preferential_format" => "png",
     //         'naming' => "[uniqid]"
     //     ],
     //     ...
@@ -80,9 +82,9 @@ abstract class Content
                 if(isset($data['naming']) && isset($data['dir']) && isset($data['type']) && isset($data['default']) && !empty($data['naming']) && !empty($data['dir']) && !empty($data['type']) && !empty($data['default'])){
                     $path = FileManager::formatPath($data['dir']);
                     $path .= FileManager::solveNameFromPaternAndObject($this,$data['naming']);
-                    if(isset($data['preferential format']) && !empty($data['preferential format'])){
-                        if(file_exists($path . "." . $data['preferential format'])){
-                            $path .= "." . $data['preferential format'];
+                    if(isset($data['preferential_format']) && !empty($data['preferential_format'])){
+                        if(file_exists($path . "." . $data['preferential_format'])){
+                            $path .= "." . $data['preferential_format'];
                         }
                     } else {
                         $path .= "." . FileManager::findExtention($path, $data["type"]);

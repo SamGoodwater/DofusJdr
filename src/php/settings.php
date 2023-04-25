@@ -6,6 +6,7 @@ $GLOBALS['project'] = [
     "description" => "Ce jeu de rôle est un mode de Donjon & Dragon où les règles ont été adapté au monde des douze, c'est à dire à l'univers du jeu vidéo Dofus.",
     "version" => "1.3",
     "stability" => "α", // β ou α
+    "stability_verbal" => "alpha",
     "author" => "Goodwater",
     "mail" => "contact@jdr.iota21.fr",
     "github" => "https://github.com/SamGoodwater/DofusJdr"

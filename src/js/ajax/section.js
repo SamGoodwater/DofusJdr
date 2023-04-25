@@ -314,11 +314,11 @@ class Section extends Controller{
         }
     }
 
-    // static updateOrder_num(){
-    //     $('.sectionselector').each(function(index, value) {
-    //         Section.update($(this).data("uniqid"),index,'order_num', IS_VALUE);
-    //     });
-    // }
+    static updateOrder_num(){
+        $('.sectionselector').each(function(index, value) {
+            Section.update($(this).data("uniqid"),index,'order_num', IS_VALUE);
+        });
+    }
 
     static getVisual(uniqid, show_modal = true){
         var URL = 'index.php?c=section&a=getVisual';

@@ -165,6 +165,8 @@ class ClasseManager extends Manager
         $managerUser = new UserManager();
         $managerUser->removeBookmarkFromObj($object);
         
+        $this->removeAllLinkSpellFromClasse($object);
+        $this->removeAllLinkCapabilityFromClasse($object);
         $req = $this->_bdd->prepare('DELETE FROM classe WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }
@@ -214,13 +216,67 @@ class ClasseManager extends Manager
         $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_classe = :id_classe AND id_spell = :id_spell');
         return $req->execute(array("id_classe" =>  $classe->getId(), "id_spell" =>  $spell->getId()));
     }
-    public function removeAllLinkSpellFromMob(Classe $classe){
+    public function removeAllLinkSpellFromClasse(Classe $classe){
         $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_classe = :id');
         return $req->execute(array("id" =>  $classe->getId()));
     }
     public function removeAllLinkSpellFromSpell(Spell $spell){
         $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_spell = :id');
         return $req->execute(array("id" =>  $spell->getId()));
+    }
+
+ // Link Capability
+    public function getLinkCapability(Classe $classe){
+        $req = $this->_bdd->prepare('   SELECT *, link_classe_capability.id AS link_id 
+                                        FROM link_classe_capability
+                                        INNER JOIN capability ON link_classe_capability.id_capability = capability.id
+                                        WHERE id_classe = ?
+                                        ORDER BY capability.level ASC');
+        $req->execute(array($classe->getId()));
+        $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        if(empty($ret)){return "";}
+        $return = array();
+        foreach ($ret as $link) {
+            $return[] = new Capability($this->securite($link));
+        }
+        return $return;
+    }
+    public function existsLinkCapability(Classe $classe, Capability $capability){
+        $req = $this->_bdd->prepare('SELECT id FROM link_classe_capability WHERE id_classe = ? AND id_capability = ?');
+        $req->execute(array($classe->getId(), $capability->getId()));
+        return $req->rowCount();
+    }
+    public function addLinkCapability(Classe $classe, Capability $capability){
+        if($this->existsLinkCapability($classe, $capability)){return false;}
+        $req = $this->_bdd->prepare('INSERT INTO link_classe_capability(
+                    id_classe,
+                    id_capability
+                )
+            VALUES (
+                    :id_classe,
+                    :id_capability
+                )');
+
+        return $req->execute(array(
+            "id_classe" => $classe->getId(),
+            "id_capability"=> $capability->getId()
+        ));
+
+        // Renvoi le dernier ingredient ajouté
+        $post = $this->_bdd->prepare('SELECT id FROM link_classe_capability ORDER BY id DESC LIMIT 1');
+        return $post->execute();
+    }
+    public function removeLinkCapability(Classe $classe, Capability $capability){
+        $req = $this->_bdd->prepare('DELETE FROM link_classe_capability WHERE id_classe = :id_classe AND id_capability = :id_capability');
+        return $req->execute(array("id_classe" =>  $classe->getId(), "id_capability" =>  $capability->getId()));
+    }
+    public function removeAllLinkCapabilityFromClasse(Classe $classe){
+        $req = $this->_bdd->prepare('DELETE FROM link_classe_capability WHERE id_classe = :id');
+        return $req->execute(array("id" =>  $classe->getId()));
+    }
+    public function removeAllLinkCapabilityFromCapability(Capability $capability){
+        $req = $this->_bdd->prepare('DELETE FROM link_classe_capability WHERE id_capability = :id');
+        return $req->execute(array("id" =>  $capability->getId()));
     }
 
 // OTHER

@@ -40,7 +40,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end" id='sortableItems'>
-            <button type="button" class="me-2 btn-sm btn btn-back-secondary" data-bs-toggle="modal" data-bs-target="#modalAddSpell">Ajouter un sort</button>
+            <button type="button" class="me-2 btn-sm btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un sort', $('#addSpell'), Page.SIZE_MD, true);">Ajouter un sort</button>
             <div class="dropdown">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories des sorts</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
@@ -132,14 +132,14 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                     <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fas fa-image"></i></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="name">Nom</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="resume"></th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="resume"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="is_magic"><i class="fas fa-fist-raised text-brown-d-2"></i> | <i class="fas fa-magic text-purple-d-2"></i></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-filter-control="input" data-field="category">Catégorie</th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-filter-control="input" data-field="element">Elèment</th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-filter-control="input" data-field="powerful">Puissance</th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-filter-control="input" data-field="type">Type</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="level"><span class="text-level">Niveau</span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="category">Catégorie</th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="element">Elèment</th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="powerful">Puissance</th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="type">Type</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="level"><span class="text-level">Niveau</span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="pa"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Coût en points d'action du sort"><img class='icon' src='medias/icons/pa.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Portée du sort"><img class='icon' src='medias/icons/po.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="cast_per_turn"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de fois que le sort peut-être lancer par tour"><img class='icon' src='medias/icons/cast_per_turn.png'></span></th>
@@ -147,8 +147,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="sight_line"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Besoin de la ligne de vue pour lancer le sort"><i class='fas fa-eye-slash text-sight-line'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="number_between_two_cast"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de tour entre deux lancer de sort"><img class='icon' src='medias/icons/number_between_two_cast.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="id_invocation"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Créature attachée au sort">Invocation attachée au sort</th>
-                    <th data-sortable="false" data-visible="false" data-filter-control="input" data-field="description">Description</th>
-                    <th data-sortable="false" data-visible="false" data-filter-control="input" data-field="effect">Effets</th>
+                    <th data-sortable="false" data-visible="false"  data-field="description">Description</th>
+                    <th data-sortable="false" data-visible="false"  data-field="effect">Effets</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fas fa-check text-green-d-3'></i> JDR</span></th>
@@ -161,24 +161,15 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> sorts. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
-        <div class="modal fade" id="modalAddSpell" tabindex="-1" aria-labelledby="modalAddSpell" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">Création d'un sort</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom du sort">
-                            <label for="floatingInput">Nom du sort</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer modal-footer d-flex flex-row justify-content-between">
-                        <button type="button" class="btn-border-grey" data-bs-dismiss="modal">Close</button>
-                        <button type="button" onclick="Spell.add();" class="btn btn-border-secondary">Créer</button>
-                    </div>
-                </div>
+
+        <div id="addSpell" style="display:none;">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom du sort">
+                <label for="floatingInput">Nom du sort</label>
+            </div>
+            <div class="modal-footer d-flex flex-row justify-content-between">
+                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Spell.add();" class="btn btn-sm btn-sm btn-back-secondary">Créer</button>
             </div>
         </div>
 

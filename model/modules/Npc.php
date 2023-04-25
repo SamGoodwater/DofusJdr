@@ -3084,8 +3084,102 @@ class Npc extends Content
                             write: false);
                     }
                     return "";
+
+                case Content::DISPLAY_LIST:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($spells)){
+                        ob_start();
+                            ?> <ul class="list-unstyled"> <?php
+                                foreach ($spells as $spell) {?>
+                                    <li>
+                                        <?php $view->dispatch(
+                                            template_name : "spell/text",
+                                            data : [
+                                                "obj" => $spell,
+                                                "is_link" => true
+                                            ], 
+                                            write: true); ?>
+                                    </li> <?php
+                                }
+                            ?> </ul> <?php
+                        return ob_get_clean();
+                    }
+                    return "";
+
                 case Content::FORMAT_ARRAY:
                     return $spells;
+            }
+        }
+
+        public function getCapability(int $format = Content::FORMAT_BRUT, $display_remove = false, $size = 300){
+            $classe = $this->getClasse(Content::FORMAT_OBJECT);
+            $manager = new NpcManager();
+            $capabilities = $manager->getLinkCapability($this);
+            if(is_array($capabilities) && !empty($capabilities)){
+                $capabilities = array_merge($capabilities, $classe->getCapability(Content::FORMAT_ARRAY));
+            } else {
+                $capabilities = $classe->getCapability(Content::FORMAT_ARRAY);
+            }
+            usort($capabilities, function($a, $b) {
+                return $a->getLevel() <=> $b->getLevel();
+            });
+            
+            switch ($format) {
+                case Content::DISPLAY_EDITABLE:
+                    $view = new View();
+                    $html = $view->dispatch(
+                        template_name : "input/search",
+                        data : [
+                            "id" => "addCapability" . $this->getUniqid(),
+                            "title" => "Ajouter une aptitude",
+                            "label" => "Rechercher une aptitude",
+                            "placeholder" => "Rechercher une aptitude",
+                            "search_in" => ControllerSearch::SEARCH_IN_CAPABILITY,
+                            "parameter" => $this->getUniqid(),
+                            "action" => ControllerSearch::SEARCH_DONE_ADD_CAPABILITY_TO_NPC,
+                        ], 
+                        write: false);
+                    return $html . $this->getCapability(Content::DISPLAY_RESUME, true);
+
+                case Content::DISPLAY_RESUME:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($capabilities)){
+                        return $view->dispatch(
+                            template_name : "capability/list",
+                            data : [
+                                "capabilities" => $capabilities,
+                                "is_removable" => $display_remove,
+                                "uniqid" => $this->getUniqid(),
+                                "class_name" => "Npc",
+                                "size" => $size
+                            ], 
+                            write: false);
+                    }
+                    return "";
+
+                case Content::DISPLAY_LIST:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($capabilities)){
+                        ob_start();
+                            ?> <ul> <?php
+                                foreach ($capabilities as $capability) {?>
+                                    <li>
+                                        <?php $view->dispatch(
+                                            template_name : "capability/text",
+                                            data : [
+                                                "obj" => $capability,
+                                                "is_link" => true
+                                            ], 
+                                            write: true); ?>
+                                    </li> <?php
+                                }
+                            ?> </ul> <?php
+                        return ob_get_clean();
+                    }
+                    return "";
+
+                case Content::FORMAT_ARRAY:
+                    return $capabilities;
             }
         }
 
@@ -3445,6 +3539,43 @@ class Npc extends Content
 
                 } else {
                     throw new Exception("Une action est requise");
+                }
+
+            }
+        }
+
+        /* Data = array(uniqid => id du capability)
+            Js : Classe.update(UniqidM,{action:'add|remove|update', uniqid:'uniqIdS'},'capability', IS_VALUE);
+        */
+        public function setCapability(array $data){ 
+            $manager = new NpcManager;
+            $managerS = new CapabilityManager;
+            if(!isset($data['uniqid'])){throw new Exception("L'uniqid de l'aptitude n'est pas défini");}
+            if($managerS->existsUniqid($data['uniqid'])){
+                $capability = $managerS->getFromUniqid($data['uniqid']); 
+
+                if(isset($data['action'])){
+                    switch ($data['action']) {
+                        case 'add':
+                            if($manager->addLinkCapability($this, $capability)){
+                                return true;
+                            }else{
+                                throw new Exception("Erreur lors de l'ajout de l'aptitude");
+                            }
+               
+                        case "remove":
+                            if($manager->removeLinkCapability($this, $capability)){
+                                return true;
+                            }else{
+                                throw new Exception("Erreur lors de la suppression de l'aptitude");
+                            }
+
+                        default:
+                            throw new Exception("L'action n'est pas valide");
+                    }
+
+                } else {
+                    throw new Exception("Une action est requise.");
                 }
 
             }

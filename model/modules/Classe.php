@@ -32,14 +32,14 @@ class Classe extends Content
             "type" => FileManager::FORMAT_IMG,
             "default" => "medias/modules/classes/default.png",
             "dir" => "medias/modules/classes/",
-            "preferential format" => "png",
+            "preferential_format" => "png",
             'naming' => "[name]"
         ],
         "logo" => [
             "type" => FileManager::FORMAT_IMG,
             "default" => "medias/modules/classes/default_logo.png",
             "dir" => "medias/modules/classes/",
-            "preferential format" => "svg",
+            "preferential_format" => "svg",
             "naming" => "[name]_logo"
         ]
     ];
@@ -312,8 +312,94 @@ class Classe extends Content
                             write: false);
                     }
                     return "";
+
+                    
+                case Content::DISPLAY_LIST:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($spells)){
+                        ob_start();
+                            ?> <ul class="list-unstyled"> <?php
+                                foreach ($spells as $spell) {?>
+                                    <li>
+                                        <?php $view->dispatch(
+                                            template_name : "spell/text",
+                                            data : [
+                                                "obj" => $spell,
+                                                "is_link" => true
+                                            ], 
+                                            write: true); ?>
+                                    </li> <?php
+                                }
+                            ?> </ul> <?php
+                        return ob_get_clean();
+                    }
+                    return "";
+
                 case Content::FORMAT_ARRAY:
                     return $spells;
+            }
+        }
+        public function getCapability(int $format = Content::FORMAT_BRUT, bool $display_remove = false, $size = 300){
+            $manager = new ClasseManager();
+            $capabilities = $manager->getLinkCapability($this);
+            
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    $view = new View();
+                    $html = $view->dispatch(
+                        template_name : "input/search",
+                        data : [
+                            "id" => "addCapability" . $this->getUniqid(),
+                            "title" => "Ajouter une aptitude",
+                            "label" => "Rechercher une aptitude",
+                            "placeholder" => "Rechercher une aptitude",
+                            "search_in" => ControllerSearch::SEARCH_IN_CAPABILITY,
+                            "parameter" => $this->getUniqid(),
+                            "action" => ControllerSearch::SEARCH_DONE_ADD_CAPABILITY_TO_CLASSE,
+                        ], 
+                        write: false);
+
+                    return $html . $this->getCapability(Content::DISPLAY_RESUME, true);
+
+                case Content::DISPLAY_RESUME:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($capabilities)){
+                        return $view->dispatch(
+                            template_name : "capability/list",
+                            data : [
+                                "capabilities" => $capabilities,
+                                "is_removable" => $display_remove,
+                                "uniqid" => $this->getUniqid(),
+                                "class_name" => "Classe",
+                                "size" => $size
+                            ], 
+                            write: false);
+                    }
+                    return "";
+
+                case Content::DISPLAY_LIST:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($capabilities)){
+                        ob_start();
+                            ?> <ul> <?php
+                                foreach ($capabilities as $capability) {?>
+                                    <li>
+                                        <?php $view->dispatch(
+                                            template_name : "capability/text",
+                                            data : [
+                                                "obj" => $capability,
+                                                "is_link" => true
+                                            ], 
+                                            write: true); ?>
+                                    </li> <?php
+                                }
+                            ?> </ul> <?php
+                        return ob_get_clean();
+                    }
+                    return "";
+
+                case Content::FORMAT_ARRAY:
+                    return $capabilities;
             }
         }
         
@@ -373,6 +459,43 @@ class Classe extends Content
                                 return true;
                             }else{
                                 throw new Exception("Erreur lors de la suppression du sort");
+                            }
+
+                        default:
+                            throw new Exception("L'action n'est pas valide");
+                    }
+
+                } else {
+                    throw new Exception("Une action est requise.");
+                }
+
+            }
+        }
+
+        /* Data = array(uniqid => id du capability)
+            Js : Classe.update(UniqidM,{action:'add|remove|update', uniqid:'uniqIdS'},'capability', IS_VALUE);
+        */
+        public function setCapability(array $data){ 
+            $manager = new ClasseManager;
+            $managerS = new CapabilityManager;
+            if(!isset($data['uniqid'])){throw new Exception("L'uniqid de l'aptitude n'est pas défini");}
+            if($managerS->existsUniqid($data['uniqid'])){
+                $capability = $managerS->getFromUniqid($data['uniqid']); 
+
+                if(isset($data['action'])){
+                    switch ($data['action']) {
+                        case 'add':
+                            if($manager->addLinkCapability($this, $capability)){
+                                return true;
+                            }else{
+                                throw new Exception("Erreur lors de l'ajout de l'aptitude");
+                            }
+               
+                        case "remove":
+                            if($manager->removeLinkCapability($this, $capability)){
+                                return true;
+                            }else{
+                                throw new Exception("Erreur lors de la suppression de l'aptitude");
                             }
 
                         default:

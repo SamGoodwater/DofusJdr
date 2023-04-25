@@ -3,7 +3,7 @@ src/conf.php
 src\conf.php
 conf.php
 medias/safeDir/token.txt
-
-/vendor/
-
-/tools/
+vendor/
+tools/
+backup/db/offline
+backup/db/online

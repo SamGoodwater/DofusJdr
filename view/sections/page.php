@@ -48,7 +48,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
         <h3  class="mb-3">Ajouter une page</h3>
         <div class="d-flex justify-content-between align-item-baseline addpage">
-            <div> <!-- Nom -->
+            <div class="align-self-end"> <!-- Nom -->
                 <input 
                     id="name"
                     placeholder="Nom de la page" 

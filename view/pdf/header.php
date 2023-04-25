@@ -10,14 +10,14 @@
         if(!is_dir($file) && $file != '.' && $file != '..'){
             $img = New File("medias/icons/".$file);
             if(FileManager::isImage($img)){
-                $icons[$img->getName(Content::FORMAT_BRUT, false)] = $img->getPath();
+                $icons[$img->getName(Content::FORMAT_BRUT, false)] = "data:image/".$img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $img->getPath()));
             }
         }
     }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <style type="text/css">
@@ -395,6 +395,11 @@
                 font-weight: 800;
                 color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pa'].'-d-5']?>;
             }
+            .time_before_use_again{
+                font-size: 1.3em;
+                font-weight: 800;
+                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['time_before_use_again'].'-d-5']?>;
+            }
             .level{
                 font-size: 1em;
                 font-weight: 800;
@@ -422,20 +427,23 @@
 
     <body>
 
-        <header>
-            <p class="center">
-                <?php $img = $_SERVER["DOCUMENT_ROOT"]."/medias/Logos/logo.png"?>
-                <img src="<?=$img?>" height="20">
-            </p>
-        </header>
-        <footer>
-            <table width="100%">
-                <tr width="100%">
-                    <td align="left" width="30%" class="size-0-7 text-grey">Fiche générée le <?=date("d/m/Y")?> à <?=date("H:i")?></td>
-                    <td align="center" width="30%" class="size-0-7 text-grey"><?=$GLOBALS['project']['name']?> &#x3B1; <?php echo date("Y");?></td>
-                    <td align="center" width="30%"><span class="pagenum"></span></td>
-                </tr>
-            </table>
-        </footer>
+    <header>
+        <p class="center">
+            <?php 
+                $file_img = New File($GLOBALS['project']['logo']);
+                $img = "data:image/".$file_img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file_img->getPath()));
+            ?>
+            <img src="<?=$img?>" height="20">
+        </p>
+    </header>
+    <footer>
+        <table width="100%">
+            <tr width="100%">
+                <td align="left" width="30%" class="size-0-7 text-grey">Fiche générée le <?=date("d/m/Y")?> à <?=date("H:i")?></td>
+                <td align="center" width="30%" class="size-0-7 text-grey"><?=$GLOBALS['project']['name']?> version <?=$GLOBALS['project']['version']?> <?=$GLOBALS['project']['stability_verbal']?> | <?php echo date("Y");?></td>
+                <td align="center" width="30%"><span class="pagenum"></span></td>
+            </tr>
+        </table>
+    </footer>
 
 <?php $content = ob_get_clean();

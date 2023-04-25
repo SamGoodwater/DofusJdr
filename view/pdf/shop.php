@@ -7,7 +7,9 @@
                     <table>
                         <tr>
                             <?php if(!empty($shop->getId_seller())){ 
-                                $img = $_SERVER["DOCUMENT_ROOT"]."/".$shop->getId_seller(Content::FORMAT_VIEW)->getClasse(Content::FORMAT_OBJECT)->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
+                                    $file_img = New File($shop->getId_seller(Content::FORMAT_OBJECT)->getFile('logo', new Style(['format' => Content::FORMAT_BRUT])));
+                                    $img = "data:image/".$file_img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file_img->getPath()));
+                                ?>
                                 <td width="15%" rowspan="2" align="left"><img src="<?=$img?>" height="80"></td>
                                 <td><?=$shop->getId_seller(Content::FORMAT_OBJECT)->getName()?></td>
                             <?php } else { ?>

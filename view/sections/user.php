@@ -38,7 +38,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
     $total = $manager->countAll();
 
     ob_start(); ?>
-        <button type="button" class="btn btn-sm btn-back-secondary me-2" data-bs-toggle="modal" data-bs-target="#modalAddUser">Nouvel·le Utilisateur·trice</button>
+        <button type="button" class="btn btn-sm btn-back-secondary me-2" onclick="Page.build(true, 'Création d\'un utilisateur·trice', $('#addUser'), Page.SIZE_MD, true);">Nouvel·le Utilisateur·trice</button>
 
         <table 
             id="table"
@@ -79,8 +79,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="edit"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="pseudo">Pseudo</th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-filter-control="input" data-field="email">Email</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="pseudo">Pseudo</th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="email">Email</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="rights">Droits</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="last_connexion">Dernière connexion</th>
@@ -93,33 +93,23 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> Utilisateur·trice.</p>
 
         <!-- Modal ADD -->
-        <div class="modal fade" id="modalAddUser" tabindex="-1" aria-labelledby="modalAddUser" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">Création d'un·e Utilisateur·trice </h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control form-control-main-focus" id="email" placeholder="Email">
-                            <label for="email">Email</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input onchange="verifPassword();" type="password" class="form-control form-control-main-focus" id="password" placeholder="Mot de passe ou Passe-phrase">
-                            <label for="password">Mot de passe ou Passe-phrase</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input onchange="verifPassword();" type="password" class="form-control form-control-main-focus" id="password_repeat" placeholder="Réécrire le mot de passe ou la passe-phrase">
-                            <label for="password_repeat">Réécrire le mot de passe ou la passe-phrase</label>
-                        </div>
-                        <p id="display_error" class="bold text-red-d-3 size-0-8"></p>
-                    </div>
-                    <div class="modal-footer modal-footer d-flex flex-row justify-content-between">
-                        <button type="button" class="btn-border-grey" data-bs-dismiss="modal">Close</button>
-                        <button type="button" onclick="User.add();" class="btn btn-border-secondary">Créer</button>
-                    </div>
-                </div>
+        <div id="addUser" style="display:none;">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-main-focus" id="email" placeholder="Email">
+                <label for="email">Email</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input onchange="verifPassword();" type="password" class="form-control form-control-main-focus" id="password" placeholder="Mot de passe ou Passe-phrase">
+                <label for="password">Mot de passe ou Passe-phrase</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input onchange="verifPassword();" type="password" class="form-control form-control-main-focus" id="password_repeat" placeholder="Réécrire le mot de passe ou la passe-phrase">
+                <label for="password_repeat">Réécrire le mot de passe ou la passe-phrase</label>
+            </div>
+            <p id="display_error" class="bold text-red-d-3 size-0-8"></p>
+            <div class="modal-footer d-flex flex-row justify-content-between">
+                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="User.add();" class="btn btn-sm btn-back-secondary">Créer</button>
             </div>
         </div>
 

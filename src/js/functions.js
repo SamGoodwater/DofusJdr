@@ -280,3 +280,29 @@ function rollDice() {
 
 // Met la première lettre en majuscule
 function ucFirst(str) {return str && str[0].toUpperCase() + str.slice(1);}
+
+function showTooltips(launcheur, target){
+  if ($('.container-tooltips').length === 0) {
+    // La div avec la classe "container-tooltips" n'existe pas dans la page
+    // Création de la div
+    var containerTooltips = $('<div>').addClass('container-tooltips');
+    // Insertion de la div dans le corps de la page
+    $('body').append(containerTooltips);
+  }
+  var tooltip = $('.container-tooltips');
+  var clone = $(target).clone();
+  clone.show();
+  tooltip.html(clone);
+  
+  var position = $(launcheur).offset();
+  var x = position.left;
+  var y = position.top;
+  tooltip.css('position', 'absolute');
+  tooltip.css('left', (x+100)+'px');
+  tooltip.css('top', (y-50)+'px');
+  tooltip.show("clip", 100);
+  tooltip.css('display', 'flex');
+  $(launcheur).on("mouseleave", function(){
+    tooltip.hide("clip", 100);
+  });
+}

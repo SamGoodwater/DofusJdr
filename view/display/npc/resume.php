@@ -99,6 +99,7 @@
                         <p class="m-1"><?=$obj->getSupercherie(Content::FORMAT_VIEW)?></p>
                     </div>
                 </div>
+                <p class="card-text"><?=$obj->getSpell(Content::DISPLAY_LIST)?></p>
                 <p class="card-text text-grey-d-2"><?=$obj->getStory();?></p>
                 <div class="nav-item-divider back-main-d-1"></div>
                 <p class="card-text text-grey"><?=$obj->getOther_info();?></p>

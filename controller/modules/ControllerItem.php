@@ -167,7 +167,7 @@ class ControllerItem extends Controller{
       } else {
         $manager = new ItemManager();
 
-        if($manager->existsName($_REQUEST['name']) == false){
+        if($manager->existsName($_REQUEST['name']) == false && !empty(trim($_REQUEST['name']))){
 
           $type = Item::TYPE_CHAPEAU ;
           if(in_array($_REQUEST['type'], Item::TYPE_LIST)){

@@ -4,8 +4,8 @@ class Consumable extends Controller{
     
     static add(){
         var URL = 'index.php?c=consumable&a=add';
-        var name = $('#modalAddConsumable #name').val();
-        var type = $('#modalAddConsumable #type').val();
+        var name = $('#modal #addConsumable #name').val();
+        var type = $('#modal #addConsumable #type').val();
         
         $.post(URL,
             {
@@ -19,9 +19,9 @@ class Consumable extends Controller{
                 }
                 if(data.state){
                     MsgAlert("Ajout du consommable", 'Le consommable ' + name + ' a bien été ajouté.', "green" , 3000);
-                    $('#modalAddConsumable #type').val("");
-                    $('#modalAddConsumable #name').val("");
-                    $('#modalAddConsumable').modal("hide");
+                    $('#modal #addConsumable #type').val("");
+                    $('#modal #addConsumable #name').val("");
+                    $('#modal').modal("hide");
                     $('#table').bootstrapTable('refresh');
                 } else {
                     $('#display_error').text(data['error']);

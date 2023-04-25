@@ -43,5 +43,7 @@
         <p class="card-text"><?=$obj->getLife()?></p>
         <div class="nav-item-divider back-main-d-1"></div>
         <p class="card-text"><?=$obj->getSpell(Content::DISPLAY_RESUME)?></p>
+        <div class="nav-item-divider back-main-d-1"></div>
+        <p class="card-text"><?=$obj->getCapability(Content::DISPLAY_RESUME)?></p>
     </div>
 </div>

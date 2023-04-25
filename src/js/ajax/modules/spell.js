@@ -4,7 +4,7 @@ class Spell extends Controller{
     
     static add(){
         var URL = 'index.php?c=spell&a=add';
-        var name = $('#modalAddSpell #name').val();
+        var name = $('#modal #addSpell #name').val();
         
         $.post(URL,
             {
@@ -17,8 +17,8 @@ class Spell extends Controller{
                 }
                 if(data.state){
                     MsgAlert("Ajout du sort", 'Le sort ' + name + ' a bien été ajouté.', "green" , 3000);
-                    $('#modalAddSspell #name').val("");
-                    $('#modalAddSpell').modal("hide");
+                    $('#modal #addSspell #name').val("");
+                    $('#modal').modal("hide");
                     $('#table').bootstrapTable('refresh');
                 } else {
                     $('#display_error').text(data['error']);

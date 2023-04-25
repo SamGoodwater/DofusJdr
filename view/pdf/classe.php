@@ -3,16 +3,22 @@
         <table width="100%" valign="middle" align="left">
             <tr>
                 <td width="15%" class="starter center">
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
+                    <?php 
+                        $file_img = New File($obj->getFile('img', new Style(['format' => Content::FORMAT_BRUT])));
+                        $img = "data:image/".$file_img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file_img->getPath()));
+                    ?>
                     <img src="<?=$img?>" height="100"><br>
                     Arme priviligiée<br>
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getWeapons_of_choice(Content::FORMAT_PATH); ?>
-                    <img src="<?=$img?>" height="20">    
+                    <?php 
+                        $file_img = New File($obj->getWeapons_of_choice(Content::FORMAT_PATH));
+                        $img = "data:image/".$file_img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file_img->getPath()));
+                    ?>
+                    <img src="<?=$img?>" height="20">
                     <p><?=$obj->getTrait()?></p>      
                 </td>
                 <td width="50%">
                     <table>
-                        <tr><td colspan="2"><h1 class="center"><?=$obj->getName()?></h1></td></tr>
+                        <tr><td colspan="2"><h1 class="center"><?=ucfirst($obj->getName())?></h1></td></tr>
                         <tr><td colspan="2" class="starter"><?=$obj->getDescription_fast()?></td></tr>
                         <tr><td colspan="2"><?=$obj->getDescription()?></td></tr>
                     </table>

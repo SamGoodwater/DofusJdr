@@ -89,6 +89,7 @@ class Router {
                 ],
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css",
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/panzoom.css",
+                "https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css",
                 "src/css/shortcuts",
                 "src/css/",
                 "src/css/plugin/"
@@ -191,13 +192,13 @@ class Router {
                             foreach(scandir($dir) as $file) {
                                 $path = $dir . $file;
                                 if($file != '.' && $file != '..' && !empty($file) && !is_dir($path)){
-                                    if(substr($path, -3) == ".js"){
+                                    if(substr($path, -2) == "js"){
                                         ?> <script src="<?=$path?>" crossorigin="<?=$crossorigin?>" integrity="<?=$integrity?>" type="text/javascript"></script> <?php
                                     }
                                 }
                             }  
                         } else {
-                            if(substr($dir, -3) == ".js"){
+                            if(substr($dir, -2) == "js"){
                                 ?> <script src="<?=$dir?>"  crossorigin="<?=$crossorigin?>" integrity="<?=$integrity?>" type="text/javascript"></script> <?php
                             }
                         }

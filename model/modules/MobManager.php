@@ -282,6 +282,9 @@ class MobManager extends Manager
     public function delete(Mob $object){
         $managerUser = new UserManager();
         $managerUser->removeBookmarkFromObj($object);
+
+        $this->removeAllLinkCapabilityFromMob($object);
+        $this->removeAllLinkSpellFromMob($object);
         
         $req = $this->_bdd->prepare('DELETE FROM mob WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
@@ -338,6 +341,59 @@ class MobManager extends Manager
     public function removeAllLinkSpellFromSpell(Spell $spell){
         $req = $this->_bdd->prepare('DELETE FROM link_mob_spell WHERE id_spell = :id');
         return $req->execute(array("id" =>  $spell->getId()));
+    }
+
+// Link Capability
+    public function getLinkCapability(Mob $mob){
+        $req = $this->_bdd->prepare('   SELECT *, link_mob_capability.id AS link_id 
+                                        FROM link_mob_capability
+                                        INNER JOIN capability ON link_mob_capability.id_capability = capability.id
+                                        WHERE id_mob = ?
+                                        ORDER BY capability.level ASC');
+        $req->execute(array($mob->getId()));
+        $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        if(empty($ret)){return "";}
+        $return = array();
+        foreach ($ret as $link) {
+            $return[] = new Capability($this->securite($link));
+        }
+        return $return;
+    }
+    public function existsLinkCapability(Mob $mob, Capability $capability){
+        $req = $this->_bdd->prepare('SELECT id FROM link_mob_capability WHERE id_mob = ? AND id_capability = ?');
+        $req->execute(array($mob->getId(), $capability->getId()));
+        return $req->rowCount();
+    }
+    public function addLinkCapability(Mob $mob, Capability $capability){
+        $req = $this->_bdd->prepare('INSERT INTO link_mob_capability(
+                    id_mob,
+                    id_capability
+                )
+            VALUES (
+                    :id_mob,
+                    :id_capability
+                )');
+
+        return $req->execute(array(
+            "id_mob" => $mob->getId(),
+            "id_capability"=> $capability->getId()
+        ));
+
+        // Renvoi le dernier ingredient ajouté
+        $post = $this->_bdd->prepare('SELECT id FROM link_mob_capability ORDER BY id DESC LIMIT 1');
+        return $post->execute();
+    }
+    public function removeLinkCapability(Mob $mob, Capability $capability){
+        $req = $this->_bdd->prepare('DELETE FROM link_mob_capability WHERE id_mob = :id_mob AND id_capability = :id_capability');
+        return $req->execute(array("id_mob" =>  $mob->getId(), "id_capability" =>  $capability->getId()));
+    }
+    public function removeAllLinkCapabilityFromMob(Mob $mob){
+        $req = $this->_bdd->prepare('DELETE FROM link_mob_capability WHERE id_mob = :id');
+        return $req->execute(array("id" =>  $mob->getId()));
+    }
+    public function removeAllLinkCapabilityFromCapability(Capability $capability){
+        $req = $this->_bdd->prepare('DELETE FROM link_mob_capability WHERE id_capability = :id');
+        return $req->execute(array("id" =>  $capability->getId()));
     }
 
 // OTHER

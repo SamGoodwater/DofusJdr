@@ -4,8 +4,8 @@ class Item extends Controller{
 
     static add(){
         var URL = 'index.php?c=item&a=add';
-        var name = $('#modalAddItem #name').val();
-        var type = $('#modalAddItem #type').val();
+        var name = $('#modal #addItem #name').val();
+        var type = $('#modal #addItem #type').val();
         
         $.post(URL,
             {
@@ -19,9 +19,9 @@ class Item extends Controller{
                 }
                 if(data.state){
                     MsgAlert("Ajout de l'équipement", 'L\'équipement ' + name + ' a bien été ajouté.', "green" , 3000);
-                    $('#modalAddItem #type').val("");
-                    $('#modalAddItem #name').val("");
-                    $('#modalAddItem').modal("hide");
+                    $('#modal #addItem #type').val("");
+                    $('#modal #addItem #name').val("");
+                    $('#modal').modal("hide");
                     $('#table').bootstrapTable('refresh');
                 } else {
                     $('#display_error').text(data['error']);

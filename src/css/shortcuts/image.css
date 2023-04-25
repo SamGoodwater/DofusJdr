@@ -292,17 +292,16 @@
     background-size: cover; /* Resize the background image to cover the entire container */
     -webkit-background-size: cover; /* pour anciens Chrome et Safari */
 }
-
+.icon{
+    width: 20px;
+    background-color: transparent;
+}
 .icon-xs{
     width: 10px;
     background-color: transparent;
 }
 .icon-sm{
     width: 15px;
-    background-color: transparent;
-}
-.icon{
-    width: 20px;
     background-color: transparent;
 }
 .icon-lg{
@@ -322,4 +321,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.fancybox__container{
+    z-index:2000;
 }

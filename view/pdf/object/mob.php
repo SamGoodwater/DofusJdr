@@ -6,7 +6,10 @@
         <td>
             <table width="100%" valign="middle" border=0>
                 <tr width="100%" style="text-align:center;" border=0> <!-- LIGNE -->
-                    <?php $img = $_SERVER["DOCUMENT_ROOT"]."/".$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])); ?>
+                    <?php 
+                        $file_img = New File($obj->getFile('logo', new Style(['format' => Content::FORMAT_BRUT])));
+                        $img = "data:image/".$file_img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file_img->getPath()));
+                    ?>
                     <td width="15%" rowspan="2"><img src="<?=$img?>" height="100"></td>
                     <td><h2><?=$obj->getName()?></h2></td>
                     <td class="box-level"><h3><span class="starter">Niveau : </span><b class="enavant2"><?=$obj->getLevel()?></b></h3></td>
@@ -55,7 +58,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getLife(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getLife(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -97,7 +100,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getPa(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getPa(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -123,7 +126,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getPm(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getPm(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -149,7 +152,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getPo(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getPo(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -176,7 +179,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getIntel(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getIntel(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -212,7 +215,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getCa(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getCa(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -243,7 +246,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getDodge_pa(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getDodge_pa(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -270,7 +273,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getDodge_pm(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getDodge_pm(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -297,7 +300,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getFuite(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getFuite(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -324,7 +327,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getTacle(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getTacle(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -354,7 +357,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getVitality(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getVitality(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -380,7 +383,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getSagesse(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getSagesse(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -406,7 +409,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getStrong(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getStrong(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -432,7 +435,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getIntel(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getIntel(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -458,7 +461,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getAgi(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getAgi(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -484,7 +487,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getChance(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getChance(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -514,7 +517,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_neutre(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_neutre(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -540,7 +543,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_terre(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_terre(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -566,7 +569,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_feu(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_feu(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -592,7 +595,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_air(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_air(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -618,7 +621,7 @@
                                                     ?><tr>
                                                 <?php } ?>
 
-                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">nvx</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_eau(), $i)?></b></span></td>
+                                                    <td class="center"><span class="box-calcule"><i><i class="size-0-7">niv</i><?=$i?></i><br><b><?=Content::getValueFromFormule($obj->getRes_eau(), $i)?></b></span></td>
 
                                                 <?php if($lign%6 == 5){ ?>
                                                     </tr>
@@ -644,7 +647,7 @@
                 <?php } ?>
 
                     <?php
-                        $obj = $spell['obj'];
+                        $obj = $spell;
                         include "view/pdf/object/spell.php";
                     ?>
                     

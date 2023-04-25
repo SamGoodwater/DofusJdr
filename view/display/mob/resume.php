@@ -62,6 +62,7 @@
                         <div><?=$obj->getRes_eau(Content::FORMAT_ICON);?></div>
                     </div> 
                 </div>
+                <p class="card-text"><?=$obj->getSpell(Content::DISPLAY_LIST)?></p>
             </div>
         </div>
     </div>

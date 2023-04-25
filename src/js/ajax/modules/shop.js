@@ -4,7 +4,7 @@ class Shop extends Controller{
 
     static add(){
         var URL = 'index.php?c=shop&a=add';
-        var name = $('#modalAddShop #name').val();
+        var name = $('#modal #addShop #name').val();
         
         $.post(URL,
             {
@@ -17,8 +17,8 @@ class Shop extends Controller{
                 }
                 if(data.state){
                     MsgAlert("Ajout d'un hôtel de vente", "L'hôtel de vente " + name + " a bien été ajouté.", "green" , 3000);
-                    $('#modalAddShop #name').val("");
-                    $('#modalAddShop').modal("hide");
+                    $('#modal #addShop #name').val("");
+                    $('#modal').modal("hide");
                     $('#table').bootstrapTable('refresh');
                 } else {
                     $('#display_error').text(data['error']);

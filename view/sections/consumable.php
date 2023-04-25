@@ -40,7 +40,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end">
-            <button type="button" class="me-2 btn btn-back-secondary" data-bs-toggle="modal" data-bs-target="#modalAddConsumable">Ajouter un consommable</button>
+            <button type="button" class="me-2 btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un consommable', $('#addConsumable'), Page.SIZE_MD, true);">Ajouter un consommable</button>
             <div class="form-check form-switch">
                 <input onchange="refreshUsable(this);" class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
                 <label class="form-check-label" for="flexSwitchCheckChecked">Afficher seulement les consommables compatibles avec le JDR</label>
@@ -87,13 +87,13 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="type">Catégorie</th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="type">Catégorie</th>
                     <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fas fa-image"></i></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="input" data-field="name">Nom</th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="name">Nom</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="select" data-field="level"><span class="text-level">Niveau</span></th>
-                    <th data-sortable="true" data-visible="false" data-filter-control="input" data-field="description">Description</th>
-                    <th data-sortable="true" data-visible="false" data-filter-control="input" data-field="effect">Effet</th>
-                    <th data-sortable="true" data-visible="false" data-filter-control="input" data-field="recepe">Recette</th>
+                    <th data-sortable="true" data-visible="false" data-field="description">Description</th>
+                    <th data-sortable="true" data-visible="false"  data-field="effect">Effet</th>
+                    <th data-sortable="true" data-visible="false"  data-field="recepe">Recette</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="rarity"><span class="text-grey-d-2" data-bs-toggle='tooltip' data-bs-placement='bottom' title="Rareté du consommable">Rareté</span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="price"><span class="text-kamas" data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix estimé du consommable"><img class='icon' src='medias/icons/kamas.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
@@ -108,32 +108,22 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> consommables. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
-        <div class="modal fade" id="modalAddConsumable" tabindex="-1" aria-labelledby="modalAddConsumable" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">Création d'un consommable</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating mb-2">
-                            <select class="form-select" id="type" aria-label="Floating label select example">
-                                <?php foreach (Consumable::TYPE_LIST as $key => $type) {
-                                        echo "<option value='".$type."'>".ucfirst($key)."</option>";      
-                                    } ?>
-                            </select>
-                            <label for="floatingSelect">Catérogie du consommable</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom du consommable">
-                            <label for="floatingInput">Nom du consommable</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer modal-footer d-flex flex-row justify-content-between">
-                        <button type="button" class="btn-border-grey" data-bs-dismiss="modal">Close</button>
-                        <button type="button" onclick="Consumable.add();" class="btn btn-border-secondary">Créer</button>
-                    </div>
-                </div>
+        <div id="addConsumable" style="display:none;">
+            <div class="form-floating mb-2">
+                <select class="form-select" id="type" aria-label="Floating label select example">
+                    <?php foreach (Consumable::TYPE_LIST as $key => $type) {
+                            echo "<option value='".$type."'>".ucfirst($key)."</option>";      
+                        } ?>
+                </select>
+                <label for="floatingSelect">Catérogie du consommable</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom du consommable">
+                <label for="floatingInput">Nom du consommable</label>
+            </div>
+            <div class="modal-footer d-flex flex-row justify-content-between">
+                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Consumable.add();" class="btn btn-sm btn-back-secondary">Créer</button>
             </div>
         </div>
 

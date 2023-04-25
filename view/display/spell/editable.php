@@ -49,5 +49,5 @@
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
         <div class="my-2"><?=$obj->getId_invocation(Content::FORMAT_EDITABLE)?></div>
     </div>
-    <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Spell.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
+    <p class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-border-red' onclick="Spell.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
 </div>
