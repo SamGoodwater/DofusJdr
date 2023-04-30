@@ -1,6 +1,33 @@
 <?php
 class ControllerNpc extends Controller{
+  public function count(){
+    $return = [
+      'state' => false,
+      'value' => "",
+      'error' => 'erreur inconnue'
+    ];
+    $currentUser = ControllerConnect::getCurrentUser();
+    
+    if(!$currentUser->getRight('npc', User::RIGHT_READ)){
+      $return["error"] = "Vous n'avez pas les droits pour lire cet objet";}else{
 
+      $manager = new NpcManager();
+
+      $usable = 0;
+      if(isset($_REQUEST['usable'])){
+        if($_REQUEST['usable'] == 1 || $_REQUEST['usable'] == 0){
+          $usable = $_REQUEST['usable'];
+        }
+      }
+
+      $return['value'] = $manager->countAll(
+        usable:$usable
+      );
+      $return['state'] = true;
+    }
+    echo json_encode($return);
+    flush();
+  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     
@@ -10,14 +37,32 @@ class ControllerNpc extends Controller{
       $json = "Vous n'avez pas les droits pour lire cet objet";}else{
 
       $managerS = new NpcManager();
+      
       $usable = 0;
-
       if(isset($_REQUEST['usable'])){
         if($_REQUEST['usable'] == 1 || $_REQUEST['usable'] == 0){
           $usable = $_REQUEST['usable'];
         }
       }
-      $objs = $managerS->getAll($usable);
+
+      $offset = -1;
+      if(isset($_REQUEST['offset'])){
+        if(is_numeric($_REQUEST['offset'])){
+          $offset = $_REQUEST['offset'];
+        }
+      }
+      $limit = -1;
+      if(isset($_REQUEST['limit'])){
+        if(is_numeric($_REQUEST['limit'])){
+          $limit = $_REQUEST['limit'];
+        }
+      }
+
+      $objs = $managerS->getAll(
+        usable:$usable,
+        offset:$offset,
+        limit:$limit
+      );
 
       foreach ($objs AS $obj) {
         

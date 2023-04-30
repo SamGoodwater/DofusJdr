@@ -1,15 +1,17 @@
-#fileupload{
+#fileupload {
   margin: 10px;
   background: #fff;
   border-radius: 5px;
 }
-.fileupload header{
+
+.fileupload header {
   color: var(--main-d-2);
   font-size: 27px;
   font-weight: 600;
   text-align: center;
 }
-.fileupload form{
+
+.fileupload form {
   display: flex;
   cursor: pointer;
   margin: 10px;
@@ -22,22 +24,26 @@
   background-color: var(--main-l-5);
   transition: all 0.3s ease-in-out;
 }
-.fileupload form:focus{
+
+.fileupload form:focus {
   border: 4px dashed var(--main-d-5);
   background-color: var(--main-d-3);
-  color:white;
+  color: white;
 }
-.fileupload form :where(i, p){
-  color: var(--main-d-2);;
+
+.fileupload form :where(i, p) {
+  color: var(--main-d-2);
 }
-.fileupload form i{
+
+.fileupload form i {
   font-size: 50px;
 }
-.fileupload form p{
+
+.fileupload form p {
   font-size: 16px;
 }
 
-.fileupload section .row{
+.fileupload section .row {
   margin-bottom: 10px;
   background: #E9F0FF;
   list-style: none;
@@ -47,64 +53,77 @@
   align-items: center;
   justify-content: space-between;
 }
-.fileupload section .row i{
+
+.fileupload section .row i {
   color: var(--main-d-2);
   font-size: 30px;
 }
-.fileupload section .details span{
+
+.fileupload section .details span {
   font-size: 14px;
 }
-.fileupload .progress-area .row .content{
+
+.fileupload .progress-area .row .content {
   width: 100%;
   margin-left: 15px;
 }
-.fileupload .progress-area .details{
+
+.fileupload .progress-area .details {
   display: flex;
   align-items: center;
   margin-bottom: 7px;
   justify-content: space-between;
 }
-.fileupload .progress-area .content .progress-bar{
+
+.fileupload .progress-area .content .progress-bar {
   height: 6px;
   width: 100%;
   margin-bottom: 4px;
   background: #fff;
   border-radius: 30px;
 }
-.fileupload .content .progress-bar .progress{
+
+.fileupload .content .progress-bar .progress {
   height: 100%;
   width: 0%;
   background: var(--main-d-2);
   border-radius: inherit;
 }
-.fileupload .uploaded-area{
+
+.fileupload .uploaded-area {
   max-height: 232px;
   overflow-y: scroll;
 }
-.fileupload .uploaded-area.onprogress{
+
+.fileupload .uploaded-area.onprogress {
   max-height: 150px;
 }
-.fileupload .uploaded-area::-webkit-scrollbar{
+
+.fileupload .uploaded-area::-webkit-scrollbar {
   width: 0px;
 }
-.fileupload .uploaded-area .row .content{
+
+.fileupload .uploaded-area .row .content {
   display: flex;
   align-items: center;
 }
-.fileupload .uploaded-area .row .details{
+
+.fileupload .uploaded-area .row .details {
   display: flex;
   margin-left: 15px;
   flex-direction: column;
 }
-.fileupload .uploaded-area .row .details .size{
+
+.fileupload .uploaded-area .row .details .size {
   color: #404040;
   font-size: 11px;
 }
-.fileupload .uploaded-area i.fa-check{
+
+.fileupload .uploaded-area i.fa-check {
   font-size: 16px;
 }
 
-.dragable{
+.dragable {
   cursor: copy;
   filter: blur(2px);
   -webkit-filter: blur(2px);
@@ -121,34 +140,42 @@
   position: absolute;
   z-index: -1;
 }
+
 .inputfile + label, .inputfilelabel {
   display: inline-block;
-  color: #878787;  
+  color: #878787;
 }
-#optionImage{
+
+#optionImage {
   border: 3px dashed var(--blue-grey-darken-3, #37474f);
   padding: 10px;
   width: 100%;
 }
-#filesView{
+
+#filesView {
   border: 1px dotted var(--blue-grey-darken-3, #37474f);
-  padding:20px;
+  padding: 20px;
   width: 200px;
   display: none;
 }
-div[data-select="true"] {
+
+div[data-select=true] {
   background-color: var(--blue-grey, #96abb6);
-  box-shadow: 1px 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  box-shadow: 1px 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-div[data-select="false"]:hover {
+
+div[data-select=false]:hover {
   background-color: var(--blue-grey-lighten-3, #c3e3f5);
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
-div[data-select="true"] #is_selected i {
+
+div[data-select=true] #is_selected i {
   background-color: var(--blue-grey-darken-3, #353f44);
-  color:rgba(255, 255, 255, 100);
+  color: rgb(255, 255, 255);
 }
-div[data-select="false"] #is_selected i {
+
+div[data-select=false] #is_selected i {
   background-color: rgba(255, 255, 255, 0);
-  color:rgba(255, 255, 255, 0);
-}
+  color: rgba(255, 255, 255, 0);
+}/*# sourceMappingURL=file.css.map */

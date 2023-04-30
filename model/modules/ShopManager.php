@@ -3,11 +3,21 @@ class ShopManager extends Manager
 {
 
 // GET
-    public function getAll(){
-        $requete = "SELECT * FROM shop ORDER BY location"; 
+    public function getAll(bool $usable = false, int $offset = -1, int $limit = -1){
+        $limitClause = ($limit != -1 && $offset != -1) ? 'LIMIT :offset, :limit' : '';
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        $orderByClause = 'ORDER BY usable DESC';
+        $requete = 'SELECT * FROM shop ' . $whereClause . ' ' . $orderByClause . ' ' . $limitClause;
+
         $req = $this->_bdd->prepare($requete);
+        if($limit != -1 && $offset != -1){
+            $req->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $req->bindValue(':limit', $limit, PDO::PARAM_INT);
+        }
         $req->execute();
+
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        
         if(!empty($ret)){
             return $this->bdd2objects($ret);
         } else {
@@ -29,8 +39,9 @@ class ShopManager extends Manager
         return new Shop($req);
     }
 
-    public function countAll(){
-        $requete = "SELECT id FROM shop";    
+    public function countAll(bool $usable = false){
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        $requete = 'SELECT id FROM shop ' . $whereClause;
         $req = $this->_bdd->prepare($requete);
         $req->execute();
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
@@ -167,6 +178,7 @@ class ShopManager extends Manager
                 "comment" => $link['comment']
             ];
         }
+        if(empty($return)){return [];}
         return $return;
     }
     public function getLinkConsumableFromConsumable(Shop $shop , Consumable $consumable){
@@ -260,6 +272,7 @@ class ShopManager extends Manager
                 "comment" => $link['comment']
             ];
         }
+        if(empty($return)){return [];}
         return $return;
     }
     public function getLinkItemFromItem(Shop $shop , Item $item){

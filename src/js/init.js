@@ -5,6 +5,8 @@ const IS_VALUE = 1;
 const IS_CHECKBOX = 2;
 const IS_CKEDITOR = 3;
 const IS_PATH_FILE = 4;
+const IS_LIST_OF_CHECKBOX = 5;
+const IS_SELECT = 6;
 const CKEDITOR5 = Array;
 
 const DISPLAY_CARD = 0;

@@ -1,6 +1,66 @@
 <?php
 class ControllerSpell extends Controller{
+  public function count(){
+    $return = [
+      'state' => false,
+      'value' => "",
+      'error' => 'erreur inconnue'
+    ];
+    $currentUser = ControllerConnect::getCurrentUser();
+    
+    if(!$currentUser->getRight('spell', User::RIGHT_READ)){
+      $return["error"] = "Vous n'avez pas les droits pour lire cet objet";}else{
 
+      $manager = new SpellManager();
+
+      $usable = 0;
+      if(isset($_REQUEST['usable'])){
+        if($_REQUEST['usable'] == 1 || $_REQUEST['usable'] == 0){
+          $usable = $_REQUEST['usable'];
+        }
+      }
+
+      $element=[];
+      if(isset($_REQUEST['element'])){
+        if(empty($_REQUEST['element'])){$element = [];
+        } else{
+          foreach (array_filter(explode("|", $_REQUEST['element'])) as $value) {
+            if(isset(Spell::ELEMENT[$value])){$element[] = $value;}
+          }
+        }
+      } else {$element = [];}
+
+      $category=[];
+      if(isset($_REQUEST['category'])){
+        if(empty($_REQUEST['category'])){$category = [];
+        } else{
+          foreach (array_filter(explode("|", $_REQUEST['category'])) as $value) {
+            if(in_array($value, Spell::CATEGORY)){$category[] = $value;}
+          }
+        }
+      } else {$category = [];}
+
+      $level=[];
+      if(isset($_REQUEST['level'])){
+        if(empty($_REQUEST['level'])){$level = [];
+        } else{
+          foreach (array_filter(explode("|", $_REQUEST['level'])) as $value) {
+            if($value > 0 && $value <= 20){$level[] = $value;}
+          }
+        }
+      } else {$level = [];}
+
+      $return['value'] = $manager->countAll(
+        usable:$usable, 
+        element:$element, 
+        category:$category,
+        level:$level
+      );
+      $return['state'] = true;
+    }
+    echo json_encode($return);
+    flush();
+  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     
@@ -20,35 +80,55 @@ class ControllerSpell extends Controller{
 
       $element=[];
       if(isset($_REQUEST['element'])){
-        if(empty($_REQUEST['element'])){$element = ["all"];
+        if(empty($_REQUEST['element'])){$element = [];
         } else{
-          foreach (array_filter(explode(",", $_REQUEST['element'])) as $value) {
+          foreach (array_filter(explode("|", $_REQUEST['element'])) as $value) {
             if(isset(Spell::ELEMENT[$value])){$element[] = $value;}
           }
         }
-      } else {$element = ["all"];}
+      } else {$element = [];}
 
       $category=[];
       if(isset($_REQUEST['category'])){
-        if(empty($_REQUEST['category'])){$category = ["all"];
+        if(empty($_REQUEST['category'])){$category = [];
         } else{
-          foreach (array_filter(explode(",", $_REQUEST['category'])) as $value) {
+          foreach (array_filter(explode("|", $_REQUEST['category'])) as $value) {
             if(in_array($value, Spell::CATEGORY)){$category[] = $value;}
           }
         }
-      } else {$category = ["all"];}
+      } else {$category = [];}
 
       $level=[];
       if(isset($_REQUEST['level'])){
-        if(empty($_REQUEST['level'])){$level = ["all"];
+        if(empty($_REQUEST['level'])){$level = [];
         } else{
-          foreach (array_filter(explode(",", $_REQUEST['level'])) as $value) {
+          foreach (array_filter(explode("|", $_REQUEST['level'])) as $value) {
             if($value > 0 && $value <= 20){$level[] = $value;}
           }
         }
-      } else {$level = ["all"];}
+      } else {$level = [];}
 
-      $objs = $managerS->getAll($element, $category, $level, $usable);
+      $offset = -1;
+      if(isset($_REQUEST['offset'])){
+        if(is_numeric($_REQUEST['offset'])){
+          $offset = $_REQUEST['offset'];
+        }
+      }
+      $limit = -1;
+      if(isset($_REQUEST['limit'])){
+        if(is_numeric($_REQUEST['limit'])){
+          $limit = $_REQUEST['limit'];
+        }
+      }
+
+      $objs = $managerS->getAll(
+        element:$element, 
+        category:$category, 
+        level:$level, 
+        usable:$usable,
+        offset:$offset,
+        limit:$limit
+      );
 
       foreach ($objs as $obj) {
         ob_start();?>

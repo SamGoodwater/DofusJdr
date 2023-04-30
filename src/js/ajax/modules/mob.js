@@ -1,6 +1,6 @@
 class Mob extends Controller{
     static MODEL_NAME = "mob";
-    
+
     static add(){
         var URL = 'index.php?c=mob&a=add';
         var name = $('#modal #addMob #name').val();

@@ -33,17 +33,43 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
     );
 
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
-    
-    $usable = 1;
-    $managerTemplate = new ConsumableManager();
-    $total = $managerTemplate->countAll();
 
     ob_start(); ?>
-        <div class="d-flex flex-row justify-content-between align-items-end">
-            <button type="button" class="me-2 btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un consommable', $('#addConsumable'), Page.SIZE_MD, true);">Ajouter un consommable</button>
+        <div class="d-flex flex-row justify-content-between align-items-end" id="sortableConsomables">
+            <button type="button" class="me-2 btn-sm btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un consomable', $('#addItem'), Page.SIZE_MD, true);">Ajouter un consommable</button>
+            <div id="selectorTypeListCheckbox" class="dropdown">
+                <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="typesort" data-bs-toggle="dropdown" aria-expanded="false">Catégorie du consommable</a>
+                <ul class="dropdown-menu p-3" aria-labelledby="typesort">
+                    <?php $checked = "";
+                    foreach (Consumable::TYPES as $key => $type_) { 
+                        if(in_array($type_, $array_type)){$checked = "checked";}else{$checked="";}?>
+                        <li>
+                            <div class="form-check form-check-inline">
+                                <input <?=$checked?> class="form-check-input selectorType" type="checkbox" id="CheckboxType<?=$type_?>" value="<?=$type_?>">
+                                <label class="form-check-label badge back-<?=Style::getColorFromLetter($type_)?>-d-2 text-white" for="CheckboxType<?=$type_?>"><?=ucfirst($key)?></label>
+                            </div>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+            <div class="dropdown" id="selectorLevelListCheckbox">
+                <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="levelsort" data-bs-toggle="dropdown" aria-expanded="false">Affichage par niveau</a>
+                <ul class="dropdown-menu p-4" aria-labelledby="levelsort">
+                    <?php $checked = "";
+                    for ($i=1; $i <= 20 ; $i++) {
+                        if(in_array($type_,$array_level)){$checked = "checked";}else{$checked="";}?>
+                        <li>
+                            <div class="form-check form-check-inline">
+                                <input <?=$checked?> class="form-check-input selectorLevel" type="checkbox" id="CheckboxLevel<?=$i?>" value="<?=$i?>">
+                                <label class="form-check-label badge back-<?=Style::getColorFromLetter($i, true)?>-d-3" for="CheckboxLevel<?=$i?>">Niveau <?=$i?></label>
+                            </div>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
             <div class="form-check form-switch">
-                <input onchange="refreshUsable(this);" class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                <label class="form-check-label" for="flexSwitchCheckChecked">Afficher seulement les consommables compatibles avec le JDR</label>
+                <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
+                <label class="form-check-label" for="toggleUsableSwitch">Afficher seulement les consommables compatibles avec le JDR</label>
             </div>
         </div>
         <table 
@@ -78,7 +104,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             data-detail-view-by-click="true"
             data-resizable="true"
             data-detail-formatter="detailFormatter"
-            data-url="index.php?c=consumable&a=getAll&usable=<?=$usable?>"
             >
 
             <thead>
@@ -105,13 +130,13 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> consommables. Le chargement du tableau peut prendre quelques minutes.</p>
+        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> consommables. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
         <div id="addConsumable" style="display:none;">
             <div class="form-floating mb-2">
                 <select class="form-select" id="type" aria-label="Floating label select example">
-                    <?php foreach (Consumable::TYPE_LIST as $key => $type) {
+                    <?php foreach (Consumable::TYPES as $key => $type) {
                             echo "<option value='".$type."'>".ucfirst($key)."</option>";      
                         } ?>
                 </select>
@@ -128,31 +153,25 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         </div>
 
         <script>
-            var total = <?=$total?>;
-
-            $('#table').bootstrapTable({
-                onDblClickRow: function (row, $element, field) {
-                    Consumable.open(row.uniqid);
-                    $('#table').bootstrapTable('collapseAllRows');
-                },
-                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
-            });
-            $('#table tbody').on('click', function (e) {
-                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(e.target).blur();
-                }
-            });
-
-            function refreshUsable(input) {
-                var usable = 0;
-                if ($(input).is(":checked")) {
-                    usable  = 1;
-                }
-                $('#table').bootstrapTable('refreshOptions', {
-                    url: 'index.php?c=consumable&a=getAll&usable='+usable
-                });
-            }
-
+            Consumable.createAndLoadDataBootstrapTable(
+                [
+                    {
+                        selector:"#toggleUsableSwitch",
+                        name:"usable",
+                        type:IS_CHECKBOX
+                    },
+                    {
+                        selector:"#selectorLevelListCheckbox",
+                        name:"level",
+                        type:IS_LIST_OF_CHECKBOX
+                    },
+                    {
+                        selector:"#selectorTypeListCheckbox",
+                        name:"type",
+                        type:IS_LIST_OF_CHECKBOX
+                    }
+                ]
+            );
         </script>
     <?php $template["content"] = ob_get_clean();
 

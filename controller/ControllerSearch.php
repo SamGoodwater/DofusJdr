@@ -53,6 +53,11 @@ class ControllerSearch extends Controller{
             new ControllerSpell
           ];
         break;
+        case $this::SEARCH_IN_CAPABILITY:
+          $controllers = [
+            new ControllerCapability
+          ];
+        break;
         case $this::SEARCH_IN_ITEM:
           $controllers = [
             new ControllerItem
@@ -93,7 +98,8 @@ class ControllerSearch extends Controller{
             new ControllerMob,
             new ControllerNpc,
             new ControllerShop,
-            new ControllerSpell
+            new ControllerSpell,
+            new ControllerCapability
           ];
         break;
       }

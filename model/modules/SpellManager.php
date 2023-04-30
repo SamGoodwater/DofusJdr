@@ -3,58 +3,48 @@ class SpellManager extends Manager
 {
 
 // GET
-    public function getAll($element = ["all"], $category = ["all"], $level = ["all"], $usable = 0){
-        $usable_text = "(usable = 1 OR usable = 0)"; if($usable) { $usable_text = "usable = 1"; }
-        $category_text = "";
-        if(is_array($category) && !empty($category)){
-            if($category[0] == "all"){
-                $category_text = "";
-            } else {
-                foreach ($category as $value) {
-                    if(in_array($value, Spell::CATEGORY)){
-                        $category_text .= $value .",";
-                    }
-                }
-            }
-        }
-        if($category_text != ""){
-            $category_text = " AND category IN (".substr($category_text, 0, -1).")";
-        }
-
-        $element_text = "";
-        if(is_array($element) && !empty($element)){
-            if($element[0] == "all"){
-                $element_text = "";
-            } else {
-                foreach ($element as $value) {
-                    if(isset(Spell::ELEMENT[$value])){
-                        $element_text .= $value .",";
-                    }
-                }
-            }
-        }
-        if($element_text != ""){
-            $element_text = " AND element IN (".substr($element_text, 0, -1).")";
-        }
-
-        $level_text = "";
-        if(is_array($level) && !empty($level) && $level[0] != "all"){
+    public function getAll(array $element = [], array $category = [], array $level = [], bool $usable = false, int $offset = -1, int $limit = -1){
+        $limitClause = ($limit != -1 && $offset != -1) ? 'LIMIT :offset, :limit' : '';
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        if(!empty($level)){
+            $whereClause .= ($whereClause == '') ? 'WHERE level IN (' : ' AND level IN (';
             foreach ($level as $value) {
                 if($value > 0 && $value <= 20){
-                    $level_text .= $value .",";
+                    $whereClause .= $value .",";
                 }
             }
+            $whereClause = substr($whereClause, 0, -1).")";
         }
-        if($level_text != ""){
-            $level_text = " AND level IN (".substr($level_text, 0, -1).")";
+        if(!empty($category)){
+            $whereClause .= ($whereClause == '') ? 'WHERE category IN (' : ' AND category IN (';
+            foreach ($category as $value) {
+                if(in_array($value, Spell::CATEGORY)){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
         }
-
-        $requete = "SELECT * FROM spell WHERE ".$usable_text." ".$element_text." ".$category_text." ".$level_text." ORDER BY usable DESC, level"; 
+        if(!empty($element)){
+            $whereClause .= ($whereClause == '') ? 'WHERE element IN (' : ' AND element IN (';
+            foreach ($element as $value) {
+                if(isset(Spell::ELEMENT[$value])){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
+        }
+        $orderByClause = 'ORDER BY usable DESC, level ASC';
+        $requete = 'SELECT * FROM spell ' . $whereClause . ' ' . $orderByClause . ' ' . $limitClause;
 
         $req = $this->_bdd->prepare($requete);
+        if($limit != -1 && $offset != -1){
+            $req->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $req->bindValue(':limit', $limit, PDO::PARAM_INT);
+        }
         $req->execute();
 
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        
         if(!empty($ret)){
             return $this->bdd2objects($ret);
         } else {
@@ -83,8 +73,36 @@ class SpellManager extends Manager
         return new Spell($this->securite($req));
     }
 
-    public function countAll(){
-        $requete = "SELECT id FROM spell";    
+    public function countAll(bool $usable = false, array $level = array(), array $category = array(), array $element = array()){
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        if(!empty($level)){
+            $whereClause .= ($whereClause == '') ? 'WHERE level IN (' : ' AND level IN (';
+            foreach ($level as $value) {
+                if($value > 0 && $value <= 20){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
+        }
+        if(!empty($category)){
+            $whereClause .= ($whereClause == '') ? 'WHERE category IN (' : ' AND category IN (';
+            foreach ($category as $value) {
+                if(in_array($value, Spell::CATEGORY)){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
+        }
+        if(!empty($element)){
+            $whereClause .= ($whereClause == '') ? 'WHERE element IN (' : ' AND element IN (';
+            foreach ($element as $value) {
+                if(isset(Spell::ELEMENT[$value])){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
+        }
+        $requete = 'SELECT id FROM spell ' . $whereClause;
         $req = $this->_bdd->prepare($requete);
         $req->execute();
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);

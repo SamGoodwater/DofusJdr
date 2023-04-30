@@ -34,16 +34,12 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
-    $usable = 1;
-    $manager = new MobManager();
-    $total = $manager->countAll();
-
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end">
             <button type="button" class="me-2 btn btn-sm btn-back-secondary" onclick="Page.build(true, 'Création d\'une créature', $('#addMob'), Page.SIZE_MD, true);">Ajouter une créature</button>
             <div class="form-check form-switch">
-                <input onchange="refreshUsable(this);" class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                <label class="form-check-label" for="flexSwitchCheckChecked">Afficher seulement les créatures compatibles avec le JDR</label>
+                <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
+                <label class="form-check-label" for="toggleUsableSwitch">Afficher seulement les créatures compatibles avec le JDR</label>
             </div>
         </div>
         <table 
@@ -78,7 +74,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             data-detail-view-by-click="true"
             data-resizable="true"
             data-detail-formatter="detailFormatter"
-            data-url="index.php?c=mob&a=getAll&usable=<?=$usable?>"
             >
             
             <thead>
@@ -131,7 +126,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> créatures. Le chargement du tableau peut prendre quelques minutes.</p>
+        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> créatures. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
         <div id="addMob" style="display:none;">
@@ -187,32 +182,15 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         </div>
 
         <script>
-            var total = <?=$total?>;
-
-            $('#table').bootstrapTable({
-                onDblClickRow: function (row, $element, field) {
-                    Mob.open(row.uniqid);
-                    $('#table').bootstrapTable('collapseAllRows');
-                },
-                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
-            });
-
-            $('#table tbody').on('click', function (e) {
-                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(e.target).blur();
-                }
-            });
-
-            function refreshUsable(input) {
-                var usable = 0;
-                if ($(input).is(":checked")) {
-                    usable  = 1;
-                }
-                $('#table').bootstrapTable('refreshOptions', {
-                    url: 'index.php?c=mob&a=getAll&usable='+usable
-                });
-            }
-
+            Mob.createAndLoadDataBootstrapTable(
+                [
+                    {
+                        selector:"#toggleUsableSwitch",
+                        name:"usable",
+                        type:IS_CHECKBOX
+                    }
+                ]
+            );
         </script>
     <?php $template["content"] = ob_get_clean();
 

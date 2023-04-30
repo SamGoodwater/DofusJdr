@@ -6,6 +6,9 @@ class Controller {
     static DISPLAY_EDITABLE = 102;
     static DISPLAY_FULL = 103;
 
+    static TABLE_OFFSET = 0;
+    static TABLE_LIMIT = 100;
+
     static MODEL_NAME = "";
 
     static open(uniqid, display = Controller.DISPLAY_CARD){
@@ -153,6 +156,127 @@ class Controller {
             },
             "json"
         ); 
+    }
+
+    static createAndLoadDataBootstrapTable(selectorOptions = []){
+        let this_ = this;
+        var total = 0;
+        var optionurl = "";
+        var url = 'index.php?c='+this.MODEL_NAME+'&a=getAll';
+        var offset = this.TABLE_OFFSET;
+        var limit = this.TABLE_LIMIT;
+        var loadedRows = 0;
+        let currentRequest = null;
+
+        let refresh = function refresh() {
+            if (currentRequest != null) {
+                currentRequest.abort(); // Annuler la requête AJAX en cours
+                currentRequest = null; // Réinitialisez la variable currentRequest
+            }
+            optionurl = "";
+            loadedRows = 0;
+            offset = 0;
+            $('#table').bootstrapTable('removeAll');
+
+            selectorOptions.forEach(element => {
+                if($(element.selector).length > 0){
+                    switch (element.type) {
+                        case IS_CHECKBOX:
+                            if ($(element.selector).is(":checked")) {
+                                optionurl += '&'+element.name+'=1';
+                            }
+                        break;
+                        case IS_SELECT:
+                            if ($(element.selector).val() != "") {
+                                optionurl += '&'+element.name+'='+$(element.selector).val();
+                            }
+                        break;
+                        case IS_INPUT:
+                            if ($(element.selector).val() != "") {
+                                optionurl += '&'+element.name+'='+$(element.selector).val();
+                            }
+                        break;
+                        case IS_LIST_OF_CHECKBOX:
+                            var value = "";
+                            $(element.selector + " input").each(function(){
+                                if ($(this).is(":checked")) {
+                                    value += $(this).val() + "|";
+                                }
+                            });
+                            if (value != "") {
+                                optionurl += '&'+element.name+'='+value;
+                            }
+                        break;
+                    }
+                }
+            });
+            
+            $.post('index.php?c='+this_.MODEL_NAME+'&a=count'+optionurl,
+                {},
+                function(data, status){
+                    if(data.state){
+                        total = data.value;
+                        $('.total_obj').text(data.value);
+                        loadData();
+                    } else {
+                        MsgAlert("Impossible d'afficher la page", data.error, "danger" , 7000);
+                    }
+                },
+                "json"
+            );
+        }
+
+
+        let loadData = function loadData() {
+            var nextUrl = url + optionurl + '&offset=' + offset + '&limit=' + limit;
+            $.post(nextUrl,
+                {},
+                function(data, status){
+                    if($('#table').length > 0){
+                        $('#table').bootstrapTable('append', data);
+                        loadedRows += data.length;
+                        if (loadedRows < total) {
+                            offset += limit;
+                            loadData();
+                        } else {
+                            currentRequest = null; // Réinitialisez la variable currentRequest une fois le chargement terminé
+                        }
+                    } else {
+                        currentRequest.abort(); // Annuler la requête AJAX en cours
+                        currentRequest = null; // Réinitialisez la variable currentRequest une fois le chargement terminé
+                    }
+                },
+                "json"
+            );
+        }
+        function createTable(){
+            $('#table').bootstrapTable({
+                onDblClickRow: function (row, $element, field) {
+                    this_.open(row.uniqid);
+                    $('#table').bootstrapTable('collapseAllRows');
+                },
+                onLoadSuccess:refresh(),
+                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
+            });
+
+            $('#table tbody').on('click', function (e) {
+                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
+                    $(e.target).blur();
+                }
+            });
+            $(".bootstrap-table .fixed-table-toolbar [name='refresh']").click(function () {
+                refresh();
+            });
+            selectorOptions.forEach(element => {
+                if($(element.selector).length > 0){
+                    $(element.selector).change(function () {
+                        refresh();
+                    });
+                }
+            });
+        }
+        
+        createTable();
     }
 
 }

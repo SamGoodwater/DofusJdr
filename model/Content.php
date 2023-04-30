@@ -85,6 +85,8 @@ abstract class Content
                     if(isset($data['preferential_format']) && !empty($data['preferential_format'])){
                         if(file_exists($path . "." . $data['preferential_format'])){
                             $path .= "." . $data['preferential_format'];
+                        } else {
+                            $path .= "." . FileManager::findExtention($path, $data["type"]);
                         }
                     } else {
                         $path .= "." . FileManager::findExtention($path, $data["type"]);

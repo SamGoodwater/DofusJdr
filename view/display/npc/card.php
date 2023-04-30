@@ -121,6 +121,8 @@
         <h4 class="pt-2 text-center">Sorts</h4>
         <div class="dy-2 px-1"><?=$obj->getSpell(Content::DISPLAY_RESUME);?></div>
         <div class="dy-2 px-1"><?=$obj->getOther_spell();?></div>
+        <h4 class="pt-2 text-center">Aptitudes</h4>
+        <div class="dy-2 px-1"><?=$obj->getCapability(Content::DISPLAY_RESUME);?></div>
         <div class="nav-item-divider back-main-d-1"></div>
         <h4 class="pt-2 text-center">Equipement</h4>
         <div class="dy-2 px-1"><?=$obj->getItem();?></div>

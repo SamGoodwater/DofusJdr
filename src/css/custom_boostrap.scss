@@ -1,0 +1,36 @@
+$primary: var(--secondary);
+
+.bootstrap-table .fixed-table-toolbar .columns .dropdown-menu {
+    overflow: auto;
+}
+.bootstrap-table .fixed-table-body{
+    overflow: scroll;
+    scrollbar-width: none;
+}
+.bootstrap-table .fixed-table-toolbar .columns .dropdown-menu{
+    scrollbar-width: none;  
+}
+.bootstrap-table .fixed-table-toolbar .columns .dropdown-menu::-webkit-scrollbar {
+    display: none;
+}
+.bootstrap-table .fixed-table-container{
+    position: inherit;
+}
+.bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading{
+    display: none;
+}
+.bootstrap-table .fixed-table-body::-webkit-scrollbar {
+    display: none;
+}
+#account_btn_toolbar_mobile .dropup .dropdown-toggle::after{
+    display: none;
+}
+
+.page-item .page-link {
+    color: var(--secondary);
+}
+.page-item.active .page-link {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    color: white;
+}

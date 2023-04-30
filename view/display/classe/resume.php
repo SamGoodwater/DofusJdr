@@ -30,7 +30,16 @@
             </div>
             <div class="justify-content-center d-flex short-badge-150 flex-wrap"><?=$obj->getTrait(Content::FORMAT_BADGE)?></div>
             <div class="card-hover-showed">
-                <p class="card-text"><?=$obj->getSpell(Content::DISPLAY_LIST)?></p>
+                <?php $spells = $obj->getSpell(Content::DISPLAY_LIST); 
+                    if(!empty($spells)){ ?>
+                        <p class="text-main-d-2 text-bold mt-3 text-center">Sorts</p>
+                        <div><?=$spells?></div>
+                <?php } ?>
+                <?php $aptitudes = $obj->getCapability(Content::DISPLAY_LIST); 
+                if(!empty($aptitudes)){ ?>
+                    <p class="text-main-d-2 text-bold mt-3 text-center">Aptitudes</p>
+                    <div><?=$aptitudes?></div>
+                <?php } ?>
                 <p class="card-text"><small class="text-muted"><?=$obj->getDescription_fast()?></small></p>
                 <p class="card-text"><?=$obj->getDescription()?></p>
                 <p class="text-main-d-2 size-1-2 text-bold mt-4 mb-2">Spécificités de la classe</p>

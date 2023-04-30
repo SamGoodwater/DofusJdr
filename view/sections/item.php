@@ -38,7 +38,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
         <div class="m-2">
             <p>Sélectionner une catégorie d'équipement</p>
             <div id="option" class="mb-2 item">
-                <?php foreach (Item::TYPE_LIST as $name => $value) {?>
+                <?php foreach (Item::TYPES as $name => $value) {?>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" value="<?=$value?>" id="flexCheck<?=$name?>">
                         <label class="form-check-label" for="flexCheck<?=$name?>"><?=$name?></label>
@@ -64,44 +64,41 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
-    $usable = 1;
     $manager = new ItemManager;
-    $total = 0; $type = ""; $array_type = []; $array_level = []; $level ="";
+    $type = ""; $array_type = []; $array_level = []; $level ="";
     if(preg_match('/^[0-9]*\|[0-9]{1,}/m', $template_vars['content'])){
         $type = $template_vars['content'];
         foreach (array_filter(explode("|", $type)) as $type_val) {
-            if(in_array($type_val, Item::TYPE_LIST)){
+            if(in_array($type_val, Item::TYPES)){
                 $array_type[] = $type_val;
-                $total += $manager->countFromType($type_val);
             }
         }
     } elseif(preg_match('/[0-9]{1,}/m', $template_vars['content'])) {
-        if(in_array($template_vars['content'], Item::TYPE_LIST)){
+        if(in_array($template_vars['content'], Item::TYPES)){
             $type = $template_vars['content'];
             $array_type[] = $template_vars['content'];
-            $total = $manager->countFromType($template_vars['content']);
         }
     }
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end" id="sortableItems">
             <button type="button" class="me-2 btn-sm btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un équipement', $('#addItem'), Page.SIZE_MD, true);">Ajouter un équipement</button>
-            <div class="dropdown">
+            <div id="selectorTypeListCheckbox" class="dropdown">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="typesort" data-bs-toggle="dropdown" aria-expanded="false">Catégorie d'équipement</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
                     <?php $checked = "";
-                    foreach (Item::TYPE_LIST as $key => $type_) { 
+                    foreach (Item::TYPES as $key => $type_) { 
                         if(in_array($type_, $array_type)){$checked = "checked";}else{$checked="";}?>
                         <li>
                             <div class="form-check form-check-inline">
-                                <input <?=$checked?> onchange="refreshUsable('#sortableItems');" class="form-check-input selectorType" type="checkbox" id="CheckboxType<?=$type_?>" value="<?=$type_?>">
+                                <input <?=$checked?> class="form-check-input selectorType" type="checkbox" id="CheckboxType<?=$type_?>" value="<?=$type_?>">
                                 <label class="form-check-label badge back-<?=Style::getColorFromLetter($type_)?>-d-2 text-white" for="CheckboxType<?=$type_?>"><?=ucfirst($key)?></label>
                             </div>
                         </li>
                     <?php } ?>
                 </ul>
             </div>
-            <div class="dropdown">
+            <div class="dropdown" id="selectorLevelListCheckbox">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="levelsort" data-bs-toggle="dropdown" aria-expanded="false">Affichage par niveau</a>
                 <ul class="dropdown-menu p-4" aria-labelledby="levelsort">
                     <?php $checked = "";
@@ -109,7 +106,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         if(in_array($type_,$array_level)){$checked = "checked";}else{$checked="";}?>
                         <li>
                             <div class="form-check form-check-inline">
-                                <input <?=$checked?> onchange="refreshUsable('#sortableItems');" class="form-check-input selectorLevel" type="checkbox" id="CheckboxLevel<?=$i?>" value="<?=$i?>">
+                                <input <?=$checked?> class="form-check-input selectorLevel" type="checkbox" id="CheckboxLevel<?=$i?>" value="<?=$i?>">
                                 <label class="form-check-label badge back-<?=Style::getColorFromLetter($i, true)?>-d-3" for="CheckboxLevel<?=$i?>">Niveau <?=$i?></label>
                             </div>
                         </li>
@@ -117,8 +114,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </ul>
             </div>
             <div class="form-check form-switch">
-                <input onchange="refreshUsable('#sortableItems');" class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="selectorUsable" checked>
-                <label class="form-check-label" for="selectorUsable">Afficher seulement les équipements compatibles avec le JDR</label>
+                <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
+                <label class="form-check-label" for="toggleUsableSwitch">Afficher seulement les équipements compatibles avec le JDR</label>
             </div>
         </div>
         <table 
@@ -153,7 +150,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             data-detail-view-by-click="true"
             data-resizable="true"
             data-detail-formatter="detailFormatter"
-            data-url="index.php?c=item&a=getAll&type=<?=$type?>&level=<?=$level?>&usable=<?=$usable?>"
             >
             <thead>
                 <tr>
@@ -179,13 +175,13 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> équipements. Le chargement du tableau peut prendre quelques minutes.</p>
+        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> équipements. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
         <div id="addItem" style="display:none;">
             <div class="form-floating mb-2">
                 <select class="form-select" id="type" aria-label="Floating label select example">
-                    <?php foreach (Item::TYPE_LIST as $key => $type) {
+                    <?php foreach (Item::TYPES as $key => $type) {
                             echo "<option value='".$type."'>".ucfirst($key)."</option>";      
                         } ?>
                 </select>
@@ -202,51 +198,25 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         </div>
 
         <script>
-            var total = <?=$total?>;
-
-            $('#table').bootstrapTable({
-                onDblClickRow: function (row, $element, field) {
-                    Item.open(row.uniqid, Controller.DISPLAY_CARD);
-                    $('#table').bootstrapTable('collapseAllRows');
-                },
-                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
-            });
-            $('#table tbody').on('click', function (e) {
-                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(e.target).blur();
-                }
-            });
-
-            function refreshUsable(globalSelector) {
-                var selectorUsable = $(globalSelector + ' #selectorUsable');
-                var selectorLevel = $(globalSelector + ' .selectorLevel');
-                var selectorType = $(globalSelector + ' .selectorType');
-
-                var usable = 0;
-                if (selectorUsable.is(":checked")) {
-                    usable  = 1;
-                }
-                var level = "";
-                selectorLevel.each(function( index ) {
-                    if ($(this).is(":checked")) {
-                        level += $(this).val() + ",";
+            Item.createAndLoadDataBootstrapTable(
+                [
+                    {
+                        selector:"#toggleUsableSwitch",
+                        name:"usable",
+                        type:IS_CHECKBOX
+                    },
+                    {
+                        selector:"#selectorLevelListCheckbox",
+                        name:"level",
+                        type:IS_LIST_OF_CHECKBOX
+                    },
+                    {
+                        selector:"#selectorTypeListCheckbox",
+                        name:"type",
+                        type:IS_LIST_OF_CHECKBOX
                     }
-                });
-                if(level==""){level="all"}
-
-                var type = "";
-                selectorType.each(function( index ) {
-                    if ($(this).is(":checked")) {
-                        type += $(this).val() + "|";
-                    }
-                });
-                if(type==""){type="all"}
-
-                $('#table').bootstrapTable('refreshOptions', {
-                    url: 'index.php?c=item&a=getAll&type='+type+'&level='+level+'&usable='+usable
-                });
-            }
-
+                ]
+            );
         </script>
     <?php $template["content"] = ob_get_clean();
 

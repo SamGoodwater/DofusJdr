@@ -279,7 +279,7 @@ class Npc extends Content
                         template_name : "badge",
                         data : [
                             "content" => "Niveau {$this->_level}",
-                            "color" => Style::getColorFromLetter($this->_level) . "-d-3",
+                            "color" => Style::getColorFromLetter($this->_level, true) . "-d-3",
                             "tooltip" => "Niveau du ou de la PNJ",
                             "style" => Style::STYLE_OUTLINE
                         ], 
@@ -293,7 +293,7 @@ class Npc extends Content
                             "color" => "",
                             "tooltip" => "Niveau du ou de la PNJ",
                             "style" => Style::STYLE_NONE,
-                            "class" => "text-".Style::getColorFromLetter($this->_level) . "-d-3"
+                            "class" => "text-".Style::getColorFromLetter($this->_level, true) . "-d-3"
                         ], 
                         write: false);
                 
@@ -3116,13 +3116,18 @@ class Npc extends Content
             $manager = new NpcManager();
             $capabilities = $manager->getLinkCapability($this);
             if(is_array($capabilities) && !empty($capabilities)){
-                $capabilities = array_merge($capabilities, $classe->getCapability(Content::FORMAT_ARRAY));
+                $capabilities_classe = $classe->getCapability(Content::FORMAT_ARRAY);
+                if(is_array($capabilities_classe) && !empty($capabilities_classe)){
+                    $capabilities = array_merge($capabilities, $capabilities_classe);
+                }
             } else {
                 $capabilities = $classe->getCapability(Content::FORMAT_ARRAY);
             }
-            usort($capabilities, function($a, $b) {
-                return $a->getLevel() <=> $b->getLevel();
-            });
+            if(is_array($capabilities) && !empty($capabilities)){
+                usort($capabilities, function($a, $b) {
+                    return $a->getLevel() <=> $b->getLevel();
+                });
+            }
             
             switch ($format) {
                 case Content::DISPLAY_EDITABLE:
@@ -3161,7 +3166,7 @@ class Npc extends Content
                     $view = new View(View::TEMPLATE_DISPLAY);
                     if(!empty($capabilities)){
                         ob_start();
-                            ?> <ul> <?php
+                            ?> <ul class="list-unstyled"> <?php
                                 foreach ($capabilities as $capability) {?>
                                     <li>
                                         <?php $view->dispatch(

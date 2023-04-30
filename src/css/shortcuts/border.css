@@ -1,74 +1,270 @@
 /* B O R D E R */
-.border{
-    border-width: 1px;
-    border-style: solid;
+.border {
+  border-width: 1px;
+  border-style: solid;
 }
-.no-border{border-width: 0px;border-style: none;}
-.border-solid{border-style: solid;}
-.border-groove{border-style: groove;}
 
-.border-none{border-width: 0px;}
-.border-1{border-width: 1px;}
-.border-2{border-width: 2px;}
-.border-3{border-width: 3px;}
-.border-4{border-width: 4px;}
-.border-5{border-width: 5px;}
-.border-top-0{border-top-width: 0px;}
-.border-top-1{border-top-width: 1px;}
-.border-top-2{border-top-width: 2px;}
-.border-top-3{border-top-width: 3px;}
-.border-top-4{border-top-width: 4px;}
-.border-top-5{border-top-width: 5px;}
-.border-bottom-0{border-bottom-width: 0px;}
-.border-bottom-1{border-bottom-width: 1px;}
-.border-bottom-2{border-bottom-width: 2px;}
-.border-bottom-3{border-bottom-width: 3px;}
-.border-bottom-4{border-bottom-width: 4px;}
-.border-bottom-5{border-bottom-width: 5px;}
-.border-bottom-8{border-bottom-width: 8px;}
-.border-right-0{border-right-width: 0px;}
-.border-right-1{border-right-width: 1px;}
-.border-right-2{border-right-width: 2px;}
-.border-right-3{border-right-width: 3px;}
-.border-right-4{border-right-width: 4px;}
-.border-right-5{border-right-width: 5px;}
-.border-left-0{border-left-width: 0px;}
-.border-left-1{border-left-width: 1px;}
-.border-left-2{border-left-width: 2px;}
-.border-left-3{border-left-width: 3px;}
-.border-left-4{border-left-width: 4px;}
-.border-left-5{border-left-width: 5px;}
+.no-border {
+  border-width: 0px;
+  border-style: none;
+}
 
-.border-1-hover:hover{border-width: 1px;}
-.border-2-hover:hover{border-width: 2px;}
-.border-3-hover:hover{border-width: 3px;}
-.border-4-hover:hover{border-width: 4px;}
-.border-5-hover:hover{border-width: 5px;}
-.border-top-0-hover:hover{border-top-width: 0px;}
-.border-top-1-hover:hover{border-top-width: 1px;}
-.border-top-2-hover:hover{border-top-width: 2px;}
-.border-top-3-hover:hover{border-top-width: 3px;}
-.border-top-4-hover:hover{border-top-width: 4px;}
-.border-top-5-hover:hover{border-top-width: 5px;}
-.border-bottom-0-hover:hover{border-bottom-width: 0px;}
-.border-bottom-1-hover:hover{border-bottom-width: 1px;}
-.border-bottom-2-hover:hover{border-bottom-width: 2px;}
-.border-bottom-3-hover:hover{border-bottom-width: 3px;}
-.border-bottom-4-hover:hover{border-bottom-width: 4px;}
-.border-bottom-5-hover:hover{border-bottom-width: 5px;}
-.border-bottom-8-hover:hover{border-bottom-width: 8px;}
-.border-right-0-hover:hover{border-right-width: 0px;}
-.border-right-1-hover:hover{border-right-width: 1px;}
-.border-right-2-hover:hover{border-right-width: 2px;}
-.border-right-3-hover:hover{border-right-width: 3px;}
-.border-right-4-hover:hover{border-right-width: 4px;}
-.border-right-5-hover:hover{border-right-width: 5px;}
-.border-left-0-hover:hover{border-left-width: 0px;}
-.border-left-1-hover:hover{border-left-width: 1px;}
-.border-left-2-hover:hover{border-left-width: 2px;}
-.border-left-3-hover:hover{border-left-width: 3px;}
-.border-left-4-hover:hover{border-left-width: 4px;}
-.border-left-5-hover:hover{border-left-width: 5px;}
+.border-solid {
+  border-style: solid;
+}
 
-.border-solid-hover:hover{border-style: solid;}
-.border-groove-hover:hover{border-style: groove;}
+.border-groove {
+  border-style: groove;
+}
+
+.border-none {
+  border-width: 0px;
+}
+
+.border-1 {
+  border-width: 1px;
+}
+
+.border-2 {
+  border-width: 2px;
+}
+
+.border-3 {
+  border-width: 3px;
+}
+
+.border-4 {
+  border-width: 4px;
+}
+
+.border-5 {
+  border-width: 5px;
+}
+
+.border-top-0 {
+  border-top-width: 0px;
+}
+
+.border-top-1 {
+  border-top-width: 1px;
+}
+
+.border-top-2 {
+  border-top-width: 2px;
+}
+
+.border-top-3 {
+  border-top-width: 3px;
+}
+
+.border-top-4 {
+  border-top-width: 4px;
+}
+
+.border-top-5 {
+  border-top-width: 5px;
+}
+
+.border-bottom-0 {
+  border-bottom-width: 0px;
+}
+
+.border-bottom-1 {
+  border-bottom-width: 1px;
+}
+
+.border-bottom-2 {
+  border-bottom-width: 2px;
+}
+
+.border-bottom-3 {
+  border-bottom-width: 3px;
+}
+
+.border-bottom-4 {
+  border-bottom-width: 4px;
+}
+
+.border-bottom-5 {
+  border-bottom-width: 5px;
+}
+
+.border-bottom-8 {
+  border-bottom-width: 8px;
+}
+
+.border-right-0 {
+  border-right-width: 0px;
+}
+
+.border-right-1 {
+  border-right-width: 1px;
+}
+
+.border-right-2 {
+  border-right-width: 2px;
+}
+
+.border-right-3 {
+  border-right-width: 3px;
+}
+
+.border-right-4 {
+  border-right-width: 4px;
+}
+
+.border-right-5 {
+  border-right-width: 5px;
+}
+
+.border-left-0 {
+  border-left-width: 0px;
+}
+
+.border-left-1 {
+  border-left-width: 1px;
+}
+
+.border-left-2 {
+  border-left-width: 2px;
+}
+
+.border-left-3 {
+  border-left-width: 3px;
+}
+
+.border-left-4 {
+  border-left-width: 4px;
+}
+
+.border-left-5 {
+  border-left-width: 5px;
+}
+
+.border-1-hover:hover {
+  border-width: 1px;
+}
+
+.border-2-hover:hover {
+  border-width: 2px;
+}
+
+.border-3-hover:hover {
+  border-width: 3px;
+}
+
+.border-4-hover:hover {
+  border-width: 4px;
+}
+
+.border-5-hover:hover {
+  border-width: 5px;
+}
+
+.border-top-0-hover:hover {
+  border-top-width: 0px;
+}
+
+.border-top-1-hover:hover {
+  border-top-width: 1px;
+}
+
+.border-top-2-hover:hover {
+  border-top-width: 2px;
+}
+
+.border-top-3-hover:hover {
+  border-top-width: 3px;
+}
+
+.border-top-4-hover:hover {
+  border-top-width: 4px;
+}
+
+.border-top-5-hover:hover {
+  border-top-width: 5px;
+}
+
+.border-bottom-0-hover:hover {
+  border-bottom-width: 0px;
+}
+
+.border-bottom-1-hover:hover {
+  border-bottom-width: 1px;
+}
+
+.border-bottom-2-hover:hover {
+  border-bottom-width: 2px;
+}
+
+.border-bottom-3-hover:hover {
+  border-bottom-width: 3px;
+}
+
+.border-bottom-4-hover:hover {
+  border-bottom-width: 4px;
+}
+
+.border-bottom-5-hover:hover {
+  border-bottom-width: 5px;
+}
+
+.border-bottom-8-hover:hover {
+  border-bottom-width: 8px;
+}
+
+.border-right-0-hover:hover {
+  border-right-width: 0px;
+}
+
+.border-right-1-hover:hover {
+  border-right-width: 1px;
+}
+
+.border-right-2-hover:hover {
+  border-right-width: 2px;
+}
+
+.border-right-3-hover:hover {
+  border-right-width: 3px;
+}
+
+.border-right-4-hover:hover {
+  border-right-width: 4px;
+}
+
+.border-right-5-hover:hover {
+  border-right-width: 5px;
+}
+
+.border-left-0-hover:hover {
+  border-left-width: 0px;
+}
+
+.border-left-1-hover:hover {
+  border-left-width: 1px;
+}
+
+.border-left-2-hover:hover {
+  border-left-width: 2px;
+}
+
+.border-left-3-hover:hover {
+  border-left-width: 3px;
+}
+
+.border-left-4-hover:hover {
+  border-left-width: 4px;
+}
+
+.border-left-5-hover:hover {
+  border-left-width: 5px;
+}
+
+.border-solid-hover:hover {
+  border-style: solid;
+}
+
+.border-groove-hover:hover {
+  border-style: groove;
+}/*# sourceMappingURL=border.css.map */

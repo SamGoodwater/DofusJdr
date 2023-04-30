@@ -26,7 +26,11 @@
             </td>
         </tr>
         <tr class="baseline center">
-            <td valign="middle"><span class="badge level">Niv. <?=$obj->getLevel()?></span></td>
+            <td valign="middle">
+                <?php if($obj->getLevel() != 0 && !empty($obj->getLevel())) {?>
+                    <span class="badge level">Niv. <?=$obj->getLevel()?>
+                <?php } ?>
+            </span></td>
             <td valign="middle" class="baseline center">
                 <span class='po'><?=$obj->getPo()?></span>
                 <div>

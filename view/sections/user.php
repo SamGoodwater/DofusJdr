@@ -34,9 +34,6 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
-    $manager = new UserManager();
-    $total = $manager->countAll();
-
     ob_start(); ?>
         <button type="button" class="btn btn-sm btn-back-secondary me-2" onclick="Page.build(true, 'Création d\'un utilisateur·trice', $('#addUser'), Page.SIZE_MD, true);">Nouvel·le Utilisateur·trice</button>
 
@@ -71,7 +68,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             data-detail-view-by-click="true"
             data-resizable="true"
             data-detail-formatter="detailFormatter"
-            data-url="index.php?c=user&a=getAll"
             >
             
             <thead>
@@ -90,7 +86,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> Utilisateur·trice.</p>
+        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> Utilisateur·trice.</p>
 
         <!-- Modal ADD -->
         <div id="addUser" style="display:none;">
@@ -114,20 +110,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         </div>
 
         <script>
-            var total = <?=$total?>;
-
-            $('#table').bootstrapTable({
-                onDblClickRow: function (row, $element, field) {
-                    User.open(row.uniqid);
-                    $('#table').bootstrapTable('collapseAllRows');
-                },
-                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
-            });
-            $('#table tbody').on('click', function (e) {
-                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(e.target).blur();
-                }
-            });
+            User.createAndLoadDataBootstrapTable();
             
             function verifPassword(){
                 var password = $("#password").val();

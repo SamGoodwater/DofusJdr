@@ -2,56 +2,39 @@
 class ItemManager extends Manager
 {
 
-    public function getAllFromType($type, $usable = 0){
-        if($usable){
-            $requete = "SELECT * FROM item WHERE usable = 1 AND type = ? ORDER BY usable DESC, level"; 
-            $req = $this->_bdd->prepare($requete);
-            $req->execute(array($type));
-        } else {
-            $requete = "SELECT * FROM item WHERE type = ? ORDER BY usable DESC, level"; 
-            $req = $this->_bdd->prepare($requete);
-            $req->execute(array($type));
-        }
-
-        $ret = $req->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($ret)){
-            return $this->bdd2objects($ret);
-        } else {
-            return array();
-        }
-    }
-    public function getAll($type = ["all"], $level = ["all"], $usable = 0){
-        $usable_text = "(usable = 1 OR usable = 0)"; if($usable) { $usable_text = "usable = 1"; }
-        $type_text = "";
-        if(is_array($type) && !empty($type) && $type[0] != "all"){
-            foreach ($type as $value) {
-                if(in_array($value, Item::TYPE_LIST)){
-                    $type_text .= $value .",";
-                }
-            }
-        }
-        if($type_text != ""){
-            $type_text = " AND type IN (".substr($type_text, 0, -1).")";
-        }
-
-        $level_text = "";
-        if(is_array($level) && !empty($level) && $level[0] != "all"){
+    public function getAll(array $type = [], array $level = [], bool $usable = false, int $offset = -1, int $limit = -1){
+        $limitClause = ($limit != -1 && $offset != -1) ? 'LIMIT :offset, :limit' : '';
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        if(!empty($level)){
+            $whereClause .= ($whereClause == '') ? 'WHERE level IN (' : ' AND level IN (';
             foreach ($level as $value) {
                 if($value > 0 && $value <= 20){
-                    $level_text .= $value .",";
+                    $whereClause .= $value .",";
                 }
             }
+            $whereClause = substr($whereClause, 0, -1).")";
         }
-        if($level_text != ""){
-            $level_text = " AND level IN (".substr($level_text, 0, -1).")";
+        if(!empty($type)){
+            $whereClause .= ($whereClause == '') ? 'WHERE type IN (' : ' AND type IN (';
+            foreach ($type as $value) {
+                if(in_array($value, Item::TYPES)){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
         }
-
-        $requete = "SELECT * FROM item WHERE ".$usable_text." ".$level_text." ".$type_text." ORDER BY usable DESC, level"; 
+        $orderByClause = 'ORDER BY usable DESC, level ASC';
+        $requete = 'SELECT * FROM item ' . $whereClause . ' ' . $orderByClause . ' ' . $limitClause;
 
         $req = $this->_bdd->prepare($requete);
+        if($limit != -1 && $offset != -1){
+            $req->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $req->bindValue(':limit', $limit, PDO::PARAM_INT);
+        }
         $req->execute();
 
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        
         if(!empty($ret)){
             return $this->bdd2objects($ret);
         } else {
@@ -73,8 +56,27 @@ class ItemManager extends Manager
         return new Item($this->securite($req));
     }
     
-    public function countAll(){
-        $requete = "SELECT id FROM item";    
+    public function countAll(bool $usable = false, array $level = array(), array $type = array()){
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        if(!empty($level)){
+            $whereClause .= ($whereClause == '') ? 'WHERE level IN (' : ' AND level IN (';
+            foreach ($level as $value) {
+                if($value > 0 && $value <= 20){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
+        }
+        if(!empty($type)){
+            $whereClause .= ($whereClause == '') ? 'WHERE type IN (' : ' AND type IN (';
+            foreach ($type as $value) {
+                if(in_array($value, Item::TYPES)){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
+        }
+        $requete = 'SELECT id FROM item ' . $whereClause;
         $req = $this->_bdd->prepare($requete);
         $req->execute();
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);

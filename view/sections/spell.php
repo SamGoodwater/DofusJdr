@@ -34,35 +34,31 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
     
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
-    $usable = 1;
-    $manager = new SpellManager();
-    $total = $manager->countAll();
-
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end" id='sortableItems'>
             <button type="button" class="me-2 btn-sm btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un sort', $('#addSpell'), Page.SIZE_MD, true);">Ajouter un sort</button>
-            <div class="dropdown">
+            <div id="selectorCategoryListCheckbox" class="dropdown">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories des sorts</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
                     <?php $checked = "";
                     foreach (Spell::CATEGORY as $key => $category_) { ?>
                         <li>
                             <div class="form-check form-check-inline">
-                                <input onchange="refreshUsable('#sortableItems');" class="form-check-input selectorCategory" type="checkbox" id="CheckboxCategory<?=$category_?>" value="<?=$category_?>">
+                                <input class="form-check-input selectorCategory" type="checkbox" id="CheckboxCategory<?=$category_?>" value="<?=$category_?>">
                                 <label class="form-check-label badge back-<?=Style::getColorFromLetter($category_)?>-d-2 text-white" for="CheckboxCategory<?=$category_?>"><?=ucfirst($key)?></label>
                             </div>
                         </li>
                     <?php } ?>
                 </ul>
             </div>
-            <div class="dropdown mx-2">
+            <div id="selectorElementListCheckbox" class="dropdown mx-2">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Elements des sorts</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
                     <?php $checked = "";
                     foreach (Spell::ELEMENT as $id_element => $element_) { ?>
                         <li>
                             <div class="form-check form-check-inline">
-                                <input onchange="refreshUsable('#sortableItems');" class="form-check-input selectorElement" type="checkbox" id="CheckboxElement<?=$id_element?>" value="<?=$id_element?>">
+                                <input class="form-check-input selectorElement" type="checkbox" id="CheckboxElement<?=$id_element?>" value="<?=$id_element?>">
                                 <label class="form-check-label badge back-<?=$element_['color']?> text-white" for="CheckboxElement<?=$id_element?>"><?=ucfirst($element_['name'])?></label>
                             </div>
                         </li>
@@ -70,14 +66,14 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </ul>
             </div>
             
-            <div class="dropdown mx-2">
+            <div id="selectorLevelListCheckbox" class="dropdown mx-2">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="levelsort" data-bs-toggle="dropdown" aria-expanded="false">Affichage par niveau</a>
                 <ul class="dropdown-menu p-4" aria-labelledby="levelsort">
                     <?php $checked = "";
                     for ($i=1; $i <= 20 ; $i++) { ?>
                         <li>
                             <div class="form-check form-check-inline">
-                                <input onchange="refreshUsable('#sortableItems');" class="form-check-input selectorLevel" type="checkbox" id="CheckboxLevel<?=$i?>" value="<?=$i?>">
+                                <input class="form-check-input selectorLevel" type="checkbox" id="CheckboxLevel<?=$i?>" value="<?=$i?>">
                                 <label class="form-check-label badge back-<?=Style::getColorFromLetter($i, true)?>-d-3" for="CheckboxLevel<?=$i?>"><?=$i?></label>
                             </div>
                         </li>
@@ -85,8 +81,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </ul>
             </div>
             <div class="form-check form-switch">
-                <input onchange="refreshUsable('#sortableItems');" class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="selectorUsable" checked>
-                <label class="form-check-label" for="selectorUsable">Afficher seulement les sorts compatibles avec le JDR</label>
+                <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
+                <label class="form-check-label" for="toggleUsableSwitch">Afficher seulement les sorts compatibles avec le JDR</label>
             </div>
         </div>
         <table 
@@ -121,7 +117,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             data-detail-view-by-click="true"
             data-resizable="true"
             data-detail-formatter="detailFormatter"
-            data-url="index.php?c=spell&a=getAll&level=all&category=all&element=all&usable=<?=$usable?>"
             >
             
             <thead>
@@ -158,7 +153,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> sorts. Le chargement du tableau peut prendre quelques minutes.</p>
+        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> sorts. Le chargement du tableau peut prendre quelques minutes.</p>
 
         <!-- Modal ADD -->
 
@@ -174,68 +169,30 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         </div>
 
         <script>
-            var total = <?=$total?>;
-
-            $('#table').bootstrapTable({
-                onDblClickRow: function (row, $element, field) {
-                    Spell.open(row.uniqid);
-                    $('#table').bootstrapTable('collapseAllRows');
-                },
-                exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
-            });
-            $('#table tbody').on('click', function (e) {
-                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
-                    $(e.target).blur();
-                }
-            });
-
-            function refreshUsable(globalSelector) {
-                var selectorUsable = $(globalSelector + ' #selectorUsable');
-                var selectorLevel = $(globalSelector + ' .selectorLevel');
-                // var selectorType = $(globalSelector + ' .selectorType');
-                var selectorElement = $(globalSelector + ' .selectorElement');
-                var selectorCategory = $(globalSelector + ' .selectorCategory');
-
-                var usable = 0;
-                if (selectorUsable.is(":checked")) {
-                    usable  = 1;
-                }
-                var level = "";
-                selectorLevel.each(function( index ) {
-                    if ($(this).is(":checked")) {
-                        level += $(this).val() + ",";
+            Spell.createAndLoadDataBootstrapTable(
+                [
+                    {
+                        selector:"#toggleUsableSwitch",
+                        name:"usable",
+                        type:IS_CHECKBOX
+                    },
+                    {
+                        selector:"#selectorLevelListCheckbox",
+                        name:"level",
+                        type:IS_LIST_OF_CHECKBOX
+                    },
+                    {
+                        selector:"#selectorElementListCheckbox",
+                        name:"element",
+                        type:IS_LIST_OF_CHECKBOX
+                    },
+                    {
+                        selector:"#selectorCategoryListCheckbox",
+                        name:"category",
+                        type:IS_LIST_OF_CHECKBOX
                     }
-                });
-                if(level==""){level="all"}
-
-                // var type = "";
-                // selectorType.each(function( index ) {
-                //     if ($(this).is(":checked")) {
-                //         type += $(this).val() + ",";
-                //     }
-                // });
-                // if(type==""){type="all"}
-
-                var element = "";
-                selectorElement.each(function( index ) {
-                    if ($(this).is(":checked")) {
-                        element += $(this).val() + ",";
-                    }
-                });
-                if(element==""){element="all"}
-
-                var category = "";
-                selectorCategory.each(function( index ) {
-                    if ($(this).is(":checked")) {
-                        category += $(this).val() + ",";
-                    }
-                });
-                if(category==""){category="all"}
-
-                $('#table').bootstrapTable('refreshOptions', {
-                    url: 'index.php?c=spell&a=getAll&category='+category+'&element='+element+'&level='+level+'&usable='+usable
-                });
-            }
+                ]
+            );
 
         </script>
     <?php $template["content"] = ob_get_clean();

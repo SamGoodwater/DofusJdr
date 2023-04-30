@@ -11,7 +11,7 @@ class Item extends Content
         ]
     ];
 
-    const TYPE_LIST = [
+    const TYPES = [
         "Arcs" => Item::TYPE_ARC,
         "Baguettes" => Item::TYPE_BAGUETTE,
         "Bâtons" => Item::TYPE_BATON,
@@ -133,7 +133,7 @@ class Item extends Content
                         template_name : "badge",
                         data : [
                             "content" => "Niveau {$this->_level}",
-                            "color" => Style::getColorFromLetter($this->_level) . "-d-3",
+                            "color" => Style::getColorFromLetter($this->_level, true) . "-d-3",
                             "tooltip" => "Niveau à partir duquel il est possible de porter l'équipement",
                             "style" => Style::STYLE_OUTLINE
                         ], 
@@ -147,7 +147,7 @@ class Item extends Content
                             "color" => "",
                             "tooltip" => "Niveau à partir duquel il est possible de porter l'équipement",
                             "style" => Style::STYLE_NONE,
-                            "class" => "text-".Style::getColorFromLetter($this->_level) . "-d-3"
+                            "class" => "text-".Style::getColorFromLetter($this->_level, true) . "-d-3"
                         ], 
                         write: false);
                 
@@ -226,7 +226,7 @@ class Item extends Content
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
                     $items = [];
-                    foreach (Item::TYPE_LIST as $name => $type) {
+                    foreach (Item::TYPES as $name => $type) {
                         $items[] = [
                             "display" => ucfirst($name),
                             "onclick" => "Item.update('".$this->getUniqid()."', '".$type."', 'type',".Controller::IS_VALUE.")",
@@ -245,11 +245,11 @@ class Item extends Content
                         write: false);
 
                 case Content::FORMAT_BADGE:
-                    if(in_array($this->_type, Item::TYPE_LIST)){
+                    if(in_array($this->_type, Item::TYPES)){
                         return $view->dispatch(
                             template_name : "badge",
                             data : [
-                                "content" => ucfirst(array_search($this->_type, Item::TYPE_LIST)),
+                                "content" => ucfirst(array_search($this->_type, Item::TYPES)),
                                 "color" => Style::getColorFromLetter($this->_type) . "-d-2",
                                 "tooltip" => "Type de l'équipement",
                                 "style" => Style::STYLE_BACK
@@ -492,7 +492,7 @@ class Item extends Content
             return true;
         }
         public function setType($data){
-            if(in_array($data, Item::TYPE_LIST)){
+            if(in_array($data, Item::TYPES)){
                 $this->_type = $data;
                 return true;
             } else {

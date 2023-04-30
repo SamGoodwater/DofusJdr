@@ -3,18 +3,21 @@ class MobManager extends Manager
 {
 
 // GET
-    public function getAll($usable = 0){
-        if($usable){
-            $requete = "SELECT * FROM mob WHERE usable = 1 ORDER BY usable DESC, level"; 
-            $req = $this->_bdd->prepare($requete);
-            $req->execute();
-        } else {
-            $requete = "SELECT * FROM mob ORDER BY usable DESC, level"; 
-            $req = $this->_bdd->prepare($requete);
-            $req->execute();
+    public function getAll(bool $usable = false, int $offset = -1, int $limit = -1){
+        $limitClause = ($limit != -1 && $offset != -1) ? 'LIMIT :offset, :limit' : '';
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        $orderByClause = 'ORDER BY usable DESC, level ASC';
+        $requete = 'SELECT * FROM mob ' . $whereClause . ' ' . $orderByClause . ' ' . $limitClause;
+
+        $req = $this->_bdd->prepare($requete);
+        if($limit != -1 && $offset != -1){
+            $req->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $req->bindValue(':limit', $limit, PDO::PARAM_INT);
         }
+        $req->execute();
 
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        
         if(!empty($ret)){
             return $this->bdd2objects($ret);
         } else {
@@ -43,8 +46,9 @@ class MobManager extends Manager
         return new Mob($this->securite($req));
     }
 
-    public function countAll(){
-        $requete = "SELECT id FROM mob";    
+    public function countAll(bool $usable = false){
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        $requete = 'SELECT id FROM mob ' . $whereClause;
         $req = $this->_bdd->prepare($requete);
         $req->execute();
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);

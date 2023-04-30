@@ -80,5 +80,6 @@
     <div class="card-text my-2"><?=$obj->getDescription(Content::DISPLAY_EDITABLE);?></div>
     <div class="card-text my-2"><?=$obj->getZone(Content::DISPLAY_EDITABLE);?></div>
     <div class="card-text my-2"><?=$obj->getSpell(Content::DISPLAY_EDITABLE)?></div>
+    <div class="card-text my-2"><?=$obj->getCapability(Content::DISPLAY_EDITABLE)?></div>
     <div class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-border-red' onclick="Mob.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
 </div>

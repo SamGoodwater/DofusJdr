@@ -1,6 +1,55 @@
 <?php
 class ControllerItem extends Controller{
 
+  public function count(){
+    $return = [
+      'state' => false,
+      'value' => "",
+      'error' => 'erreur inconnue'
+    ];
+    $currentUser = ControllerConnect::getCurrentUser();
+    
+    if(!$currentUser->getRight('item', User::RIGHT_READ)){
+      $return["error"] = "Vous n'avez pas les droits pour lire cet objet";}else{
+
+      $manager = new ItemManager();
+      $usable = 0;
+      if(isset($_REQUEST['usable'])){
+        if($_REQUEST['usable'] == 1 || $_REQUEST['usable'] == 0){
+          $usable = $_REQUEST['usable'];
+        }
+      }
+
+      $type=[];
+      if(isset($_REQUEST['type'])){
+        if(empty($_REQUEST['type'])){$type = [];
+        } else{
+          foreach (array_filter(explode("|", $_REQUEST['type'])) as $value) {
+            if(in_array($value, Item::TYPES)){$type[] = $value;}
+          }
+        }
+      } else {$type = [];}
+
+      $level=[];
+      if(isset($_REQUEST['level'])){
+        if(empty($_REQUEST['level'])){$level = [];
+        } else{
+          foreach (array_filter(explode("|", $_REQUEST['level'])) as $value) {
+            if($value > 0 && $value <= 20){$level[] = $value;}
+          }
+        }
+      } else {$level = [];}
+
+      $return['value'] = $manager->countAll(
+        usable:$usable, 
+        type:$type, 
+        level:$level
+      );
+      $return['state'] = true;
+    }
+    echo json_encode($return);
+    flush();
+  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     
@@ -20,25 +69,44 @@ class ControllerItem extends Controller{
 
       $type=[];
       if(isset($_REQUEST['type'])){
-        if(empty($_REQUEST['type'])){$type = ["all"];
+        if(empty($_REQUEST['type'])){$type = [];
         } else{
           foreach (array_filter(explode("|", $_REQUEST['type'])) as $value) {
-            if(in_array($value, Item::TYPE_LIST)){$type[] = $value;}
+            if(in_array($value, Item::TYPES)){$type[] = $value;}
           }
         }
-      } else {$type = ["all"];}
+      } else {$type = [];}
 
       $level=[];
       if(isset($_REQUEST['level'])){
-        if(empty($_REQUEST['level'])){$level = ["all"];
+        if(empty($_REQUEST['level'])){$level = [];
         } else{
-          foreach (array_filter(explode(",", $_REQUEST['level'])) as $value) {
+          foreach (array_filter(explode("|", $_REQUEST['level'])) as $value) {
             if($value > 0 && $value <= 20){$level[] = $value;}
           }
         }
-      } else {$level = ["all"];}
+      } else {$level = [];}
 
-      $objs = $managerS->getAll($type, $level, $usable);     
+      $offset = -1;
+      if(isset($_REQUEST['offset'])){
+        if(is_numeric($_REQUEST['offset'])){
+          $offset = $_REQUEST['offset'];
+        }
+      }
+      $limit = -1;
+      if(isset($_REQUEST['limit'])){
+        if(is_numeric($_REQUEST['limit'])){
+          $limit = $_REQUEST['limit'];
+        }
+      }
+
+      $objs = $managerS->getAll(
+        type:$type,
+        level:$level, 
+        usable:$usable,
+        offset:$offset,
+        limit:$limit
+      );  
 
       foreach ($objs as $key => $obj) {
 
@@ -170,7 +238,7 @@ class ControllerItem extends Controller{
         if($manager->existsName($_REQUEST['name']) == false && !empty(trim($_REQUEST['name']))){
 
           $type = Item::TYPE_CHAPEAU ;
-          if(in_array($_REQUEST['type'], Item::TYPE_LIST)){
+          if(in_array($_REQUEST['type'], Item::TYPES)){
             $type = $_REQUEST['type'];
           }
 

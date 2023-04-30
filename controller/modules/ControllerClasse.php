@@ -1,7 +1,34 @@
 <?php
 
 class ControllerClasse extends Controller{
+  public function count(){
+    $return = [
+      'state' => false,
+      'value' => "",
+      'error' => 'erreur inconnue'
+    ];
+    $currentUser = ControllerConnect::getCurrentUser();
+    
+    if(!$currentUser->getRight('classe', User::RIGHT_READ)){
+      $return["error"] = "Vous n'avez pas les droits pour lire cet objet";}else{
 
+      $manager = new ClasseManager();
+
+      $usable = 0;
+      if(isset($_REQUEST['usable'])){
+        if($_REQUEST['usable'] == 1 || $_REQUEST['usable'] == 0){
+          $usable = $_REQUEST['usable'];
+        }
+      }
+
+      $return['value'] = $manager->countAll(
+        usable:$usable
+      );
+      $return['state'] = true;
+    }
+    echo json_encode($return);
+    flush();
+  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     $json = array();  
@@ -10,7 +37,31 @@ class ControllerClasse extends Controller{
       $json = "Vous n'avez pas les droits pour lire cet objet";}else{
 
       $manager = new ClasseManager();
-      $objs = $manager->getAll();
+      
+      $usable = 0;
+      if(isset($_REQUEST['usable'])){
+        if($_REQUEST['usable'] == 1 || $_REQUEST['usable'] == 0){
+          $usable = $_REQUEST['usable'];
+        }
+      }
+      $offset = -1;
+      if(isset($_REQUEST['offset'])){
+        if(is_numeric($_REQUEST['offset'])){
+          $offset = $_REQUEST['offset'];
+        }
+      }
+      $limit = -1;
+      if(isset($_REQUEST['limit'])){
+        if(is_numeric($_REQUEST['limit'])){
+          $limit = $_REQUEST['limit'];
+        }
+      }
+      
+      $objs = $manager->getAll(
+        usable:$usable,
+        offset:$offset,
+        limit:$limit
+      );
 
       foreach ($objs as $obj) {
 

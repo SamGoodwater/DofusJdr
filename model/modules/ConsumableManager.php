@@ -3,18 +3,39 @@ class ConsumableManager extends Manager
 {
 
 // GET
-    public function getAll($usable = 0){
-        if($usable){
-            $requete = "SELECT * FROM consumable WHERE usable = 1 ORDER BY usable DESC, level"; 
-            $req = $this->_bdd->prepare($requete);
-            $req->execute();
-        } else {
-            $requete = "SELECT * FROM consumable ORDER BY usable DESC, level"; 
-            $req = $this->_bdd->prepare($requete);
-            $req->execute();
+    public function getAll(array $type = [], array $level = [], bool $usable = false, int $offset = -1, int $limit = -1){
+        $limitClause = ($limit != -1 && $offset != -1) ? 'LIMIT :offset, :limit' : '';
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        if(!empty($level)){
+            $whereClause .= ($whereClause == '') ? 'WHERE level IN (' : ' AND level IN (';
+            foreach ($level as $value) {
+                if($value > 0 && $value <= 20){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
         }
+        if(!empty($type)){
+            $whereClause .= ($whereClause == '') ? 'WHERE type IN (' : ' AND type IN (';
+            foreach ($type as $value) {
+                if(in_array($value, Consumable::TYPES)){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
+        }
+        $orderByClause = 'ORDER BY usable DESC, level ASC';
+        $requete = 'SELECT * FROM consumable ' . $whereClause . ' ' . $orderByClause . ' ' . $limitClause;
+
+        $req = $this->_bdd->prepare($requete);
+        if($limit != -1 && $offset != -1){
+            $req->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $req->bindValue(':limit', $limit, PDO::PARAM_INT);
+        }
+        $req->execute();
 
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        
         if(!empty($ret)){
             return $this->bdd2objects($ret);
         } else {
@@ -36,8 +57,27 @@ class ConsumableManager extends Manager
         return new Consumable($this->securite($req));
     }
 
-    public function countAll(){
-        $requete = "SELECT id FROM consumable";    
+    public function countAll(bool $usable = false, array $level = array(), array $type = array()){
+        $whereClause = ($usable) ? 'WHERE usable = 1' : '';
+        if(!empty($level)){
+            $whereClause .= ($whereClause == '') ? 'WHERE level IN (' : ' AND level IN (';
+            foreach ($level as $value) {
+                if($value > 0 && $value <= 20){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
+        }
+        if(!empty($type)){
+            $whereClause .= ($whereClause == '') ? 'WHERE type IN (' : ' AND type IN (';
+            foreach ($type as $value) {
+                if(in_array($value, Consumable::TYPES)){
+                    $whereClause .= $value .",";
+                }
+            }
+            $whereClause = substr($whereClause, 0, -1).")";
+        }
+        $requete = 'SELECT id FROM consumable ' . $whereClause;
         $req = $this->_bdd->prepare($requete);
         $req->execute();
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);

@@ -197,12 +197,14 @@ class Shop extends Content
             $view = new View();
             $manager = new ShopManager;
             $links = $manager->getLinkConsumable($this);
+            if(empty($links) || !is_array($links)){
+                $links = [];
+            }
 
             switch ($format) { 
                 case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div><?=$this->getConsumable(Content::FORMAT_BRUT, true)?></div>
-                        <h6 class="mt-1">Ajouter des consommables</h6>
                         <?php 
                             $view->dispatch(
                                 template_name : "input/search",
@@ -242,12 +244,14 @@ class Shop extends Content
             $view = new View();
             $manager = new ShopManager;
             $links = $manager->getLinkItem($this);
+            if(empty($links) || !is_array($links)){
+                $links = [];
+            }
 
             switch ($format) { 
                 case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
                         <div><?=$this->getItem(Content::FORMAT_BRUT, true)?></div>
-                        <h6 class="mt-1">Ajouter des équipements</h6>
                         <?php 
                             $view->dispatch(
                                 template_name : "input/search",

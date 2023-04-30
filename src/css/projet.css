@@ -1,4 +1,4 @@
-:root{
+:root {
   /* Couleur princpale */
   --main-l-5: var(--blue-grey-l-5);
   --main-l-4: var(--blue-grey-l-4);
@@ -15,7 +15,6 @@
   --main-a-2: var(--blue-grey-a-2);
   --main-a-3: var(--blue-grey-a-3);
   --main-a-4: var(--blue-grey-a-4);
-
   /* Couleur secondaire */
   --secondary-l-5: var(--teal-l-5);
   --secondary-l-4: var(--teal-l-4);
@@ -32,7 +31,6 @@
   --secondary-a-2: var(--teal-a-2);
   --secondary-a-3: var(--teal-a-3);
   --secondary-a-4: var(--teal-a-4);
-
   /* Couleur tertiaire */
   --tertiary-l-5: var(--deep-purple-l-5);
   --tertiary-l-4: var(--deep-purple-l-4);
@@ -52,15 +50,16 @@
 }
 
 /* Correction d'un bogue de bootstrap table */
-.image_resized [src*="icons"]{
+.image_resized [src*=icons] {
   width: 40px;
   background-color: transparent;
 }
 
-.move_icon_pa i{
+.move_icon_pa i {
   position: relative;
 }
-.move_icon_pa i span{
+
+.move_icon_pa i span {
   position: absolute;
   top: 4px;
   right: 8px;
@@ -69,7 +68,8 @@
   font-size: 0.9rem;
   z-index: 10;
 }
-.move_icon_pa i img{
+
+.move_icon_pa i img {
   opacity: 0.8;
   z-index: 9;
-}
+}/*# sourceMappingURL=projet.css.map */

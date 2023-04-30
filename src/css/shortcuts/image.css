@@ -1,328 +1,354 @@
+@charset "UTF-8";
 /* <a data-fancybox='gallery' href='<?=$path?>'><div class='<?=$css?>' style='background-image:url(<?=$path?>)'></div></a>
 <div class="img-back-50 rounded-circle border-grey-mid border-1 ml-2" style="background-image:url(<?=$user->getCheminPhoto()?>)"></div>
  */
 /* ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥ IMAGE ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥ */
-.borderImage{
-    overflow:hidden;
-    -webkit-border-radius: 5%;
-    -moz-border-radius: 5%;
-    -ms-border-radius: 5%;
-    -o-border-radius: 5%;
-    border-radius: 5%;
-    margin: 0px 0px;
-    padding: 0px 0px;
-}
-.roundedImage{
-    overflow:hidden;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid rgba(255,255,255,0.6);
-    background-color: transparent;
-    display: flex;
-    justify-content: flex-end;
-    margin: 0px 0px;
-    padding: 0px 0px;
-}
-.roundedImage img{
-    margin: 0px 0px;
-    padding: 0px 0px;
+.borderImage {
+  overflow: hidden;
+  border-radius: 5%;
+  margin: 0px 0px;
+  padding: 0px 0px;
 }
 
-.img-back-allH-450L{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 450px;
-    height: 100%;
-}
-.img-back-allH-30L{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 30px;
-    height: 100%;
+.roundedImage {
+  overflow: hidden;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background-color: transparent;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0px 0px;
+  padding: 0px 0px;
 }
 
-.img-back-450H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 450px;
+.roundedImage img {
+  margin: 0px 0px;
+  padding: 0px 0px;
 }
-.img-back-400H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 400px;
+
+.img-back-allH-450L {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 450px;
+  height: 100%;
 }
-.img-back-350H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 350px;
+
+.img-back-allH-30L {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 100%;
 }
-.img-back-300H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 300px;
+
+.img-back-450H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 450px;
 }
-.img-back-250H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 250px;
+
+.img-back-400H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 400px;
 }
-.img-back-200H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 200px;
+
+.img-back-350H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 350px;
 }
-.img-back-180H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 180px;
+
+.img-back-300H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 300px;
 }
-.img-back-170H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 170px;
+
+.img-back-250H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 250px;
 }
-.img-back-150H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 150px;
+
+.img-back-200H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 200px;
 }
-.img-back-130H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 130px;
+
+.img-back-180H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 180px;
 }
-.img-back-120H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 120px;
+
+.img-back-170H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 170px;
 }
-.img-back-100H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 100px;
+
+.img-back-150H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 150px;
 }
-.img-back-80H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 80px;
+
+.img-back-130H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 130px;
 }
-.img-back-50H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 50px;
+
+.img-back-120H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 120px;
 }
-.img-back-400{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 400px;
-    height: 400px;
+
+.img-back-100H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100px;
 }
-.img-back-350{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 350px;
-    height: 350px;
+
+.img-back-80H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 80px;
 }
-.img-back-300{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 300px;
-    height: 300px;
+
+.img-back-50H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 50px;
 }
-.img-back-200{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 200px;
-    height: 200px;
+
+.img-back-400 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 400px;
+  height: 400px;
 }
-.img-back-180{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 180px;
-    height: 180px;
+
+.img-back-350 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 350px;
+  height: 350px;
 }
-.img-back-150{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 150px;
-    height: 150px;
+
+.img-back-300 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 300px;
+  height: 300px;
 }
-.img-back-120{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 120px;
-    height: 120px;
+
+.img-back-200 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 200px;
 }
-.img-back-90{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 90px;
-    height: 90px;
+
+.img-back-180 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 180px;
+  height: 180px;
 }
-.img-back-70{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 70px;
-    height: 70px;
+
+.img-back-150 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 150px;
+  height: 150px;
 }
-.img-back-50{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 50px;
-    height: 50px;
+
+.img-back-120 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 120px;
+  height: 120px;
 }
-.img-back-45{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 45px;
-    height: 45px;
+
+.img-back-90 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 90px;
+  height: 90px;
 }
-.img-back-30{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 30px;
-    height: 30px;
+
+.img-back-70 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 70px;
+  height: 70px;
 }
-.img-back-20{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 20px;
-    height: 20px;
+
+.img-back-50 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 50px;
+  height: 50px;
 }
-.img-back-15{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 15px;
-    height: 15px;
+
+.img-back-45 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 45px;
+  height: 45px;
 }
-.img-back{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
+
+.img-back-30 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+}
+
+.img-back-20 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+}
+
+.img-back-15 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 15px;
+  height: 15px;
+}
+
+.img-back {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 /* FILTRES */
-.filter-nb-60-blur-8{
-    /* Préfixes vendeurs */
-    -webkit-filter: grayscale(60%) blur(8px);
-    -moz-filter: grayscale(60%) blur(8px);
-    -o-filter: grayscale(60%) blur(8px);
-    -ms-filter: grayscale(60%) blur(8px);
-
-    filter: grayscale(60%) blur(8px);
+.filter-nb-60-blur-8 {
+  /* Préfixes vendeurs */
+  -moz-filter: grayscale(60%) blur(8px);
+  -o-filter: grayscale(60%) blur(8px);
+  -ms-filter: grayscale(60%) blur(8px);
+  filter: grayscale(60%) blur(8px);
 }
 
-.filter-blur-8{
-    /* Préfixes vendeurs */
-    -webkit-filter: blur(8px);
-    -moz-filter: blur(8px);
-    -o-filter: blur(8px);
-    -ms-filter: blur(8px);
-
-    filter: blur(8px);
+.filter-blur-8 {
+  /* Préfixes vendeurs */
+  -moz-filter: blur(8px);
+  -o-filter: blur(8px);
+  -ms-filter: blur(8px);
+  filter: blur(8px);
 }
 
-.filter-nb-100{
-    /* Préfixes vendeurs */
-    -webkit-filter: grayscale(100%);
-    -moz-filter: grayscale(100%);
-    -o-filter: grayscale(100%);
-    -ms-filter: grayscale(100%);
-    filter: grayscale(100%);
+.filter-nb-100 {
+  /* Préfixes vendeurs */
+  -moz-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  filter: grayscale(100%);
 }
 
-#background_image{
-    /* position: absolute; */
-    position:fixed;
-    top:0;
-    left:0;
-	width:100%;
-    height: 100%;
-    z-index: -1;
-    background-position: center; /* Center the image */
-    background-repeat: repeat; /* Do not repeat the image */
-    background-size: cover; /* Resize the background image to cover the entire container */
-    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+#background_image {
+  /* position: absolute; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-position: center; /* Center the image */
+  background-repeat: repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
+  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
 }
-.icon{
-    width: 20px;
-    background-color: transparent;
+
+.icon {
+  width: 20px;
+  background-color: transparent;
 }
-.icon-xs{
-    width: 10px;
-    background-color: transparent;
+
+.icon-xs {
+  width: 10px;
+  background-color: transparent;
 }
-.icon-sm{
-    width: 15px;
-    background-color: transparent;
+
+.icon-sm {
+  width: 15px;
+  background-color: transparent;
 }
-.icon-lg{
-    width: 30px;
-    background-color: transparent;
+
+.icon-lg {
+  width: 30px;
+  background-color: transparent;
 }
-.icon-xl{
-    width: 40px;
-    background-color: transparent;
+
+.icon-xl {
+  width: 40px;
+  background-color: transparent;
 }
+
 .text-under-img {
-    text-align: center;
-    position:relative;
-}
-.text-under-img p {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  text-align: center;
+  position: relative;
 }
 
-.fancybox__container{
-    z-index:2000;
+.text-under-img p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
+
+.fancybox__container {
+  z-index: 2000;
+}/*# sourceMappingURL=image.css.map */

@@ -1,25 +1,59 @@
 /* Input RANGE couleur */
-    .form-range::-webkit-slider-thumb{background: var(--main-d-2);}
-    .form-range.border-main::-webkit-slider-thumb{background: var(--main-d-2);}
-    .form-range::-moz-range-thumb{background: var(--main-d-2);}
-    .form-range.border-main::-moz-range-thumb{background: var(--main-d-2);}
-    .form-range::-ms-thumb{background: var(--main-d-2);}
-    .form-range.border-main::-ms-thumb {background: var(--main-d-2);} 
+.form-range::-webkit-slider-thumb {
+  background: var(--main-d-2);
+}
 
-    .form-range.border-secondary::-webkit-slider-thumb{background: var(--secondary-d-2);}
-    .form-range.border-secondary::-moz-range-thumb{background: var(--secondary-d-2);}
-    .form-range.border-secondary::-ms-thumb{background: var(--secondary-d-2);}
+.form-range.border-main::-webkit-slider-thumb {
+  background: var(--main-d-2);
+}
 
-    .form-range.border-tertiary::-webkit-slider-thumb{background: var(--tertiary-d-2);}
-    .form-range.border-tertiary::-moz-range-thumb{background: var(--tertiary-d-2);}
-    .form-range.border-tertiary::-ms-thumb  {background: var(--tertiary-d-2);}
+.form-range::-moz-range-thumb {
+  background: var(--main-d-2);
+}
+
+.form-range.border-main::-moz-range-thumb {
+  background: var(--main-d-2);
+}
+
+.form-range::-ms-thumb {
+  background: var(--main-d-2);
+}
+
+.form-range.border-main::-ms-thumb {
+  background: var(--main-d-2);
+}
+
+.form-range.border-secondary::-webkit-slider-thumb {
+  background: var(--secondary-d-2);
+}
+
+.form-range.border-secondary::-moz-range-thumb {
+  background: var(--secondary-d-2);
+}
+
+.form-range.border-secondary::-ms-thumb {
+  background: var(--secondary-d-2);
+}
+
+.form-range.border-tertiary::-webkit-slider-thumb {
+  background: var(--tertiary-d-2);
+}
+
+.form-range.border-tertiary::-moz-range-thumb {
+  background: var(--tertiary-d-2);
+}
+
+.form-range.border-tertiary::-ms-thumb {
+  background: var(--tertiary-d-2);
+}
 
 /* -------------------------------------------- F O R M ------------------------------ */
-    .form-control:focus{
-        border-color: var(--main-d-1)!important;
-        box-shadow: 0 0 0 .2rem var(--main-d-1)!important;
-    }
-    .form-select:focus{
-        border-color: var(--main-d-1)!important;
-        box-shadow: 0 0 0 .2rem var(--main-d-1)!important;
-    }
+.form-control:focus {
+  border-color: var(--main-d-1) !important;
+  box-shadow: 0 0 0 0.2rem var(--main-d-1) !important;
+}
+
+.form-select:focus {
+  border-color: var(--main-d-1) !important;
+  box-shadow: 0 0 0 0.2rem var(--main-d-1) !important;
+}/*# sourceMappingURL=form.css.map */

@@ -207,8 +207,8 @@ class Section extends Controller{
             $('#section'+uniqid+" .trash").hide("slow");
             $('#section'+uniqid+" #saveCkeditor").hide("slow");
 
-            var title = $("#section"+uniqid+" h3 input").val();
-            $("#section"+uniqid+" h3").html(title);
+            var title = $("#section"+uniqid+" h1 input").val();
+            $("#section"+uniqid+" h1").html(title);
 
             Section.update(uniqid, CKEDITOR5['content'+uniqid].getData(), 'content', IS_VALUE);
             CKEDITOR5['content'+uniqid].destroy();
@@ -220,8 +220,10 @@ class Section extends Controller{
             $('#section'+uniqid+" .trash").show("slow");
             $('#section'+uniqid+" #saveCkeditor").show("slow");
 
-            var title = "<input class='form-control form-control-main-l-3-focus' onchange=\"Section.update('"+uniqid+"', this, 'title');\" placeholder='titre de la section' type='text' value='"+$("#section"+uniqid+" h3").text()+"'>";
-            $("#section"+uniqid+" h3").html(title);
+            var title_text = $("#section"+uniqid+" h1").text();
+            var input = "<input class='form-control form-control-main-l-3-focus' onchange=\"Section.update('"+uniqid+"', this, 'title');\" placeholder='titre de la section' type='text' value=''>";
+            $("#section"+uniqid+" h1").html(input);
+            $("#section"+uniqid+" h1").find("input").val(title_text);
 
             ClassicEditor
                 .create( document.querySelector('#content'+uniqid), { 

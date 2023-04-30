@@ -206,7 +206,7 @@ class Spell extends Content
                         template_name : "badge",
                         data : [
                             "content" => "Niveau {$this->_level}",
-                            "color" => Style::getColorFromLetter($this->_level) . "-d-3",
+                            "color" => Style::getColorFromLetter($this->_level, true) . "-d-3",
                             "tooltip" => "Niveau à partir duquel il est possible d'apprendre le sort",
                             "style" => Style::STYLE_OUTLINE
                         ], 
@@ -220,7 +220,7 @@ class Spell extends Content
                             "color" => "",
                             "tooltip" => "Niveau à partir duquel il est possible d'apprendre le sort",
                             "style" => Style::STYLE_NONE,
-                            "class" => "text-".Style::getColorFromLetter($this->_level) . "-d-3"
+                            "class" => "text-".Style::getColorFromLetter($this->_level, true) . "-d-3"
                         ], 
                         write: false);
                 

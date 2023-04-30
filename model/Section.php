@@ -5,6 +5,31 @@ class Section extends Content
         const GET_SECTION_CONTENT = 0;
         const GET_SECTION_DESCRIPTION = 1;
 
+        const SOLVE_ADD_CLASS_TO_KEYWORD = 0;
+        const SOLVE_ADD_CLASS_TO_KEYWORD_DATA = [
+          "text-vitality-d-3" => [
+            "vitality",
+            "vita"
+          ],
+          "text-sagesse-d-3" => [
+            "sagesse"
+          ],
+          "text-intel-d-3" => [
+            "intelligence",
+            "intel"
+          ],
+          "text-chance-d-3" => [
+            "chance"
+          ],
+          "text-agi-d-3" => [
+            "aigilité",
+            "agi"
+          ],
+          "text-force-d-3" => [
+            "force"
+          ]
+        ];
+
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         private $_type ='';
         private $_uniqid_page ='';
@@ -90,7 +115,10 @@ class Section extends Content
                 return $this->_title;
         }
     }
-    public function getContent(int $format = Content::FORMAT_BRUT){
+    public function getContent(int $format = Content::FORMAT_BRUT, bool $solve = false){
+        if($solve){
+            $this->_content = $this->solveContent(self::SOLVE_ADD_CLASS_TO_KEYWORD);
+        }
         switch ($format) {
             case Content::FORMAT_EDITABLE:
                 ob_start(); ?>
@@ -129,7 +157,7 @@ class Section extends Content
             case Content::DISPLAY_EDITABLE:
                 $template_vars = [
                     'get' => Section::GET_SECTION_CONTENT,
-                    'content' => $this->getContent(),
+                    'content' => $this->getContent(COntent::FORMAT_BRUT, true),
                     'uniqid' => $this->getUniqid(),
                     'uniqid_page' => $this->getUniqid_page(Content::FORMAT_OBJECT)->getUniqid()
                 ];
@@ -173,7 +201,7 @@ class Section extends Content
             default:
                 $template_vars = [
                     'get' => Section::GET_SECTION_CONTENT,
-                    'content' => $this->getContent(),
+                    'content' => $this->getContent(Content::FORMAT_BRUT, true),
                     'uniqid' => $this->getUniqid(),
                     'uniqid_page' => $this->getUniqid_page(Content::FORMAT_OBJECT)->getUniqid()
                 ];
@@ -235,4 +263,25 @@ class Section extends Content
                 return false;
             }
         }
+
+    //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ OTHERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
+        public function solveContent(int $way = self::SOLVE_ADD_CLASS_TO_KEYWORD) {
+            $content = $this->getContent();
+            if (empty($content)) {return '';}
+            switch ($way) {
+                case self::SOLVE_ADD_CLASS_TO_KEYWORD:
+                    $keywords = self::SOLVE_ADD_CLASS_TO_KEYWORD_DATA;
+                    $pattern = '/\b(' . implode('|', array_map('preg_quote', array_keys($keywords))) . ')\b/i';
+                    $replace = [];
+                    foreach ($keywords as $class => $words) {
+                        foreach ($words as $word) {
+                            $replace = "<span class='$class'>$word</span>";
+                            $content = preg_replace($pattern, $replace, $content);
+                        }
+                    }
+                    break;
+            }
+            return $content;
+        }
+
 }

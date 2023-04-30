@@ -121,6 +121,8 @@
         <div class="dy-2 px-1"><?=$obj->getSpell(Content::DISPLAY_EDITABLE);?></div>
         <div class="dy-2 px-1"><?=$obj->getOther_spell(Content::DISPLAY_EDITABLE);?></div>
         <div class="nav-item-divider back-main-d-1"></div>
+        <div class="dy-2 px-1"><?=$obj->getCapability(Content::DISPLAY_EDITABLE);?></div>
+        <div class="nav-item-divider back-main-d-1"></div>
         <div class="dy-2 px-1"><?=$obj->getItem(Content::DISPLAY_EDITABLE);?></div>
         <div class="dy-2 px-1"><?=$obj->getOther_item(Content::DISPLAY_EDITABLE);?></div>
         <div class="nav-item-divider back-main-d-1"></div>

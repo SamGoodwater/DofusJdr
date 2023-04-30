@@ -9,7 +9,7 @@ class Capability extends Content
             "type" => FileManager::FORMAT_IMG,
             "default" => "medias/modules/capabilities/default.svg",
             "dir" => "medias/modules/capabilities/",
-            "preferential_format" => "svg",
+            "preferential_format" => "jpg",
             "naming" => "[uniqid]"
         ]
     ];
@@ -45,7 +45,7 @@ class Capability extends Content
     const CATEGORY_HEAL = 7;
 
     const CATEGORY = [
-        "Aptitude lié à l'historique" => self::CATEGORY_HISTORICAL,
+        "Aptitude liée à l'historique" => self::CATEGORY_HISTORICAL,
         "Aptitude de soigneur·gneuse" => self::CATEGORY_HEAL,
         "Aptitude des comabattant·e" => self::CATEGORY_DAMAGE,
         "Aptitude de tank" => self::CATEGORY_TANK,
@@ -109,17 +109,19 @@ class Capability extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
+                    if(empty($this->_level) || $this->_level == 0){return '';}
                     return $view->dispatch(
                         template_name : "badge",
                         data : [
                             "content" => "Niveau {$this->_level}",
-                            "color" => Style::getColorFromLetter($this->_level) . "-d-3",
+                            "color" => Style::getColorFromLetter($this->_level, true) . "-d-3",
                             "tooltip" => "Niveau à partir duquel il est possible de maitriser l'aptitude",
                             "style" => Style::STYLE_OUTLINE
                         ], 
                         write: false);
                 
                 case Content::FORMAT_ICON:
+                    if(empty($this->_level) || $this->_level == 0){return '';}
                     return $view->dispatch(
                         template_name : "badge",
                         data : [
@@ -127,7 +129,7 @@ class Capability extends Content
                             "color" => "",
                             "tooltip" => "Niveau à partir duquel il est possible de maitriser l'aptitude",
                             "style" => Style::STYLE_NONE,
-                            "class" => "text-".Style::getColorFromLetter($this->_level) . "-d-3"
+                            "class" => "text-".Style::getColorFromLetter($this->_level, true) . "-d-3"
                         ], 
                         write: false);
                 
@@ -719,12 +721,12 @@ class Capability extends Content
             $this->_effect = $data;
             return true;
         }
-        public function setLevel(int | null $data){
-            if(is_numeric($data)){
+        public function setLevel(int | null | string $data){
+            if(is_numeric($data) || is_null($data) || $data == ""){
                 $this->_level = $data;
                 return true;
             } else {
-                throw new Exception("La valeur doit être un nombre");
+                throw new Exception("La valeur doit être un nombre ou être null");
             }
         }
         public function setPo(string | int | null $data){

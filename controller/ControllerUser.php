@@ -1,6 +1,24 @@
 <?php
 class ControllerUser extends Controller{
 
+  public function count(){
+    $return = [
+      'state' => false,
+      'value' => "",
+      'error' => 'erreur inconnue'
+    ];
+    $currentUser = ControllerConnect::getCurrentUser();
+    
+    if(!$currentUser->getRight('user', User::RIGHT_READ)){
+      $return["error"] = "Vous n'avez pas les droits pour lire cet objet";}else{
+
+      $manager = new UserManager();
+      $return['value'] = $manager->countAll();
+      $return['state'] = true;
+    }
+    echo json_encode($return);
+    flush();
+  }
   public function getAll(){
     $currentUser = ControllerConnect::getCurrentUser();
     $json = array();  
@@ -8,7 +26,22 @@ class ControllerUser extends Controller{
       $json = "Vous n'avez pas les droits pour lire cet objet";}else{
 
       $managerS = new UserManager();
-      $objs = $managerS->getAll();
+      $offset = -1;
+      if(isset($_REQUEST['offset'])){
+        if(is_numeric($_REQUEST['offset'])){
+          $offset = $_REQUEST['offset'];
+        }
+      }
+      $limit = -1;
+      if(isset($_REQUEST['limit'])){
+        if(is_numeric($_REQUEST['limit'])){
+          $limit = $_REQUEST['limit'];
+        }
+      }
+      $objs = $managerS->getAll(
+        offset:$offset,
+        limit:$limit
+      );
 
       foreach ($objs AS $obj) {
         $edit = "";

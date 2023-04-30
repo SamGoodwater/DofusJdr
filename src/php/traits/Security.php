@@ -52,6 +52,7 @@ trait SecurityFct
 
         function securite($data, $hard_secure = false){ // Permet de protéger toutes les données reçu depuis la base de donnée
             if(is_array($data)){
+                $new_data = array();
                 foreach ($data as $key => $value) {
                     $new_data[$key] =   $this->securite($value);
                 }

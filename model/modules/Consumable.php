@@ -8,7 +8,7 @@ class Consumable extends Content
     const TYPE_PARCHMENT = 4;
     const TYPE_STONE= 5;
 
-    const TYPE_LIST = [
+    const TYPES = [
         "nourriture" => Consumable::TYPE_FOOD,
         "potion" => Consumable::TYPE_POTION,
         "confiserie" => Consumable::TYPE_TREAT,
@@ -42,7 +42,7 @@ class Consumable extends Content
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
                     $items = [];
-                    foreach (Consumable::TYPE_LIST as $name => $type) {
+                    foreach (Consumable::TYPES as $name => $type) {
                         $items[] = [
                             "display" => ucfirst($name),
                             "onclick" => "Consumable.update('".$this->getUniqid()."', '".$type."', 'type',".Controller::IS_VALUE.")",
@@ -61,11 +61,11 @@ class Consumable extends Content
                         write: false);
 
                 case Content::FORMAT_BADGE:
-                    if(in_array($this->_type, Consumable::TYPE_LIST)){
+                    if(in_array($this->_type, Consumable::TYPES)){
                         return $view->dispatch(
                             template_name : "badge",
                             data : [
-                                "content" => ucfirst(array_search($this->_type, Consumable::TYPE_LIST)),
+                                "content" => ucfirst(array_search($this->_type, Consumable::TYPES)),
                                 "color" => Style::getColorFromLetter($this->_type) . "-d-2",
                                 "tooltip" => "Type de consommable",
                                 "style" => Style::STYLE_BACK
@@ -168,7 +168,7 @@ class Consumable extends Content
                         template_name : "badge",
                         data : [
                             "content" => "Niveau {$this->_level}",
-                            "color" => Style::getColorFromLetter($this->_level) . "-d-3",
+                            "color" => Style::getColorFromLetter($this->_level, true) . "-d-3",
                             "tooltip" => "Niveau à partir duquel il est possible de fabriquer le consommable",
                             "style" => Style::STYLE_OUTLINE
                         ], 
@@ -182,7 +182,7 @@ class Consumable extends Content
                             "color" => "",
                             "tooltip" => "Niveau à partir duquel il est possible de fabriquer le consommable",
                             "style" => Style::STYLE_NONE,
-                            "class" => "text-".Style::getColorFromLetter($this->_level) . "-d-3"
+                            "class" => "text-".Style::getColorFromLetter($this->_level, true) . "-d-3"
                         ], 
                         write: false);
                 
@@ -306,7 +306,7 @@ class Consumable extends Content
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function setType($data){
-            if(in_array($data, Consumable::TYPE_LIST)){
+            if(in_array($data, Consumable::TYPES)){
                 $this->_type = $data;
                 return true;
             } else {

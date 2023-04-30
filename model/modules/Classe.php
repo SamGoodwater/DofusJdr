@@ -381,7 +381,7 @@ class Classe extends Content
                     $view = new View(View::TEMPLATE_DISPLAY);
                     if(!empty($capabilities)){
                         ob_start();
-                            ?> <ul> <?php
+                            ?> <ul class="list-unstyled"> <?php
                                 foreach ($capabilities as $capability) {?>
                                     <li>
                                         <?php $view->dispatch(

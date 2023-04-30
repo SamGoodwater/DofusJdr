@@ -116,7 +116,7 @@ class Mob extends Content
                         template_name : "badge",
                         data : [
                             "content" => "Niveau {$this->_level}",
-                            "color" => Style::getColorFromLetter($this->_level) . "-d-3",
+                            "color" => Style::getColorFromLetter($this->_level, true) . "-d-3",
                             "tooltip" => "Niveau de la créature",
                             "style" => Style::STYLE_OUTLINE
                         ], 
@@ -155,7 +155,7 @@ class Mob extends Content
                             "color" => "",
                             "tooltip" => "Niveau de la créature",
                             "style" => Style::STYLE_NONE,
-                            "class" => "text-".Style::getColorFromLetter($this->_level) . "-d-3"
+                            "class" => "text-".Style::getColorFromLetter($this->_level, true) . "-d-3"
                         ], 
                         write: false);
                 
@@ -1703,7 +1703,7 @@ class Mob extends Content
                     $view = new View(View::TEMPLATE_DISPLAY);
                     if(!empty($capabilities)){
                         ob_start();
-                            ?> <ul> <?php
+                            ?> <ul class="list-unstyled"> <?php
                                 foreach ($capabilities as $capability) {?>
                                     <li>
                                         <?php $view->dispatch(

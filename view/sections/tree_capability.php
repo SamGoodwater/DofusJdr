@@ -77,7 +77,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <?php $i=1; foreach ($capabilities_sort_by_powerful as $key => $powerful_objs) { ?>
                         <div class="tree-line">
                             <div>
-                                <h3 class="bold">Puissance <?= $i ?></h3>	
+                                <h3 class="bold">Palier <?= $i ?></h3>	
                             </div>
                             <div class='tree-line-node-content'>
                                 <div class='tree-line-node'>

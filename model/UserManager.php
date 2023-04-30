@@ -3,11 +3,19 @@ class UserManager extends Manager
 {
 
 // GET
-    public function getAll(){
-        $requete = "SELECT * FROM user";
+    public function getAll(int $offset = -1, int $limit = -1){
+        $limitClause = ($limit != -1 && $offset != -1) ? 'LIMIT :offset, :limit' : '';
+        $requete = 'SELECT * FROM user ' . $limitClause;
+
         $req = $this->_bdd->prepare($requete);
+        if($limit != -1 && $offset != -1){
+            $req->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $req->bindValue(':limit', $limit, PDO::PARAM_INT);
+        }
         $req->execute();
+
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        
         if(!empty($ret)){
             return $this->bdd2objects($ret);
         } else {

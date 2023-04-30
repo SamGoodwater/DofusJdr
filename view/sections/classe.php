@@ -33,8 +33,6 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
     );
 
     if($template_vars['get'] == Section::GET_SECTION_CONTENT){
-        $manager = new ClasseManager();
-        $total = $manager->countAll();
 
         ob_start(); ?>
             <a class="btn back-grey text-d-2 mb-2" onclick="return false; Page.build(true, 'Création d\'une classe', $('#addClasse'), Page.SIZE_MD, true);">Ajouter une classe</a>
@@ -69,7 +67,6 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                 data-detail-view-by-click="true"
                 data-resizable="true"
                 data-detail-formatter="detailFormatter"
-                data-url="index.php?c=classe&a=getAll"
                 >
 
                 <thead>
@@ -97,7 +94,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                 <tbody>
                 </tbody>
             </table>
-            <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <?=$total?> classes. Le chargement du tableau peut prendre quelques minutes.</p>
+            <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> classes. Le chargement du tableau peut prendre quelques minutes.</p>
 
             <div id="addClasse" style="display:none;">
                 <div class="form-floating mb-1">
@@ -125,18 +122,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
             </div>
 
             <script>
-                $('#table').bootstrapTable({
-                    onDblClickRow: function (row, $element, field) {
-                        Classe.open(row.uniqid);
-                        $('#table').bootstrapTable('collapseAllRows');
-                    },
-                    exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
-                });
-                $('#table tbody').on('click', function (e) {
-                    if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
-                        $(e.target).blur();
-                    }
-                });
+                Classe.createAndLoadDataBootstrapTable();
             </script>
         <?php $template["content"] = ob_get_clean();
     }

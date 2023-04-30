@@ -11,7 +11,7 @@
 ?>
 
 <div class="card mb-3">
-    <p class='size-0-7 m-1'>Hôtel de vente N°<?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$obj->getTimestamp_updated(Content::DATE_FR);?></p>
+    <p class='size-0-7 m-1'>Hôtel de vente <?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$obj->getTimestamp_updated(Content::DATE_FR);?></p>
     <div class="d-flex flex-row justify-content-around flex-wrap m-3">
         <div class="col-auto">
             <h4 class="m-2 mx-4"><?=$obj->getName(Content::DISPLAY_EDITABLE)?></h4>

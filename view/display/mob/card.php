@@ -71,5 +71,6 @@
         <p class="card-text my-2"><?=$obj->getDescription()?></p>
         <p class="card-text my-2"><small class="text-muted"><i class="fas fa-map-marker-alt text-main-d-2 me-2"></i> Zone de vie: <?=$obj->getZone()?></small></p>
         <p class="card-text my-2"><?=$obj->getSpell(Content::DISPLAY_RESUME)?></p>
+        <p class="card-text my-2"><?=$obj->getCapability(Content::DISPLAY_RESUME)?></p>
     </div>
 </div>
