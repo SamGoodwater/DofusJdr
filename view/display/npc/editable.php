@@ -127,7 +127,7 @@
         <div class="dy-2 px-1"><?=$obj->getOther_item(Content::DISPLAY_EDITABLE);?></div>
         <div class="nav-item-divider back-main-d-1"></div>
         <div class="dy-2 px-1"><?=$obj->getConsumable(Content::DISPLAY_EDITABLE);?></div>
-        <div class="dy-2 px-1"><?=$obj->getOther_consomable(Content::DISPLAY_EDITABLE);?></div>
+        <div class="dy-2 px-1"><?=$obj->getOther_consumable(Content::DISPLAY_EDITABLE);?></div>
     </div>
     <p class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-border-red' onclick="Npc.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
 </div>

@@ -74,7 +74,7 @@ class Npc extends Content
         private $_drop_='';
 
         private $_other_item='';
-        private $_other_consomable='';
+        private $_other_consumable='';
         private $_other_spell='';
         
         protected $_usable = true; // surcharge de la variable de Content
@@ -150,8 +150,7 @@ class Npc extends Content
                     foreach ($manager->getAll() as $classe) {
                         $items[] = [
                             "onclick" => "Npc.update('".$this->getUniqid()."', '".$classe->getUniqid()."', 'classe', ".Controller::IS_VALUE.");",
-                            "display" => $classe,
-                            "class" => "badge back-main-d-2",
+                            "display" => "<span class='badge back-main-d-2'>" .ucfirst($classe->getName())."</span>"
                         ];
                     }
 
@@ -2922,7 +2921,7 @@ class Npc extends Content
                     return html_entity_decode($this->_other_spell);
             }
         }
-        public function getOther_consomable(int $format = Content::FORMAT_BRUT){
+        public function getOther_consumable(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
                 case Content::DISPLAY_RESUME:
@@ -2930,16 +2929,47 @@ class Npc extends Content
                         template_name : "input/ckeditor",
                         data : [
                             "class_name" => "npc",
-                            "id" => "other_consomable".$this->getUniqid(),
+                            "id" => "other_consumable".$this->getUniqid(),
                             "uniqid" => $this->getUniqid(),
-                            "input_name" => "other_consomable",
-                            "label" => "Autres consomables",
-                            "value" => $this->_other_consomable
+                            "input_name" => "other_consumable",
+                            "label" => "Autres consommables",
+                            "value" => $this->_other_consumable
                         ], 
                         write: false);
                 
                 default:
-                    return html_entity_decode($this->_other_consomable);
+                    return html_entity_decode($this->_other_consumable);
+            }
+        }
+
+        
+        public function getMaster_bonus(int $format = Content::FORMAT_BRUT){
+            $master_bonus =  Controller::calcMaster_bonus($this->getLevel());
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_BADGE:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$master_bonus} Bonus de maîtrise",
+                            "color" => "master_bonus-d-4",
+                            "tooltip" => "Bonus de maîtrise",
+                            "style" => Style::STYLE_BACK
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $master_bonus,
+                            "color" => "master_bonus-d-4",
+                            "tooltip" => "Bonus de maîtrise",
+                            "style" => Style::STYLE_BACK
+                        ], 
+                        write: false);
+                default:
+                    return $master_bonus;
             }
         }
 
@@ -2949,7 +2979,7 @@ class Npc extends Content
             $links = $manager->getLinkConsumable($this);
 
             switch ($format) { 
-                case Content::DISPLAY_RESUME:
+                case Content::DISPLAY_EDITABLE:
                     ob_start(); ?>
                         <div><?=$this->getConsumable(Content::FORMAT_BRUT, true)?></div>
                         <?php 
@@ -2957,9 +2987,9 @@ class Npc extends Content
                                 template_name : "input/search",
                                 data : [
                                     "id" => "addConsumable" . $this->getUniqid(),
-                                    "title" => "Ajouter un consomable",
-                                    "label" => "Rechercher un consomable",
-                                    "placeholder" => "Rechercher un consomable",
+                                    "title" => "Ajouter un consommable",
+                                    "label" => "Rechercher un consommable",
+                                    "placeholder" => "Rechercher un consommable",
                                     "search_in" => ControllerSearch::SEARCH_IN_CONSUMABLE,
                                     "parameter" => $this->getUniqid(),
                                     "action" => ControllerSearch::SEARCH_DONE_ADD_CONSUMABLE_TO_NPC,
@@ -2987,7 +3017,7 @@ class Npc extends Content
                             write: false
                         );
                     }else{
-                        echo "Aucun consomable associé";
+                        echo "Aucun consommable associé";
                     }
             }   
         }
@@ -2997,7 +3027,7 @@ class Npc extends Content
             $links = $manager->getLinkItem($this);
 
             switch ($format) { 
-                case Content::DISPLAY_RESUME:
+                case Content::DISPLAY_EDITABLE:
                     ob_start(); ?>
                         <div><?=$this->getItem(Content::FORMAT_BRUT, true)?></div>
                         <?php 
@@ -3409,8 +3439,8 @@ class Npc extends Content
             $this->_other_item = $data;
             return true;
         }
-        public function setOther_consomable(string | int | null  $data){
-            $this->_other_consomable = $data;
+        public function setOther_consumable(string | int | null  $data){
+            $this->_other_consumable = $data;
             return true;
         }
         public function setOther_spell(string | int | null  $data){
@@ -3419,9 +3449,9 @@ class Npc extends Content
         }
 
             /* Data = array(
-                    uniqid => id du consomable,
-                    quantity => quantité du consomable,
-                    price => prix du consomable,
+                    uniqid => id du consommable,
+                    quantity => quantité du consommable,
+                    price => prix du consommable,
                     action => remove / add / update
                 )
             Js : Npc.update(UniqidS,{action:'add|remove|update', uniqid:'uniqIdC', quantity:'Quantity'},'consumable', IS_VALUE);
@@ -3467,7 +3497,7 @@ class Npc extends Content
         /* Data = array(
                 uniqid => id de l'équipement,
                 quantity => quantité de l'équipement,
-                price => prix du consomable,
+                price => prix du consommable,
                 action => remove / add / update
             )
             Js : Npc.update(UniqidS,{action:'add|remove|update', uniqid:'uniqIdC', quantity:'Quantity'},'item', IS_VALUE);

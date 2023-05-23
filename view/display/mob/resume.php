@@ -21,6 +21,7 @@
                         <p class="mt-1 text-level short-badge-150"><?=$obj->getLevel(Content::FORMAT_BADGE)?></p> 
                         <div class="mt-1 mx-2"> <?=$obj->getPowerful(Content::FORMAT_ICON)?></div>
                         <p class="mt-1 short-badge-100"><?=$obj->getHostility(Content::FORMAT_BADGE)?></p>
+                        <div><?=$obj->getSize(Content::FORMAT_ICON)?></div>
                     </div>
                 </div>
                 <div class="d-flex flex-column justify-content-between ms-auto">

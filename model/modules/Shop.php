@@ -106,9 +106,8 @@ class Shop extends Content
                     $items = [];
                     foreach (Shop::PRICE as $name => $value) {
                         $items[] = [
-                            "display" => ucfirst($name),
+                            "display" => "<span class='badge-outline border-".Style::getColorFromLetter($value)."-d-2'>" .ucfirst($name)."</span>",
                             "onclick" => "Shop.update('{$this->getUniqid()}', {$value}, 'price', ".Controller::IS_VALUE.")",
-                            "class" => "badge-outline border-".Style::getColorFromLetter($value)."-d-2"
                         ];
                     }
                     return $view->dispatch(
@@ -210,9 +209,9 @@ class Shop extends Content
                                 template_name : "input/search",
                                 data : [
                                     "id" => "addConsumable" . $this->getUniqid(),
-                                    "title" => "Ajouter un consomable",
-                                    "label" => "Rechercher un consomable",
-                                    "placeholder" => "Rechercher un consomable",
+                                    "title" => "Ajouter un consommable",
+                                    "label" => "Rechercher un consommable",
+                                    "placeholder" => "Rechercher un consommable",
                                     "search_in" => ControllerSearch::SEARCH_IN_CONSUMABLE,
                                     "parameter" => $this->getUniqid(),
                                     "action" => ControllerSearch::SEARCH_DONE_ADD_CONSUMABLE_TO_SHOP,
@@ -315,9 +314,9 @@ class Shop extends Content
         }
 
         /* Data = array(
-                        uniqid => id du consomable,
-                        quantity => quantité du consomable,
-                        price => prix du consomable,
+                        uniqid => id du consommable,
+                        quantity => quantité du consommable,
+                        price => prix du consommable,
                         action => remove / add / update
                     )
             Js : Shop.update(UniqidS,{action:'add|remove|update', uniqid:'uniqIdC', quantity:'Quantity',price:'price',comment:'Comment'},'consumable', IS_VALUE);
@@ -369,7 +368,7 @@ class Shop extends Content
         /* Data = array(
                 uniqid => id de l'équipement,
                 quantity => quantité de l'équipement,
-                price => prix du consomable,
+                price => prix du consommable,
                 action => remove / add / update
             )
             Js : Shop.update(UniqidS,{action:'add|remove|update', uniqid:'uniqIdC', quantity:'Quantity',price:'price',comment:'Comment'},'item', IS_VALUE);

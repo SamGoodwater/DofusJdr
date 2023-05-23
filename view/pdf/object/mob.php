@@ -14,7 +14,7 @@
                     <td><h2><?=$obj->getName()?></h2></td>
                     <td class="box-level"><h3><span class="starter">Niveau : </span><b class="enavant2"><?=$obj->getLevel()?></b></h3></td>
                 </tr>
-                <?php if(!empty($obj->getTrait()) || !empty($obj->getHostility()) || !empty($obj->getZone())){ ?>
+                <?php if(!empty($obj->getTrait()) || !empty($obj->getHostility()) || !empty($obj->getSize()) || !empty($obj->getZone())){ ?>
                     <tr border=0>
                         <?php if(!empty($obj->getTrait())){ ?>
                             <td colspan="3"><span class="starter">Traits : </span><?php
@@ -23,9 +23,10 @@
                                 <?php } ?> 
                             </td>
                         <?php } ?>
-                        <?php if(!empty($obj->getHostility()) || !empty($obj->getZone())){ ?>
+                        <?php if(!empty($obj->getHostility()) || !empty($obj->getZone()) || !empty($obj->getSize())){ ?>
                             <td>
                                 <span class="badge frequency"><?=$obj->getHostility(Content::FORMAT_TEXT)?></span>
+                                <span class="badge frequency"><?=$obj->getSize(Content::FORMAT_TEXT)?></span>
                                 <?=$obj->getZone()?>
                             </td>
                         <?php } ?>

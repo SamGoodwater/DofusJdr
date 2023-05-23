@@ -138,6 +138,7 @@ class MobManager extends Manager
                     zone,
                     hostility,
                     trait,
+                    size,
                     usable
                    )
             VALUES (
@@ -172,6 +173,7 @@ class MobManager extends Manager
                     :zone,
                     :hostility,
                     :trait,
+                    :size,
                     :usable
                 )');
 
@@ -207,6 +209,7 @@ class MobManager extends Manager
             'zone' => $object->getZone(),
             'hostility' => $object->getHostility(),
             'trait' => $object->getTrait(),
+            'size' => $object->getSize(),
             "usable" => $object->getUsable()
         ));
     }
@@ -243,6 +246,7 @@ class MobManager extends Manager
                     zone=:zone,
                     hostility=:hostility,
                     trait=:trait,
+                    size=:size,
                     usable=:usable
             WHERE id = :id');
 
@@ -279,6 +283,7 @@ class MobManager extends Manager
             'zone' => $object->getZone(),
             'hostility' => $object->getHostility(),
             'trait' => $object->getTrait(),
+            'size' => $object->getSize(),
             "usable" => $object->getUsable()
             ));
 

@@ -20,6 +20,16 @@ class Mob extends Content
         "hostile" => 5
     ];
 
+    const SIZE = [
+        "très petite" => 0,
+        "petite" => 1,
+        "moyenne" => 2,
+        "grande" => 3,
+        "très grande" => 4,
+        "gigantesque" => 5
+    ];
+
+
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         private $_name='';
         private $_description='';
@@ -49,6 +59,7 @@ class Mob extends Content
         private $_zone="";
         private $_hostility="";
         private $_trait="";
+        private $_size=self::SIZE['moyenne'];
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function getName(int $format = Content::FORMAT_BRUT){
@@ -1492,8 +1503,7 @@ class Mob extends Content
                     foreach (Mob::HOSTILITY as $name => $value) {
                         $items[] = [
                             "onclick" => "Mob.update('".$this->getUniqid()."', ".$value.", 'hostility', ".Controller::IS_VALUE.");",
-                            "display" => $name,
-                            "class" => "badge-outline text-".Style::getColorFromLetter($value, true)."-d-4 border-".Style::getColorFromLetter($value, true)."-d-2",
+                            "display" => "<span class='badge-outline text-".Style::getColorFromLetter($value, true)."-d-4 border-".Style::getColorFromLetter($value, true)."-d-2'>" .ucfirst($name)."</span>"
                         ];
                     }
 
@@ -1535,6 +1545,7 @@ class Mob extends Content
                     return $this->_hostility;
             }
         }
+
         public function getTrait(int $format = Content::FORMAT_BRUT){
             $view = new View();
             if(!empty($this->_trait)){
@@ -1585,6 +1596,73 @@ class Mob extends Content
                     return $this->_trait;
             }
 
+        }
+        public function getSize(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    $items = [];
+                    foreach (Mob::SIZE as $name => $value) {
+                        $items[] = [
+                            "onclick" => "Mob.update('".$this->getUniqid()."', ".$value.", 'size', ".Controller::IS_VALUE.");",
+                            "display" => "<span class='badge back-".Style::getColorFromLetter($value, true)."-d-2'>" .ucfirst($name)."</span>"
+                        ];
+                    }
+
+                    return $view->dispatch(
+                        template_name : "dropdown",
+                        data : [
+                            "tooltip" => "Taille de la créature",
+                            "label" => ucfirst($this->getSize(Content::FORMAT_BADGE)),
+                            "size" => Style::SIZE_SM,
+                            "items" => $items,
+                            "comment" => "<span class='mx-2'>Taille : " . implode(", ", array_keys(Mob::SIZE))."</span>",
+                        ], 
+                        write: false);
+    
+                case Content::FORMAT_BADGE:
+                    if(in_array($this->_size, Mob::SIZE)){
+                        return $view->dispatch(
+                            template_name : "badge",
+                            data : [
+                                "content" => ucfirst(array_search($this->_size, Mob::SIZE)),
+                                "color" => Style::getColorFromLetter($this->_size, true)."-d-2",
+                                "tooltip" => "Taille de la créature : " . array_search($this->_size, Mob::SIZE),
+                                "style" => Style::STYLE_BACK
+                            ], 
+                            write: false);
+                            
+                    } else  {
+                        return "";
+                    }
+                case Content::FORMAT_ICON:
+                    if(in_array($this->_size, Mob::SIZE)){
+                        $expr = '/(?<=\s|^)[a-z]/i'; preg_match_all($expr, array_search($this->_size, Mob::SIZE), $matches);
+                        $short_name = strtoupper(implode('', $matches[0]));
+                        return $view->dispatch(
+                            template_name : "badge",
+                            data : [
+                                "content" => $short_name,
+                                "color" => Style::getColorFromLetter($this->_size, true)."-d-2",
+                                "tooltip" => "Taille de la créature : " . array_search($this->_size, Mob::SIZE),
+                                "style" => Style::STYLE_BACK
+                            ], 
+                            write: false);
+                            
+                    } else  {
+                        return "";
+                    }
+
+                case Content::FORMAT_TEXT:
+                    if(in_array($this->_size, Mob::SIZE)){
+                        return array_search($this->_size, Mob::SIZE);
+                    } else  {
+                        return "";
+                    }
+
+                default:
+                    return $this->_size;
+            }
         }
 
         public function getSpell(int $format = Content::FORMAT_BRUT, $display_remove = false, $size = 300){
@@ -1976,6 +2054,15 @@ class Mob extends Content
         public function setTrait(string | int | null $data){
             $this->_trait = $data;
             return true;
+        }
+        public function setSize(int | null $data){
+            if(in_array($data, Mob::SIZE)){
+                $this->_size = $data;
+                return true;
+            } else {
+                $this->_size = Mob::SIZE["moyenne"];
+                throw new Exception("Donnée non valide;");
+            }
         }
 
         /* Data = array(

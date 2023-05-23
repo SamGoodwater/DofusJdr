@@ -162,7 +162,7 @@ class NpcManager extends Manager
                     kamas,
                     drop_,
                     other_item,
-                    other_consomable,
+                    other_consumable,
                     other_spell
                    )
             VALUES (
@@ -224,7 +224,7 @@ class NpcManager extends Manager
                     :kamas,
                     :drop_,
                     :other_item,
-                    :other_consomable,
+                    :other_consumable,
                     :other_spell
                 )');
         
@@ -287,7 +287,7 @@ class NpcManager extends Manager
             "kamas" => $object->getKamas(),
             "drop_" => $object->getDrop_(),
             "other_item" => $object->getOther_item(),
-            "other_consomable" => $object->getOther_consomable(),
+            "other_consumable" => $object->getOther_consumable(),
             "other_spell" => $object->getOther_spell()
         ));
     }
@@ -351,7 +351,7 @@ class NpcManager extends Manager
                     kamas=:kamas,
                     drop_=:drop_,
                     other_item=:other_item,
-                    other_consomable=:other_consomable,
+                    other_consumable=:other_consumable,
                     other_spell=:other_spell
             WHERE id=:id');
 
@@ -415,7 +415,7 @@ class NpcManager extends Manager
             "kamas" => $object->getKamas(),
             "drop_" => $object->getDrop_(),
             "other_item" => $object->getOther_item(),
-            "other_consomable" => $object->getOther_consomable(),
+            "other_consumable" => $object->getOther_consumable(),
             "other_spell" => $object->getOther_spell()
         ));
 

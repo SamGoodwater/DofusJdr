@@ -105,6 +105,7 @@ class Style {
             "sagesse" => "purple",
             "life" => "deep-orange",
             "level" => "teal",
+            "master_bonus" => "orange",
             "time_before_use_again" => "blue-grey",
             "dodge_pa" => "yellow",
             "dodge_pm" => "lime",

@@ -7,7 +7,7 @@ class Controller {
     static DISPLAY_FULL = 103;
 
     static TABLE_OFFSET = 0;
-    static TABLE_LIMIT = 100;
+    static TABLE_LIMIT = 50;
 
     static MODEL_NAME = "";
 
@@ -168,6 +168,8 @@ class Controller {
         var loadedRows = 0;
         let currentRequest = null;
 
+        let spinner = "<div class='spinner-border spinner-border-sm' role='status'><span class='visually-hidden'>Loading...</span></div> Chargement du tableau ";
+
         let refresh = function refresh() {
             if (currentRequest != null) {
                 currentRequest.abort(); // Annuler la requête AJAX en cours
@@ -210,7 +212,7 @@ class Controller {
                     }
                 }
             });
-            
+
             $.post('index.php?c='+this_.MODEL_NAME+'&a=count'+optionurl,
                 {},
                 function(data, status){
@@ -228,10 +230,16 @@ class Controller {
 
 
         let loadData = function loadData() {
+            $(".fixed-table-toolbar .loading-spinner").html(spinner + Math.round(100 * (loadedRows / total)) + "%");
             var nextUrl = url + optionurl + '&offset=' + offset + '&limit=' + limit;
             $.post(nextUrl,
                 {},
                 function(data, status){
+                    if(data.length == 0){
+                        $(".fixed-table-toolbar .loading-spinner").html('');
+                        currentRequest = null; // Réinitialisez la variable currentRequest une fois le chargement terminé
+                        return;
+                    }
                     if($('#table').length > 0){
                         $('#table').bootstrapTable('append', data);
                         loadedRows += data.length;
@@ -239,9 +247,11 @@ class Controller {
                             offset += limit;
                             loadData();
                         } else {
+                            $(".fixed-table-toolbar .loading-spinner").html('');
                             currentRequest = null; // Réinitialisez la variable currentRequest une fois le chargement terminé
                         }
                     } else {
+                        $(".fixed-table-toolbar .loading-spinner").html('');
                         currentRequest.abort(); // Annuler la requête AJAX en cours
                         currentRequest = null; // Réinitialisez la variable currentRequest une fois le chargement terminé
                     }
@@ -274,6 +284,7 @@ class Controller {
                     });
                 }
             });
+            $(".fixed-table-toolbar").append("<div class='loading-spinner text-grey-d-2' style='top:15px;left:15px;position:relative;z-index:-1;'></div>");
         }
         
         createTable();

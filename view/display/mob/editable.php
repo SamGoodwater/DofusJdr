@@ -15,6 +15,7 @@
             <div class="text-center mt-2">
                 <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
                 <?=$obj->getHostility(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getSize(Content::DISPLAY_EDITABLE)?>
             </div>
         </div>
         <div class="col">

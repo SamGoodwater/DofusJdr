@@ -366,7 +366,7 @@
                 </td>
             </tr>
             <tr> <!-- LIGNE -->
-                <td><span class="starter">Consommables : </span><?=$obj->getOther_consomable()?></td>
+                <td><span class="starter">Consommables : </span><?=$obj->getOther_consumable()?></td>
             </tr>
             <tr> <!-- LIGNE -->
                 <td><span class="starter">Autres sorts : </span><?=$obj->getOther_spell()?></td>

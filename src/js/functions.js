@@ -281,28 +281,92 @@ function rollDice() {
 // Met la première lettre en majuscule
 function ucFirst(str) {return str && str[0].toUpperCase() + str.slice(1);}
 
+let is_tooltipsCustom_triggerable = true;
 function showTooltips(launcheur, target){
-  if ($('.container-tooltips').length === 0) {
-    // La div avec la classe "container-tooltips" n'existe pas dans la page
-    // Création de la div
-    var containerTooltips = $('<div>').addClass('container-tooltips');
-    // Insertion de la div dans le corps de la page
-    $('body').append(containerTooltips);
+  if(is_tooltipsCustom_triggerable){
+    // Il n'est plus possible de déclencher cette fonction avant 200ms
+    is_tooltipsCustom_triggerable = false;
+    setTimeout(function(){is_tooltipsCustom_triggerable = true;}, 200);
+
+    if ($('.container-tooltips').length === 0) {
+      // La div avec la classe "container-tooltips" n'existe pas dans la page
+      // Création de la div
+      let containerTooltips = $('<div>').addClass('container-tooltips');
+      // Insertion de la div dans le corps de la page
+      $('body').append(containerTooltips);
+    }
+    let tooltip = $('.container-tooltips');
+    let clone = $(target).clone();
+    clone.show();
+    tooltip.html(clone);
+    
+    let position_launcher = $(launcheur).offset();
+    // var position_tooltip = tooltip.offset();
+
+    let point_centered_launcher = {
+      x: position_launcher.left + $(launcheur).width() / 2,
+      y: position_launcher.top + $(launcheur).height() / 2
+    };
+    
+    let direction = "";
+
+    if($(window).width() / 2 > point_centered_launcher.x){
+      // Le point est à gauche
+      direction = "R";
+    } else {
+      // Le point est à droite
+      direction = "L";
+    }
+    if($(window).height() / 2 > point_centered_launcher.y){
+      // Le point est plus en haut
+      direction += "B";
+    } else {
+      // Le point est plus en bas
+      direction += "T";
+    }
+
+    let x = $(window).width() / 2 - $(launcheur).width() / 2;
+    let y = $(window).height() / 2 - $(launcheur).height() / 2;
+
+    if($(launcheur).width() < $(window).width() / 2 && $(launcheur).height() < $(window).height() / 2){
+      console.log(direction);
+      switch (direction) {
+        case "LT":
+          // le coin en bas à droite du tooltip doit être coller au coin en haut à gauche du launcher.
+          x = position_launcher.left - $(launcheur).width();
+          y = position_launcher.top - $(tooltip).height();
+        break;
+        case "LB":
+          // le coin en haut à droite du tooltip doit être coller au coin en bas à gauche du launcher.
+          x = position_launcher.left - $(launcheur).width();
+          y = position_launcher.top + $(launcheur).height();
+        break;
+        case "RT":
+          // le coin en bas à gauche du tooltip doit être coller au coin en haut à droite du launcher.
+          x = position_launcher.left + $(launcheur).width();
+          y = position_launcher.top - $(tooltip).height();
+        break;
+        case "RB":
+          // le coin en haut à gauche du tooltip doit être coller au coin en bas à droite du launcher.
+          x = position_launcher.left + $(launcheur).width();
+          y = position_launcher.top + $(launcheur).height();
+        break;
+        default:
+          x = $(window).width() / 2 - $(launcheur).width() / 2;
+          y = $(window).height() / 2 - $(launcheur).height() / 2;
+        break;
+      }
+    }
+
+    tooltip.css('left', x);
+    tooltip.css('top', y);
+
+    tooltip.css('position', 'absolute');
+    tooltip.show("clip", 100);
+    tooltip.css('display', 'flex');
+
+    $(launcheur).on("mouseleave", function(){
+      tooltip.hide("clip", 100);
+    });
   }
-  var tooltip = $('.container-tooltips');
-  var clone = $(target).clone();
-  clone.show();
-  tooltip.html(clone);
-  
-  var position = $(launcheur).offset();
-  var x = position.left;
-  var y = position.top;
-  tooltip.css('position', 'absolute');
-  tooltip.css('left', (x+100)+'px');
-  tooltip.css('top', (y-50)+'px');
-  tooltip.show("clip", 100);
-  tooltip.css('display', 'flex');
-  $(launcheur).on("mouseleave", function(){
-    tooltip.hide("clip", 100);
-  });
 }

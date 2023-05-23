@@ -48,6 +48,7 @@
             <p class="m-1"><?=$obj->getIni(Content::FORMAT_VIEW)?></p>
             <p class="m-1"><?=$obj->getInvocation(Content::FORMAT_VIEW)?></p>
             <p class="m-1"><?=$obj->getTouch(Content::FORMAT_VIEW)?></p>
+            <p class="m-1"><?=$obj->getMaster_bonus(Content::FORMAT_BADGE)?></p>
         </div>
         <div class="row justify-content-around">
             <div class="col-auto">
@@ -130,6 +131,6 @@
         <div class="nav-item-divider back-main-d-1"></div>
         <h4 class="pt-2 text-center">Consommables</h4>
         <div class="dy-2 px-1"><?=$obj->getConsumable();?></div>
-        <div class="dy-2 px-1"><?=$obj->getOther_consomable();?></div>
+        <div class="dy-2 px-1"><?=$obj->getOther_consumable();?></div>
     </div>
 </div>

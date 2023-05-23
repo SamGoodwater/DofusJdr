@@ -228,9 +228,8 @@ class Item extends Content
                     $items = [];
                     foreach (Item::TYPES as $name => $type) {
                         $items[] = [
-                            "display" => ucfirst($name),
-                            "onclick" => "Item.update('".$this->getUniqid()."', '".$type."', 'type',".Controller::IS_VALUE.")",
-                            "class" => "badge back-".Style::getColorFromLetter($type)."-d-2"
+                            "display" => "<span class='badge back-".Style::getColorFromLetter($type)."-d-2'>" .ucfirst($name)."</span>",
+                            "onclick" => "Item.update('".$this->getUniqid()."', '".$type."', 'type',".Controller::IS_VALUE.")"
                         ];
                     }
 
@@ -438,9 +437,8 @@ class Item extends Content
                     $items = [];
                     foreach (Item::RARITY_LIST as $name => $rarity) {
                         $items[] = [
-                            "display" => ucfirst($name),
-                            "onclick" => "Item.update('{$this->getUniqid()}', {$rarity}, 'rarity', ".Controller::IS_VALUE.")",
-                            "class" => "badge back-".Style::getColorFromLetter($rarity, true)."-d-2"
+                            "display" => "<span class='badge back-".Style::getColorFromLetter($rarity, true)."-d-2'>" .ucfirst($name)."</span>",
+                            "onclick" => "Item.update('{$this->getUniqid()}', {$rarity}, 'rarity', ".Controller::IS_VALUE.")"
                         ];
                     }
                     return $view->dispatch(

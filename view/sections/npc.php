@@ -79,7 +79,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th data-sortable="false" data-visible="true" data-field="logo"><i class="fas fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="select" data-field="classe">Classe</th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-filter-control="select" data-field="level">Niveau</th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="select" data-field="level">Niveau</th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="master_bonus">Bonus de maitrise</th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="story">Histoire<br>du ou de la PNJ</th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="historical">Historique</th>
@@ -133,7 +134,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="kamas"><img class='icon' src='medias/icons/kamas.png'></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="drop_">Drop</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="other_equipment">Autres équipements</th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="other_consomable">Autres consommables</th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="other_consumable">Autres consommables</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="other_spell">Autres sorts</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>

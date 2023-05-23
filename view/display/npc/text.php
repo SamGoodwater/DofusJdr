@@ -42,6 +42,7 @@
                 <div><?=$obj->getIni(Content::FORMAT_ICON)?></div>
                 <div><?=$obj->getLife(Content::FORMAT_ICON)?></div>
                 <div><?=$obj->getTouch(Content::FORMAT_ICON)?></div>
+                <div><?=$obj->getMaster_bonus(Content::FORMAT_ICON)?></div>
             </div>
             <div class="col-auto">
                 <div><?=$obj->getVitality(Content::FORMAT_ICON);?></div>

@@ -118,5 +118,15 @@ trait CalcStats
             return "error";
         }
     }
+
+    static function calcMaster_bonus($level){
+      if(is_integer($level)){
+        $master_bonus = round(1 + 0.25 * $level, 0, PHP_ROUND_HALF_DOWN);
+        if($master_bonus >= 1 && $master_bonus <= 6){
+          return $master_bonus;
+        }
+      }
+        return 1;
+    }
 }
   

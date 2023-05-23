@@ -32,11 +32,57 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
         "editOnDblClick" => false
     );
 
+    ob_start(); ?>
+        <a class="btn btn-sm btn-underline-main" onclick="selectAllCategoryItem();">Tout sélectionner</a>
+        <a class="btn btn-sm btn-underline-main" onclick="deselectAllCategoryItem();">Tout désélectionner</a>
+        <div class="m-2">
+            <p>Sélectionner une catégorie de consommable</p>
+            <div id="option" class="mb-2 item">
+                <?php foreach (Consumable::TYPES as $name => $value) {?>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="<?=$value?>" id="flexCheck<?=$name?>">
+                        <label class="form-check-label" for="flexCheck<?=$name?>"><?=$name?></label>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+        <script>
+            function selectAllCategoryItem(){
+                var checkboxes = document.querySelectorAll('#option.item input[type="checkbox"]');
+                for (var checkbox of checkboxes) {
+                    checkbox.checked = true;
+                }
+            }
+            function deselectAllCategoryItem(){
+                var checkboxes = document.querySelectorAll('#option.item input[type="checkbox"]');
+                for (var checkbox of checkboxes) {
+                    checkbox.checked = false;
+                }
+            }
+        </script>
+    <?php $template["option"] = ob_get_clean();
+
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
+
+    $manager = new ConsumableManager;
+    $type = ""; $array_type = []; $array_level = []; $level ="";
+    if(preg_match('/^[0-9]*\|[0-9]{1,}/m', $template_vars['content'])){
+        $type = $template_vars['content'];
+        foreach (array_filter(explode("|", $type)) as $type_val) {
+            if(in_array($type_val, Consumable::TYPES)){
+                $array_type[] = $type_val;
+            }
+        }
+    } elseif(preg_match('/[0-9]{1,}/m', $template_vars['content'])) {
+        if(in_array($template_vars['content'], Consumable::TYPES)){
+            $type = $template_vars['content'];
+            $array_type[] = $template_vars['content'];
+        }
+    }
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end" id="sortableConsomables">
-            <button type="button" class="me-2 btn-sm btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un consomable', $('#addItem'), Page.SIZE_MD, true);">Ajouter un consommable</button>
+            <button type="button" class="me-2 btn-sm btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un consommable', $('#addConsumable'), Page.SIZE_MD, true);">Ajouter un consommable</button>
             <div id="selectorTypeListCheckbox" class="dropdown">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="typesort" data-bs-toggle="dropdown" aria-expanded="false">Catégorie du consommable</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">

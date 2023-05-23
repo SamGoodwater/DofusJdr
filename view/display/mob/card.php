@@ -22,6 +22,7 @@
                         <div><?=$obj->getLife(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getTouch(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getHostility(Content::FORMAT_BADGE)?></div>
+                        <div><?=$obj->getSize(Content::FORMAT_BADGE)?></div>
                         <div> <?=$obj->getPowerful(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getTrait(Content::FORMAT_BADGE);?></div>
                     </div>

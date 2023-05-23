@@ -7,3 +7,8 @@ vendor/
 tools/
 backup/db/offline
 backup/db/online
+medias/safeDir/token.txt
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map

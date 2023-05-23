@@ -653,8 +653,7 @@ class Spell extends Content
                     foreach(self::ELEMENT as $id_element => $element) { 
                         $items[] = [
                             "onclick" => "Spell.update('".$this->getUniqid()."', ".$id_element.", 'element', ".Controller::IS_VALUE.");",
-                            "display" => ucfirst($element['name']),
-                            "class" => "badge back-".$element['color']."-d-2",
+                            "display" => "<span class='badge back-".$element['color']."-d-2'>" .ucfirst($element['name'])."</span>"
                         ];
                     }
 
@@ -711,8 +710,7 @@ class Spell extends Content
                     foreach(self::CATEGORY as $name => $category) { 
                         $items[] = [
                             "onclick" => "Spell.update('".$this->getUniqid()."', ".$category.", 'category', ".Controller::IS_VALUE.");",
-                            "display" => $name,
-                            "class" => "badge back-".Style::getColorFromLetter($category)."-d-2",
+                            "display" => "<span class='badge back-".Style::getColorFromLetter($category)."-d-2'>" .ucfirst($name)."</span>"
                         ];
                     }
 
@@ -905,8 +903,7 @@ class Spell extends Content
                     for ($i=1; $i <= 7 ; $i++) { 
                         $items[] = [
                             "onclick" => "Spell.update('".$this->getUniqid()."', ".$i.", 'powerful', ".Controller::IS_VALUE.");",
-                            "display" => "Puissance ".$i,
-                            "class" => "badge back-deep-purple-d-3",
+                            "display" => "<span class='badge back-deep-purple-d-3'>Puissance " .$i."</span>"
                         ];
                     }
 
@@ -960,8 +957,7 @@ class Spell extends Content
                     foreach(self::TYPE as $name => $type) { 
                         $items[] = [
                             "onclick" => "Spell.update('".$this->getUniqid()."',{action:'add', type:'".$type."'},'type', IS_VALUE);",
-                            "display" => $name,
-                            "class" => "btn btn-sm btn-border-".Style::getColorFromLetter($type)."-d-4",
+                            "display" => "<span class='btn btn-sm btn-border-".Style::getColorFromLetter($type)."-d-4'>" .ucfirst($name)."</span>"
                         ];
                     }
 

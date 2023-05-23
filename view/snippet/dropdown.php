@@ -16,7 +16,7 @@
     if(!isset($tooltip)) { $tooltip = "";}else{if(!is_string($tooltip)&& !is_numeric($tooltip)) {$tooltip = "";}}
     if(!isset($tooltip_placement)) { $tooltip_placement = Style::DIRECTION_BOTTOM;}else{if(!in_array($tooltip_placement, [Style::DIRECTION_BOTTOM, Style::DIRECTION_TOP, Style::DIRECTION_RIGHT, Style::DIRECTION_LEFT])) {$tooltip_placement = Style::DIRECTION_BOTTOM;}}
 ?>
-<div>
+<div class="d-flex flex-column align-items-center justify-content-center">
     <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>">
         <a class="d-flex align-items-center <?=$class?>" type="button" id="<?=$id?>" style="<?=$css?>" <?=$data?> data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><div><?=$label?></div> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
         <div class="dropdown-menu" aria-labelledby="<?=$id?>"> <?php
