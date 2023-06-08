@@ -150,6 +150,25 @@ class ControllerUser extends Controller{
               $object->setLast_connexion();
 
               if($manager->add($object)){
+
+                $manager = new UserManager();
+                $admins = $manager->getAllAdmins();
+                $mail = new Mail();
+                $mail->setSubject("Bienvenu sur ".$GLOBALS["project"]["name"]." !");
+                $mail->setTo($object->getEmail());
+                foreach ($admins as $admin) {
+                  $mail->setCci($admin->getEmail());
+                }
+                $mail->setTemplate(Mail::TEMPLATE_NEW_USER, 
+                  [
+                    "mail" => $object->getEmail()
+                  ]
+                );
+                $result = $mail->send();
+                if($result !== true){
+                  $return['error'] = $result;
+                }
+
                 $return['state'] = true;
                 $return['script'] = "User.open('".$object->getUniqid()."', Controller.DISPLAY_EDITABLE)";
               }else {
@@ -194,6 +213,20 @@ class ControllerUser extends Controller{
 
                 $object->setPassword($_REQUEST["new_password"]);
                 if($manager->update($object)){
+                  
+                  // Mail
+                    $mail = new Mail();
+                    $mail->setSubject("Modification de votre mot de passe - " . $GLOBALS["project"]["name"]);
+                    $mail->setTo($object->getEmail());
+                    $mail->setTemplate(Mail::TEMPLATE_GENERIC, 
+                      [
+                        "text" => "Votre mot de passe a bien été modifié.<br>Si vous n'êtes pas à l'origine de cette modification, veuillez contacter l'adminitrateur·trice du site. (".$GLOBALS['project']['mail']['contact'].")"
+                      ]);
+                    $result = $mail->send();
+                    if($result !== true){
+                      return $result;
+                    }
+                  
                   $return['state'] = true;
                   $return['script'] = "User.open('".$object->getUniqid()."', Controller.DISPLAY_EDITABLE)";
                   
@@ -462,4 +495,25 @@ class ControllerUser extends Controller{
     }    
     return $array;
   }
+
+  // Events
+    public function eventAfterUpdate(){
+      $manager = new UserManager();
+      $admins = $manager->getAllAdmins();
+      $mail = new Mail();
+      $mail->setSubject("Modification d'un compte - ". $GLOBALS["project"]["name"]);
+      foreach ($admins as $admin) {
+        $mail->setTo($admin->getEmail());
+      }
+      $mail->setTemplate(Mail::TEMPLATE_EDIT_USER, 
+        [
+          "new_user" => $this->obj,
+          "old_user" => $this->obj_old
+        ]
+      );
+      $result = $mail->send();
+      if($result !== true){
+         return $result;
+      }
+    }
 }

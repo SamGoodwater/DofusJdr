@@ -176,7 +176,7 @@ class ControllerConnect extends Controller{
                     <?php $return["header_mobile"] = ob_get_clean();
 
                 $return["modal"] = $user->getVisual(Content::FORMAT_EDITABLE);
-                $return["size"] = "fl";
+                $return["size"] = "lg";
                 $return["title"] = "Compte";
 
             } else {
@@ -206,8 +206,13 @@ class ControllerConnect extends Controller{
                     </div>
                 <?php $return["header_mobile"] = ob_get_clean();
                 ob_start(); ?>
-                    <div class="text-center">
-                        <div id="modalConnexionUser">
+                    <div class="text-center user__modal_connexion">
+                        <div class="d-flex flex-row justify-content-around align-item-baseline pb-4 pt-2 px-4">
+                            <p><a class="btn-text-main user__modal_btn-switch" onclick="switchConnectInscript('#modalConnexionUser', this);">Se connecter</a></p>
+                            <p><a class="btn-text-main user__modal_btn-switch" onclick="switchConnectInscript('#modalAddUser', this);">S'inscrire</a></p>
+                            <p><a class="btn-text-main user__modal_btn-switch" onclick="switchConnectInscript('#modalPasswordForgotten', this);">Mot de passe oublié</a></p>
+                        </div>
+                        <div id="modalConnexionUser" class="user__modal_tab">
                             <h3>Connexion</h3>
                             <div class="form-floating mb-3">
                                 <input required type="text" class="form-control form-control-main-focus form-control form-control-main-focus-main-focus" id="email" placeholder="Email">
@@ -218,7 +223,7 @@ class ControllerConnect extends Controller{
                                 <label for="password">Mot de passe ou Passe-phrase</label>
                             </div>
                             <div class="form-check text-left">
-                                <input class="form-check-input" type="checkbox" value="" id="remember">
+                                <input class="form-check-input form-control-main-focus back-main-l-2 border-main" type="checkbox" value="" id="remember">
                                 <label class="form-check-label" for="remember">Garder la connexion</label>
                             </div>
                             <p class="size-0-8 text-grey-d-1 text-left"><i class="fas fa-question-circle"></i> Cette fonctionnalité resquière l'utilisation d'un cookie de connexion.</p>
@@ -226,7 +231,7 @@ class ControllerConnect extends Controller{
                             <button type="button" onclick="Connect.connect();" class="btn btn-border-secondary">Se connecter</button>
                         </div>
                         
-                        <div id="modalAddUser">
+                        <div id="modalAddUser" class="user__modal_tab">
                             <h3>Inscription</h3>
                             <div class="form-floating mb-3">
                                 <input required type="text" class="form-control form-control-main-focus" id="email" placeholder="Email">
@@ -248,20 +253,26 @@ class ControllerConnect extends Controller{
                             <button type="button" onclick="User.add();" class="btn btn-border-secondary">S'inscrire</button>
                         </div>
 
-                        <a class="btn-text-main size-0-9 p-3 text-center" onclick="switchConnectInscript(this);">S'inscrire</a>
+                        <div id="modalPasswordForgotten" class="user__modal_tab">
+                            <h3 class="mb-3">Mot de passe oublié</h3>
+                            <p>Saisissez l'adresse mail que vous avez utilisé pour créer votre compte.</p>
+                            <div class="form-floating mb-3">
+                                <input required type="text" class="form-control form-control-main-focus form-control form-control-main-focus-main-focus" id="email" placeholder="Email">
+                                <label for="email">Email</label>
+                            </div>
+                            <p class="mb-3">Un nouveau mot de passe vous sera transmis sur cette adresse mail. Pensez à le modifier dès votre première connexion.</p>
+                            <button type="button" onclick="Connect.passwordForgotten();" class="btn btn-border-secondary">Envoyer un nouveau mot de passe</button>
+                        </div>
                     </div>
                     <script>
-                        $("#modalAddUser").hide();
-                        function switchConnectInscript(btn){
-                            if($("#modalConnexionUser").css('display') == 'none'){
-                                $("#modalConnexionUser").show();
-                                $("#modalAddUser").hide();
-                                $(btn).text("S'inscrire");
-                            } else {
-                                $("#modalConnexionUser").hide();
-                                $("#modalAddUser").show();
-                                $(btn).text("Se connecter");
-                            }
+                        $(document).ready(function(){
+                            switchConnectInscript('#modalConnexionUser', ".user__modal_connexion .user__modal_btn-switch:first");
+                        });
+                        function switchConnectInscript(tab, btn){
+                            $(".user__modal_tab").hide();
+                            $(".user__modal_connexion .user__modal_btn-switch").css("border-bottom", "none");
+                            $(tab).show();
+                            $(btn).css("border-bottom", "solid 1px var(--main-d-2)");
                         }
                     </script>
                 <?php $return["modal"] = ob_get_clean();
@@ -376,51 +387,54 @@ class ControllerConnect extends Controller{
                 new AlertManager(new Alert("Dernière connexion de " . $user->getPseudo(),"Dernière connexion le " . $user->getLast_connexion(Content::DATE_FR) . " à " .  $user->getLast_connexion(Content::TIME_FR),"",Alert::ALERT_INFO,6000));
                 return true;
         }
+
+        public function passwordForgotten(){
+                $return = [
+                    'state' => true,
+                    'value' => "",
+                    'error' => '',
+                    'script' => ""
+                  ];
+              
+                  if(!isset($_REQUEST['mail']))
+                  {
+                    $return['error'] = 'Impossible de récupérer les données';
+                  } else {
+        
+                        // Récupération des objets
+                        $manager = new UserManager();
+                        // Récupération de l'objet
+                        if($manager->existsEmail($_REQUEST['mail'])){
+                            $user = $manager->getFromEmail($_REQUEST['mail']);
+                            $characters = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "é", "è", "à", "&", "^", "$", "*", "ù", "!", "?", ":", ";", ",", ".", "/", "|", "%", "µ", "£", "¤", "§", "°", "=", "+", "-", "(", ")", "[", "]", "{", "}", "<", ">", "~", "#", "²");
+                            $password = "";
+                            for($i=0;$i<9;$i++){
+                                $password .= ($i%2) ? strtoupper($characters[array_rand($characters)]) : $characters[array_rand($characters)];
+                            }
+                            $user->setPassword($password);
+                            $manager->update($user);
+                            $mail = new Mail();
+                            $mail->setTo($user->getEmail());
+                            $mail->setSubject("Mot de passe oublié- ". $GLOBALS["project"]["name"]);
+                            $mail->setTemplate(Mail::TEMPLATE_PASSWORD_FORGOTTEN, 
+                              [
+                                "mail" => $user->getEmail(),
+                                "password" => $password
+                              ]
+                            );
+                            $result = $mail->send();
+                            if($result !== true){
+                                $return['error'] = $result;
+                            } else {
+                                $return['state'] = true;
+                            }
+                        }
+                  }
+              
+                  echo json_encode($return);
+                  flush();
+            }
+        
+        
 }
 
-
-// public function passwordForgotten(){
-        //     $return = [
-        //         'state' => true,
-        //         'value' => "",
-        //         'error' => '',
-        //         'script' => ""
-        //       ];
-          
-        //       if(!isset($_REQUEST['mail']))
-        //       {
-        //         $return['error'] = 'Impossible de récupérer les données';
-        //       } else {
- 
-        //             // Récupération des objets
-        //             $manager = new UserManager();
-        //             // Récupération de l'objet
-        //             if($manager->existsId($_REQUEST['mail'])){
-        //                 $user = $managerM->getFromMail($_REQUEST['mail']);
-        //                 $characters = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
-        //                 for($i=0;$i<9;$i++){
-        //                     $password .= ($i%2) ? strtoupper($characters[array_rand($characters)]) : $characters[array_rand($characters)];
-        //                 }
-        //                 $user->setPassword($password);
-        //                 $manager->update($user);
-        //                                        // Envoi d'un mail :
-        //                     // Création
-        //                     $mail = New Mail();
-        //                     // Paramètres
-        //                         $mail->setSubject("Mot de passe oublié - " . $institution->getName());
-        //                         $mail->setFrom($setting->getMail_username(), $institution->getName());
-        //                         $mail->setReply($setting->getMail_username(), $institution->getName()); // Facultatif
-        //                         $mail->setTo($_REQUEST['mail']); // --- peut-être répéter ---
-        //                         $mail->setTemplate(Mail::TEMPLATE_PASSWORD_FORGOTTEN,["password" => $password]);
-        //                       // Envoi
-        //                         if(!$mail->send()){
-        //                           $return['error'] = $result;
-        //                         }
-
-        //                 $return['state'] = true;
-        //             }
-        //       }
-          
-        //       echo json_encode($return);
-        //       flush();
-        // }

@@ -44,6 +44,8 @@ function init() {
 		location.reload();
 	});
 
+	Bubbleshortcut.init();
+
 	$('.selectpicker').selectpicker;
 	
 	$('.draggable').draggable();

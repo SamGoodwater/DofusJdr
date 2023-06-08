@@ -282,11 +282,11 @@ function rollDice() {
 function ucFirst(str) {return str && str[0].toUpperCase() + str.slice(1);}
 
 let is_tooltipsCustom_triggerable = true;
-function showTooltips(launcheur, target){
+function showTooltips(launcher, target){
   if(is_tooltipsCustom_triggerable){
     // Il n'est plus possible de déclencher cette fonction avant 200ms
     is_tooltipsCustom_triggerable = false;
-    setTimeout(function(){is_tooltipsCustom_triggerable = true;}, 200);
+    setTimeout(function(){is_tooltipsCustom_triggerable = true;}, 250);
 
     if ($('.container-tooltips').length === 0) {
       // La div avec la classe "container-tooltips" n'existe pas dans la page
@@ -300,62 +300,61 @@ function showTooltips(launcheur, target){
     clone.show();
     tooltip.html(clone);
     
-    let position_launcher = $(launcheur).offset();
-    // var position_tooltip = tooltip.offset();
-
-    let point_centered_launcher = {
-      x: position_launcher.left + $(launcheur).width() / 2,
-      y: position_launcher.top + $(launcheur).height() / 2
+    let position_launcher = $(launcher).offset();
+    let direction = {
+      x: "",
+      y: ""
     };
-    
-    let direction = "";
+    let point_centered_launcher = {
+      x: position_launcher.left + $(launcher).width() / 2,
+      y: position_launcher.top + $(launcher).height() / 2
+    };
+
+    let gap = 3; // Ecart entre le launcher et le tooltip
 
     if($(window).width() / 2 > point_centered_launcher.x){
       // Le point est à gauche
-      direction = "R";
+      direction.x = "L";
     } else {
       // Le point est à droite
-      direction = "L";
+      direction.x = "R";
     }
     if($(window).height() / 2 > point_centered_launcher.y){
       // Le point est plus en haut
-      direction += "B";
+      direction.y += "T";
     } else {
       // Le point est plus en bas
-      direction += "T";
+      direction.y += "B";
     }
 
-    let x = $(window).width() / 2 - $(launcheur).width() / 2;
-    let y = $(window).height() / 2 - $(launcheur).height() / 2;
+    let x = $(window).width() / 2 - $(launcher).width() / 2;
+    let y = $(window).height() / 2 - $(launcher).height() / 2;
 
-    if($(launcheur).width() < $(window).width() / 2 && $(launcheur).height() < $(window).height() / 2){
-      console.log(direction);
-      switch (direction) {
-        case "LT":
-          // le coin en bas à droite du tooltip doit être coller au coin en haut à gauche du launcher.
-          x = position_launcher.left - $(launcheur).width();
-          y = position_launcher.top - $(tooltip).height();
-        break;
-        case "LB":
-          // le coin en haut à droite du tooltip doit être coller au coin en bas à gauche du launcher.
-          x = position_launcher.left - $(launcheur).width();
-          y = position_launcher.top + $(launcheur).height();
-        break;
-        case "RT":
-          // le coin en bas à gauche du tooltip doit être coller au coin en haut à droite du launcher.
-          x = position_launcher.left + $(launcheur).width();
-          y = position_launcher.top - $(tooltip).height();
-        break;
-        case "RB":
-          // le coin en haut à gauche du tooltip doit être coller au coin en bas à droite du launcher.
-          x = position_launcher.left + $(launcheur).width();
-          y = position_launcher.top + $(launcheur).height();
-        break;
-        default:
-          x = $(window).width() / 2 - $(launcheur).width() / 2;
-          y = $(window).height() / 2 - $(launcheur).height() / 2;
-        break;
+    if($(launcher).width() < $(window).width() / 2 && $(launcher).height() < $(window).height() / 2){
+      if(direction.x == "L"){
+        // Le launcher est à gauche donc on met le tooltip à droite
+        x = position_launcher.left + $(launcher).width() + gap;
+      } else {
+        // Le launcher est à droite donc on met le tooltip à gauche
+        x = position_launcher.left - $(tooltip).width() - gap;
       }
+      if(direction.y == "T"){
+        // Le launcher est en haut donc on met le tooltip en bas
+        y = position_launcher.top + $(launcher).height() / 2 - $(tooltip).height() / 2;
+        if(y < 0){
+          y = 0;
+        }
+      } else {
+        // Le launcher est en bas donc on met le tooltip en haut
+        y = position_launcher.top + $(launcher).height() / 2 - $(tooltip).height() / 2;
+        if(y + $(tooltip).height() > $(window).height()){
+          y = $(window).height() - $(tooltip).height();
+        }
+      }
+    } else {
+      // Le launcher est trop proche du bord donc on le met au centre
+      x = $(window).width() / 2 - $(tooltip).width() / 2;
+      y = $(window).height() / 2 - $(tooltip).height() / 2;
     }
 
     tooltip.css('left', x);
@@ -365,7 +364,7 @@ function showTooltips(launcheur, target){
     tooltip.show("clip", 100);
     tooltip.css('display', 'flex');
 
-    $(launcheur).on("mouseleave", function(){
+    $(launcher).on("mouseleave", function(){
       tooltip.hide("clip", 100);
     });
   }

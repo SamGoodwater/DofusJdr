@@ -92,6 +92,9 @@ class Style {
             "tertiary"
         ];
         const COLOR_CUSTOM = array(
+            "main" => "blue-grey",
+            "secondary" => "teal",
+            "tertiary" => "deep-purple",
             "force" => "brown",
             "strong" => "brown",
             "terre" => "brown",

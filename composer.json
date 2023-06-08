@@ -21,7 +21,8 @@
     ],
     "require": {
         "calcinai/php-imagick": "^0.1.2",
-        "dompdf/dompdf": "^2.0"
+        "dompdf/dompdf": "^2.0",
+        "phpmailer/phpmailer": "^6.8"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.2",

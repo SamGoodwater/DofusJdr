@@ -211,7 +211,7 @@ class User extends Content
                             "value" => "",
                             "placeholder" => "•••••••••",
                             "type" => "password",
-                            "id" => "password" . $this->getUniqid(),
+                            "id" => "currentpassword",
                             "style" => Style::INPUT_BASIC
                         ], 
                         write: true); ?>
@@ -225,7 +225,7 @@ class User extends Content
                             "value" => "",
                             "placeholder" => "•••••••••",
                             "type" => "password",
-                            "id" => "newpassword" . $this->getUniqid(),
+                            "id" => "newpassword",
                             "style" => Style::INPUT_BASIC
                         ], 
                         write: true); ?>
@@ -239,12 +239,12 @@ class User extends Content
                             "value" => "",
                             "placeholder" => "•••••••••",
                             "type" => "password",
-                            "id" => "repeatnewpassword" . $this->getUniqid(),
+                            "id" => "repeatnewpassword",
                             "style" => Style::INPUT_BASIC
                         ], 
                         write: true); ?>
 
-                        <div class="text-center"><a class="btn btn-sm btn-border-main" onclick="User.updatePassword(<?=$this->getUniqid()?>);">Modifier</a></div>
+                        <div class="text-center mt-3"><a class="btn btn-sm btn-border-main" onclick="User.updatePassword('<?=$this->getUniqid()?>');">Modifier</a></div>
                     </div>
                     <?php return ob_get_clean();
                 

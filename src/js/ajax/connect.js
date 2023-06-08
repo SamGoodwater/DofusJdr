@@ -140,4 +140,34 @@ class Connect {
             "json"
         ); 
     }
+    static passwordForgotten(){
+        $("#onloadDisplay").show("slow");
+        
+        var URL = 'index.php?c=connect&a=passwordForgotten';
+        var mail = $('#modalPasswordForgotten #email').val();
+        $('#display_error').text("");
+        
+        $.post(URL,
+            {
+                mail:mail
+            },
+            function(data, status)
+            {
+                if(data.script != ""){
+                    $('body').append("<script>"+data.script+"</script>");
+                }
+                if(data.state){
+                    $("#userVisual").html(data.value.header);
+                    Page.build(Page.RESPONSIVE, data.value.title,  data.value.modal, data.value.size, false);
+                    $('#modalPasswordForgotten #email').val("");
+                    MsgAlert("Mot de passe oublié", 'Un mail vous a été envoyé', "green" , 4000);
+                } else {
+                    $('#display_error').text(data.error);
+                    MsgAlert("Echec de l'ajout", 'Erreur : ' + data.error, "danger" , 4000);
+                }
+                $("#onloadDisplay").hide("slow");
+            },
+            "json"
+        ); 
+    }
 }

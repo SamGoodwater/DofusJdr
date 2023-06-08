@@ -10,7 +10,7 @@
 
 <div class="mb-3">
     <div class="row g-0">
-        <div class="col-auto"><?=$obj->getFile('img', new Style(['format' => Content::FORMAT_EDITABLE, "class" => "img-back-200"]))?></div>
+        <div class="col-auto selector-image-main"><?=$obj->getFile('img', new Style(['format' => Content::FORMAT_EDITABLE, "class" => "img-back-200"]))?></div>
         <div class="col m-2">
             <div class="row">
                 <div class="col">

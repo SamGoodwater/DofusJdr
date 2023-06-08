@@ -22,6 +22,17 @@ class UserManager extends Manager
             return array();
         }
     }
+    public function getAllAdmins(){
+        $requete = "SELECT * FROM user WHERE is_admin = 1";    
+        $req = $this->_bdd->prepare($requete);
+        $req->execute();
+        $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        if(!empty($ret)){
+            return $this->bdd2objects($ret);
+        } else {
+            return array();
+        }
+    }
     public function getFromId($id){
         $post = $this->_bdd->prepare('SELECT * FROM user WHERE id = ?');
         $post->execute(array($id));

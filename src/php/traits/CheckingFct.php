@@ -14,7 +14,7 @@ trait CheckingFct
         }
     }
     function isEmail($email){
-        if (preg_match("#^[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]+@[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]{2,}\.[a-z]{2,4}$#", $email)){
+        if(preg_match("#^[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]+@[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]{2,}\.[a-z]{2,4}$#", $email)){
             return true;
         }else{
             return false;
@@ -42,7 +42,7 @@ trait CheckingFct
             return false;
         }
     }
-    function isNumeroTel($numero){
+    function isPhoneNumber($numero){
         if (preg_match("#^\+[0-9]{6,20}$#", $numero)){
             return true;
         }else{

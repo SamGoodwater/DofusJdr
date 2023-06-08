@@ -12,7 +12,7 @@
     <p class='size-0-7 m-1'>PNJ <?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$obj->getTimestamp_updated(Content::DATE_FR);?></p>
     <div class="row m-2">
         <div class="col-auto">
-            <div><?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_EDITABLE]))?></div>
+            <div class="selector-image-main"><?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_EDITABLE]))?></div>
         </div>
         <div class="col-auto">
             <h6 class="text-center">Classe</h6>

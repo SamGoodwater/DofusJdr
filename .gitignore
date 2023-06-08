@@ -12,3 +12,6 @@ medias/safeDir/token.txt
 *.css.map
 *.sass.map
 *.scss.map
+.src/php/settings.php
+src/php/settings.php
+src/php/settings.php

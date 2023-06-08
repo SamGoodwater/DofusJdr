@@ -23,7 +23,11 @@ class Controller {
             function(data, status)
             {
                 if(data.state){
-                    Page.build(Page.RESPONSIVE, data.value.title, data.value.visual, Page.SIZE_XL, true);
+                    let bubbleId = ""; 
+                    if(data.value.bubbleId != ""){
+                        bubbleId = data.value.bubbleId;
+                    }
+                    Page.build(Page.RESPONSIVE, data.value.title, data.value.visual, Page.SIZE_XL, true, bubbleId);
                 } else {
                     MsgAlert("Impossible de récupérer l'élément", 'Erreur : ' + data.error, "danger" , 4000);
                 }

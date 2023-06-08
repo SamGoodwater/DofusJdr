@@ -295,22 +295,15 @@
 .icon{
     width: 20px;
     background-color: transparent;
-}
-.icon-xs{
-    width: 10px;
-    background-color: transparent;
-}
-.icon-sm{
-    width: 15px;
-    background-color: transparent;
-}
-.icon-lg{
-    width: 30px;
-    background-color: transparent;
-}
-.icon-xl{
-    width: 40px;
-    background-color: transparent;
+    &-xs{
+        width: 10px;
+    }
+    &-sm{
+        width: 15px;
+    }
+    &-lg{
+        width: 30px;
+    }
 }
 .text-under-img {
     text-align: center;

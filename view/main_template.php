@@ -168,19 +168,24 @@
     </div>
 
     <div class="offcanvas offcanvas-start back-main-l-4" data-bs-scroll="true" tabindex="-1" id="offcanvasbookmark" aria-labelledby="offcanvasbookmark">
-            <div class="offcanvas-header">
-                <a id="back-bookmark" class="btn-text-main size-1-4 me-2" onclick="User.getBookmark();"><i class="fas fa-chevron-circle-left"></i></a>
-                <h2 class="offcanvas-title text-secondary-d-2"></h2>
-                <div>
-                    <a id="btn-fullscreen" title="Agrandir" class="btn-text-main size-1-4" onclick="Page.offCanvasFullscreen();"><i class="fas fa-expand"></i></a>
-                    <button type="button" title="Fermer le Grimoire (Echap)" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
+        <div class="offcanvas-header">
+            <a id="back-bookmark" class="btn-text-main size-1-4 me-2" onclick="User.getBookmark();"><i class="fas fa-chevron-circle-left"></i></a>
+            <h2 class="offcanvas-title text-secondary-d-2"></h2>
+            <div>
+                <a id="btn-fullscreen" title="Agrandir" class="btn-text-main size-1-4" onclick="Page.offCanvasFullscreen();"><i class="fas fa-expand"></i></a>
+                <button type="button" title="Fermer le Grimoire (Echap)" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div class="offcanvas-body row border-none border-solid border-main-l-2-hover border-right-5 border-main-l-3 p-2 m-0" id="offCanvas_zone_resizable">
-                <div id="offcanvas-content" class="col">
+        </div>
+        <div class="offcanvas-body row border-none border-solid border-main-l-2-hover border-right-5 border-main-l-3 p-2 m-0" id="offCanvas_zone_resizable">
+            <div id="offcanvas-content" class="col">
 
-                </div>
             </div>
+        </div>
+    </div>
+
+    <div id="bubbleshorcut" class="bubbleshorcut">
+        <div class="bubbleshorcut_item show"></div>
+        <a title="Cacher les bulles de raccourcis" class="bubbleshorcut__button_dropdown active" onclick="Bubbleshortcut.dropdownToogle();"><i class="fas fa-caret-down"></i></a> 
     </div>
 
     <div id="modal" class="modal" tabindex="-1">
@@ -188,6 +193,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title w-100"></h2>
+                    <a class="modal__bubbleshortcut_toggle mx-2" onclick=""></a>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -200,7 +206,7 @@
         <div class="mx-5 d-flex flex-column-reverse flex-md-row align-items-center">
             <div>
                 <p>Ce site recquière l'utilisation de certains cookies pour fonctionner, d'autres sont optionnelles. Lesquels acceptes-vous ?</p>
-                <ul>
+                <ul class="list-unstyled">
                     <li>
                         <div class="form-check">
                             <input class="form-check-input form-control-main-focus back-main-l-2 border-main" type="checkbox" id="cookie-requisite" checked disabled>
@@ -280,6 +286,15 @@
                 Page.show("home");
             }
             Connect.getHeader(false);
+
+            const modal = document.getElementById('modal');
+            modal.addEventListener('hidden.bs.modal', event => {
+                let bubbleId = $(".modal__bubbleshortcut_toggle").attr('onclick');
+                bubbleId = bubbleId.split("'")[1];
+                if(Bubbleshortcut.existFromBubbleId(bubbleId)){
+                    Bubbleshortcut.update(bubbleId);
+                }
+            });
             
             // Redimensionnement de la zone de bookmark #offcanvasbookmark grâce à la souris et au clic et à la zone #offCanvas_zone_resizable avec un min de 350px et un max de la largeur de l'écran
             $("#offCanvas_zone_resizable").resizable({

@@ -10,7 +10,7 @@
 
 <div class="card mb-3">
     <div class="row g-0">
-        <div class="col-auto">
+        <div class="col-auto selector-image-main">
             <?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_EDITABLE, "class" => "img-back-200"]))?>
             <div class="text-center mt-2">
                 <?=$obj->getPowerful(Content::FORMAT_BADGE)?>

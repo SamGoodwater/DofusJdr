@@ -50,7 +50,7 @@ class User extends Controller{
             {},
             function(data, status)
             {
-                Page.buildOffcanvas("Grimoire", data.visual, Page.PLACEMENT_TOP, show);
+                Page.buildOffcanvas("Grimoire", data.visual, Page.PLACEMENT_START, show);
                 $("#onloadDisplay").hide("slow");
             },
             "json"
@@ -106,12 +106,12 @@ class User extends Controller{
     }
 
     static updatePassword(uniqid){
-        var URL = 'index.php?c=user&a=updatePassword';
-        var current_password = $('#modalUpdatePassword #password'.uniqid).val();
-        var password = $('#modalUpdatePassword #newpassword'.uniqid).val();
-        var password_repeat = $('#modalUpdatePassword #newpassword_repeat' . uniqid).val();
+        let URL = 'index.php?c=user&a=updatePassword';
+        let current_password = $('#modal #currentpassword').val();
+        let new_password = $('#modal #newpassword').val();
+        let password_repeat = $('#modal #repeatnewpassword').val();
 
-        if(password == "" || password_repeat	== ""){
+        if(new_password == "" || password_repeat	== ""){
             $('#display_error').text("Veuillez remplir tous les champs");
             return false;
         }
@@ -132,9 +132,9 @@ class User extends Controller{
                 }
                 if(data.state){
                     MsgAlert("Modification du mot de passe", "Le mot de passe a bien été modifié.", "green" , 3000);
-                    $('#modalUpdatePassword #password').val("");
-                    $('#modalUpdatePassword #password_repeat').val("");
-                    $('#modalUpdatePassword').modal("hide");
+                    $('#modal #currentpassword').val("");
+                    $('#modal #repeatnewpassword').val("");
+                    $('#modal').modal("hide");
                 } else {
                     $('#display_error').text(data['error']);
                     MsgAlert("Echec de la modification", 'Erreur : ' + data.error, "danger" , 4000);

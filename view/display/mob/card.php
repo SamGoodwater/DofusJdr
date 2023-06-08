@@ -10,7 +10,7 @@
 
 <div class="card mb-3" id="mob<?=$obj->getUniqid()?>">
     <div class="row g-0">
-        <div class="col-auto">
+        <div class="col-auto selector-image-main">
             <a style="position:relative;top:5px;left:5px;" href="<?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>" download="<?=$obj->getName().'.'.substr(strrchr($obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
             <?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-200"]))?>
         </div>

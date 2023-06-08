@@ -20,6 +20,9 @@ abstract class Controller{
 
   const DIR_IMG = "";
 
+  protected $obj = null;
+  protected $obj_old = null;
+
   protected $_model_name = "";
   protected $_manager_name = "";
   public function __construct(){
@@ -71,7 +74,8 @@ abstract class Controller{
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
             $return['value'] = array(
               'visual' => $obj->getVisual($display),
-              "title" => $obj->getName($display)
+              "title" => $obj->getName($display),
+              "bubbleId" => strtolower(get_class($obj)) . $obj->getUniqid()
             );
             $return['state'] = true;
           }else {
@@ -103,15 +107,27 @@ abstract class Controller{
 
             if($manager->existsUniqid($_REQUEST['uniqid'])){
 
-              $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
+              $this->obj = $manager->getFromUniqid($_REQUEST['uniqid']);
                 $method = "set".ucfirst($_REQUEST['type']);
 
-                if(method_exists($obj,$method)){
-                    $result = $obj->$method($_REQUEST['value']);
+                if(method_exists($this->obj,$method)){
+                    $this->obj_old = clone $this->obj;
+                    // Avant avoir terminé la mise à jour, vérifiez si la classe fille a un événement spécifique à déclencher
+                    if(method_exists($this, 'eventBeforeUpdate')) {
+                      $this->eventBeforeUpdate();
+                    }
+
+                    $result = $this->obj->$method($_REQUEST['value']);
                     if($result){
-                      $obj->setTimestamp_updated(time());
-                      $manager->update($obj);
+                      $this->obj->setTimestamp_updated(time());
+                      $manager->update($this->obj);
                       $return['state'] = true;
+
+                      // Après avoir terminé la mise à jour, vérifiez si la classe fille a un événement spécifique à déclencher
+                      if(method_exists($this, 'eventAfterUpdate')) {
+                          $this->eventAfterUpdate();
+                      }
+
                     } else {
                       $return['error'] = $result;
                     }

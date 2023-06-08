@@ -2,45 +2,44 @@ class Page extends Controller{
 
     static MODEL_NAME = "page";
 
-    SIZE_SM = 576;
-    SIZE_MD = 768;
-    SIZE_LG = 993;
-    SIZE_XL = 1200;
-    SIZE_XXL = 1400;
-    SIZE_FL = -1;
+    static SIZE_SM = 576;
+    static SIZE_MD = 768;
+    static SIZE_LG = 993;
+    static SIZE_XL = 1200;
+    static SIZE_XXL = 1400;
+    static SIZE_FL = -1;
 
-    PLACEMENT_START = "start";
-    PLACEMENT_END = "end";
-    PLACEMENT_BOTTOM = "bottom";
-    PLACEMENT_TOP = "top";
+    static PLACEMENT_START = "start";
+    static PLACEMENT_END = "end";
+    static PLACEMENT_BOTTOM = "bottom";
+    static PLACEMENT_TOP = "top";
 
-    RESPONSIVE = "responsive";
+    static RESPONSIVE = "responsive";
 
     // Changement de Nom de build à build
-    static build(is_modal = true, title, content, size = this.SIZE_MD, show = false){
-
+    static build(is_modal = true, title, content, size = Page.SIZE_MD, show = false, bubbleId = null){
         switch (size) {
             case "sm":
-                size = this.SIZE_SM;    
+                size = Page.SIZE_SM;    
             break;
             case "md":
-                size = this.SIZE_MD;    
+                size = Page.SIZE_MD;    
             break;
             case "lg":
-                size = this.SIZE_LG;    
+                size = Page.SIZE_LG;    
             break;
             case "xl":
-                size = this.SIZE_XL;
+                size = Page.SIZE_XL;
             break;
             case "xxl":
-                size = this.SIZE_XXL;    
+                size = Page.SIZE_XXL;    
             break;
             case "fl":
-                size = this.SIZE_FL;    
+                size = Page.SIZE_FL;    
             break;
         }
 
-        if(size >= this.SIZE_XXL && is_modal){size = this.SIZE_XL;} // XXL is not supported by bootstrap modal
+        if(size >= Page.SIZE_XXL && is_modal){size = Page.SIZE_XL;} // XXL is not supported by bootstrap modal
 
         var clone = null;
         if (content.jquery) {
@@ -52,8 +51,8 @@ class Page extends Controller{
             clone = content;
           }
 
-        if(is_modal == this.RESPONSIVE){
-            if(getSizeScreen() <= this.SIZE_MD) {
+        if(is_modal == Page.RESPONSIVE){
+            if(getSizeScreen() <= Page.SIZE_MD) {
                 is_modal = false;
             } else {
                 is_modal = true;
@@ -66,16 +65,16 @@ class Page extends Controller{
             $("#modal .modal-dialog").removeClass("modal-sm");
             $("#modal .modal-dialog").removeClass("modal-fullscreen");
             switch (size) {
-                case this.SIZE_XL:
+                case Page.SIZE_XL:
                     $("#modal .modal-dialog").addClass("modal-xl");
                 break;
-                case this.SIZE_LG:
+                case Page.SIZE_LG:
                     $("#modal .modal-dialog").addClass("modal-lg");
                 break;
-                case this.SIZE_SM:
+                case Page.SIZE_SM:
                     $("#modal .modal-dialog").addClass("modal-sm");
                 break;
-                case this.SIZE_FL:
+                case Page.SIZE_FL:
                     $("#modal .modal-dialog").addClass("modal-fullscreen");
                 break;
             }
@@ -84,6 +83,19 @@ class Page extends Controller{
             $("#modal .modal-body").html("");
             $("#modal .modal-title").html(title);
             $("#modal .modal-body").html(clone);
+            if(bubbleId != null){
+                $(".modal__bubbleshortcut_toggle").show();
+
+                if(Bubbleshortcut.existFromBubbleId(bubbleId)){
+                    $(".modal__bubbleshortcut_toggle").addClass("listed");
+                    $(".modal__bubbleshortcut_toggle").attr("onclick", "Bubbleshortcut.remove('"+bubbleId+"')");
+                } else {
+                    $(".modal__bubbleshortcut_toggle").removeClass("listed");
+                    $(".modal__bubbleshortcut_toggle").attr("onclick", "Bubbleshortcut.update('"+bubbleId+"')");
+                }
+            } else {
+                $(".modal__bubbleshortcut_toggle").hide();
+            }
 
             if(show){
                 $('#modal').modal('hide');
@@ -107,20 +119,20 @@ class Page extends Controller{
         }
     }
 
-    static buildOffcanvas(title, content, placement = this.PLACEMENT_START, show = false, displayBack = false){
+    static buildOffcanvas(title, content, placement = Page.PLACEMENT_START, show = false, displayBack = false){
 
         $("#offcanvasbookmark").removeClass("offcanvas-start").removeClass("offcanvas-end").removeClass("offcanvas-bottom").removeClass("offcanvas-top");
         switch (placement) {
-            case this.PLACEMENT_START:
+            case Page.PLACEMENT_START:
                 $("#offcanvasbookmark").addClass("offcanvas-start");
             break;
-            case this.PLACEMENT_END:
+            case Page.PLACEMENT_END:
                 $("#offcanvasbookmark").addClass("offcanvas-end");
             break;
-            case this.PLACEMENT_BOTTOM:
+            case Page.PLACEMENT_BOTTOM:
                 $("#offcanvasbookmark").addClass("offcanvas-bottom");
             break;
-            case this.PLACEMENT_TOP:
+            case Page.PLACEMENT_TOP:
                 $("#offcanvasbookmark").addClass("offcanvas-top");
             break;
             default:
@@ -274,7 +286,7 @@ class Page extends Controller{
 
     static showSearchbar(){
         var html = $("#globalsearch").parent().html();
-        Page.build(Page.RESPONSIVE, "Recherche", html, this.SIZE_SM, true);
+        Page.build(Page.RESPONSIVE, "Recherche", html, Page.SIZE_SM, true);
         autocomplete_load("#modal #globalsearch");
     }
 
