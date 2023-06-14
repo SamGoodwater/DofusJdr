@@ -15,6 +15,10 @@ class Page extends Controller{
     static PLACEMENT_TOP = "top";
 
     static RESPONSIVE = "responsive";
+    
+    constructor() {
+        this.table_indexes_row_to_child = [];
+    }
 
     // Changement de Nom de build à build
     static build(is_modal = true, title, content, size = Page.SIZE_MD, show = false, bubbleId = null){
@@ -288,11 +292,6 @@ class Page extends Controller{
         var html = $("#globalsearch").parent().html();
         Page.build(Page.RESPONSIVE, "Recherche", html, Page.SIZE_SM, true);
         autocomplete_load("#modal #globalsearch");
-    }
-
-
-    constructor() {
-        this.table_indexes_row_to_child = [];
     }
 
     showRow(uniqid) {

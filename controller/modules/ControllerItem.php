@@ -1,5 +1,5 @@
 <?php
-class ControllerItem extends Controller{
+class ControllerItem extends ControllerModule{
 
   public function count(){
     $return = [
@@ -286,6 +286,9 @@ class ControllerItem extends Controller{
             foreach ($items  as $object) {
                 $click_action = "";
                 switch ($action) {
+                  case ControllerSearch::SEARCH_DONE_ADD_TO_BOOKMARK:
+                    $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                  break;
                   case ControllerSearch::SEARCH_DONE_ADD_ITEM_TO_SHOP:
                     $click_action = "onclick=\"Shop.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'item', IS_VALUE);\"";
                   break;

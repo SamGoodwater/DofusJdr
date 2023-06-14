@@ -38,6 +38,7 @@ class Bubbleshortcut {
 
             $(".modal__bubbleshortcut_toggle").removeClass("listed");
             $(".modal__bubbleshortcut_toggle").attr("onclick", "Bubbleshortcut.update('"+bubbleId+"')");
+            $(".modal__bubbleshortcut_toggle").attr("title", "Ajouter cette bulle de raccourcis");
             
         } else {
             // add
@@ -58,6 +59,7 @@ class Bubbleshortcut {
 
             $(".modal__bubbleshortcut_toggle").addClass("listed");
             $(".modal__bubbleshortcut_toggle").attr("onclick", "Bubbleshortcut.remove('"+bubbleId+"')");
+            $(".modal__bubbleshortcut_toggle").attr("title", "Enlever cette bulle de raccourcis");
         }
     }
     static remove(bubbleId){

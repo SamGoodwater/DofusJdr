@@ -37,6 +37,52 @@ jQuery(document).ready(function($) {
 	
 });
 
+$(document).ready(function() {
+    $(window).resize(function() {
+        if ($(window).width() < 992) {
+            $(".app").addClass("app-compacted");
+        } else {
+            $(".app").removeClass("app-compacted");
+        }
+    });
+
+	// Ce code permet de détecter si des touches sont enfoncés et de jouer des fonctions.
+	var keys = {};
+	$(window).on("keyup keydown", function (e) {
+		keys[e.keyCode] = e.type === 'keydown';
+
+		// Remplacer les numéros par les touches correspondantes disponible sur ce site : https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
+		// Mettre si le raccourcis est déjà prit par le navigateur e.preventDefault();
+
+		// ctrl + b -> ouvre le bookmark
+		if(keys[17] && keys[66]) {
+			User.getBookmark();
+			keys = {};
+		}
+	});
+
+	
+	const modal = document.getElementById('modal');
+	modal.addEventListener('hidden.bs.modal', event => {
+		let bubbleId = $(".modal__bubbleshortcut_toggle").attr('onclick');
+		bubbleId = bubbleId.split("'")[1];
+		if(Bubbleshortcut.existFromBubbleId(bubbleId)){
+			Bubbleshortcut.update(bubbleId);
+		}
+	});
+	
+	// Redimensionnement de la zone de bookmark #offcanvasbookmark grâce à la souris et au clic et à la zone #offCanvas_zone_resizable avec un min de 350px et un max de la largeur de l'écran
+	$("#offCanvas_zone_resizable").resizable({
+		handles: "e",
+		minWidth: 350,
+		maxWidth: $(window).width() - 50,
+		resize: function (event, ui) {
+			$("#offcanvasbookmark").css("width", ui.size.width);
+			$("#offcanvasbookmark").css("max-width", ui.size.width);
+		}
+	});
+});
+
 function init() {
 
 	// Fonctionne pas - sencé recharge la page quand on revient en arrière dans l'historique du navigateur
@@ -69,58 +115,5 @@ function init() {
 	});
 
 	$('[data-toggle="tooltip"]').tooltip();
+	
 }
-
-// Ce code permet de détecter si des touches sont enfoncés et de jouer des fonctions.
-var keys = {};
-$(window).on("keyup keydown", function (e) {
-	keys[e.keyCode] = e.type === 'keydown';
-
-	// Remplacer les numéros par les touches correspondantes disponible sur ce site : https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
-	// Mettre si le raccourcis est déjà prit par le navigateur e.preventDefault();
-
-	// ctrl + b -> ouvre le bookmark
-	if(keys[17] && keys[66]) {
-		User.getBookmark();
-		keys = {};
-	}
-});
-
-function toogleToolbar($forced_hidden = false){
-	if($('.app-toolbar-content').hasClass('hidden') == false || $forced_hidden){
-		$(".app-toolbar-content").addClass("hidden");
-		$(".app-btn-show-toolbar-footer").show("blind", 300);
-		$(".dropdown-item-toogletoolbar-button").text("Afficher la barre d'outils");
-	} else {
-		$(".app-toolbar-content").removeClass("hidden");
-		$(".app-btn-show-toolbar-footer").hide("blind", 300);
-		$(".dropdown-item-toogletoolbar-button").text("Masquer la barre d'outils");
-	}
-}
-function toogleFooter($forced_hidden = false){
-	if($('footer').hasClass('hidden') || $forced_hidden){
-		$("footer").addClass("hidden");
-		$("footer").hide("blind", 300);
-	} else {
-		$("footer").removeClass("hidden");
-		$("footer").show("blind", 300);
-	}
-}
-function toogleMenu($forced_closed = false){
-	if($('.app').hasClass('app-extend') || $forced_closed){
-		$(".app").removeClass("app-extend").addClass("app-fold");
-		$(".app-nav").hide("drop", 300);
-	} else {
-		$(".app").removeClass("app-fold").addClass("app-extend");
-		$(".app-nav").show("drop", 300);
-	}
-}
-$(document).ready(function() {
-    $(window).resize(function() {
-        if ($(window).width() < 992) {
-            $(".app").addClass("app-compacted");
-        } else {
-            $(".app").removeClass("app-compacted");
-        }
-    });
-});

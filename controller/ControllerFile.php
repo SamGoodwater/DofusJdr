@@ -14,7 +14,7 @@ class ControllerFile extends Controller{
       'script' => ""
     ];
     $currentUser = ControllerConnect::getCurrentUser();
-    if(!$currentUser->getRight('item', User::RIGHT_WRITE)){
+    if(!$currentUser->getRight('file', User::RIGHT_WRITE)){
       $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
 
       if(!isset($_REQUEST['path'])){

@@ -1,5 +1,5 @@
 <?php
-class ControllerShop extends Controller{
+class ControllerShop extends ControllerModule{
   public function count(){
     $return = [
       'state' => false,
@@ -256,6 +256,9 @@ class ControllerShop extends Controller{
             foreach ($objects as $object) {
                 $click_action = "";
                 switch ($action) {
+                  case ControllerSearch::SEARCH_DONE_ADD_TO_BOOKMARK:
+                    $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                  break;
                   default:
                     $click_action = "onclick=\"Shop.open('".$object->getUniqid()."');\"";
                   break;

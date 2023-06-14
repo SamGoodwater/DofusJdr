@@ -156,6 +156,8 @@ class Router {
                         "https://cdn.jsdelivr.net/npm/amplitudejs@5.3.2/dist/amplitude.js", // Amplitude JS, outil d'aide à la création d'un lecteur
                         "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js", // Fancybox
                         "src/js/", // Ini et function
+                        "src/js/functions",
+                        "src/js/modules",
                         "src/js/plugin/upload/",
                         "src/js/ajax/",
                         "src/js/ajax/modules",

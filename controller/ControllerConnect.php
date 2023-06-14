@@ -34,7 +34,7 @@ class ControllerConnect extends Controller{
             }
             return new User([
                 'pseudo' => 'guest',
-                'rights' => User::RIGHT
+                'rights' => Module::USER_RIGHT
             ]);
         }
         static function setCurrentUser(User $user){
@@ -50,7 +50,7 @@ class ControllerConnect extends Controller{
                     } elseif(preg_match('/^connexion:(1|0|true|false)$/mi', $cookie, $matches)){
                         $user->setCookie(User::COOKIE_CONNEXION, $matches[1]);
                     }elseif(preg_match('/^bookmark:(1|0|true|false)$/mi', $cookie, $matches)){
-                        $user->setCookie(User::COOKIE_GRIMOIRE, $matches[1]);
+                        $user->setCookie(User::COOKIE_BOOKMARK, $matches[1]);
                     }
                 }
             }
@@ -138,7 +138,7 @@ class ControllerConnect extends Controller{
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item dropdown-item-toogletoolbar-button" onclick="toogleToolbar();">Masquer la barre d'outils</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" onclick="Connect.disconnect();">Deconnexion</a></li>
+                            <li><a class="dropdown-item back-secondary-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
                         </ul>
                     </div>
                     <?php $return["header"] = ob_get_clean();
@@ -170,7 +170,7 @@ class ControllerConnect extends Controller{
                                     <li><a class="dropdown-item" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
                                 <?php } ?>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" onclick="Connect.disconnect();">Deconnexion</a></li>
+                                <li><a class="dropdown-item back-secondary-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
                             </ul>
                         </div>
                     <?php $return["header_mobile"] = ob_get_clean();
@@ -222,8 +222,9 @@ class ControllerConnect extends Controller{
                                 <input required type="password" class="form-control form-control-main-focus" id="password" placeholder="Mot de passe ou Passe-phrase">
                                 <label for="password">Mot de passe ou Passe-phrase</label>
                             </div>
+                            <?php $disabled=""; if(!$user->getCookie(User::COOKIE_CONNEXION)){$disabled="disabled title='Cette fonctionnalité resquière l\'utilisation d'un cookie de connexion.'";}?>
                             <div class="form-check text-left">
-                                <input class="form-check-input form-control-main-focus back-main-l-2 border-main" type="checkbox" value="" id="remember">
+                                <input class="form-check-input form-control-main-focus back-main-l-2 border-main" type="checkbox" value="" <?=$disabled?> id="remember">
                                 <label class="form-check-label" for="remember">Garder la connexion</label>
                             </div>
                             <p class="size-0-8 text-grey-d-1 text-left"><i class="fas fa-question-circle"></i> Cette fonctionnalité resquière l'utilisation d'un cookie de connexion.</p>
@@ -301,7 +302,7 @@ class ControllerConnect extends Controller{
             $old_user = self::getCurrentUser();
             $cookie_requisite = $old_user->getCookie(User::COOKIE_REQUISITE);
             $cookie_connexion = $old_user->getCookie(User::COOKIE_CONNEXION);
-            $cookie_bookmark = $old_user->getCookie(User::COOKIE_GRIMOIRE);
+            $cookie_bookmark = $old_user->getCookie(User::COOKIE_BOOKMARK);
 
             $ControllerConnect = new ControllerConnect();
             if(ControllerConnect::isConnect() && !empty($old_user->getEmail())){
@@ -312,6 +313,10 @@ class ControllerConnect extends Controller{
                     $UserManager = new UserManager();
                     $user = $UserManager->getMatch($_REQUEST['email'],$_REQUEST['password']);
                     if(is_object($user)){
+                        $user->setCookie(User::COOKIE_REQUISITE, $cookie_requisite);
+                        $user->setCookie(User::COOKIE_CONNEXION, $cookie_connexion);
+                        $user->setCookie(User::COOKIE_BOOKMARK, $cookie_bookmark);
+                        ControllerConnect::setCurrentUser($user);
                         $ControllerConnect->connectUser($user);
                         if(isset($_REQUEST['remember'])){
                             if($_REQUEST['remember'] == true && $user->getCookie(User::COOKIE_CONNEXION)){
@@ -365,8 +370,8 @@ class ControllerConnect extends Controller{
             if(isset($_REQUEST['connexion'], $_REQUEST['bookmark'])){
                 $user = ControllerConnect::getCurrentUser();
                 $user->setcookie(User::COOKIE_REQUISITE, true);
-                $user->setcookie(User::COOKIE_CONNEXION, $this->returnBool($_REQUEST['connexion']));
-                $user->setcookie(User::COOKIE_GRIMOIRE, $this->returnBool($_REQUEST['bookmark']));
+                $user->setcookie(User::COOKIE_CONNEXION, $_REQUEST['connexion']);
+                $user->setcookie(User::COOKIE_BOOKMARK, $_REQUEST['bookmark']);
                 ControllerConnect::setCurrentUser($user);
                 $return["cookie"]["preference"] = "requisite:true|connexion:".$_REQUEST['connexion']."|bookmark:".$_REQUEST['bookmark'];
                 $time = time() + (60 * 60 * 24 * 7 * 4 * 6); // 6 mois
@@ -384,7 +389,6 @@ class ControllerConnect extends Controller{
                 $user->setLast_connexion(time());
                 $manager->update($user);
                 ControllerConnect::setCurrentUser($user);
-                new AlertManager(new Alert("Dernière connexion de " . $user->getPseudo(),"Dernière connexion le " . $user->getLast_connexion(Content::DATE_FR) . " à " .  $user->getLast_connexion(Content::TIME_FR),"",Alert::ALERT_INFO,6000));
                 return true;
         }
 
@@ -416,7 +420,7 @@ class ControllerConnect extends Controller{
                             $mail = new Mail();
                             $mail->setTo($user->getEmail());
                             $mail->setSubject("Mot de passe oublié- ". $GLOBALS["project"]["name"]);
-                            $mail->setTemplate(Mail::TEMPLATE_PASSWORD_FORGOTTEN, 
+                            $mail->setTemplate("view/mails/password_forgotten.php", 
                               [
                                 "mail" => $user->getEmail(),
                                 "password" => $password
@@ -433,7 +437,7 @@ class ControllerConnect extends Controller{
               
                   echo json_encode($return);
                   flush();
-            }
+        }
         
         
 }

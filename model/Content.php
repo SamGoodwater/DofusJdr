@@ -2,7 +2,7 @@
 
 abstract class Content
 {
-    use CheckingFct, SecurityFct;
+    use CheckingFct, SecurityFct, CalcFct, StringFct;
     
     //Format GETTERS
 
@@ -49,7 +49,8 @@ abstract class Content
     // const FILES = [
     //     "img" => [
     //         "type" => FileManager::FORMAT_IMG,
-    //         "default" => "medias/classes/default.png",
+    //         "default" => "medias/modules/classes/default.png",
+    //         "default_editable" => "medias/modules/classes/default_[type].png",
     //         "dir" => "medias/classes/",
     //         "preferential_format" => "png",
     //         'naming' => "[uniqid]"
@@ -93,7 +94,16 @@ abstract class Content
                     }
                     if(file_exists($path)){
                         $this->_files[$name] = new File($path);
-                    } elseif(file_exists($data["default"])) {
+                    }elseif(isset($data["default_editable"])){
+                        $path = FileManager::solveNameFromPaternAndObject($this,$data['default_editable']);
+                        if(file_exists($path)){
+                            $this->_files[$name] = new File($path);
+                        }elseif(file_exists($data["default"])) {
+                            $this->_files[$name] = new File($data["default"]);
+                        } else {
+                            $this->_files[$name] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                        }
+                    }elseif(file_exists($data["default"])) {
                         $this->_files[$name] = new File($data["default"]);
                     } else {
                         $this->_files[$name] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
@@ -102,17 +112,17 @@ abstract class Content
             }
         }
     }
-
     protected function hydrate(array $donnees){
         foreach($donnees as $champ => $valeur){
           $method = "set".ucfirst($champ);
 
-          if(method_exists($this,$method))
-          {
+          if(method_exists($this,$method)){
               $this->$method($this->securite($valeur));
           }
         }
     }
+
+    // GETTERS
     public function getId(int $format = Content::FORMAT_BRUT){
         switch ($format) {
             case Content::FORMAT_BADGE:
@@ -243,7 +253,7 @@ abstract class Content
                         data : [
                             "url" => "index.php?c=".strtolower($className)."&a=upload",
                             "uniqid" => $this->getUniqid(),
-                            "label" => "Modifier l'Image",
+                            "label" => "Modifier le fichier",
                             "view_img_path" => $file->getPath(),
                             "extention_available" => FileManager::getListeExtention(FileManager::FORMAT_IMG),
                             "name_file" => $name_file
@@ -257,6 +267,8 @@ abstract class Content
         }
         return $file->getVisual($style);
     }
+
+    // SETTERS
     public function setId($data){
         if($data > 0){
             $this->_id = $data;
@@ -326,7 +338,6 @@ abstract class Content
             case Content::DISPLAY_EDITABLE:
                 $template_name = $className."/editable";
             break;
-
             case  Content::DISPLAY_CARD:      
                 $template_name =  $className."/card";
             break;
@@ -350,135 +361,4 @@ abstract class Content
 
     }
 
-    static function removeSpecialCaractere(string | int $string){ // Enlève tout les accents et les caractères spéciaux
-        $caracteres = array('à' => 'a', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', '@' => 'a',
-        'È' => 'e', 'É' => 'e', 'Ê' => 'e', 'Ë' => 'e', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', '€' => 'e',
-        'Ì' => 'i', 'Í' => 'i', 'Î' => 'i', 'Ï' => 'i', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i',
-        'Ò' => 'o', 'Ó' => 'o', 'Ô' => 'o', 'Ö' => 'o', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'ö' => 'o',
-        'Ù' => 'u', 'Ú' => 'u', 'Û' => 'u', 'Ü' => 'u', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u', 'µ' => 'u',
-        'Œ' => 'oe', 'œ' => 'oe',
-        '$' => 's');
-        $string = strtr($string, $caracteres);
-        $string = preg_replace('#[^A-Za-z0-9]+#', '-', $string);
-        $string = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $string);
-        setlocale(LC_ALL, 'fr_FR');
-        $string = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $string);
-        $string = preg_replace('#[^0-9a-z]+#i', '_', $string);
-        while(strpos($string, '--') !== false)
-        {
-            $string = str_replace('--', '_', $string);
-        }
-        $string = trim($string, '_');
-
-        return $string;
-    }
-    static function getMinMaxFromFormule(string | int $formule){
-        $count_min = 0;
-        $count_max = 0;
-        $same = false;
-        if(!preg_match_all("/\[(.*)\]/i", $formule, $matches, PREG_SET_ORDER)){
-            $count_min = $formule;
-            $count_max = $formule;
-            $same = true;
-        }else{
-            $formule = str_replace(' ', '', $matches[0][1]);
-                if(preg_match_all("/(\d{1,}d\d{1,})/i", $formule, $dices, PREG_SET_ORDER)){
-                    foreach ($dices as $dice) {
-                        $dice = explode('d', $dice[0]);
-                        $count_min += $dice[0];
-                        $count_max += $dice[0] * $dice[1];
-                    }
-                }
-                if(preg_match_all("/(\d{1,}-\d{1,})/i", $formule, $values, PREG_SET_ORDER)){
-                    foreach ($values as $value) {
-                        $value = explode('-', $value[0]);
-                        $count_min += $value[0];
-                        $count_max += $value[1];
-                    }
-                }
-                if(preg_match_all("/(\+\d{1,}|\d{1,}\+)/i", $formule, $additions, PREG_SET_ORDER)){
-                    foreach ($additions as $addition) {
-                        $addition = str_replace('+', '', $addition[0]);
-                        $count_min += $addition;
-                        $count_max += $addition;
-                    }
-                }
-                if(preg_match_all("/(Niveau.*(\/|\*)(\d{1,}))/i", $formule, $level, PREG_SET_ORDER)){
-                    $level = $level[0];
-                    if(is_integer(intval($level[3]))){
-                        if($level[2] == "/"){
-                            $count_min += round(1 / intval($level[3]));
-                            $count_max += round(20 / intval($level[3]));
-                        } elseif($level[2] == "*"){
-                            $count_min += round(1 * intval($level[3]));
-                            $count_max += round(20 * intval($level[3]));
-                        }
-                    }
-                } else {
-                    if(preg_match_all("/(Niveau.*)/i", $formule, $level, PREG_SET_ORDER)){
-                        $count_min += 1;
-                        $count_max += 20;
-                    }
-                }
-        }
-        
-        return [
-            'min' => $count_min,
-            'max' => $count_max,
-            "same" => $same
-        ];
-    }
-    static function getValueFromFormule(string | int $formule, string | int $var){
-        $var = intval(str_replace(' ', '', $var));
-        $val = 0;
-        if(!preg_match_all("/\[(.*)\]/i", $formule, $matches, PREG_SET_ORDER)){
-            $val = $formule;
-        }else{
-            $formule = str_replace(' ', '', $matches[0][1]);
-                if(preg_match_all("/niveau|level/i", $formule, $level, PREG_SET_ORDER)){
-                    $val += $var;
-                }
-                if(preg_match_all("/((\*|\/)(\d{1,})|(\d{1,})(\*|\/))/i", $formule, $multiplications, PREG_SET_ORDER)){
-                    foreach ($multiplications as $multiplication) {
-                        $multiplication = array_filter($multiplication);
-                        if(isset($multiplication[4]) && !isset($multiplication[2])){
-                            $multiplication[2] = $multiplication[4];
-                        }
-                        if(isset($multiplication[5]) && !isset($multiplication[3])){
-                            $multiplication[3] = $multiplication[5];
-                        }
-                        if($multiplication[2] == "*"){
-                            $val = $val * intval($multiplication[3]);
-                        } elseif($multiplication[2] == "/"){
-                            $val = $val / intval($multiplication[3]);
-                        } elseif($multiplication[3] == "*"){
-                            $val = $val * intval($multiplication[2]);
-                        } elseif($multiplication[3] == "/"){
-                            $val = $val / intval($multiplication[2]);
-                        }
-                    }
-                }
-                if(preg_match_all("/([^*\/](\+|\-)(\d{1,})|(\d{1,})(\+|\-))/i", $formule, $additions, PREG_SET_ORDER)){
-                    foreach ($additions as $addition) {
-                        $addition = array_filter($addition);
-                        if(isset($addition[4]) && !isset($addition[2])){
-                            $addition[2] = $addition[4];
-                        }
-                        if(isset($addition[5]) && !isset($addition[3])){
-                            $addition[3] = $addition[5];
-                        }
-                        if($addition[2] == "+"){
-                            $val += intval($addition[3]);
-                        } elseif($addition[2] == "-"){
-                            $val -= intval($addition[3]);
-                        } elseif($addition[3] == "+"){
-                            $val += intval($addition[2]);
-                        } elseif($addition[3] == "-"){
-                            $val -= intval($addition[2]);
-                        }
-                    }
-                }
-        }
-        return round(intval($val), 0, PHP_ROUND_HALF_DOWN);
-    }
 }

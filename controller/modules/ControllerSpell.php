@@ -1,5 +1,5 @@
 <?php
-class ControllerSpell extends Controller{
+class ControllerSpell extends ControllerModule{
   public function count(){
     $return = [
       'state' => false,
@@ -380,7 +380,6 @@ class ControllerSpell extends Controller{
     flush();
   }
 
-  public const SEARCH_DONE_REDIRECT = 0;
   public function search($term, $action = ControllerSearch::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
     $currentUser = ControllerConnect::getCurrentUser();
     if(!$currentUser->getRight('spell', User::RIGHT_READ)){
@@ -399,6 +398,9 @@ class ControllerSpell extends Controller{
             foreach ($objects as $object) {
                 $click_action = "";
                 switch ($action) {
+                  case ControllerSearch::SEARCH_DONE_ADD_TO_BOOKMARK:
+                    $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                  break;
                   case ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_MOB:
                     $click_action = "onclick=\"Mob.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'spell', IS_VALUE);\"";
                   break;

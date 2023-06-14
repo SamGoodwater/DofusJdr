@@ -207,7 +207,7 @@ trait ColorFct
     static function isValidColor($color){
         $color = Style::getColorWithoutShade($color);
 
-        if(in_array($color, Style::COLOR_ALLOWED) || isset(Style::COLOR_CUSTOM[$color])){
+        if(in_array($color, Style::COLOR_ALLOWED) || isset(Module::COLOR_CUSTOM[$color])){
             return true;
         } else {
             return false;

@@ -91,29 +91,29 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resumeattack"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resumedefend"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resumeres"></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="pa"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de point d'action"><img class='icon' src='medias/icons/pa.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="pm"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de point de mouvement"><img class='icon' src='medias/icons/pm.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de portée"><img class='icon' src='medias/icons/po.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="ini"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Initiative"><img class='icon' src='medias/icons/ini.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="touch"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de touche"><img class='icon' src='medias/icons/touch.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="pa"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de point d'action"><img class='icon' src='medias/icons/modules/pa.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="pm"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de point de mouvement"><img class='icon' src='medias/icons/modules/pm.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de portée"><img class='icon' src='medias/icons/modules/po.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="ini"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Initiative"><img class='icon' src='medias/icons/modules/ini.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="touch"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de touche"><img class='icon' src='medias/icons/modules/touch.png'></span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="hostility"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Agressivité"><i class='fas fa-tired text-main-d-2'></i></span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="size"></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="vitality"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Vitalité"><img class='icon' src='medias/icons/vitality.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="sagesse"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Sagesse"><img class='icon' src='medias/icons/sagesse.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="strong"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Force"><img class='icon' src='medias/icons/force.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="intel"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur d'Intelligence"><img class='icon' src='medias/icons/intel.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="agi"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur d'Agilité"><img class='icon' src='medias/icons/agi.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="chance"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Chance"><img class='icon' src='medias/icons/chance.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="ca"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de classe d'armure"><img class='icon' src='medias/icons/ca.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="fuite"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de fuite"><img class='icon' src='medias/icons/fuite.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="tacle"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de tacle"><img class='icon' src='medias/icons/tacle.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="dodge_pa"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PA"><img class='icon' src='medias/icons/dodge_pa.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="dodge_pm"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PM"><img class='icon' src='medias/icons/dodge_pm.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_neutre"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance neutre"><img class='icon' src='medias/icons/res_neutre.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_terre"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance terre"><img class='icon' src='medias/icons/res_terre.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_feu"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance feu"><img class='icon' src='medias/icons/res_feu.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_air"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance air"><img class='icon' src='medias/icons/res_air.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_eau"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance eau"><img class='icon' src='medias/icons/res_eau.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="vitality"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Vitalité"><img class='icon' src='medias/icons/modules/vitality.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="sagesse"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Sagesse"><img class='icon' src='medias/icons/modules/sagesse.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="strong"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Force"><img class='icon' src='medias/icons/modules/force.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="intel"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur d'Intelligence"><img class='icon' src='medias/icons/modules/intel.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="agi"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur d'Agilité"><img class='icon' src='medias/icons/modules/agi.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="chance"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Chance"><img class='icon' src='medias/icons/modules/chance.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="ca"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de classe d'armure"><img class='icon' src='medias/icons/modules/ca.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="fuite"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de fuite"><img class='icon' src='medias/icons/modules/fuite.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="tacle"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de tacle"><img class='icon' src='medias/icons/modules/tacle.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="dodge_pa"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PA"><img class='icon' src='medias/icons/modules/dodge_pa.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="dodge_pm"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Esquive PM"><img class='icon' src='medias/icons/modules/dodge_pm.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_neutre"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance neutre"><img class='icon' src='medias/icons/modules/res_neutre.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_terre"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance terre"><img class='icon' src='medias/icons/modules/res_terre.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_feu"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance feu"><img class='icon' src='medias/icons/modules/res_feu.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_air"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance air"><img class='icon' src='medias/icons/modules/res_air.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_eau"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance eau"><img class='icon' src='medias/icons/modules/res_eau.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="spell"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Sorts"><i class='fas fa-magic text-main-d-1'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="trait"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Traits">Traits</span></th>
                     <th data-sortable="false" data-visible="false"  data-field="description">Description</th>
@@ -153,27 +153,27 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <div class="my-2">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="intel">
-                    <label class="form-check-label" for="intel">Intelligence <img class='icon-sm' src='medias/icons/intel.png'></label>
+                    <label class="form-check-label" for="intel">Intelligence <img class='icon-sm' src='medias/icons/modules/intel.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="strong">
-                    <label class="form-check-label" for="strong">Force <img class='icon-sm' src='medias/icons/force.png'></label>
+                    <label class="form-check-label" for="strong">Force <img class='icon-sm' src='medias/icons/modules/force.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="chance">
-                    <label class="form-check-label" for="chance">Chance <img class='icon-sm' src='medias/icons/chance.png'></label>
+                    <label class="form-check-label" for="chance">Chance <img class='icon-sm' src='medias/icons/modules/chance.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="agi">
-                    <label class="form-check-label" for="agi">Agilité <img class='icon-sm' src='medias/icons/agi.png'></label>
+                    <label class="form-check-label" for="agi">Agilité <img class='icon-sm' src='medias/icons/modules/agi.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="sagesse">
-                    <label class="form-check-label" for="sagesse">Sagesse <img class='icon-sm' src='medias/icons/sagesse.png'></label>
+                    <label class="form-check-label" for="sagesse">Sagesse <img class='icon-sm' src='medias/icons/modules/sagesse.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="vitality">
-                    <label class="form-check-label" for="vitality">Vitalité <img class='icon-sm' src='medias/icons/vitality.png'></label>
+                    <label class="form-check-label" for="vitality">Vitalité <img class='icon-sm' src='medias/icons/modules/vitality.png'></label>
                 </div>
             </div>
             <div class="modal-footer d-flex flex-row justify-content-between">

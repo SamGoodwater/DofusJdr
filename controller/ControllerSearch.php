@@ -25,6 +25,7 @@ class ControllerSearch extends Controller{
   public const SEARCH_DONE_ADD_CAPABILITY_TO_CLASSE = 10;
   public const SEARCH_DONE_ADD_CAPABILITY_TO_NPC = 11;
   public const SEARCH_DONE_ADD_CAPABILITY_TO_MOB = 12;
+  public const SEARCH_DONE_ADD_TO_BOOKMARK = 13;
 
 
   public function search(){

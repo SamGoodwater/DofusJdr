@@ -2,10 +2,12 @@
 $GLOBALS['project'] = [
     "name" => "",
     "logo" => "medias/logos/logo.png",
-    "background-img" => "medias/logos/background.png",
+    "background_img" => "medias/logos/background.png",
     "logo_mini" => "medias/logos/logo_mini.svg",
+    "keywords" => "",
     "description" => "",
     "version" => "0",
+    "bookmark_name" => "Signet",
     "stability" => "α", // β ou α
     "stability_verbal" => "alpha",
     "author" => "",
@@ -18,5 +20,11 @@ $GLOBALS['project'] = [
         "smtp_password" => "",
         "smtp_secure" => "ssl"
     ],
-    "github" => ""
-];
+    "github" => "",
+    "var_globals_project_not_accessible_to_js" => 
+    [
+        "mail",
+        "author",
+        "github"
+    ]
+]; 

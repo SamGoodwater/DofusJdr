@@ -183,17 +183,17 @@ class PageManager extends Manager{
             WHERE id=:id');
 
         return $req->execute(array(
-            'id' => $page->getId(),
-            'uniqid' => $page->getUniqid(),
-            'timestamp_add' => $page->getTimestamp_add(),
-            'timestamp_updated' => $page->getTimestamp_updated(),
-            'name' => $page->getName(),
-            'url_name' => $page->getUrl_name(),
-            'order_num' => $page->getOrder_num(),
-            'category' => $page->getCategory(),
-            "is_dropdown" => $page->getIs_dropdown(),
-            "public" => $page->getPublic(),
-            "is_editable" => $page->getIs_editable()
+                'id' => $page->getId(),
+                'uniqid' => $page->getUniqid(),
+                'timestamp_add' => $page->getTimestamp_add(),
+                'timestamp_updated' => $page->getTimestamp_updated(),
+                'name' => $page->getName(),
+                'url_name' => $page->getUrl_name(),
+                'order_num' => $page->getOrder_num(),
+                'category' => $page->getCategory(),
+                "is_dropdown" => $page->getIs_dropdown(),
+                "public" => $page->getPublic(),
+                "is_editable" => $page->getIs_editable()
             ));
     }
 

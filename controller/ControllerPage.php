@@ -2,7 +2,6 @@
 class ControllerPage extends Controller{
 
   // -------- AFFICHAGE ----------
-
   public function show(){
     $return = [
       'state' => false,
@@ -42,7 +41,7 @@ class ControllerPage extends Controller{
           include_once "view/sections/home.php";
           $content = $template["content"];
           $title = $template["title"];
-          new AlertManager(new Alert("Impossible d'accéder à la page","Vous n'avez pas les droits.","",Alert::ALERT_DANGER,6000));
+          $return['error'] = "Impossible d'accéder à la page - Vous n'avez pas les droits.";
         }
 
       } else {
@@ -251,4 +250,3 @@ class ControllerPage extends Controller{
     flush();
   }
 }
- 

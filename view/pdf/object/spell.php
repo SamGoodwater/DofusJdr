@@ -45,10 +45,10 @@
         </tr>
         <tr>
             <?php 
-            if(is_array(Style::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE)])){
+            if(is_array(Module::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE)])){
                 $totalRed = 0;$totalGreen = 0;$totalBlue = 0;
-                $numbers_color = count(Style::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE)]);
-                foreach (Style::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE)] as $color_verbal) {
+                $numbers_color = count(Module::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE)]);
+                foreach (Module::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE)] as $color_verbal) {
                     $rgb = Style::hex2rgb(Style::COLOR_TO_HEX[$color_verbal . "-d-4"]);
                     $totalRed += hexdec($rgb['red']);
                     $totalGreen += hexdec($rgb['green']);
@@ -59,7 +59,7 @@
                 $averageBlue = round($totalBlue / $numbers_color);
                 $color = "#" . dechex($averageRed) . dechex($averageGreen) . dechex($averageBlue);
             } else {
-                $color = Style::COLOR_TO_HEX[Style::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE)]."-d-2"];
+                $color = Style::COLOR_TO_HEX[Module::COLOR_CUSTOM[$obj->getElement(Content::FORMAT_COLOR_VERBALE)]."-d-2"];
             } ?>
             <td class="badge" style="color:white;background:<?=$color?>;"><?=ucfirst($obj->getElement(Content::FORMAT_TEXT))?></td>
             <td><?php foreach ($obj->getType(Content::FORMAT_TEXT) as $key => $type) { ?>

@@ -13,7 +13,7 @@
     if(!isset($color)) { $color = "main";}else{if(!Style::isValidColor($color)) {$color = "main";}}
     if(!isset($content)) { $content = "";}else{if(!is_string($content) && !is_numeric($content)) {$content = "";}}
     if(!isset($style)) { $style = Style::ICON_SOLID;}else{if(!in_array($style, [Style::ICON_REGULAR, Style::ICON_SOLID, Style::ICON_MEDIA])) {$style = Style::ICON_SOLID;}}
-    if(!isset($dirfile)) { $dirfile = "icons/";}else{if(!is_string($dirfile) && !is_string($dirfile)) {$dirfile = "icons/";}}
+    if(!isset($dirfile)) { $dirfile = "icons/modules/";}else{if(!is_string($dirfile) && !is_string($dirfile)) {$dirfile = "icons/modules/";}}
     $dirfile = str_replace("../", "/", $dirfile);$dirfile = str_replace("./", "/", $dirfile);
     if(!isset($size)) { $size = "";}else{if(!in_array($size, [Style::SIZE_SM, Style::SIZE_LG, '', Style::SIZE_XL]) && !is_string($size) && !is_numeric($size)) {$size = "xl";}}
     if($style != Style::ICON_MEDIA){

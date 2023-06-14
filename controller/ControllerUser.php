@@ -159,7 +159,7 @@ class ControllerUser extends Controller{
                 foreach ($admins as $admin) {
                   $mail->setCci($admin->getEmail());
                 }
-                $mail->setTemplate(Mail::TEMPLATE_NEW_USER, 
+                $mail->setTemplate("view/mails/new_user.php", 
                   [
                     "mail" => $object->getEmail()
                   ]
@@ -265,7 +265,7 @@ class ControllerUser extends Controller{
 
     } else {
         ob_start(); ?>
-          <p>Aucun favoris dans le grimoire.</p>
+          <p>Aucun favoris dans le <?=ucfirst($GLOBALS['project']['bookmark_name'])?>.</p>
           <p>Parcourez le site pour en rajouter</p>
         <?php $return["visual"] = ob_get_clean();
     }
@@ -424,7 +424,7 @@ class ControllerUser extends Controller{
   public function getCookieBookmark(User $user){
     $serial = ""; $date = "";
     $bookmark_minified = $user->getBookmark(Content::FORMAT_TEXT);
-    if(!empty($bookmark_minified) && $user->getCookie(User::COOKIE_GRIMOIRE)){
+    if(!empty($bookmark_minified) && $user->getCookie(User::COOKIE_BOOKMARK)){
       $serial = urlencode(serialize($bookmark_minified));
       if(mb_strlen($serial) > 4096){
         $serial = "";
@@ -442,7 +442,7 @@ class ControllerUser extends Controller{
     $manager = new UserManager();
     $rights = $user->getRights(Content::FORMAT_ARRAY);
     $has_edited = false;
-    foreach (User::RIGHT as $name => $value) {
+    foreach (Module::USER_RIGHT as $name => $value) {
       if(!isset($rights[$name])){
         $user->setRights($name, $value);
         $has_edited = true;
@@ -505,7 +505,7 @@ class ControllerUser extends Controller{
       foreach ($admins as $admin) {
         $mail->setTo($admin->getEmail());
       }
-      $mail->setTemplate(Mail::TEMPLATE_EDIT_USER, 
+      $mail->setTemplate("view/mails/edit_user.php", 
         [
           "new_user" => $this->obj,
           "old_user" => $this->obj_old

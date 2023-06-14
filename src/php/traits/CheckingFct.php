@@ -2,13 +2,13 @@
 
 trait CheckingFct
 {
-    function returnBool($data, $default = false){
-        $true = [true, 1, "1", "o", "O", "y", "Y", "oui", "yes", "OUI", "YES"];
-        $false = [false, 0, "0", "n", "N", "no", "NO", "non", "NON"];
-        if(in_array($data, $true)){
-            return true;
-        }elseif(in_array($data, $false)){
-            return false;
+    function returnBool($data, bool $default = false){
+        if(is_bool($data)){
+            if($data){
+                return 1;
+            } else {
+                return 0;
+            }
         }else{
             return $default;
         }

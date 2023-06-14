@@ -135,9 +135,9 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="powerful">Puissance</th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="type">Type</th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="level"><span class="text-level">Niveau</span></th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="time_before_use_again"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Durée avant réutilisation"><img class='icon-sm' src='medias/icons/time_before_use_again.svg'></span></th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Portée de l'aptitude"><img class='icon' src='medias/icons/po.png'></span></th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="po_editable"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Aptitude au corps à corps, à distance avec une portée modifiable ou non"><img class='icon' src='medias/icons/po_editable.png'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="time_before_use_again"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Durée avant réutilisation"><img class='icon-sm' src='medias/icons/modules/time_before_use_again.svg'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Portée de l'aptitude"><img class='icon' src='medias/icons/modules/po.png'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="po_editable"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Aptitude au corps à corps, à distance avec une portée modifiable ou non"><img class='icon' src='medias/icons/modules/po_editable.png'></span></th>
                     <th data-sortable="false" data-visible="false"  data-field="description">Description</th>
                     <th data-sortable="false" data-visible="false"  data-field="effect">Effets</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>

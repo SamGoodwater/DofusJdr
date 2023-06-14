@@ -6,9 +6,9 @@
     header("Cache-Control: no-cache, must-revalidate");
 
     $icons = array();
-    foreach (scandir("medias/icons") AS $file){
+    foreach (scandir("medias/icons/modules") AS $file){
         if(!is_dir($file) && $file != '.' && $file != '..'){
-            $img = New File("medias/icons/".$file);
+            $img = New File("medias/icons/modules/".$file);
             if(FileManager::isImage($img)){
                 $icons[$img->getName(Content::FORMAT_BRUT, false)] = "data:image/".$img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $img->getPath()));
             }
@@ -92,204 +92,204 @@
                 border-radius: 5px;
             }
             .box-level{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['level'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['level'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-level .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['level'].'-d-3']?>;
             }
             .box-pa{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pa'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pa'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['pa'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['pa'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-pa .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pa'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['pa'].'-d-3']?>;
             }
             .box-pm{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pm'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pm'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['pm'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['pm'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-pm .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pm'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['pm'].'-d-3']?>;
             }
             .box-po{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['po'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['po'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-po .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['po'].'-d-3']?>;
             }
             .box-ini{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ini'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ini'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['ini'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['ini'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-ini .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ini'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['ini'].'-d-3']?>;
             }
             .box-touch{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['touch'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['touch'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['touch'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['touch'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-touch .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['touch'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['touch'].'-d-3']?>;
             }
             .box-life{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['life'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['life'].'-d-3']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['life'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['life'].'-d-3']?>;
                 border-radius: 4px;
             }
             .box-life .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['life'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['life'].'-d-3']?>;
             }
             .box-dodge_pm{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pm'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pm'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['dodge_pm'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['dodge_pm'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-dodge_pm .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pm'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['dodge_pm'].'-d-3']?>;
             }
             .box-dodge_pa{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pa'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pa'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['dodge_pa'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['dodge_pa'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-dodge_pa .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['dodge_pa'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['dodge_pa'].'-d-3']?>;
             }
             .box-ca{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ca'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ca'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['ca'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['ca'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-ca .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['ca'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['ca'].'-d-3']?>;
             }
             .box-fuite{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['fuite'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['fuite'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['fuite'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['fuite'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-fuite .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['fuite'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['fuite'].'-d-3']?>;
             }
             .box-tacle{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['tacle'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['tacle'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['tacle'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['tacle'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-tacle .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['tacle'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['tacle'].'-d-3']?>;
             }
             .box-strong{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['strong'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['strong'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['strong'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['strong'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-strong .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['strong'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['strong'].'-d-3']?>;
             }
             .box-intel{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['intel'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['intel'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['intel'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['intel'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-intel .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['intel'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['intel'].'-d-3']?>;
             }
             .box-chance{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['chance'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['chance'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['chance'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['chance'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-chance .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['chance'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['chance'].'-d-3']?>;
             }
             .box-agi{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['agi'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['agi'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['agi'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['agi'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-agi .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['agi'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['agi'].'-d-3']?>;
             }
             .box-shield{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['shield'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['shield'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['shield'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['shield'].'-d-2']?>;
                 border-radius: 4px;
             }
             .box-shield .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['shield'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['shield'].'-d-3']?>;
             }
 
             .box-neutre{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['neutre'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['neutre'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['neutre'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['neutre'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-neutre .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['neutre'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['neutre'].'-d-3']?>;
             }
             .box-vitality{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['vitality'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['vitality'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['vitality'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['vitality'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-vitality .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['vitality'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['vitality'].'-d-3']?>;
             }
             .box-sagesse{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['sagesse'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['sagesse'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['sagesse'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['sagesse'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-sagesse .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['sagesse'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['sagesse'].'-d-3']?>;
             }
             .box-terre{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['terre'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['terre'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['terre'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['terre'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-terre .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['terre'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['terre'].'-d-3']?>;
             }
             .box-feu{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['feu'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['feu'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['feu'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['feu'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-feu .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['feu'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['feu'].'-d-3']?>;
             }
             .box-eau{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['eau'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['eau'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['eau'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['eau'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-eau .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['eau'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['eau'].'-d-3']?>;
             }
             .box-air{
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['air'].'-l-5']?>;
-                border: 2px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['air'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['air'].'-l-5']?>;
+                border: 2px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['air'].'-d-2']?>;
                 border-radius: 4px;
                 padding: 2px 4px;
             }
             .box-air .enavant2{
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['air'].'-d-3']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['air'].'-d-3']?>;
             }
             .box-terre-feu{
                 background-color: #fff3e0;
@@ -388,31 +388,31 @@
             .po{
                 font-size: 1em;
                 font-weight: 800;
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-2']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['po'].'-d-2']?>;
             }
             .pa{
                 font-size: 1.3em;
                 font-weight: 800;
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['pa'].'-d-5']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['pa'].'-d-5']?>;
             }
             .time_before_use_again{
                 font-size: 1.3em;
                 font-weight: 800;
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['time_before_use_again'].'-d-5']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['time_before_use_again'].'-d-5']?>;
             }
             .level{
                 font-size: 1em;
                 font-weight: 800;
-                color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-d-2']?>;
-                border: 1px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['level'].'-d-2']?>;
+                color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['level'].'-d-2']?>;
+                border: 1px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['level'].'-d-2']?>;
                 background-color: white;
             }
             .frequency{
                 font-size: 1em;
                 font-weight: 600;
                 color: white;
-                border: 1px solid <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-2']?>;
-                background-color: <?=Style::COLOR_TO_HEX[Style::COLOR_CUSTOM['po'].'-d-2']?>;
+                border: 1px solid <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['po'].'-d-2']?>;
+                background-color: <?=Style::COLOR_TO_HEX[Module::COLOR_CUSTOM['po'].'-d-2']?>;
             }
           
             .colored {

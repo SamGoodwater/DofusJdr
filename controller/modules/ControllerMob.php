@@ -1,5 +1,5 @@
 <?php
-class ControllerMob extends Controller{
+class ControllerMob extends ControllerModule{
   public function count(){
     $return = [
       'state' => false,
@@ -399,132 +399,132 @@ class ControllerMob extends Controller{
       break;
     }
 
-    $intel = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['base'];
+    $intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];
     if($is_intel){
-        $intel = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $intel = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
         $intel = round($coef * $intel);
-        if($intel < Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$intel = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($intel < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
     }
-    $chance = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
     if($is_chance){
-      $chance = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+      $chance = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
       $chance = round($coef * $chance);
-      if($chance < Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$chance = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+      if($chance < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
     }
-    $strong = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
     if($is_strong){
-        $strong = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $strong = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
         $strong = round($coef * $strong);
-        if($strong < Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$strong = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($strong < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
     }
-    $agi = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
     if($is_agi){
-        $agi = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $agi = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
         $agi = round($coef * $agi);
-        if($agi < Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$agi = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($agi < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
     }
-    $vitality = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
     if($is_vitality){
-        $vitality = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $vitality = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
         $vitality = round($coef * $vitality);
-        if($vitality < Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$vitality = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($vitality < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
     }
-    $sagesse = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
     if($is_sagesse){
-        $sagesse = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $sagesse = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
         $sagesse = round($coef * $sagesse);
-        if($sagesse < Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$sagesse = Controller::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($sagesse < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
     }
 
-    $life =  $this::calcExp(Controller::BALANCE_LIFE['mob']['expression'], ['level' => $level]);
+    $life =  $this::calcExp(ControllerModule::BALANCE_LIFE['mob']['expression'], ['level' => $level]);
     $random = (int) rand(round(-0.1 * $life), round(0.1 * $life));
     $life = (int) round( (1+($coef-1)*1.7) * $life + $random);
     $life += $vitality * $level;
-    if($life < Controller::BALANCE_LIFE['mob']['min']){$life = Controller::BALANCE_LIFE['mob']['min'];}
+    if($life < ControllerModule::BALANCE_LIFE['mob']['min']){$life = ControllerModule::BALANCE_LIFE['mob']['min'];}
 
-    $pa = $this::calcExp(Controller::BALANCE_PA['mob']['expression'], ['level' => $level]);
+    $pa = $this::calcExp(ControllerModule::BALANCE_PA['mob']['expression'], ['level' => $level]);
     $pa = round( (1+($coef-1)*0.8) * $pa);
-    if($pa < Controller::BALANCE_PA['mob']['min']){$pa = Controller::BALANCE_PA['mob']['min'];}
+    if($pa < ControllerModule::BALANCE_PA['mob']['min']){$pa = ControllerModule::BALANCE_PA['mob']['min'];}
 
-    $pm = $this::calcExp(Controller::BALANCE_PM['mob']['expression'], ['level' => $level]);
+    $pm = $this::calcExp(ControllerModule::BALANCE_PM['mob']['expression'], ['level' => $level]);
     $pm = round( (1+($coef-1)*0.8) * $pm);
-    if($pm < Controller::BALANCE_PM['mob']['min']){$pm = Controller::BALANCE_PM['mob']['min'];}
+    if($pm < ControllerModule::BALANCE_PM['mob']['min']){$pm = ControllerModule::BALANCE_PM['mob']['min'];}
 
-    $po = $this::calcExp(Controller::BALANCE_PO['mob']['expression'], ['level' => $level]);
+    $po = $this::calcExp(ControllerModule::BALANCE_PO['mob']['expression'], ['level' => $level]);
     $po = round( (1+($coef-1)*0.8) * $po);
-    if($po < Controller::BALANCE_PO['mob']['min']){$po = Controller::BALANCE_PO['mob']['min'];}
+    if($po < ControllerModule::BALANCE_PO['mob']['min']){$po = ControllerModule::BALANCE_PO['mob']['min'];}
 
-    $ini = $this::calcExp(Controller::BALANCE_INI['mob']['expression'], ['level' => $level]);
+    $ini = $this::calcExp(ControllerModule::BALANCE_INI['mob']['expression'], ['level' => $level]);
     $ini = $ini / 2;
     if($is_intel){
       if($this->returnBool($speficific_main['intel'])){
         $ini += $intel;
-        if($ini > Controller::BALANCE_INI['mob']['max']){$ini = Controller::BALANCE_INI['mob']['max'];}
+        if($ini > ControllerModule::BALANCE_INI['mob']['max']){$ini = ControllerModule::BALANCE_INI['mob']['max'];}
       }
     }
     $ini = round($coef * $ini);
-    if($ini < Controller::BALANCE_INI['mob']['min']){$ini = Controller::BALANCE_INI['mob']['min'];}
+    if($ini < ControllerModule::BALANCE_INI['mob']['min']){$ini = ControllerModule::BALANCE_INI['mob']['min'];}
 
-    $touch = $this::calcExp(Controller::BALANCE_TOUCH['mob']['expression'], ['level' => $level]);
+    $touch = $this::calcExp(ControllerModule::BALANCE_TOUCH['mob']['expression'], ['level' => $level]);
 
-    $res = $this::calcExp(Controller::BALANCE_RES['mob']['expression'], ['level' => $level]);
+    $res = $this::calcExp(ControllerModule::BALANCE_RES['mob']['expression'], ['level' => $level]);
     $res = round( (1+($coef-1)*0.8) * $res);
-    if($res < Controller::BALANCE_RES['mob']['min']){$res = Controller::BALANCE_RES['mob']['min'];}
-    $res_neutre = Controller::BALANCE_RES['mob']['base'];
+    if($res < ControllerModule::BALANCE_RES['mob']['min']){$res = ControllerModule::BALANCE_RES['mob']['min'];}
+    $res_neutre = ControllerModule::BALANCE_RES['mob']['base'];
     if($powerful >= 5){
         $res_neutre = $res;
     }
-    $res_terre = Controller::BALANCE_RES['mob']['base'];
+    $res_terre = ControllerModule::BALANCE_RES['mob']['base'];
     if($is_strong){
         $res_terre = $res;
     }
-    $res_feu = Controller::BALANCE_RES['mob']['base'];
+    $res_feu = ControllerModule::BALANCE_RES['mob']['base'];
     if($is_intel){
         $res_feu = $res;
     }
-    $res_air = Controller::BALANCE_RES['mob']['base'];
+    $res_air = ControllerModule::BALANCE_RES['mob']['base'];
     if($is_agi){
         $res_air = $res;
     }
-    $res_eau = Controller::BALANCE_RES['mob']['base'];
+    $res_eau = ControllerModule::BALANCE_RES['mob']['base'];
     if($is_chance){
         $res_eau = $res;
     }
 
-    $tacle = $this::calcExp(Controller::BALANCE_TACLE['mob']['expression'], ['level' => $level]);
+    $tacle = $this::calcExp(ControllerModule::BALANCE_TACLE['mob']['expression'], ['level' => $level]);
     $tacle = $tacle / 2;
     $fuite = $tacle;
     if($is_chance){
         $tacle += $chance;
-        if($tacle > Controller::BALANCE_TACLE['mob']['max']){$tacle = Controller::BALANCE_TACLE['mob']['max'];}
+        if($tacle > ControllerModule::BALANCE_TACLE['mob']['max']){$tacle = ControllerModule::BALANCE_TACLE['mob']['max'];}
     }
     $tacle = round( (1+($coef-1)*0.8) * $tacle);
-    if($tacle < Controller::BALANCE_TACLE['mob']['min']){$tacle = Controller::BALANCE_TACLE['mob']['min'];}
+    if($tacle < ControllerModule::BALANCE_TACLE['mob']['min']){$tacle = ControllerModule::BALANCE_TACLE['mob']['min'];}
 
     if($is_agi){
         $fuite += $agi;
-        if($fuite > Controller::BALANCE_TACLE['mob']['max']){$fuite = Controller::BALANCE_TACLE['mob']['max'];}
+        if($fuite > ControllerModule::BALANCE_TACLE['mob']['max']){$fuite = ControllerModule::BALANCE_TACLE['mob']['max'];}
     }
     $fuite = round( (1+($coef-1)*0.8) * $fuite);
-    if($fuite < Controller::BALANCE_TACLE['mob']['min']){$fuite = Controller::BALANCE_TACLE['mob']['min'];}
+    if($fuite < ControllerModule::BALANCE_TACLE['mob']['min']){$fuite = ControllerModule::BALANCE_TACLE['mob']['min'];}
 
-    $ca = $this::calcExp(Controller::BALANCE_CA['mob']['expression'], ['level' => $level]);
+    $ca = $this::calcExp(ControllerModule::BALANCE_CA['mob']['expression'], ['level' => $level]);
     $ca -= 0.4*$level*$ca/24;
     if($is_vitality){
         $ca += $vitality;
-        if($ca > Controller::BALANCE_CA['mob']['max']){$ca = Controller::BALANCE_CA['mob']['max'];}
+        if($ca > ControllerModule::BALANCE_CA['mob']['max']){$ca = ControllerModule::BALANCE_CA['mob']['max'];}
     }
     $ca = round( (1+($coef-1)*0.8) * $ca);
-    if($ca < Controller::BALANCE_CA['mob']['min']){$ca = Controller::BALANCE_CA['mob']['min'];}
+    if($ca < ControllerModule::BALANCE_CA['mob']['min']){$ca = ControllerModule::BALANCE_CA['mob']['min'];}
 
-    $dodge = $this::calcExp(Controller::BALANCE_DODGE['mob']['expression'], ['level' => $level]);
+    $dodge = $this::calcExp(ControllerModule::BALANCE_DODGE['mob']['expression'], ['level' => $level]);
     $dodge -= 0.4*$level*$dodge/24;
     if($is_sagesse){
       $dodge += $sagesse;
-      if($dodge > Controller::BALANCE_DODGE['mob']['max']){$dodge = Controller::BALANCE_DODGE['mob']['max'];}
+      if($dodge > ControllerModule::BALANCE_DODGE['mob']['max']){$dodge = ControllerModule::BALANCE_DODGE['mob']['max'];}
     }
     $dodge = round( (1+($coef-1)*0.8) * $dodge);
-    if($dodge < Controller::BALANCE_DODGE['mob']['min']){$dodge = Controller::BALANCE_DODGE['mob']['min'];}
+    if($dodge < ControllerModule::BALANCE_DODGE['mob']['min']){$dodge = ControllerModule::BALANCE_DODGE['mob']['min'];}
 
     $obj = new Mob(array(
       'name'=>$name,
@@ -623,6 +623,9 @@ class ControllerMob extends Controller{
             foreach ($objects as $object) {
                 $click_action = "";
                 switch ($action) {
+                  case ControllerSearch::SEARCH_DONE_ADD_TO_BOOKMARK:
+                    $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                  break;
                   case ControllerSearch::SEARCH_DONE_ADD_MOB_TO_SPELL:
                     $click_action = "onclick=\"Spell.update('".$parameter."','".$object->getId()."','id_invocation', IS_VALUE);\"";
                   break;

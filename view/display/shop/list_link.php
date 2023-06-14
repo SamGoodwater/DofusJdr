@@ -41,10 +41,10 @@
                                 </p>
                                 <p class="d-flex flex-row justify-content-around mt-1 badge back-white border border-2 border-kamas-d-4">
                                     <?php if(!empty($link['price'])){ ?>
-                                        <span class='text-kamas-d-4 size-1-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix de l'objet"><?=$link["price"]?> <img class='icon' src='medias/icons/kamas.png'></span>     
+                                        <span class='text-kamas-d-4 size-1-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix de l'objet"><?=$link["price"]?> <img class='icon' src='medias/icons/modules/kamas.png'></span>     
                                     <?php } ?>
                                     <?php if(!empty($link['obj']->getPrice())){ ?>
-                                        <span class="ms-1 size-0-8 text-grey-d-2 text-right">Prix recommandé :<br><?=$link["obj"]->getPrice()?> <img class='icon-sm' src='medias/icons/kamas.png'></span>
+                                        <span class="ms-1 size-0-8 text-grey-d-2 text-right">Prix recommandé :<br><?=$link["obj"]->getPrice()?> <img class='icon-sm' src='medias/icons/modules/kamas.png'></span>
                                     <?php } ?>
                                 </p>
                             </div>

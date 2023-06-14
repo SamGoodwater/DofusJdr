@@ -5,31 +5,6 @@ class Section extends Content
         const GET_SECTION_CONTENT = 0;
         const GET_SECTION_DESCRIPTION = 1;
 
-        const SOLVE_ADD_CLASS_TO_KEYWORD = 0;
-        const SOLVE_ADD_CLASS_TO_KEYWORD_DATA = [
-          "text-vitality-d-3" => [
-            "vitality",
-            "vita"
-          ],
-          "text-sagesse-d-3" => [
-            "sagesse"
-          ],
-          "text-intel-d-3" => [
-            "intelligence",
-            "intel"
-          ],
-          "text-chance-d-3" => [
-            "chance"
-          ],
-          "text-agi-d-3" => [
-            "aigilité",
-            "agi"
-          ],
-          "text-force-d-3" => [
-            "force"
-          ]
-        ];
-
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         private $_type ='';
         private $_uniqid_page ='';
@@ -117,7 +92,7 @@ class Section extends Content
     }
     public function getContent(int $format = Content::FORMAT_BRUT, bool $solve = false){
         if($solve){
-            $this->_content = $this->solveContent(self::SOLVE_ADD_CLASS_TO_KEYWORD);
+            $this->_content = $this->solveContent();
         }
         switch ($format) {
             case Content::FORMAT_EDITABLE:
@@ -265,12 +240,14 @@ class Section extends Content
         }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ OTHERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
-        public function solveContent(int $way = self::SOLVE_ADD_CLASS_TO_KEYWORD) {
+        //Cette fonction permet de modifier le contentu du Content avant d'être affiché. Les paramètres de modification sont défini dans les constantes de la classe Module.
+        public function solveContent() {
             $content = $this->getContent();
             if (empty($content)) {return '';}
-            switch ($way) {
-                case self::SOLVE_ADD_CLASS_TO_KEYWORD:
-                    $keywords = self::SOLVE_ADD_CLASS_TO_KEYWORD_DATA;
+
+            // ADD CLASS TO KEYWORD
+                if(!empty(Module::SOLVE_ADD_CLASS_TO_KEYWORD) && is_array(Module::SOLVE_ADD_CLASS_TO_KEYWORD)) {
+                    $keywords = Module::SOLVE_ADD_CLASS_TO_KEYWORD;
                     $pattern = '/\b(' . implode('|', array_map('preg_quote', array_keys($keywords))) . ')\b/i';
                     $replace = [];
                     foreach ($keywords as $class => $words) {
@@ -279,8 +256,9 @@ class Section extends Content
                             $content = preg_replace($pattern, $replace, $content);
                         }
                     }
-                    break;
-            }
+                }
+
+
             return $content;
         }
 

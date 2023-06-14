@@ -324,11 +324,11 @@ class Capability extends Content
 
                 case Content::FORMAT_PATH:
                     if($this->_po_editable && !in_array($this->getPO(), Spell::EXPRESSION_CAC)){ // Aptitude à distance Avec portée modifiable
-                        return "medias/icons/po_editable.png";
+                        return "medias/icons/modules/po_editable.png";
                     } elseif(in_array($this->getPO(), Spell::EXPRESSION_CAC)) { // Aptitude au CàC
-                        return "medias/icons/cac.png";
+                        return "medias/icons/modules/cac.png";
                     } else { 
-                        return "medias/icons/po_no_editable.png";   
+                        return "medias/icons/modules/po_no_editable.png";   
                     }
                     
                 default:

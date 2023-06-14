@@ -18,7 +18,6 @@ class Style {
     }
 
     // Constante générale 
-    
     const STYLE_NONE = "none";
     const STYLE_BACK = "back";
     const STYLE_TEXT = "text";
@@ -91,58 +90,7 @@ class Style {
             "secondary",
             "tertiary"
         ];
-        const COLOR_CUSTOM = array(
-            "main" => "blue-grey",
-            "secondary" => "teal",
-            "tertiary" => "deep-purple",
-            "force" => "brown",
-            "strong" => "brown",
-            "terre" => "brown",
-            "intel" => "red",
-            "feu" => "red",
-            "agi" => "green",
-            "air" => "green",
-            "chance" => "blue",
-            "eau" => "blue",
-            "vitality" => "amber",
-            "sagesse" => "purple",
-            "life" => "deep-orange",
-            "level" => "teal",
-            "master_bonus" => "orange",
-            "time_before_use_again" => "blue-grey",
-            "dodge_pa" => "yellow",
-            "dodge_pm" => "lime",
-            "po" => "teal",
-            "po-editable" => "blue-grey",
-            "pa" => "deep-orange",
-            "pm" => "cyan",
-            "cast-per-turn" => "purple",
-            "sight-line" => "indigo",
-            "number-between-two-cast" => "pink",
-            "ini" => "deep-purple",
-            "invocation" => "amber",
-            "touch" => "lime",
-            "actif" => "amber",
-            "twohands" => "grey",
-            "kamas" => "yellow",
-            "ca" => "grey",
-            "fuite" => "light-green",
-            "tacle" => "cyan",
-            "neutre" => "grey",
-            "shield" => "blue-grey",
-            "terre-feu" => ["brown", "red"],
-            "terre-air" => ["brown", "green"],
-            "terre-eau" => ["brown", "blue"],
-            "feu-air" => ["red", "green"],
-            "feu-eau" => ["red", "blue"],
-            "air-eau" => ["green", "blue"],
-            "terre-feu-air" => ["brown","red", "green"],
-            "terre-feu-eau" => ["brown","red", "blue"],
-            "terre-air-eau" => ["brown","green", "blue"],
-            "feu-air-eau" => ["red","green", "blue"],
-            "terre-feu-air-eau" => ["brown","red","green", "blue"]
-        );
-        const COLOR_TO_HEX = array(
+        const COLOR_TO_HEX =  [
             'black' => "#000000", 
             'white' => "#000000", 
             'transparent' => "#00BFFF00", 
@@ -419,7 +367,7 @@ class Style {
             'blue-grey-d-3' => "#37474f",
             'blue-grey-d-4' => "#263238",
             'blue-grey-d-5' => "#161d20"
-        );
+        ];
     // END OF COLOR LIST
 
     const ICONS_FILE = [

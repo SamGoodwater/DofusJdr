@@ -50,7 +50,7 @@ class User extends Controller{
             {},
             function(data, status)
             {
-                Page.buildOffcanvas("Grimoire", data.visual, Page.PLACEMENT_START, show);
+                Page.buildOffcanvas(ucFirst(globalThis.project.bookmark_name), data.visual, Page.PLACEMENT_START, show);
                 $("#onloadDisplay").hide("slow");
             },
             "json"
@@ -66,13 +66,13 @@ class User extends Controller{
           i.removeClass("fas");
           i.addClass("far");
           url = "index.php?c=user&a=removeBookmark";
-          sentence = "Le favoris a bien été enlevé du grimoire.";
+          sentence = "Le favoris a bien été enlevé du "+ucFirst(globalThis.project.bookmark_name)+".";
 
         }else if(i.hasClass("far") && i.hasClass("fa-bookmark")){ // AJOUT
           i.removeClass("far");
           i.addClass("fas");
           url = "index.php?c=user&a=addBookmark";
-          sentence = "Le favoris a bien été ajouté au grimoire.";
+          sentence = "Le favoris a bien été ajouté au "+ucFirst(globalThis.project.bookmark_name)+".";
         }
 
         let classe = $(btn).data("classe");
@@ -89,7 +89,7 @@ class User extends Controller{
                     $('body').append("<script>"+data['script']+"</script>");
                 }
                 if(data.state){
-                    MsgAlert("Modification du Grimoire", sentence, "green" , 3000);
+                    MsgAlert("Modification du "+ucFirst(globalThis.project.bookmark_name)+".", sentence, "green" , 3000);
                     if(data.cookie.serial != ""){
                         var cookie = "bookmark="+data.cookie.serial+"; path=/; expires="+data.cookie.date+";"; 
                         document.cookie = cookie;
@@ -98,7 +98,7 @@ class User extends Controller{
                         User.getBookmark(true);
                     }
                 } else {
-                    MsgAlert("Modification du Grimoire", 'Erreur : ' + data.error, "danger" , 4000);
+                    MsgAlert("Modification du "+ucFirst(globalThis.project.bookmark_name)+".", 'Erreur : ' + data.error, "danger" , 4000);
                 }
             },
             "json"

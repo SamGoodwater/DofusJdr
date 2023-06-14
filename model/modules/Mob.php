@@ -1829,7 +1829,7 @@ class Mob extends Content
 
             $factor = Controller::calcExp("0,157894737 * (level + 3)", ["level" => $level]);
 
-            $pa_expected = Controller::calcExp(Controller::BALANCE_PA["mob"]["expression"], ["level" => $level]);
+            $pa_expected = Controller::calcExp(ControllerModule::BALANCE_PA["mob"]["expression"], ["level" => $level]);
             if(is_numeric($this->getPa())){
                 $pa = $this->getPa();
             } else {
@@ -1837,7 +1837,7 @@ class Mob extends Content
                 if(!is_numeric($pa_form["min"]) || !is_numeric($pa_form["max"])){
                     $pa = ((int)$pa_form["min"] + (int)$pa_form["max"]) / 2;
                 } else {
-                    $pa = Controller::BALANCE_PA['mob']["base"];
+                    $pa = ControllerModule::BALANCE_PA['mob']["base"];
                 }
             }
             if($pa > $pa_expected + $factor){
@@ -1845,7 +1845,7 @@ class Mob extends Content
             }elseif($pa < $pa_expected - $factor){
                 $powerful -= 1;
             }
-            $pm_expected = Controller::calcExp(Controller::BALANCE_PM["mob"]["expression"], ["level" => $level]);
+            $pm_expected = Controller::calcExp(ControllerModule::BALANCE_PM["mob"]["expression"], ["level" => $level]);
             if(is_numeric($this->getPm())){
                 $pm = $this->getPm();
             } else {
@@ -1853,7 +1853,7 @@ class Mob extends Content
                 if(!is_numeric($pm_form["min"]) || !is_numeric($pm_form["max"])){
                     $pm = ((int)$pm_form["min"] + (int)$pm_form["max"]) / 2;
                 } else {
-                    $pm = Controller::BALANCE_PM['mob']["base"];
+                    $pm = ControllerModule::BALANCE_PM['mob']["base"];
                 }
             }
             if($pm > $pm_expected + $factor){
@@ -1864,7 +1864,7 @@ class Mob extends Content
 
             $factor = Controller::calcExp("2,631578947 * (level + 5)", ["level" => $level]);
 
-            $life_expected = Controller::calcExp(Controller::BALANCE_LIFE["mob"]["expression"], ["level" => $level]);
+            $life_expected = Controller::calcExp(ControllerModule::BALANCE_LIFE["mob"]["expression"], ["level" => $level]);
             if(is_numeric($this->getLife())){
                 $life = $this->getLife();
             } else {
@@ -1872,7 +1872,7 @@ class Mob extends Content
                 if(!is_numeric($life_form["min"]) || !is_numeric($life_form["max"])){
                     $life = ((int)$life_form["min"] + (int)$life_form["max"]) / 2;
                 } else {
-                    $life = Controller::BALANCE_LIFE['mob']["base"];
+                    $life = ControllerModule::BALANCE_LIFE['mob']["base"];
                 }
                 
             }

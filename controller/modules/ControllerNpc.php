@@ -1,5 +1,5 @@
 <?php
-class ControllerNpc extends Controller{
+class ControllerNpc extends ControllerModule{
   public function count(){
     $return = [
       'state' => false,
@@ -443,120 +443,120 @@ class ControllerNpc extends Controller{
       break;
     }
 
-    $intel = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['base'];
+    $intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];
     if($is_intel){
-      $intel = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
+      $intel = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
       $intel = round($coef * $intel);
-      if($intel < Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$intel = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-      if($intel > Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$intel = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
+      if($intel < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
+      if($intel > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
     }
-    $chance = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
+    $chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
     if($is_chance){
-        $chance = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
+        $chance = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
         $chance = round($coef * $chance);
-        if($chance < Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$chance = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-        if($chance > Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$chance = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
+        if($chance < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
+        if($chance > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
     }
-    $strong = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
+    $strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
     if($is_strong){
       if($this->returnBool($speficific_main['strong'])){
-        $strong = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
+        $strong = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
         $strong = round($coef * $strong);
-        if($strong < Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$strong = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-        if($strong > Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$strong = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
+        if($strong < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
+        if($strong > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
       }
     }
-    $agi = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
+    $agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
     if($is_agi){
-      $agi = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
+      $agi = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
       $agi = round($coef * $agi);
-      if($agi < Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$agi = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-      if($agi > Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$agi = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
+      if($agi < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
+      if($agi > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
     }
-    $vitality = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
+    $vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
     if($is_vitality){
-      $vitality = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
+      $vitality = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
       $vitality = round($coef * $vitality);
-      if($vitality < Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$vitality = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-      if($vitality > Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$vitality = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
+      if($vitality < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
+      if($vitality > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
     }
-    $sagesse = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
+    $sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
     if($is_sagesse){
-        $sagesse = $this::calcExp(Controller::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
+        $sagesse = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
         $sagesse = round($coef * $sagesse);
-        if($sagesse < Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$sagesse = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-        if($sagesse > Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$sagesse = Controller::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
+        if($sagesse < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
+        if($sagesse > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
       }
 
-    $pa = $this::calcExp(Controller::BALANCE_PA['classe']['expression_item'], ['level' => $level]);
+    $pa = $this::calcExp(ControllerModule::BALANCE_PA['classe']['expression_item'], ['level' => $level]);
     $pa = round( (1+($coef-1)*0.8) * $pa);
-    if($pa < Controller::BALANCE_PA['classe']['min']){$pa = Controller::BALANCE_PA['classe']['min'];}
-    if($pa > Controller::BALANCE_PA['classe']['max_item']){$pa = Controller::BALANCE_PA['classe']['max_item'];}
+    if($pa < ControllerModule::BALANCE_PA['classe']['min']){$pa = ControllerModule::BALANCE_PA['classe']['min'];}
+    if($pa > ControllerModule::BALANCE_PA['classe']['max_item']){$pa = ControllerModule::BALANCE_PA['classe']['max_item'];}
 
-    $pm = $this::calcExp(Controller::BALANCE_PM['classe']['expression_item'], ['level' => $level]);
+    $pm = $this::calcExp(ControllerModule::BALANCE_PM['classe']['expression_item'], ['level' => $level]);
     $pm = round( (1+($coef-1)*0.8) * $pm);
-    if($pm < Controller::BALANCE_PM['classe']['min']){$pm = Controller::BALANCE_PM['classe']['min'];}
-    if($pm > Controller::BALANCE_PM['classe']['max_item']){$pm = Controller::BALANCE_PM['classe']['max_item'];}
+    if($pm < ControllerModule::BALANCE_PM['classe']['min']){$pm = ControllerModule::BALANCE_PM['classe']['min'];}
+    if($pm > ControllerModule::BALANCE_PM['classe']['max_item']){$pm = ControllerModule::BALANCE_PM['classe']['max_item'];}
 
-    $po = $this::calcExp(Controller::BALANCE_PO['classe']['expression_item'], ['level' => $level]);
+    $po = $this::calcExp(ControllerModule::BALANCE_PO['classe']['expression_item'], ['level' => $level]);
     $po = round( (1+($coef-1)*0.8) * $po);
-    if($po < Controller::BALANCE_PO['classe']['min']){$po = Controller::BALANCE_PO['classe']['min'];}
-    if($po > Controller::BALANCE_PO['classe']['max_item']){$po = Controller::BALANCE_PO['classe']['max_item'];}
+    if($po < ControllerModule::BALANCE_PO['classe']['min']){$po = ControllerModule::BALANCE_PO['classe']['min'];}
+    if($po > ControllerModule::BALANCE_PO['classe']['max_item']){$po = ControllerModule::BALANCE_PO['classe']['max_item'];}
 
-    $invoc = $this::calcExp(Controller::BALANCE_INVOCATION['classe']['expression_item'], ['level' => $level]);
+    $invoc = $this::calcExp(ControllerModule::BALANCE_INVOCATION['classe']['expression_item'], ['level' => $level]);
     $invoc = round( (1+($coef-1)*0.8) * $invoc);
-    if($invoc < Controller::BALANCE_INVOCATION['classe']['min']){$invoc = Controller::BALANCE_INVOCATION['classe']['min'];}
-    if($invoc > Controller::BALANCE_INVOCATION['classe']['max_item']){$invoc = Controller::BALANCE_INVOCATION['classe']['max_item'];}
+    if($invoc < ControllerModule::BALANCE_INVOCATION['classe']['min']){$invoc = ControllerModule::BALANCE_INVOCATION['classe']['min'];}
+    if($invoc > ControllerModule::BALANCE_INVOCATION['classe']['max_item']){$invoc = ControllerModule::BALANCE_INVOCATION['classe']['max_item'];}
 
-    $ini = $this::calcExp(Controller::BALANCE_INI['classe']['expression_base'], ['level' => $level]);
+    $ini = $this::calcExp(ControllerModule::BALANCE_INI['classe']['expression_base'], ['level' => $level]);
     if(isset($speficific_main['intel'])){
       if($this->returnBool($speficific_main['intel'])){
         $ini += $intel;
-        if($ini > Controller::BALANCE_INI['classe']['max_item']){$ini = Controller::BALANCE_INI['classe']['max_item'];}
+        if($ini > ControllerModule::BALANCE_INI['classe']['max_item']){$ini = ControllerModule::BALANCE_INI['classe']['max_item'];}
       }
     }
     $ini = round($coef * $ini);
-    if($ini < Controller::BALANCE_INI['classe']['min']){$ini = Controller::BALANCE_INI['classe']['min'];}
+    if($ini < ControllerModule::BALANCE_INI['classe']['min']){$ini = ControllerModule::BALANCE_INI['classe']['min'];}
 
-    $touch = $this::calcExp(Controller::BALANCE_TOUCH['classe']['expression_item'], ['level' => $level]);
+    $touch = $this::calcExp(ControllerModule::BALANCE_TOUCH['classe']['expression_item'], ['level' => $level]);
 
-    $res = $this::calcExp(Controller::BALANCE_RES['classe']['expression_item'], ['level' => $level]);
+    $res = $this::calcExp(ControllerModule::BALANCE_RES['classe']['expression_item'], ['level' => $level]);
     $res = round( (1+($coef-1)*0.8) * $res);
-    if($res < Controller::BALANCE_RES['classe']['min']){$res = Controller::BALANCE_RES['classe']['min'];}
-    $res_neutre = Controller::BALANCE_RES['classe']['base'];
+    if($res < ControllerModule::BALANCE_RES['classe']['min']){$res = ControllerModule::BALANCE_RES['classe']['min'];}
+    $res_neutre = ControllerModule::BALANCE_RES['classe']['base'];
     if($powerful >= 5){
         $res_neutre = $res;
     }
-    $res_terre = Controller::BALANCE_RES['classe']['base'];
+    $res_terre = ControllerModule::BALANCE_RES['classe']['base'];
     if($is_strong){$res_terre = $res;}
-    $res_feu = Controller::BALANCE_RES['classe']['base'];
+    $res_feu = ControllerModule::BALANCE_RES['classe']['base'];
     if($is_intel){$res_feu = $res;}
-    $res_air = Controller::BALANCE_RES['classe']['base'];
+    $res_air = ControllerModule::BALANCE_RES['classe']['base'];
     if($is_agi){$res_air = $res;}
-    $res_eau = Controller::BALANCE_RES['classe']['base'];
+    $res_eau = ControllerModule::BALANCE_RES['classe']['base'];
     if($is_chance){$res_eau = $res;}
 
-    $tacle = $this::calcExp(Controller::BALANCE_TACLE['classe']['expression_base'], ['level' => $level]);
+    $tacle = $this::calcExp(ControllerModule::BALANCE_TACLE['classe']['expression_base'], ['level' => $level]);
     $fuite = $tacle;
     $tacle = round( (1+($coef-1)*0.8) * $tacle);
-    if($tacle < Controller::BALANCE_TACLE['classe']['min']){$tacle = Controller::BALANCE_TACLE['classe']['min'];}
-    if($tacle > Controller::BALANCE_TACLE['classe']['max_item']){$tacle = Controller::BALANCE_TACLE['classe']['max_item'];}
+    if($tacle < ControllerModule::BALANCE_TACLE['classe']['min']){$tacle = ControllerModule::BALANCE_TACLE['classe']['min'];}
+    if($tacle > ControllerModule::BALANCE_TACLE['classe']['max_item']){$tacle = ControllerModule::BALANCE_TACLE['classe']['max_item'];}
 
     $fuite = round( (1+($coef-1)*0.8) * $fuite);
-    if($fuite < Controller::BALANCE_TACLE['classe']['min']){$fuite = Controller::BALANCE_TACLE['classe']['min'];}
-    if($fuite > Controller::BALANCE_TACLE['classe']['max_item']){$fuite = Controller::BALANCE_TACLE['classe']['max_item'];}
+    if($fuite < ControllerModule::BALANCE_TACLE['classe']['min']){$fuite = ControllerModule::BALANCE_TACLE['classe']['min'];}
+    if($fuite > ControllerModule::BALANCE_TACLE['classe']['max_item']){$fuite = ControllerModule::BALANCE_TACLE['classe']['max_item'];}
 
-    $ca = $this::calcExp(Controller::BALANCE_CA['classe']['expression_base'], ['level' => $level]);
+    $ca = $this::calcExp(ControllerModule::BALANCE_CA['classe']['expression_base'], ['level' => $level]);
     $ca = round( (1+($coef-1)*0.8) * $ca);
-    if($ca < Controller::BALANCE_CA['classe']['min']){$ca = Controller::BALANCE_CA['classe']['min'];}
-    if($ca > Controller::BALANCE_CA['classe']['max_item']){$ca = Controller::BALANCE_CA['classe']['max_item'];}
+    if($ca < ControllerModule::BALANCE_CA['classe']['min']){$ca = ControllerModule::BALANCE_CA['classe']['min'];}
+    if($ca > ControllerModule::BALANCE_CA['classe']['max_item']){$ca = ControllerModule::BALANCE_CA['classe']['max_item'];}
 
-    $dodge = $this::calcExp(Controller::BALANCE_DODGE['classe']['expression_base'], ['level' => $level]);
+    $dodge = $this::calcExp(ControllerModule::BALANCE_DODGE['classe']['expression_base'], ['level' => $level]);
     $dodge = round( (1+($coef-1)*0.8) * $dodge);
-    if($dodge < Controller::BALANCE_DODGE['classe']['min']){$dodge = Controller::BALANCE_DODGE['classe']['min'];}
-    if($dodge > Controller::BALANCE_DODGE['classe']['max_item']){$dodge = Controller::BALANCE_DODGE['classe']['max_item'];}
+    if($dodge < ControllerModule::BALANCE_DODGE['classe']['min']){$dodge = ControllerModule::BALANCE_DODGE['classe']['min'];}
+    if($dodge > ControllerModule::BALANCE_DODGE['classe']['max_item']){$dodge = ControllerModule::BALANCE_DODGE['classe']['max_item'];}
 
-    $skill = $this::calcExp(Controller::BALANCE_SKILL['classe']['expression_base'], ['level' => $level]);
+    $skill = $this::calcExp(ControllerModule::BALANCE_SKILL['classe']['expression_base'], ['level' => $level]);
 
     $acrobatie = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
     $discretion = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
@@ -694,11 +694,11 @@ class ControllerNpc extends Controller{
       break;
     }
 
-    $life =  $this::calcExp(Controller::BALANCE_LIFE['classe']['expression_item'], ['level' => $level, "dice" => $dice]);
+    $life =  $this::calcExp(ControllerModule::BALANCE_LIFE['classe']['expression_item'], ['level' => $level, "dice" => $dice]);
     $life += $vitality * $level;
     $random = rand(-0.1 * $life, 0.1 * $life);
     $life = round( (1+($coef-1)*1.7) * $life + $random);
-    if($life < Controller::BALANCE_LIFE['classe']['min']){$life = Controller::BALANCE_LIFE['classe']['min'];}
+    if($life < ControllerModule::BALANCE_LIFE['classe']['min']){$life = ControllerModule::BALANCE_LIFE['classe']['min'];}
 
     if(empty($name)){$name = $name_auto;}
 
@@ -1302,6 +1302,9 @@ class ControllerNpc extends Controller{
             foreach ($objects as $object) {
                 $click_action = "";
                 switch ($action) {
+                  case ControllerSearch::SEARCH_DONE_ADD_TO_BOOKMARK:
+                    $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                  break;
                   default:
                     $click_action = "onclick=\"Npc.open('".$object->getUniqid()."')\"";
                   break;

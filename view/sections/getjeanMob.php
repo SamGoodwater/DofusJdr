@@ -61,27 +61,27 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <div class="my-2">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="intel">
-                    <label class="form-check-label" for="intel">Intelligence <img class='icon-sm' src='medias/icons/intel.png'></label>
+                    <label class="form-check-label" for="intel">Intelligence <img class='icon-sm' src='medias/icons/modules/intel.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="strong">
-                    <label class="form-check-label" for="strong">Force <img class='icon-sm' src='medias/icons/force.png'></label>
+                    <label class="form-check-label" for="strong">Force <img class='icon-sm' src='medias/icons/modules/force.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="chance">
-                    <label class="form-check-label" for="chance">Chance <img class='icon-sm' src='medias/icons/chance.png'></label>
+                    <label class="form-check-label" for="chance">Chance <img class='icon-sm' src='medias/icons/modules/chance.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="agi">
-                    <label class="form-check-label" for="agi">Agilité <img class='icon-sm' src='medias/icons/agi.png'></label>
+                    <label class="form-check-label" for="agi">Agilité <img class='icon-sm' src='medias/icons/modules/agi.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="sagesse">
-                    <label class="form-check-label" for="sagesse">Sagesse <img class='icon-sm' src='medias/icons/sagesse.png'></label>
+                    <label class="form-check-label" for="sagesse">Sagesse <img class='icon-sm' src='medias/icons/modules/sagesse.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="vitality">
-                    <label class="form-check-label" for="vitality">Vitalité <img class='icon-sm' src='medias/icons/vitality.png'></label>
+                    <label class="form-check-label" for="vitality">Vitalité <img class='icon-sm' src='medias/icons/modules/vitality.png'></label>
                 </div>
             </div>
             <button class="btn btn-sm btn-back-secondary" onclick="createJeanMob();">Générer le PDF</button>

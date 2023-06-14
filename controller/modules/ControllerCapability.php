@@ -1,5 +1,5 @@
 <?php
-class ControllerCapability extends Controller{
+class ControllerCapability extends ControllerModule{
 
   public function count(){
     $return = [
@@ -368,8 +368,7 @@ class ControllerCapability extends Controller{
     echo json_encode($return);
     flush();
   }
-
-  public const SEARCH_DONE_REDIRECT = 0;
+  
   public function search($term, $action = ControllerSearch::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
     $currentUser = ControllerConnect::getCurrentUser();
     if(!$currentUser->getRight('capability', User::RIGHT_READ)){
@@ -388,6 +387,9 @@ class ControllerCapability extends Controller{
             foreach ($objects as $object) {
                 $click_action = "";
                 switch ($action) {
+                  case ControllerSearch::SEARCH_DONE_ADD_TO_BOOKMARK:
+                    $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                  break;
                   case ControllerSearch::SEARCH_DONE_ADD_CAPABILITY_TO_MOB:
                     $click_action = "onclick=\"Mob.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'capability', IS_VALUE);\"";
                   break;

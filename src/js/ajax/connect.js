@@ -1,6 +1,6 @@
 let COOKIE_RIQUISITE = true;
 let COOKIE_CONNEXION = false;
-let COOKIE_GRIMOIRE = false;
+let COOKIE_BOOKMARK = false;
 class Connect {
 
     static setCookie(via_input = false, cookie = {"connexion" : false, "bookmark" : false }){
@@ -11,9 +11,9 @@ class Connect {
                 COOKIE_CONNEXION = false;
             }
             if ($('.cookie-bar #cookie-bookmark').is(":checked")) {
-                COOKIE_GRIMOIRE = true;
+                COOKIE_BOOKMARK = true;
             } else {
-                COOKIE_GRIMOIRE = false;
+                COOKIE_BOOKMARK = false;
             }
         } else {
             if (typeof cookie["connexion"] == "boolean") {
@@ -22,9 +22,9 @@ class Connect {
                 COOKIE_CONNEXION = false;
             }
             if (typeof cookie["bookmark"] == "boolean") {
-                COOKIE_GRIMOIRE = cookie["bookmark"];
+                COOKIE_BOOKMARK = cookie["bookmark"];
             } else  {
-                COOKIE_GRIMOIRE = false;
+                COOKIE_BOOKMARK = false;
             }
         }
 
@@ -32,7 +32,7 @@ class Connect {
         $.post(URL,
             {
                 connexion:COOKIE_CONNEXION,
-                bookmark:COOKIE_GRIMOIRE
+                bookmark:COOKIE_BOOKMARK
             },
             function(data, status)
             {

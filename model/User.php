@@ -26,9 +26,9 @@ class User extends Content
             "écriture" => self::RIGHT_WRITE
         ];
 
-        const COOKIE_REQUISITE = 0;
-        const COOKIE_CONNEXION = 1;
-        const COOKIE_GRIMOIRE = 2;
+        const COOKIE_REQUISITE = 1;
+        const COOKIE_CONNEXION = 2;
+        const COOKIE_BOOKMARK = 3;
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         private $_token='';
@@ -39,26 +39,12 @@ class User extends Content
         private $_rights = null;
         private $_is_admin = false;
 
-        const RIGHT = [
-            "capability" => User::RIGHT_READ,
-            "classe" => User::RIGHT_READ,
-            "consumable" => User::RIGHT_READ,
-            "item" => User::RIGHT_READ,
-            "mob" => User::RIGHT_READ,
-            "npc" => User::RIGHT_READ,
-            "page" => User::RIGHT_READ,
-            "section" => User::RIGHT_READ,
-            "shop" => User::RIGHT_READ,
-            "spell" => User::RIGHT_READ,
-            "user" => User::RIGHT_NO
-        ];
-
         protected $_usable = true; // surcharge de la variable de Content
 
         private $_cookie = [
             self::COOKIE_REQUISITE => true,
             self::COOKIE_CONNEXION => false,
-            self::COOKIE_GRIMOIRE => false
+            self::COOKIE_BOOKMARK => false
         ];
 
         private $_bookmark = [];
@@ -307,7 +293,7 @@ class User extends Content
             } else {
                 $rights = [];
             }
-            if($type != "all" && isset(User::RIGHT[$type])){
+            if($type != "all" && isset(Module::USER_RIGHT[$type])){
                 $rights = [$type => $rights[$type]];
             }
 
@@ -316,7 +302,7 @@ class User extends Content
                       ob_start(); ?>
                         <div class="m-3">
                            <?php foreach ($rights as $right_name => $value) {
-                                if(isset(User::RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){?>
+                                if(isset(Module::USER_RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){?>
                                     <h5 class="m-0 mt-2">Droit concernant <?=ucfirst($right_name)?></h5>
                                     <?php foreach (User::RIGHT_TYPE as $type) {
                                         $checked = false; if($value == $type){ $checked = true;}
@@ -352,7 +338,7 @@ class User extends Content
                     ob_start(); ?>
                         <div class="m-3">
                             <?php foreach ($rights as $right_name => $value) {
-                                if(isset(User::RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){ ?>
+                                if(isset(Module::USER_RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){ ?>
                                     <h5 class="m-0 mt-2">Droit concernant <?=ucfirst($right_name)?></h5>
                                     <?php switch ($value) {
                                         case self::RIGHT_NO:
@@ -391,7 +377,7 @@ class User extends Content
                     ob_start(); ?>
                         <div class="m-3">
                             <?php foreach ($rights as $right_name => $value) {
-                                if(isset(User::RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){
+                                if(isset(Module::USER_RIGHT[$right_name]) && in_array($value, User::RIGHT_TYPE)){
                                     switch ($value) {
                                         case self::RIGHT_NO:
                                             $color = "grey";
@@ -443,8 +429,8 @@ class User extends Content
         }
 
         public function getCookie($type){
-            if(isset($this->_cookie[$type]) && !empty($this->_cookie[$type])){
-                return $this->returnBool($this->_cookie[$type]);
+            if(isset($this->_cookie[$type])){
+                return $this->_cookie[$type];
             } else {
                 return false;
             }
@@ -547,12 +533,12 @@ class User extends Content
             $new_right = array();
             if(is_array($data)){
                 // Si ça vient de l'update du controller
-                if(isset(User::RIGHT[reset($data)]) && in_array($data[1], User::RIGHT_TYPE)){
+                if(isset(Module::USER_RIGHT[reset($data)]) && in_array($data[1], User::RIGHT_TYPE)){
                     $new_right[$data[0]] = $data[1];
                 } else {
                     // Si data est un tableau de droits composé du nom du droit en key et de la valeur en value
                     foreach ($data as $right_name => $data_value) {
-                        if(isset(User::RIGHT[$right_name]) && in_array($data_value, User::RIGHT_TYPE)){
+                        if(isset(Module::USER_RIGHT[$right_name]) && in_array($data_value, User::RIGHT_TYPE)){
                             $new_right[$right_name] = $data_value;
                         }
                     }
@@ -561,16 +547,16 @@ class User extends Content
                 // Si ça vient de la base de donnée
                 $data_check = unserialize($data);
                 foreach ($data_check as $right_name => $data_value) {
-                    if(isset(User::RIGHT[$right_name]) && in_array($data_value, User::RIGHT_TYPE)){
+                    if(isset(Module::USER_RIGHT[$right_name]) && in_array($data_value, User::RIGHT_TYPE)){
                         $new_right[$right_name] = $data_value;
                     }
                 }
             } elseif(empty($data) && empty($right) && empty($value)){
-                $new_right = User::RIGHT;
+                $new_right = Module::USER_RIGHT;
             }
 
             // Si on veut modifier un droit en particulier
-            if(isset(User::RIGHT[$right]) && in_array($value, User::RIGHT_TYPE)) {
+            if(isset(Module::USER_RIGHT[$right]) && in_array($value, User::RIGHT_TYPE)) {
                 $new_right[$right] = $value;
             }
             if($this->isSerialized($this->getRights())){
@@ -585,7 +571,7 @@ class User extends Content
                     }
                 }
             }
-            foreach (User::RIGHT as $name => $value) {
+            foreach (Module::USER_RIGHT as $name => $value) {
                 if(!isset($new_right[$name])){
                     $new_right[$name] = $value;
                 }
@@ -600,9 +586,14 @@ class User extends Content
             return true;
         }
 
-        public function setCookie($type, bool $data){
+        public function setCookie($type, string | bool $data){
             if(isset($this->_cookie[$type])){
-                $this->_cookie[$type] = $this->returnBool($data);
+                if($data == "false"){
+                    $data = false;
+                }else{
+                    $data = true;
+                }
+                $this->_cookie[$type] = $data;
                 return true;
             } else {
                 return false;

@@ -2,9 +2,9 @@
 class Consumable extends Content
 {
 
-    const TYPE_FOOD = 3;
     const TYPE_POTION = 1;
     const TYPE_TREAT = 2;
+    const TYPE_FOOD = 3;
     const TYPE_PARCHMENT = 4;
     const TYPE_STONE= 5;
 
@@ -20,6 +20,7 @@ class Consumable extends Content
         "logo" => [
             "type" => FileManager::FORMAT_IMG,
             "default" => "medias/modules/consumables/default.svg",
+            "default_editable" => "medias/modules/consumables/default_[type].svg",
             "dir" => "medias/modules/consumables/",
             "preferential_format" => "svg",
             "naming" => "[uniqid]"

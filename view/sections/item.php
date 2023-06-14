@@ -165,7 +165,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th data-sortable="true" data-visible="false"  data-field="effect">Effet</th>
                     <th data-sortable="true" data-visible="false"  data-field="recepe">Recette</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="rarity"><span class="text-grey" data-bs-toggle='tooltip' data-bs-placement='bottom' title="Rareté de l'équipement">Rareté</span></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="price"><span class="text-kamas" data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix estimé de l'équipement"><img class='icon' src='medias/icons/kamas.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="price"><span class="text-kamas" data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix estimé de l'équipement"><img class='icon' src='medias/icons/modules/kamas.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fas fa-check text-green-d-3'></i> JDR</span></th>

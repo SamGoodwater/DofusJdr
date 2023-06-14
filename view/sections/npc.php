@@ -91,28 +91,28 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="size">Taille</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="weight">Poids</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="life">Points de vie</th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="pa"><img class='icon' src='medias/icons/pa.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="pm"><img class='icon' src='medias/icons/pm.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="po"><img class='icon' src='medias/icons/po.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="ini"><img class='icon' src='medias/icons/ini.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="invocation"><img class='icon' src='medias/icons/invocation.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="touch"><img class='icon' src='medias/icons/touch.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="ca"><img class='icon' src='medias/icons/ca.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="dodge_pa"><img class='icon' src='medias/icons/dodge_pa.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="dodge_pm"><img class='icon' src='medias/icons/dodge_pm.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="fuite"><img class='icon' src='medias/icons/fuite.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="tacle"><img class='icon' src='medias/icons/tacle.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="vitality"><img class='icon' src='medias/icons/vitality.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="sagesse"><img class='icon' src='medias/icons/sagesse.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="strong"><img class='icon' src='medias/icons/force.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="intel"><img class='icon' src='medias/icons/intel.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="agi"><img class='icon' src='medias/icons/agi.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="chance"><img class='icon' src='medias/icons/chance.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_neutre"><img class='icon' src='medias/icons/res_neutre.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_terre"><img class='icon' src='medias/icons/res_terre.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_feu"><img class='icon' src='medias/icons/res_feu.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_air"><img class='icon' src='medias/icons/res_air.png'></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_eau"><img class='icon' src='medias/icons/res_eau.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="pa"><img class='icon' src='medias/icons/modules/pa.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="pm"><img class='icon' src='medias/icons/modules/pm.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="po"><img class='icon' src='medias/icons/modules/po.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="ini"><img class='icon' src='medias/icons/modules/ini.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="invocation"><img class='icon' src='medias/icons/modules/invocation.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="touch"><img class='icon' src='medias/icons/modules/touch.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="ca"><img class='icon' src='medias/icons/modules/ca.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="dodge_pa"><img class='icon' src='medias/icons/modules/dodge_pa.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="dodge_pm"><img class='icon' src='medias/icons/modules/dodge_pm.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="fuite"><img class='icon' src='medias/icons/modules/fuite.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="tacle"><img class='icon' src='medias/icons/modules/tacle.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="vitality"><img class='icon' src='medias/icons/modules/vitality.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="sagesse"><img class='icon' src='medias/icons/modules/sagesse.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="strong"><img class='icon' src='medias/icons/modules/force.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="intel"><img class='icon' src='medias/icons/modules/intel.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="agi"><img class='icon' src='medias/icons/modules/agi.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="chance"><img class='icon' src='medias/icons/modules/chance.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_neutre"><img class='icon' src='medias/icons/modules/res_neutre.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_terre"><img class='icon' src='medias/icons/modules/res_terre.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_feu"><img class='icon' src='medias/icons/modules/res_feu.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_air"><img class='icon' src='medias/icons/modules/res_air.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="res_eau"><img class='icon' src='medias/icons/modules/res_eau.png'></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="acrobatie">Acrobatie</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="discretion">Discrétion</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="escamotage">Escamotage</th>
@@ -131,7 +131,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="persuasion">Persuasion</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="representation">Représentation</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="supercherie">Supercherie</th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="kamas"><img class='icon' src='medias/icons/kamas.png'></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="kamas"><img class='icon' src='medias/icons/modules/kamas.png'></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="drop_">Drop</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="other_equipment">Autres équipements</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="other_consumable">Autres consommables</th>

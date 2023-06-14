@@ -5,6 +5,7 @@ class Item extends Content
         "logo" => [
             "type" => FileManager::FORMAT_IMG,
             "default" => "medias/modules/items/default.svg",
+            "default_editable" => "medias/modules/items/default_[type].svg",
             "dir" => "medias/modules/items/",
             "preferential_format" => "svg",
             "naming" => "[uniqid]"
@@ -308,16 +309,16 @@ class Item extends Content
                     
                 case Content::FORMAT_BADGE:
                     if($this->_twohands){ 
-                        return "<span class='badge back-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='1 main'>1 main <img class='icon' src='medias/modules/icons/onehand.png'></span>";
+                        return "<span class='badge back-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='1 main'>1 main <img class='icon' src='medias/icons/modules/onehand.png'></span>";
                     } else { 
-                        return "<span class='badge back-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='2 mains'>2 mains <img class='icon' src='medias/modules/icons/twohand.png'></span>";
+                        return "<span class='badge back-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='2 mains'>2 mains <img class='icon' src='medias/icons/modules/twohand.png'></span>";
                     }
 
                 case Content::FORMAT_ICON:
                     if($this->_twohands){ 
-                        return "<span class='text-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='1 main'>1 <img class='icon' src='medias/modules/icons/onehand.png'></span>";
+                        return "<span class='text-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='1 main'>1 <img class='icon' src='medias/icons/modules/onehand.png'></span>";
                     } else { 
-                        return "<span class='text-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='2 mains'>2 <img class='icon' src='medias/modules/icons/twohand.png'></span>";
+                        return "<span class='text-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='2 mains'>2 <img class='icon' src='medias/icons/modules/twohand.png'></span>";
                     }
                     
                 default:
@@ -331,7 +332,7 @@ class Item extends Content
                         <div class="mb-1 text-pa-d-2">
                             <label>Coût en point d'action de l'équipement</label>
                             <div class="input-group">
-                                <div class="input-group-text back-pa-d-2 text-white"><img class='icon' src='medias/modules/icons/pa.png'></div>
+                                <div class="input-group-text back-pa-d-2 text-white"><img class='icon' src='medias/icons/modules/pa.png'></div>
                                 <input 
                                     onchange="Item.update('<?=$this->getUniqid();?>', this, 'pa');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Coût en point d'action de l'équipement"
@@ -346,7 +347,7 @@ class Item extends Content
                     return "<span class='badge back-pa-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Coût en point d'action de l'équipement\">PA {$this->_pa}</span>";
                    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-pa-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Coût en point d'action de l'équipement\">{$this->_pa} <img class='icon' src='medias/modules/icons/pa.png'></span>";
+                    return "<span class='text-pa-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Coût en point d'action de l'équipement\">{$this->_pa} <img class='icon' src='medias/icons/modules/pa.png'></span>";
                 
                 default:
                     return $this->_pa;
@@ -359,7 +360,7 @@ class Item extends Content
                         <div class="mb-1 text-po-d-2">
                             <label>Portée de l'équipement</label>
                             <div class="input-group">
-                                <div class="input-group-text back-po text-white"><img class="icon" src="medias/modules/icons/po.png"></div>
+                                <div class="input-group-text back-po text-white"><img class="icon" src="medias/icons/modules/po.png"></div>
                                 <input 
                                     onchange="Item.update('<?=$this->getUniqid();?>', this, 'po');" 
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' title="Portée de l'équipement"
@@ -374,7 +375,7 @@ class Item extends Content
                     return "<span class='badge back-po-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Portée de l'équipement\">PO {$this->_po}</span>";
                    
                 case Content::FORMAT_ICON:
-                    return "<span class='text-po-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Portée de l'équipement\">{$this->_po} <img class='icon' src='medias/modules/icons/po.png'></span>";
+                    return "<span class='text-po-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Portée de l'équipement\">{$this->_po} <img class='icon' src='medias/icons/modules/po.png'></span>";
                 
                 default:
                     return $this->_po;

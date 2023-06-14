@@ -411,11 +411,11 @@ class Spell extends Content
 
                 case Content::FORMAT_PATH:
                     if($this->_po_editable && !in_array($this->getPO(), Spell::EXPRESSION_CAC)){ // Sort à distance Avec portée modifiable
-                        return "medias/icons/po_editable.png";
+                        return "medias/icons/modules/po_editable.png";
                     } elseif(in_array($this->getPO(), Spell::EXPRESSION_CAC)) { // Sort au CàC
-                        return "medias/icons/cac.png";
+                        return "medias/icons/modules/cac.png";
                     } else { 
-                        return "medias/icons/po_no_editable.png";   
+                        return "medias/icons/modules/po_no_editable.png";   
                     }
                     
                 default:
@@ -585,9 +585,9 @@ class Spell extends Content
 
                 case Content::FORMAT_PATH:
                     if($this->_sight_line){ 
-                        return "medias/icons/sight_line.png";
+                        return "medias/icons/modules/sight_line.png";
                     } else { 
-                        return "medias/icons/no_sight_line.png";
+                        return "medias/icons/modules/no_sight_line.png";
                     }
                     
                 default:
