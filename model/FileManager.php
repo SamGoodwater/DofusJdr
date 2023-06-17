@@ -644,4 +644,34 @@ class FileManager extends Manager{
             }
             return $patern;
         }
+
+        // thumbnail
+            static function addThumbnail(File $file){
+                if(!$file->isThumbnail()){
+                    if(!$file->existThumbnail()){
+                        $thumb = $file->getThumbnail();
+                        return FileManager::write(
+                            path_read:$file->getPath(),
+                            path_write:$thumb->getPath(),
+                            compress:true,
+                            set_format_png:false,
+                            resize:true,
+                            is_thumbnail:true
+                        );
+                    } else {
+                        return false;
+                    }
+                }
+                return false;
+            }
+            static function removeThumbnail(File $file){
+                if(!$file->isThumbnail()){
+                    if($file->existThumbnail()){
+                        $file = $file->getThumbnail();
+                    } else {
+                        return false;
+                    }
+                }
+                return FileManager::remove(path:$file->getPath(), removeRoot:false);
+            }
 }

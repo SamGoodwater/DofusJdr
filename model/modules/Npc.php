@@ -2990,9 +2990,9 @@ class Npc extends Content
                                     "title" => "Ajouter un consommable",
                                     "label" => "Rechercher un consommable",
                                     "placeholder" => "Rechercher un consommable",
-                                    "search_in" => ControllerSearch::SEARCH_IN_CONSUMABLE,
+                                    "search_in" => ControllerModule::SEARCH_IN_CONSUMABLE,
                                     "parameter" => $this->getUniqid(),
-                                    "action" => ControllerSearch::SEARCH_DONE_ADD_CONSUMABLE_TO_NPC,
+                                    "action" => ControllerModule::SEARCH_DONE_ADD_CONSUMABLE_TO_NPC,
                                 ], 
                                 write: true);
                         ?>  
@@ -3038,9 +3038,9 @@ class Npc extends Content
                                     "title" => "Ajouter un équipement",
                                     "label" => "Rechercher un équipement",
                                     "placeholder" => "Rechercher un équipement",
-                                    "search_in" => ControllerSearch::SEARCH_IN_ITEM,
+                                    "search_in" => ControllerModule::SEARCH_IN_ITEM,
                                     "parameter" => $this->getUniqid(),
-                                    "action" => ControllerSearch::SEARCH_DONE_ADD_ITEM_TO_NPC,
+                                    "action" => ControllerModule::SEARCH_DONE_ADD_ITEM_TO_NPC,
                                 ], 
                                 write: true);
                         ?>  
@@ -3092,9 +3092,9 @@ class Npc extends Content
                             "title" => "Ajouter un sort",
                             "label" => "Rechercher un sort",
                             "placeholder" => "Rechercher un sort",
-                            "search_in" => ControllerSearch::SEARCH_IN_SPELL,
+                            "search_in" => ControllerModule::SEARCH_IN_SPELL,
                             "parameter" => $this->getUniqid(),
-                            "action" => ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_NPC,
+                            "action" => ControllerModule::SEARCH_DONE_ADD_SPELL_TO_NPC,
                         ], 
                         write: false);
                     return $html . $this->getSpell(Content::DISPLAY_RESUME, true);
@@ -3169,9 +3169,9 @@ class Npc extends Content
                             "title" => "Ajouter une aptitude",
                             "label" => "Rechercher une aptitude",
                             "placeholder" => "Rechercher une aptitude",
-                            "search_in" => ControllerSearch::SEARCH_IN_CAPABILITY,
+                            "search_in" => ControllerModule::SEARCH_IN_CAPABILITY,
                             "parameter" => $this->getUniqid(),
-                            "action" => ControllerSearch::SEARCH_DONE_ADD_CAPABILITY_TO_NPC,
+                            "action" => ControllerModule::SEARCH_DONE_ADD_CAPABILITY_TO_NPC,
                         ], 
                         write: false);
                     return $html . $this->getCapability(Content::DISPLAY_RESUME, true);

@@ -10,6 +10,7 @@ $GLOBALS['project'] = [
     "bookmark_name" => "Signet",
     "stability" => "α", // β ou α
     "stability_verbal" => "alpha",
+    "base_url" => "http://exemple.com/",
     "author" => "",
     "mail" => [
         "contact" => "contact@mail.fr",
@@ -28,3 +29,28 @@ $GLOBALS['project'] = [
         "github"
     ]
 ]; 
+
+if($_SERVER['HTTP_HOST'] == '127.0.0.1' || $_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == '') { // LOCAL
+    $conf_host = "localhost";
+    $conf_login = "root";
+    $conf_password = "";
+    $conf_pdo_name = "";
+} else { // Serveur
+    $conf_host = "localhost";
+    $conf_login = "";
+    $conf_password = "*********";
+    $conf_pdo_name = "";
+}
+    
+if(!isset($GLOBALS['pdoHost'])){
+    $GLOBALS['pdoHost'] = $conf_host;
+}
+if(!isset($GLOBALS['pdoName'])){
+    $GLOBALS['pdoName'] = $conf_pdo_name;
+}
+if(!isset($GLOBALS['pdoLogin'])){
+    $GLOBALS['pdoLogin'] = $conf_login;
+}
+if(!isset($GLOBALS['pdoPassword'])){
+    $GLOBALS['pdoPassword'] = $conf_password ;
+}

@@ -6,7 +6,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="description" content="<?=$GLOBALS['project']['description']?>">
-    <link rel="icon" type="image/svg" href="<?=$GLOBALS['project']['logo_mini']?>"/>
+    <?php $icon_write = false;
+        if(isset($GLOBALS['project']['icon'])){
+            if(!empty($GLOBALS['project']['icon'])){
+                if(is_array($GLOBALS['project']['icon'])){
+                    foreach($GLOBALS['project']['icon'] as $icon){
+                        $file = new File($icon);
+                        echo("<link rel='icon' type='image/".$file->getExtention()."' href='".$file->getPath()."'/>");
+                    }
+                    $icon_write = true;
+                } else {
+                    $file = new File($GLOBALS['project']['icon']);
+                    echo("<link rel='icon' type='image/".$file->getExtention()."' href='".$file->getPath()."'/>");
+                    $icon_write = true;
+                }
+            }
+        }
+        if(!$icon_write){
+            if(isset($GLOBALS['project']['logo_mini'])){
+                if(!empty($GLOBALS['project']['logo_mini'])){
+                    $file = new File($GLOBALS['project']['logo_mini']);
+                    echo("<link rel='icon' type='image/".$file->getExtention()."' href='".$file->getPath()."'/>");
+                }
+            } else {
+                $file = new File($GLOBALS['project']['logo']);
+                echo("<link rel='icon' type='image/".$file->getExtention()."' href='".$file->getPath()."'/>");
+            }
+        }
+
+    ?>
     <title><?=$GLOBALS['project']['name']?></title>
     <meta name="keywords" content="<?=$GLOBALS['project']['keywords']?>"/>
 
@@ -108,6 +136,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2 class="modal-title w-100"></h2>
+                        <a class="modal__share_object btn-text-grey mx-2" title="Copier le lien vers cette objet" onclick=""><i class="fas fa-share-alt"></i></a>
+                        <a class="modal__bookmark_toogle btn-text-grey mx-2" title="Ajouter aux favoris" data-uniqid="" data-classe="" onclick="User.changeBookmark(this);"><i class="far fa-bookmark"></i></a>
                         <a class="modal__bubbleshortcut_toggle mx-2" title="Ajouter cette bulle de raccourcis" onclick=""></a>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -173,9 +203,14 @@
 
         $(document).ready(function(){ 
             // Renvoi vers la page demandée
-            let parts = window.location.pathname.split('/').filter(function(value) {
+            let settings_modal = window.location.pathname.split('@').filter(function(value) {
                 return value !== '' && value !== null && typeof value !== 'undefined';
             });
+
+            let parts = settings_modal[0].split('/').filter(function(value) {
+                return value !== '' && value !== null && typeof value !== 'undefined';
+            });
+
             if(parts.length = 1){
                 Page.show(parts[0]);
             } else if(parts.length == 2) {
@@ -184,6 +219,23 @@
                 Page.show("home");
             }
             Connect.getHeader(false);
+
+            if(settings_modal.length == 2){
+                settings_modal = settings_modal[1].split('~').filter(function(value) {
+                    return value !== '' && value !== null && typeof value !== 'undefined';
+                });
+                if(settings_modal.length == 2){
+                    let modelClassName = ucFirst(settings_modal[0]);
+                    let model_uniqid = settings_modal[1];
+                    // Vérifie que modelClassName ne contient que des lettres
+                    if (/^[a-zA-Z]+$/.test(modelClassName)) {
+                        // Vérifie que model_uniqid contient exactement 13 lettres et chiffres
+                        if (/^[a-zA-Z0-9]{13}$/.test(model_uniqid)) {
+                            eval(`${modelClassName}.open('${model_uniqid}')`);
+                        }
+                    }   
+                }
+            }
         });
 
     </script>

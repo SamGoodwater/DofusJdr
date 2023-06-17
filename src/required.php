@@ -5,8 +5,7 @@
     $to_require = [
         "src/php/traits/",
         "src/php/traits/modules/",
-        "src/php/conf.php",
-        "src/php/settings.php"
+        "src/php/conf.php"
     ];
 
     foreach ($to_require as $dir) {

@@ -49,5 +49,71 @@ class ControllerFile extends Controller{
     flush();
   }
 
+  public function addThumbnail(){
+    $return = [
+      'state ' => false,
+      'value' => "",
+      'error' => 'erreur inconnue',
+      'script' => ""
+    ];
+    $currentUser = ControllerConnect::getCurrentUser();
+    if(!$currentUser->getRight('file', User::RIGHT_WRITE)){
+      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
+
+      if(!isset($_REQUEST['path'])){
+        $return['error'] = 'Impossible de récupérer les données';
+      } else {
+
+        if(file_exists($_REQUEST['path'])){
+          $file = new File($_REQUEST['path']);
+          if(FileManager::addThumbnail($file)){
+            $return['state'] = true;
+            $return["value"] = $file->getThumbnail()->getPath();
+          } else {
+            $return['error'] = "Impossible de créer la miniature.";
+          }
+          
+        } else {
+          $return['error'] = "Le lien n'existe pas.";
+        }
+      }
+    }
+
+    echo json_encode($return);
+    flush();
+  }
+  public function removeThumbnail(){
+    $return = [
+      'state ' => false,
+      'value' => "",
+      'error' => 'erreur inconnue',
+      'script' => ""
+    ];
+    $currentUser = ControllerConnect::getCurrentUser();
+    if(!$currentUser->getRight('file', User::RIGHT_WRITE)){
+      $return['error'] = "Vous n'avez pas les droits pour écrire cet objet";}else{
+
+      if(!isset($_REQUEST['path'])){
+        $return['error'] = 'Impossible de récupérer les données';
+      } else {
+
+        if(file_exists($_REQUEST['path'])){
+          $file = new File($_REQUEST['path']);
+          if(FileManager::removeThumbnail($file)){
+            $return['state'] = true;
+          } else {
+            $return['error'] = "Impossible de supprimer la miniature.";
+          }
+          
+        } else {
+          $return['error'] = "Le lien n'existe pas.";
+        }
+      }
+    }
+
+    echo json_encode($return);
+    flush();
+  }
+
 }
  

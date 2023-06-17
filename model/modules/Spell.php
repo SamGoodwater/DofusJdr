@@ -777,9 +777,9 @@ class Spell extends Content
                                     "title" => "Lier une invocation au sort",
                                     "label" => "Rechercher une invocation",
                                     "placeholder" => "Rechercher une invocation",
-                                    "search_in" => ControllerSearch::SEARCH_IN_MOB,
+                                    "search_in" => ControllerModule::SEARCH_IN_MOB,
                                     "parameter" => $this->getUniqid(),
-                                    "action" => ControllerSearch::SEARCH_DONE_ADD_MOB_TO_SPELL,
+                                    "action" => ControllerModule::SEARCH_DONE_ADD_MOB_TO_SPELL,
                                     "comment" => "Une seule créature peut être liée à un sort. Si vous liez une autre créature, la créature actuelle sera remplacée."
                                 ], 
                                 write: true);

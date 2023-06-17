@@ -141,6 +141,13 @@ class File
                 return false;
             }
         }
+        public function isThumbnail(){
+            if(preg_match("/_thumb/", $this->getName(with_extention:false))){
+                return true;
+            } else {
+                return false;
+            }
+        }
     
         public function getVisual(Style $style = new Style()) {
             $view = new View();

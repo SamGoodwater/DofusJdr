@@ -182,4 +182,49 @@ class File {
             ); 
         }
     }
+
+    static removeThumbnail(path){
+        var URL = 'index.php?c=file&a=removeThumbnail';
+    
+        if (confirm("Etes vous sûr de supprimer et recréer les miniatures pour cette image ?")) {
+            $.post(URL,
+                {
+                    path:path
+                },
+                function(data, status)
+                {
+                    if(data.script != ""){
+                        $('body').append("<script>"+data.script+"</script>");
+                    }
+                    if(data.return){
+                        MsgAlert("Mise à jour des miniatures", "Les miniatures ont bien été supprimé.", "green-d-3" , 3000);
+                    } else {
+                        MsgAlert("Echec de la mise à jour des miniatures", 'Erreur : ' + data.error, "red-d-3" , 4000);
+                    }
+                },
+                "json"
+            ); 
+        }
+    
+    }
+    static addThumbnail(path){
+        var URL = 'index.php?c=file&a=addThumbnail';
+        $.post(URL,
+            {
+                path:path
+            },
+            function(data, status)
+            {
+                if(data.script != ""){
+                    $('body').append("<script>"+data.script+"</script>");
+                }
+                if(data.return){
+                    MsgAlert("Mise à jour des miniatures", "Les miniatures ont bien été ajouté.", "green-d-3" , 3000);
+                } else {
+                    MsgAlert("Echec de la mise à jour des miniatures", 'Erreur : ' + data.error, "red-d-3" , 4000);
+                }
+            },
+            "json"
+        ); 
+    }
 }

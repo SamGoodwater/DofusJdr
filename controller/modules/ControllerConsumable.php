@@ -256,7 +256,7 @@ class ControllerConsumable extends ControllerModule{
     echo json_encode($return);
     flush();
   }
-  public function search($term, $action = ControllerSearch::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
+  public function search($term, $action = ControllerModule::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
     $currentUser = ControllerConnect::getCurrentUser();
     if(!$currentUser->getRight('consumable', User::RIGHT_READ)){
       $array = [
@@ -274,13 +274,13 @@ class ControllerConsumable extends ControllerModule{
             foreach ($consumables  as $object) {
                 $click_action = "";
                 switch ($action) {
-                  case ControllerSearch::SEARCH_DONE_ADD_TO_BOOKMARK:
+                  case ControllerModule::SEARCH_DONE_ADD_TO_BOOKMARK:
                     $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
                   break;
-                  case ControllerSearch::SEARCH_DONE_ADD_CONSUMABLE_TO_SHOP:
+                  case ControllerModule::SEARCH_DONE_ADD_CONSUMABLE_TO_SHOP:
                     $click_action = "onclick=\"Shop.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'consumable', IS_VALUE);\"";
                   break;
-                  case ControllerSearch::SEARCH_DONE_ADD_CONSUMABLE_TO_NPC:
+                  case ControllerModule::SEARCH_DONE_ADD_CONSUMABLE_TO_NPC:
                     $click_action = "onclick=\"Npc.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'consumable', IS_VALUE);\"";
                   break;
                   default:

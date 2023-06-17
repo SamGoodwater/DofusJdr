@@ -21,7 +21,7 @@ class Page extends Controller{
     }
 
     // Changement de Nom de build à build
-    static build(is_modal = true, title, content, size = Page.SIZE_MD, show = false, bubbleId = null){
+    static build(is_modal = true, title, content, size = Page.SIZE_MD, show = false, bubbleId = null, linkShare = "", bookmark = {}){
         switch (size) {
             case "sm":
                 size = Page.SIZE_SM;    
@@ -87,6 +87,14 @@ class Page extends Controller{
             $("#modal .modal-body").html("");
             $("#modal .modal-title").html(title);
             $("#modal .modal-body").html(clone);
+
+            if(linkShare != ""){
+                $("#modal .modal__share_object").attr("onclick", "copyToClipboard('"+document.location.href+linkShare+"')");
+                $("#modal .modal__share_object").show();
+            } else {
+                $("#modal .modal__share_object").hide();
+            }
+
             if(bubbleId != null){
                 $(".modal__bubbleshortcut_toggle").show();
 
@@ -99,6 +107,32 @@ class Page extends Controller{
                 }
             } else {
                 $(".modal__bubbleshortcut_toggle").hide();
+            }
+            
+            let bookmark_obj = $(".modal__bookmark_toogle");
+            if(bookmark != null){
+                if( bookmark['classe'] !== "undefined" && 
+                    bookmark['uniqid'] !== "undefined" && 
+                    bookmark['active'] !== "undefined" 
+                ){
+                    bookmark_obj.show();
+                    bookmark_obj.data('classe', bookmark.classe);
+                    bookmark_obj.data('uniqid', bookmark.uniqid);
+                    var i = bookmark_obj.find('i');
+                    if(bookmark.active){
+                        i.removeClass("far");
+                        i.addClass("fas");
+                        bookmark_obj.attr('title', "Retirer des favoris");
+                    }else{
+                        i.removeClass("fas");
+                        i.addClass("far");
+                        bookmark_obj.attr('title', "Ajouter aux favoris");
+                    }
+                } else {
+                    bookmark_obj.hide();
+                }
+            } else {
+                bookmark_obj.hide();
             }
 
             if(show){

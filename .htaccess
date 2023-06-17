@@ -1,6 +1,7 @@
 Options -Indexes
 Options +FollowSymLinks
 RewriteEngine On
+RewriteBase /
 
 # Si l'URL ne contient pas "index.php" et que la requête n'est pas un répertoire ou un fichier existant
 RewriteCond %{REQUEST_URI} !^/(index\.php|images|css|js)/

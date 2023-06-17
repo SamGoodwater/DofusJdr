@@ -212,9 +212,9 @@ class Shop extends Content
                                     "title" => "Ajouter un consommable",
                                     "label" => "Rechercher un consommable",
                                     "placeholder" => "Rechercher un consommable",
-                                    "search_in" => ControllerSearch::SEARCH_IN_CONSUMABLE,
+                                    "search_in" => ControllerModule::SEARCH_IN_CONSUMABLE,
                                     "parameter" => $this->getUniqid(),
-                                    "action" => ControllerSearch::SEARCH_DONE_ADD_CONSUMABLE_TO_SHOP,
+                                    "action" => ControllerModule::SEARCH_DONE_ADD_CONSUMABLE_TO_SHOP,
                                 ], 
                                 write: true);
                         ?>  
@@ -259,9 +259,9 @@ class Shop extends Content
                                     "title" => "Ajouter un équipement",
                                     "label" => "Rechercher un équipement",
                                     "placeholder" => "Rechercher un équipement",
-                                    "search_in" => ControllerSearch::SEARCH_IN_CONSUMABLE,
+                                    "search_in" => ControllerModule::SEARCH_IN_CONSUMABLE,
                                     "parameter" => $this->getUniqid(),
-                                    "action" => ControllerSearch::SEARCH_DONE_ADD_ITEM_TO_SHOP,
+                                    "action" => ControllerModule::SEARCH_DONE_ADD_ITEM_TO_SHOP,
                                 ], 
                                 write: true);
                         ?>  

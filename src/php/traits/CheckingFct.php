@@ -14,11 +14,7 @@ trait CheckingFct
         }
     }
     function isEmail($email){
-        if(preg_match("#^[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]+@[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]{2,}\.[a-z]{2,4}$#", $email)){
-            return true;
-        }else{
-            return false;
-        }
+        return preg_match("#^[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]+@[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]{2,}\.[a-z]{2,4}$#", $email);
     }
     function isDate($date){
         if(is_numeric($date)){
@@ -33,38 +29,22 @@ trait CheckingFct
 
     }
     function isURL($lien){
-        if (preg_match("#^(http|https|ftp):#", $lien))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return preg_match("#^(http|https|ftp):#", $lien);
     }
     function isPhoneNumber($numero){
-        if (preg_match("#^\+[0-9]{6,20}$#", $numero)){
-            return true;
-        }else{
-            return false;
-        }
+        return preg_match("#^\+[0-9]{6,20}$#", $numero);
     }
     function isCaractere($text, $regex="#~|\|#"){
-        if (preg_match($regex, $text)){
-            return true;
-        } else {
-            return false;
-        }
+        return preg_match($regex, $text);
     }
     function isColorHexa($couleur){
         return preg_match("/^#(?:(?:[a-f\d]{3,4}){1,2})$/i",$couleur);
     }
     function isTimestamp($time){
-      if(preg_match("/^-*[0-9]{1,19}$/", $time )){
-        return true;
-      }else {
-        return false;
-      }
+      return preg_match("/^-*[0-9]{1,19}$/", $time );
+    }
+    function includeHtmlTag($str){
+        return preg_match("/<[^<]+>/",$str);
     }
 
     function isSerialized($var ) {

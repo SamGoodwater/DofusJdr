@@ -289,9 +289,9 @@ class Classe extends Content
                             "title" => "Ajouter un sort",
                             "label" => "Rechercher un sort",
                             "placeholder" => "Rechercher un sort",
-                            "search_in" => ControllerSearch::SEARCH_IN_SPELL,
+                            "search_in" => ControllerModule::SEARCH_IN_SPELL,
                             "parameter" => $this->getUniqid(),
-                            "action" => ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_CLASSE,
+                            "action" => ControllerModule::SEARCH_DONE_ADD_SPELL_TO_CLASSE,
                         ], 
                         write: false);
 
@@ -353,9 +353,9 @@ class Classe extends Content
                             "title" => "Ajouter une aptitude",
                             "label" => "Rechercher une aptitude",
                             "placeholder" => "Rechercher une aptitude",
-                            "search_in" => ControllerSearch::SEARCH_IN_CAPABILITY,
+                            "search_in" => ControllerModule::SEARCH_IN_CAPABILITY,
                             "parameter" => $this->getUniqid(),
-                            "action" => ControllerSearch::SEARCH_DONE_ADD_CAPABILITY_TO_CLASSE,
+                            "action" => ControllerModule::SEARCH_DONE_ADD_CAPABILITY_TO_CLASSE,
                         ], 
                         write: false);
 

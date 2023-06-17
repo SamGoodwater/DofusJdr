@@ -43,7 +43,7 @@ class Router {
             $controller = new $controllerName();
             return $controller;
         } else {
-            throw new Exception("Le controller " . $controllerName . " n'existe pas");
+            return new View();
         }
     }
 
@@ -52,7 +52,7 @@ class Router {
             $action = $this->_action;
             $this->_controller->$action(extract($this->_params));
         } else {
-            throw new Exception("L'action " . $this->_action . " n'existe pas dans le controller " . get_class($this->_controller));
+            $this->_controller->includeMainTemplate();
         }
     }
 
@@ -68,7 +68,6 @@ class Router {
         }
         return $this->_params;
     }
-
 
     // Statics functions
         static function includeCss(){ ?>
@@ -111,15 +110,22 @@ class Router {
 
                 if(is_dir($dir)){
                     $dir = FileManager::formatPath($dir, false, true);
+                    $dir_url = $dir;
+                    if(!substr($dir,4) == "http"){
+                        $dir_url = $GLOBALS['project']['base_url'].$dir;
+                    }
                     foreach(scandir($dir) as $file) {
-                        $path = $dir . $file;
-                        if($file != '.' && $file != '..' && !empty($file) && !is_dir($path)){
+                        $path =  $dir_url . $file;
+                        if($file != '.' && $file != '..' && !empty($file) && !is_dir($dir.$file)){
                             if(substr($path, -4) == ".css"){
                                 ?> <link href="<?=$path?>" crossorigin="<?=$crossorigin?>" media="<?=$media?>" integrity="<?=$integrity?>" rel="stylesheet" type="text/css"> <?php
                             }
                         }
                     }  
                 } else {
+                    if(!substr($dir,4) == "http"){
+                        $dir = $GLOBALS['project']['base_url'].$dir;
+                    }
                     if(substr($dir, -4) == ".css"){
                         ?> <link href="<?=$dir?>"  crossorigin="<?=$crossorigin?>" media="<?=$media?>" integrity="<?=$integrity?>" rel="stylesheet" type="text/css"> <?php
                     }
@@ -191,15 +197,22 @@ class Router {
 
                         if(is_dir($dir)){
                             $dir = FileManager::formatPath($dir, false, true);
+                            $dir_url = $dir;
+                            if(!substr($dir,4) == "http"){
+                                $dir_url = $GLOBALS['project']['base_url'].$dir;
+                            }
                             foreach(scandir($dir) as $file) {
-                                $path = $dir . $file;
-                                if($file != '.' && $file != '..' && !empty($file) && !is_dir($path)){
+                                $path = $dir_url . $file;
+                                if($file != '.' && $file != '..' && !empty($file) && !is_dir($dir.$file)){
                                     if(substr($path, -2) == "js"){
                                         ?> <script src="<?=$path?>" crossorigin="<?=$crossorigin?>" integrity="<?=$integrity?>" type="text/javascript"></script> <?php
                                     }
                                 }
                             }  
                         } else {
+                            if(!substr($dir,4) == "http"){
+                                $dir = $GLOBALS['project']['base_url'].$dir;
+                            }
                             if(substr($dir, -2) == "js"){
                                 ?> <script src="<?=$dir?>"  crossorigin="<?=$crossorigin?>" integrity="<?=$integrity?>" type="text/javascript"></script> <?php
                             }

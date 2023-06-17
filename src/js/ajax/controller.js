@@ -27,7 +27,20 @@ class Controller {
                     if(data.value.bubbleId != ""){
                         bubbleId = data.value.bubbleId;
                     }
-                    Page.build(Page.RESPONSIVE, data.value.title, data.value.visual, Page.SIZE_XL, true, bubbleId);
+                    Page.build(
+                        Page.RESPONSIVE,
+                        data.value.title, 
+                        data.value.visual, 
+                        Page.SIZE_XL, 
+                        true, 
+                        bubbleId, 
+                        data.value.linkshare, 
+                        {
+                            active : data.value.bookmark_active,
+                            uniqid : uniqid,
+                            classe : data.value.classe
+                        }
+                    );
                 } else {
                     MsgAlert("Impossible de récupérer l'élément", 'Erreur : ' + data.error, "danger" , 4000);
                 }

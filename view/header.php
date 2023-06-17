@@ -8,9 +8,9 @@
             <input type="text" 
                 style="max-width: 300px;"
                 data-url = "index.php?c=search&a=search"
-                data-search_in = <?=ControllerSearch::SEARCH_IN_ALL?>
+                data-search_in = <?=ControllerModule::SEARCH_IN_ALL?>
                 data-minlenght = 3
-                data-action = <?=ControllerSearch::SEARCH_DONE_REDIRECT?>
+                data-action = <?=ControllerModule::SEARCH_DONE_REDIRECT?>
                 data-limit = 5
                 data-only_usable = true
                 class="form-control text-main-d-3 form-control-sm" 

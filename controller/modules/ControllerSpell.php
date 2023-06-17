@@ -380,7 +380,7 @@ class ControllerSpell extends ControllerModule{
     flush();
   }
 
-  public function search($term, $action = ControllerSearch::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
+  public function search($term, $action = ControllerModule::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
     $currentUser = ControllerConnect::getCurrentUser();
     if(!$currentUser->getRight('spell', User::RIGHT_READ)){
       $array = [
@@ -398,19 +398,19 @@ class ControllerSpell extends ControllerModule{
             foreach ($objects as $object) {
                 $click_action = "";
                 switch ($action) {
-                  case ControllerSearch::SEARCH_DONE_ADD_TO_BOOKMARK:
+                  case ControllerModule::SEARCH_DONE_ADD_TO_BOOKMARK:
                     $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
                   break;
-                  case ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_MOB:
+                  case ControllerModule::SEARCH_DONE_ADD_SPELL_TO_MOB:
                     $click_action = "onclick=\"Mob.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'spell', IS_VALUE);\"";
                   break;
-                  case ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_CLASSE:
+                  case ControllerModule::SEARCH_DONE_ADD_SPELL_TO_CLASSE:
                     $click_action = "onclick=\"Classe.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'spell', IS_VALUE);\"";
                   break;
-                  case ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_NPC:
+                  case ControllerModule::SEARCH_DONE_ADD_SPELL_TO_NPC:
                     $click_action = "onclick=\"Npc.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'spell', IS_VALUE);\"";
                   break;
-                  case ControllerSearch::SEARCH_DONE_GET_SPELL:
+                  case ControllerModule::SEARCH_DONE_GET_SPELL:
                     $click_action = "onclick=\"Spell.showResume('".$object->getUniqid()."','#".$parameter."', ".Content::FORMAT_BADGE.", false);\"";
                   break;
                   default:

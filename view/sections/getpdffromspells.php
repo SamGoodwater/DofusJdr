@@ -43,10 +43,10 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <div class="form-floating w-100">
                         <input  type="text" 
                                 data-url = "index.php?c=search&a=search"
-                                data-search_in = <?=ControllerSearch::SEARCH_IN_SPELL?>
+                                data-search_in = <?=ControllerModule::SEARCH_IN_SPELL?>
                                 data-minlenght = 3
                                 data-parameter = "showResume<?=$this->getUniqid()?>"
-                                data-action = <?=ControllerSearch::SEARCH_DONE_GET_SPELL?>
+                                data-action = <?=ControllerModule::SEARCH_DONE_GET_SPELL?>
                                 data-limit = 10
                                 data-only_usable = true
                                 class="form-control form-control-main-focus" 

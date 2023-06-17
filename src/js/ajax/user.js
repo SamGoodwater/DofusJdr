@@ -63,16 +63,18 @@ class User extends Controller{
 
         var i = $(btn).find('i'); // REMOVE
         if(i.hasClass("fas") && i.hasClass("fa-bookmark")){
-          i.removeClass("fas");
-          i.addClass("far");
-          url = "index.php?c=user&a=removeBookmark";
-          sentence = "Le favoris a bien été enlevé du "+ucFirst(globalThis.project.bookmark_name)+".";
+            i.removeClass("fas");
+            i.addClass("far");
+            $(btn).attr('title', "Ajouter aux favoris");
+            url = "index.php?c=user&a=removeBookmark";
+            sentence = "Le favoris a bien été enlevé du "+ucFirst(globalThis.project.bookmark_name)+".";
 
         }else if(i.hasClass("far") && i.hasClass("fa-bookmark")){ // AJOUT
-          i.removeClass("far");
-          i.addClass("fas");
-          url = "index.php?c=user&a=addBookmark";
-          sentence = "Le favoris a bien été ajouté au "+ucFirst(globalThis.project.bookmark_name)+".";
+            i.removeClass("far");
+            i.addClass("fas");
+            $(btn).attr('title', "Retirer des favoris");
+            url = "index.php?c=user&a=addBookmark";
+            sentence = "Le favoris a bien été ajouté au "+ucFirst(globalThis.project.bookmark_name)+".";
         }
 
         let classe = $(btn).data("classe");
@@ -93,6 +95,16 @@ class User extends Controller{
                     if(data.cookie.serial != ""){
                         var cookie = "bookmark="+data.cookie.serial+"; path=/; expires="+data.cookie.date+";"; 
                         document.cookie = cookie;
+                    }
+                    var i = $(btn).find('i'); // REMOVE
+                    if(i.hasClass("fas") && i.hasClass("fa-bookmark")){
+                        i.removeClass("fas");
+                        i.addClass("far");
+                        $(btn).attr('title', "Ajouter aux favoris");
+                    }else if(i.hasClass("far") && i.hasClass("fa-bookmark")){ // AJOUT
+                        i.removeClass("far");
+                        i.addClass("fas");
+                        $(btn).attr('title', "Retirer des favoris");
                     }
                     if($("#offcanvasbookmark").css("visibility") == 'visible'){
                         User.getBookmark(true);

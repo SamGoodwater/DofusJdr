@@ -5,10 +5,10 @@
     <div class="form-floating w-100">
         <input  type="text" 
                 data-url = "index.php?c=search&a=search"
-                data-search_in = <?=ControllerSearch::SEARCH_IN_SPELL?>
+                data-search_in = <?=ControllerModule::SEARCH_IN_SPELL?>
                 data-minlenght = 3
                 data-parameter = "<?=$this->getUniqid()?>"
-                data-action = <?=ControllerSearch::SEARCH_DONE_ADD_SPELL_TO_MOB?>
+                data-action = <?=ControllerModule::SEARCH_DONE_ADD_SPELL_TO_MOB?>
                 data-limit = 10
                 data-only_usable = true
                 class="form-control" 

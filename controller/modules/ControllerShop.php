@@ -238,7 +238,7 @@ class ControllerShop extends ControllerModule{
     echo json_encode($return);
     flush();
   }
-  public function search($term, $action = ControllerSearch::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
+  public function search($term, $action = ControllerModule::SEARCH_DONE_REDIRECT, $parameter = "", $limit = null, $only_usable = false){
     $currentUser = ControllerConnect::getCurrentUser();
     if(!$currentUser->getRight('shop', User::RIGHT_READ)){
       $array = [
@@ -256,7 +256,7 @@ class ControllerShop extends ControllerModule{
             foreach ($objects as $object) {
                 $click_action = "";
                 switch ($action) {
-                  case ControllerSearch::SEARCH_DONE_ADD_TO_BOOKMARK:
+                  case ControllerModule::SEARCH_DONE_ADD_TO_BOOKMARK:
                     $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
                   break;
                   default:

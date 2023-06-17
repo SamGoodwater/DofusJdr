@@ -61,6 +61,7 @@ abstract class Controller{
         $return['error'] = 'Impossible de récupérer les données';
       } else {
         $manager = new $this->_manager_name();
+        $user = ControllerConnect::getCurrentUser();
 
         $display = Content::DISPLAY_CARD;
         if(isset($_REQUEST['display'])){
@@ -68,14 +69,23 @@ abstract class Controller{
             $display = $_REQUEST['display'];
           }
         }
+
         // Récupération de l'objet
           if($manager->existsUniqid($_REQUEST['uniqid'])){
 
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
+            $title = $obj->getName($display);
+            if(!$this->includeHtmlTag($title)){
+              $title = ucfirst($title);
+            }
+
             $return['value'] = array(
               'visual' => $obj->getVisual($display),
               "title" => $obj->getName($display),
-              "bubbleId" => strtolower(get_class($obj)) . $obj->getUniqid()
+              "bubbleId" => strtolower(get_class($obj)) . $obj->getUniqid(),
+              'linkshare' => "@" . get_class($obj) . "~" . $obj->getUniqid(),
+              'bookmark_active' => $user->in_bookmark($obj),
+              "classe" => strtolower(get_class($obj))
             );
             $return['state'] = true;
           }else {

@@ -9,14 +9,18 @@ abstract class Content
     const DISPLAY_CARD = 100;
     const DISPLAY_RESUME = 101;
     const DISPLAY_EDITABLE = 102;
-    const DISPLAY_LIST = 104;
     const DISPLAY_FULL = 103;
+    const DISPLAY_LIST = 104;
+    const DISPLAY_MENU = 105;
+    const DISPLAY_CARROUSEL = 106;
     const DISPLAY = [
         self::DISPLAY_EDITABLE => "Modifier",
         self::DISPLAY_CARD => "Carte",
         self::DISPLAY_RESUME => "Résumé",
         self::DISPLAY_LIST => "Liste",
         self::DISPLAY_FULL => "Complet",
+        self::DISPLAY_MENU => "Menu",
+        self::DISPLAY_CARROUSEL => "Carrousel"
     ];
 
     const FORMAT_BRUT = 0;
@@ -53,7 +57,8 @@ abstract class Content
     //         "default_editable" => "medias/modules/classes/default_[type].png",
     //         "dir" => "medias/classes/",
     //         "preferential_format" => "png",
-    //         'naming' => "[uniqid]"
+    //         'naming' => "[uniqid]",
+    //         'is_dir' => false // ENSEMBLE DE FICHIER : TRUE ||| FICHIER UNIQUE : FALSE
     //     ],
     //     ...
     // ]
@@ -81,33 +86,72 @@ abstract class Content
         if(!empty($className::FILES)){
             foreach($className::FILES as $name => $data){
                 if(isset($data['naming']) && isset($data['dir']) && isset($data['type']) && isset($data['default']) && !empty($data['naming']) && !empty($data['dir']) && !empty($data['type']) && !empty($data['default'])){
+                    
                     $path = FileManager::formatPath($data['dir']);
                     $path .= FileManager::solveNameFromPaternAndObject($this,$data['naming']);
-                    if(isset($data['preferential_format']) && !empty($data['preferential_format'])){
-                        if(file_exists($path . "." . $data['preferential_format'])){
-                            $path .= "." . $data['preferential_format'];
-                        } else {
-                            $path .= "." . FileManager::findExtention($path, $data["type"]);
-                        }
+                    $is_dir = false; if(isset($data['is_dir'])){ $is_dir = $data['is_dir']; }
+
+                    if($is_dir){
+                        // ENSEMBLE DE FICHIER ------------------------------------------------
+                            $path = FileManager::formatPath($path);
+                            if(file_exists($path)){
+                                foreach (scandir($path) as $file) {
+                                    if($file != "." && $file != "..") {
+                                        $path_file = $path . $file;
+                                        if(file_exists($path_file)){
+                                            $this->_files[$name][] = new File($path_file);
+                                        }
+                                    }
+                                }
+                                if(empty($this->_files[$name])){
+                                    if(isset($data["default_editable"])){
+                                            $path = FileManager::solveNameFromPaternAndObject($this,$data['default_editable']);
+                                        if(file_exists($path)){
+                                            $this->_files[$name][] = new File($path);
+                                        }elseif(file_exists($data["default"])) {
+                                            $this->_files[$name][] = new File($data["default"]);
+                                        } else {
+                                            $this->_files[$name][] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                                        }
+                                    }elseif(file_exists($data["default"])) {
+                                        $this->_files[$name][] = new File($data["default"]);
+                                    } else {
+                                        $this->_files[$name][] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                                    }
+                                }	
+                            } else {
+                                $this->_files[$name][] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                            }
+
                     } else {
-                        $path .= "." . FileManager::findExtention($path, $data["type"]);
+                        // FICHIER UNIQUE ------------------------------------------------
+                            if(isset($data['preferential_format']) && !empty($data['preferential_format'])){
+                                if(file_exists($path . "." . $data['preferential_format'])){
+                                    $path .= "." . $data['preferential_format'];
+                                } else {
+                                    $path .= "." . FileManager::findExtention($path, $data["type"]);
+                                }
+                            } else {
+                                $path .= "." . FileManager::findExtention($path, $data["type"]);
+                            }
+                            if(file_exists($path)){
+                                $this->_files[$name] = new File($path);
+                            }elseif(isset($data["default_editable"])){
+                                $path = FileManager::solveNameFromPaternAndObject($this,$data['default_editable']);
+                                if(file_exists($path)){
+                                    $this->_files[$name] = new File($path);
+                                }elseif(file_exists($data["default"])) {
+                                    $this->_files[$name] = new File($data["default"]);
+                                } else {
+                                    $this->_files[$name] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                                }
+                            }elseif(file_exists($data["default"])) {
+                                $this->_files[$name] = new File($data["default"]);
+                            } else {
+                                $this->_files[$name] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                            }
                     }
-                    if(file_exists($path)){
-                        $this->_files[$name] = new File($path);
-                    }elseif(isset($data["default_editable"])){
-                        $path = FileManager::solveNameFromPaternAndObject($this,$data['default_editable']);
-                        if(file_exists($path)){
-                            $this->_files[$name] = new File($path);
-                        }elseif(file_exists($data["default"])) {
-                            $this->_files[$name] = new File($data["default"]);
-                        } else {
-                            $this->_files[$name] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
-                        }
-                    }elseif(file_exists($data["default"])) {
-                        $this->_files[$name] = new File($data["default"]);
-                    } else {
-                        $this->_files[$name] = new File(Content::PATH_FILE_GENERAL_DEFAULT);
-                    }
+
                 }
             }
         }
@@ -220,41 +264,89 @@ abstract class Content
                 return $this->_usable;
         }
     }
-    public function getFile(string $name_file, Style $style = new Style([])){
+    public function getFile(string $name_file, Style $style = new Style([]), $getfirst = false){
         $className = strtolower(get_class($this));
         $view = new View();
+        $multi_files = false;
         if(isset($this->_files[$name_file])){
-            $file = $this->_files[$name_file];
+            $files = null;
+            if(is_array($this->_files[$name_file])){         
+                if($getfirst){
+                    $file = $this->_files[$name_file][0];
+                    $is_removable = false;
+                    if($style->getIs_removable() && $file->getPath() != $className::FILES[$name_file]["default"] && $file->getPath() != Content::PATH_FILE_GENERAL_DEFAULT){
+                        $is_removable = true;   
+                    }
+                    $files[] = [
+                        "file" => $file,
+                        "is_removable" => $is_removable
+                    ];
+                }else{
+                    $multi_files = true;
+                    foreach ($this->_files[$name_file] as $file) {
+                        $is_removable = false;
+                        if($style->getIs_removable() && $file->getPath() != $className::FILES[$name_file]["default"] && $file->getPath() != Content::PATH_FILE_GENERAL_DEFAULT){
+                            $is_removable = true;   
+                        }
+                        $files = [
+                            "file" => $file,
+                            "is_removable" => $is_removable
+                        ];
+                    }
+                }
+            } else {
+                $file = $this->_files[$name_file];
+                $is_removable = false;
+                if($style->getIs_removable() && $file->getPath() != $className::FILES[$name_file]["default"] && $file->getPath() != Content::PATH_FILE_GENERAL_DEFAULT){
+                    $is_removable = true;   
+                }
+                $files = [
+                    "file" => $file,
+                    "is_removable" => $is_removable
+                ];
+            }
         } else {
             throw new Exception("Ce nom de fichier n'est pas associé à cet objet.");
         }
 
-        if($file->getPath() == $className::FILES[$name_file]["default"] || $file->getPath() == Content::PATH_FILE_GENERAL_DEFAULT){
-            $style->setIs_removable(false);
-        } else {
-            $style->setIs_removable(true);
-        }
         switch ($style->getDisplay()) {
-            case  Content::FORMAT_BRUT:
-                return $file->getPath();
+            case Content::FORMAT_BRUT:
+                $return = [];
+                if($multi_files){
+                    foreach ($files as $file) {
+                        $return[] = $file['file']->getPath();
+                    }
+                    return $return;
+                } else {
+                    return $files['file']->getPath();
+                }
 
             case Content::FORMAT_OBJECT:
-                return $file;
+                return $files;
+
+            case Content::DISPLAY_CARROUSEL:
+                return $view->dispatch(
+                    template_name : "carrousel",
+                    data : [
+                        "files" => $files,
+                        "is_removable" => $style->getIs_removable()
+                    ], 
+                    write: false);
 
             case  Content::DISPLAY_EDITABLE:
-                $style->setFormat(Content::FORMAT_VIEW);
+                $style->setDisplay(Content::DISPLAY_CARROUSEL);
+                $style->setIs_removable(true);
+
                 ob_start();
-                    echo $file->getVisual($style);
-                    if($style->getIs_removable()){
-                        ?><div class="text-center"><a onclick="File.remove('<?=$file->getPath();?>');" class="btn-sm btn-text-red">Supprimer l'image</a></div><?php
-                    }
+                    echo $this->getFile($name_file, $style);
+
                     $view->dispatch(
                         template_name : "input/file",
                         data : [
                             "url" => "index.php?c=".strtolower($className)."&a=upload",
                             "uniqid" => $this->getUniqid(),
                             "label" => "Modifier le fichier",
-                            "view_img_path" => $file->getPath(),
+                            "view_img_path" => "",
                             "extention_available" => FileManager::getListeExtention(FileManager::FORMAT_IMG),
                             "name_file" => $name_file
                         ], 
@@ -265,7 +357,26 @@ abstract class Content
                 $style->setIs_download(true);
 
         }
-        return $file->getVisual($style);
+
+        $return = "";
+        if($multi_files){
+            foreach ($files as $file) {
+                if($file['is_removable']){
+                    $style->setIs_removable(true);
+                } else {
+                    $style->setIs_removable(false);
+                }
+                $return .= $file['file']->getVisual($style);
+            }
+            return $return;
+        } else {
+            if($files['is_removable']){
+                $style->setIs_removable(true);
+            } else {
+                $style->setIs_removable(false);
+            }
+            return $files['file']->getVisual($style);
+        }
     }
 
     // SETTERS
@@ -360,5 +471,4 @@ abstract class Content
             write: false);
 
     }
-
 }
