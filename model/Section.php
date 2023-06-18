@@ -30,13 +30,17 @@ class Section extends Content
                                 'uniqid' => $this->getUniqid(),
                                 'uniqid_page' => $this->getUniqid_page(Content::FORMAT_OBJECT)->getUniqid()
                             ];
-                            foreach ($manager->getAllTemplateFile() as $template) { 
-                                include SectionManager::PATH_SECTION . $template; ?>
-                                <a class="dropdown-item" onclick="Section.update('<?=$this->getUniqid()?>','<?=$template?>', 'type', <?=Controller::IS_VALUE?>);$('#dropdownDisplay<?=$this->getId()?>').html($(this).html());">
-                                    <?=$name?><br>
-                                    <span class="size-0-7 text-grey-d-2"><?=$description?></span>
-                                </a>
-                            <?php } ?>
+                            foreach ($manager->getAllTemplateFile() as $key => $template) { 
+                                foreach($template as $name){
+                                    $path = SectionManager::PATH_SECTION . $key ."/". $name;
+                                    if(!file_exists($path)){ $path = SectionManager::PATH_SECTION . $name;}
+                                    include $path; ?>
+                                    <a class="dropdown-item" onclick="Section.update('<?=$this->getUniqid()?>','<?=$key?>/<?=$name?>', 'type', <?=Controller::IS_VALUE?>);$('#dropdownDisplay<?=$this->getId()?>').html($(this).html());">
+                                        <?=$name?><br>
+                                        <span class="size-0-7 text-grey-d-2"><?=$description?></span>
+                                    </a>
+                                <?php }
+                            } ?>
                         </div>
                     </div>
                 <?php return ob_get_clean();
@@ -48,8 +52,8 @@ class Section extends Content
                     'uniqid' => $this->getUniqid(),
                     'uniqid_page' => $this->getUniqid_page(Content::FORMAT_OBJECT)->getUniqid()
                 ];
-                if(file_exists(SectionManager::PATH_SECTION . $template)){
-                    include SectionManager::PATH_SECTION . $template;
+                if(file_exists(SectionManager::PATH_SECTION . $this->_type)){
+                    include SectionManager::PATH_SECTION . $this->_type;
                     return "<span class='badge back-main-d-2'>".$name."</span>";
                 } else {
                     return "Aucun template associé à la section";
@@ -127,6 +131,7 @@ class Section extends Content
     }
     
     public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
+        $user = ControllerConnect::getCurrentUser();
 
         switch ($display) {
             case Content::DISPLAY_EDITABLE:
@@ -138,6 +143,14 @@ class Section extends Content
                 ];
                 if(file_exists(SectionManager::PATH_SECTION . $this->getType()) && is_file(SectionManager::PATH_SECTION . $this->getType())){
                     include SectionManager::PATH_SECTION . $this->getType();
+
+                    if(isset($template['onlyForAdmin'])){
+                        if($template['onlyForAdmin']){
+                            if(!$user->getIs_admin()){
+                                return "";
+                            }
+                        }
+                    }
 
                     $ondbldclick="";
                     if(isset($template['editOnDblClick'])){
@@ -182,6 +195,14 @@ class Section extends Content
                 ];
                 if(file_exists(SectionManager::PATH_SECTION . $this->getType()) && is_file(SectionManager::PATH_SECTION . $this->getType())){
                     include SectionManager::PATH_SECTION . $this->getType();
+
+                    if(isset($template['onlyForAdmin'])){
+                        if($template['onlyForAdmin']){
+                            if(!$user->getIs_admin()){
+                                return "";
+                            }
+                        }
+                    }
                     
                     ob_start(); ?>
                         <section>

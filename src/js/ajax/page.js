@@ -111,8 +111,8 @@ class Page extends Controller{
             
             let bookmark_obj = $(".modal__bookmark_toogle");
             if(bookmark != null){
-                if( bookmark['classe'] !== "undefined" && 
-                    bookmark['uniqid'] !== "undefined" && 
+                if( bookmark['classe'] !== "undefined" && bookmark['classe'] != "" &&
+                    bookmark['uniqid'] !== "undefined" && bookmark['uniqid'] != "" &&
                     bookmark['active'] !== "undefined" 
                 ){
                     bookmark_obj.show();

@@ -45,18 +45,19 @@ class ControllerUser extends Controller{
 
       foreach ($objs AS $obj) {
         $edit = "";
-        if($currentUser->getRight('user', User::RIGHT_WRITE) && $obj->getIs_admin()){
+        if($currentUser->getRight('user', User::RIGHT_WRITE)){
           $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
         }
 
         $json[] = array(
           'id' => $obj->getId(Content::FORMAT_BADGE),
           "uniqid" => $obj->getUniqid(),
-          "timestamp_add" => $obj->getTimestamp_add(),
-          "last_connexion" => $obj->getLast_connexion(),
+          "timestamp_add" => $obj->getTimestamp_add(Content::DATE_TIME_FR),
+          "last_connexion" => $obj->getLast_connexion(Content::DATE_TIME_FR),
           "pseudo" => $obj->getPseudo(),
           "email" => $obj->getEmail(),
           "rights" => $obj->getRights(Content::FORMAT_BADGE),
+          "is_admin" => $obj->getIs_admin(Content::FORMAT_BADGE),
           'edit' => $edit,
           'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
         );
@@ -88,18 +89,19 @@ class ControllerUser extends Controller{
             $obj = $manager->getFromUniqid($_REQUEST['uniqid']);
 
             $edit = "";
-            if($currentUser->getRight('user', User::RIGHT_WRITE) && $obj->getIs_admin()){
+            if($currentUser->getRight('user', User::RIGHT_WRITE)){
               $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
             }
 
             $return["value"] = array(
               'id' => $obj->getId(Content::FORMAT_BADGE),
               "uniqid" => $obj->getUniqid(),
-              "timestamp_add" => $obj->getTimestamp_add(),
-              "last_connexion" => $obj->getLast_connexion(),
+              "timestamp_add" => $obj->getTimestamp_add(Content::DATE_TIME_FR),
+              "last_connexion" => $obj->getLast_connexion(Content::DATE_TIME_FR),
               "pseudo" => $obj->getPseudo(),
               "email" => $obj->getEmail(),
               "rights" => $obj->getRights(Content::FORMAT_BADGE),
+              "is_admin" => $obj->getIs_admin(Content::FORMAT_BADGE),
               'edit' => $edit,
               'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
             );
@@ -159,7 +161,7 @@ class ControllerUser extends Controller{
                 foreach ($admins as $admin) {
                   $mail->setCci($admin->getEmail());
                 }
-                $mail->setTemplate("view/mails/new_user.php", 
+                $mail->setTemplate("/view/mails/new_user.php", 
                   [
                     "mail" => $object->getEmail()
                   ]
@@ -505,7 +507,7 @@ class ControllerUser extends Controller{
       foreach ($admins as $admin) {
         $mail->setTo($admin->getEmail());
       }
-      $mail->setTemplate("view/mails/edit_user.php", 
+      $mail->setTemplate("/view/mails/edit_user.php", 
         [
           "new_user" => $this->obj,
           "old_user" => $this->obj_old

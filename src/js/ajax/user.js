@@ -80,41 +80,45 @@ class User extends Controller{
         let classe = $(btn).data("classe");
         let uniqid = $(btn).data("uniqid");
 
-        $.post(url,
-            {
-                uniqid:uniqid,
-                classe:classe
-            },
-            function(data, status)
-            {
-                if(data['script'] != ""){
-                    $('body').append("<script>"+data['script']+"</script>");
-                }
-                if(data.state){
-                    MsgAlert("Modification du "+ucFirst(globalThis.project.bookmark_name)+".", sentence, "green" , 3000);
-                    if(data.cookie.serial != ""){
-                        var cookie = "bookmark="+data.cookie.serial+"; path=/; expires="+data.cookie.date+";"; 
-                        document.cookie = cookie;
+        if(classe != "" && uniqid != ""){
+
+            $.post(url,
+                {
+                    uniqid:uniqid,
+                    classe:classe
+                },
+                function(data, status)
+                {
+                    if(data['script'] != ""){
+                        $('body').append("<script>"+data['script']+"</script>");
                     }
-                    var i = $(btn).find('i'); // REMOVE
-                    if(i.hasClass("fas") && i.hasClass("fa-bookmark")){
-                        i.removeClass("fas");
-                        i.addClass("far");
-                        $(btn).attr('title', "Ajouter aux favoris");
-                    }else if(i.hasClass("far") && i.hasClass("fa-bookmark")){ // AJOUT
-                        i.removeClass("far");
-                        i.addClass("fas");
-                        $(btn).attr('title', "Retirer des favoris");
+                    if(data.state){
+                        MsgAlert("Modification du "+ucFirst(globalThis.project.bookmark_name)+".", sentence, "green" , 3000);
+                        if(data.cookie.serial != ""){
+                            var cookie = "bookmark="+data.cookie.serial+"; path=/; expires="+data.cookie.date+";"; 
+                            document.cookie = cookie;
+                        }
+                        var i = $(btn).find('i'); // REMOVE
+                        if(i.hasClass("fas") && i.hasClass("fa-bookmark")){
+                            i.removeClass("fas");
+                            i.addClass("far");
+                            $(btn).attr('title', "Ajouter aux favoris");
+                        }else if(i.hasClass("far") && i.hasClass("fa-bookmark")){ // AJOUT
+                            i.removeClass("far");
+                            i.addClass("fas");
+                            $(btn).attr('title', "Retirer des favoris");
+                        }
+                        if($("#offcanvasbookmark").css("visibility") == 'visible'){
+                            User.getBookmark(true);
+                        }
+                    } else {
+                        MsgAlert("Modification du "+ucFirst(globalThis.project.bookmark_name)+".", 'Erreur : ' + data.error, "danger" , 4000);
                     }
-                    if($("#offcanvasbookmark").css("visibility") == 'visible'){
-                        User.getBookmark(true);
-                    }
-                } else {
-                    MsgAlert("Modification du "+ucFirst(globalThis.project.bookmark_name)+".", 'Erreur : ' + data.error, "danger" , 4000);
-                }
-            },
-            "json"
-        ); 
+                },
+                "json"
+            ); 
+
+        }
     }
 
     static updatePassword(uniqid){

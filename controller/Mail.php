@@ -8,7 +8,7 @@ class Mail
 {
     use ColorFct, CheckingFct;
 
-        const TEMPLATE_GENERIC = "view/mails/generic.php";      
+        const TEMPLATE_GENERIC = "/view/mails/generic.php";      
 
         private $in_fatal_error = false;
         private $fatal_error_msg = "Erreur inconnu";
@@ -40,7 +40,7 @@ class Mail
                 $this->_attachment[] = $data;
             } 
         }
-        public function setTemplate(int $template_path = self::TEMPLATE_GENERIC, Array $data = array('text' => "")){
+        public function setTemplate(string $template_path = self::TEMPLATE_GENERIC, Array $data = array('text' => "")){
             if(file_exists($template_path)){
 
                 // Start template

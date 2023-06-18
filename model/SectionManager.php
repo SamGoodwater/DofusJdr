@@ -170,10 +170,28 @@ class SectionManager extends Manager
 
 // TEMPLATE SECTIONS FILES
     public function getAllTemplateFile(){    
-        $templates = array();
+        $templates = array(
+            "Bases" => array()
+        );
         foreach (scandir(SectionManager::PATH_SECTION) as $file) {
+    
+            if($file != ".." && $file != "."){
+                if(is_dir(SectionManager::PATH_SECTION.$file)){
+                    $templates[$file] = $this->getTemplateName(SectionManager::PATH_SECTION.$file);
+                }else{
+                    $templates['Bases'][] = $file;
+                }
+            } else {
+            }
+        }
+        return $templates;
+    }
+    private function getTemplateName($path){
+        $path = FileManager::formatPath($path);
+        $templates = array();
+        foreach (scandir($path) as $file) {
             if(substr(strrchr($file,'.'),1) == "php" && $file != ".." && $file != "."){
-                if(file_exists(SectionManager::PATH_SECTION.$file)){
+                if(file_exists($path.$file)){
                     $templates[] = $file;
                 }
             }

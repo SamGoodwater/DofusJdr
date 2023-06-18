@@ -29,7 +29,9 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
         "content" => "",
         "option" => "",
         "editable" => false,
-        "editOnDblClick" => false
+        "editOnDblClick" => false,
+        "onlyForAdmin" => false,
+        "shownListAddInPage" => true
     );
 
     if($template_vars['get'] == Section::GET_SECTION_CONTENT){

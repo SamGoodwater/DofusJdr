@@ -28,7 +28,9 @@ if(!isset($template_vars['uniqid_page'])){ $template_vars['uniqid_page'] = "";}
         "content" => "",
         "option" => "",
         "editable" => false,
-        "editOnDblClick" => false
+        "editOnDblClick" => false,
+        "onlyForAdmin" => false,
+        "shownListAddInPage" => true
     );
     $classeManager = new ClasseManager;
 

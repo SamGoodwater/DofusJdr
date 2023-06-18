@@ -9,16 +9,17 @@
 ?>
 
 <div class="card mb-3">
-    <p class='size-0-7 mb-1'>Utilisateur <?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Dernière connexion le <?=$obj->getLast_connexion(Content::DATE_FR);?> à <?=$obj->getLast_connexion(Content::TIME_FR);?></p>
+    <p class='size-0-7 mb-1'><?=$obj->getIs_admin(Content::FORMAT_BADGE, false);?> Utilisateur <?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Dernière connexion le <?=$obj->getLast_connexion(Content::DATE_FR);?> à <?=$obj->getLast_connexion(Content::TIME_FR);?></p>
     <div class="m-1"><?=$obj->getPseudo(Content::FORMAT_EDITABLE)?></div>
     <div class="m-1 mb-3"><?=$obj->getEmail(Content::FORMAT_EDITABLE)?></div>
-    <?php if($obj->getRight("user", User::RIGHT_WRITE) && $obj->getIs_admin()){ ?>
+    <?php if($obj->getIs_admin()){ ?>
         <h3>ToolsBox</h3>
         <div class="flex-row justify-content-start align-item-baseline mb-2">
             <a onclick="Tools.req('savedb', '<?=$obj->generateAndSaveToken()?>');" class="btn-sm btn btn-back-main">Sauver la base de donnée</a>
             <a onclick="Tools.req('verifAndCreatePageNeeded', '<?=$obj->generateAndSaveToken()?>');" class="btn-sm btn btn-back-main">Vérifier et créer les pages obligatoires</a>
         </div>
-        
+    <?php } ?>
+    <?php if($user->getRight('user', User::RIGHT_WRITE)){ ?>
         <h3>Modifier les droits</h3>
         <?=$obj->getRights(Content::FORMAT_EDITABLE)?>
     <?php } ?>

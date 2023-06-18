@@ -29,7 +29,9 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
         "content" => "",
         "option" => "",
         "editable" => false,
-        "editOnDblClick" => false
+        "editOnDblClick" => false,
+        "onlyForAdmin" => true,
+        "shownListAddInPage" => false
     );
 
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
@@ -75,11 +77,12 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="edit"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="is_admin"></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="pseudo">Pseudo</th>
-                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="email">Email</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="rights">Droits</th>
-                    <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
-                    <th class="text-center" data-sortable="false" data-visible="false" data-field="last_connexion">Dernière connexion</th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="email">Email</th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="rights">Droits</th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="timestamp_add">Date de création</th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="last_connexion">Dernière connexion</th>
                 </tr>
             </thead>
 

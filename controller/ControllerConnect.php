@@ -135,6 +135,9 @@ class ControllerConnect extends Controller{
                             <?php if($user->getRight("page", User::RIGHT_WRITE)){ ?>
                                 <li><a class="dropdown-item" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
                             <?php } ?>
+                            <?php if($user->getIs_admin()){ ?>
+                                <li><a class="dropdown-item" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
+                            <?php } ?>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item dropdown-item-toogletoolbar-button" onclick="toogleToolbar();">Masquer la barre d'outils</a></li>
                             <li><hr class="dropdown-divider"></li>
@@ -168,6 +171,9 @@ class ControllerConnect extends Controller{
                                 <li><a class="dropdown-item" onclick="User.open('<?=$user->getUniqid()?>');">Paramètres</a></li>
                                 <?php if($user->getRight("page", User::RIGHT_WRITE)){ ?>
                                     <li><a class="dropdown-item" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
+                                <?php } ?>
+                                <?php if($user->getIs_admin()){ ?>
+                                    <li><a class="dropdown-item" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
                                 <?php } ?>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item back-secondary-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
@@ -420,7 +426,7 @@ class ControllerConnect extends Controller{
                             $mail = new Mail();
                             $mail->setTo($user->getEmail());
                             $mail->setSubject("Mot de passe oublié- ". $GLOBALS["project"]["name"]);
-                            $mail->setTemplate("view/mails/password_forgotten.php", 
+                            $mail->setTemplate("/view/mails/password_forgotten.php", 
                               [
                                 "mail" => $user->getEmail(),
                                 "password" => $password

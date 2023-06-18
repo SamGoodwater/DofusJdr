@@ -21,7 +21,8 @@ class Page extends Content
         const UNIQID_NO_EDIT = [
             "home" => "home",
             "cgu" => "cgu",
-            "gestion_des_pages" => "page_manager"
+            "gestion_des_pages" => "page_manager",
+            "user_manager" => "user_manager"
         ];
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
@@ -173,6 +174,7 @@ class Page extends Content
             $return__["title"] = "Ajouter une section";
             $manager__ = new SectionManager;
             $templates__ = $manager__->getAllTemplateFile();
+            $user= ControllerConnect::getCurrentUser();
             ob_start(); ?>
                 <div>
                     <div class="form-floating">
@@ -184,9 +186,19 @@ class Page extends Content
                                 'uniqid' => "",
                                 'uniqid_page' => $this->getUniqid()
                             ];
-                            foreach ($templates__ as $file__) { 
-                                include SectionManager::PATH_SECTION . $file__;?>
-                                <option value="<?= $file__?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$template["description"]?>"><?=$template["title"]?></option>
+
+                            foreach ($templates__ as $key__ => $dir__) { ?>
+                                <optgroup label="<?=ucfirst($key__)?>">
+                                    <?php foreach($dir__ as $file__){
+                                        $path__ = SectionManager::PATH_SECTION . $key__ . "/" . $file__;
+                                        if(!file_exists($path__)){ $path__ = SectionManager::PATH_SECTION . $file__;}
+                                        include $path__;
+                                        $shownListAddInPage = true; if(isset($template["shownListAddInPage"])){$shownListAddInPage = $manager__->returnBool($template["shownListAddInPage"]);}
+                                        if(($user->getIs_admin() || $template['onlyForAdmin'] == false) && $shownListAddInPage){ ?>
+                                            <option value="<?= $file__?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$template["description"]?>"><?=$template["title"]?></option>
+                                        <?php }
+                                    } ?>
+                                </optgroup>
                             <?php } ?>
                         </select>
                         <label >Sélectionner un type de section</label>
@@ -203,14 +215,21 @@ class Page extends Content
                         'uniqid' => "",
                         'uniqid_page' => $this->getUniqid()
                     ];
-                    foreach($templates__ as $file__) {
-                        include SectionManager::PATH_SECTION . $file__; 
-                        if(isset($template["option"])){ 
-                            if(!empty($template["option"])) {?>
-                                <div id="<?=substr($file__, 0, -4)?>" class="option">
-                                    <?=$template["option"]?>
-                                </div>
-                        <?php } 
+                    foreach($templates__ as $key__ => $dir__) {
+                        foreach($dir__ as $file__){
+                            $path__ = SectionManager::PATH_SECTION . $key__ . "/" . $file__;
+                            if(!file_exists($path__)){ $path__ = SectionManager::PATH_SECTION . $file__;}
+                            include $path__;
+                            $shownListAddInPage = true; if(isset($template["shownListAddInPage"])){$shownListAddInPage = $manager__->returnBool($template["shownListAddInPage"]);}
+                            if(($user->getIs_admin() || $template['onlyForAdmin'] == false) && $shownListAddInPage){
+                                if(isset($template["option"])){ 
+                                    if(!empty($template["option"])) {?>
+                                        <div id="<?=substr($file__, 0, -4)?>" class="option">
+                                            <?=$template["option"]?>
+                                        </div>
+                                <?php } 
+                                }
+                            }
                         }
                     } ?>
 

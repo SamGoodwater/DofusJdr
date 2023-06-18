@@ -132,6 +132,18 @@ class ControllerTools extends Controller{
                 $section->setTimestamp_updated(time());
                 $return["value"] .= "La page des CGU n'existe pas, elle a été créée.<br>";
               break;
+              case 'user_manager':
+                $name_page = "Gestion des utilisateurs·trices";
+                $is_editable = false;
+                $public = false;
+                $section = new Section([
+                  "uniqid" => uniqid(),
+                  "type" => "user.php"
+                ]);
+                $section->setTimestamp_add(time());
+                $section->setTimestamp_updated(time());
+                $return["value"] .= "La page des Utilisateurs·trices n'existe pas, elle a été créée.<br>";
+              break;
               
               default:
                 $name_page = "";

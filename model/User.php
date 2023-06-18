@@ -109,7 +109,7 @@ class User extends Content
         public function gethash(int $format = Content::FORMAT_BRUT){
             return $this->_hash;
         }
-        public function getIs_admin(int $format = Content::FORMAT_BRUT){
+        public function getIs_admin(int $format = Content::FORMAT_BRUT, $showNoneAdmin = true){
             $view = new View();
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
@@ -121,7 +121,7 @@ class User extends Content
                             "id" => "is_admin_" . $this->getUniqid(),
                             "input_name" => "is_admin",
                             "label" => $this->getIs_admin(Content::FORMAT_BADGE),
-                            "checked" => $this->returnBool($this->_is_admin),
+                            "checked" => $this->_is_admin,
                             "style" => Style::CHECK_SWITCH
                         ], 
                         write: false);
@@ -138,16 +138,18 @@ class User extends Content
                             ], 
                             write: false);
     
-                    } else {
+                    } elseif($showNoneAdmin) {
                         return $view->dispatch(
                             template_name : "badge",
                             data : [
-                                "content" => "Modérateur",
+                                "content" => "Utilisateur·trice",
                                 "color" => "grey-d-1",
                                 "style" => Style::STYLE_BACK,
                                 "tooltip" => "L'utilisateur·trice n'est pas adminitrateur·trice"
                             ], 
                             write: false);
+                    } else {
+                        return "";
                     }
     
                 case Content::FORMAT_ICON:
@@ -163,7 +165,7 @@ class User extends Content
                             ], 
                             write: false); 
     
-                    } else { 
+                    } elseif($showNoneAdmin) { 
     
                         return $view->dispatch(
                             template_name : "icon",
@@ -174,6 +176,8 @@ class User extends Content
                                 "tooltip" => "L'utilisateur·trice n'est pas adminitrateur·trice"
                             ], 
                             write: false);
+                    } else {
+                        return "";
                     }
                     
                 default:
