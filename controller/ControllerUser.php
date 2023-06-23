@@ -46,7 +46,7 @@ class ControllerUser extends Controller{
       foreach ($objs AS $obj) {
         $edit = "";
         if($currentUser->getRight('user', User::RIGHT_WRITE)){
-          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
         }
 
         $json[] = array(
@@ -59,7 +59,7 @@ class ControllerUser extends Controller{
           "rights" => $obj->getRights(Content::FORMAT_BADGE),
           "is_admin" => $obj->getIs_admin(Content::FORMAT_BADGE),
           'edit' => $edit,
-          'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
+          'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
         );
       }
 
@@ -90,7 +90,7 @@ class ControllerUser extends Controller{
 
             $edit = "";
             if($currentUser->getRight('user', User::RIGHT_WRITE)){
-              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"User.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -103,7 +103,7 @@ class ControllerUser extends Controller{
               "rights" => $obj->getRights(Content::FORMAT_BADGE),
               "is_admin" => $obj->getIs_admin(Content::FORMAT_BADGE),
               'edit' => $edit,
-              'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
+              'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
             );
 
             $return['state'] = true;

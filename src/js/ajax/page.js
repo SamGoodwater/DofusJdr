@@ -22,6 +22,10 @@ class Page extends Controller{
 
     // Changement de Nom de build à build
     static build(is_modal = true, title, content, size = Page.SIZE_MD, show = false, bubbleId = null, linkShare = "", bookmark = {}){
+        if(show){
+            $('#modal').modal('hide');
+        }
+
         switch (size) {
             case "sm":
                 size = Page.SIZE_SM;    
@@ -145,7 +149,7 @@ class Page extends Controller{
             }
         } else {
             let html = "<div class='undercontent'>";
-                    html += "<div><button onclick='$(\".undercontent\").remove();' class='btn-text-main size-2-5 position-absolute' style='top:0px;right:0px;z-index:21'><i class='fas fa-times-circle'></i></button></div>";
+                    html += "<div><button onclick='$(\".undercontent\").remove();' class='btn-text-main size-2-5 position-absolute' style='top:0px;right:0px;z-index:21'><i class='fa-solid fa-times-circle'></i></button></div>";
                     html += "<div>"+title+"</div>";
                     html+= "<div>"+clone+"</div>";
                 html += "</div>";

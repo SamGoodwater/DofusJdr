@@ -77,7 +77,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         ?>
                             <h3 class="mb-2">Modèle : <?=$class_name?></h3>
                             <h5>Mise à jour des propriétés de la classe</h5>
-                            <p><a class="btn btn-sm btn-text-main" data-bs-toggle="collapse" href="#collapseTest<?=$obj->getUniqid()?>" role="button" aria-expanded="false" aria-controls="collapseTest<?=$obj->getUniqid()?>">Voir les détails</a></p>
+                            <p><a class="btn btn-sm btn-animate btn-text-main" data-bs-toggle="collapse" href="#collapseTest<?=$obj->getUniqid()?>" role="button" aria-expanded="false" aria-controls="collapseTest<?=$obj->getUniqid()?>">Voir les détails</a></p>
                             <div class="collapse" id="collapseTest<?=$obj->getUniqid()?>">
                                 <ul>
                                 <?php

@@ -3074,9 +3074,16 @@ class Npc extends Content
             $manager = new NpcManager();
             $spells = $manager->getLinkSpell($this);
             if(is_array($spells) && !empty($spells)){
-                $spells = array_merge($spells, $classe->getSpell(Content::FORMAT_ARRAY));
+                $spell_classe = array();
+                foreach ($classe->getSpell(Content::FORMAT_ARRAY)as $spell) {
+                    $spell_classe[] = $spell['spell1'];
+                }
+                $spells = array_merge($spells, $spell_classe);
             } else {
-                $spells = $classe->getSpell(Content::FORMAT_ARRAY);
+                $spells = array();
+                foreach ($classe->getSpell(Content::FORMAT_ARRAY)as $spell) {
+                    $spells[] = $spell['spell1'];
+                }
             }
             usort($spells, function($a, $b) {
                 return $a->getLevel() <=> $b->getLevel();

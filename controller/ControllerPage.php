@@ -27,7 +27,7 @@ class ControllerPage extends Controller{
         $page = $manager->getFromUrl_name($url_name);
         if($page->getPublic() || $currentUser->getRight('page', User::RIGHT_WRITE)){
             $title = $page->getName();
-            $content = $page->getVisual(Content::FORMAT_EDITABLE);
+            $content = $page->getVisual(new Style(["display" => Content::DISPLAY_EDITABLE]));
             $modal = $page->getModal();
             $return["modal_html"] = $modal['html'];
             $return["modal_title"] = $modal['title'];

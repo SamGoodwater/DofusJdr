@@ -20,7 +20,7 @@
             <div class="m-2" style="width: <?=$size?>px;position:relative;">
                 <?php if($is_editable){ ?>
                     <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
-                        <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Dissocier cet objet de ce ou cette PNJ" class="btn-underline-red" style="position:absolute;top:10px;right:10px;z-index:10;" onclick="if (confirm('Etes vous sûr dissocier l\'objet de cet hôtel de vente ?')){<?=ucfirst($class_name)?>.update('<?=$uniqid?>',{action:'remove', uniqid:'<?=$link['obj']->getUniqid()?>'},'<?=$input_name?>', IS_VALUE);}"><i class="fas fa-times"></i></a>
+                        <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Dissocier cet objet de ce ou cette PNJ" class="btn-underline-red" style="position:absolute;top:10px;right:10px;z-index:10;" onclick="if (confirm('Etes vous sûr dissocier l\'objet de cet hôtel de vente ?')){<?=ucfirst($class_name)?>.update('<?=$uniqid?>',{action:'remove', uniqid:'<?=$link['obj']->getUniqid()?>'},'<?=$input_name?>', IS_VALUE);}"><i class="fa-solid fa-times"></i></a>
                     </div>
                 <?php } ?>
 
@@ -47,7 +47,7 @@
                 ?>
 
                 <?php if($is_editable && ($user->getRight($input_name, User::RIGHT_WRITE) || $user->Is_admin())){ ?>
-                    <a onclick="switchCard('#settingcard<?=$link['obj']->getUniqid()?>');" class="position-absolute" style="top:100px;right:5px;z-index:1001;" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier l'objet"><i class="fas fa-cog"></i></a>
+                    <a onclick="switchCard('#settingcard<?=$link['obj']->getUniqid()?>');" class="position-absolute" style="top:100px;right:5px;z-index:1001;" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier l'objet"><i class="fa-solid fa-cog"></i></a>
 
                     <div id="settingcard<?=$link["obj"]->getUniqid();?>" class="position-absolute back-white border border-main-d-2" style="z-index:1000;width: <?=$size?>px;top:0px;left:0;">
                         <h6><?=$link["obj"]->getName()?></h6>

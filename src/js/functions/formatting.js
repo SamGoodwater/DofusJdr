@@ -28,7 +28,6 @@ function changeRangeText(input){
         console.log("Nda");
   }
 }
-
   
 function array_unique(array) { //cleanArray removes all duplicated elements
   var i, j, len = array.length, out = [], obj = {};

@@ -98,7 +98,7 @@ class File {
             (fileTotal < 1024) ? fileSize = fileTotal + " KB" : fileSize = (loaded / (1024*1024)).toFixed(2) + " MB";
             
             let progressHTML = `<li class="row">
-                                    <i class='fas fa-file-alt'></i>
+                                    <i class='fa-solid fa-file-alt'></i>
                                     <div class="content">
                                         <div class="details">
                                             <span class="name">${name} • Téléchargement</span>
@@ -112,7 +112,7 @@ class File {
 
             // uploadedArea.innerHTML = ""; //uncomment this line if you don't want to show upload history
             uploadedArea.classList.add("onprogress");
-                var thumbail = "<i class='fas fa-file-alt'></i>";
+                var thumbail = "<i class='fa-solid fa-file-alt'></i>";
                 // Affichage de la mignature
                 var file = input.files[0];
                 var regex = /(image|jpg|jpeg|gif|png|svg|bmp|tif|tiff|raw|ico)/ig;
@@ -132,7 +132,7 @@ class File {
                                                         <span class="size">${fileSize}</span>
                                                     </div>
                                                 </div>
-                                                <i class="fas fa-check"></i>
+                                                <i class="fa-solid fa-check"></i>
                                             </li>`;
 
                     uploadedArea.classList.remove("onprogress");

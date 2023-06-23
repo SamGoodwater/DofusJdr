@@ -113,28 +113,28 @@ class Page extends Content
             $managerS = new SectionManager();
             return $managerS->getAllFromPage($this);            
         }
-        public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
+        public function getVisual(Style $style = new Style(["display" => Content::DISPLAY_CARD, "size" => "300"])){
             $user = ControllerConnect::getCurrentUser();
            
-            switch ($display) {
+            switch ($style->getDisplay()) {
                 case Content::DISPLAY_EDITABLE:
                     ob_start(); ?>
                         <div class="sortablebis">
 
                             <?php if(empty($this->getSection())){ ?>
-                                <p>La page est vide <i class="fas fa-sad-tear"></i></p>
+                                <p>La page est vide <i class="fa-solid fa-sad-tear"></i></p>
                                 <p><a data-bs-toggle="collapse" onclick="Section.getVisual('<?=$this->getUniqid()?>', true);">Ajouter une section pour commencer.</a></p>
                             <?php }
 
                             $format = Content::FORMAT_BRUT; if($this->getIs_editable()){$format = Content::FORMAT_EDITABLE;}
                             foreach ($this->getSection() as $section__) { ?>
-                                <?= $section__->getVisual($format); ?>      
+                                <?= $section__->getVisual(new Style(["display" => $format])); ?>      
                             <?php } ?>
 
                         </div>
                         <?php if($user->IsConnect() && $this->getIs_editable()){ ?>
                                 <div class="text-right">
-                                    <a onclick="Section.getVisual('<?=$this->getUniqid()?>', true);" class="size-2 text-main-d-3 text-main-d-1-hover mx-3"><i class="far fa-plus-square"></i></a>
+                                    <a onclick="Section.getVisual('<?=$this->getUniqid()?>', true);" class="size-2 text-main-d-3 text-main-d-1-hover mx-3"><i class="fa-regular fa-plus-square"></i></a>
                                 </div>   
                         <?php } ?>
 
@@ -234,7 +234,7 @@ class Page extends Content
                     } ?>
 
                     <div id="addSection" class="text-right m-2">
-                        <a onclick="Section.add('<?=$this->getUrl_name()?>')" class="btn btn-sm btn-back-secondary">Ajouter</a>
+                        <a onclick="Section.add('<?=$this->getUrl_name()?>')" class="btn btn-sm btn-animate btn-back-secondary">Ajouter</a>
                     </div>
                 </div>
                 <script>

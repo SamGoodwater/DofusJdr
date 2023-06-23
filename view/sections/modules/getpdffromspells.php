@@ -60,7 +60,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </div>
                 <script>autocomplete_load("#getSpell<?=$this->getUniqid()?>");</script>
             </div>
-            <button class="btn btn-sm btn-back-secondary" onclick="getPdfFromListUniqidsSpells()">Générer le PDF</button>
+            <button class="btn btn-sm btn-animate btn-back-secondary" onclick="getPdfFromListUniqidsSpells()">Générer le PDF</button>
         </div>
         <div id="showResume<?=$this->getUniqid()?>" class="d-flex flex-row justify-content-start">
 

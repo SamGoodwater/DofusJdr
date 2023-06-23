@@ -22,7 +22,7 @@ class Section extends Content
             case Content::FORMAT_EDITABLE:
                 ob_start(); ?>
                     <div class="dropdown">
-                        <a class="" type="button" id="dropdownDisplay<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getType(Content::FORMAT_BADGE)?> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
+                        <a class="" type="button" id="dropdownDisplay<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getType(Content::FORMAT_BADGE)?> <i class="fa-solid fa-chevron-down font-size-0-8 text-grey"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownDisplay<?=$this->getId()?>">
                             <?php $template_vars = [
                                 'get' => Section::GET_SECTION_DESCRIPTION,
@@ -103,7 +103,7 @@ class Section extends Content
                 ob_start(); ?>
                     <div class="form-group">
                         <div  id="content<?=$this->getUniqid()?>"><?=html_entity_decode($this->_content)?></div>
-                        <a id="saveCkeditor" class='p-1 back-grey-l-2-hover' style="display: none;" onclick="Section.update('<?=$this->getUniqid()?>', CKEDITOR5['content<?=$this->getUniqid()?>'].getData(), 'content', <?=Controller::IS_VALUE?>)"><small><i class="fas fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
+                        <a id="saveCkeditor" class='p-1 back-grey-l-2-hover' style="display: none;" onclick="Section.update('<?=$this->getUniqid()?>', CKEDITOR5['content<?=$this->getUniqid()?>'].getData(), 'content', <?=Controller::IS_VALUE?>)"><small><i class="fa-solid fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
                     </div>
                 <?php return ob_get_clean();
             
@@ -130,10 +130,10 @@ class Section extends Content
         }
     }
     
-    public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300){
+    public function getVisual(Style $style = new Style(["display" => Content::DISPLAY_CARD, "size" => "300"])){
         $user = ControllerConnect::getCurrentUser();
 
-        switch ($display) {
+        switch ($style->getDisplay()) {
             case Content::DISPLAY_EDITABLE:
                 $template_vars = [
                     'get' => Section::GET_SECTION_CONTENT,
@@ -164,9 +164,9 @@ class Section extends Content
                                 <h1 class="text-secondary-l-2 mb-3 light" style="width:initial;"><?=$this->getTitle()?></h1>
                                 <div class="section-options row justify-content-between text-right">
                                     <div>
-                                        <a data-bs-toggle="tooltip" data-bs-placement="left" title="Modifier la section" onclick="Section.showEdit('<?=$this->getUniqid()?>');" class="text-main-d-3 text-main-d-1-hover"><i class="fas fa-edit"></i></a>
-                                        <a data-bs-toggle="tooltip" data-bs-placement="left" title="Glisser à déposer pour trier les sections dans l'ordre southaiter." class="handleSection text-main-d-3 text-main-d-1-hover"><i class="fas fa-sort"></i></a>
-                                        <a data-bs-toggle="tooltip" data-bs-placement="left" title="Supprimer la section" onclick="Section.remove('<?=$this->getUniqid()?>')" class="trash text-main-d-3 text-red-d-1-hover"><i class="fas fa-trash"></i></a> 
+                                        <a data-bs-toggle="tooltip" data-bs-placement="left" title="Modifier la section" onclick="Section.showEdit('<?=$this->getUniqid()?>');" class="text-main-d-3 text-main-d-1-hover"><i class="fa-solid fa-edit"></i></a>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="left" title="Glisser à déposer pour trier les sections dans l'ordre southaiter." class="handleSection text-main-d-3 text-main-d-1-hover"><i class="fa-solid fa-sort"></i></a>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="left" title="Supprimer la section" onclick="Section.remove('<?=$this->getUniqid()?>')" class="trash text-main-d-3 text-red-d-1-hover"><i class="fa-solid fa-trash"></i></a> 
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +179,7 @@ class Section extends Content
                     ob_start(); ?>
                         <section id="section<?=$this->getUniqid()?>">
                             <p>Erreur : Aucun template associé à la section
-                                <a class="btn btn-sm btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fas fa-trash"></i> Supprimer la section</a>
+                                <a class="btn btn-sm btn-animate btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fa-solid fa-trash"></i> Supprimer la section</a>
                             </p>
                             <p><small class="text-grey-d-1">Impossible d'accéder au template lié à cette section. Le lien est manquant ou corrompu. Si l'erreur persiste après avoir ressayer de la recréer, veuillez contacter l'administrateur·trice du site.</small></p>
                         </section>
@@ -215,7 +215,7 @@ class Section extends Content
                     ob_start(); ?>
                         <section id="section<?=$this->getUniqid()?>">
                             <p>Erreur : Aucun template associé à la section
-                                <a class="btn btn-sm btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fas fa-trash"></i> Supprimer la section</a>
+                                <a class="btn btn-sm btn-animate btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fa-solid fa-trash"></i> Supprimer la section</a>
                             </p>
                             <p><small class="text-grey-d-1">Impossible d'accéder au template lié à cette section. Le lien est manquant ou corrompu. Si l'erreur persiste après avoir ressayer de la recréer, veuillez contacter l'administrateur·trice du site.</small></p>
                         </section>

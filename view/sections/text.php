@@ -39,7 +39,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
     ob_start(); ?>
         <div class="form-group">
             <div  id="content<?=$template_vars['uniqid']?>"><?=html_entity_decode($template_vars['content'])?></div>
-            <a id="saveCkeditor" class='p-1 back-grey-l-2-hover' style="display: none;" onclick="Section.update('<?=$template_vars['uniqid']?>', CKEDITOR5['content<?=$template_vars['uniqid']?>'].getData(), 'content', <?=Controller::IS_VALUE?>)"><small><i class="fas fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
+            <a id="saveCkeditor" class='p-1 back-grey-l-2-hover' style="display: none;" onclick="Section.update('<?=$template_vars['uniqid']?>', CKEDITOR5['content<?=$template_vars['uniqid']?>'].getData(), 'content', <?=Controller::IS_VALUE?>)"><small><i class="fa-solid fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
         </div>
     <?php $template["content"] = ob_get_clean();
 

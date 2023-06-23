@@ -5,7 +5,7 @@
 // Conseillé
     if(!isset($user)) {$user = ControllerConnect::getCurrentUser();}else{if(get_class($user) != "User") {$user = ControllerConnect::getCurrentUser();}}
     if(!isset($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}}
-    if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
+    if(!isset($style)){ $style = new Style; }else{ if(!get_class($style) == "Style"){ $style = new Style; } }
 
     $npc = $obj->getId_seller(Content::FORMAT_OBJECT);
 ?>
@@ -25,7 +25,7 @@
             <h6 class="text-center">Marchand·e</h6>
             <div class="row justify-content-center">
                 <?php if(!empty($npc)){ ?>
-                    <?=$npc->getVisual(Content::DISPLAY_RESUME)?>
+                    <?=$npc->getVisual(new Style(["display" => Content::DISPLAY_RESUME]))?>
                 <?php }  else {?>
                     <p class="text-center">Aucun</p>
                 <?php } ?>
@@ -33,7 +33,7 @@
         </div>
         <div class="col-auto">
             <?php if($user->getRight('shop', User::RIGHT_WRITE)){ ?>
-                <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Shop.open('<?=$obj->getUniqid()?>', Controller.DISPLAY_EDITABLE);"><i class='far fa-edit'></i> Modifier</a>
+                <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Shop.open('<?=$obj->getUniqid()?>', Controller.DISPLAY_EDITABLE);"><i class='fa-regular fa-edit'></i> Modifier</a>
             <?php } ?>
         </div>
     </div>
@@ -43,5 +43,5 @@
         <h3>Consommables</h3>
         <?=$obj->getConsumable()?>
     </div>
-    <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Shop.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
+    <p class="text-right font-size-0-8 m-1"><a class='text-red-d-2 text-red-l-3-hover' onclick="Shop.remove('<?=$obj->getUniqid()?>')"><i class="fa-solid fa-trash"></i> Supprimer</a></p>
 </div>

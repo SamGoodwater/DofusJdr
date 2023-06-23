@@ -35,8 +35,8 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
     );
 
     ob_start(); ?>
-        <a class="btn btn-sm btn-underline-main" onclick="selectAllCategoryItem();">Tout sélectionner</a>
-        <a class="btn btn-sm btn-underline-main" onclick="deselectAllCategoryItem();">Tout désélectionner</a>
+        <a class="btn btn-sm btn-animate btn-underline-main" onclick="selectAllCategoryItem();">Tout sélectionner</a>
+        <a class="btn btn-sm btn-animate btn-underline-main" onclick="deselectAllCategoryItem();">Tout désélectionner</a>
         <div class="m-2">
             <p>Sélectionner une catégorie d'équipement</p>
             <div id="option" class="mb-2 item">
@@ -160,7 +160,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="type">Catégorie</th>
-                    <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fas fa-image"></i></th>
+                    <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fa-solid fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-filter-control="select" data-field="level"><span class="text-level">Niveau</span></th>
                     <th data-sortable="true" data-visible="false"  data-field="description">Description</th>
@@ -170,14 +170,14 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="price"><span class="text-kamas" data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix estimé de l'équipement"><img class='icon' src='medias/icons/modules/kamas.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fas fa-check text-green-d-3'></i> JDR</span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>
                 </tr>
             </thead>
 
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> équipements. Le chargement du tableau peut prendre quelques minutes.</p>
+        <p class="mt-2"><i class="fa-solid fa-info-circle"></i> Il y a <span class="total_obj"></span> équipements.</p>
 
         <!-- Modal ADD -->
         <div id="addItem" style="display:none;">
@@ -194,8 +194,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 <label for="floatingInput">Nom de l'équipement</label>
             </div>
             <div class="modal-footer d-flex flex-row justify-content-between">
-                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="Item.add();" class="btn btn-sm btn-back-secondary">Créer</button>
+                <button type="button" class="btn btn-sm btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Item.add();" class="btn btn-sm btn-animate btn-back-secondary">Créer</button>
             </div>
         </div>
 

@@ -1,6 +1,6 @@
 <header class='app-toolbar'> <!-- ENTETE -->
     <div class="app-toolbar-title">
-        <a onclick="toogleMenu();" class="menu-toggle"><i class="fas fa-bars"></i></a>
+        <a onclick="toogleMenu();" class="menu-toggle"><i class="fa-solid fa-bars"></i></a>
         <h1 id="title"></h1>
     </div>
     <div class="app-toolbar-nav">

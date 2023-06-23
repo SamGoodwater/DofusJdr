@@ -5,7 +5,7 @@
 // Conseillé
     if(!isset($user)) {$user = ControllerConnect::getCurrentUser();}else{if(get_class($user) != "User") {$user = ControllerConnect::getCurrentUser();}}
     if(!isset($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}}
-    if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
+    if(!isset($style)){ $style = new Style; }else{ if(!get_class($style) == "Style"){ $style = new Style; } }
 ?>
 
 <div class="card mb-3">
@@ -13,7 +13,7 @@
         <div class="selector-image-main"><?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-120"]));?></div>
         <div>
             <h6 class="text-center">Classe</h6>
-            <?=$obj->getClasse(Content::FORMAT_OBJECT)->getVisual(Content::DISPLAY_RESUME)?>
+            <?=$obj->getClasse(Content::FORMAT_OBJECT)->getVisual(new Style(["display" => Content::DISPLAY_RESUME]))?>
         </div>
         <div>
             <div class="d-flex justify-content-between align-items-baseline">
@@ -30,9 +30,9 @@
         </div>
         <div class="m-2">
             <?php if($user->getRight('npc', User::RIGHT_WRITE)){ ?>
-                <p><a class='text-main-d-2 text-main-l-3-hover' onclick="Npc.open('<?=$obj->getUniqid()?>', Controller.DISPLAY_EDITABLE)"><i class='far fa-edit'></i> Modifier</a></p>
+                <p><a class='text-main-d-2 text-main-l-3-hover' onclick="Npc.open('<?=$obj->getUniqid()?>', Controller.DISPLAY_EDITABLE)"><i class='fa-regular fa-edit'></i> Modifier</a></p>
             <?php } ?>
-            <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$obj->getUniqid()?>'><i class='fas fa-file-pdf'></i> Générer un pdf</a></p>
+            <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$obj->getUniqid()?>'><i class='fa-solid fa-file-pdf'></i> Générer un pdf</a></p>
         </div>
     </div>
     <div class="card-body">

@@ -148,7 +148,7 @@ class ControllerSpell extends ControllerModule{
 
         $edit = "";
         if($currentUser->getRight('spell', User::RIGHT_WRITE)){
-          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
         }
 
         $json[] = array(
@@ -177,8 +177,8 @@ class ControllerSpell extends ControllerModule{
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
           'resume' => $resume,
           'edit' => $edit,
-          'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
-          'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
+          'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
+          'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
         );
       }
 
@@ -226,7 +226,7 @@ class ControllerSpell extends ControllerModule{
 
             $edit = "";
             if($currentUser->getRight('spell', User::RIGHT_WRITE)){
-              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -255,8 +255,8 @@ class ControllerSpell extends ControllerModule{
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'resume' => $resume,
               'edit' => $edit,
-              'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fas fa-file-pdf'></i></a>",
-              'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
+              'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
+              'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
             );
 
             $return['state'] = true;
@@ -405,7 +405,7 @@ class ControllerSpell extends ControllerModule{
                     $click_action = "onclick=\"Mob.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'spell', IS_VALUE);\"";
                   break;
                   case ControllerModule::SEARCH_DONE_ADD_SPELL_TO_CLASSE:
-                    $click_action = "onclick=\"Classe.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'spell', IS_VALUE);\"";
+                    $click_action = "onclick=\"Classe.updateSpell('".$parameter."', '".$object->getUniqid()."')\"";
                   break;
                   case ControllerModule::SEARCH_DONE_ADD_SPELL_TO_NPC:
                     $click_action = "onclick=\"Npc.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'spell', IS_VALUE);\"";

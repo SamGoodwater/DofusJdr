@@ -275,27 +275,50 @@ class Classe extends Content
             }
 
         }
-        public function getSpell(int $format = Content::FORMAT_BRUT, bool $display_remove = false, $size = 300){
+        public function getSpell(int $format = Content::FORMAT_BRUT, bool $is_editable = false, $size = 300){
             $manager = new ClasseManager();
             $spells = $manager->getLinkSpell($this);
             
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
                     $view = new View();
-                    $html = $view->dispatch(
-                        template_name : "input/search",
-                        data : [
-                            "id" => "addSpell" . $this->getUniqid(),
-                            "title" => "Ajouter un sort",
-                            "label" => "Rechercher un sort",
-                            "placeholder" => "Rechercher un sort",
-                            "search_in" => ControllerModule::SEARCH_IN_SPELL,
-                            "parameter" => $this->getUniqid(),
-                            "action" => ControllerModule::SEARCH_DONE_ADD_SPELL_TO_CLASSE,
-                        ], 
-                        write: false);
+                    ob_start();?>
 
-                    return $html . $this->getSpell(Content::DISPLAY_RESUME, true);
+                        <div class="">
+                            <?=$this->getSpell(Content::DISPLAY_RESUME, true);?>
+
+                            <div class="text-center">
+                                <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Ajouter un sort" class="ms-2 btn btn-sm btn-animate btn-back-main" onclick="Classe.initModalUpdateSpell(this, '');"><i class="fa-regular fa-plus-square"></i> Ajouter un nouveau sort</a>
+                            </div>
+                        </div>
+
+                        <div id="modalAddSpell" class="modal" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content back-main-l-5">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Ajouter un sort</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php $view->dispatch(
+                                            template_name : "input/search",
+                                            data : [
+                                                "id" => "addSpell" . $this->getUniqid(),
+                                                "title" => "Ajouter un sort",
+                                                "label" => "Rechercher un sort",
+                                                "placeholder" => "Rechercher un sort",
+                                                "search_in" => ControllerModule::SEARCH_IN_SPELL,
+                                                "parameter" => $this->getUniqid(),
+                                                "action" => ControllerModule::SEARCH_DONE_ADD_SPELL_TO_CLASSE
+                                            ], 
+                                            write: true); ?>
+
+                                            <input id="data-hidden" type="hidden" data-uniqid="">                                            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php return ob_get_clean();
 
                 case Content::DISPLAY_RESUME:
                     $view = new View(View::TEMPLATE_DISPLAY);
@@ -304,10 +327,13 @@ class Classe extends Content
                             template_name : "spell/list",
                             data : [
                                 "spells" => $spells,
-                                "is_removable" => $display_remove,
+                                "is_editable" => $is_editable,
+                                "is_removable" => $is_editable,
                                 "uniqid" => $this->getUniqid(),
                                 "class_name" => "Classe",
-                                "size" => $size
+                                "size" => $size,
+                                'in_competition' => true,
+                                "add_new_spell" => $is_editable
                             ], 
                             write: false);
                     }
@@ -324,8 +350,10 @@ class Classe extends Content
                                         <?php $view->dispatch(
                                             template_name : "spell/text",
                                             data : [
-                                                "obj" => $spell,
-                                                "is_link" => true
+                                                "obj" => $spell["spell1"],
+                                                "obj2" => $spell["spell2"],
+                                                "is_link" => true,
+                                                "in_competition" => true
                                             ], 
                                             write: true); ?>
                                     </li> <?php
@@ -436,39 +464,55 @@ class Classe extends Content
         /* Data = array(
                         uniqid => id du spell
                     )
-            Js : Classe.update(UniqidM,{action:'add|remove|update', uniqid:'uniqIdS'},'spell', IS_VALUE);
+            Js : REMOVE : Classe.update(UniqidM,{action:'add|remove', uniqid:'uniqidS'},'spell', IS_VALUE);
+            Js : UPDATE : Classe.update(UniqidM,{action:'update', uniqidS:'uniqid', uniqidSNew:'uniqidNew'},'spell', IS_VALUE);
+            Js : ADD : Classe.update(UniqidM,{action:'update', uniqidS1:'uniqid1', uniqidS2:'uniqid2'},'spell', IS_VALUE);
         */
         public function setSpell(array $data){ 
             $managerC = new ClasseManager;
             $managerS = new SpellManager;
-            if(!isset($data['uniqid'])){throw new Exception("L'uniqid du sort n'est pas défini");}
-            if($managerS->existsUniqid($data['uniqid'])){
-                $spell = $managerS->getFromUniqid($data['uniqid']); 
 
-                if(isset($data['action'])){
-                    switch ($data['action']) {
-                        case 'add':
-                            if($managerC->addLinkSpell($this, $spell)){
-                                return true;
-                            }else{
-                                throw new Exception("Erreur lors de l'ajout du sort");
-                            }
-               
-                        case "remove":
+            if(isset($data['action'])){
+                switch ($data['action']) {
+                    case 'add':
+                        if(!isset($data['uniqid'])){return "L'uniqid du sort n'est pas défini";}
+                        if(!$managerS->existsUniqid($data['uniqid'])){return "Le sort existe déjà";}
+                        $spell = $managerS->getFromUniqid($data['uniqid']);
+                        if($managerC->addLinkSpell($this, $spell, new Spell(["id" => 0]))){	
+                            return true;
+                        }else{
+                            return "Erreur lors de l'ajout du sort";
+                        }
+
+                    case "update":
+                        if(!isset($data['uniqid']) && !isset($data['uniqidNew'])){return "L'uniqid du sort n'est pas défini";}
+                        if(!$managerS->existsUniqid($data['uniqid'])){return "Le sort n'existe pas";}
+                        if(!$managerS->existsUniqid($data['uniqidNew'])){return "Le sort n'existe pas";}
+                        $spell = $managerS->getFromUniqid($data['uniqid']);
+                        $spellNew = $managerS->getFromUniqid($data['uniqidNew']);
+                        if($managerC->updateLinkSpell($this, $spell, $spellNew)){
+                            return true;
+                        }else{
+                            return "Erreur lors de la mise à jour du lien";
+                        }
+           
+                    case "remove":          
+                        if(!isset($data['uniqid'])){return "L'uniqid du sort n'est pas défini";}
+                        if($managerS->existsUniqid($data['uniqid'])){
+                            $spell = $managerS->getFromUniqid($data['uniqid']); 
                             if($managerC->removeLinkSpell($this, $spell)){
                                 return true;
                             }else{
-                                throw new Exception("Erreur lors de la suppression du sort");
+                                return "Erreur lors de la suppression du sort";
                             }
+                        }
 
-                        default:
-                            throw new Exception("L'action n'est pas valide");
-                    }
-
-                } else {
-                    throw new Exception("Une action est requise.");
+                    default:
+                        return "L'action n'est pas valide";
                 }
 
+            } else {
+                return "Une action est requise.";
             }
         }
 

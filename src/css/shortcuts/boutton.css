@@ -3,16 +3,39 @@
 /* https://openclassrooms.com/fr/courses/5919246-creez-des-animations-css-modernes/6340912-decouvrez-les-animations-web */
 /* Animation */
 [class*=btn-], .btn {
-  transform: scale(1);
   /* propriété durée délais timming , autres animations ... */
   transition: transform 0.15s cubic-bezier(0.71, 0.12, 1, 0.6), background-color 0.14s 50ms ease-in-out;
 }
-
 [class*=btn-]:hover, .btn:hover {
   text-decoration: none;
   box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5.5px);
   -webkit-backdrop-filter: blur(5.5px);
+}
+[class*=btn-]:active, .btn:active {
+  display: inline-block;
+}
+[class*=btn-].btn-animate, .btn.btn-animate {
+  overflow: hidden;
+  backdrop-filter: blur(5.5px);
+  -webkit-backdrop-filter: blur(5.5px);
+}
+[class*=btn-].btn-animate::before, .btn.btn-animate::before {
+  content: "";
+  background: white;
+  opacity: 0.3;
+  width: 0%;
+  height: 0%;
+  top: 0%;
+  left: 0%;
+  transform: skew(45deg);
+  position: absolute;
+  transition: left 0.3s ease;
+}
+[class*=btn-].btn-animate:hover::before, .btn.btn-animate:hover::before {
+  left: 150%;
+  width: 60%;
+  height: 100%;
 }
 
 [class*=btn-text]:hover {
@@ -20,27 +43,6 @@
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
-}
-
-/* [class*="btn-"]::before, .btn::before {
-  content: '';
-  background: rgba(255, 255, 255, 0.2);
-  width: 0%;
-  height: 0%;
-  top: 0%;
-  left: 0%;
-  transform: skew(45deg);
-  position: absolute;
-  transition: left 0.5s ease;
-}
-[class*="btn-"]:hover::before, .btn:hover::before{
-  left: 150%;
-  width: 60%;
-  height: 100%;
-} */
-[class*=btn-]:active, .btn:active {
-  display: inline-block;
-  transform: scale(1.05) translateY(2px); /* Une seule propriété transforme par élément */
 }
 
 /* Bouton fond rempli */

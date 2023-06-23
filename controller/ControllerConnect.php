@@ -126,22 +126,22 @@ class ControllerConnect extends Controller{
 
                 ob_start(); ?>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-back-secondary" onclick="Connect.getHeader(true);"><?=$user->getPseudo()?></button>
+                        <button type="button" class="btn btn-sm btn-animate btn-back-secondary" onclick="Connect.getHeader(true);"><?=$user->getPseudo()?></button>
                         <button type="button"  class="btn btn-sm btn-back-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="User.open('<?=$user->getUniqid()?>');">Paramètres</a></li>
+                            <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="User.open('<?=$user->getUniqid()?>');">Paramètres</a></li>
                             <?php if($user->getRight("page", User::RIGHT_WRITE)){ ?>
-                                <li><a class="dropdown-item" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
+                                <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
                             <?php } ?>
                             <?php if($user->getIs_admin()){ ?>
-                                <li><a class="dropdown-item" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
+                                <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
                             <?php } ?>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item dropdown-item-toogletoolbar-button" onclick="toogleToolbar();">Masquer la barre d'outils</a></li>
+                            <li><a class="dropdown-item btn-animate back-secondary-l-4-hover dropdown-item-toogletoolbar-button" onclick="toogleToolbar();">Masquer la barre d'outils</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item back-secondary-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
+                            <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
                         </ul>
                     </div>
                     <?php $return["header"] = ob_get_clean();
@@ -168,27 +168,27 @@ class ControllerConnect extends Controller{
                             <ul class="dropdown-menu">
                                 <li class="italic text-center"><?=$user->getPseudo()?></li>
                                 <li class="item-divider-main"></li>
-                                <li><a class="dropdown-item" onclick="User.open('<?=$user->getUniqid()?>');">Paramètres</a></li>
+                                <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="User.open('<?=$user->getUniqid()?>');">Paramètres</a></li>
                                 <?php if($user->getRight("page", User::RIGHT_WRITE)){ ?>
-                                    <li><a class="dropdown-item" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
+                                    <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
                                 <?php } ?>
                                 <?php if($user->getIs_admin()){ ?>
-                                    <li><a class="dropdown-item" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
+                                    <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
                                 <?php } ?>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item back-secondary-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
+                                <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
                             </ul>
                         </div>
                     <?php $return["header_mobile"] = ob_get_clean();
 
-                $return["modal"] = $user->getVisual(Content::FORMAT_EDITABLE);
+                $return["modal"] = $user->getVisual(new Style(["display" => Content::DISPLAY_EDITABLE]));
                 $return["size"] = "lg";
                 $return["title"] = "Compte";
 
             } else {
                 ob_start(); ?>
                     <div>
-                        <button type="button" onclick="Connect.getHeader(true);" class="btn btn-sm btn-back-secondary">Connexion</button>
+                        <button type="button" onclick="Connect.getHeader(true);" class="btn btn-sm btn-animate btn-back-secondary">Connexion</button>
                     </div>
                 <?php $return["header"] = ob_get_clean();
                 ob_start(); ?>
@@ -233,9 +233,9 @@ class ControllerConnect extends Controller{
                                 <input class="form-check-input form-control-main-focus back-main-l-2 border-main" type="checkbox" value="" <?=$disabled?> id="remember">
                                 <label class="form-check-label" for="remember">Garder la connexion</label>
                             </div>
-                            <p class="size-0-8 text-grey-d-1 text-left"><i class="fas fa-question-circle"></i> Cette fonctionnalité resquière l'utilisation d'un cookie de connexion.</p>
+                            <p class="size-0-8 text-grey-d-1 text-left"><i class="fa-solid fa-question-circle"></i> Cette fonctionnalité resquière l'utilisation d'un cookie de connexion.</p>
                             <p id="display_error" class="bold text-red-d-3 size-0-8"></p>
-                            <button type="button" onclick="Connect.connect();" class="btn btn-border-secondary">Se connecter</button>
+                            <button type="button" onclick="Connect.connect();" class="btn btn-animate btn-border-secondary">Se connecter</button>
                         </div>
                         
                         <div id="modalAddUser" class="user__modal_tab">
@@ -257,7 +257,7 @@ class ControllerConnect extends Controller{
                                 <label for="password_repeat">Réécrire le mot de passe ou la passe-phrase</label>
                             </div>
                             <p id="display_error" class="bold text-red-d-3 size-0-8"></p>
-                            <button type="button" onclick="User.add();" class="btn btn-border-secondary">S'inscrire</button>
+                            <button type="button" onclick="User.add();" class="btn btn-animate btn-border-secondary">S'inscrire</button>
                         </div>
 
                         <div id="modalPasswordForgotten" class="user__modal_tab">

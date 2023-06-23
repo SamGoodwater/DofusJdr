@@ -167,7 +167,7 @@ class Shop extends Content
 
                 case Content::DISPLAY_RESUME:
                     if(isset($npc)){
-                        return $npc->getVisual(Content::DISPLAY_RESUME);
+                        return $npc->getVisual(new Style(["display" => Content::DISPLAY_RESUME]));
                     } else {
                         return "";
                     }

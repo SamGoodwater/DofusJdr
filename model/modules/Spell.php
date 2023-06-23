@@ -764,7 +764,7 @@ class Spell extends Content
                         <?php if(!empty($this->_id_invocation)){ ?>
                             <div style="position:relative;width: 300px;">
                                 <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
-                                    <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher cette créature de ce sort" class="p-4 btn-underline-red" onclick="if (confirm('Etes vous sûr de détacher cette créature de ce sort ?')){Spell.update('<?=$this->getUniqid();?>', 0, 'id_invocation', IS_VALUE);}"><i class="fas fa-times"></i></a>
+                                    <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher cette créature de ce sort" class="p-4 btn-underline-red" onclick="if (confirm('Etes vous sûr de détacher cette créature de ce sort ?')){Spell.update('<?=$this->getUniqid();?>', 0, 'id_invocation', IS_VALUE);}"><i class="fa-solid fa-times"></i></a>
                                 </div>
                                 <?=$this->getId_invocation(Content::DISPLAY_RESUME)?>
                             </div>
@@ -788,7 +788,7 @@ class Spell extends Content
 
                 case Content::DISPLAY_RESUME:
                     if(isset($mob)){
-                        return $mob->getVisual(Content::DISPLAY_RESUME, $size);
+                        return $mob->getVisual(new Style(["display" => Content::DISPLAY_RESUME, "size" => $size]));
                     } else {
                         return "";
                     }

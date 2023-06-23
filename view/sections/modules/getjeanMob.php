@@ -86,7 +86,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <label class="form-check-label" for="vitality">Vitalité <img class='icon-sm' src='medias/icons/modules/vitality.png'></label>
                 </div>
             </div>
-            <button class="btn btn-sm btn-back-secondary" onclick="createJeanMob();">Générer le PDF</button>
+            <button class="btn btn-sm btn-animate btn-back-secondary" onclick="createJeanMob();">Générer le PDF</button>
         </div>
         <script>
             function createJeanMob(){

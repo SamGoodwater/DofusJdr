@@ -79,7 +79,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
-                    <th data-sortable="false" data-visible="true" data-field="logo"><i class="fas fa-image"></i></th>
+                    <th data-sortable="false" data-visible="true" data-field="logo"><i class="fa-solid fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="description">Description</th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="location">Localisation</th>
@@ -93,7 +93,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> Hôtels de vente. Le chargement du tableau peut prendre quelques minutes.</p>
+        <p class="mt-2"><i class="fa-solid fa-info-circle"></i> Il y a <span class="total_obj"></span> Hôtels de vente.</p>
 
         <!-- Modal ADD -->
 
@@ -103,8 +103,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 <label for="floatingInput">Nom de l'hôtel de vente</label>
             </div>
             <div class="modal-footer d-flex flex-row justify-content-between">
-                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="Shop.add();" class="btn btn-sm btn-back-secondary">Créer</button>
+                <button type="button" class="btn btn-sm btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Shop.add();" class="btn btn-sm btn-animate btn-back-secondary">Créer</button>
             </div>
         </div>
 

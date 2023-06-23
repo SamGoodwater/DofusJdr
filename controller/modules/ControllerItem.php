@@ -117,7 +117,7 @@ class ControllerItem extends ControllerModule{
 
         $edit = "";
         if($currentUser->getRight('item', User::RIGHT_WRITE)){
-          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Item.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Item.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
         }
 
         $json[] = array(
@@ -141,7 +141,7 @@ class ControllerItem extends ControllerModule{
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
           'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='item' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
           'edit' => $edit,
-          'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
+          'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
         );
       }
 
@@ -180,7 +180,7 @@ class ControllerItem extends ControllerModule{
 
             $edit = "";
             if($currentUser->getRight('item', User::RIGHT_WRITE)){
-              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Item.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='far fa-edit'></i></a>";
+              $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Item.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
             }
 
             $return["value"] = array(
@@ -204,7 +204,7 @@ class ControllerItem extends ControllerModule{
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='item' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'edit' => $edit,
-              'detailView' => $obj->getVisual(Content::DISPLAY_CARD)
+              'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
             );
 
             $return['state'] = true;

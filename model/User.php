@@ -234,7 +234,7 @@ class User extends Content
                         ], 
                         write: true); ?>
 
-                        <div class="text-center mt-3"><a class="btn btn-sm btn-border-main" onclick="User.updatePassword('<?=$this->getUniqid()?>');">Modifier</a></div>
+                        <div class="text-center mt-3"><a class="btn btn-sm btn-animate btn-border-main" onclick="User.updatePassword('<?=$this->getUniqid()?>');">Modifier</a></div>
                     </div>
                     <?php return ob_get_clean();
                 
@@ -264,7 +264,7 @@ class User extends Content
             $badge_right_no = $view->dispatch(
                 template_name : "badge",
                 data : [
-                    "content" => "<i class='fas fa-exclamation-triangle'></i> Aucun",
+                    "content" => "<i class='fa-solid fa-exclamation-triangle'></i> Aucun",
                     "color" => "grey-d-3",
                     "tooltip" => "Aucun droit",
                     "style" => Style::STYLE_OUTLINE,
@@ -273,7 +273,7 @@ class User extends Content
             $badge_right_read = $view->dispatch(
                 template_name : "badge",
                 data : [
-                    "content" => "<i class='fas fa-book-open'></i> Lecture",
+                    "content" => "<i class='fa-solid fa-book-open'></i> Lecture",
                     "color" => "blue-d-3",
                     "tooltip" => "Droit de lecture",
                     "style" => Style::STYLE_OUTLINE,
@@ -282,7 +282,7 @@ class User extends Content
             $badge_right_write = $view->dispatch(
                 template_name : "badge",
                 data : [
-                    "content" => "<i class='fas fa-edit'></i> Écriture",
+                    "content" => "<i class='fa-solid fa-edit'></i> Écriture",
                     "color" => "green-d-3",
                     "tooltip" => "Droit d'écriture",
                     "style" => Style::STYLE_OUTLINE,
@@ -348,17 +348,17 @@ class User extends Content
                                         case self::RIGHT_NO:
                                             $color = "grey";
                                             $title = "Aucun droit concernant les ".$right_name;
-                                            $text = "Aucun <i class='fas fa-exclamation-triangle'></i>";
+                                            $text = "Aucun <i class='fa-solid fa-exclamation-triangle'></i>";
                                         break;
                                         case self::RIGHT_READ:
                                             $color = "blue";
                                             $title = "Lecture seule concernant les ".$right_name;
-                                            $text = "Lecture <i class='fas fa-book-open'></i>";
+                                            $text = "Lecture <i class='fa-solid fa-book-open'></i>";
                                         break;
                                         case self::RIGHT_WRITE:
                                             $color = "green";
                                             $title = "Lecture et écriture concernant les ".$right_name;
-                                            $text = "Ecriture & Lecture <i class='fas fa-edit'></i>";
+                                            $text = "Ecriture & Lecture <i class='fa-solid fa-edit'></i>";
                                         break;
                                         default:
                                             return "Erreur";
@@ -454,7 +454,7 @@ class User extends Content
                         <div class="d-flex flex-row flex-wrap align-content-stretch justify-content-start ">
                             <?php foreach ($bookmarks as $bookmark) { ?>
                                 <div class="mx-3 my-1">
-                                    <?= $bookmark->getVisual(Content::DISPLAY_RESUME); ?>
+                                    <?= $bookmark->getVisual(new Style(["display" => Content::DISPLAY_RESUME])); ?>
                                 </div>                       
                             <?php } ?>
                         </div>

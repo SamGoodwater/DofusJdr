@@ -1,5 +1,5 @@
 <div class="close-menu">
-    <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Fermer le menu" onclick="toogleMenu();"><i class="fas fa-times"></i></a>
+    <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Fermer le menu" onclick="toogleMenu();"><i class="fa-solid fa-times"></i></a>
 </div>
 <div>
     <a onclick="Page.show('home')" class="brand-logo"><img src="medias/logos/logo.png" width="180"></a>

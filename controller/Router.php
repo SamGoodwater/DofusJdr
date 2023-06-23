@@ -83,7 +83,7 @@ class Router {
                 "https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css",
                 "https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css",
                 [
-                    "link" => "https://use.fontawesome.com/releases/v5.3.1/css/all.css",
+                    "link" => "https://use.fontawesome.com/releases/v6.4.0/css/all.css",
                     "media" => "all"
                 ],
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css",

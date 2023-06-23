@@ -50,7 +50,7 @@ const copyToClipboard = str => {
         
         // var appendlink = '';
         // if(link !=''){
-        //   appendlink = "<p class='text-center m-0 p-0 font-size-0-8'><a target='_blank' href='" + link + "'><i class='fas fa-arrow-circle-right'></i></a></p>";
+        //   appendlink = "<p class='text-center m-0 p-0 font-size-0-8'><a target='_blank' href='" + link + "'><i class='fa-solid fa-arrow-circle-right'></i></a></p>";
         // }
         var append = "<div id='"+result+"' class='notif border-"+color+"'><div class='toast-header'><div class='msgSquare back-"+color+"'></div><strong class='me-auto'>"+title+"</strong><small></small><button type='button' class='btn-close' onclick='$(this).parent().parent().remove();' aria-label='Close'></button></div><div class='toast-body'>"+content+"</div></div>";
     

@@ -1,5 +1,7 @@
 <?php
 
+use PhpParser\Node\Expr\Cast\Object_;
+
 abstract class Content
 {
     use CheckingFct, SecurityFct, CalcFct, StringFct;
@@ -334,7 +336,12 @@ abstract class Content
                     write: false);
 
             case  Content::DISPLAY_EDITABLE:
-                $style->setDisplay(Content::DISPLAY_CARROUSEL);
+                if($multi_files){
+                    $style->setDisplay(Content::DISPLAY_CARROUSEL);
+                } else {
+                    $style->setDisplay(Content::FORMAT_VIEW);
+                }
+       
                 $style->setIs_removable(true);
 
                 ob_start();
@@ -381,7 +388,7 @@ abstract class Content
 
     // SETTERS
     public function setId($data){
-        if($data > 0){
+        if($data >= 0){
             $this->_id = $data;
             return true;
         } else {
@@ -433,7 +440,7 @@ abstract class Content
         return true;
     }
 
-    public function getVisual(int $display = Content::DISPLAY_CARD, int $size = 300) {
+    public function getVisual(Style $style = new Style(["display" => Content::DISPLAY_CARD, "size" => "300"])) {
         $user = ControllerConnect::getCurrentUser();
         $bookmark_icon = Style::ICON_REGULAR;
         if($user->in_bookmark($this)){
@@ -441,11 +448,11 @@ abstract class Content
         }
 
         //OPTIONS
-        if($size < 100){$size = 300;}
+        if($style->getSize() < 100){$style->setSize(300);}
 
         $view = new View(View::TEMPLATE_DISPLAY);
         $className = strtolower(get_class($this));
-        switch ($display) {
+        switch ($style->getDisplay()) {
             case Content::DISPLAY_EDITABLE:
                 $template_name = $className."/editable";
             break;
@@ -466,9 +473,20 @@ abstract class Content
                 "obj" => $this,
                 "user" => $user,
                 "bookmark_icon" => $bookmark_icon,
-                "size" => $size
+                "style" => $style
             ], 
             write: false);
 
+    }
+
+    static function exist($obj){
+        if(is_object($obj)){
+            if(!empty($obj)){
+                if($obj->getId() > 0 && $obj->getId() != null){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

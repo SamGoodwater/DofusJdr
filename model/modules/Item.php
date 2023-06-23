@@ -286,9 +286,9 @@ class Item extends Content
 
                 case Content::FORMAT_ICON:
                     if($this->_actif){ 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title='Item actif' class='fas fa-check-circle text-actif'></i>";
+                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title='Item actif' class='fa-solid fa-check-circle text-actif'></i>";
                     } else { 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title='Item passif' class='fas fa-ban text-actif'></i>";
+                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title='Item passif' class='fa-solid fa-ban text-actif'></i>";
                     }
                     
                 default:

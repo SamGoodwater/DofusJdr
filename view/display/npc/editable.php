@@ -5,7 +5,7 @@
 // Conseillé
     if(!isset($user)) {$user = ControllerConnect::getCurrentUser();}else{if(get_class($user) != "User") {$user = ControllerConnect::getCurrentUser();}}
     if(!isset($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}}
-    if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
+    if(!isset($style)){ $style = new Style; }else{ if(!get_class($style) == "Style"){ $style = new Style; } }
 ?>
 
 <div class="card mb-3">
@@ -16,8 +16,8 @@
         </div>
         <div class="col-auto">
             <h6 class="text-center">Classe</h6>
-            <?=$obj->getClasse(Content::FORMAT_OBJECT)->getVisual(Content::DISPLAY_RESUME)?>
-            <p class="mt-4 text-center"><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='btn btn-sm btn-border-red' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$obj->getUniqid()?>'><i class='fas fa-file-pdf'></i> Générer un pdf</a></p>
+            <?=$obj->getClasse(Content::FORMAT_OBJECT)->getVisual(new Style(["display" => Content::DISPLAY_RESUME]))?>
+            <p class="mt-4 text-center"><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='btn btn-sm btn-animate btn-border-red' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$obj->getUniqid()?>'><i class='fa-solid fa-file-pdf'></i> Générer un pdf</a></p>
         </div>
         <div class="col ms-4">
             <div class="d-flex justify-content-between align-items-baseline">
@@ -129,5 +129,5 @@
         <div class="dy-2 px-1"><?=$obj->getConsumable(Content::DISPLAY_EDITABLE);?></div>
         <div class="dy-2 px-1"><?=$obj->getOther_consumable(Content::DISPLAY_EDITABLE);?></div>
     </div>
-    <p class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-border-red' onclick="Npc.remove('<?=$obj->getUniqid()?>')"><i class="fas fa-trash"></i> Supprimer</a></p>
+    <p class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-animate btn-border-red' onclick="Npc.remove('<?=$obj->getUniqid()?>')"><i class="fa-solid fa-trash"></i> Supprimer</a></p>
 </div>

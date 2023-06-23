@@ -85,7 +85,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                 <div class='tree-line-node'>
                                     <?php foreach ($powerful_objs as $key2 => $obj) { ?>
                                         <div class='tree-node-item border-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>'>
-                                            <?= $obj->getVisual(Content::DISPLAY_RESUME)?>
+                                            <?= $obj->getVisual(new Style(["display" => Content::DISPLAY_RESUME]))?>
                                         </div>
                                     <?php } ?>
                                 </div>

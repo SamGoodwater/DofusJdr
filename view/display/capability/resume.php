@@ -5,11 +5,11 @@
 // Conseillé
     if(!isset($user)) {$user = ControllerConnect::getCurrentUser();}else{if(get_class($user) != "User") {$user = ControllerConnect::getCurrentUser();}}
     if(!isset($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}}
-    if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
+    if(!isset($style)){ $style = new Style; }else{ if(!get_class($style) == "Style"){ $style = new Style; } }
 ?>
 
-<div style="position:relative;width: <?=$size?>px;">
-    <div ondblclick="Capability.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card p-2 m-1 back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>-l-5 back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>-l-4-hover" style="width: <?=$size?>px;" >
+<div id="<?=$style->getId()?>" class="resume <?=$style->getClass()?>" style="position:relative;width: <?=$style->getSize()?>px;">
+    <div ondblclick="Capability.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card p-2 m-1 back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>-l-5 back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>-l-4-hover" >
         <div class="d-flex flew-row flex-nowrap">
             <div>
                 <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
@@ -28,9 +28,9 @@
                     <?=$obj->getTime_before_use_again(Content::FORMAT_ICON)?>
                 </div>
             </div>
-            <div class="d-flex flex-column justify-content-between ms-auto">
+            <div class="d-flex flex-column justify-content-between ms-auto resume-rapid-menu">
                 <a onclick='User.changeBookmark(this);' data-classe='capability' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
-                <a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=capability&a=getPdf&uniqids=<?=$obj->getUniqid()?>'><i class='fas fa-file-pdf'></i></a>
+                <a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=capability&a=getPdf&uniqids=<?=$obj->getUniqid()?>'><i class='fa-solid fa-file-pdf'></i></a>
             </div>
         </div>
         <div class="card-hover-showed">

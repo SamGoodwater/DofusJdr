@@ -46,23 +46,23 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <div class="sortablebis">
 
             <?php if(empty($sections)){ ?>
-                <p>La page est vide <i class="fas fa-sad-tear"></i></p>
+                <p>La page est vide <i class="fa-solid olid fa-sad-tear"></i></p>
                 <p><a data-bs-toggle="collapse" onclick="Section.getVisual('<?=$pageTemp->getUniqid()?>',true);" >Ajouter un paragraphe pour commencer.</a></p>
             <?php }
             
             foreach ($sections as $section) { ?>
-                <?= $section->getVisual(Content::FORMAT_EDITABLE); ?>      
+                <?= $section->getVisual(new Style(["display" => Content::DISPLAY_EDITABLE])); ?>      
             <?php } ?>
 
         </div>
 
         <div class="text-right">
-            <a onclick="Section.getVisual('<?=$pageTemp->getUniqid()?>',true);" class="size-2 text-main-d-3 text-main-d-1-hover mx-3"><i class="far fa-plus-square"></i></a>
+            <a onclick="Section.getVisual('<?=$pageTemp->getUniqid()?>',true);" class="size-2 text-main-d-3 text-main-d-1-hover mx-3"><i class="fa-regular fa-plus-square"></i></a>
         </div>
 
         <script>
             $(document).ready(function(){ 
-                var containtModal = "<div><input type=\"hidden\" id=\"type\" value=\"text.php\"><div class=\"form-floating m-2\"><input id=\"title\" placeholder='' type='text' class='form-control form-control-main-focus form-control form-control-main-focus-sm'><label class='size-0-8'>Titre du nouveau paragraphe</label></div><div class='text-right m-2'><a onclick=\"Section.add('home')\" class=\"btn btn-sm btn-border-secondary\">Ajouter</a></div></div>";
+                var containtModal = "<div><input type=\"hidden\" id=\"type\" value=\"text.php\"><div class=\"form-floating m-2\"><input id=\"title\" placeholder='' type='text' class='form-control form-control-main-focus form-control form-control-main-focus-sm'><label class='size-0-8'>Titre du nouveau paragraphe</label></div><div class='text-right m-2'><a onclick=\"Section.add('home')\" class=\"btn btn-sm btn-animate btn-border-secondary\">Ajouter</a></div></div>";
                 Page.build(Page.RESPONSIVE, "Ajouter un paragraphe", containtModal);
 
                 $( ".sortablebis" ).sortable({

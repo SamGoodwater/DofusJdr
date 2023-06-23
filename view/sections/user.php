@@ -37,7 +37,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
-        <button type="button" class="btn btn-sm btn-back-secondary me-2" onclick="Page.build(true, 'Création d\'un utilisateur·trice', $('#addUser'), Page.SIZE_MD, true);">Nouvel·le Utilisateur·trice</button>
+        <button type="button" class="btn btn-sm btn-animate btn-back-secondary me-2" onclick="Page.build(true, 'Création d\'un utilisateur·trice', $('#addUser'), Page.SIZE_MD, true);">Nouvel·le Utilisateur·trice</button>
 
         <table 
             id="table"
@@ -89,7 +89,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> Utilisateur·trice.</p>
+        <p class="mt-2"><i class="fa-solid fa-info-circle"></i> Il y a <span class="total_obj"></span> Utilisateur·trice.</p>
 
         <!-- Modal ADD -->
         <div id="addUser" style="display:none;">
@@ -107,8 +107,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             </div>
             <p id="display_error" class="bold text-red-d-3 size-0-8"></p>
             <div class="modal-footer d-flex flex-row justify-content-between">
-                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="User.add();" class="btn btn-sm btn-back-secondary">Créer</button>
+                <button type="button" class="btn btn-sm btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="User.add();" class="btn btn-sm btn-animate btn-back-secondary">Créer</button>
             </div>
         </div>
 

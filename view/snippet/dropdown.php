@@ -18,7 +18,7 @@
 ?>
 <div class="d-flex flex-column align-items-center justify-content-center">
     <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>">
-        <a class="d-flex align-items-center <?=$class?>" type="button" id="<?=$id?>" style="<?=$css?>" <?=$data?> data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><div><?=$label?></div> <i class="fas fa-chevron-down font-size-0-8 text-grey"></i></a>
+        <a class="d-flex align-items-center <?=$class?>" type="button" id="<?=$id?>" style="<?=$css?>" <?=$data?> data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><div><?=$label?></div> <i class="fa-solid fa-chevron-down font-size-0-8 text-grey"></i></a>
         <div class="dropdown-menu" aria-labelledby="<?=$id?>"> <?php
             foreach ($items as $key => $item) { 
                     $href=""; $onclick=""; $display="";$item_class="";

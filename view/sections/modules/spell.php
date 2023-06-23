@@ -128,10 +128,10 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
-                    <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fas fa-image"></i></th>
+                    <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fa-solid fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="resume"></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="is_magic"><i class="fas fa-fist-raised text-brown-d-2"></i> | <i class="fas fa-magic text-purple-d-2"></i></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="is_magic"><i class="fa-solid fa-fist-raised text-brown-d-2"></i> | <i class="fa-solid fa-magic text-purple-d-2"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="category">Catégorie</th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="element">Elèment</th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="powerful">Puissance</th>
@@ -141,21 +141,21 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Portée du sort"><img class='icon' src='medias/icons/modules/po.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="cast_per_turn"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de fois que le sort peut-être lancer par tour"><img class='icon' src='medias/icons/modules/cast_per_turn.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="po_editable"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Sort au corps à corps, à distance avec une portée modifiable ou non"><img class='icon' src='medias/icons/modules/po_editable.png'></span></th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="sight_line"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Besoin de la ligne de vue pour lancer le sort"><i class='fas fa-eye-slash text-sight-line'></i></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="sight_line"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Besoin de la ligne de vue pour lancer le sort"><i class='fa-solid fa-eye-slash text-sight-line'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="number_between_two_cast"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de tour entre deux lancer de sort"><img class='icon' src='medias/icons/modules/number_between_two_cast.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="id_invocation"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Créature attachée au sort">Invocation attachée au sort</th>
                     <th data-sortable="false" data-visible="false"  data-field="description">Description</th>
                     <th data-sortable="false" data-visible="false"  data-field="effect">Effets</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fas fa-check text-green-d-3'></i> JDR</span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>
                 </tr>
             </thead>
 
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> sorts. Le chargement du tableau peut prendre quelques minutes.</p>
+        <p class="mt-2"><i class="fa-solid fa-info-circle"></i> Il y a <span class="total_obj"></span> sorts.</p>
 
         <!-- Modal ADD -->
 
@@ -165,8 +165,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 <label for="floatingInput">Nom du sort</label>
             </div>
             <div class="modal-footer d-flex flex-row justify-content-between">
-                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="Spell.add();" class="btn btn-sm btn-sm btn-back-secondary">Créer</button>
+                <button type="button" class="btn btn-sm btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Spell.add();" class="btn btn-sm btn-animate btn-sm btn-back-secondary">Créer</button>
             </div>
         </div>
 

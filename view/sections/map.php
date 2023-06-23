@@ -93,7 +93,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             </div>
                             <p class="text-center">
                                 <?=ucfirst($file_name->getName(Content::FORMAT_BRUT, false))?>
-                                <a href="<?=$file_name->getPath()?>" download="<?=$file_name->getName().'.'.substr(strrchr($file_name->getPath(),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>  
+                                <a href="<?=$file_name->getPath()?>" download="<?=$file_name->getName().'.'.substr(strrchr($file_name->getPath(),'.'),1);?>"><i class="fa-solid fa-download text-main-d-3 text-main-d-1-hover"></i></a>  
                             </p>
                         </div>
                     <?php } ?>
@@ -103,12 +103,12 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
     
             <h4 class="text-center mt-4">Cartes spécifiques</h4>
             <div>
-                <button onclick="checkAll();" class="btn btn-sm border-main-d-1 text-white back-main-d-1 text-main-d-1-hover back-white-hover form-control-main-focus">Tout afficher</button>
-                <button onclick="discheckAll();" class="btn btn-sm border-main-d-1 text-white back-main-d-1 text-main-d-1-hover back-white-hover form-control-main-focus">Rien afficher</button>
+                <button onclick="checkAll();" class="btn btn-sm btn-animate border-main-d-1 text-white back-main-d-1 text-main-d-1-hover back-white-hover form-control-main-focus">Tout afficher</button>
+                <button onclick="discheckAll();" class="btn btn-sm btn-animate border-main-d-1 text-white back-main-d-1 text-main-d-1-hover back-white-hover form-control-main-focus">Rien afficher</button>
                 
                 <?php foreach ($img AS $key => $list) { ?>
     
-                    <button id="cat" onclick="checkCat(this);" data-catselect="<?=$key?>" data-check="1" data-color="<?=Style::getColorFromLetter($key)?>" class="btn btn-sm border-<?=Style::getColorFromLetter($key)?>-d-4 form-control-<?=Style::getColorFromLetter($key)?>-focus"><?=ucfirst($key)?></button>
+                    <button id="cat" onclick="checkCat(this);" data-catselect="<?=$key?>" data-check="1" data-color="<?=Style::getColorFromLetter($key)?>" class="btn btn-sm btn-animate border-<?=Style::getColorFromLetter($key)?>-d-4 form-control-<?=Style::getColorFromLetter($key)?>-focus"><?=ucfirst($key)?></button>
                 
                 <?php } ?>
                 
@@ -120,7 +120,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         <div class="card m-1" data-cat="<?=$key?>" style="width: 15rem;">
                             <a data-fancybox='gallery' href='<?=$file_name->getPath()?>'><img src="<?=$file_name->getPath()?>" class="card-img-top" alt="<?=ucfirst($file_name->getName(Content::FORMAT_BRUT, false))?>"></a>
                             <span style="position:absolute;bottom:3px;right:3px;" class="badge back-<?=Style::getColorFromLetter($key)?>-d-4 text-white"><?=ucfirst($key)?></span>
-                            <a style="position:absolute;top:5px;left:5px;" href="<?=$file_name->getPath()?>" download="<?=$file_name->getName().'.'.substr(strrchr($file_name->getPath(),'.'),1);?>"><i class=" p-1 fas fa-download text-white text-main-l-1-hover shadow-text-3"></i></a>  
+                            <a style="position:absolute;top:5px;left:5px;" href="<?=$file_name->getPath()?>" download="<?=$file_name->getName().'.'.substr(strrchr($file_name->getPath(),'.'),1);?>"><i class=" p-1 fa-solid fa-download text-white text-main-l-1-hover shadow-text-3"></i></a>  
                         </div>
     
                     <?php }?>

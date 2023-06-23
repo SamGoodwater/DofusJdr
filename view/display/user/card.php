@@ -5,7 +5,7 @@
 // Conseillé
     if(!isset($user)) {$user = ControllerConnect::getCurrentUser();}else{if(get_class($user) != "User") {$user = ControllerConnect::getCurrentUser();}}
     if(!isset($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}else{if(!is_string($bookmark_icon)) {$bookmark_icon =  Style::ICON_REGULAR;}}
-    if(!isset($size)){ $size = "300"; }else{ if(!is_numeric($size)){ $size = "300"; } }
+    if(!isset($style)){ $style = new Style; }else{ if(!get_class($style) == "Style"){ $style = new Style; } }
 ?>
 
 <div class="card mb-3 p-3">
@@ -17,7 +17,7 @@
         </div>
         <div class="col-auto">
             <?php if($user->getRight('user', User::RIGHT_WRITE)){ ?>
-                <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="User.open('<?=$obj->getUniqid()?>', Controller.DISPLAY_EDITABLE);"><i class='far fa-edit'></i></a>
+                <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="User.open('<?=$obj->getUniqid()?>', Controller.DISPLAY_EDITABLE);"><i class='fa-regular fa-edit'></i></a>
             <?php } ?>
         </div>
     </div>

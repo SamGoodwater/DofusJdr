@@ -38,7 +38,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end">
-            <button type="button" class="me-2 btn btn-sm btn-back-secondary" onclick="Page.build(true, 'Création d\'une créature', $('#addMob'), Page.SIZE_MD, true);">Ajouter une créature</button>
+            <button type="button" class="me-2 btn btn-sm btn-animate btn-back-secondary" onclick="Page.build(true, 'Création d\'une créature', $('#addMob'), Page.SIZE_MD, true);">Ajouter une créature</button>
             <div class="form-check form-switch">
                 <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
                 <label class="form-check-label" for="toggleUsableSwitch">Afficher seulement les créatures compatibles avec le JDR</label>
@@ -84,7 +84,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
-                    <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fas fa-image"></i></th>
+                    <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fa-solid fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="level"><span class="text-level">Niveau</span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="powerful"><span class="text-deep-purple-d-3">Puissance</span></th>
@@ -98,7 +98,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de portée"><img class='icon' src='medias/icons/modules/po.png'></span></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="ini"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus d'Initiative"><img class='icon' src='medias/icons/modules/ini.png'></span></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="touch"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Bonus de touche"><img class='icon' src='medias/icons/modules/touch.png'></span></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="hostility"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Agressivité"><i class='fas fa-tired text-main-d-2'></i></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="hostility"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Agressivité"><i class='fa-solid fa-tired text-main-d-2'></i></span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="size"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="vitality"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Vitalité"><img class='icon' src='medias/icons/modules/vitality.png'></span></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="sagesse"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Modificateur de Sagesse"><img class='icon' src='medias/icons/modules/sagesse.png'></span></th>
@@ -116,20 +116,20 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="res_feu"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance feu"><img class='icon' src='medias/icons/modules/res_feu.png'></span></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="res_air"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance air"><img class='icon' src='medias/icons/modules/res_air.png'></span></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="res_eau"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Résistance eau"><img class='icon' src='medias/icons/modules/res_eau.png'></span></th>
-                    <th class="text-center" data-sortable="false" data-visible="false" data-field="spell"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Sorts"><i class='fas fa-magic text-main-d-1'></i></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="spell"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Sorts"><i class='fa-solid fa-magic text-main-d-1'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="trait"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Traits">Traits</span></th>
                     <th data-sortable="false" data-visible="false"  data-field="description">Description</th>
-                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="zone"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Zone de vie"><i class='fas fa-map-marker-alt text-main-d-2'></i></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="zone"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Zone de vie"><i class='fa-solid fa-map-marker-alt text-main-d-2'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fas fa-check text-green-d-3'></i> JDR</span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>
                 </tr>
             </thead>
 
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> créatures. Le chargement du tableau peut prendre quelques minutes.</p>
+        <p class="mt-2"><i class="fa-solid fa-info-circle"></i> Il y a <span class="total_obj"></span> créatures.</p>
 
         <!-- Modal ADD -->
         <div id="addMob" style="display:none;">
@@ -179,8 +179,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </div>
             </div>
             <div class="modal-footer d-flex flex-row justify-content-between">
-                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="Mob.add();" class="btn btn-sm btn-back-secondary">Créer</button>
+                <button type="button" class="btn btn-sm btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Mob.add();" class="btn btn-sm btn-animate btn-back-secondary">Créer</button>
             </div>
         </div>
 

@@ -37,7 +37,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
     if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
         ob_start(); ?>
-            <a class="btn back-grey text-d-2 mb-2" onclick="return false; Page.build(true, 'Création d\'une classe', $('#addClasse'), Page.SIZE_MD, true);">Ajouter une classe</a>
+            <a class="btn btn-sm btn-animate back-grey text-d-2 mb-2" onclick="return false; Page.build(true, 'Création d\'une classe', $('#addClasse'), Page.SIZE_MD, true);">Ajouter une classe</a>
             <table 
                 id="table"
                 class="table table-striped"
@@ -78,8 +78,8 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                         <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                         <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
-                        <th data-sortable="false" data-visible="true" data-field="path_img_logo"><i class="fas fa-image"></i></th>
-                        <th data-sortable="false" data-visible="false" data-field="path_img"><i class="fas fa-image"></i></th>
+                        <th data-sortable="false" data-visible="true" data-field="path_img_logo"><i class="fa-solid fa-image"></i></th>
+                        <th data-sortable="false" data-visible="false" data-field="path_img"><i class="fa-solid fa-image"></i></th>
                         <th class="text-center" data-sortable="true" data-visible="true" data-field="name">Nom</th>
                         <th class="text-center" data-sortable="false" data-visible="true" data-field="description_fast">Description<br>succinte</th>
                         <th class="text-center" data-sortable="true" data-visible="true" data-field="weapons_of_choice">Arme de prédilection</th>
@@ -89,14 +89,14 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="specificity">Spécificités</th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
-                        <th class="text-center" data-sortable="true" data-visible="false" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fas fa-check text-green-d-3'></i> JDR</span></th>
+                        <th class="text-center" data-sortable="true" data-visible="false" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>
                     </tr>
                 </thead>
 
                 <tbody>
                 </tbody>
             </table>
-            <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> classes. Le chargement du tableau peut prendre quelques minutes.</p>
+            <p class="mt-2"><i class="fa-solid fa-info-circle"></i> Il y a <span class="total_obj"></span> classes.</p>
 
             <div id="addClasse" style="display:none;">
                 <div class="form-floating mb-1">
@@ -118,8 +118,8 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                     <label >Arme de prédilection</label>
                 </div>
                 <div class="modal-footer d-flex flex-row justify-content-between">
-                    <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-sm btn-back-secondary" onclick="Classe.add();">Ajouter</button>
+                    <button type="button" class="btn btn-sm btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-animate btn-back-secondary" onclick="Classe.add();">Ajouter</button>
                 </div>
             </div>
 

@@ -58,7 +58,7 @@
                 <?php include_once "header.php";?>
             </div>
             <div class="app-btn-show-toolbar-footer" style="display: none;">
-                <a onclick="toogleToolbar(false);toogleFooter(false)"><i class="fas fa-caret-down"></i></a>
+                <a onclick="toogleToolbar(false);toogleFooter(false)"><i class="fa-solid fa-caret-down"></i></a>
             </div>
 
             <div class='app-content'>
@@ -102,9 +102,9 @@
                     </ul>
                 </div>
                 <div class="d-flex flex-column text-center align-items-center">
-                    <button onclick="Connect.setCookie(false,{'connexion':true, 'bookmark':true});" class="btn btn-sm btn-border-green my-2">Tout accepter</button>
-                    <button onclick="Connect.setCookie(true);" class="btn btn-sm btn-border-secondary my-2">Accepter les cookies cochés</button>
-                    <button onclick="Connect.setCookie(false,{'connexion':false, 'bookmark':false});" class="btn btn-sm btn-border-red my-2">Tout rejeter</button>
+                    <button onclick="Connect.setCookie(false,{'connexion':true, 'bookmark':true});" class="btn btn-sm btn-animate btn-border-green my-2">Tout accepter</button>
+                    <button onclick="Connect.setCookie(true);" class="btn btn-sm btn-animate btn-border-secondary my-2">Accepter les cookies cochés</button>
+                    <button onclick="Connect.setCookie(false,{'connexion':false, 'bookmark':false});" class="btn btn-sm btn-animate btn-border-red my-2">Tout rejeter</button>
                     <p><small class="size-0-7 text-grey-d-3 my-2">Aucun cookie n'est utilisé à des fins commerciales, statistiques ou pour récupérer quelconque information. <a onclick="Page.show('cgu');">En savoir plus</a></small></p>
                 </div>
             </div>
@@ -112,10 +112,10 @@
 
         <div class="offcanvas offcanvas-start back-main-l-4" data-bs-scroll="true" tabindex="-1" id="offcanvasbookmark" aria-labelledby="offcanvasbookmark">
             <div class="offcanvas-header">
-                <a id="back-bookmark" class="btn-text-main size-1-4 me-2" onclick="User.getBookmark();"><i class="fas fa-chevron-circle-left"></i></a>
+                <a id="back-bookmark" class="btn-text-main size-1-4 me-2" onclick="User.getBookmark();"><i class="fa-solid fa-chevron-circle-left"></i></a>
                 <h2 class="offcanvas-title text-secondary-d-2"></h2>
                 <div>
-                    <a id="btn-fullscreen" title="Agrandir" class="btn-text-main size-1-4" onclick="Page.offCanvasFullscreen();"><i class="fas fa-expand"></i></a>
+                    <a id="btn-fullscreen" title="Agrandir" class="btn-text-main size-1-4" onclick="Page.offCanvasFullscreen();"><i class="fa-solid fa-expand"></i></a>
                     <button type="button" title="Fermer le <?=ucfirst($GLOBALS['project']['bookmark_name'])?> (Echap)" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
             </div>
@@ -128,7 +128,7 @@
 
         <div id="bubbleshorcut" class="bubbleshorcut">
             <div class="bubbleshorcut_item show"></div>
-            <a title="Cacher les bulles de raccourcis" class="bubbleshorcut__button_dropdown active" onclick="Bubbleshortcut.dropdownToogle();"><i class="fas fa-caret-down"></i></a> 
+            <a title="Cacher les bulles de raccourcis" class="bubbleshorcut__button_dropdown active" onclick="Bubbleshortcut.dropdownToogle();"><i class="fa-solid fa-caret-down"></i></a> 
         </div>
 
         <div id="modal" class="modal" tabindex="-1">
@@ -136,8 +136,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2 class="modal-title w-100"></h2>
-                        <a class="modal__share_object btn-text-grey mx-2" title="Copier le lien vers cette objet" onclick=""><i class="fas fa-share-alt"></i></a>
-                        <a class="modal__bookmark_toogle btn-text-grey mx-2" title="Ajouter aux favoris" data-uniqid="" data-classe="" onclick="User.changeBookmark(this);"><i class="far fa-bookmark"></i></a>
+                        <a class="modal__share_object btn-text-grey mx-2" title="Copier le lien vers cette objet" onclick=""><i class="fa-solid fa-share-alt"></i></a>
+                        <a class="modal__bookmark_toogle btn-text-grey mx-2" title="Ajouter aux favoris" data-uniqid="" data-classe="" onclick="User.changeBookmark(this);"><i class="fa-regular fa-bookmark"></i></a>
                         <a class="modal__bubbleshortcut_toggle mx-2" title="Ajouter cette bulle de raccourcis" onclick=""></a>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -151,7 +151,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title w-100"><i class="fas fa-dice"></i> Jet de dés</h2>
+                        <h2 class="modal-title w-100"><i class="fa-solid fa-dice"></i> Jet de dés</h2>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body justify-content-center text-center">
@@ -165,7 +165,7 @@
                             </div>
                         </p>
                         <p class="text-grey-d-1 size-0-8" id="min-max"></p>
-                        <a class="btn btn-sm btn-back-secondary" onclick="rollDice();">Lancer les dés</a>
+                        <a class="btn btn-sm btn-animate btn-back-secondary" onclick="rollDice();">Lancer les dés</a>
                         <p id="result_dice"></p>
                     </div>
                 </div>

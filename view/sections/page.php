@@ -71,24 +71,24 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 <p><small class="size-0-8 text-grey-d-1">Liste déroulante</small></p>
                 <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, les pages filles seront sous forme de liste déroulante. Attention cette page n'est plus accessible directement depuis le menu.">
                     <input class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switchdropdownadd">
-                    <label class="form-check-label" for="switchdropdownadd"><i class="fas fa-caret-square-down"></i></label>
+                    <label class="form-check-label" for="switchdropdownadd"><i class="fa-solid fa-caret-square-down"></i></label>
                 </div> 
             </div>
             <div class="text-center"> <!-- Public -->
                 <p><small class="size-0-8 text-grey-d-1">Public</small></p>
                 <div checked class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, la page est accessible même sans être connecté via un compte.">
                     <input class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switchpublicadd">
-                    <label class="form-check-label" for="switchpublicadd"><i class="fas fa-low-vision"></i></label>
+                    <label class="form-check-label" for="switchpublicadd"><i class="fa-solid fa-low-vision"></i></label>
                 </div>
             </div>
             <div class="text-center"> <!-- Is_editable -->
                 <p><small class="size-0-8 text-grey-d-1">Modiable</small></p>
                 <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, il est possible d'ajouter des sections à la page.">
                     <input checked class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditableadd">
-                    <label class="form-check-label" for="switcheditableadd"><i class="fas fa-pen-square"></i></label>
+                    <label class="form-check-label" for="switcheditableadd"><i class="fa-solid fa-pen-square"></i></label>
                 </div>
             </div>
-            <p><a class="btn btn-sm btn-back-secondary mb-2" onclick="Page.add();">Ajouter la page</a></p>
+            <p><a class="btn btn-sm btn-animate btn-back-secondary mb-2" onclick="Page.add();">Ajouter la page</a></p>
         </div>
 
         <div class='item-divider-main'></div>
@@ -120,9 +120,9 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-field="name">Nom</th>
                     <th class="text-center" data-sortable="true" data-field="url_name">URL</th>
                     <th class="text-center" data-sortable="true" data-field="category">Emplacement</th>
-                    <th class="text-center" data-sortable="false" data-field="is_dropdown"><p data-bs-toggle="tooltip" data-bs-placement="bottom" title="Si la case est coché, les pages filles seront sous forme de liste déroulante. Attention cette page n'est plus accessible directement depuis le menu."><i class="fas fa-caret-square-down"></i></p></th>
-                    <th class="text-center" data-sortable="false" data-field="public"><p data-bs-toggle="tooltip" data-bs-placement="bottom" title="Si la case est coché, la page est accessible même sans être connecté via un compte."><i class="fas fa-low-vision"></i></th>
-                    <th class="text-center" data-sortable="false" data-field="is_editable"><p data-bs-toggle="tooltip" data-bs-placement="bottom" title="Si la case est coché, il est possible d'ajouter des sections à la page."><i class="fas fa-pen-square"></i></p></th>
+                    <th class="text-center" data-sortable="false" data-field="is_dropdown"><p data-bs-toggle="tooltip" data-bs-placement="bottom" title="Si la case est coché, les pages filles seront sous forme de liste déroulante. Attention cette page n'est plus accessible directement depuis le menu."><i class="fa-solid fa-caret-square-down"></i></p></th>
+                    <th class="text-center" data-sortable="false" data-field="public"><p data-bs-toggle="tooltip" data-bs-placement="bottom" title="Si la case est coché, la page est accessible même sans être connecté via un compte."><i class="fa-solid fa-low-vision"></i></th>
+                    <th class="text-center" data-sortable="false" data-field="is_editable"><p data-bs-toggle="tooltip" data-bs-placement="bottom" title="Si la case est coché, il est possible d'ajouter des sections à la page."><i class="fa-solid fa-pen-square"></i></p></th>
                     <th class="text-center" data-sortable="false" data-field="remove"></th>
                 </tr>
             </thead>
@@ -136,8 +136,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     $checked_editable="";if($page->getIs_editable()){$checked_editable="checked";} ?>
                     <tr id="row-<?=$page->getUniqid()?>" data-uniqid="<?=$page->getUniqid()?>" data-uniqid-parent="<?=$page->getCategory()?>" class="row_edit_page back-main-l-4">
                         <td> 
-                            <a onclick="Page.show('<?=$page->getUrl_name()?>');" data-bs-toggle="tooltip" data-bs-placement="top" title="Accéder à la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fas fa-location-arrow"></i></a>
-                            <a onclick="copyToClipboard('<?=$_SERVER['SERVER_NAME'] . '/#'. $page->getUrl_name()?>')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copier le lien de la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fas fa-copy"></i></a>
+                            <a onclick="Page.show('<?=$page->getUrl_name()?>');" data-bs-toggle="tooltip" data-bs-placement="top" title="Accéder à la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fa-solid fa-location-arrow"></i></a>
+                            <a onclick="copyToClipboard('<?=$_SERVER['SERVER_NAME'] . '/#'. $page->getUrl_name()?>')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copier le lien de la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fa-solid fa-copy"></i></a>
                         </td>
                         <td> <!-- Nom -->
                             <input 
@@ -177,18 +177,18 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         <td> <!-- Public -->
                             <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, la page est accessible même sans être connecté via un compte.">
                                 <input <?=$disabled?> onchange="Page.update('<?=$page->getUniqid();?>', this, 'public', <?=Controller::IS_CHECKBOX?>);" <?=$checked_public?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switchpublic<?=$page->getUniqid()?>">
-                                <label class="form-check-label" for="switchpublic<?=$page->getUniqid()?>"><i class="fas fa-low-vision"></i></label>
+                                <label class="form-check-label" for="switchpublic<?=$page->getUniqid()?>"><i class="fa-solid fa-low-vision"></i></label>
                             </div>
                         </td>
                         <td> <!-- Is_editable -->
                             <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, il est possible d'ajouter des sections à la page.">
                                 <input onchange="Page.update('<?=$page->getUniqid();?>', this, 'is_editable', <?=Controller::IS_CHECKBOX?>);" <?=$checked_editable?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditable<?=$page->getUniqid()?>">
-                                <label class="form-check-label" for="switcheditable<?=$page->getUniqid()?>"><i class="fas fa-pen-square"></i></label>
+                                <label class="form-check-label" for="switcheditable<?=$page->getUniqid()?>"><i class="fa-solid fa-pen-square"></i></label>
                             </div>
                         </td>
                         <td>
                             <?php if($disabled != "disabled"){ ?>
-                                <a onclick="Page.remove('<?=$page->getUniqid()?>')" class="text-main-d-3 text-red-d-1-hover pe-1"><i class="fas fa-trash"></i></a>
+                                <a onclick="Page.remove('<?=$page->getUniqid()?>')" class="text-main-d-3 text-red-d-1-hover pe-1"><i class="fa-solid fa-trash"></i></a>
                             <?php } ?>
                         </td>
                     </tr>
@@ -207,9 +207,9 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         </tr>
                         <tr id="row-<?=$page->getUniqid()?>" data-uniqid="<?=$page->getUniqid()?>" data-uniqid-parent="<?=$number_category?>" class="row_edit_page sortables back-main-l-4">
                             <td> 
-                                <a onclick="Page.show('<?=$page->getUrl_name()?>');" data-bs-toggle="tooltip" data-bs-placement="top" title="Accéder à la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fas fa-location-arrow"></i></a>
-                                <a onclick="copyToClipboard('<?=$_SERVER['SERVER_NAME'] . '/#'. $page->getUrl_name()?>')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copier le lien de la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fas fa-copy"></i></a>
-                                <a onclick="page.showRow('<?=$page->getUniqid()?>');" data-bs-toggle="tooltip" data-bs-placement="top" title="Afficher ou cacher les pages enfants" class="dropdown-child text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fas fa-sort-down"></i></a>
+                                <a onclick="Page.show('<?=$page->getUrl_name()?>');" data-bs-toggle="tooltip" data-bs-placement="top" title="Accéder à la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fa-solid fa-location-arrow"></i></a>
+                                <a onclick="copyToClipboard('<?=$_SERVER['SERVER_NAME'] . '/#'. $page->getUrl_name()?>')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copier le lien de la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fa-solid fa-copy"></i></a>
+                                <a onclick="page.showRow('<?=$page->getUniqid()?>');" data-bs-toggle="tooltip" data-bs-placement="top" title="Afficher ou cacher les pages enfants" class="dropdown-child text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fa-solid fa-sort-down"></i></a>
                             </td>
                             <td> <!-- Nom -->
                                 <input 
@@ -247,24 +247,24 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             <td> <!-- Dropdown -->
                                 <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, les pages filles seront sous forme de liste déroulante. Attention cette page n'est plus accessible directement depuis le menu.">
                                     <input onchange="Page.update('<?=$page->getUniqid();?>', this, 'is_dropdown', <?=Controller::IS_CHECKBOX?>);" <?=$checked_dropdown?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switchdropdown<?=$page->getUniqid()?>">
-                                    <label class="form-check-label" for="switchdropdown<?=$page->getUniqid()?>"><i class="fas fa-caret-square-down"></i></label>
+                                    <label class="form-check-label" for="switchdropdown<?=$page->getUniqid()?>"><i class="fa-solid fa-caret-square-down"></i></label>
                                 </div>
                             </td>
                             <td> <!-- Public -->
                                 <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, la page est accessible même sans être connecté via un compte.">
                                     <input <?=$disabled?> onchange="Page.update('<?=$page->getUniqid();?>', this, 'public', <?=Controller::IS_CHECKBOX?>);" <?=$checked_public?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switchpublic<?=$page->getUniqid()?>">
-                                    <label class="form-check-label" for="switchpublic<?=$page->getUniqid()?>"><i class="fas fa-low-vision"></i></label>
+                                    <label class="form-check-label" for="switchpublic<?=$page->getUniqid()?>"><i class="fa-solid fa-low-vision"></i></label>
                                 </div>
                             </td>
                             <td> <!-- Is_editable -->
                                 <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, il est possible d'ajouter des sections à la page.">
                                     <input onchange="Page.update('<?=$page->getUniqid();?>', this, 'is_editable', <?=Controller::IS_CHECKBOX?>);" <?=$checked_editable?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditable<?=$page->getUniqid()?>">
-                                    <label class="form-check-label" for="switcheditable<?=$page->getUniqid()?>"><i class="fas fa-pen-square"></i></label>
+                                    <label class="form-check-label" for="switcheditable<?=$page->getUniqid()?>"><i class="fa-solid fa-pen-square"></i></label>
                                 </div>
                             </td>
                             <td>
                                 <?php if($disabled != "disabled"){ ?>
-                                    <a onclick="Page.remove('<?=$page->getUniqid()?>')" class="text-main-d-3 text-red-d-1-hover pe-1"><i class="fas fa-trash"></i></a>
+                                    <a onclick="Page.remove('<?=$page->getUniqid()?>')" class="text-main-d-3 text-red-d-1-hover pe-1"><i class="fa-solid fa-trash"></i></a>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -272,8 +272,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             $disabled = ""; if(in_array($page_child->getUniqid(), Page::UNIQID_NO_EDIT)){$disabled = "disabled";} ?>
                             <tr id="row-<?=$page_child->getUniqid()?>" data-uniqid-parent="<?=$page->getUniqid()?>" class="group-<?=$page->getUniqid()?> row_edit_page_child sortables back-main-l-5" data-uniqid="<?=$page_child->getUniqid()?>">
                                 <td>
-                                    <a onclick="Page.show('<?=$page->getUrl_name()?>');" data-bs-toggle="tooltip" data-bs-placement="top" title="Accéder à la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fas fa-location-arrow"></i></a>
-                                    <a onclick="copyToClipboard('<?=$_SERVER['SERVER_NAME'] . '/#'. $page->getUrl_name()?>')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copier le lien de la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fas fa-copy"></i></a>
+                                    <a onclick="Page.show('<?=$page->getUrl_name()?>');" data-bs-toggle="tooltip" data-bs-placement="top" title="Accéder à la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fa-solid fa-location-arrow"></i></a>
+                                    <a onclick="copyToClipboard('<?=$_SERVER['SERVER_NAME'] . '/#'. $page->getUrl_name()?>')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copier le lien de la page" class="text-main-d-3 text-secondary-d-2-hover pe-1"><i class="fa-solid fa-copy"></i></a>
                                 </td>
                                 <td> <!-- Nom -->
                                     <input 
@@ -312,18 +312,18 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                 <td> <!-- Public -->
                                     <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, la page est accessible même sans être connecté via un compte.">
                                         <input <?=$disabled?> onchange="Page.update('<?=$page_child->getUniqid();?>', this, 'public', <?=Controller::IS_CHECKBOX?>);" <?=$checked_public?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switchpublic<?=$page_child->getUniqid()?>">
-                                        <label class="form-check-label" for="switchpublic<?=$page_child->getUniqid()?>"><i class="fas fa-low-vision"></i></label>
+                                        <label class="form-check-label" for="switchpublic<?=$page_child->getUniqid()?>"><i class="fa-solid fa-low-vision"></i></label>
                                     </div>
                                 </td>
                                 <td> <!-- Is_editable -->
                                     <div class="form-check form-switch pe-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Si la case est coché, il est possible d'ajouter des sections à la page.">
                                         <input onchange="Page.update('<?=$page_child->getUniqid();?>', this, 'is_editable', <?=Controller::IS_CHECKBOX?>);" <?=$checked_editable?> class="form-check-input back-main-d-2 border-main-d-2" type="checkbox" role="switch" id="switcheditable<?=$page_child->getUniqid()?>">
-                                        <label class="form-check-label" for="switcheditable<?=$page_child->getUniqid()?>"><i class="fas fa-pen-square"></i></label>
+                                        <label class="form-check-label" for="switcheditable<?=$page_child->getUniqid()?>"><i class="fa-solid fa-pen-square"></i></label>
                                     </div>
                                 </td>
                                 <td>
                                     <?php if($disabled != "disabled"){ ?>
-                                        <a onclick="Page.remove('<?=$page_child->getUniqid()?>')" class="text-main-d-3 text-red-d-1-hover pe-1"><i class="fas fa-trash"></i></a>
+                                        <a onclick="Page.remove('<?=$page_child->getUniqid()?>')" class="text-main-d-3 text-red-d-1-hover pe-1"><i class="fa-solid fa-trash"></i></a>
                                     <?php } ?>
                                 </td>
                             </tr>

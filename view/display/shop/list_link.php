@@ -21,10 +21,10 @@
                     <div>
                         <?php if($is_editable){ ?>
                             <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
-                                <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Dissocier cet objet de cet hôtel de vente" class="btn-underline-red" style="position:absolute;top:10px;right:10px;z-index:10;" onclick="if (confirm('Etes vous sûr dissocier l\'objet de cet hôtel de vente ?')){<?=ucfirst($class_name)?>.update('<?=$uniqid?>',{action:'remove', uniqid:'<?=$link['obj']->getUniqid()?>'},'<?=$input_name?>', IS_VALUE);}"><i class="fas fa-times"></i></a>
+                                <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Dissocier cet objet de cet hôtel de vente" class="btn-underline-red" style="position:absolute;top:10px;right:10px;z-index:10;" onclick="if (confirm('Etes vous sûr dissocier l\'objet de cet hôtel de vente ?')){<?=ucfirst($class_name)?>.update('<?=$uniqid?>',{action:'remove', uniqid:'<?=$link['obj']->getUniqid()?>'},'<?=$input_name?>', IS_VALUE);}"><i class="fa-solid fa-times"></i></a>
                             </div>
                         <?php } ?>
-                        <a class="text-left" style="position:absolute;top:5px;left:5px;" href="<?=$link["obj"]->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>" download="<?=$link["obj"]->getName().'.'.substr(strrchr($link["obj"]->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])),'.'),1);?>"><i class="fas fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
+                        <a class="text-left" style="position:absolute;top:5px;left:5px;" href="<?=$link["obj"]->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>" download="<?=$link["obj"]->getName().'.'.substr(strrchr($link["obj"]->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])),'.'),1);?>"><i class="fa-solid fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
                         <?=$link["obj"]->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-70"]))?>
                         <div class="card-body position-relative" id="view<?=$link['obj']->getUniqid()?>">
                             <span class="ms-1 position-absolute" style="top:-14px;left:5px;"><?=$link["obj"]->getLevel(Content::FORMAT_BADGE)?></span> 
@@ -80,7 +80,7 @@
                             </div>
                             <div>
                                 <?php if($user->getRight($input_name, User::RIGHT_WRITE) || $user->Is_admin()){ ?>
-                                    <a class="btn btn-sm btn-text-secondary" onclick="<?=ucfirst($input_name)?>.open('<?=$link['obj']->getUniqid()?>', Controller.DISPLAY_EDITABLE);">Editer l'objet</a>
+                                    <a class="btn btn-sm btn-animate btn-text-secondary" onclick="<?=ucfirst($input_name)?>.open('<?=$link['obj']->getUniqid()?>', Controller.DISPLAY_EDITABLE);">Editer l'objet</a>
                                 <?php } ?>
                             </div>
                             <div class="nav-divider back-main-d-1"></div>

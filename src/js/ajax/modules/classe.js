@@ -49,4 +49,37 @@ class Classe extends Controller{
         ); 
     }
 
+    static initModalUpdateSpell(btn, targetSpellToKeep){
+        let $inputdata = $("#modalAddSpell #data-hidden");
+        let $parent = $(btn).closest('.resume_in_competition');
+        let $spell = $parent.find(targetSpellToKeep);
+        $inputdata.attr('data-uniqid', $spell.attr('data-uniqid'));
+        $('#modalAddSpell').modal('show');
+    }
+    static updateSpell(uniqidClasse, uniqidSpellNew){
+        let uniqidSpell = $("#modalAddSpell #data-hidden").attr('data-uniqid');
+        let action = {};
+        if(uniqidSpell == undefined || uniqidSpell == ""){
+            if(VERBAL_MODE){
+                console.log("add");
+            }
+            action = {
+                action : "add",
+                uniqid : uniqidSpellNew
+            };
+        } else {
+            if(VERBAL_MODE){
+                console.log("update");
+            }
+            action = {
+                action : "update",
+                uniqid : uniqidSpell,
+                uniqidNew : uniqidSpellNew
+            };
+        }
+
+        Classe.update(uniqidClasse,action,'spell', IS_VALUE, "", true);
+        $("#modalAddSpell").modal("hide");
+    }
+
 }

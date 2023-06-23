@@ -40,7 +40,7 @@ if(!isset($template_vars['uniqid_page'])){ $template_vars['uniqid_page'] = "";}
 
             <div class="mb-3 d-flex">
                 <input type="text" class="form-control form-control-main-focus form-control form-control-main-focus-sm" onchange="searchWithTerm();" id="search" placeholder="Rechercher">
-                <button class="btn btn-border-grey btn-sm ms-1 my-1" onclick="resetSearch()" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Restorer la recherche"><i class="fas fa-trash-restore"></i></button>
+                <button class="btn btn-border-grey btn-sm ms-1 my-1" onclick="resetSearch()" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Restorer la recherche"><i class="fa-solid fa-trash-restore"></i></button>
             </div>
 
             <div class="nav-item-divider"></div>
@@ -54,11 +54,11 @@ if(!isset($template_vars['uniqid_page'])){ $template_vars['uniqid_page'] = "";}
                             </a>
                         </div>
                         <?php if($n_img > 1){?> 
-                            <button class="btn-prev"><i class="fas fa-chevron-left"></i></button>
-                            <button class="btn-next"><i class="fas fa-chevron-right"></i></button>
+                            <button class="btn-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button class="btn-next"><i class="fa-solid fa-chevron-right"></i></button>
                         <?php } ?>
                         <div class="slider-title">
-                            <div id="arrow-show-info" class="text-center text-white"><i class="fas fa-chevron-up"></i></div>
+                            <div id="arrow-show-info" class="text-center text-white"><i class="fa-solid fa-chevron-up"></i></div>
                             <div><i class="name size-1-4 text-white"><?=$classe->getName()?></i></div>
                             <span class="position-absolute" style="right:20px;top:-10px;"><?=$classe->getWeapons_of_choice(Content::FORMAT_ICON)?></span>
                             <div class="description_fast size-0-8 text-grey"><?=$classe->getDescription_fast()?></div>
@@ -75,7 +75,7 @@ if(!isset($template_vars['uniqid_page'])){ $template_vars['uniqid_page'] = "";}
                                     <div class="state"><?=$classe->getUsable(Content::FORMAT_EDITABLE);?></div>
                                 </div>
                                 <p class="text-center size-0-6 text-grey-d-2">Ajouté le <?=$classe->getTimestamp_add(Content::DATE_FR)?><br>Mis à jour le <?=$classe->getTimestamp_updated(Content::DATE_FR)?></p>
-                                <a class="btn btn-sm btn-back-main align-self-end" onclick="Classe.open('<?=$classe->getUniqid()?>')"><i class="fa-regular fa-pen-to-square"></i> Modifier</a>
+                                <a class="btn btn-sm btn-animate btn-back-main align-self-end" onclick="Classe.open('<?=$classe->getUniqid()?>')"><i class="fa-regular fa-pen-to-square"></i> Modifier</a>
                             </div>
                         </div>
                     </div>

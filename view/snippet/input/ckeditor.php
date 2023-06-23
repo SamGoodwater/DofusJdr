@@ -20,7 +20,7 @@
 <div class="<?=$class?>" <?=$data?> style="<?=$css?>">
     <p class="text-<?=$color?>-d-2"><?=$label?></p>
     <div  id="<?=$id?>"><?=html_entity_decode($value)?></div>
-    <a class='p-1 back-grey-l-2-hover' onclick="<?=ucfirst($class_name)?>.update('<?=$uniqid?>', CKEDITOR5['<?=$id?>'].getData(), '<?=$input_name?>', <?=Controller::IS_VALUE?>)"><small><i class="fas fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
+    <a class='p-1 back-grey-l-2-hover' onclick="<?=ucfirst($class_name)?>.update('<?=$uniqid?>', CKEDITOR5['<?=$id?>'].getData(), '<?=$input_name?>', <?=Controller::IS_VALUE?>)"><small><i class="fa-solid fa-save"></i> - N'oublier pas d'enregistrer régulièrement</small></a>
     <?php if(!empty($comment)){ ?>
         <span class="size-0-8 text-grey"><?=$comment?></span>
     <?php } ?>

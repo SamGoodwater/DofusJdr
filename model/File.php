@@ -300,7 +300,7 @@ class File
 
                     ob_start(); ?>
                         <a id="<?=$this->getName(Content::FORMAT_BRUT, false)?>" class="text-center" <?=$dowload?> data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html='true' title="<?=$this->getName()?><br><small>Cliquez pour télécharger</small>">
-                            <p><i class='fas fa-<?=$data["icon"]?> text-<?=$data["color"]?>-d-2 font-size-2 <?=$style->getClass()?>'></i></p>
+                            <p><i class='fa-solid fa-<?=$data["icon"]?> text-<?=$data["color"]?>-d-2 font-size-2 <?=$style->getClass()?>'></i></p>
                             <p style="width: 5rem;" class='badge text-white back-<?=$data["color"]?>-d-2 overflow-hidden text-truncate font-weight-bold mt-1'><?=$this->getName()?></p>
                         </a> 
                     <?php return ob_get_clean();
@@ -316,7 +316,7 @@ class File
                         ob_start();?>
                             <div class="glob-player">
                                 <div class="glob-btn">
-                                    <span class="btn amplitude-play-pause btn-back-<?=Style::ICONS_FILE[FileManager::FORMAT_AUDIO]["color"]?>" amplitude-main-play-pause="true"><i class=" fas fa fa-play" aria-hidden="true"></i> <i class="fas fa fa-pause" aria-hidden="true"></i></span>
+                                    <span class="btn amplitude-play-pause btn-back-<?=Style::ICONS_FILE[FileManager::FORMAT_AUDIO]["color"]?>" amplitude-main-play-pause="true"><i class=" fa-solid fa-play" aria-hidden="true"></i> <i class="fa-solid fa-pause" aria-hidden="true"></i></span>
                                 </div>
                                 <div>
                                     <div class="meta-name" amplitude-song-info="name" amplitude-main-song-info="true"></div>

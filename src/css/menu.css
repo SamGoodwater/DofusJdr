@@ -402,29 +402,4 @@ footer.hidden {
 
 .sectionselector .section-title:hover .section-options {
   display: flex;
-}
-
-/* ---------------- C A R D   L I N K E D ---------------------- */
-.card-hover-linked .card-hover-showed {
-  padding: 3px;
-  display: none;
-  position: absolute;
-  width: inherit;
-  background: inherit;
-  border: inherit;
-  z-index: 1100;
-  top: 99%;
-  left: -1px;
-  box-shadow: 1px 10px 6px rgba(0, 0, 0, 0.16), -1px 5px 6px rgba(0, 0, 0, 0.23);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  border-top-width: 0px;
-}
-
-.card-hover-linked:hover .card-hover-showed {
-  display: block;
-}
-
-.card-hover-linked:hover {
-  box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.16), -1px 5px 6px rgba(0, 0, 0, 0.23);
-  border-bottom-width: 0px;
 }/*# sourceMappingURL=menu.css.map */

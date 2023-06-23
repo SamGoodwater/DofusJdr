@@ -184,56 +184,135 @@ class ClasseManager extends Manager
 
 // Link Spell
     public function getLinkSpell(Classe $classe){
-        $req = $this->_bdd->prepare('   SELECT *, link_classe_spell.id AS link_id 
-                                        FROM link_classe_spell
-                                        INNER JOIN spell ON link_classe_spell.id_spell = spell.id
-                                        WHERE id_classe = ?
-                                        ORDER BY spell.level ASC');
+        $class = new ReflectionClass('Spell');
+        $properties = $class->getProperties(ReflectionProperty::IS_PRIVATE);
+        // Properties name inclu dans la classe mère
+        $attributeNames = array(
+            "id","uniqid","timestamp_add","timestamp_updated","usable"
+        );
+        foreach ($properties as $property) {
+            $attributeNames[] = lcfirst(substr($property->getName(), 1));
+        }
+        $aliasColumns = array();
+        foreach ($attributeNames as $attributeName) {
+            $aliasColumns[] = "spell1.$attributeName AS spell1_$attributeName";
+            $aliasColumns[] = "spell2.$attributeName AS spell2_$attributeName";
+        }
+        
+
+        $aliasColumnsString = implode(", ", $aliasColumns);
+        $req = $this->_bdd->prepare("SELECT link_classe_spell.*, $aliasColumnsString, $aliasColumnsString
+                                    FROM link_classe_spell
+                                    LEFT JOIN spell AS spell1 ON link_classe_spell.id_spell1 = spell1.id 
+                                    LEFT JOIN spell AS spell2 ON link_classe_spell.id_spell2 = spell2.id
+                                    WHERE id_classe = ?
+                                    ORDER BY spell1.level ASC, spell2.level ASC");
         $req->execute(array($classe->getId()));
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
-        if(empty($ret)){return "";}
+
         $return = array();
-        foreach ($ret as $link) {
-            $return[] = new Spell($this->securite($link));
+        foreach ($ret as $row) {
+            $spell1 = array();
+            $spell2 = array();
+            foreach ($attributeNames as $attributeName) {
+                $spell1[$attributeName] = $row["spell1_$attributeName"];
+                $spell2[$attributeName] = $row["spell2_$attributeName"];
+            }
+            $spell_group = [
+                "spell1" => !empty($spell1["id"]) && $spell1["id"] != 0 ? new Spell($spell1) : null,
+                "spell2" => !empty($spell2["id"]) && $spell2["id"] != 0 ? new Spell($spell2) : null
+            ];
+            $return[] = $spell_group;
         }
+        if(empty($ret)){return "";}
         return $return;
     }
     public function existsLinkSpell(Classe $classe, Spell $spell){
-        $req = $this->_bdd->prepare('SELECT id FROM link_classe_spell WHERE id_classe = ? AND id_spell = ?');
-        $req->execute(array($classe->getId(), $spell->getId()));
+        $req = $this->_bdd->prepare('SELECT id FROM link_classe_spell WHERE id_classe = :id_classe AND (id_spell1 = :id_spell OR id_spell2 = :id_spell)');
+        $req->execute(array("id_classe" => $classe->getId(), "id_spell" => $spell->getId()));
         return $req->rowCount();
     }
-    public function addLinkSpell(Classe $classe, Spell $spell){
-        if($this->existsLinkSpell($classe, $spell)){return false;}
+    public function addLinkSpell(Classe $classe, Spell $spell1 = null, Spell $spell2 = null){
+        if(!Content::exist($spell1)){$spell1 = new Spell(["id" => 0]);}
+        if(!Content::exist($spell2)){$spell2 = new Spell(["id" => 0]);}
+
+        if($spell1->getId() == $spell2->getId()){return false;}
+
+        if($this->existsLinkSpell($classe, $spell1) && $spell1->getId() != 0){return false;}
+        if($this->existsLinkSpell($classe, $spell2) && $spell2->getId() != 0){return false;}
+
         $req = $this->_bdd->prepare('INSERT INTO link_classe_spell(
                     id_classe,
-                    id_spell
+                    id_spell1,
+                    id_spell2
                 )
             VALUES (
                     :id_classe,
-                    :id_spell
+                    :id_spell1,
+                    :id_spell2
                 )');
 
         return $req->execute(array(
             "id_classe" => $classe->getId(),
-            "id_spell"=> $spell->getId()
+            "id_spell1"=> $spell1->getId(),
+            "id_spell2"=> $spell2->getId()
         ));
+    }
+    
+    public function updateLinkSpell(Classe $classe, Spell $spell, Spell $spellNew){
+        if(!Content::exist($spell)){$spell->setId(0);}
+        if($spell->getId() == $spellNew->getId()){return false;}
+        if($this->existsLinkSpell($classe, $spellNew)){return false;}
 
-        // Renvoi le dernier ingredient ajouté
-        $post = $this->_bdd->prepare('SELECT id FROM link_classe_spell ORDER BY id DESC LIMIT 1');
-        return $post->execute();
+        $req = $this->_bdd->prepare('SELECT id_spell1, id_spell2 FROM link_classe_spell WHERE id_classe = :idC AND (id_spell1 = :idS OR id_spell2 = :idS)');
+        $req->execute(["idC" => $classe->getId(), ":idS" => $spell->getId()]);
+        $link = $req->fetch(PDO::FETCH_ASSOC);
+        if(empty($link)){return false;}
+
+        if($link["id_spell1"] == $spell->getId()){
+            $req = $this->_bdd->prepare('UPDATE link_classe_spell SET id_spell2 = :id_spellNew WHERE id_classe = :id_classe AND id_spell1 = :id_spell');
+        }else{
+            $req = $this->_bdd->prepare('UPDATE link_classe_spell SET id_spell1 = :id_spellNew WHERE id_classe = :id_classe AND id_spell2 = :id_spell');
+        }
+        return $req->execute(array(
+            "id_classe" => $classe->getId(),
+            "id_spell" => $spell->getId(),
+            "id_spellNew" => $spellNew->getId()
+        ));
     }
     public function removeLinkSpell(Classe $classe, Spell $spell){
-        $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_classe = :id_classe AND id_spell = :id_spell');
-        return $req->execute(array("id_classe" =>  $classe->getId(), "id_spell" =>  $spell->getId()));
+        $req = $this->_bdd->prepare('SELECT id_spell1, id_spell2 FROM link_classe_spell WHERE id_classe = :idC AND (id_spell1 = :idS OR id_spell2 = :idS)');
+        $req->execute(["idC" => $classe->getId(), ":idS" => $spell->getId()]);
+        $link = $req->fetch(PDO::FETCH_ASSOC);
+        if(empty($link)){return false;}
+
+        if($link["id_spell1"] == $spell->getId()){
+            $req = $this->_bdd->prepare('UPDATE link_classe_spell SET id_spell1 = 0
+            WHERE id_classe = :id_classe AND id_spell1 = :id_spell');
+            $state = $req->execute(array("id_classe" =>  $classe->getId(), "id_spell" =>  $spell->getId()));
+        } else {
+            $req = $this->_bdd->prepare('UPDATE link_classe_spell SET id_spell2 = 0
+            WHERE id_classe = :id_classe AND id_spell2 = :id_spell');
+            $state = $req->execute(array("id_classe" =>  $classe->getId(), "id_spell" =>  $spell->getId()));
+        }
+        if($state){
+            $this->cleanLinkSpell();
+            return true;
+        }
+        return false;
     }
     public function removeAllLinkSpellFromClasse(Classe $classe){
         $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_classe = :id');
         return $req->execute(array("id" =>  $classe->getId()));
     }
     public function removeAllLinkSpellFromSpell(Spell $spell){
-        $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_spell = :id');
+        $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_spell1 = :id OR id_spell2 = :id');
         return $req->execute(array("id" =>  $spell->getId()));
+    }
+
+    public function cleanLinkSpell(){
+        $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_spell1 = 0 AND id_spell2 = 0');
+        return $req->execute();
     }
 
  // Link Capability

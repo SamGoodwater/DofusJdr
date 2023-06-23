@@ -80,7 +80,7 @@ abstract class Controller{
             }
 
             $return['value'] = array(
-              'visual' => $obj->getVisual($display),
+              'visual' => $obj->getVisual(new Style(["display" => $display])),
               "title" => $obj->getName($display),
               "bubbleId" => strtolower(get_class($obj)) . $obj->getUniqid(),
               'linkshare' => "@" . get_class($obj) . "~" . $obj->getUniqid(),

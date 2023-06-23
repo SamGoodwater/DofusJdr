@@ -128,10 +128,10 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
-                    <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fas fa-image"></i></th>
+                    <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fa-solid fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="resume"></th>
-                    <th class="text-center" data-sortable="true" data-visible="false" data-field="is_magic"><i class="fas fa-fist-raised text-brown-d-2"></i> | <i class="fas fa-magic text-purple-d-2"></i></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="is_magic"><i class="fa-solid fa-fist-raised text-brown-d-2"></i> | <i class="fa-solid fa-magic text-purple-d-2"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="category">Catégorie</th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="element">Elèment</th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="powerful">Puissance</th>
@@ -144,14 +144,14 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th data-sortable="false" data-visible="false"  data-field="effect">Effets</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fas fa-check text-green-d-3'></i> JDR</span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>
                 </tr>
             </thead>
 
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fas fa-info-circle"></i> Il y a <span class="total_obj"></span> aptitudes. Le chargement du tableau peut prendre quelques minutes.</p>
+        <p class="mt-2"><i class="fa-solid fa-info-circle"></i> Il y a <span class="total_obj"></span> aptitudes.</p>
 
         <div id="addCapability" style="display:none;">
             <div class="form-floating mb-3">
@@ -159,8 +159,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 <label for="floatingInput">Nom de l'aptitude</label>
             </div>
             <div class="modal-footer d-flex flex-row justify-content-between">
-                <button type="button" class="btn btn-sm btn-border-grey" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="Capability.add();" class="btn btn-sm btn-border-secondary">Créer</button>
+                <button type="button" class="btn btn-sm btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Capability.add();" class="btn btn-sm btn-animate btn-border-secondary">Créer</button>
             </div>
         </div>
 
