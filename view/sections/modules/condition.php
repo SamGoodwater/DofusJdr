@@ -2,7 +2,7 @@
 /* 
 __________________________________________________________________________
 -------------------------------- SECTION ---------------------------------
-    Nom : Shop
+    Nom : Condition
     Version 1
     
     Une section est une partie d'une page.
@@ -24,8 +24,8 @@ if(!isset($template_vars['uniqid_page'])){ $template_vars['uniqid_page'] = "";}
 if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_DESCRIPTION;}
 
     $template = array(
-        "title" => "Hôtels de vente",
-        "description" => "Section de gestion des hôtels de vente",
+        "title" => "Etats",
+        "description" => "Section de gestion des états",
         "content" => "",
         "option" => "",
         "editable" => false,
@@ -33,16 +33,22 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
         "onlyForAdmin" => false,
         "shownListAddInPage" => true
     );
-
+    
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
-        <button type="button" class="btn-sm btn btn-border-secondary btn-animate" onclick="Page.build(true, 'Création d\'un hôtel de vente', $('#addShop'), Page.SIZE_MD, true);">Nouvel Hôtel de Vente</button>
-
+        <div class="d-flex flex-row justify-content-between align-items-end" id='sortableCondition'>
+            <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'un état', $('#addCondition'), Page.SIZE_MD, true);">Ajouter un état</button>
+            <div class="form-check form-switch">
+                <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
+                <label class="form-check-label" for="toggleUsableSwitch">Afficher seulement les états compatibles avec le JDR</label>
+            </div>
+        </div>
         <table 
             id="table"
             class="table table-striped"
             data-bs-toggle="table" 
+            data-virtual-scroll="true"
             data-classes="table-no-bordered" 
             data-remember-order='true'
             data-locale="fr-FR"
@@ -75,41 +81,44 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <thead>
                 <tr>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="edit"></th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="pdf"></th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
-                    <th data-sortable="false" data-visible="true" data-field="logo"><i class="fa-solid fa-image"></i></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
-                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="description">Description</th>
-                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="location">Localisation</th>
-                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="price">Prix mpyen</th>
-                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="seller">Marchant</th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="is_unbewitchable">Désenvoutable</th>
+                    <th data-sortable="false" data-visible="true"  data-field="description">Description</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>
                 </tr>
             </thead>
 
             <tbody>
             </tbody>
         </table>
-        <p class="mt-2"><i class="fa-solid fa-info-circle"></i> Il y a <span class="total_obj"></span> Hôtels de vente.</p>
+        <p class="mt-2"><i class="fa-solid fa-info-circle"></i> Il y a <span class="total_obj"></span> états.</p>
 
-        <!-- Modal ADD -->
-
-        <div id="addShop" style="display:none;">
+        <div id="addCondition" style="display:none;">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom de l'hôtel de vente">
-                <label for="floatingInput">Nom de l'hôtel de vente</label>
+                <input type="text" class="form-control form-control-main-focus" id="name" placeholder="Nom du sort">
+                <label for="floatingInput">Nom de l'état</label>
             </div>
             <div class="modal-footer d-flex flex-row justify-content-between">
                 <button type="button" class="btn btn-sm btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="Shop.add();" class="btn btn-sm btn-animate btn-back-secondary">Créer</button>
+                <button type="button" onclick="Condition.add();" class="btn btn-sm btn-animate btn-border-secondary">Créer</button>
             </div>
         </div>
 
         <script>
-            Shop.createAndLoadDataBootstrapTable();
+            Condition.createAndLoadDataBootstrapTable(
+                [
+                    {
+                        selector:"#toggleUsableSwitch",
+                        name:"usable",
+                        type:IS_CHECKBOX
+                    }
+                ]
+            );
         </script>
     <?php $template["content"] = ob_get_clean();
 

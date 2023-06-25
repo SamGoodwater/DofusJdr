@@ -40,7 +40,7 @@ if(!isset($template_vars['uniqid_page'])){ $template_vars['uniqid_page'] = "";}
 
             <div class="mb-3 d-flex">
                 <input type="text" class="form-control form-control-main-focus form-control form-control-main-focus-sm" onchange="searchWithTerm();" id="search" placeholder="Rechercher">
-                <button class="btn btn-border-grey btn-sm ms-1 my-1" onclick="resetSearch()" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Restorer la recherche"><i class="fa-solid fa-trash-restore"></i></button>
+                <button class="btn btn-border-grey btn-animate btn-sm ms-1 my-1" onclick="resetSearch()" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Restorer la recherche"><i class="fa-solid fa-trash-restore"></i></button>
             </div>
 
             <div class="nav-item-divider"></div>

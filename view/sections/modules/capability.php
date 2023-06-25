@@ -38,9 +38,9 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end" id='sortableItems'>
-            <button type="button" class="me-2 btn-sm btn btn-back-secondary" onclick="Page.build(true, 'Création d\'une aptitude', $('#addCapability'), Page.SIZE_MD, true);">Ajouter une aptitude</button>
+            <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'une aptitude', $('#addCapability'), Page.SIZE_MD, true);">Ajouter une aptitude</button>
             <div id="selectorCategoryListCheckbox" class="dropdown">
-                <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories des aptitudes</a>
+                <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories des aptitudes</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
                     <?php $checked = "";
                     foreach (Capability::CATEGORY as $key => $category_) { ?>
@@ -54,7 +54,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </ul>
             </div>
             <div id="selectorElementListCheckbox" class="dropdown mx-2">
-                <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Elements des aptitudes</a>
+                <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" data-bs-toggle="dropdown" aria-expanded="false">Elements des aptitudes</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
                     <?php $checked = "";
                     foreach (Spell::ELEMENT as $id_element => $element_) { ?>
@@ -69,7 +69,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             </div>
             
             <div id="selectorLevelListCheckbox" class="dropdown mx-2">
-                <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="levelsort" data-bs-toggle="dropdown" aria-expanded="false">Affichage par niveau</a>
+                <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" id="levelsort" data-bs-toggle="dropdown" aria-expanded="false">Affichage par niveau</a>
                 <ul class="dropdown-menu p-4" aria-labelledby="levelsort">
                     <?php $checked = "";
                     for ($i=1; $i <= 20 ; $i++) { ?>

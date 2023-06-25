@@ -20,28 +20,34 @@ class Section extends Content
 
         switch ($format) {
             case Content::FORMAT_EDITABLE:
+                $templates__ = $manager->getAllTemplateFile();
+                $user= ControllerConnect::getCurrentUser();
                 ob_start(); ?>
-                    <div class="dropdown">
-                        <a class="" type="button" id="dropdownDisplay<?=$this->getId()?>" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?=$this->getType(Content::FORMAT_BADGE)?> <i class="fa-solid fa-chevron-down font-size-0-8 text-grey"></i></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownDisplay<?=$this->getId()?>">
-                            <?php $template_vars = [
+                    <div class="form-floating">
+                        <select onchange="showOptions();" class="form-select form-select-sm m-2" id="type">
+                            <?php 
+                            $template_vars = [
                                 'get' => Section::GET_SECTION_DESCRIPTION,
-                                'content' => $this->getContent(),
-                                'uniqid' => $this->getUniqid(),
-                                'uniqid_page' => $this->getUniqid_page(Content::FORMAT_OBJECT)->getUniqid()
+                                'content' => "",
+                                'uniqid' => "",
+                                'uniqid_page' => $this->getUniqid()
                             ];
-                            foreach ($manager->getAllTemplateFile() as $key => $template) { 
-                                foreach($template as $name){
-                                    $path = SectionManager::PATH_SECTION . $key ."/". $name;
-                                    if(!file_exists($path)){ $path = SectionManager::PATH_SECTION . $name;}
-                                    include $path; ?>
-                                    <a class="dropdown-item" onclick="Section.update('<?=$this->getUniqid()?>','<?=$key?>/<?=$name?>', 'type', <?=Controller::IS_VALUE?>);$('#dropdownDisplay<?=$this->getId()?>').html($(this).html());">
-                                        <?=$name?><br>
-                                        <span class="size-0-7 text-grey-d-2"><?=$description?></span>
-                                    </a>
-                                <?php }
-                            } ?>
-                        </div>
+
+                            foreach ($templates__ as $key__ => $dir__) { ?>
+                                <optgroup label="<?=ucfirst($key__)?>">
+                                    <?php foreach($dir__ as $file__){
+                                        $path__ = SectionManager::PATH_SECTION . $key__ . "/" . $file__;
+                                        if(!file_exists($path__)){ $path__ = SectionManager::PATH_SECTION . $file__;}
+                                        include $path__;
+                                        $shownListAddInPage = true; if(isset($template["shownListAddInPage"])){$shownListAddInPage = $manager__->returnBool($template["shownListAddInPage"]);}
+                                        if(($user->getIs_admin() || $template['onlyForAdmin'] == false) && $shownListAddInPage){ ?>
+                                            <option value="<?= $file__?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$template["description"]?>"><?=$template["title"]?></option>
+                                        <?php }
+                                    } ?>
+                                </optgroup>
+                            <?php } ?>
+                        </select>
+                        <label >Sélectionner un type de section</label>
                     </div>
                 <?php return ob_get_clean();
 

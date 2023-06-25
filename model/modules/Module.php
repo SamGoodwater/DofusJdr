@@ -30,6 +30,7 @@ class Module extends Content
     // DROITS DES UTILISATEURS
       const USER_RIGHT = [
           "capability" => User::RIGHT_READ,
+          "condition" => User::RIGHT_READ,
           "classe" => User::RIGHT_READ,
           "consumable" => User::RIGHT_READ,
           "item" => User::RIGHT_READ,

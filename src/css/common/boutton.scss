@@ -16,31 +16,31 @@
       display: inline-block;
     }
 
+    // Blur ANIMATION
     &.btn-animate{
-      // Blur ANIMATION
+
       overflow: hidden;
       backdrop-filter: blur(5.5px);
       -webkit-backdrop-filter: blur(5.5px);
 
-      // Blur ANIMATION
-      &::before {
-        content: '';
-        background: white;
-        opacity: 0.3;
-        width: 0%;
-        height: 0%;
-        top: 0%;
-        left: 0%;
-        transform: skew(45deg);
-        position: absolute;
-        transition: left 0.3s ease;
-      }
-      // Blur ANIMATION
-      &:hover::before{
-        left: 150%;
-        width: 60%;
-        height: 100%;
-      }
+        &::before {
+          content: '';
+          background: rgb(255, 255, 255);
+          opacity: 0.1;
+          width: 0%;
+          height: 0%;
+          top: 0%;
+          left: 0%;
+          transform: skew(45deg);
+          position: absolute;
+          transition: left 0.3s ease;
+        }
+
+        &:hover::before{
+          left: 150%;
+          width: 60%;
+          height: 100%;
+        }
     }
 
   }
@@ -59,56 +59,85 @@
   .btn-back-main{
     border: 2px solid var(--main-d-2);
     background-color: var(--main-d-2);
+
+      &:hover{
+        background-color: var(--main-l-3);
+        border: 2px solid var(--main-l-3);
+        color: var(--main-d-4);
+      }
+      &.btn-animate::before{
+        background: var(--main-l-5);
+      }
   }
-  .btn-back-main:hover{
-    background-color: var(--main-l-3);
-    border: 2px solid var(--main-l-3);
-    color: var(--main-d-4);
-  }
+
   .btn-back-secondary{
     border: 2px solid var(--secondary-d-2);
     background-color: var(--secondary-d-2);
+
+    &:hover{
+      background-color: var(--secondary-l-3);
+      border: 2px solid var(--secondary-l-3);
+      color: var(--secondary-d-4);
+    }
+    &.btn-animate::before{
+      background: var(--secondary-l-5);
+    }
   }
-  .btn-back-secondary:hover{
-    border: 2px solid var(--secondary-l-3);
-    background-color: var(--secondary-l-3);
-    color: var(--secondary-d-4);
-  }
+
   .btn-back-tertiary{
     border: 2px solid var(--tertiary-d-2);
     background-color: var(--tertiary-d-2);
+
+    &:hover{
+      background-color: var(--tertiary-l-3);
+      border: 2px solid var(--tertiary-l-3);
+      color: var(--tertiary-d-4);
+    }
+    &.btn-animate::before{
+      background: var(--tertiary-l-5);
+    }
   }
-  .btn-back-tertiary:hover{
-    border: 2px solid var(--tertiary-l-3);
-    background-color: var(--tertiary-l-3);
-    color: var(--tertiary-d-4);
-  }
+
   .btn-back-red{
     border: 2px solid var(--red-d-2);
     background-color: var(--red-d-2);
+
+    &:hover{
+      background-color: var(--red-l-3);
+      border: 2px solid var(--red-l-3);
+      color: var(--red-d-4);
+    }
+    &.btn-animate::before{
+      background: var(--red-l-5);
+    }
   }
-  .btn-back-red:hover{
-    border: 2px solid var(--red-l-3);
-    background-color: var(--red-l-3);
-    color: var(--red-d-4);
-  }
+
   .btn-back-green{
     border: 2px solid var(--green-d-2);
     background-color: var(--green-d-2);
+
+    &:hover{
+      background-color: var(--green-l-3);
+      border: 2px solid var(--green-l-3);
+      color: var(--green-d-4);
+    }
+    &.btn-animate::before{
+      background: var(--green-l-5);
+    }
   }
-  .btn-back-green:hover{
-    border: 2px solid var(--green-l-3);
-    background-color: var(--green-l-3);
-    color: var(--green-d-4);
-  }
+
   .btn-back-grey{
     border: 2px solid var(--grey-d-2);
     background-color: var(--grey-d-2);
-  }
-  .btn-back-grey:hover{
-    border: 2px solid var(--grey-l-3);
-    background-color: var(--grey-l-3);
-    color: var(--grey-d-4);
+
+    &:hover{
+      background-color: var(--grey-l-3);
+      border: 2px solid var(--grey-l-3);
+      color: var(--grey-d-4);
+    }
+    &.btn-animate::before{
+      background: var(--grey-l-5);
+    }
   }
   
   /* Bouton border */
@@ -121,50 +150,79 @@
   .btn-border-main{
     border: 2px solid var(--main-d-2);
     color: var(--main-d-2);
+
+    &:hover{
+      border: 2px solid var(--main-d-2);
+      background-color: var(--main-d-2);
+    }
+    &.btn-animate::before{
+      background: var(--main-d-5);
+    }
   }
-  .btn-border-main:hover{
-    border: 2px solid var(--main-d-2);
-    background-color: var(--main-d-2);
-  }
+
   .btn-border-secondary{
     border: 2px solid var(--secondary-d-2);
     color: var(--secondary-d-2);
+
+    &:hover{
+      border: 2px solid var(--secondary-d-2);
+      background-color: var(--secondary-d-2);
+    }
+    &.btn-animate::before{
+      background: var(--secondary-d-5);
+    }
   }
-  .btn-border-secondary:hover{
-    border: 2px solid var(--secondary-d-2);
-    background-color: var(--secondary-d-2);
-  }
+
   .btn-border-tertiary{
     border: 2px solid var(--tertiary-d-2);
     color: var(--main-d-2);
+
+    &:hover{
+      border: 2px solid var(--tertiary-d-2);
+      background-color: var(--tertiary-d-2);
+    }
+    &.btn-animate::before{
+      background: var(--tertiary-d-5);
+    }
   }
-  .btn-border-tertiary:hover{
-    border: 2px solid var(--tertiary-d-2);
-    background-color: var(--tertiary-d-2);
-  }
+
   .btn-border-red{
     border: 2px solid var(--red-d-2);
     color: var(--red-d-2);
+
+    &:hover{
+      border: 2px solid var(--red-d-2);
+      background-color: var(--red-d-2);
+    }
+    &.btn-animate::before{
+      background: var(--red-d-5);
+    }
   }
-  .btn-border-red:hover{
-    border: 2px solid var(--red-d-2);
-    background-color: var(--red-d-2);
-  }
+
   .btn-border-green{
     border: 2px solid var(--green-d-2);
     color: var(--green-d-2);
+
+    &:hover{
+      border: 2px solid var(--green-d-2);
+      background-color: var(--green-d-2);
+    }
+    &.btn-animate::before{
+      background: var(--green-d-5);
+    }
   }
-  .btn-border-green:hover{
-    border: 2px solid var(--green-d-2);
-    background-color: var(--green-d-2);
-  }
+
   .btn-border-grey{
     border: 2px solid var(--grey-d-2);
     color: var(--grey-d-2);
-  }
-  .btn-border-grey:hover{
-    border: 2px solid var(--grey-d-2);
-    background-color: var(--grey-d-2);
+
+    &:hover{
+      border: 2px solid var(--grey-d-2);
+      background-color: var(--grey-d-2);
+    }
+    &.btn-animate::before{
+      background: var(--grey-d-5);
+    }
   }
   
   /* Bouton underline */

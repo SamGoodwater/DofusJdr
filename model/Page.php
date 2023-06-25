@@ -191,11 +191,15 @@ class Page extends Content
                                 <optgroup label="<?=ucfirst($key__)?>">
                                     <?php foreach($dir__ as $file__){
                                         $path__ = SectionManager::PATH_SECTION . $key__ . "/" . $file__;
-                                        if(!file_exists($path__)){ $path__ = SectionManager::PATH_SECTION . $file__;}
+                                        $value__ = $key__ . "/" . $file__;
+                                        if(!file_exists($path__)){ 
+                                            $path__ = SectionManager::PATH_SECTION . $file__;
+                                            $value__ = $file__;
+                                        }
                                         include $path__;
                                         $shownListAddInPage = true; if(isset($template["shownListAddInPage"])){$shownListAddInPage = $manager__->returnBool($template["shownListAddInPage"]);}
                                         if(($user->getIs_admin() || $template['onlyForAdmin'] == false) && $shownListAddInPage){ ?>
-                                            <option value="<?= $file__?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$template["description"]?>"><?=$template["title"]?></option>
+                                            <option value="<?= $value__?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$template["description"]?>"><?=$template["title"]?></option>
                                         <?php }
                                     } ?>
                                 </optgroup>

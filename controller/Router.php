@@ -91,7 +91,7 @@ class Router {
                 "https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css",
                 "src/css/shortcuts",
                 "src/css/",
-                "src/css/plugin/"
+                "src/css/common/"
             ];?>
 
             <?php 
@@ -132,7 +132,7 @@ class Router {
                 }
             } ?>
 
-            <?php  require_once "src/css/shortcuts/color.php";
+            <?php  require_once "src/css/common/color.php";
         }
         static function includeJS(){  
             if($_SESSION['JqueryAppel'] == false ){?>

@@ -84,9 +84,9 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end" id="sortableConsomables">
-            <button type="button" class="me-2 btn-sm btn btn-back-secondary" onclick="Page.build(true, 'Création d\'un consommable', $('#addConsumable'), Page.SIZE_MD, true);">Ajouter un consommable</button>
+            <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'un consommable', $('#addConsumable'), Page.SIZE_MD, true);">Ajouter un consommable</button>
             <div id="selectorTypeListCheckbox" class="dropdown">
-                <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="typesort" data-bs-toggle="dropdown" aria-expanded="false">Catégorie du consommable</a>
+                <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" id="typesort" data-bs-toggle="dropdown" aria-expanded="false">Catégorie du consommable</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
                     <?php $checked = "";
                     foreach (Consumable::TYPES as $key => $type_) { 
@@ -101,7 +101,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </ul>
             </div>
             <div class="dropdown" id="selectorLevelListCheckbox">
-                <a class="btn btn-sm btn-border-secondary dropdown-toggle" type="button" id="levelsort" data-bs-toggle="dropdown" aria-expanded="false">Affichage par niveau</a>
+                <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" id="levelsort" data-bs-toggle="dropdown" aria-expanded="false">Affichage par niveau</a>
                 <ul class="dropdown-menu p-4" aria-labelledby="levelsort">
                     <?php $checked = "";
                     for ($i=1; $i <= 20 ; $i++) {
