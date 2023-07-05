@@ -18,6 +18,9 @@
                     <?=$obj->getWeapons_of_choice(Content::FORMAT_EDITABLE)?>
                     <?=$obj->getTrait(Content::FORMAT_EDITABLE)?>
                 </div>
+                <div class="col">
+                    <?=$obj->getLife_dice(Content::FORMAT_EDITABLE);?>
+                </div>
                 <div class="col-auto">
                     <?=$obj->getUsable(Content::FORMAT_EDITABLE)?>
                 </div>

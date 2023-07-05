@@ -22,6 +22,9 @@
                         <p class="text-main-l-2 size-0-8">Arme priviligiée :</p>
                         <?=$obj->getWeapons_of_choice(Content::FORMAT_BADGE)?>
                     </div>
+                    <div class="col">
+                        <?=$obj->getLife_dice(Content::FORMAT_BADGE);?>
+                    </div>
                     <div class="col-auto ms-auto">
                         <?=$obj->getUsable(Content::FORMAT_BADGE)?>
                         <?php if($user->getRight('classe', User::RIGHT_WRITE)){ ?>

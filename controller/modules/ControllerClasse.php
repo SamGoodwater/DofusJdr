@@ -84,6 +84,7 @@ class ControllerClasse extends ControllerModule{
           'description_fast' => $obj->getDescription_fast(),
           'description' => $obj->getDescription(),
           'life' => $obj->getLife(),
+          'life_dice' => $obj->getLife_dice(Content::FORMAT_ICON),
           'specificity' => $obj->getSpecificity(),
           'weapons_of_choice' => "<div class='d-flex justify-content-center'>".$obj->getWeapons_of_choice(Content::FORMAT_ICON)."</div>",
           'trait' => $obj->getTrait(Content::FORMAT_BADGE),
@@ -143,6 +144,7 @@ class ControllerClasse extends ControllerModule{
               'description_fast' => $obj->getDescription_fast(),
               'description' => $obj->getDescription(),
               'life' => $obj->getLife(),
+              'life_dice' => $obj->getLife_dice(Content::FORMAT_ICON),
               'specificity' => $obj->getSpecificity(),
               'weapons_of_choice' => "<div class='d-flex justify-content-center'>".$obj->getWeapons_of_choice(Content::FORMAT_ICON)."</div>",
               'trait' => $obj->getTrait(Content::FORMAT_BADGE),
@@ -231,6 +233,7 @@ class ControllerClasse extends ControllerModule{
                 $classe = new Classe([
                   'name' => trim($_REQUEST['name']),
                   'weapons_of_choice' => $_REQUEST['weapons_of_choice'],
+                  'life_dice' => 10,
                   'uniqid' => uniqid()
                 ]);
                 $classe->setTimestamp_add();

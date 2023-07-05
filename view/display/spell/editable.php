@@ -36,6 +36,7 @@
                     </div>   
                     <div class="col">
                         <?=$obj->getCast_per_turn(Content::FORMAT_EDITABLE)?>
+                        <?=$obj->getCast_per_target(Content::FORMAT_EDITABLE)?>
                         <?=$obj->getNumber_between_two_cast(Content::FORMAT_EDITABLE)?>
                         <?=$obj->getSight_line(Content::FORMAT_EDITABLE)?>
                     </div>            

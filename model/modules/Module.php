@@ -70,6 +70,7 @@ class Module extends Content
         "pa" => "deep-orange",
         "pm" => "cyan",
         "cast-per-turn" => "purple",
+        "cast-per-target" => "indigo",
         "sight-line" => "indigo",
         "number-between-two-cast" => "pink",
         "ini" => "deep-purple",

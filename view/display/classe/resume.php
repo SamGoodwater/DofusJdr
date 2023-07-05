@@ -18,6 +18,7 @@
                 <div class="mx-2 d-flex flex-column justify-content-between">
                     <div class="d-flex flex-nowrap justify-content-between">
                         <p class="bold ms-1"><?=$obj->getName()?></p>
+                        <div class="me-1"><?=$obj->getLife_dice(Content::FORMAT_ICON)?></div>
                         <div class="me-1"><?=$obj->getWeapons_of_choice(Content::FORMAT_ICON)?></div>
                     </div>
                     <div class="size-0-7 text-grey-d-2"><?=$obj->getDescription_fast()?></div>

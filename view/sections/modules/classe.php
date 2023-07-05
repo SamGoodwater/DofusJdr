@@ -86,6 +86,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="trait"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Traits du mod">Traits</span></th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="description">Description</th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="life">Gestion de la vitalité</th>
+                        <th class="text-center" data-sortable="false" data-visible="true" data-field="life_dice"></th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="specificity">Spécificités</th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                         <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>

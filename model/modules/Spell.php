@@ -153,6 +153,7 @@ class Spell extends Content
         private $_po_editable=true;
         private $_pa=1;
         private $_cast_per_turn=1;
+        private $_cast_per_target=1;
         private $_sight_line=false;
         private $_number_between_two_cast=0;
         private $_element = Spell::ELEMENT_NEUTRE;
@@ -524,6 +525,56 @@ class Spell extends Content
                 
                 default:
                     return $this->_cast_per_turn;
+            }
+        }
+        public function getCast_per_target(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Spell",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "cast_per_target",
+                            "label" => "Utilisation par cible",
+                            "placeholder" => "1",
+                            "tooltip" => "Nombre de fois que le sort peut-être lancer par tour sur une même cible",
+                            "comment" => "Nombre de fois que le sort peut-être lancer par tour sur une même cible",
+                            "value" => $this->_cast_per_target,
+                            "color" => "cast_per_target-d-2",
+                            "style" => Style::INPUT_ICON,
+                            "icon" => "cast_per_target.png",
+                            "style_icon" => Style::ICON_MEDIA
+                        ], 
+                        write: false);
+                
+                case Content::FORMAT_BADGE:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$this->_cast_per_target} fois / cible / tour",
+                            "color" => "cast_per_target-d-2",
+                            "tooltip" => "Nombre de fois que le sort peut-être lancer par tour sur une même cible",
+                            "style" => Style::STYLE_BACK
+                        ], 
+                        write: false);
+                   
+                case Content::FORMAT_ICON:
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "cast_per_target.png",
+                            "color" => "cast_per_target-d-2",
+                            "tooltip" => "Nombre de fois que le sort peut-être lancer par tour sur une même cible",
+                            "content" => $this->_cast_per_target,
+                            "content_placement" => Style::POSITION_LEFT
+                        ], 
+                        write: false);
+                
+                default:
+                    return $this->_cast_per_target;
             }
         }
         public function getSight_line(int $format = Content::FORMAT_BRUT){
@@ -957,7 +1008,7 @@ class Spell extends Content
                     foreach(self::TYPE as $name => $type) { 
                         $items[] = [
                             "onclick" => "Spell.update('".$this->getUniqid()."',{action:'add', type:'".$type."'},'type', IS_VALUE);",
-                            "display" => "<span class='btn btn-sm btn-border-".Style::getColorFromLetter($type)."-d-4'>" .ucfirst($name)."</span>"
+                            "display" => "<span class='w-100 btn border-0 border-bottom-1-hover border-".Style::getColorFromLetter($type)."-d-4'>" .ucfirst($name)."</span>"
                         ];
                     }
 
@@ -1015,7 +1066,22 @@ class Spell extends Content
 
         public function getFrequency(int $format = Content::FORMAT_BRUT){
             $view = new View();
-            $text = "";
+            $text = $tooltips = "Le sort peut être lancer " . $this->getCast_per_turn() . " tout les " . $this->getNumber_between_two_cast() . ' tour(s)';
+            $badge_target = "";
+            if($this->getCast_per_target() < $this->getCast_per_turn() && $this->getCast_per_target() != 0){
+                $tooltips = "Le sort peut être lancer " . $this->getCast_per_target() . " sur la même cible et " . $this->getCast_per_turn() . " fois toutes cibles confondus, tout les " . $this->getNumber_between_two_cast() . ' tour(s)';
+                $badge_target = $view->dispatch(
+                    template_name : "badge",
+                    data : [
+                        "content" => $this->getCast_per_target() . " fois / cible",
+                        "color" => "main-d-2",
+                        "class" => "me-1",
+                        "tooltip" => $tooltips,
+                        "style" => Style::STYLE_OUTLINE
+                    ], 
+                    write: false);
+            }
+
             if((int) $this->getNumber_between_two_cast() <= 1){
                 $text = $this->getCast_per_turn() . " fois / tour";
             }else{
@@ -1024,15 +1090,23 @@ class Spell extends Content
 
             switch ($format) {
                 case Content::FORMAT_BADGE:
-                    return $view->dispatch(
-                        template_name : "badge",
-                        data : [
-                            "content" => $text,
-                            "color" => "main-d-2",
-                            "tooltip" => "Le sort peut être lancer " . $this->getCast_per_turn() . " tout les " . $this->getNumber_between_two_cast() . ' tour(s)',
-                            "style" => Style::STYLE_OUTLINE
-                        ], 
-                        write: false);
+                    ob_start(); ?>
+
+                        <div class="d-flex justify-content-center m-1 align-items-center"> <?php
+                            if(!empty($badge_target)){echo($badge_target);}
+
+                            $view->dispatch(
+                                template_name : "badge",
+                                data : [
+                                    "content" => $text,
+                                    "color" => "main-d-2",
+                                    "tooltip" => $tooltips,
+                                    "style" => Style::STYLE_OUTLINE
+                                ], 
+                                write: true);
+                        ?> </div> <?php
+
+                    return ob_get_clean();
                    
                 case Content::FORMAT_TEXT:
                     return $this->getFrequency();
@@ -1077,6 +1151,14 @@ class Spell extends Content
         }
         public function setCast_per_turn(string | int | null $data){
             $this->_cast_per_turn = $data;
+            return true;
+        }
+        public function setCast_per_target(string | int | null $data){
+            if($data > $this->getCast_per_turn() || $data == 0){
+                $this->_cast_per_target = $this->getCast_per_turn();
+            } else {
+                $this->_cast_per_target = $data;
+            }
             return true;
         }
         public function setSight_line(bool | null $data){

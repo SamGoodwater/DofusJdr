@@ -14,6 +14,7 @@
                         $img = "data:image/".$file_img->getExtention().";base64,".base64_encode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file_img->getPath()));
                     ?>
                     <img src="<?=$img?>" height="20">
+                    <p>Dé de vie : <?=$obj->getLife_dice();?></p>
                     <p><?=$obj->getTrait()?></p>      
                 </td>
                 <td width="50%">

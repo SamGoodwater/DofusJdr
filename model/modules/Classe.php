@@ -49,6 +49,7 @@ class Classe extends Content
         private $_description_fast='';
         private $_description='';
         private $_life='';
+        private $_life_dice=10;
         private $_specificity='';
         private $_weapons_of_choice='';
         private $_trait="";
@@ -135,6 +136,55 @@ class Classe extends Content
                 
                 default:
                     return html_entity_decode($this->_life);
+            }
+        }
+        public function getLife_dice(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Classe",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "life_dice",
+                            "label" => "Valeur du dé de vie",
+                            "placeholder" => "10",
+                            "tooltip" => "Valeur du dé de vie",
+                            "value" => $this->_life_dice,
+                            "color" => "grey-l-4",
+                            "style" => Style::INPUT_ICON,
+                            "icon" => "dice12.svg",
+                            "style_icon" => Style::ICON_MEDIA
+                        ], 
+                        write: false);
+                
+                case Content::FORMAT_BADGE:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "Dé de vie : {$this->_life_dice}<img class='icon icon-sm ms-1 align-text-bottom' src='medias/icons/modules/dice12.svg'>",
+                            "color" => "grey-d-4",
+                            "tooltip" => "Valeur du dé de vie",
+                            "style" => Style::STYLE_OUTLINE
+                        ], 
+                        write: false);
+                   
+                case Content::FORMAT_ICON:
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "dice12.svg",
+                            "color" => "grey-d-4",
+                            "tooltip" => "Valeur du dé de vie",
+                            "content" => $this->_life_dice,
+                            "content_placement" => Style::POSITION_LEFT
+                        ], 
+                        write: false);
+                
+                default:
+                    return $this->_life_dice;
             }
         }
         public function getSpecificity(int $format = Content::FORMAT_BRUT){
@@ -450,6 +500,13 @@ class Classe extends Content
         }
         public function setLife($data){
             $this->_life = $data;
+            return true;
+        }
+        public function setlife_dice(string | int | null $data){
+            if($data == null || $data == "" || $data == 0 || $data == "0"){
+                $data = 10;
+            }
+            $this->_life_dice = $data;
             return true;
         }
         public function setWeapons_of_choice($data){
