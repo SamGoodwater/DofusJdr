@@ -2,9 +2,13 @@
 
 trait NumberFct
 {
-    function extractBonusValue($inputString) {
+    function extractNumber($inputString) {
         // Supprimer les espaces pour faciliter l'analyse
         $inputString = str_replace(' ', '', $inputString);
+
+        if(is_numeric($inputString)) {
+            return $inputString;
+        }
         
         // Définir les patterns pour les nombres (avec différentes formes possibles)
         $patterns = array(

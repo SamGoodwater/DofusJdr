@@ -500,30 +500,49 @@ class Item extends Content
                             "color" => "kamas-d-3",
                             "style" => Style::INPUT_ICON,
                             'icon' => "kamas.png",
-                            "style_icon" => Style::ICON_MEDIA
+                            "style_icon" => Style::ICON_MEDIA,
+                            "comment" => "Prix estimé automatique : " . $this->getEstimatedPrice() . " kamas"
                         ], 
                         write: false);
                 
                 case Content::FORMAT_BADGE:
+                    $text = "{$this->_price} kamas (défini) <br> <small>".$this->getEstimatedPrice()." kamas (calculé)</small>";
+                    $tooltip = "Prix estimé de l'équipement {$this->_price} kamas (défini) - Prix calculé automatiquement : ".$this->getEstimatedPrice()." kamas";
+                    if($this->_price == $this->getEstimatedPrice()){
+                        $text = "{$this->_price} kamas";
+                        $tooltip = "Prix estimé de l'équipement - défini";
+                    }
+                    if($this->_price == 0 || empty($this->_price)){
+                        $text = $this->getEstimatedPrice() . " kamas";
+                        $tooltip = "Prix estimé de l'équipement - calculé automatiquement";
+                    }
                     return $view->dispatch(
                         template_name : "badge",
                         data : [
-                            "content" => "{$this->_price} kamas",
+                            "content" => $text,
                             "color" => "kamas-d-4",
-                            "tooltip" => $this->getEstimatedPrice(Content::FORMAT_TEXT),
+                            "tooltip" => $tooltip,
                             "style" => Style::STYLE_BACK
                         ], 
                         write: false);
                    
                 case Content::FORMAT_ICON:
+                    $tooltip = "Prix estimé de l'équipement {$this->_price} kamas (défini) - Prix calculé automatiquement : ".$this->getEstimatedPrice()." kamas";
+                    if($this->_price == $this->getEstimatedPrice()){
+                        $tooltip = "Prix estimé de l'équipement - défini";
+                    }
+                    $text = $this->_price;
+                    if($this->_price == 0 || empty($this->_price)){
+                        $text = $this->getEstimatedPrice();
+                    }
                     return $view->dispatch(
                         template_name : "icon",
                         data : [
                             "style" => Style::ICON_MEDIA,
                             "icon" => "kamas.png",
                             "color" => "kamas-d-3",
-                            "tooltip" => "Prix estimé de l'équipement - défini",
-                            "content" => $this->_price,
+                            "tooltip" => $tooltip,
+                            "content" => $text,
                             "content_placement" => Style::POSITION_LEFT
                         ], 
                         write: false); 
@@ -576,47 +595,14 @@ class Item extends Content
 
         public function getEstimatedPrice(int $format = Content::FORMAT_BRUT){
             $estimated_price = 0;
-            if(is_array($this->getBonus())){
-                foreach($this->getBonus() as $bonus){
+            if(is_array($this->getBonus(Content::FORMAT_ARRAY))){
+                foreach($this->getBonus(Content::FORMAT_ARRAY) as $bonus){
                     if(is_array($bonus)){
-                        $multiplier = 1;
+                        $multiplier = $this->extractNumber($bonus['value']);
+                        if($multiplier == 0 || !is_numeric($multiplier)) $multiplier = 1;
 
-                        
-
-                        if(isset($bonus['value'])){
-                            if(is_numeric($bonus['value'])){
-                                $multiplier = (int) $bonus['value'];
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], '%') !== false){
-                                $multiplier = (int) (str_replace('%', '', $bonus['value'])) / 100;
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'x') !== false){
-                                $multiplier = (int) str_replace('x', '', $bonus['value']);
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'k') !== false){
-                                $multiplier = (int) str_replace('k', '000', $bonus['value']);
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'm') !== false){
-                                $multiplier = (int) str_replace('m', '000000', $bonus['value']);
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'b') !== false){
-                                $multiplier = (int) str_replace('b', '000000000', $bonus['value']);
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 't') !== false){
-                                $multiplier = (int) str_replace('t', '000000000000', $bonus['value']);
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'q') !== false){
-                                $multiplier = (int) str_replace('q', '000000000000000', $bonus['value']);
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'Q') !== false){
-                                $multiplier = (int) str_replace('Q', '000000000000000000', $bonus['value']);
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 's') !== false){
-                                $multiplier = (int) str_replace('s', '000000000000000000000', $bonus['value']);
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'S') !== false){
-                                $multiplier = (int) str_replace('S', '000000000000000000000000', $bonus['value']);
-                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'o') !== false){
-                                $multiplier = (int) str_replace('o', '000000000000000000000000000', $bonus['value']);
-                            }elseif(is_string($bonus['value'])){
-
-                                $multiplier = preg_replace("/[^0-9]/","",$bonus['value']);  (int) $bonus['value'];
-    
-                            }
-        
-                        }
                         if(isset($bonus['price']) && is_numeric($bonus['price'])){
-                            $estimated_price += (int) $bonus['price'];
+                            $estimated_price += $multiplier * (int) $bonus['price'];
                         }
                     }
                 }

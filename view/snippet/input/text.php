@@ -80,6 +80,10 @@ switch ($style) {
             </div>
         </div> 
 
+        <?php if(!empty($comment)){ ?>
+                <span class="size-0-8 text-grey"><?=$comment?></span>
+            <?php } ?>
+
     <?php break;
 
     case Style::INPUT_FLOATING: ?>

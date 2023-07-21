@@ -4,7 +4,7 @@ use PhpParser\Node\Expr\Cast\Object_;
 
 abstract class Content
 {
-    use CheckingFct, SecurityFct, CalcFct, StringFct;
+    use CheckingFct, SecurityFct, CalcFct, StringFct, NumberFct;
     
     //Format GETTERS
 
