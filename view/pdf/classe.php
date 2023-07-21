@@ -36,8 +36,8 @@
         <table valign="top" align="left">
           
             <?php $mobs = []; $lign=0; $managerMob = new MobManager; foreach ($obj->getSpell(Content::FORMAT_ARRAY) as $spell) { ;
-                if($managerMob->existsId($spell->getId_invocation())){
-                    $mobs[] = $spell->getId_invocation(Content::FORMAT_OBJECT);
+                if($managerMob->existsId($spell->getInvocation())){
+                    $mobs[] = $spell->getInvocation(Content::FORMAT_OBJECT);
                 }
                 if($lign%3 == 0){
                     ?><tr>

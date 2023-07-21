@@ -34,6 +34,7 @@
                 </div>
                 <div class="nav-item-divider back-main-d-1"></div>
                 <h2 class="card-title"><?=$obj->getName()?></h2>
+                <p class="card-text"><?=$obj->getBonus(Content::FORMAT_BADGE)?></p>
                 <p class="card-text"><?=$obj->getEffect()?></p>
             </div>
         </div>

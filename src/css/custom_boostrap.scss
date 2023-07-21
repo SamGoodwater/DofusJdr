@@ -34,3 +34,48 @@ $primary: var(--secondary);
     border-color: var(--secondary);
     color: white;
 }
+
+// JQUERY UI AUTOCOMPLETE
+
+.ui-widget-content.ui-autocomplete{
+    max-width: 400px!important;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    .ui-menu-item{
+        box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        padding: 5px;
+        border-radius: 5px;
+        border-bottom: 1px solid var(--main-l-1);
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform .15s cubic-bezier(.71,.12,1,.6), background-color .14s 50ms ease-in-out;
+
+        &:hover{
+            box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5.5px);
+            -webkit-backdrop-filter: blur(5.5px);
+        }
+
+        &::before {
+            content: '';
+            background: var(--main-l-1);
+            opacity: 0.1;
+            width: 0%;
+            height: 0%;
+            top: 0%;
+            left: 0%;
+            transform: skew(45deg);
+            position: absolute;
+            transition: left 0.3s ease;
+        }
+
+        &:hover::before{
+            left: 150%;
+            width: 60%;
+            height: 100%;
+        }
+    }
+}

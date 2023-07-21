@@ -17,7 +17,7 @@
             <div style="position:relative;width:<?=$size?>px;">
                 <?php if($is_removable){ ?>
                     <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
-                        <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher l'aptitude" class="p-4 btn-text-red" onclick="if (confirm('Etes vous sûr d\'étacher l\'aptitude ?')){<?=ucfirst($class_name)?>.update('<?=$uniqid?>',{action:'remove', uniqid:'<?=$capability->getUniqid()?>'},'capability', IS_VALUE);}"><i class="fa-solid fa-times"></i></a>
+                        <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher l'aptitude" class="p-4 btn-text-red" onclick="if (confirm('Etes vous sûr de vouloir d\'étacher l\'aptitude ?')){<?=ucfirst($class_name)?>.update('<?=$uniqid?>',{action:'remove', uniqid:'<?=$capability->getUniqid()?>'},'capability', IS_VALUE);}"><i class="fa-solid fa-times"></i></a>
                     </div>
                 <?php } ?>
                 <?= $capability->getVisual(new Style(["display" => Content::DISPLAY_RESUME]));?>

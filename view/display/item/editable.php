@@ -29,10 +29,11 @@
                     </div>   
                 </div>
                 <div class="nav-item-divider back-main-d-1"></div>
-                <p class='size-0-7 mb-2'>Equipement <?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$obj->getTimestamp_updated(Content::DATE_FR);?></p>
+                <p class='size-0-7 mb-2'>Équipement <?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$obj->getTimestamp_updated(Content::DATE_FR);?></p>
             </div>
         </div>
     </div>
+    <div class="card-text m-3"><?=$obj->getBonus(Content::FORMAT_EDITABLE);?></div>
     <div class="card-text m-3"><?=$obj->getEffect(Content::FORMAT_EDITABLE);?></div>
     <div class="card-text m-3"><?=$obj->getDescription(Content::FORMAT_EDITABLE);?></div>
     <div class="card-text m-3"><?=$obj->getRecepe(Content::FORMAT_EDITABLE);?></div>

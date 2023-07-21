@@ -494,7 +494,7 @@ class Npc extends Content
                             "color" => "life-d-2",
                             "style" => Style::INPUT_ICON,
                             "size" => Style::SIZE_SM,
-                            "icon" => "life.svg",
+                            "icon" => "life.png",
                             "style_icon" => Style::ICON_MEDIA
                         ], 
                         write: false);
@@ -516,7 +516,7 @@ class Npc extends Content
                         template_name : "icon",
                         data : [
                             "style" => Style::ICON_MEDIA,
-                            "icon" => "life.svg",
+                            "icon" => "life.png",
                             "color" => "life-d-2",
                             "tooltip" => "Calcul des points de vie",
                             "content" => $this->_life,

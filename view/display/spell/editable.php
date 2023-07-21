@@ -48,7 +48,7 @@
         <p class="card-text mb-2"><?=$obj->getEffect(Content::FORMAT_EDITABLE)?></p>
         <p class="card-text  my-2"><?=$obj->getDescription(Content::FORMAT_EDITABLE)?></p>
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
-        <div class="my-2"><?=$obj->getId_invocation(Content::FORMAT_EDITABLE)?></div>
+        <div class="my-2"><?=$obj->getInvocation(Content::FORMAT_EDITABLE)?></div>
     </div>
     <p class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-animate btn-border-red' onclick="Spell.remove('<?=$obj->getUniqid()?>')"><i class="fa-solid fa-trash"></i> Supprimer</a></p>
 </div>

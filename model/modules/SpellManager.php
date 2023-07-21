@@ -178,7 +178,6 @@ class SpellManager extends Manager
                     number_between_two_cast,
                     element,
                     category,
-                    id_invocation,
                     is_magic,
                     powerful,
                     usable
@@ -200,7 +199,6 @@ class SpellManager extends Manager
                     :number_between_two_cast,
                     :element,
                     :category,
-                    :id_invocation,
                     :is_magic,
                     :powerful,
                     :usable
@@ -223,7 +221,6 @@ class SpellManager extends Manager
             'number_between_two_cast' => $spell->getNumber_between_two_cast(),
             "element" => $spell->getElement(),
             "category" => $spell->getCategory(),
-            "id_invocation" => $spell->getId_invocation(),
             "is_magic" => $spell->getIs_magic(),
             "powerful" => $spell->getPowerful(),
             "usable" => $spell->getUsable()
@@ -247,7 +244,6 @@ class SpellManager extends Manager
                     number_between_two_cast=:number_between_two_cast,
                     element=:element,
                     category=:category,
-                    id_invocation=:id_invocation,
                     is_magic=:is_magic,
                     powerful=:powerful,
                     usable=:usable
@@ -271,7 +267,6 @@ class SpellManager extends Manager
             'number_between_two_cast' => $spell->getNumber_between_two_cast(),
             "element" => $spell->getElement(),
             "category" => $spell->getCategory(),
-            "id_invocation" => $spell->getId_invocation(),
             "is_magic" => $spell->getIs_magic(),
             "powerful" => $spell->getPowerful(),
             "usable" => $spell->getUsable()
@@ -281,57 +276,111 @@ class SpellManager extends Manager
         $managerUser = new UserManager();
         $managerUser->removeBookmarkFromObj($object);
         $this->removeAllLinkTypeFromSpell($object);
+        $this->removeAllLinkMobFromSpell($object);
         $req = $this->_bdd->prepare('DELETE FROM spell WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }
 
     // Link Type
-    public function getLinkType(Spell $spell){
-        $req = $this->_bdd->prepare('SELECT type FROM link_spell_type INNER JOIN spell ON link_spell_type.id_spell = spell.id WHERE link_spell_type.id_spell = ? ORDER BY link_spell_type.type');
-        $req->execute(array($spell->getId()));
-        $ret = $req->fetchAll(PDO::FETCH_ASSOC);
-        if(empty($ret)){return "";}
-        $return = array();
-        foreach ($ret as $link) {
-            if(in_array($link['type'], Spell::TYPE)){
-                $return[] = $link['type'];
+        public function getLinkType(Spell $spell){
+            $req = $this->_bdd->prepare('SELECT type FROM link_spell_type INNER JOIN spell ON link_spell_type.id_spell = spell.id WHERE link_spell_type.id_spell = ? ORDER BY link_spell_type.type');
+            $req->execute(array($spell->getId()));
+            $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+            if(empty($ret)){return "";}
+            $return = array();
+            foreach ($ret as $link) {
+                if(in_array($link['type'], Spell::TYPE)){
+                    $return[] = $link['type'];
+                }
             }
+            return $return;
         }
-        return $return;
-    }
-    public function existsLinkType(Spell $spell, $type){
-        $req = $this->_bdd->prepare('SELECT id FROM link_spell_type WHERE id_spell = ? AND type = ?');
-        $req->execute(array($spell->getId(), $type));
-        return $req->rowCount();
-    } 
-    public function addLinkType(Spell $spell, $type){
-        if($this->existsLinkType($spell, $type)){return false;}
-        $req = $this->_bdd->prepare('INSERT INTO link_spell_type(
-                    id_spell,
-                    type
-                )
-            VALUES (
-                    :id_spell,
-                    :type
-                )');
+        public function existsLinkType(Spell $spell, $type){
+            $req = $this->_bdd->prepare('SELECT id FROM link_spell_type WHERE id_spell = ? AND type = ?');
+            $req->execute(array($spell->getId(), $type));
+            return $req->rowCount();
+        } 
+        public function addLinkType(Spell $spell, $type){
+            if($this->existsLinkType($spell, $type)){return false;}
+            $req = $this->_bdd->prepare('INSERT INTO link_spell_type(
+                        id_spell,
+                        type
+                    )
+                VALUES (
+                        :id_spell,
+                        :type
+                    )');
 
-        return $req->execute(array(
-            "id_spell" => $spell->getId(),
-            "type"=> $type,
-        ));
+            return $req->execute(array(
+                "id_spell" => $spell->getId(),
+                "type"=> $type,
+            ));
 
-        // Renvoi le dernier ingredient ajouté
-        $post = $this->_bdd->prepare('SELECT id FROM link_spell_type ORDER BY id DESC LIMIT 1');
-        return $post->execute();
-    }
-    public function removeLinkType(Spell $spell, $type){
-        $req = $this->_bdd->prepare('DELETE FROM link_spell_type WHERE id_spell = :id_spell AND type = :type');
-        return $req->execute(array("id_spell" =>  $spell->getId(), "type" =>  $type));
-    }
-    public function removeAllLinkTypeFromSpell(Spell $spell){
-        $req = $this->_bdd->prepare('DELETE FROM link_spell_type WHERE id_spell = :id');
-        return $req->execute(array("id" =>  $spell->getId()));
-    }
+            // Renvoi le dernier ingredient ajouté
+            $post = $this->_bdd->prepare('SELECT id FROM link_spell_type ORDER BY id DESC LIMIT 1');
+            return $post->execute();
+        }
+        public function removeLinkType(Spell $spell, $type){
+            $req = $this->_bdd->prepare('DELETE FROM link_spell_type WHERE id_spell = :id_spell AND type = :type');
+            return $req->execute(array("id_spell" =>  $spell->getId(), "type" =>  $type));
+        }
+        public function removeAllLinkTypeFromSpell(Spell $spell){
+            $req = $this->_bdd->prepare('DELETE FROM link_spell_type WHERE id_spell = :id');
+            return $req->execute(array("id" =>  $spell->getId()));
+        }
+
+    // Link Mob
+        public function getLinkMob(Spell $spell){
+            $req = $this->_bdd->prepare('   SELECT *, link_spell_mob.id AS link_id 
+                                            FROM link_spell_mob
+                                            INNER JOIN mob ON link_spell_mob.id_mob = mob.id
+                                            WHERE id_spell = ?
+                                            ORDER BY mob.level ASC');
+            $req->execute(array($spell->getId()));
+            $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+            if(empty($ret)){return "";}
+            $return = array();
+            foreach ($ret as $link) {
+                $return[] = new Mob($this->securite($link));
+            }
+            return $return;
+        }
+        public function existsLinkMob(Spell $spell, Mob $mob){
+            $req = $this->_bdd->prepare('SELECT id FROM link_spell_mob WHERE id_spell = ? AND id_mob = ?');
+            $req->execute(array($spell->getId(), $mob->getId()));
+            return $req->rowCount();
+        }
+        public function addLinkMob(Spell $spell, Mob $mob){
+            $req = $this->_bdd->prepare('INSERT INTO link_spell_mob(
+                        id_spell,
+                        id_mob
+                    )
+                VALUES (
+                        :id_spell,
+                        :id_mob
+                    )');
+
+            return $req->execute(array(
+                "id_spell" => $spell->getId(),
+                "id_mob"=> $mob->getId()
+            ));
+
+            // Renvoi le dernier ingredient ajouté
+            $post = $this->_bdd->prepare('SELECT id FROM link_spell_mob ORDER BY id DESC LIMIT 1');
+            return $post->execute();
+        }
+        public function removeLinkMob(Spell $spell, Mob $mob){
+            $req = $this->_bdd->prepare('DELETE FROM link_spell_mob WHERE id_spell = :id_spell AND id_mob = :id_mob');
+            return $req->execute(array("id_spell" =>  $spell->getId(), "id_mob" =>  $mob->getId()));
+        }
+        public function removeAllLinkMobFromSpell(Spell $spell){
+            $req = $this->_bdd->prepare('DELETE FROM link_spell_mob WHERE id_spell = :id');
+            return $req->execute(array("id" =>  $spell->getId()));
+        }
+        public function removeAllLinkMobFromMob(Mob $mob){
+            $req = $this->_bdd->prepare('DELETE FROM link_spell_mob WHERE id_mob = :id');
+            return $req->execute(array("id" =>  $mob->getId()));
+        }
 
 // OTHER
     private function bdd2objects(array $bdd_results){

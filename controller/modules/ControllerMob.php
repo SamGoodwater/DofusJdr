@@ -627,7 +627,7 @@ class ControllerMob extends ControllerModule{
                     $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
                   break;
                   case ControllerModule::SEARCH_DONE_ADD_MOB_TO_SPELL:
-                    $click_action = "onclick=\"Spell.update('".$parameter."','".$object->getId()."','id_invocation', IS_VALUE);\"";
+                    $click_action = "onclick=\"Spell.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'mob', IS_VALUE);\"";
                   break;
                   default:
                     $click_action = "onclick=\"Mob.open('".$object->getUniqid()."')\"";

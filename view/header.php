@@ -4,7 +4,7 @@
         <h1 id="title"></h1>
     </div>
     <div class="app-toolbar-nav">
-        <div class="mx-2">
+        <div class="mx-2 position-relative">
             <input type="text" 
                 style="max-width: 300px;"
                 data-url = "index.php?c=search&a=search"

@@ -50,6 +50,6 @@
         <p class="card-text"><?=$obj->getEffect()?></p>
         <p class="card-text"><small class="text-muted"><?=$obj->getDescription()?></small></p>
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
-        <div class="d-flex justify-content-center"><?=$obj->getId_invocation(Content::DISPLAY_RESUME)?></div>
+        <div class="d-flex justify-content-center"><?=$obj->getInvocation(Content::DISPLAY_RESUME)?></div>
     </div>
 </div>

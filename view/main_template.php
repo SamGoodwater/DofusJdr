@@ -97,7 +97,7 @@
                                 <input class="form-check-input form-control-main-focus back-main-l-2 border-main" type="checkbox" checked id="cookie-bookmark">
                                 <label class="form-check-label" for="cookie-bookmark">Cookies du <?=ucfirst($GLOBALS['project']['bookmark_name'])?></label>
                             </div>
-                            <p><small class="size-0-7 text-grey-d-3">Ce sont les cookies permettant d'enregistrer (sans avoir de compte) différents élèments dans son <?=ucfirst($GLOBALS['project']['bookmark_name'])?>.</small></p>
+                            <p><small class="size-0-7 text-grey-d-3">Ce sont les cookies permettant d'enregistrer (sans avoir de compte) différents éléments dans son <?=ucfirst($GLOBALS['project']['bookmark_name'])?>.</small></p>
                         </li>
                     </ul>
                 </div>

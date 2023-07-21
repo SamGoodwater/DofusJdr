@@ -21,12 +21,14 @@
         <a class="d-flex align-items-center <?=$class?>" type="button" id="<?=$id?>" style="<?=$css?>" <?=$data?> data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><div><?=$label?></div> <i class="fa-solid fa-chevron-down font-size-0-8 text-grey"></i></a>
         <div class="dropdown-menu" aria-labelledby="<?=$id?>"> <?php
             foreach ($items as $key => $item) { 
-                    $href=""; $onclick=""; $display="";$item_class="";
+                    $href = $onclick = $display = $item_class = $item_css = $item_id = "";
                     if(isset($item["href"])){$href = "href=\"" . $item["href"]. "\"";}
                     if(isset($item["onclick"])){$onclick = "onclick=\"". $item["onclick"]. ";$('#".$id." div').html($(this).html());\"";}
                     if(isset($item["display"])){$display = $item["display"];}
-                    if(isset($item["class"])){$item_class = $item["class"];}?>
-                <a class="dropdown-item <?=$item_class?>" <?=$href?> <?=$onclick?>><?=$display?></a>
+                    if(isset($item["class"])){$item_class = $item["class"];}
+                    if(isset($item["css"])){$item_css = $item["css"];}
+                    if(isset($item["id"])){$item_id = $item["id"];}?>
+                <a class="dropdown-item <?=$item_class?>" id="<?=$item_id?>" <?=$item_css?> <?=$href?> <?=$onclick?>><?=$display?></a>
             <?php } ?>
         </div>
     </div>

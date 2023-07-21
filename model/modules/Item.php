@@ -73,21 +73,16 @@ class Item extends Content
         "Très répandu" => 5
     ];
 
-
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         private $_name='';
         private $_level="";
         private $_description="";
         private $_effect="";
+        private $_bonus="";
         private $_type=Item::TYPE_ARC;
         private $_recepe="";
         private $_price=0;
         private $_rarity=5;
-
-        private $_actif = false;
-        private $_twohands = false;
-        private $_pa=0;
-        private $_po=0;
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function getName(int $format = Content::FORMAT_BRUT){
@@ -200,6 +195,230 @@ class Item extends Content
                     return $this->_effect;
             }
         }
+
+        public function getBonus(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            $bonus = [];
+           
+            if($this->isSerialized($this->_bonus)){
+                $bonus_brut = unserialize($this->_bonus);
+                if($bonus_brut != -1){ // -1 correspond à un équipement sans bonus
+                    if(is_array($bonus_brut)){
+                        if(!empty($bonus_brut)){
+                            foreach ($bonus_brut as $caract) {
+                                if(isset($caract['type'])){
+                                    $type = $caract['type'];
+                                    if(isset(Creature::CARACTERISTICS[$type])){
+                                        $bonus[$type] = [
+                                            "type" => $type,
+                                            "name" => Creature::CARACTERISTICS[$type]["name"],
+                                            "value" => $caract['value'],
+                                            "color" => Creature::CARACTERISTICS[$type]["color"],
+                                            "icon" => Creature::CARACTERISTICS[$type]["icon"],
+                                            "price" => Creature::CARACTERISTICS[$type]["price"],
+                                            "path_icon" => "medias/icons/modules/" . Creature::CARACTERISTICS[$type]["icon"]
+                                        ];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                   
+                    $items_bonus_all = [];
+                    foreach (Creature::CARACTERISTICS as $type => $caract) {
+                        $items_bonus_all[] = [
+                            "display" => "<span data-type='" .$type."' data-name='".ucfirst($caract['name'])."' data-color='".$caract['color']."' data-icon='medias/icons/modules/".$caract['icon']."' class='badge-outline w-100 m-0 px-2 text-left text-".$caract['color']."-d-4 border-".$caract['color']."-d-4'><img class='icon-lg pe-2' src='medias/icons/modules/".$caract['icon']."'>" .ucfirst($caract['name'])."</span>",
+                            "onclick" => "",
+                            "class" => "w-100 m-0 p-0"
+                        ];
+                    }
+
+                    $items_bonus = [];
+                    foreach ($bonus as $type => $caract) {
+
+
+                        ob_start(); ?>
+
+                            <div class='input-group input-group-sm mb-3 border-<?=$caract['color']?>-d-4'>
+                                <span class='input-group-text back-<?=$caract['color']?>-l-4 text-<?=$caract['color']?>-d-4'>
+                                    <img src='<?=$caract['path_icon']?>' class='icon-xl'><?=ucfirst($caract['name'])?>
+                                </span>
+                                <input type='text' data-type="<?=$caract['type']?>" class='item_bonus form-control form-control-<?=$caract['color']?>-focus text-<?=$caract['color']?>-d-4' value='<?=$caract['value']?>'>
+                                <a onclick='$(this).parent().parent().parent().empty();' class='btn btn-text-red align-self-center' title='Supprimer cette caractéristique'>
+                                    <i class='size-1-2 fa-solid fa-trash'></i>
+                                </a>
+                            </div>
+                        <?php 
+
+                        $items_bonus[] = [
+                            "display" => ob_get_clean()
+                        ];
+                    }
+
+                    ob_start(); ?>
+                        <div class="m-2">
+
+                            <?php $view->dispatch(
+                                template_name : "list",
+                                data : [
+                                    "title" => "Bonus de l'équipement",
+                                    "tooltip" => "",
+                                    "items" => $items_bonus,
+                                    "id" => "bonus_list_{$this->getUniqid()}"
+                                ], 
+                                write: true); ?>
+
+                        <?php if(empty($bonus)){ ?>
+                            <ul id="bonus_list_<?=$this->getUniqid()?>" class="list-group list-group-flush">
+                                <li class="list-group-item none-bonus-text">Aucun bonus de caractéristique</li>
+                            </ul>
+                        <?php } ?>
+
+                            <div class="d-flex justify-content-start align-items-end">
+                                <div class="mx-2">
+                                    <?php $view->dispatch(
+                                        template_name : "dropdown",
+                                        data : [
+                                            "label" => "Ajouter un bonus",
+                                            "tooltip" => "Bonus à l'équipement",
+                                            "items" => $items_bonus_all,
+                                            "class" => "mx-2 btn-border-main btn btn-sm",
+                                            "id" => "bonus_dropdown_{$this->getUniqid()}",
+                                        ], 
+                                        write: true); ?>
+                                </div>
+
+                                <div class="mx-2">
+                                    <?php $view->dispatch(
+                                    template_name : "input/text",
+                                    data : [
+                                        "is_onchange" => false,
+                                        "id" => "bonus_value",
+                                        "label" => "Valeur du bonus",
+                                        "size" => STYLE::SIZE_SM,
+                                        "class" => "",
+                                        "placeholder" => "Choisissez une valeur",
+                                        "value" => "",
+                                        "style" => Style::INPUT_BASIC
+                                    ], 
+                                    write: true); ?>
+                                </div>
+
+                                <button class="btn btn-sm btn-border-main" onclick="addDisplayBonus()"><i class="fa-solid fa-plus"></i></button>
+                                <button class="btn btn-sm btn-border-secondary mx-2" onclick="saveBonus()"><i class="fa-solid fa-floppy-disk"></i> Enregistrer les bonus</button>
+                            </div>
+                            <p><small id="error_msg_bonus" class="text-red-d-4 size-0-8"></small></p>
+
+                        </div>
+                        <script>
+                            function addDisplayBonus() {
+                                $("#error_msg_bonus").html("");
+
+                                let list = $("#bonus_list_<?=$this->getUniqid()?>");
+                                let bonus_value = $("#bonus_value").val();
+                                let select = $("#bonus_dropdown_<?=$this->getUniqid()?> span");
+                                let type = select.attr("data-type");
+                                let color = select.attr("data-color");
+                                let icon = select.attr("data-icon");
+                                let name = select.attr("data-name");
+
+                                if(bonus_value == "" || bonus_value == null || bonus_value == undefined){
+                                    $("#error_msg_bonus").html("Veuillez saisir une valeur pour le bonus");
+                                    return;
+                                }
+                                if(type == "" || type == null || type == undefined){
+                                    $("#error_msg_bonus").html("Veuillez choisir un type de bonus");
+                                    return;
+                                }
+
+                                let item = document.createElement("li");
+                                item.classList.add("list-group-item");
+                                item.classList.add("p-1");
+                                item.innerHTML = "<div class='input-group input-group-sm mb-3 border-"+color+"-d-4'><span class='input-group-text back-"+color+"-l-4 text-"+color+"-d-4'><img src='"+icon+"' class='icon-xl'> "+name+"</span><input type='text' data-type='"+type+"' class='item_bonus form-control form-control-"+color+"-focus text-"+color+"-d-4' value='"+bonus_value+"'><a onclick='$(this).parent().parent().parent().empty();' class='btn btn-text-red align-self-center' title='Supprimer cette caractéristique'><i class='size-1-2 fa-solid fa-trash'></i></a></div>";
+                                list.append(item);
+
+                                if($('.none-bonus-text') != null){
+                                    $('.none-bonus-text').remove();
+                                }
+                            }
+
+                            function saveBonus() {
+                                let list = $("#bonus_list_<?=$this->getUniqid()?>");
+                                let bonus = [];
+                                let error = false;
+
+                                if(list.children().length > 0){
+                                    list.children().each(function(){
+                                        if($(this).find("input").length == 0) return;
+                                        if($(this).hasClass("none-bonus-text")) return;
+
+                                        let type = $(this).find("input").attr("data-type");
+                                        let value = $(this).find("input").val();
+                                        if(value == "" || value == null || value == undefined){
+                                            $("#error_msg_bonus").html("Veuillez saisir une valeur pour le bonus");
+                                            $(this).find("input").css("border-color", "red");
+                                            error = true;
+                                            return;
+                                        }
+                                        if(type == "" || type == null || type == undefined){
+                                            $("#error_msg_bonus").html("Veuillez choisir un type de bonus");
+                                            $(this).find("input").css("border-color", "red");
+                                            error = true;
+                                            return;
+                                        }
+                                        bonus.push({
+                                            "type" : type,
+                                            "value" : value
+                                        });
+                                    });
+                                } else {
+                                    bonus = "-1";
+                                }
+                                
+                                Item.update('<?=$this->getUniqid()?>', bonus, 'bonus', IS_VALUE);
+                            }
+
+                        </script>
+
+                    <?php return ob_get_clean();
+
+
+                case Content::FORMAT_BADGE:
+                    if(empty($bonus)){
+                        $bonus = [
+                            "aucun" => [
+                                "type" => "none",
+                                "name" => "Aucun bonus",
+                                "value" => "",
+                                "color" => "gray",
+                                "icon" => "",
+                                "path_icon" => ""
+                            ]
+                        ];
+                    }
+
+                    ob_start(); ?>
+                        <div class="d-flex justify-content-start align-content-center flex-wrap">
+                            <?php foreach ($bonus as $type => $caract) { ?>
+                                <span class='me-2 mb-2 badge badge-outline text-<?=$caract['color']?>-d-4 border-<?=$caract['color']?>-d-4'>
+                                    <img class='icon-lg pe-1' src='<?=$caract['path_icon']?>'>
+                                    <span class='size-0-9'><?=ucfirst($caract['name'])?></span> : <?=$caract['value']?></span>
+                            <?php } ?>
+                        </div>
+                    <?php return ob_get_clean();
+
+                case Content::FORMAT_ARRAY:
+                    return $bonus;
+
+                default:
+                    return $this->_bonus;
+            }
+        }
         public function getRecepe(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
@@ -264,124 +483,6 @@ class Item extends Content
                     return $this->_type;
             }
         }
-        // ---------- Plus utile
-        public function getActif(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_EDITABLE:
-                    $checked = ""; 
-                    if($this->_actif){ $checked = "checked"; } else { $checked = ""; }
-                    ob_start(); ?>
-                        <div class="form-check form-switch">
-                            <input onchange="Item.update('<?=$this->getUniqid();?>', this, 'actif', <?=Controller::IS_CHECKBOX?>);"  type="checkbox" class="form-check-input back-actif border-actif" <?=$checked?> id="customSwitchActif<?=$this->getId()?>">
-                            <label class="custom-control-label" for="customSwitchActif<?=$this->getUniqid()?>"><?=$this->getActif(Content::FORMAT_BADGE);?></label>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    if($this->_actif){ 
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='top' title='Item actif' class='badge back-actif-d-2'>Actif</span>";
-                    } else { 
-                        return "<span data-bs-toggle='tooltip' data-bs-placement='top' title='Item passif' class='badge back-actif-d-2'>Passif</span>";
-                    }
-
-                case Content::FORMAT_ICON:
-                    if($this->_actif){ 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title='Item actif' class='fa-solid fa-check-circle text-actif'></i>";
-                    } else { 
-                        return "<i data-bs-toggle='tooltip' data-bs-placement='top' title='Item passif' class='fa-solid fa-ban text-actif'></i>";
-                    }
-                    
-                default:
-                    return $this->_actif;
-            }
-        }
-        public function getTwohands(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_EDITABLE:
-                    $checked = ""; 
-                    if($this->_twohands){ $checked = "checked"; } else { $checked = ""; }
-                    ob_start(); ?>
-                        <div class="form-check form-switch">
-                            <input onchange="Item.update('<?=$this->getUniqid();?>', this, 'twohands', <?=Controller::IS_CHECKBOX?>);"  type="checkbox" class="form-check-input back-twohands border-twohands" <?=$checked?> id="customSwitchtwohands<?=$this->getId()?>">
-                            <label class="custom-control-label" for="customSwitchtwohands<?=$this->getUniqid()?>"><?=$this->getTwohands(Content::FORMAT_BADGE);?></label>
-                        </div>
-                    <?php return ob_get_clean();
-                    
-                case Content::FORMAT_BADGE:
-                    if($this->_twohands){ 
-                        return "<span class='badge back-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='1 main'>1 main <img class='icon' src='medias/icons/modules/onehand.png'></span>";
-                    } else { 
-                        return "<span class='badge back-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='2 mains'>2 mains <img class='icon' src='medias/icons/modules/twohand.png'></span>";
-                    }
-
-                case Content::FORMAT_ICON:
-                    if($this->_twohands){ 
-                        return "<span class='text-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='1 main'>1 <img class='icon' src='medias/icons/modules/onehand.png'></span>";
-                    } else { 
-                        return "<span class='text-twohands-d-2' data-bs-toggle='tooltip' data-bs-placement='top' title='2 mains'>2 <img class='icon' src='medias/icons/modules/twohand.png'></span>";
-                    }
-                    
-                default:
-                    return $this->_twohands;
-            }
-        }
-        public function getPa(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_EDITABLE:
-                    ob_start(); ?>
-                        <div class="mb-1 text-pa-d-2">
-                            <label>Coût en point d'action de l'équipement</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-pa-d-2 text-white"><img class='icon' src='medias/icons/modules/pa.png'></div>
-                                <input 
-                                    onchange="Item.update('<?=$this->getUniqid();?>', this, 'pa');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Coût en point d'action de l'équipement"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_pa?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                
-                case Content::FORMAT_BADGE:
-                    return "<span class='badge back-pa-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Coût en point d'action de l'équipement\">PA {$this->_pa}</span>";
-                   
-                case Content::FORMAT_ICON:
-                    return "<span class='text-pa-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Coût en point d'action de l'équipement\">{$this->_pa} <img class='icon' src='medias/icons/modules/pa.png'></span>";
-                
-                default:
-                    return $this->_pa;
-            }
-        }
-        public function getPo(int $format = Content::FORMAT_BRUT){
-            switch ($format) {
-                case Content::FORMAT_EDITABLE:
-                    ob_start(); ?>
-                        <div class="mb-1 text-po-d-2">
-                            <label>Portée de l'équipement</label>
-                            <div class="input-group">
-                                <div class="input-group-text back-po text-white"><img class="icon" src="medias/icons/modules/po.png"></div>
-                                <input 
-                                    onchange="Item.update('<?=$this->getUniqid();?>', this, 'po');" 
-                                    data-bs-toggle='tooltip' data-bs-placement='bottom' title="Portée de l'équipement"
-                                    type="text" 
-                                    class="form-control form-control-main-focus" 
-                                    value="<?=$this->_po?>">
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-                
-                case Content::FORMAT_BADGE:
-                    return "<span class='badge back-po-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Portée de l'équipement\">PO {$this->_po}</span>";
-                   
-                case Content::FORMAT_ICON:
-                    return "<span class='text-po-d-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title=\"Portée de l'équipement\">{$this->_po} <img class='icon' src='medias/icons/modules/po.png'></span>";
-                
-                default:
-                    return $this->_po;
-            }
-        }
-        // ---------- fin
         public function getPrice(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
@@ -392,9 +493,9 @@ class Item extends Content
                             "class_name" => "Item",
                             "uniqid" => $this->getUniqid(),
                             "input_name" => "price",
-                            "label" => "Prix estimé",
-                            "placeholder" => "Prix estimé",
-                            "tooltip" => "Prix estimé",
+                            "label" => "Prix estimé - Défini",
+                            "placeholder" => $this->getEstimatedPrice(Content::FORMAT_TEXT),
+                            "tooltip" => "Prix estimé - Défini",
                             "value" => $this->_price,
                             "color" => "kamas-d-3",
                             "style" => Style::INPUT_ICON,
@@ -409,7 +510,7 @@ class Item extends Content
                         data : [
                             "content" => "{$this->_price} kamas",
                             "color" => "kamas-d-4",
-                            "tooltip" => "Prix estimé de l'équipement",
+                            "tooltip" => $this->getEstimatedPrice(Content::FORMAT_TEXT),
                             "style" => Style::STYLE_BACK
                         ], 
                         write: false);
@@ -421,7 +522,7 @@ class Item extends Content
                             "style" => Style::ICON_MEDIA,
                             "icon" => "kamas.png",
                             "color" => "kamas-d-3",
-                            "tooltip" => "Prix estimé de l'équipement",
+                            "tooltip" => "Prix estimé de l'équipement - défini",
                             "content" => $this->_price,
                             "content_placement" => Style::POSITION_LEFT
                         ], 
@@ -473,6 +574,89 @@ class Item extends Content
             }
         }
 
+        public function getEstimatedPrice(int $format = Content::FORMAT_BRUT){
+            $estimated_price = 0;
+            if(is_array($this->getBonus())){
+                foreach($this->getBonus() as $bonus){
+                    if(is_array($bonus)){
+                        $multiplier = 1;
+
+                        
+
+                        if(isset($bonus['value'])){
+                            if(is_numeric($bonus['value'])){
+                                $multiplier = (int) $bonus['value'];
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], '%') !== false){
+                                $multiplier = (int) (str_replace('%', '', $bonus['value'])) / 100;
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'x') !== false){
+                                $multiplier = (int) str_replace('x', '', $bonus['value']);
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'k') !== false){
+                                $multiplier = (int) str_replace('k', '000', $bonus['value']);
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'm') !== false){
+                                $multiplier = (int) str_replace('m', '000000', $bonus['value']);
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'b') !== false){
+                                $multiplier = (int) str_replace('b', '000000000', $bonus['value']);
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 't') !== false){
+                                $multiplier = (int) str_replace('t', '000000000000', $bonus['value']);
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'q') !== false){
+                                $multiplier = (int) str_replace('q', '000000000000000', $bonus['value']);
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'Q') !== false){
+                                $multiplier = (int) str_replace('Q', '000000000000000000', $bonus['value']);
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 's') !== false){
+                                $multiplier = (int) str_replace('s', '000000000000000000000', $bonus['value']);
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'S') !== false){
+                                $multiplier = (int) str_replace('S', '000000000000000000000000', $bonus['value']);
+                            }elseif(is_string($bonus['value']) && strpos($bonus['value'], 'o') !== false){
+                                $multiplier = (int) str_replace('o', '000000000000000000000000000', $bonus['value']);
+                            }elseif(is_string($bonus['value'])){
+
+                                $multiplier = preg_replace("/[^0-9]/","",$bonus['value']);  (int) $bonus['value'];
+    
+                            }
+        
+                        }
+                        if(isset($bonus['price']) && is_numeric($bonus['price'])){
+                            $estimated_price += (int) $bonus['price'];
+                        }
+                    }
+                }
+            }
+
+            $view = new View();
+            switch ($format) {
+                
+                case Content::FORMAT_BADGE:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$estimated_price} kamas",
+                            "color" => "kamas-d-4",
+                            "tooltip" => "Prix estimé de l'équipement - calculé automatiquement",
+                            "style" => Style::STYLE_BACK
+                        ], 
+                        write: false);
+                   
+                case Content::FORMAT_ICON:
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "kamas.png",
+                            "color" => "kamas-d-3",
+                            "tooltip" => "Prix estimé de l'équipement - calculé automatiquement",
+                            "content" => $estimated_price,
+                            "content_placement" => Style::POSITION_LEFT
+                        ], 
+                        write: false); 
+
+                case Content::FORMAT_TEXT:
+                    return "Le prix calculé automatiquement est de {$estimated_price} kamas";
+                
+                default:
+                    return $estimated_price;
+            }       
+        }
+
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function setName($data){
             $this->_name = $data;
@@ -490,6 +674,18 @@ class Item extends Content
             $this->_effect = $data;
             return true;
         }
+        public function setBonus($data){
+            if(empty($data)){
+                $this->_bonus = null;
+                return true;
+            }
+            if($this->isSerialized($data)){
+                $this->_bonus = $data;
+            } else {
+                $this->_bonus = serialize($data);
+            }
+            return true;
+        }
         public function setType($data){
             if(in_array($data, Item::TYPES)){
                 $this->_type = $data;
@@ -500,15 +696,6 @@ class Item extends Content
         }
         public function setRecepe($data){
             $this->_recepe = $data;
-            return true;
-        }
-        public function setActif($data){
-            // $this->_actif = $this->returnBool($data);
-            $this->_actif = $data;
-            return true;
-        }
-        public function setTwohands($data){
-            $this->_twohands = $data;
             return true;
         }
         public function setPrice($data){
@@ -522,22 +709,6 @@ class Item extends Content
             } else {
                 $this->_rarity = Item::RARITY_LIST["Très répandu"];
                 throw new Exception("Rareté invalide");
-            }
-        }
-        public function setPo(int $data){
-            if(is_numeric($data)){
-                $this->_po = $data;
-                return true;
-            } else {
-                throw new Exception("La valeur doit être un nombre");
-            }
-        }
-        public function setPa(int $data){
-            if(is_numeric($data)){
-                $this->_pa = $data;
-                return true;
-            } else {
-                throw new Exception("La valeur doit être un nombre");
             }
         }
 }

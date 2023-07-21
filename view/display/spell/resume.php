@@ -32,7 +32,7 @@
             </div>
             <div class="d-flex flex-column justify-content-between ms-auto resume-rapid-menu">
                 <a onclick='User.changeBookmark(this);' data-classe='spell' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
-                <a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=<?=$obj->getUniqid()?>'><i class='fa-solid fa-file-pdf'></i></a>
+                <a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer lkjkjnj un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=<?=$obj->getUniqid()?>'><i class='fa-solid fa-file-pdf'></i></a>
             </div>
         </div>
         <div class="card-hover-showed">
@@ -46,9 +46,9 @@
             <?=$obj->getEffect()?>
             <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
             <?=$obj->getDescription()?>
-            <?php if(!empty($obj->getId_invocation())){ ?>
+            <?php if(!empty($obj->getInvocation())){ ?>
                 <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
-                <div style="margin:-4px;"><?=$obj->getId_invocation(Content::DISPLAY_RESUME, size:290)?></div>
+                <div><?=$obj->getInvocation(Content::DISPLAY_LIST)?></div>
             <?php } ?>
         </div>
     </div>

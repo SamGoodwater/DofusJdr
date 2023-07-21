@@ -158,7 +158,6 @@ class Spell extends Content
         private $_number_between_two_cast=0;
         private $_element = Spell::ELEMENT_NEUTRE;
         private $_category = Spell::CATEGORY_MOB;
-        private $_id_invocation = "";
         private $_is_magic = true;
         private $_powerful = 1;
 
@@ -802,59 +801,6 @@ class Spell extends Content
                     return $this->_category;
             }
         }
-        public function getId_invocation(int $format = Content::FORMAT_BRUT, $size = 300){
-            $view = new View();
-            $manager = new MobManager();
-            if($manager->existsId($this->_id_invocation)){
-                $mob = $manager->getFromId($this->_id_invocation);
-            }
-
-            switch ($format) {
-                case Content::FORMAT_EDITABLE:
-                    ob_start(); ?>
-                        <?php if(!empty($this->_id_invocation)){ ?>
-                            <div style="position:relative;width: 300px;">
-                                <div class="text-center" style="position:absolute;top:5px;right:7px;z-index:9;height:30px;width:30px;">
-                                    <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Détacher cette créature de ce sort" class="p-4 btn-underline-red" onclick="if (confirm('Etes vous sûr de détacher cette créature de ce sort ?')){Spell.update('<?=$this->getUniqid();?>', 0, 'id_invocation', IS_VALUE);}"><i class="fa-solid fa-times"></i></a>
-                                </div>
-                                <?=$this->getId_invocation(Content::DISPLAY_RESUME)?>
-                            </div>
-                        <?php } ?>
-                        <?php 
-                            $view->dispatch(
-                                template_name : "input/search",
-                                data : [
-                                    "id" => "addMob" . $this->getUniqid(),
-                                    "title" => "Lier une invocation au sort",
-                                    "label" => "Rechercher une invocation",
-                                    "placeholder" => "Rechercher une invocation",
-                                    "search_in" => ControllerModule::SEARCH_IN_MOB,
-                                    "parameter" => $this->getUniqid(),
-                                    "action" => ControllerModule::SEARCH_DONE_ADD_MOB_TO_SPELL,
-                                    "comment" => "Une seule créature peut être liée à un sort. Si vous liez une autre créature, la créature actuelle sera remplacée."
-                                ], 
-                                write: true);
-                        ?>  
-                    <?php return ob_get_clean();
-
-                case Content::DISPLAY_RESUME:
-                    if(isset($mob)){
-                        return $mob->getVisual(new Style(["display" => Content::DISPLAY_RESUME, "size" => $size]));
-                    } else {
-                        return "";
-                    }
-
-                case Content::FORMAT_OBJECT:
-                    if(isset($mob)){
-                        return $mob;
-                    } else {
-                        return "";
-                    }
-                    
-                default:
-                    return $this->_id_invocation;
-            }
-        }
         public function getIs_magic(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
@@ -1064,6 +1010,71 @@ class Spell extends Content
             }
         }
 
+        public function getMob(int $format = Content::FORMAT_BRUT, bool $display_remove = false, $size = 300){return $this->getInvocation($format, $display_remove, $size);}
+        public function getInvocation(int $format = Content::FORMAT_BRUT, bool $display_remove = false, $size = 300){
+            $manager = new SpellManager();
+            $mobs = $manager->getLinkMob($this);
+            
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    $view = new View();
+                    $html = $view->dispatch(
+                        template_name : "input/search",
+                        data : [
+                            "id" => "addMob" . $this->getUniqid(),
+                            "title" => "Ajouter une invocation",
+                            "label" => "Rechercher une créature",
+                            "placeholder" => "Rechercher une créature",
+                            "search_in" => ControllerModule::SEARCH_IN_MOB,
+                            "parameter" => $this->getUniqid(),
+                            "action" => ControllerModule::SEARCH_DONE_ADD_MOB_TO_SPELL,
+                        ], 
+                        write: false);
+
+                    return $html . $this->getMob(Content::DISPLAY_RESUME, true);
+
+                case Content::DISPLAY_RESUME:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($mobs)){
+                        return $view->dispatch(
+                            template_name : "mob/list",
+                            data : [
+                                "mobs" => $mobs,
+                                "is_removable" => $display_remove,
+                                "uniqid" => $this->getUniqid(),
+                                "class_name" => "Spell",
+                                "size" => $size
+                            ], 
+                            write: false);
+                    }
+                    return "";
+
+                case Content::DISPLAY_LIST:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($mobs)){
+                        ob_start();
+                            ?> <ul class="list-unstyled"> <?php
+                                foreach ($mobs as $mob) {?>
+                                    <li>
+                                        <?php $view->dispatch(
+                                            template_name : "mob/text",
+                                            data : [
+                                                "obj" => $mob,
+                                                "is_link" => true
+                                            ], 
+                                            write: true); ?>
+                                    </li> <?php
+                                }
+                            ?> </ul> <?php
+                        return ob_get_clean();
+                    }
+                    return "";
+
+                case Content::FORMAT_ARRAY:
+                    return $mobs;
+            }
+        }
+
         public function getFrequency(int $format = Content::FORMAT_BRUT){
             $view = new View();
             $text = $tooltips = "Le sort peut être lancer " . $this->getCast_per_turn() . " tout les " . $this->getNumber_between_two_cast() . ' tour(s)';
@@ -1185,15 +1196,6 @@ class Spell extends Content
                 throw new Exception("Valeur incorrect");
             }
         }
-        public function setId_invocation(int | null $data){
-            $manager = new MobManager;
-            if($manager->existsId($data) || $data == 0){
-                $this->_id_invocation = $data;
-                return true;
-            } else {
-                throw new Exception("Valeur incorrect");
-            }
-        }
         public function setIs_magic(bool | null $data){
             $this->_is_magic = $this->returnBool($data);
             return true;
@@ -1243,6 +1245,44 @@ class Spell extends Content
                         throw new Exception("Une action est requise.");
                     }
                 }
+            }
+        }
+
+        /* Data = array(uniqid => id du mob)
+            Js : Spell.update(UniqidM,{action:'add|remove', uniqid:'uniqIdM'},'mob', IS_VALUE);
+        */
+        public function setInvocation(array $data){return $this->setMob($data);}
+        public function setMob(array $data){ 
+            $manager = new SpellManager;
+            $managerM = new MobManager;
+            if(!isset($data['uniqid'])){throw new Exception("L'uniqid de la créature n'est pas défini");}
+            if($managerM->existsUniqid($data['uniqid'])){
+                $mob = $managerM->getFromUniqid($data['uniqid']); 
+
+                if(isset($data['action'])){
+                    switch ($data['action']) {
+                        case 'add':
+                            if($manager->addLinkMob($this, $mob)){
+                                return true;
+                            }else{
+                                throw new Exception("Erreur lors de l'ajout de la créature");
+                            }
+               
+                        case "remove":
+                            if($manager->removeLinkMob($this, $mob)){
+                                return true;
+                            }else{
+                                throw new Exception("Erreur lors de la suppression de la créature");
+                            }
+
+                        default:
+                            throw new Exception("L'action n'est pas valide");
+                    }
+
+                } else {
+                    throw new Exception("Une action est requise.");
+                }
+
             }
         }
 }

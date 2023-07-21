@@ -29,6 +29,7 @@
                 </div>
             </div>
             <div class="card-hover-showed">
+                <p class="card-text"><?=$obj->getBonus(Content::FORMAT_BADGE)?></p>
                 <p class="card-text"><?=$obj->getEffect()?></p>
                 <div class="nav-item-divider back-main-d-1"></div>
                 <p class="card-text"><small class="size-0-9 text-secondary-d-3"><?=$obj->getDescription()?></small></p>

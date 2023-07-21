@@ -60,9 +60,9 @@
                     <?=$obj->getEffect()?>
                     <div class="m-2 nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
                     <?=$obj->getDescription()?>
-                    <?php if(!empty($obj->getId_invocation())){ ?>
+                    <?php if(!empty($obj->getInvocation())){ ?>
                         <div class="m-2 nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
-                        <div style="margin:-4px;"><?=$obj->getId_invocation(Content::DISPLAY_RESUME, size:290)?></div>
+                        <div><?=$obj->getInvocation(Content::DISPLAY_LIST)?></div>
                     <?php } ?>
                 </div>
             </div>
@@ -110,9 +110,9 @@
                         <?=$obj2->getEffect()?>
                         <div class="m-2 nav-item-divider back-<?=$obj2->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
                         <?=$obj2->getDescription()?>
-                        <?php if(!empty($obj2->getId_invocation())){ ?>
+                        <?php if(!empty($obj2->getInvocation())){ ?>
                             <div class="m-2 nav-item-divider back-<?=$obj2->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
-                            <div style="margin:-4px;"><?=$obj2->getId_invocation(Content::DISPLAY_RESUME, size:290)?></div>
+                            <div><?=$obj2->getInvocation(Content::DISPLAY_LIST)?></div>
                         <?php } ?>
                     </div>
                 </div>

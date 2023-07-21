@@ -131,12 +131,6 @@
                 "3" : "Sort consommable"
             }
         },
-        "id_invocation": {
-            "default" : null,
-            "type" : "int(11)",
-            "null" : true,
-            "description" : ""
-        },
         "is_magic": {
             "default" : true,
             "type" : "bool",

@@ -221,7 +221,7 @@ class Mob extends Content
                             template_name : "icon",
                             data : [
                                 "style" => Style::ICON_MEDIA,
-                                "icon" => "life.svg",
+                                "icon" => "life.png",
                                 "color" => "life-d-2",
                                 "tooltip" => "Calcul des points de vie de la créature",
                                 "content" => $this->_life,
@@ -541,7 +541,7 @@ class Mob extends Content
                             "label" => "Vitalité",
                             "placeholder" => "Vitalité",
                             "tooltip" => "Vitalité",
-                            "value" => $this->_touch,
+                            "value" => $this->_vitality,
                             "color" => "touch-d-2",
                             "style" => Style::INPUT_ICON,
                             "size" => Style::SIZE_SM,
