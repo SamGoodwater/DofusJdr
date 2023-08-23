@@ -39,7 +39,7 @@
                                     <span class="me-1"><?=$link["obj"]->getType(Content::FORMAT_BADGE)?></span>
                                     <span class="ms-1"><?=$link["obj"]->getRarity(Content::FORMAT_BADGE)?></span>          
                                 </p>
-                                <p class="d-flex flex-row justify-content-around mt-1 badge back-white border border-2 border-kamas-d-4">
+                                <p class="d-flex flex-row   justify-content-around mt-1 badge back-white border border-2 border-kamas-d-4">
                                     <?php if(!empty($link['price'])){ ?>
                                         <span class='text-kamas-d-4 size-1-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix de l'objet"><?=$link["price"]?> <img class='icon' src='medias/icons/modules/kamas.png'></span>     
                                     <?php } ?>
@@ -50,7 +50,7 @@
                             </div>
                             <p class="card-text"><?=$link["obj"]->getEffect()?></p>
                         </div>
-                    </div>
+                       </div>
                     <div class="card-hover-showed">
                         <div class="nav-divider back-main-d-1"></div>
                         <p class="card-text size-0-8 text-grey-d-2"><?=$link["obj"]->getDescription()?></p>

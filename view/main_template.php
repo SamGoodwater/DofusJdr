@@ -60,12 +60,12 @@
             <div class="app-btn-show-toolbar-footer" style="display: none;">
                 <a onclick="toogleToolbar(false);toogleFooter(false)"><i class="fa-solid fa-caret-down"></i></a>
             </div>
-
-            <div class='app-content'>
+            
+            <main class='app-content'>
                 <div id="content" class='container'>
 
                 </div>
-            </div>
+            </main>
             
             <?php include_once "footer.php";?>
         </div>

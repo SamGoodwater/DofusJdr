@@ -118,18 +118,18 @@ class Spell extends Content
     const TYPE_DEBUFF = 3;
     const TYPE_INVOCATION = 4;   
     const TYPE_PLACEMENT = 5;   
-    const TYPE_MANIPULATION = 6;   
-    const TYPE_TRANSFORMATION = 7;   
+    const TYPE_HEAL = 6;   
+    const TYPE_TANK = 7;   
 
     const TYPE = [
         "Dommage" => self::TYPE_DAMAGE,
         "Protection" => self::TYPE_PROTECT,
-        "Boost" => self::TYPE_BUFF,
-        "Retrait" => self::TYPE_DEBUFF,
+        "Amélioration" => self::TYPE_BUFF,
+        "Entrave" => self::TYPE_DEBUFF,
         "Invocation" => self::TYPE_INVOCATION,
         "Placement" => self::TYPE_PLACEMENT,
-        "Manipulation" => self::TYPE_MANIPULATION,
-        "Transformation" => self::TYPE_TRANSFORMATION
+        "Soin" => self::TYPE_HEAL,
+        "Tank" => self::TYPE_TANK
     ];
 
     const CATEGORY_CLASS = 1;

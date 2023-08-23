@@ -118,7 +118,7 @@ class File {
                 var regex = /(image|jpg|jpeg|gif|png|svg|bmp|tif|tiff|raw|ico)/ig;
                 let path = form.dataset.viewimgpath + file.name;
                 if(regex.test(file.type)) {
-                    thumbail = "<img src='"+path+"' class='img-fluid' width=30px>";
+                    thumbail = "<img src='"+path+"' alt='Fichier téléchargé' class='img-fluid' width=30px>";
                 }
 
                 progressArea.innerHTML = progressHTML;

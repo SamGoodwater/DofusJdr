@@ -2,10 +2,11 @@
     <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Fermer le menu" onclick="toogleMenu();"><i class="fa-solid fa-times"></i></a>
 </div>
 <div>
-    <a onclick="Page.show('home')" class="brand-logo"><img src="medias/logos/logo.png" width="180"></a>
+    <a onclick="Page.show('home')" class="brand-logo"><img src="medias/logos/logo.png" alt="Logo du site" width="180"></a>
 </div>
 <?php $manager = new PageManager; ?>
-<div class="app-nav-list"> <!-- MENU -->
+
+<aside class="app-nav-list"> <!-- MENU -->
     
     <?php 
     $currentUser = ControllerConnect::getCurrentUser();
@@ -60,4 +61,4 @@
     <div class="p-2 size-0-8 text-secondary-d-4 text-center">
         <?=$GLOBALS['project']['name']?> version <?=$GLOBALS['project']['stability']?> <?=$GLOBALS['project']['version']?> <?=date("Y");?>
     </div>
-</div>
+</aside>
