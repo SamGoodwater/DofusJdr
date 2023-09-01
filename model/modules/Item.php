@@ -232,7 +232,7 @@ class Item extends Content
                     $items_bonus_all = [];
                     foreach (Creature::CARACTERISTICS as $type => $caract) {
                         $items_bonus_all[] = [
-                            "display" => "<span data-type='" .$type."' data-name='".ucfirst($caract['name'])."' data-color='".$caract['color']."' data-icon='medias/icons/modules/".$caract['icon']."' class='badge-outline w-100 m-0 px-2 text-left text-".$caract['color']."-d-4 border-".$caract['color']."-d-4'><img class='icon-lg pe-2' src='medias/icons/modules/".$caract['icon']."' alt=\"Icône du bonus ".$caract['name']."\">" .ucfirst($caract['name'])."</span>",
+                            "display" => "<span data-type='" .$type."' data-name='".ucfirst($caract['name'])."' data-color='".$caract['color']."' data-icon='medias/icons/modules/".$caract['icon']."' class='badge-outline w-100 m-0 px-2 text-left text-".$caract['color']."-d-4 border-".$caract['color']."-d-4'><img class='icon-lg pe-2' src='medias/icons/modules/".$caract['icon']."' alt='Icône du bonus ".$caract['name']."'>" .ucfirst($caract['name'])."</span>",
                             "onclick" => "",
                             "class" => "w-100 m-0 p-0"
                         ];
@@ -339,7 +339,7 @@ class Item extends Content
                                 let item = document.createElement("li");
                                 item.classList.add("list-group-item");
                                 item.classList.add("p-1");
-                                item.innerHTML = "<div class='input-group input-group-sm mb-3 border-"+color+"-d-4'><span class='input-group-text back-"+color+"-l-4 text-"+color+"-d-4'><img src='"+icon+"' alt=\"Icône du bonus "+name+"\" class='icon-xl'> "+name+"</span><input type='text' data-type='"+type+"' class='item_bonus form-control form-control-"+color+"-focus text-"+color+"-d-4' value='"+bonus_value+"'><a onclick='$(this).parent().parent().parent().empty();' class='btn btn-text-red align-self-center' title='Supprimer cette caractéristique'><i class='size-1-2 fa-solid fa-trash'></i></a></div>";
+                                item.innerHTML = "<div class='input-group input-group-sm mb-3 border-"+color+"-d-4'><span class='input-group-text back-"+color+"-l-4 text-"+color+"-d-4'><img src='"+icon+"' alt='Icône du bonus "+name+"' class='icon-xl'> "+name+"</span><input type='text' data-type='"+type+"' class='item_bonus form-control form-control-"+color+"-focus text-"+color+"-d-4' value='"+bonus_value+"'><a onclick='$(this).parent().parent().parent().empty();' class='btn btn-text-red align-self-center' title='Supprimer cette caractéristique'><i class='size-1-2 fa-solid fa-trash'></i></a></div>";
                                 list.append(item);
 
                                 if($('.none-bonus-text') != null){

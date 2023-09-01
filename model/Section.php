@@ -167,7 +167,7 @@ class Section extends Content
                     ob_start(); ?>
                         <section id="section<?=$this->getUniqid()?>" class="sectionselector mb-4" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
                             <div class="section-title d-flex flex-row justify-content-between">
-                                <h2 class="text-secondary-l-2 mb-3 light" style="width:initial;"><?=$this->getTitle()?></h2>
+                                <h2 class="text-secondary-d-3 mb-3 light" style="width:initial;"><?=$this->getTitle()?></h2>
                                 <div class="section-options row justify-content-between text-right">
                                     <div>
                                         <a data-bs-toggle="tooltip" data-bs-placement="left" title="Modifier la section" onclick="Section.showEdit('<?=$this->getUniqid()?>');" class="text-main-d-3 text-main-d-1-hover"><i class="fa-solid fa-edit"></i></a>

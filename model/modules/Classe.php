@@ -217,7 +217,7 @@ class Classe extends Content
                     foreach (Classe::WEAPONS as $name => $weapon) {
                         $items[] = [
                             "label" => $name,
-                            "display" => "<span><img class='icon me-1' src='medias/modules/weapons/".array_search($weapon, Classe::WEAPONS).".svg' alt=\"Icône de l'arme de prédilection de la classe\" >". $name."</span>",
+                            "display" => "<span><img class='icon me-1' src='medias/modules/weapons/".array_search($weapon, Classe::WEAPONS).".svg' alt='Icône de l\'arme de prédilection de la classe' >". $name."</span>",
                             "onclick" => "Classe.update('".$this->getUniqid()."', '".$weapon."', 'weapons_of_choice',".Controller::IS_VALUE.")"
                         ];
                     }
@@ -235,7 +235,7 @@ class Classe extends Content
                         return $view->dispatch(
                             template_name : "badge",
                             data : [
-                                "content" => "<img class='icon me-1' src='".$path."' alt=\"Icône de l'arme de prédilection de la classe\">" . array_search($this->_weapons_of_choice, Classe::WEAPONS),
+                                "content" => "<img class='icon me-1' src='".$path."' alt='Icône de l\'arme de prédilection de la classe'>" . array_search($this->_weapons_of_choice, Classe::WEAPONS),
                                 "color" => "",
                                 "tooltip" => "Arme de prédilection",
                                 "style" => Style::STYLE_NONE
@@ -251,7 +251,7 @@ class Classe extends Content
                         return $view->dispatch(
                             template_name : "badge",
                             data : [
-                                "content" => "<img class='icon me-1' src='".$path."' alt=\"Icône de l'arme de prédilection de la classe\">",
+                                "content" => "<img class='icon me-1' src='".$path."' alt='Icône de l\'arme de prédilection de la classe'>",
                                 "color" => "",
                                 "tooltip" => "Arme de prédilection",
                                 "style" => Style::STYLE_NONE
