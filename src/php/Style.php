@@ -62,6 +62,11 @@ class Style {
     const SIZE_XL = "xl";
     const SIZE_FULL = "full";
 
+    const LINK_BLANK = "_blank";
+    const LINK_SELF = "_self";
+    const LINK_PARENT = "_parent";
+    const LINK_DEFAULT = "";
+
     // Constantes des COULEUR
         const COLOR_ALLOWED = [
             'red',

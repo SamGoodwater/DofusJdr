@@ -15,6 +15,13 @@ class FileManager extends Manager{
     private $_formatallowed = array();
     private $_name = "";
 
+    private $_action_exist_name = FileManager::UPLOAD_ACTION_EXIST_NAME_DEFAULT;
+
+    const UPLOAD_ACTION_EXIST_NAME_REPLACE = 0;
+    const UPLOAD_ACTION_EXIST_NAME_RENAME = 1;
+    const UPLOAD_ACTION_EXIST_NAME_ERROR = 2;
+    const UPLOAD_ACTION_EXIST_NAME_DEFAULT = FileManager::UPLOAD_ACTION_EXIST_NAME_REPLACE;
+
     public function __construct(array $donnees){
         $this->hydrate($donnees);
     }
@@ -64,6 +71,17 @@ class FileManager extends Manager{
     public function getName(){
         return $this->_name;
     }
+    public function getActionExistName(){
+        return $this->_action_exist_name;
+    }
+    public function setActionExistName(int $action){
+        if($action == FileManager::UPLOAD_ACTION_EXIST_NAME_REPLACE || $action == FileManager::UPLOAD_ACTION_EXIST_NAME_RENAME || $action == FileManager::UPLOAD_ACTION_EXIST_NAME_ERROR){
+            $this->_action_exist_name = $action;
+            return true;
+        } else {
+            throw new Exception("L'action n'est pas valide.");
+        }
+    }
     public function upload(){ 
         $return = array(
             "state" => false,
@@ -86,9 +104,39 @@ class FileManager extends Manager{
                     $fileObj = New File($this->getFile()['name']);
                     if(!empty($this->getName())){
                         $path =  $dirname . $this->getName() . "." . $extension_upload;
+                        $path_without_extention =  $dirname . $this->getName();
                     } else {
                         $path =  $dirname . FileManager::formatPath($this->getFile()['name'], false, false);
+                        $path_without_extention =  $dirname . FileManager::formatPath($fileObj->getName(with_extention: false), false, false);
                     }
+
+                    foreach ($this->getListeExtention(self::FORMAT_ALL) as $ext) {
+                        $test_path = $path_without_extention . "." . $ext;
+                        if(file_exists($test_path)){
+                            switch ($this->_action_exist_name) {
+                                case FileManager::UPLOAD_ACTION_EXIST_NAME_REPLACE:
+                                    FileManager::remove($test_path);
+                                break;
+                                case FileManager::UPLOAD_ACTION_EXIST_NAME_RENAME:
+                                    if($test_path == $path){
+                                        $i = 1;
+                                        $path = $path_without_extention . "_" . $i . "." . $extension_upload;
+                                        while (file_exists($test_path)) {
+                                            $path = $path_without_extention . "_" . $i . "." . $extension_upload;
+                                            $i++;
+                                        }
+                                    }
+                                break;
+
+                                case FileManager::UPLOAD_ACTION_EXIST_NAME_ERROR:
+                                    $return['error'] = "Un fichier portant ce nom existe déjà.";
+                                    return $return;
+                                break;
+                            }
+                        }
+                    }
+
+
 
                     if(FileManager::isImage($fileObj) && class_exists('Imagick')){
                         $success = FileManager::add($this->getFile()['tmp_name'], $path);

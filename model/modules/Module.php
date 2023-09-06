@@ -40,7 +40,8 @@ class Module extends Content
           "section" => User::RIGHT_READ,
           "shop" => User::RIGHT_READ,
           "spell" => User::RIGHT_READ,
-          "user" => User::RIGHT_NO
+          "user" => User::RIGHT_NO,
+          "social" => User::RIGHT_READ
       ];
 
     // Style couleur

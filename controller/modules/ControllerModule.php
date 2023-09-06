@@ -13,6 +13,7 @@ abstract class ControllerModule extends Controller{
         public const SEARCH_IN_SHOP = 7;
         public const SEARCH_IN_CONSUMABLE = 8;
         public const SEARCH_IN_CAPABILITY = 9;
+        public const SEARCH_IN_SOCIAL = 10;
 
         public const SELECT_CONTROLLER_FROM_SEARCH_IN = [
             self::SEARCH_IN_ALL => [
@@ -24,7 +25,8 @@ abstract class ControllerModule extends Controller{
                 "npc",
                 "shop",
                 "spell",
-                "capability"
+                "capability",
+                "social"
             ],
             self::SEARCH_IN_SECTION => [
                 "section"
@@ -55,6 +57,9 @@ abstract class ControllerModule extends Controller{
             ],
             self::SEARCH_IN_CAPABILITY => [
                 "capability"
+            ],
+            self::SEARCH_IN_SOCIAL => [
+                "social"
             ]
         ];
     
