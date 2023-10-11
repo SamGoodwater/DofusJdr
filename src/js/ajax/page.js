@@ -61,7 +61,8 @@ class Page extends Controller{
 
         if(is_modal == Page.RESPONSIVE){
             if(getSizeScreen() <= Page.SIZE_MD) {
-                is_modal = false;
+                is_modal = true;
+                size = Page.SIZE_FL;
             } else {
                 is_modal = true;
             }
@@ -155,6 +156,7 @@ class Page extends Controller{
                 html += "</div>";
 
             if(show){
+                $(".app-content .undercontent").remove();
                 $(".app-content").append(html);
                 $('[data-toggle="tooltip"]').tooltip();
             }
@@ -216,7 +218,8 @@ class Page extends Controller{
         var spinner = "<div class='d-flex justify-content-center'><div class='text-main-d-2 spinner-border' role='status'><span class='visually-hidden'>Loading...</span></div></div>";
         $(".app-content #content").html(spinner);
         $(".app-toolbar #title").html("");
-        if($(".app").hasClass("app-compacted")){
+
+        if (isMobileSize()) {
             toogleMenu(true);
         }
 

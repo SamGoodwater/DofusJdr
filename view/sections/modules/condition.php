@@ -37,7 +37,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
-        <div class="d-flex flex-row justify-content-between align-items-end" id='sortableCondition'>
+        <div class="d-flex flex-row justify-content-between align-items-end flex-wrap gap-1" id='sortableCondition'>
             <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'un état', $('#addCondition'), Page.SIZE_MD, true);">Ajouter un état</button>
             <div class="form-check form-switch">
                 <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>

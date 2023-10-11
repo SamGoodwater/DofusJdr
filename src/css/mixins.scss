@@ -1,0 +1,10 @@
+// -------- Mixin pour les flexbox
+// @include flexbox(row, center, center, wrap);
+@mixin flexbox($direction: row, $justify: flex-start, $align-items: stretch, $wrap: nowrap) {
+    display: flex;
+    flex-direction: if($direction, $direction, row);
+    justify-content: if($justify, $justify, flex-start);
+    align-items: if($align-items, $align-items, stretch);
+    flex-wrap: if($wrap, $wrap, nowrap);
+}
+  

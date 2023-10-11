@@ -243,30 +243,30 @@ function showTooltips(launcher, target){
 
 function toogleToolbar($forced_hidden = false){
     if($('.app-toolbar-content').hasClass('hidden') == false || $forced_hidden){
-    $(".app-toolbar-content").addClass("hidden");
-    $(".app-btn-show-toolbar-footer").show("blind", 300);
-    $(".dropdown-item-toogletoolbar-button").text("Afficher la barre d'outils");
+        $(".app-toolbar-content").addClass("hidden");
+        $(".app-btn-show-toolbar-footer").show("blind", 300);
+        $(".dropdown-item-toogletoolbar-button").text("Afficher la barre d'outils");
     } else {
-    $(".app-toolbar-content").removeClass("hidden");
-    $(".app-btn-show-toolbar-footer").hide("blind", 300);
-    $(".dropdown-item-toogletoolbar-button").text("Masquer la barre d'outils");
+        $(".app-toolbar-content").removeClass("hidden");
+        $(".app-btn-show-toolbar-footer").hide("blind", 300);
+        $(".dropdown-item-toogletoolbar-button").text("Masquer la barre d'outils");
     }
 }
 function toogleFooter($forced_hidden = false){
     if($('footer').hasClass('hidden') || $forced_hidden){
-    $("footer").addClass("hidden");
-    $("footer").hide("blind", 300);
+        $("footer").addClass("hidden");
+        $("footer").hide("blind", 300);
     } else {
-    $("footer").removeClass("hidden");
-    $("footer").show("blind", 300);
+        $("footer").removeClass("hidden");
+        $("footer").show("blind", 300);
     }
 }
 function toogleMenu($forced_closed = false){
     if($('.app').hasClass('app-extend') || $forced_closed){
-    $(".app").removeClass("app-extend").addClass("app-fold");
-    $(".app-nav").hide("drop", 300);
+        $(".app").removeClass("app-extend").addClass("app-fold");
+        $(".app-nav").hide("drop", 300);
     } else {
-    $(".app").removeClass("app-fold").addClass("app-extend");
-    $(".app-nav").show("drop", 300);
+        $(".app").removeClass("app-fold").addClass("app-extend");
+        $(".app-nav").show("drop", 300);
     }
 }

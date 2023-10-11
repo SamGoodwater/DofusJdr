@@ -161,20 +161,24 @@ class Section extends Content
                     $ondbldclick="";
                     if(isset($template['editOnDblClick'])){
                         if($template['editOnDblClick']){
-                            $ondbldclick="ondblclick=\"Section.showEdit('".$this->getUniqid()."');\"";
+                            if($user->getRight('page', User::RIGHT_WRITE)){
+                                $ondbldclick="ondblclick=\"Section.showEdit('".$this->getUniqid()."');\"";
+                            }
                         }
                     }
                     ob_start(); ?>
-                        <section id="section<?=$this->getUniqid()?>" class="sectionselector mb-4" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
+                        <section id="section<?=$this->getUniqid()?>" data-type="<?=trim($this->getType(), ".php")?>" class="sectionselector mb-4" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
                             <div class="section-title d-flex flex-row justify-content-between">
                                 <h2 class="text-secondary-d-3 mb-3 light" style="width:initial;"><?=$this->getTitle()?></h2>
-                                <div class="section-options row justify-content-between text-right">
-                                    <div>
-                                        <a data-bs-toggle="tooltip" data-bs-placement="left" title="Modifier la section" onclick="Section.showEdit('<?=$this->getUniqid()?>');" class="text-main-d-3 text-main-d-1-hover"><i class="fa-solid fa-edit"></i></a>
-                                        <a data-bs-toggle="tooltip" data-bs-placement="left" title="Glisser à déposer pour trier les sections dans l'ordre southaiter." class="handleSection text-main-d-3 text-main-d-1-hover"><i class="fa-solid fa-sort"></i></a>
-                                        <a data-bs-toggle="tooltip" data-bs-placement="left" title="Supprimer la section" onclick="Section.remove('<?=$this->getUniqid()?>')" class="trash text-main-d-3 text-red-d-1-hover"><i class="fa-solid fa-trash"></i></a> 
+                                <?php if($user->getRight('page', User::RIGHT_WRITE)){ ?>
+                                    <div class="section-options row justify-content-between text-right">
+                                        <div>
+                                            <a data-bs-toggle="tooltip" data-bs-placement="left" title="Modifier la section" onclick="Section.showEdit('<?=$this->getUniqid()?>');" class="text-main-d-3 text-main-d-1-hover"><i class="fa-solid fa-edit"></i></a>
+                                            <a data-bs-toggle="tooltip" data-bs-placement="left" title="Glisser à déposer pour trier les sections dans l'ordre southaiter." class="handleSection text-main-d-3 text-main-d-1-hover"><i class="fa-solid fa-sort"></i></a>
+                                            <a data-bs-toggle="tooltip" data-bs-placement="left" title="Supprimer la section" onclick="Section.remove('<?=$this->getUniqid()?>')" class="trash text-main-d-3 text-red-d-1-hover"><i class="fa-solid fa-trash"></i></a> 
+                                        </div>
                                     </div>
-                                </div>
+                                <?php } ?>
                             </div>
                             <div class="sectionContentSelector">
                                 <?=$template["content"]?>

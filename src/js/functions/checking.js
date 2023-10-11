@@ -7,16 +7,22 @@ function isMobile(){
     }
 }
 function getSizeScreen(){
-let width = $(window).width();
-if(width <= Page.SIZE_SM){
-    return Page.SIZE_SM;
-} else if(width <= Page.SIZE_MD){
-    return Page.SIZE_MD;
-} else if(width <= Page.SIZE_LG){
-    return Page.SIZE_LG;
-} else if(width <= Page.SIZE_XL){
-    return Page.SIZE_XL;
-} else {
-    return Page.SIZE_XXL;
+    let width = $(window).width();
+    if(width <= Page.SIZE_SM){
+        return Page.SIZE_SM;
+    } else if(width <= Page.SIZE_MD){
+        return Page.SIZE_MD;
+    } else if(width <= Page.SIZE_LG){
+        return Page.SIZE_LG;
+    } else if(width <= Page.SIZE_XL){
+        return Page.SIZE_XL;
+    } else {
+        return Page.SIZE_XXL;
+    }
 }
+function isMobileSize(){
+    var x = window.matchMedia("(max-width: 768px)");
+    if (x.matches) {
+        return true;
+    }
 }
