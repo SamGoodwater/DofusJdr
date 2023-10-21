@@ -39,15 +39,15 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end flex-wrap gap-1" id='sortableItems'>
             <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'une aptitude', $('#addCapability'), Page.SIZE_MD, true);">Ajouter une aptitude</button>
-            <div id="selectorCategoryListCheckbox" class="dropdown">
+            <div id="selectorSpcializationListCheckbox" class="dropdown">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories des aptitudes</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
                     <?php $checked = "";
-                    foreach (Capability::CATEGORY as $key => $category_) { ?>
+                    foreach (Capability::SPECIALIZATION as $id => $specialization) { ?>
                         <li>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input selectorCategory" type="checkbox" id="CheckboxCategory<?=$category_?>" value="<?=$category_?>">
-                                <label class="form-check-label badge back-<?=Style::getColorFromLetter($category_)?>-d-2 text-white" for="CheckboxCategory<?=$category_?>"><?=ucfirst($key)?></label>
+                                <input class="form-check-input selectorSpecialization" type="checkbox" id="CheckboxSpecialization<?=$id?>" value="<?=$id?>">
+                                <label class="form-check-label badge back-<?=$specialization['color']?>-d-2 text-white" for="CheckboxSpecialization<?=$id?>"><?=ucfirst($specialization['name'])?></label>
                             </div>
                         </li>
                     <?php } ?>
@@ -130,21 +130,23 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                     <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fa-solid fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
-                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="resume"></th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="resume1"></th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="resume2"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="is_magic"><i class="fa-solid fa-fist-raised text-brown-d-2"></i> | <i class="fa-solid fa-magic text-purple-d-2"></i></th>
-                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="category">Catégorie</th>
-                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="element">Elèment</th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="element">Élément</th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="powerful">Puissance</th>
-                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="type">Type</th>
-                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="level"><span class="text-level">Niveau</span></th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="time_before_use_again"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Durée avant réutilisation"><img class='icon-sm' src='medias/icons/modules/time_before_use_again.svg'></span></th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Portée de l'aptitude"><img class='icon' src='medias/icons/modules/po.png'></span></th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="po_editable"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Aptitude au corps à corps, à distance avec une portée modifiable ou non"><img class='icon' src='medias/icons/modules/po_editable.png'></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="specialization">Spécialisation</th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="level"><span class="text-level">Niveau</span></th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="time_before_use_again"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Durée avant réutilisation"><img class='icon-sm' src='medias/icons/modules/time_before_use_again.svg'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="pa"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Coût en points d'action de l'aptitude"><img class='icon' src='medias/icons/modules/pa.png'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Portée de l'aptitude"><img class='icon' src='medias/icons/modules/po.png'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="po_editable"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Aptitude au corps à corps, à distance avec une portée modifiable ou non"><img class='icon' src='medias/icons/modules/po_editable.png'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="ritual_available"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="L'aptitude peut être ou non lancer à l'aide d'un rituel">Rituel</th>                    
                     <th data-sortable="false" data-visible="false"  data-field="description">Description</th>
                     <th data-sortable="false" data-visible="false"  data-field="effect">Effets</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>
                 </tr>
             </thead>
 
@@ -183,8 +185,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         type:IS_LIST_OF_CHECKBOX
                     },
                     {
-                        selector:"#selectorCategoryListCheckbox",
-                        name:"category",
+                        selector:"#selectorSpecializationListCheckbox",
+                        name:"specialization",
                         type:IS_LIST_OF_CHECKBOX
                     }
                 ]

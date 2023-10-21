@@ -129,6 +129,28 @@ class File
                 break;
             }
         }
+        public function getWidth(){
+            if(!FileManager::isImage($this) || empty($this->getPath() || $this->getExtention() == "svg")){
+                return -1;
+            }
+            $size = getimagesize($this->getPath());
+            if(is_array($size) && count($size) > 0){
+                if(isset($size[0])){ return $size[0];} else { return -1;}
+            } else {
+                return -1;
+            }
+        }
+        public function getHeight(){
+            if(!FileManager::isImage($this) || empty($this->getPath() || $this->getExtention() == "svg")){
+                return -1;
+            }
+            $size = getimagesize($this->getPath());
+            if(is_array($size) && count($size) > 0){
+                if(isset($size[1])){ return $size[1];} else { return -1;}
+            } else {
+                return -1;
+            }
+        }
         public function getThumbnail(){
             if($this->existThumbnail()){
                 return new File($this->getDirname() . $this->getName(with_extention:false) ."_thumb". $this->getExtention());

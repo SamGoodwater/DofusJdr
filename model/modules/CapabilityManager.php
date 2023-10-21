@@ -3,22 +3,13 @@ class CapabilityManager extends Manager
 {
 
 // GET
-    public function getAll(array $element = [], array $category = [], array $level = [], bool $usable = false, int $offset = -1, int $limit = -1){
+    public function getAll(array $element = [], array $level = [], bool $usable = false, int $offset = -1, int $limit = -1){
         $limitClause = ($limit != -1 && $offset != -1) ? 'LIMIT :offset, :limit' : '';
         $whereClause = ($usable) ? 'WHERE usable = 1' : '';
         if(!empty($level)){
             $whereClause .= ($whereClause == '') ? 'WHERE level IN (' : ' AND level IN (';
             foreach ($level as $value) {
                 if($value > 0 && $value <= 20){
-                    $whereClause .= $value .",";
-                }
-            }
-            $whereClause = substr($whereClause, 0, -1).")";
-        }
-        if(!empty($category)){
-            $whereClause .= ($whereClause == '') ? 'WHERE category IN (' : ' AND category IN (';
-            foreach ($category as $value) {
-                if(in_array($value, Capability::CATEGORY)){
                     $whereClause .= $value .",";
                 }
             }
@@ -74,21 +65,12 @@ class CapabilityManager extends Manager
         return new Capability($this->securite($req));
     }
 
-    public function countAll(bool $usable = false, array $level = array(), array $category = array(), array $element = array()){
+    public function countAll(bool $usable = false, array $level = array(), array $element = array()){
         $whereClause = ($usable) ? 'WHERE usable = 1' : '';
         if(!empty($level)){
             $whereClause .= ($whereClause == '') ? 'WHERE level IN (' : ' AND level IN (';
             foreach ($level as $value) {
                 if($value > 0 && $value <= 20){
-                    $whereClause .= $value .",";
-                }
-            }
-            $whereClause = substr($whereClause, 0, -1).")";
-        }
-        if(!empty($category)){
-            $whereClause .= ($whereClause == '') ? 'WHERE category IN (' : ' AND category IN (';
-            foreach ($category as $value) {
-                if(in_array($value, Capability::CATEGORY)){
                     $whereClause .= $value .",";
                 }
             }
@@ -170,12 +152,13 @@ class CapabilityManager extends Manager
                     description,
                     effect,
                     level,
+                    pa,
                     po,
                     po_editable,
                     time_before_use_again,
                     element,
-                    category,
                     is_magic,
+                    ritual_available,
                     powerful,
                     usable
                    )
@@ -187,11 +170,12 @@ class CapabilityManager extends Manager
                     :description,
                     :effect,
                     :level,
+                    :pa,
                     :po,
                     :po_editable,
                     :time_before_use_again,
                     :element,
-                    :category,
+                    :ritual_available,
                     :is_magic,
                     :powerful,
                     :usable
@@ -205,12 +189,13 @@ class CapabilityManager extends Manager
             'description' => $capability->getDescription(),
             'effect' => $capability->getEffect(),
             'level' => $capability->getLevel(),
+            'pa' => $capability->getPa(),
             'po' => $capability->getPo(),
             'po_editable' => $capability->getPo_editable(),
             'time_before_use_again' => $capability->getTime_before_use_again(),
             "element" => $capability->getElement(),
-            "category" => $capability->getCategory(),
             "is_magic" => $capability->getIs_magic(),
+            "ritual_available" => $capability->getRitual_available(),
             "powerful" => $capability->getPowerful(),
             "usable" => $capability->getUsable()
         ));
@@ -228,8 +213,8 @@ class CapabilityManager extends Manager
                     po_editable=:po_editable,
                     time_before_use_again=:time_before_use_again,
                     element=:element,
-                    category=:category,
                     is_magic=:is_magic,
+                    ritual_available=:ritual_available,
                     powerful=:powerful,
                     usable=:usable
             WHERE id = :id');
@@ -247,8 +232,8 @@ class CapabilityManager extends Manager
             'po_editable' => $capability->getPo_editable(),
             'time_before_use_again' => $capability->getTime_before_use_again(),
             "element" => $capability->getElement(),
-            "category" => $capability->getCategory(),
             "is_magic" => $capability->getIs_magic(),
+            "ritual_available" => $capability->getRitual_available(),
             "powerful" => $capability->getPowerful(),
             "usable" => $capability->getUsable()
             ));
@@ -256,56 +241,56 @@ class CapabilityManager extends Manager
     public function delete(Capability $object){
         $managerUser = new UserManager();
         $managerUser->removeBookmarkFromObj($object);
-        $this->removeAllLinkTypeFromCapability($object);
+        $this->removeAllLinkSpecializationFromCapability($object);
         $req = $this->_bdd->prepare('DELETE FROM capability WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }
 
-    // Link Type
-    public function getLinkType(Capability $capability){
-        $req = $this->_bdd->prepare('SELECT type FROM link_capability_type INNER JOIN capability ON link_capability_type.id_capability = capability.id WHERE link_capability_type.id_capability = ? ORDER BY link_capability_type.type');
+    // Link Specialization
+    public function getLinkSpecialization(Capability $capability){
+        $req = $this->_bdd->prepare('SELECT specialization FROM link_capability_specialization INNER JOIN capability ON link_capability_specialization.id_capability = capability.id WHERE link_capability_specialization.id_capability = ? ORDER BY link_capability_specialization.specialization');
         $req->execute(array($capability->getId()));
         $ret = $req->fetchAll(PDO::FETCH_ASSOC);
         if(empty($ret)){return "";}
         $return = array();
         foreach ($ret as $link) {
-            if(in_array($link['type'], Capability::TYPE)){
-                $return[] = $link['type'];
+            if(isset(Capability::SPECIALIZATION[$link['specialization']])){
+                $return[] = $link['specialization'];
             }
         }
         return $return;
     }
-    public function existsLinkType(Capability $capability, $type){
-        $req = $this->_bdd->prepare('SELECT id FROM link_capability_type WHERE id_capability = ? AND type = ?');
-        $req->execute(array($capability->getId(), $type));
+    public function existsLinkSpecialization(Capability $capability, $specialization){
+        $req = $this->_bdd->prepare('SELECT id FROM link_capability_specialization WHERE id_capability = ? AND specialization = ?');
+        $req->execute(array($capability->getId(), $specialization));
         return $req->rowCount();
     } 
-    public function addLinkType(Capability $capability, $type){
-        if($this->existsLinkType($capability, $type)){return false;}
-        $req = $this->_bdd->prepare('INSERT INTO link_capability_type(
+    public function addLinkSpecialization(Capability $capability, $specialization){
+        if($this->existsLinkSpecialization($capability, $specialization)){return false;}
+        $req = $this->_bdd->prepare('INSERT INTO link_capability_specialization(
                     id_capability,
-                    type
+                    specialization
                 )
             VALUES (
                     :id_capability,
-                    :type
+                    :specialization
                 )');
 
         return $req->execute(array(
             "id_capability" => $capability->getId(),
-            "type"=> $type,
+            "specialization"=> $specialization,
         ));
 
         // Renvoi le dernier ingredient ajouté
-        $post = $this->_bdd->prepare('SELECT id FROM link_capability_type ORDER BY id DESC LIMIT 1');
+        $post = $this->_bdd->prepare('SELECT id FROM link_capability_specialization ORDER BY id DESC LIMIT 1');
         return $post->execute();
     }
-    public function removeLinkType(Capability $capability, $type){
-        $req = $this->_bdd->prepare('DELETE FROM link_capability_type WHERE id_capability = :id_capability AND type = :type');
-        return $req->execute(array("id_capability" =>  $capability->getId(), "type" =>  $type));
+    public function removeLinkSpecialization(Capability $capability, $specialization){
+        $req = $this->_bdd->prepare('DELETE FROM link_capability_specialization WHERE id_capability = :id_capability AND specialization = :specialization');
+        return $req->execute(array("id_capability" =>  $capability->getId(), "specialization" =>  $specialization));
     }
-    public function removeAllLinkTypeFromCapability(Capability $capability){
-        $req = $this->_bdd->prepare('DELETE FROM link_capability_type WHERE id_capability = :id');
+    public function removeAllLinkSpecializationFromCapability(Capability $capability){
+        $req = $this->_bdd->prepare('DELETE FROM link_capability_specialization WHERE id_capability = :id');
         return $req->execute(array("id" =>  $capability->getId()));
     }
 

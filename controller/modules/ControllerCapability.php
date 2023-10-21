@@ -31,16 +31,6 @@ class ControllerCapability extends ControllerModule{
         }
       } else {$element = [];}
 
-      $category=[];
-      if(isset($_REQUEST['category'])){
-        if(empty($_REQUEST['category'])){$category = [];
-        } else{
-          foreach (array_filter(explode("|", $_REQUEST['category'])) as $value) {
-            if(in_array($value, Capability::CATEGORY)){$category[] = $value;}
-          }
-        }
-      } else {$category = [];}
-
       $level=[];
       if(isset($_REQUEST['level'])){
         if(empty($_REQUEST['level'])){$level = [];
@@ -53,8 +43,7 @@ class ControllerCapability extends ControllerModule{
 
       $return['value'] = $manager->countAll(
         usable:$usable, 
-        element:$element, 
-        category:$category, 
+        element:$element,
         level:$level
       );
       $return['state'] = true;
@@ -88,16 +77,6 @@ class ControllerCapability extends ControllerModule{
         }
       } else {$element = [];}
 
-      $category=[];
-      if(isset($_REQUEST['category'])){
-        if(empty($_REQUEST['category'])){$category = [];
-        } else{
-          foreach (array_filter(explode("|", $_REQUEST['category'])) as $value) {
-            if(in_array($value, Capability::CATEGORY)){$category[] = $value;}
-          }
-        }
-      } else {$category = [];}
-
       $level=[];
       if(isset($_REQUEST['level'])){
         if(empty($_REQUEST['level'])){$level = [];
@@ -123,7 +102,6 @@ class ControllerCapability extends ControllerModule{
 
       $objs = $managerS->getAll(
         element:$element, 
-        category:$category, 
         level:$level, 
         usable:$usable,
         offset:$offset,
@@ -133,13 +111,21 @@ class ControllerCapability extends ControllerModule{
       foreach ($objs as $obj) {
         ob_start();?>
           <div class="text-left">
-              <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
-              <?=$obj->getIs_magic(Content::FORMAT_BADGE)?>
-              <?=$obj->getElement(Content::FORMAT_BADGE)?>
-              <?=$obj->getCategory(Content::FORMAT_BADGE)?>
-              <?=$obj->getType(Content::FORMAT_BADGE)?>
+            <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
+            <?=$obj->getIs_magic(Content::FORMAT_BADGE)?>
+            <?=$obj->getRitual_available(Content::FORMAT_BADGE, true)?>
+            <?=$obj->getElement(Content::FORMAT_BADGE)?>
           </div>
-        <?php $resume = ob_get_clean();
+        <?php $resume1 = ob_get_clean();
+
+        ob_start();?>
+          <div class="text-left">
+            <?=$obj->getTime_before_use_again(Content::FORMAT_BADGE)?>
+            <?=$obj->getPa(Content::FORMAT_ICON, true)?>
+            <?=$obj->getPo(Content::FORMAT_BADGE)?>
+            <?=$obj->getPo_editable(Content::FORMAT_BADGE)?>
+          </div>
+        <?php $resume2 = ob_get_clean();
         
         $bookmark_icon = Style::ICON_REGULAR;
         if($currentUser->in_bookmark($obj)){
@@ -160,18 +146,20 @@ class ControllerCapability extends ControllerModule{
           'description' => $obj->getDescription(),
           'effect' => $obj->getEffect(),
           'level' => $obj->getLevel(Content::FORMAT_ICON),
+          'pa' => $obj->getPa(Content::FORMAT_ICON),
           'po' => $obj->getPo(Content::FORMAT_ICON),
           'po_editable' => $obj->getPo_editable(Content::FORMAT_ICON),
           'time_before_use_again' => $obj->getTime_before_use_again(Content::FORMAT_ICON),
           'element' => $obj->getElement(Content::FORMAT_BADGE),
-          'category' => $obj->getCategory(Content::FORMAT_BADGE),
-          'type' => $obj->getType(Content::FORMAT_BADGE),
+          'specialization' => $obj->getSpecialization(Content::FORMAT_BADGE),
+          'ritual_available' => $obj->getRitual_available(Content::FORMAT_BADGE),
           'is_magic' => $obj->getIs_magic(Content::FORMAT_ICON),
           'powerful' => $obj->getPowerful(Content::FORMAT_BADGE),
           'path_img' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
           'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='capability' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
-          'resume' => $resume,
+          'resume1' => $resume1,
+          'resume2' => $resume2,
           'edit' => $edit,
           'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=capability&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
           'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
@@ -207,13 +195,21 @@ class ControllerCapability extends ControllerModule{
             $obj = $managerS->getFromUniqid($_REQUEST['uniqid']);
             ob_start();?>
               <div class="text-left">
-                  <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
-                  <?=$obj->getIs_magic(Content::FORMAT_BADGE)?>
-                  <?=$obj->getElement(Content::FORMAT_BADGE)?>
-                  <?=$obj->getCategory(Content::FORMAT_BADGE)?>
-                  <?=$obj->getType(Content::FORMAT_BADGE)?>
+                <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
+                <?=$obj->getIs_magic(Content::FORMAT_BADGE)?>
+                <?=$obj->getRitual_available(Content::FORMAT_BADGE, true)?>
+                <?=$obj->getElement(Content::FORMAT_BADGE)?>
               </div>
-            <?php $resume = ob_get_clean();
+            <?php $resume1 = ob_get_clean();
+
+            ob_start();?>
+              <div class="text-left">
+                <?=$obj->getTime_before_use_again(Content::FORMAT_BADGE)?>
+                <?=$obj->getPa(Content::FORMAT_ICON, true)?>
+                <?=$obj->getPo(Content::FORMAT_BADGE)?>
+                <?=$obj->getPo_editable(Content::FORMAT_BADGE)?>
+              </div>
+            <?php $resume2 = ob_get_clean();
 
             $bookmark_icon = Style::ICON_REGULAR;
             if($currentUser->in_bookmark($obj)){
@@ -226,7 +222,7 @@ class ControllerCapability extends ControllerModule{
             }
 
             $return["value"] = array(
-              'id' => $obj->getId(),
+              'id' => $obj->getId(Content::FORMAT_BADGE),
               'uniqid' => $obj->getUniqid(),
               'timestamp_add' => $obj->getTimestamp_add(Content::DATE_FR),
               'timestamp_updated' => $obj->getTimestamp_updated(Content::DATE_FR),
@@ -234,18 +230,20 @@ class ControllerCapability extends ControllerModule{
               'description' => $obj->getDescription(),
               'effect' => $obj->getEffect(),
               'level' => $obj->getLevel(Content::FORMAT_ICON),
+              'pa' => $obj->getPa(Content::FORMAT_ICON),
               'po' => $obj->getPo(Content::FORMAT_ICON),
               'po_editable' => $obj->getPo_editable(Content::FORMAT_ICON),
               'time_before_use_again' => $obj->getTime_before_use_again(Content::FORMAT_ICON),
               'element' => $obj->getElement(Content::FORMAT_BADGE),
-              'category' => $obj->getCategory(Content::FORMAT_BADGE),
+              'specialization' => $obj->getSpecialization(Content::FORMAT_BADGE),
+              'ritual_available' => $obj->getRitual_available(Content::FORMAT_BADGE),
               'is_magic' => $obj->getIs_magic(Content::FORMAT_ICON),
               'powerful' => $obj->getPowerful(Content::FORMAT_BADGE),
-              'type' => $obj->getType(Content::FORMAT_BADGE),
-              'path_img' => $obj->getFile('logo',new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
+              'path_img' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
               'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='capability' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
-              'resume' => $resume,
+              'resume1' => $resume1,
+              'resume2' => $resume2,
               'edit' => $edit,
               'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=capability&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
               'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))

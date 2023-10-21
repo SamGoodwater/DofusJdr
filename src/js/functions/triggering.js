@@ -270,3 +270,20 @@ function toogleMenu($forced_closed = false){
         $(".app-nav").show("drop", 300);
     }
 }
+
+function checkboxButtonToogle(checkbox, classe, uniqid, nameofattr, valueofattr, inputname){
+    if($(checkbox).is(":checked")){
+        classe.update(uniqid, {action: "add", [nameofattr]: valueofattr}, inputname, IS_VALUE);
+        if($(checkbox).data('color') != ''){
+            $(checkbox).parent().find('label').addClass('back-'+$(checkbox).data('color')+'-d-2');
+            $(checkbox).parent().find('label').addClass('text-white bold');
+        }
+
+    } else {
+        classe.update(uniqid, {action: "remove", [nameofattr]: valueofattr}, inputname, IS_VALUE);
+        if($(checkbox).data('color') != ''){
+            $(checkbox).parent().find('label').removeClass('back-'+$(checkbox).data('color')+'-d-2');
+            $(checkbox).parent().find('label').removeClass('text-white bold');
+        }
+    }
+}

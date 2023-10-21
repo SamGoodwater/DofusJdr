@@ -19,13 +19,13 @@
                 <div class="d-flex flex-wrap mb-2">
                     <div class="mx-2"><?=$obj->getLevel(Content::FORMAT_BADGE)?></div>
                     <div class="mx-2"><?=$obj->getIs_magic(Content::FORMAT_BADGE)?></div>
-                    <div class="mx-2"><?=$obj->getCategory(Content::FORMAT_BADGE)?></div>
+                    <div class="mx-2"><?=$obj->getRitual_available(Content::FORMAT_BADGE)?></div>
                     <div class="mx-2"><?=$obj->getPowerful(Content::FORMAT_BADGE)?></div>
                     <div class="mx-2"><?=$obj->getElement(Content::FORMAT_BADGE)?></div>
-                    <div class="mx-2"><?=$obj->getType(Content::FORMAT_BADGE)?></div>
                 </div>
                 <div class="row justify-content-between">
                     <div class="col-auto">
+                        <div><?=$obj->getPa(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getTime_before_use_again(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getPo_editable(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getPo(Content::FORMAT_BADGE)?></div>
@@ -37,6 +37,7 @@
                         <?php } ?>
                     </div>                      
                 </div>
+                <div class="row"><?=$obj->getSpecialization(Content::FORMAT_BADGE)?></div>
             </div>
         </div>
     </div>

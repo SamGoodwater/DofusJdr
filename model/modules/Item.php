@@ -231,8 +231,15 @@ class Item extends Content
                    
                     $items_bonus_all = [];
                     foreach (Creature::CARACTERISTICS as $type => $caract) {
+                        $size = "-lg";
+                        if(empty($caract['icon'])){
+                            $caract['icon'] = "skill.png";
+                        }
+                        $file = new File("medias/icons/modules/" . $caract['icon']);
+                        if($file->getHeight() > 45 || $file->getExtention() == "svg"){$size = "";}
+
                         $items_bonus_all[] = [
-                            "display" => "<span data-type='" .$type."' data-name='".ucfirst($caract['name'])."' data-color='".$caract['color']."' data-icon='medias/icons/modules/".$caract['icon']."' class='badge-outline w-100 m-0 px-2 text-left text-".$caract['color']."-d-4 border-".$caract['color']."-d-4'><img class='icon-lg pe-2' src='medias/icons/modules/".$caract['icon']."' alt='Icône du bonus ".$caract['name']."'>" .ucfirst($caract['name'])."</span>",
+                            "display" => "<span data-type='" .$type."' data-name='".ucfirst($caract['name'])."' data-color='".$caract['color']."' data-icon='medias/icons/modules/".$caract['icon']."' class='badge-outline w-100 m-0 px-2 text-left text-".$caract['color']."-d-4 border-".$caract['color']."-d-4'><img class='icon".$size." pe-2' src='medias/icons/modules/".$caract['icon']."' alt='Icône du bonus ".$caract['name']."'>" .ucfirst($caract['name'])."</span>",
                             "onclick" => "",
                             "class" => "w-100 m-0 p-0"
                         ];
@@ -240,13 +247,20 @@ class Item extends Content
 
                     $items_bonus = [];
                     foreach ($bonus as $type => $caract) {
-
-
+                        $size = "-lg";
+                        if(empty($caract['path_icon']) ){
+                            $caract['path_icon'] = "skill.png";
+                        }
+                        if(FileManager::isDir($caract['path_icon'])){
+                            $caract['path_icon'] .= "skill.png";
+                        }
+                        $file = new File($caract['path_icon']);
+                        if($file->getExtention() == "svg" || $file->getHeight() > 45){$size = "";} 
                         ob_start(); ?>
 
                             <div class='input-group input-group-sm mb-3 border-<?=$caract['color']?>-d-4'>
                                 <span class='input-group-text back-<?=$caract['color']?>-l-4 text-<?=$caract['color']?>-d-4'>
-                                    <img src='<?=$caract['path_icon']?>' alt="Icône du bonus <?=$caract['name']?>" class='icon-xl'><?=ucfirst($caract['name'])?>
+                                    <img src='<?=$caract['path_icon']?>' alt="Icône du bonus <?=$caract['name']?>" class='icon<?=$size?>'><?=ucfirst($caract['name'])?>
                                 </span>
                                 <input type='text' data-type="<?=$caract['type']?>" class='item_bonus form-control form-control-<?=$caract['color']?>-focus text-<?=$caract['color']?>-d-4' value='<?=$caract['value']?>'>
                                 <a onclick='$(this).parent().parent().parent().empty();' class='btn btn-text-red align-self-center' title='Supprimer cette caractéristique'>
@@ -397,16 +411,25 @@ class Item extends Content
                                 "value" => "",
                                 "color" => "gray",
                                 "icon" => "",
-                                "path_icon" => ""
+                                "path_icon" => "medias/icons/none.svg"
                             ]
                         ];
                     }
 
                     ob_start(); ?>
                         <div class="d-flex justify-content-start align-content-center flex-wrap">
-                            <?php foreach ($bonus as $type => $caract) { ?>
+                            <?php foreach ($bonus as $type => $caract) { 
+                                $size = "-lg";
+                                if(empty($caract['path_icon']) ){
+                                    $caract['path_icon'] = "skill.png";
+                                }
+                                if(FileManager::isDir($caract['path_icon'])){
+                                    $caract['path_icon'] .= "skill.png";
+                                }
+                                $file = new File($caract['path_icon']);
+                                if($file->getExtention() == "svg" || $file->getHeight() > 45){$size = "";} ?>
                                 <span class='me-2 mb-2 badge badge-outline text-<?=$caract['color']?>-d-4 border-<?=$caract['color']?>-d-4'>
-                                    <img class='icon-lg pe-1' src='<?=$caract['path_icon']?>' alt="Icône du bonus <?=$caract['name']?>">
+                                    <img class='icon<?=$size?> pe-1' src='<?=$caract['path_icon']?>' alt="Icône du bonus <?=$caract['name']?>">
                                     <span class='size-0-9'><?=ucfirst($caract['name'])?></span> : <?=$caract['value']?></span>
                             <?php } ?>
                         </div>

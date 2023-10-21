@@ -123,6 +123,42 @@ class Creature extends Content
             "color" => "chance",
             "price" => 1000
         ],
+        "do_fixe_neutre" => [
+            "name" => "Dommage fixe neutre",
+            "icon" => "do_fixe_neutre.png",
+            "color" => "neutre",
+            "price" => 700
+        ],
+        "do_fixe_terre" => [
+            "name" => "Dommage fixe terre",
+            "icon" => "do_fixe_terre.png",
+            "color" => "terre",
+            "price" => 700
+        ],
+        "do_fixe_feu" => [
+            "name" => "Dommage fixe feu",
+            "icon" => "do_fixe_feu.png",
+            "color" => "feu",
+            "price" => 700
+        ],
+        "do_fixe_air" => [
+            "name" => "Dommage fixe air",
+            "icon" => "do_fixe_air.png",
+            "color" => "air",
+            "price" => 700
+        ],
+        "do_fixe_eau" => [
+            "name" => "Dommage fixe eau",
+            "icon" => "do_fixe_eau.png",
+            "color" => "eau",
+            "price" => 700
+        ],
+        "do_fixe_multiple" => [
+            "name" => "Dommage fixe multiple",
+            "icon" => "do_fixe_multiple.png",
+            "color" => "purple",
+            "price" => 900
+        ],
         "res_neutre" => [
             "name" => "Résistance neutre",
             "icon" => "res_neutre.png",
@@ -159,111 +195,141 @@ class Creature extends Content
             "color" => "wakfu",
             "price" => 1500
         ],
+        "skill_agi_of_choice" => [
+            "name" => "Compétence de agi au choix",
+            "icon" => "skill_agi",
+            "color" => "agi",
+            "price" => 300
+        ],
         "acrobaties" => [
             "name" => "Acrobaties",
-            "icon" => "",
+            "icon" => "skill_agi",
             "color" => "grey",
             "price" => 300
         ],
         "discretion" => [
             "name" => "Discrétion",
-            "icon" => "",
+            "icon" => "skill_agi",
             "color" => "agi",
             "price" => 300
         ],
         "escamotage" => [
             "name" => "Escamotage",
-            "icon" => "",
+            "icon" => "skill_agi",
             "color" => "agi",
+            "price" => 300
+        ],
+        "skill_force_of_choice" => [
+            "name" => "Compétence de force au choix",
+            "icon" => "skill_force",
+            "color" => "force",
             "price" => 300
         ],
         "athletisme" => [
             "name" => "Athlétisme",
-            "icon" => "",
+            "icon" => "skill_force",
             "color" => "force",
             "price" => 300
         ],
         "intimidation" => [
             "name" => "Intimidation",
-            "icon" => "",
+            "icon" => "skill_force",
             "color" => "force",
+            "price" => 300
+        ],
+        "skill_intel_of_choice" => [
+            "name" => "Compétence de intel au choix",
+            "icon" => "skill_intel",
+            "color" => "intel",
             "price" => 300
         ],
         "arcanes" => [
             "name" => "Arcanes",
-            "icon" => "",
+            "icon" => "skill_intel",
             "color" => "intel",
             "price" => 300
         ],
         "histoire" => [
             "name" => "Histoire",
-            "icon" => "",
+            "icon" => "skill_intel",
             "color" => "intel",
             "price" => 300
         ],
         "investigation" => [
             "name" => "Investigation",
-            "icon" => "",
+            "icon" => "skill_intel",
             "color" => "intel",
             "price" => 300
         ],
         "nature" => [
             "name" => "Nature",
-            "icon" => "",
+            "icon" => "skill_intel",
             "color" => "intel",
             "price" => 300
         ],
         "religion" => [
             "name" => "Religion",
-            "icon" => "",
+            "icon" => "skill_intel",
             "color" => "intel",
+            "price" => 300
+        ],
+        "skill_sagesse_of_choice" => [
+            "name" => "Compétence de sagesse au choix",
+            "icon" => "skill_sagesse",
+            "color" => "sagesse",
             "price" => 300
         ],
         "dressage" => [
             "name" => "Dressage",
-            "icon" => "",
+            "icon" => "skill_sagesse",
             "color" => "sagesse",
             "price" => 300
         ],
         "medecine" => [
             "name" => "Médecine",
-            "icon" => "",
+            "icon" => "skill_sagesse",
             "color" => "sagesse",
             "price" => 300
         ],
         "perception" => [
             "name" => "Perception",
-            "icon" => "",
+            "icon" => "skill_sagesse",
             "color" => "sagesse",
             "price" => 300
         ],
         "perspicacite" => [
             "name" => "Perspicacité",
-            "icon" => "",
+            "icon" => "skill_sagesse",
             "color" => "sagesse",
             "price" => 300
         ],
         "survie" => [
             "name" => "Survie",
-            "icon" => "",
+            "icon" => "skill_sagesse",
             "color" => "sagesse",
+            "price" => 300
+        ],
+        "skill_chance_of_choice" => [
+            "name" => "Compétence de chance au choix",
+            "icon" => "skill_chance",
+            "color" => "chance",
             "price" => 300
         ],
         "persuasion" => [
             "name" => "Persuasion",
-            "icon" => "",
+            "icon" => "skill_chance",
             "color" => "chance",
             "price" => 300
         ],
         "representation" => [
             "name" => "Représentation",
-            "icon" => "",
+            "icon" => "skill_chance",
             "color" => "chance",
             "price" => 300
         ],
         "supercherie" => [
             "name" => "Supercherie",
-            "icon" => "",
+            "icon" => "skill_chance",
             "color" => "chance",
             "price" => 300
         ]
@@ -291,26 +357,37 @@ class Creature extends Content
         private $_intel=0;
         private $_agi=0;
         private $_chance=0;
+        private $_do_fixe_neutre=0;
+        private $_do_fixe_terre=0;
+        private $_do_fixe_feu=0;
+        private $_do_fixe_air=0;
+        private $_do_fixe_eau=0;
+        private $_do_fixe_multiple=0;
         private $_res_neutre=0;
         private $_res_terre=0;
         private $_res_feu=0;
         private $_res_air=0;
         private $_res_eau=0;
+        private $_skill_agi_of_choice=0;
         private $_acrobatie=0;
         private $_discretion=0;
         private $_escamotage=0;
+        private $_skill_force_of_choice=0;
         private $_athletisme=0;
         private $_intimidation=0;
+        private $_skill_intel_of_choice=0;
         private $_arcane=0;
         private $_histoire=0;
         private $_investigation=0;
         private $_nature=0;
         private $_religion=0;
+        private $_skill_sagesse_of_choice=0;
         private $_dressage=0;
         private $_medecine=0;
         private $_perception=0;
         private $_perspicacite=0;
         private $_survie=0;
+        private $_skill_chance_of_choice=0;
         private $_persuasion=0;
         private $_representation=0;
         private $_supercherie=0;

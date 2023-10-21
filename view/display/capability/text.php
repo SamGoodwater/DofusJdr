@@ -28,6 +28,7 @@
                     </div>
                 </div>
                 <p class="d-flex flex-row justify-content-around align-items-center">
+                    <?=$obj->getPa(Content::FORMAT_ICON)?> 
                     <?=$obj->getPo(Content::FORMAT_ICON)?> 
                     <div><?=$obj->getTime_before_use_again(Content::FORMAT_ICON)?></div>
                 </p>
@@ -35,8 +36,8 @@
         </div>
         <div class="d-flex flex-row justify-content-around align-items-baseline flex-wrap">
             <div class="me-1 mb-1"><?=$obj->getIs_magic(Content::FORMAT_BADGE)?></div>
-            <div class="me-1 mb-1"><?=$obj->getType(Content::FORMAT_BADGE)?></div>
-            <div class="me-1 mb-1"><?=$obj->getCategory(Content::FORMAT_BADGE)?></div>
+            <div class="me-1 mb-1"><?=$obj->getRitual_available(Content::FORMAT_BADGE)?></div>
+            <div class="me-1 mb-1"><?=$obj->getSpecialization(Content::FORMAT_BADGE)?></div>
             <div class="me-1 mb-1"><?=$obj->getPowerful(Content::FORMAT_BADGE)?></div>
             <div class="me-1 mb-1"><?=$obj->getElement(Content::FORMAT_BADGE)?></div>
         </div>

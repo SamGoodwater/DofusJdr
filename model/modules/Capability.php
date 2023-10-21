@@ -14,45 +14,43 @@ class Capability extends Content
         ]
     ];
 
-    const TYPE_DAMAGE = 0;
-    const TYPE_PROTECT = 1;
-    const TYPE_BUFF = 2;
-    const TYPE_DEBUFF = 3;
-    const TYPE_INVOCATION = 4;   
-    const TYPE_PLACEMENT = 5;   
-    const TYPE_MANIPULATION = 6;   
-    const TYPE_TRANSFORMATION = 7;   
-
-    const TYPE = [
-        "Dommage" => self::TYPE_DAMAGE,
-        "Protection" => self::TYPE_PROTECT,
-        "Boost" => self::TYPE_BUFF,
-        "Retrait" => self::TYPE_DEBUFF,
-        "Invocation" => self::TYPE_INVOCATION,
-        "Placement" => self::TYPE_PLACEMENT,
-        "Manipulation" => self::TYPE_MANIPULATION,
-        "Transformation" => self::TYPE_TRANSFORMATION
-    ];
-
-    const CATEGORY_HISTORICAL = 0;
-
-    const CATEGORY_DAMAGE = 1;
-    const CATEGORY_TANK = 2;
-    const CATEGORY_OFFENSIV_SUPPORT = 3;
-    const CATEGORY_DEFENSIV_SUPPORT = 4;
-    const CATEGORY_PLACEMENT = 5;
-    const CATEGORY_ANIMAL_RELATION = 6;
-    const CATEGORY_HEAL = 7;
-
-    const CATEGORY = [
-        "Aptitude liée à l'historique" => self::CATEGORY_HISTORICAL,
-        "Aptitude de soigneur·gneuse" => self::CATEGORY_HEAL,
-        "Aptitude des comabattant·e" => self::CATEGORY_DAMAGE,
-        "Aptitude de tank" => self::CATEGORY_TANK,
-        "Aptitude de support offensif" => self::CATEGORY_OFFENSIV_SUPPORT,
-        "Aptitude de support défensif" => self::CATEGORY_DEFENSIV_SUPPORT,
-        "Aptitude de placement" => self::CATEGORY_PLACEMENT,
-        "Aptitude de relation avec les animaux" => self::CATEGORY_ANIMAL_RELATION
+    const SPECIALIZATION = [
+        1 => [
+            "name" => "Érudit",
+            "color" => "cyan"
+        ],
+        2 => [
+            "name" => "Milicien·ne",
+            "color" => "red"
+        ],
+        3 => [
+            "name" => "Voleur·euse",
+            "color" => "yellow"
+        ],
+        4 => [
+            "name" => "Dévot",
+            "color" => "blue"
+        ],
+        5 => [
+            "name" => "Artiste",
+            "color" => "purple"
+        ],
+        6 => [
+            "name" => "Négociant·e",
+            "color" => "orange"
+        ],
+        7 => [
+            "name" => "Explorateur·rice",
+            "color" => "brown"
+        ],
+        8 => [
+            "name" => "Sylvain",
+            "color" => "green"
+        ],
+        9 => [
+            "name" => "Artisan·e",
+            "color" => "lime"
+        ]
     ];
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
@@ -60,12 +58,13 @@ class Capability extends Content
         private $_description='';
         private $_effect="";
         private $_level=1;
+        private $_pa=3;
         private $_po=1;
         private $_po_editable=true;
         private $_time_before_use_again=null;
         private $_element = Spell::ELEMENT_NEUTRE;
-        private $_category = Capability::CATEGORY_HISTORICAL;
         private $_is_magic = true;
+        private $_ritual_available = false;
         private $_powerful = 1;
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
@@ -175,6 +174,69 @@ class Capability extends Content
                 
                 default:
                     return html_entity_decode($this->_effect);
+            }
+        }
+        public function getPa(int $format = Content::FORMAT_BRUT, bool $not_show_if_free = false){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Capability",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "pa",
+                            "label" => "Points d'action",
+                            "placeholder" => "Points d'action",
+                            "tooltip" => "Coût en point d'action de l'aptitude",
+                            "value" => $this->_pa,
+                            "color" => "pa-d-2",
+                            "style" => Style::INPUT_ICON,
+                            "icon" => "pa.png",
+                            "style_icon" => Style::ICON_MEDIA,
+                            "comment" => "Laisser vide si gratuit"
+                        ], 
+                        write: false);
+                
+                case Content::FORMAT_BADGE:
+                    if(empty($this->_pa) && $not_show_if_free){return "";}
+                    $pa = $this->_pa;
+                    if(empty($this->_pa)){$pa = "gratuit en ";}
+
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => "{$pa} PA",
+                            "color" => "pa-d-2",
+                            "tooltip" => "Coût en point d'action de l'aptitude",
+                            "style" => Style::STYLE_BACK
+                        ], 
+                        write: false);
+                   
+                case Content::FORMAT_ICON:
+                    if(empty($this->_pa) && $not_show_if_free){return "";}
+                    $pa = $this->_pa;
+                    if(empty($this->_pa)){$pa = 0;}
+
+                    ob_start();?>
+                        <div class="move_icon_pa ms-2"><?php
+                            $view->dispatch(
+                                template_name : "icon",
+                                data : [
+                                    "style" => Style::ICON_MEDIA,
+                                    "icon" => "pa.png",
+                                    "size" => Style::SIZE_LG,
+                                    "color" => "pa-d-2",
+                                    "tooltip" => "Coût en point d'action de l'aptitude",
+                                    "content" => $pa,
+                                    "content_placement" => Style::POSITION_LEFT
+                                ], 
+                                write: true);
+                            ?> </div>
+                    <?php return ob_get_clean();
+                
+                default:
+                    return $this->_pa;
             }
         }
         public function getPo(int $format = Content::FORMAT_BRUT){
@@ -446,55 +508,6 @@ class Capability extends Content
             }
 
         }
-        public function getCategory(int $format = Content::FORMAT_BRUT){
-            $view = new View();
-            switch ($format) {
-                case Content::FORMAT_EDITABLE:
-                    $items = [];
-                    foreach(self::CATEGORY as $name => $category) { 
-                        $items[] = [
-                            "onclick" => "Capability.update('".$this->getUniqid()."', ".$category.", 'category', ".Controller::IS_VALUE.");",
-                            "display" => "<span class='badge back-".Style::getColorFromLetter($category)."-d-2'>" .ucfirst($name)."</span>"
-                        ];
-                    }
-
-                    return $view->dispatch(
-                        template_name : "dropdown",
-                        data : [
-                            "tooltip" => "Catégorie de l'aptitude",
-                            "label" => $this->getCategory(Content::FORMAT_BADGE),
-                            "size" => Style::SIZE_SM,
-                            "items" => $items
-                        ], 
-                        write: false);
-    
-                case Content::FORMAT_BADGE:
-                    if(in_array($this->_category,  self::CATEGORY)){
-                        return $view->dispatch(
-                            template_name : "badge",
-                            data : [
-                                "content" => array_search($this->_category, self::CATEGORY),
-                                "color" => Style::getColorFromLetter($this->_category)."-d-2",
-                                "tooltip" => "Catégorie de l'aptitude",
-                                "style" => Style::STYLE_BACK
-                            ], 
-                            write: false);
-                            
-                    } else  {
-                        return "";
-                    }
-
-                case Content::FORMAT_TEXT:
-                    if(in_array($this->_category, self::CATEGORY)){
-                        return array_search($this->_category, self::CATEGORY);
-                    } else {
-                        return "";
-                    }
-
-                default:
-                    return $this->_category;
-            }
-        }
         public function getIs_magic(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
@@ -586,6 +599,102 @@ class Capability extends Content
                     return $this->_is_magic;
             }
         }
+        public function getRitual_available(int $format = Content::FORMAT_BRUT, bool $not_show_if_not_ritual = true){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    ob_start(); ?>
+                        <div class="d-flex flex-row justify-content-start align-items-center"><?php
+                            $view->dispatch(
+                                template_name : "badge",
+                                data : [
+                                    "content" => "Rituel Indisponible",
+                                    "color" => "grey-d-2",
+                                    "style" => Style::STYLE_OUTLINE,
+                                    "tooltip" => "L'aptitude ne peut pas être lancer sous forme de rituel.",
+                                    "tooltip_placement" => Style::DIRECTION_TOP,
+                                    "class" => "me-1"
+                                ], 
+                                write: true);
+                            
+                            $view->dispatch(
+                                template_name : "input/checkbox",
+                                data : [
+                                    "class_name" => "Capability",
+                                    "uniqid" => $this->getUniqid(),
+                                    "id" => "ritual_available_" . $this->getUniqid(),
+                                    "input_name" => "ritual_available",
+                                    "label" => "",
+                                    "color" => "main",
+                                    "checked" => $this->returnBool($this->_is_magic),
+                                    "style" => Style::CHECK_SWITCH
+                                ], 
+                                write: true);
+
+                            $view->dispatch(
+                                template_name : "badge",
+                                data : [
+                                    "content" => "Rituel disponible",
+                                    "color" => "cyan-d-2",
+                                    "style" => Style::STYLE_OUTLINE,
+                                    "tooltip" => "L'aptitude peut être lancer sous forme de rituel.",
+                                    "tooltip_placement" => Style::DIRECTION_TOP,
+                                    "css" => "me-1"
+                                ], 
+                                write: true);?>
+                        </div>
+                    <?php return ob_get_clean();
+                    
+                case Content::FORMAT_BADGE:
+                    if($not_show_if_not_ritual && !$this->_ritual_available){return "";}
+
+                    if($this->_ritual_available){
+                        $color = "cyan-d-2";
+                        $content = "Rituel disponible";
+                        $tooltip = "L'aptitude peut être lancer sous forme de rituel.";
+                    } else {
+                        $color = "grey-d-2";
+                        $content = "Rituel indisponible";
+                        $tooltip = "L'aptitude ne peut pas être lancer sous forme de rituel.";
+                    }
+
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $content,
+                            "color" => $color,
+                            "style" => Style::STYLE_OUTLINE,
+                            "tooltip" => $tooltip,
+                            "tooltip_placement" => Style::DIRECTION_TOP
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    if($not_show_if_not_ritual && !$this->_ritual_available){return "";}
+
+                    if($this->_ritual_available){
+                        $color = "cyan-d-2";
+                        $icon = "ritual.png";
+                        $tooltip = "L'aptitude peut être lancer sous forme de rituel.";
+                    } else {
+                        $color = "grey-d-2";
+                        $icon = "ritual_not.png";
+                        $tooltip = "L'aptitude ne peut pas être lancer sous forme de rituel.";
+                    }
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICONS_FILE,
+                            "icon" => $icon,
+                            "color" => $color,
+                            "tooltip" => $tooltip
+                        ], 
+                        write: false); 
+                    
+                default:
+                    return $this->_ritual_available;
+            }
+        }
         public function getPowerful(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
@@ -637,49 +746,42 @@ class Capability extends Content
             }
         }
 
-        public function getType(int $format = Content::FORMAT_BRUT, bool $is_remove = false){
+        public function getSpecialization(int $format = Content::FORMAT_BRUT, bool $is_remove = false){
             $view = new View();
             $manager = new CapabilityManager();
-            $types = $manager->getLinkType($this);
+            $specializations = $manager->getLinkSpecialization($this);
             
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
-                    $items = [];
-                    foreach(self::TYPE as $name => $type) { 
-                        $items[] = [
-                            "onclick" => "Capability.update('".$this->getUniqid()."',{action:'add', type:'".$type."'},'type', IS_VALUE);",
-                            "display" => "<span class='btn btn-sm btn-border-".Style::getColorFromLetter($type)."-d-4'>" .ucfirst($name)."</span>"
-                        ];
-                    }
-
-                    ob_start();
-                        $view->dispatch(
-                            template_name : "dropdown",
-                            data : [
-                                "tooltip" => "Types de l'aptitude",
-                                "label" => $this->getType(Content::FORMAT_BADGE),
-                                "size" => Style::SIZE_SM,
-                                "items" => $items
-                            ], 
-                            write: true);
-
-                        echo $this->getType(Content::FORMAT_BADGE, true);
-
-                    return ob_get_clean();
+                    ob_start(); ?>
+                        <h4>Spécialisations</h4>
+                        <p><small>Choisissez les spécialisations pouvant utiliser cette aptitude.</small></p>
+                        <div class="d-flex justify-content-start gap-1 align-baseline">
+                            <?php foreach (self::SPECIALIZATION as $id => $specialization) { 
+                                $checked = "";
+                                $class="";
+                                if($manager->existsLinkSpecialization($this, $id)) { $checked = "checked"; $class="bold text-white back-".$specialization['color']."-d-2"; } ?>
+                                <div>
+                                    <input <?=$checked?> onchange="checkboxButtonToogle(this, Capability, '<?=$this->getUniqid()?>', 'specialization', <?=$id?>, 'specialization');" data-color="<?=$specialization['color']?>" type="checkbox" class="btn-check" id="specialization-btn-check-<?=$id?>" autocomplete="off">
+                                    <label class="btn btn-sm btn-outline <?=$class?> border-<?=$specialization['color']?>-d-2" for="specialization-btn-check-<?=$id?>"><?=ucfirst($specialization['name'])?></label>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    <?php return ob_get_clean();
 
                 case Content::FORMAT_BADGE:
                     ob_start(); 
-                        if(!empty($types)){?>
-                            <div class="d-flex flex-row justify-content-around flex-wrap">
-                                <?php foreach ($types as $type) {
+                        if(!empty($specializations)){?>
+                            <h4>Disponible pour les Spécialisations suivantes :</h4>
+                            <div class="d-flex flex-row justify-content-around flex-wrap gap-1">
+                                <?php foreach ($specializations as $id => $specialization) {
                                     $view->dispatch(
                                         template_name : "badge",
                                         data : [
-                                            "content" => array_search($type, Capability::TYPE),
-                                            "color" => Style::getColorFromLetter($type) . "-d-4",
-                                            "tooltip" => "Puissance d'une aptitude sur 7 niveaux",
-                                            "style" => Style::STYLE_OUTLINE,
-                                            "onclick" => "Capability.update('".$this->getUniqid()."',{action:'remove', type:'".$type."'},'type', IS_VALUE);$(this).remove();"
+                                            "content" => self::SPECIALIZATION[$specialization]["name"],
+                                            "color" => self::SPECIALIZATION[$specialization]["color"] . "-d-4",
+                                            "tooltip" => "Aptitude utilisable par les " . self::SPECIALIZATION[$specialization]["name"],
+                                            "style" => Style::STYLE_BACK
                                         ], 
                                         write: true);
                                 } ?>
@@ -688,10 +790,14 @@ class Capability extends Content
                     return ob_get_clean();
 
                 case Content::FORMAT_TEXT:
-                    if(!empty($types)){
+                    if(!empty($specializations)){
                         $array = [];
-                        foreach ($types as $type) {
-                            $array[$type] = array_search($type, Capability::TYPE);
+                        foreach ($specializations as $specialization) {
+                            $array[$specialization] = [
+                                "id" => $specialization,
+                                "name" => self::SPECIALIZATION[$specialization]["name"],
+                                "color" => self::SPECIALIZATION[$specialization]["color"]
+                            ];
                         }
                         return $array;
                     } else {
@@ -699,8 +805,7 @@ class Capability extends Content
                     }
                     
                 case Content::FORMAT_ARRAY:
-                    return $types;
-                
+                    return $specializations;
             }
         }
 
@@ -725,6 +830,10 @@ class Capability extends Content
                 throw new Exception("La valeur doit être un nombre ou être null");
             }
         }
+        public function setPa(string | int | null $data){
+            $this->_pa = $data;
+            return true;
+        }
         public function setPo(string | int | null $data){
             $this->_po = $data;
             return true;
@@ -745,16 +854,12 @@ class Capability extends Content
                 throw new Exception("Valeur incorrect");
             }
         }
-        public function setCategory(int | null $data){
-            if(in_array($data, self::CATEGORY)){
-                $this->_category = $data;
-                return true;
-            } else {
-                throw new Exception("Valeur incorrect");
-            }
-        }
         public function setIs_magic(bool | null $data){
             $this->_is_magic = $this->returnBool($data);
+            return true;
+        }
+        public function setRitual_available(bool | null $data){
+            $this->_ritual_available = $this->returnBool($data);
             return true;
         }
         public function setPowerful(int | null $data){
@@ -768,30 +873,30 @@ class Capability extends Content
 
         /* Data = array(
                         action => add ou remove,
-                        type => numéro du type de l'aptitude                        
+                        spesialization => numéro du spesialization de l'aptitude                        
                     )
-            Js : Item.update(Uniqid,{action:'add|remove', type:'type'},'type', IS_VALUE);
+            Js : Item.update(Uniqid,{action:'add|remove', spesialization:'spesialization'},'spesialization', IS_VALUE);
         */
-        public function setType(array $data){ 
+        public function setSpecialization(array $data){ 
             if(is_array($data)){
                 $manager = new CapabilityManager;
-                if(!isset($data['type'])){throw new Exception("Le type n'est pas défini");}
-                if(in_array($data['type'], Capability::TYPE)){
-    
+                if(!isset($data['specialization'])){throw new Exception("La spécialisation n'est pas défini");}
+                if(isset(self::SPECIALIZATION[$data['specialization']])){
                     if(isset($data['action'])){
                         switch ($data['action']) {
                             case 'add':
-                                if($manager->addLinkType($this, $data['type'])){
+  
+                                if($manager->addLinkSpecialization($this, $data['specialization'])){
                                     return true;
                                 }else{
-                                    throw new Exception("Erreur lors de l'ajout du type");
+                                    throw new Exception("Erreur lors de l'ajout de la spécialisation");
                                 }
                    
                             case "remove":
-                                if($manager->removeLinkType($this, $data['type'])){
+                                if($manager->removeLinkSpecialization($this, $data['specialization'])){
                                     return true;
                                 }else{
-                                    throw new Exception("Erreur lors de la suppression du type");
+                                    throw new Exception("Erreur lors de la suppression de la spécialisation");
                                 }
     
                             default:
@@ -801,7 +906,11 @@ class Capability extends Content
                     } else {
                         throw new Exception("Une action est requise.");
                     }
+                } else {
+                    throw new Exception("La spécialisation n'est pas valide");
                 }
+            } else {
+                throw new Exception("La valeur doit être un tableau");
             }
         }
 }

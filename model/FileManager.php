@@ -603,6 +603,27 @@ class FileManager extends Manager{
                 return false;
             }
         }
+        static function isDir(File | string $file){
+            $path = "";
+            if(is_object($file)){
+                if($file instanceof File){
+                    $path = $file->getPath();
+                } else {
+                    return false;
+                }
+            } else {
+                $path = $file;
+            }
+            if(is_dir(trim($path))){
+                return true;
+            } else {
+                if(substr(trim($path), -1) == '/'){
+          
+                    return true;
+                }
+            }
+            return false;
+        }
         
         const ARRAY_REPLACE_SPECIAL_CARACTERE = [
             "<" => "_",

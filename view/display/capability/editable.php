@@ -23,18 +23,19 @@
                     <div class="col">
                         <?=$obj->getLevel(Content::FORMAT_EDITABLE)?>
                         <div class="d-flex justify-content-start align-content-start flex-wrap">
-                            <div class="m-1"><?=$obj->getCategory(Content::FORMAT_EDITABLE)?></div>
                             <div class="m-1"><?=$obj->getElement(Content::FORMAT_EDITABLE)?></div>
                         </div>
-                        <div class="m-1"><?=$obj->getType(Content::FORMAT_EDITABLE)?></div>
                         <div class="m-1"><?=$obj->getIs_magic(Content::FORMAT_EDITABLE)?></div>
+                        <div class="m-1"><?=$obj->getRitual_available(Content::FORMAT_EDITABLE)?></div>
                     </div>  
                     <div class="col">
                         <?=$obj->getTime_before_use_again(Content::FORMAT_EDITABLE)?>
+                        <?=$obj->getPa(Content::FORMAT_EDITABLE)?>
                         <?=$obj->getPo(Content::FORMAT_EDITABLE)?>
                         <?=$obj->getPo_editable(Content::FORMAT_EDITABLE)?>
                     </div>           
                 </div>
+                <div class="row m-1"><?=$obj->getSpecialization(Content::FORMAT_EDITABLE)?></div>
             </div>
         </div>
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
