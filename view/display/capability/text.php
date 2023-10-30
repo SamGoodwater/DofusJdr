@@ -16,10 +16,6 @@
 <div id="capability<?=$obj->getUniqid()?>"  style="display:none;">
     <div class="p-2 m-1 size-0-8 back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>-l-5">
         <div class="d-flex flew-row flex-nowrap">
-            <div>
-                <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-30"]))?>
-                <p class="mt-1"><?=$obj->getLevel(Content::FORMAT_BADGE)?></p> 
-            </div>
             <div class="card-body m-1 p-0">
                 <div class="d-flex flex-row justify-content-between ">
                     <p class="bold"><?=$obj->getName()?></p>
@@ -31,6 +27,8 @@
                     <?=$obj->getPa(Content::FORMAT_ICON)?> 
                     <?=$obj->getPo(Content::FORMAT_ICON)?> 
                     <div><?=$obj->getTime_before_use_again(Content::FORMAT_ICON)?></div>
+                    <div><?=$obj->getCasting_time(Content::FORMAT_ICON)?></div>
+                    <div><?=$obj->getDuration(Content::FORMAT_ICON)?></div>
                 </p>
             </div>
         </div>

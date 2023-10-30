@@ -30,7 +30,8 @@ if(!isset($template_vars['uniqid_page'])){ $template_vars['uniqid_page'] = "";}
         "editable" => false,
         "editOnDblClick" => false,
         "onlyForAdmin" => false,
-        "shownListAddInPage" => true
+        "shownListAddInPage" => true,
+        "refStockDataOption" => "" // référence des données de l'option dans la page
     );
     $classeManager = new ClasseManager;
 

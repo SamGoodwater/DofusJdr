@@ -32,4 +32,21 @@ class Item extends Controller{
         ); 
     }
 
+    static setDataInOptionInput(){
+        let option = "";
+        var checkboxes = document.querySelectorAll('#optionitem.item input[type="checkbox"]');
+        for (var checkbox of checkboxes) {
+            if(checkbox.checked){
+                option += checkbox.value + "|";
+            }
+            checkbox.checked = false;
+        }
+        let input = $('#modal #itemListAdd');
+        if(input.length > 0){
+            input.val(option);
+        } else {
+            MsgAlert("Echec de l'ajout des options", "Impossible d'accéder aux options", "danger" , 4000);
+        }
+    }
+
 }

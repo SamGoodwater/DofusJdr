@@ -31,7 +31,8 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
         "editable" => false,
         "editOnDblClick" => false,
         "onlyForAdmin" => false,
-        "shownListAddInPage" => true
+        "shownListAddInPage" => true,
+        "refStockDataOption" => "" // référence des données de l'option dans la page
     );
     
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
@@ -40,7 +41,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
         <div class="d-flex flex-row justify-content-between align-items-end flex-wrap gap-1" id='sortableItems'>
             <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'une aptitude', $('#addCapability'), Page.SIZE_MD, true);">Ajouter une aptitude</button>
             <div id="selectorSpcializationListCheckbox" class="dropdown">
-                <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories des aptitudes</a>
+                <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" data-bs-toggle="dropdown" aria-expanded="false">Trier par Spécialisations</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
                     <?php $checked = "";
                     foreach (Capability::SPECIALIZATION as $id => $specialization) { ?>
@@ -137,7 +138,9 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="powerful">Puissance</th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="specialization">Spécialisation</th>
                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="level"><span class="text-level">Niveau</span></th>
-                    <th class="text-center" data-sortable="false" data-visible="false" data-field="time_before_use_again"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Durée avant réutilisation"><img class='icon-sm' src='medias/icons/modules/time_before_use_again.svg'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="time_before_use_again"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Durée avant réutilisation"><img class='icon-15' src='medias/icons/modules/time_before_use_again.svg'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="casting_time"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Temps d'incantation"><img class='icon-15' src='medias/icons/modules/casting_time.svg'></span></th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="duration"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Durée pendant laquelle les effets de l'aptitude restent actifs"><img class='icon-15' src='medias/icons/modules/duration.svg'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="pa"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Coût en points d'action de l'aptitude"><img class='icon' src='medias/icons/modules/pa.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="po"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Portée de l'aptitude"><img class='icon' src='medias/icons/modules/po.png'></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="po_editable"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Aptitude au corps à corps, à distance avec une portée modifiable ou non"><img class='icon' src='medias/icons/modules/po_editable.png'></span></th>

@@ -64,6 +64,7 @@ class Module extends Content
         "level" => "teal",
         "master_bonus" => "orange",
         "time_before_use_again" => "blue-grey",
+        "casting_time" => "blue",
         "dodge_pa" => "yellow",
         "dodge_pm" => "lime",
         "po" => "teal",

@@ -44,7 +44,7 @@
                                         <span class='text-kamas-d-4 size-1-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title="Prix de l'objet"><?=$link["price"]?> <img class='icon' src='medias/icons/modules/kamas.png'></span>     
                                     <?php } ?>
                                     <?php if(!empty($link['obj']->getPrice())){ ?>
-                                        <span class="ms-1 size-0-8 text-grey-d-2 text-right">Prix recommandé :<br><?=$link["obj"]->getPrice()?> <img class='icon-sm' src='medias/icons/modules/kamas.png'></span>
+                                        <span class="ms-1 size-0-8 text-grey-d-2 text-right">Prix recommandé :<br><?=$link["obj"]->getPrice()?> <img class='icon-15' src='medias/icons/modules/kamas.png'></span>
                                     <?php } ?>
                                 </p>
                             </div>

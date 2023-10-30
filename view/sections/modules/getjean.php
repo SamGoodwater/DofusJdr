@@ -31,7 +31,8 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
         "editable" => false,
         "editOnDblClick" => false,
         "onlyForAdmin" => false,
-        "shownListAddInPage" => true
+        "shownListAddInPage" => true,
+        "refStockDataOption" => "" // référence des données de l'option dans la page
     );
 
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
@@ -68,33 +69,33 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             </div>
             <div class="my-2">
                 <label for="powerful" class="form-label badge back-deep-purple-d-3">Puissance <span id="powerful_value">4</span></label>
-                <input onchange="$('#powerful_value').text($(this).val());" type="range" class="form-range" min="1" max="7" step="1" value="4" id="powerful">
-                <p><small>Sur une échelle de 7 valeurs, avec 1 étant une créature extrémement faible et 7 une créature extrément forte.</small></p>
+                <input onchange="$('#powerful_value').text($(this).val());" type="range" class="form-range" min="1" max="9" step="1" value="4" id="powerful">
+                <p><small>Sur une échelle de 9 valeurs, avec 1 étant une créature extrémement faible et 9 une créature extrément forte.</small></p>
             </div>
             <div class="my-2">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="intel">
-                    <label class="form-check-label" for="intel">Intelligence <img class='icon-sm' src='medias/icons/modules/intel.png'></label>
+                    <label class="form-check-label" for="intel">Intelligence <img class='icon-15' src='medias/icons/modules/intel.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="strong">
-                    <label class="form-check-label" for="strong">Force <img class='icon-sm' src='medias/icons/modules/force.png'></label>
+                    <label class="form-check-label" for="strong">Force <img class='icon-15' src='medias/icons/modules/force.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="chance">
-                    <label class="form-check-label" for="chance">Chance <img class='icon-sm' src='medias/icons/modules/chance.png'></label>
+                    <label class="form-check-label" for="chance">Chance <img class='icon-15' src='medias/icons/modules/chance.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="agi">
-                    <label class="form-check-label" for="agi">Agilité <img class='icon-sm' src='medias/icons/modules/agi.png'></label>
+                    <label class="form-check-label" for="agi">Agilité <img class='icon-15' src='medias/icons/modules/agi.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="sagesse">
-                    <label class="form-check-label" for="sagesse">Sagesse <img class='icon-sm' src='medias/icons/modules/sagesse.png'></label>
+                    <label class="form-check-label" for="sagesse">Sagesse <img class='icon-15' src='medias/icons/modules/sagesse.png'></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="vitality">
-                    <label class="form-check-label" for="vitality">Vitalité <img class='icon-sm' src='medias/icons/modules/vitality.png'></label>
+                    <label class="form-check-label" for="vitality">Vitalité <img class='icon-15' src='medias/icons/modules/vitality.png'></label>
                 </div>
             </div>
             <button class="btn btn-sm btn-animate btn-back-secondary" onclick="createJean()">Générer le PDF</button>

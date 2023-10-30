@@ -76,7 +76,8 @@ abstract class ControllerModule extends Controller{
         public const SEARCH_DONE_ADD_CAPABILITY_TO_CLASSE = 10;
         public const SEARCH_DONE_ADD_CAPABILITY_TO_NPC = 11;
         public const SEARCH_DONE_ADD_CAPABILITY_TO_MOB = 12;
-        public const SEARCH_DONE_ADD_TO_BOOKMARK = 13;
+        public const SEARCH_DONE_GET_CAPABILITY = 13;
+        public const SEARCH_DONE_ADD_TO_BOOKMARK = 14;
 
   // Constantes de calcul des stats et d'équilibrages - DEVRA PASSER DANS UN FICHIER JSON
     const BALANCE_PA = [

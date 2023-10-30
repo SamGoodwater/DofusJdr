@@ -121,6 +121,8 @@ class ControllerCapability extends ControllerModule{
         ob_start();?>
           <div class="text-left">
             <?=$obj->getTime_before_use_again(Content::FORMAT_BADGE)?>
+            <?=$obj->getCasting_time(Content::FORMAT_BADGE)?>
+            <?=$obj->getDuration(Content::FORMAT_BADGE)?>
             <?=$obj->getPa(Content::FORMAT_ICON, true)?>
             <?=$obj->getPo(Content::FORMAT_BADGE)?>
             <?=$obj->getPo_editable(Content::FORMAT_BADGE)?>
@@ -150,6 +152,8 @@ class ControllerCapability extends ControllerModule{
           'po' => $obj->getPo(Content::FORMAT_ICON),
           'po_editable' => $obj->getPo_editable(Content::FORMAT_ICON),
           'time_before_use_again' => $obj->getTime_before_use_again(Content::FORMAT_ICON),
+          'casting_time' => $obj->getCasting_time(Content::FORMAT_ICON),
+          'duration' => $obj->getDuration(Content::FORMAT_ICON),
           'element' => $obj->getElement(Content::FORMAT_BADGE),
           'specialization' => $obj->getSpecialization(Content::FORMAT_BADGE),
           'ritual_available' => $obj->getRitual_available(Content::FORMAT_BADGE),
@@ -205,6 +209,8 @@ class ControllerCapability extends ControllerModule{
             ob_start();?>
               <div class="text-left">
                 <?=$obj->getTime_before_use_again(Content::FORMAT_BADGE)?>
+                <?=$obj->getCasting_time(Content::FORMAT_BADGE)?>
+                <?=$obj->getDuration(Content::FORMAT_BADGE)?>
                 <?=$obj->getPa(Content::FORMAT_ICON, true)?>
                 <?=$obj->getPo(Content::FORMAT_BADGE)?>
                 <?=$obj->getPo_editable(Content::FORMAT_BADGE)?>
@@ -234,6 +240,8 @@ class ControllerCapability extends ControllerModule{
               'po' => $obj->getPo(Content::FORMAT_ICON),
               'po_editable' => $obj->getPo_editable(Content::FORMAT_ICON),
               'time_before_use_again' => $obj->getTime_before_use_again(Content::FORMAT_ICON),
+              'casting_time' => $obj->getCasting_time(Content::FORMAT_ICON),
+              'duration' => $obj->getDuration(Content::FORMAT_ICON),
               'element' => $obj->getElement(Content::FORMAT_BADGE),
               'specialization' => $obj->getSpecialization(Content::FORMAT_BADGE),
               'ritual_available' => $obj->getRitual_available(Content::FORMAT_BADGE),
@@ -342,6 +350,8 @@ class ControllerCapability extends ControllerModule{
             'level' => 1,
             'po' => "",
             'time_before_use_again' => "",
+            'casting_time' => "",
+            'duration' => "",
             "element" => Spell::ELEMENT_NEUTRE,
             'uniqid' => uniqid(),
             'powerful' => 3
@@ -397,8 +407,8 @@ class ControllerCapability extends ControllerModule{
                   case ControllerModule::SEARCH_DONE_ADD_CAPABILITY_TO_NPC:
                     $click_action = "onclick=\"Npc.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'capability', IS_VALUE);\"";
                   break;
-                  case ControllerModule::SEARCH_DONE_GET_SPELL:
-                    $click_action = "onclick=\"Capability.showResume('".$object->getUniqid()."','#".$parameter."', ".Content::FORMAT_BADGE.", false);\"";
+                  case ControllerModule::SEARCH_DONE_GET_CAPABILITY:
+                    $click_action = "onclick=\"Capability.addToOptionSection('".$parameter."','".$object->getUniqid()."', '".$object->getName()."', '".$object->getElement(Content::FORMAT_COLOR_VERBALE)."');\"";
                   break;
                   default:
                     $click_action = "onclick=\"Capability.open('".$object->getUniqid()."')\"";

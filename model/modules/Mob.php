@@ -281,6 +281,7 @@ class Mob extends Content
                             "style" => Style::ICON_MEDIA,
                             "icon" => "pa.png",
                             "color" => "pa-d-2",
+                            "size" => 50,
                             "tooltip" => "Calcul des points d'action",
                             "content" => $this->_pa,
                             "content_placement" => Style::POSITION_LEFT
@@ -1882,19 +1883,19 @@ class Mob extends Content
                 $powerful -= 1;
             }
 
-            if($powerful > 7){$powerful = 7;}
+            if($powerful > 9){$powerful = 9;}
             if($powerful < 1){$powerful = 1;}
             
             $view = new View();
             switch ($format) {
                 case Content::FORMAT_BADGE:
-                    if(in_array($powerful, [1,2,3,4,5,6,7])){
+                    if(in_array($powerful, [1,2,3,4,5,6,7,8,9])){
                         return $view->dispatch(
                             template_name : "badge",
                             data : [
                                 "content" => "Puissance ".$powerful,
                                 "color" => "deep-purple-d-3",
-                                "tooltip" => "Puissance d'une créature sur 7 niveaux en fonction de ces sorts",
+                                "tooltip" => "Puissance d'une créature sur 9 niveaux en fonction de ces sorts",
                                 "style" => Style::STYLE_BACK
                             ], 
                             write: false);
@@ -1904,14 +1905,14 @@ class Mob extends Content
                     }
 
                 case Content::FORMAT_ICON:
-                    if(in_array($powerful, [1,2,3,4,5,6,7])){
+                    if(in_array($powerful, [1,2,3,4,5,6,7,8,9])){
                         return $view->dispatch(
                             template_name : "icon",
                             data : [
                                 "style" => Style::ICON_SOLID,
                                 "icon" => "fist-raised",
                                 "color" => "deep-purple-d-3",
-                                "tooltip" => "Puissance d'une créature sur 7 niveaux en fonction de ces sorts",
+                                "tooltip" => "Puissance d'une créature sur 9 niveaux en fonction de ces sorts",
                                 "content" => $powerful,
                                 "content_placement" => Style::POSITION_LEFT
                             ], 
@@ -1922,7 +1923,7 @@ class Mob extends Content
                     }
 
                 case Content::FORMAT_TEXT:
-                    if(in_array($powerful, [1,2,3,4,5,6,7])){
+                    if(in_array($powerful, [1,2,3,4,5,6,7,8,9])){
                         return $powerful;
                     } else {
                         return "";

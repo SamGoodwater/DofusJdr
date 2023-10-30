@@ -178,6 +178,17 @@ class Spell extends Content
                             "style" => Style::INPUT_FLOATING
                         ], 
                         write: false);
+
+                case Content::FORMAT_BADGE:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_name,
+                            "color" => $this->getElement(Content::FORMAT_COLOR_VERBALE)."-d-2",
+                            "tooltip" => "Nom du sort",
+                            "style" => Style::STYLE_OUTLINE
+                        ], 
+                        write: false);
                 
                 default:
                     return $this->_name;
@@ -462,7 +473,7 @@ class Spell extends Content
                                 data : [
                                     "style" => Style::ICON_MEDIA,
                                     "icon" => "pa.png",
-                                    "size" => Style::SIZE_LG,
+                                    "size" => 50,
                                     "color" => "pa-d-2",
                                     "tooltip" => "Coût en point d'action du sort",
                                     "content" => $this->_pa,
@@ -897,7 +908,7 @@ class Spell extends Content
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
                     $items = [];
-                    for ($i=1; $i <= 7 ; $i++) { 
+                    for ($i=1; $i <= 9 ; $i++) { 
                         $items[] = [
                             "onclick" => "Spell.update('".$this->getUniqid()."', ".$i.", 'powerful', ".Controller::IS_VALUE.");",
                             "display" => "<span class='badge back-deep-purple-d-3'>Puissance " .$i."</span>"
@@ -907,22 +918,22 @@ class Spell extends Content
                     return $view->dispatch(
                         template_name : "dropdown",
                         data : [
-                            "tooltip" => "Puissance d'un sort sur 7 niveaux",
+                            "tooltip" => "Puissance d'un sort sur 9 niveaux",
                             "label" => $this->getPowerful(Content::FORMAT_BADGE),
                             "size" => Style::SIZE_SM,
                             "items" => $items,
-                            "comment" => "Puissance d'un sort sur 7 niveaux"
+                            "comment" => "Puissance d'un sort sur 9 niveaux"
                         ], 
                         write: false);
     
                 case Content::FORMAT_BADGE:
-                    if(in_array($this->_powerful,  [1,2,3,4,5,6,7])){
+                    if(in_array($this->_powerful,  [1,2,3,4,5,6,7,8,9])){
                         return $view->dispatch(
                             template_name : "badge",
                             data : [
                                 "content" => "Puissance ".$this->_powerful,
                                 "color" => "deep-purple-d-3",
-                                "tooltip" => "Puissance d'un sort sur 7 niveaux",
+                                "tooltip" => "Puissance d'un sort sur 9 niveaux",
                                 "style" => Style::STYLE_BACK
                             ], 
                             write: false);
@@ -932,7 +943,7 @@ class Spell extends Content
                     }
 
                 case Content::FORMAT_TEXT:
-                    if(in_array($this->_powerful, [1,2,3,4,5,6,7])){
+                    if(in_array($this->_powerful, [1,2,3,4,5,6,7,8,9])){
                         return "Puissance " . $this->_powerful;
                     } else {
                         return "";
@@ -983,7 +994,7 @@ class Spell extends Content
                                         data : [
                                             "content" => array_search($type, Spell::TYPE),
                                             "color" => Style::getColorFromLetter($type) . "-d-4",
-                                            "tooltip" => "Puissance d'un sort sur 7 niveaux",
+                                            "tooltip" => "Puissance d'un sort sur 9 niveaux",
                                             "style" => Style::STYLE_OUTLINE,
                                             "onclick" => "Spell.update('".$this->getUniqid()."',{action:'remove', type:'".$type."'},'type', IS_VALUE);$(this).remove();"
                                         ], 
@@ -1201,7 +1212,7 @@ class Spell extends Content
             return true;
         }
         public function setPowerful(int | null $data){
-            if(in_array($data, [1,2,3,4,5,6,7])){
+            if(in_array($data, [1,2,3,4,5,6,7,8,9])){
                 $this->_powerful = $data;
                 return true;
             } else {

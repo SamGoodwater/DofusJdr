@@ -1,0 +1,9 @@
+@for $i from 5 to 31 {
+    $size: $i * 10;
+    .truncate-#{$size} {
+        max-width: $size + px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

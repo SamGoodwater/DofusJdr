@@ -197,9 +197,10 @@ class Page extends Content
                                             $value__ = $file__;
                                         }
                                         include $path__;
+                                        $optionRefData = ""; if(isset($template['refStockDataOption'])){if(!empty($template['refStockDataOption'])){$optionRefData = $template['refStockDataOption'];}}
                                         $shownListAddInPage = true; if(isset($template["shownListAddInPage"])){$shownListAddInPage = $manager__->returnBool($template["shownListAddInPage"]);}
                                         if(($user->getIs_admin() || $template['onlyForAdmin'] == false) && $shownListAddInPage){ ?>
-                                            <option value="<?= $value__?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$template["description"]?>"><?=$template["title"]?></option>
+                                            <option value="<?=$value__?>" data-md5="<?=md5($path__)?>" data-ref_stock_data_option="<?=$optionRefData?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$template["description"]?>"><?=$template["title"]?></option>
                                         <?php }
                                     } ?>
                                 </optgroup>
@@ -222,13 +223,14 @@ class Page extends Content
                     foreach($templates__ as $key__ => $dir__) {
                         foreach($dir__ as $file__){
                             $path__ = SectionManager::PATH_SECTION . $key__ . "/" . $file__;
+                            $hash = md5($path__);
                             if(!file_exists($path__)){ $path__ = SectionManager::PATH_SECTION . $file__;}
                             include $path__;
                             $shownListAddInPage = true; if(isset($template["shownListAddInPage"])){$shownListAddInPage = $manager__->returnBool($template["shownListAddInPage"]);}
                             if(($user->getIs_admin() || $template['onlyForAdmin'] == false) && $shownListAddInPage){
                                 if(isset($template["option"])){ 
                                     if(!empty($template["option"])) {?>
-                                        <div id="<?=substr($file__, 0, -4)?>" class="option">
+                                        <div id="<?=$hash?>" class="option">
                                             <?=$template["option"]?>
                                         </div>
                                 <?php } 
@@ -250,8 +252,9 @@ class Page extends Content
                     }
                     function showOptions(){
                         hideOptions();
-                        if($("#"+$("#modal #type").val().slice(0,-4)).length){ //Si la valeur du select existe en id, alors c'est qu'il y a des options associés. Il faut les afficher et enlever les autres.
-                            $("#"+$("#modal #type").val().slice(0,-4)).show("slow");
+                        if($("#modal #type").val().length){ //Si la valeur du select existe en id, alors c'est qu'il y a des options associés. Il faut les afficher et enlever les autres.
+                            let ref = $("#modal #type").find('option:selected').data("md5");
+                            $("#"+ref).show("slow");
                         }
                     }
                 </script>

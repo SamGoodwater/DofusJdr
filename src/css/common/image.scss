@@ -32,209 +32,40 @@
     padding: 0px 0px;
 }
 
-.img-back-allH-450L{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 450px;
-    height: 100%;
-}
-.img-back-allH-30L{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 30px;
-    height: 100%;
+@for $i from 5 to 51 {
+    $size: $i * 10;
+    .img-back-allH-#{$size} {
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        width: $size + px;
+        height: 100%;
+        
+    }
+
+    .img-back-#{$size}H-allL{
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: $size + px;
+    }
+    
+    .img-back-#{$size}{
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        width: $size + px;
+        height: $size + px;
+    }
 }
 
-.img-back-450H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 450px;
-}
-.img-back-400H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 400px;
-}
-.img-back-350H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 350px;
-}
-.img-back-300H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 300px;
-}
-.img-back-250H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 250px;
-}
-.img-back-200H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 200px;
-}
-.img-back-180H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 180px;
-}
-.img-back-170H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 170px;
-}
-.img-back-150H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 150px;
-}
-.img-back-130H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 130px;
-}
-.img-back-120H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 120px;
-}
-.img-back-100H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 100px;
-}
-.img-back-80H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 80px;
-}
-.img-back-50H-allL{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 50px;
-}
-.img-back-400{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 400px;
-    height: 400px;
-}
-.img-back-350{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 350px;
-    height: 350px;
-}
-.img-back-300{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 300px;
-    height: 300px;
-}
-.img-back-200{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 200px;
-    height: 200px;
-}
-.img-back-180{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 180px;
-    height: 180px;
-}
-.img-back-150{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 150px;
-    height: 150px;
-}
-.img-back-120{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 120px;
-    height: 120px;
-}
-.img-back-90{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 90px;
-    height: 90px;
-}
-.img-back-70{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 70px;
-    height: 70px;
-}
-.img-back-50{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 50px;
-    height: 50px;
-}
 .img-back-45{
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     width: 45px;
     height: 45px;
-}
-.img-back-30{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 30px;
-    height: 30px;
-}
-.img-back-20{
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 20px;
-    height: 20px;
 }
 .img-back-15{
     background-size: cover;
@@ -293,16 +124,14 @@
     -webkit-background-size: cover; /* pour anciens Chrome et Safari */
 }
 .icon{
-    width: 20px;
     background-color: transparent;
-    &-xs{
-        width: 10px;
-    }
-    &-sm{
-        width: 15px;
-    }
-    &-lg{
-        width: 30px;
+    width: 20px;
+}
+@for $i from 1 to 21 {
+    $size: $i * 5;
+    .icon-#{$size} {
+        background-color: transparent;
+        width: $size + px;
     }
 }
 .text-under-img {

@@ -30,6 +30,8 @@
                     </div>  
                     <div class="col">
                         <?=$obj->getTime_before_use_again(Content::FORMAT_EDITABLE)?>
+                        <?=$obj->getCasting_time(Content::FORMAT_EDITABLE)?>
+                        <?=$obj->getDuration(Content::FORMAT_EDITABLE)?>
                         <?=$obj->getPa(Content::FORMAT_EDITABLE)?>
                         <?=$obj->getPo(Content::FORMAT_EDITABLE)?>
                         <?=$obj->getPo_editable(Content::FORMAT_EDITABLE)?>

@@ -6,21 +6,19 @@ class Section extends Controller{
         var URL = 'index.php?c=section&a=add';
         var type = $('#modal #type').val();
         var title = $('#modal #title').val();
-        var option = "";
-        switch (type) {
-            case "item.php":
-                var checkboxes = document.querySelectorAll('#option.item input[type="checkbox"]');
-                for (var checkbox of checkboxes) {
-                    if(checkbox.checked){
-                        option += checkbox.value + "|";
-                    }
-                    checkbox.checked = false;
-                }
-                option = option.substring(0, option.length - 1);
-            break;
-            default:
-                option = $("#modal #option").val();
-            break;
+        let option = "";
+
+        let optionSelect = $('#modal #type').find("option:selected");
+        let optionRefData = optionSelect.data("ref_stock_data_option");
+        console.log(optionRefData);
+        if(optionRefData != undefined && optionRefData != null && optionRefData != ''){
+            console.log($(optionRefData));
+            if($(optionRefData).length > 0){
+                option = $(optionRefData).val();
+                console.log(option);
+            } else {
+                MsgAlert("Echec d'option'", "Impossible d'accéder aux valeurs des options", "danger" , 4000);
+            }
         }
         
         $.post(URL,

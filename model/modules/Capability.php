@@ -53,6 +53,105 @@ class Capability extends Content
         ]
     ];
 
+    const ELEMENT_NEUTRE = 0;
+    const ELEMENT_VITALITY = 1;
+    const ELEMENT_SAGESSE = 2;
+    const ELEMENT_FORCE = 3;
+    const ELEMENT_INTEL = 4;
+    const ELEMENT_AGI = 5;
+    const ELEMENT_CHANCE = 6;
+
+    const ELEMENT_FORCE_INTEL = 7;
+    const ELEMENT_FORCE_AGI = 8;
+    const ELEMENT_FORCE_CHANCE = 9;
+
+    const ELEMENT_INTEL_AGI= 10;
+    const ELEMENT_INTEL_CHANCE= 11;
+
+    const ELEMENT_AGI_CHANCE= 12;
+
+    const ELEMENT_FORCE_INTEL_AGI= 13;
+    const ELEMENT_FORCE_INTEL_CHANCE= 14;
+    const ELEMENT_FORCE_AGI_CHANCE= 15;
+    const ELEMENT_INTEL_AGI_CHANCE= 16;
+
+    const ELEMENT_FORCE_INTEL_AGI_CHANCE= 17;
+
+    const ELEMENT = [
+        self::ELEMENT_NEUTRE => [
+            "color" => "neutre",
+            "name" => "Neutre"
+        ],
+        self::ELEMENT_VITALITY => [
+            "color" => "vitality",
+            "name" => "Vitalité"
+        ],
+        self::ELEMENT_SAGESSE => [
+            "color" => "sagesse",
+            "name" => "Sagesse"
+        ],
+        self::ELEMENT_FORCE => [
+            "color" => "force",
+            "name" => "Force"
+        ],
+        self::ELEMENT_INTEL => [
+            "color" => "intel",
+            "name" => "Intel"
+        ],
+        self::ELEMENT_AGI => [
+            "color" => "agi",
+            "name" => "Agi"
+        ],
+        self::ELEMENT_CHANCE => [
+            "color" => "chance",
+            "name" => "Chance"
+        ],
+        self::ELEMENT_FORCE_INTEL => [
+            "color" => "terre-feu",
+            "name" => "Force et Intel"
+        ],
+        self::ELEMENT_FORCE_AGI => [
+            "color" => "terre-air",
+            "name" => "Force et Agi"
+        ],
+        self::ELEMENT_FORCE_CHANCE => [
+            "color" => "terre-eau",
+            "name" => "Force et Chance"
+        ],
+        self::ELEMENT_INTEL_AGI => [
+            "color" => "feu-air",
+            "name" => "Intel et Agi"
+        ],
+        self::ELEMENT_INTEL_CHANCE => [
+            "color" => "feu-eau",
+            "name" => "Intel et Chance"
+        ],
+        self::ELEMENT_AGI_CHANCE => [
+            "color" => "air-eau",
+            "name" => "Agi et Chance"
+        ],
+        self::ELEMENT_FORCE_INTEL_AGI => [
+            "color" => "terre-feu-air",
+            "name" => "Force, Intel et Agi"
+        ],
+        self::ELEMENT_FORCE_INTEL_CHANCE => [
+            "color" => "terre-feu-eau",
+            "name" => "Force, Intel et Chance"
+        ],
+        self::ELEMENT_FORCE_AGI_CHANCE => [
+            "color" => "terre-air-eau",
+            "name" => "Force, Agi et Chance"
+        ],
+        self::ELEMENT_INTEL_AGI_CHANCE => [
+            "color" => "feu-air-eau",
+            "name" => "Intel, Agi et Chance"
+        ],
+        self::ELEMENT_FORCE_INTEL_AGI_CHANCE => [
+            "color" => "terre-feu-air-eau",
+            "name" => "Force, Intel, Agi et Chance"
+        ]
+    ];
+
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         private $_name='';
         private $_description='';
@@ -62,7 +161,9 @@ class Capability extends Content
         private $_po=1;
         private $_po_editable=true;
         private $_time_before_use_again=null;
-        private $_element = Spell::ELEMENT_NEUTRE;
+        private $_casting_time = null;
+        private $_duration=null;
+        private $_element = Capability::ELEMENT_NEUTRE;
         private $_is_magic = true;
         private $_ritual_available = false;
         private $_powerful = 1;
@@ -82,6 +183,17 @@ class Capability extends Content
                             "placeholder" => "Nom de l'aptitude",
                             "value" => $this->_name,
                             "style" => Style::INPUT_FLOATING
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_BADGE:
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_name,
+                            "color" => $this->getElement(Content::FORMAT_COLOR_VERBALE)."-d-2",
+                            "tooltip" => "Nom de l'aptitude",
+                            "style" => Style::STYLE_OUTLINE
                         ], 
                         write: false);
                 
@@ -225,7 +337,7 @@ class Capability extends Content
                                 data : [
                                     "style" => Style::ICON_MEDIA,
                                     "icon" => "pa.png",
-                                    "size" => Style::SIZE_LG,
+                                    "size" => 50,
                                     "color" => "pa-d-2",
                                     "tooltip" => "Coût en point d'action de l'aptitude",
                                     "content" => $pa,
@@ -451,12 +563,120 @@ class Capability extends Content
                     return $this->_time_before_use_again;
             }
         }
+        public function getCasting_time(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Capability",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "casting_time",
+                            "label" => "Durée d'incantation",
+                            "placeholder" => "Durée d'incantation",
+                            "tooltip" => "Durée d'incantation de l'aptitude",
+                            "value" => $this->_casting_time,
+                            "color" => "casting_time-d-2",
+                            "style" => Style::INPUT_ICON,
+                            "size" => Style::SIZE_SM,
+                            "icon" => "casting_time.svg",
+                            "style_icon" => Style::ICON_MEDIA,
+                            "color_icon" => "casting_time-d-4"
+                        ], 
+                        write: false);
+                
+                case Content::FORMAT_BADGE:
+                    if(empty($this->_casting_time)){return "";}
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_casting_time,
+                            "color" => "casting_time-d-2",
+                            "tooltip" => "Durée d'incantation de l'aptitude",
+                            "style" => Style::STYLE_BACK
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    if(empty($this->_casting_time)){return "";}
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "casting_time.svg",
+                            "color" => "casting_time-d-2",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Durée d'incantation de l'aptitude",
+                            "content" => $this->_casting_time,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                default:
+                    return $this->_casting_time;
+            }
+        }
+        public function getDuration(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/text",
+                        data : [
+                            "class_name" => "Capability",
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "duration",
+                            "label" => "Durée",
+                            "placeholder" => "Durée",
+                            "tooltip" => "Durée pendant laquelle les effets de l'aptitude sont actifs",
+                            "value" => $this->_duration,
+                            "color" => "duration-d-2",
+                            "style" => Style::INPUT_ICON,
+                            "size" => Style::SIZE_SM,
+                            "icon" => "duration.svg",
+                            "style_icon" => Style::ICON_MEDIA,
+                            "color_icon" => "duration-d-4"
+                        ], 
+                        write: false);
+                
+                case Content::FORMAT_BADGE:
+                    if(empty($this->_duration)){return "";}
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $this->_duration,
+                            "color" => "duration-d-2",
+                            "tooltip" => "Durée pendant laquelle les effets de l'aptitude sont actifs",
+                            "style" => Style::STYLE_BACK
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    if(empty($this->_duration)){return "";}
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "duration.svg",
+                            "color" => "duration-d-2",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Durée pendant laquelle les effets de l'aptitude sont actifs",
+                            "content" => $this->_duration,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                default:
+                    return $this->_duration;
+            }
+        }
         public function getElement(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
                     $items = [];
-                    foreach(Spell::ELEMENT as $id_element => $element) { 
+                    foreach(Capability::ELEMENT as $id_element => $element) { 
                         $items[] = [
                             "onclick" => "Capability.update('".$this->getUniqid()."', ".$id_element.", 'element', ".Controller::IS_VALUE.");",
                             "display" => "<span class='badge back-".$element['color']."-d-2'>" .ucfirst($element['name'])."</span>"
@@ -474,12 +694,12 @@ class Capability extends Content
                         write: false);
     
                 case Content::FORMAT_BADGE:
-                    if(isset(Spell::ELEMENT[$this->_element])){
+                    if(isset(Capability::ELEMENT[$this->_element])){
                         return $view->dispatch(
                             template_name : "badge",
                             data : [
-                                "content" => ucfirst(Spell::ELEMENT[$this->_element]['name']),
-                                "color" => Spell::ELEMENT[$this->_element]['color'] ."-d-2",
+                                "content" => ucfirst(Capability::ELEMENT[$this->_element]['name']),
+                                "color" => Capability::ELEMENT[$this->_element]['color'] ."-d-2",
                                 "tooltip" => "Element(s) de l'aptitude",
                                 "style" => Style::STYLE_BACK
                             ], 
@@ -490,15 +710,15 @@ class Capability extends Content
                     }
 
                 case Content::FORMAT_COLOR_VERBALE:
-                    if(isset(Spell::ELEMENT[$this->_element])){
-                        return strtolower(Spell::ELEMENT[$this->_element]['color']);
+                    if(isset(Capability::ELEMENT[$this->_element])){
+                        return strtolower(Capability::ELEMENT[$this->_element]['color']);
                     } else {
                         return "";
                     }
 
                 case Content::FORMAT_TEXT:
-                    if(isset(Spell::ELEMENT[$this->_element])){
-                        return strtolower(Spell::ELEMENT[$this->_element]['name']);
+                    if(isset(Capability::ELEMENT[$this->_element])){
+                        return strtolower(Capability::ELEMENT[$this->_element]['name']);
                     } else {
                         return "";
                     }
@@ -700,7 +920,7 @@ class Capability extends Content
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
                     $items = [];
-                    for ($i=1; $i <= 7 ; $i++) { 
+                    for ($i=1; $i <= 9 ; $i++) { 
                         $items[] = [
                             "onclick" => "Capability.update('".$this->getUniqid()."', ".$i.", 'powerful', ".Controller::IS_VALUE.");",
                             "display" => "<span class='badge back-deep-purple-d-3'>Puissance " .$i."</span>"
@@ -710,22 +930,22 @@ class Capability extends Content
                     return $view->dispatch(
                         template_name : "dropdown",
                         data : [
-                            "tooltip" => "Puissance d'une aptitude sur 7 niveaux",
+                            "tooltip" => "Puissance d'une aptitude sur 9 niveaux",
                             "label" => $this->getPowerful(Content::FORMAT_BADGE),
                             "size" => Style::SIZE_SM,
                             "items" => $items,
-                            "comment" => "Puissance d'une aptitude sur 7 niveaux"
+                            "comment" => "Puissance d'une aptitude sur 9 niveaux"
                         ], 
                         write: false);
     
                 case Content::FORMAT_BADGE:
-                    if(in_array($this->_powerful,  [1,2,3,4,5,6,7])){
+                    if(in_array($this->_powerful,  [1,2,3,4,5,6,7,8,9])){
                         return $view->dispatch(
                             template_name : "badge",
                             data : [
                                 "content" => "Puissance ".$this->_powerful,
                                 "color" => "deep-purple-d-3",
-                                "tooltip" => "Puissance d'une aptitude sur 7 niveaux",
+                                "tooltip" => "Puissance d'une aptitude sur 9 niveaux",
                                 "style" => Style::STYLE_BACK
                             ], 
                             write: false);
@@ -735,7 +955,7 @@ class Capability extends Content
                     }
 
                 case Content::FORMAT_TEXT:
-                    if(in_array($this->_powerful, [1,2,3,4,5,6,7])){
+                    if(in_array($this->_powerful, [1,2,3,4,5,6,7,8,9])){
                         return "Puissance " . $this->_powerful;
                     } else {
                         return "";
@@ -846,8 +1066,16 @@ class Capability extends Content
             $this->_time_before_use_again = $data;
             return true;
         }
+        public function setCasting_time(string | int | null $data){
+            $this->_casting_time = $data;
+            return true;
+        }
+        public function setDuration(string | int | null $data){
+            $this->_duration = $data;
+            return true;
+        }
         public function setElement(string | null $data){
-            if(isset(Spell::ELEMENT[$this->_element])){
+            if(isset(Capability::ELEMENT[$this->_element])){
                 $this->_element = $data;
                 return true;
             } else {
@@ -863,7 +1091,7 @@ class Capability extends Content
             return true;
         }
         public function setPowerful(int | null $data){
-            if(in_array($data, [1,2,3,4,5,6,7])){
+            if(in_array($data, [1,2,3,4,5,6,7,8,9])){
                 $this->_powerful = $data;
                 return true;
             } else {

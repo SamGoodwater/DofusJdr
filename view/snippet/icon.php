@@ -15,7 +15,7 @@
     if(!isset($style)) { $style = Style::ICON_SOLID;}else{if(!in_array($style, [Style::ICON_REGULAR, Style::ICON_SOLID, Style::ICON_MEDIA])) {$style = Style::ICON_SOLID;}}
     if(!isset($dirfile)) { $dirfile = "icons/modules/";}else{if(!is_string($dirfile) && !is_string($dirfile)) {$dirfile = "icons/modules/";}}
     $dirfile = str_replace("../", "/", $dirfile);$dirfile = str_replace("./", "/", $dirfile);
-    if(!isset($size)) { $size = "";}else{if(!in_array($size, [Style::SIZE_SM, Style::SIZE_LG, '', Style::SIZE_XL]) && !is_string($size) && !is_numeric($size)) {$size = "xl";}}
+    if(!isset($size)) { $size = "";}else{if(!in_array($size, [Style::SIZE_SM, Style::SIZE_LG, '', Style::SIZE_XL]) && !is_string($size) && !is_numeric($size)) {$size = "";}}
     if($style != Style::ICON_MEDIA){
         switch ($size) {
             case Style::SIZE_XL:
@@ -28,9 +28,22 @@
                 $size = "size-0-8";
             break;
         }
+    } elseif($style == Style::ICON_MEDIA) {
+        if($size == Style::SIZE_XL){
+            $size = "icon-50";
+        } elseif($size == Style::SIZE_LG) {
+            $size = "icon-30";
+        } elseif($size == Style::SIZE_SM) {
+            $size = "icon-15";
+        } elseif(is_numeric($size)) {
+            $size = "icon-".$size;
+        } else {
+            $size = "";
+        }
     }
     
     // Optionnel - valeur par défault ok
+    if(!isset($truncate)) { $truncate = "100";}else{if(!is_numeric($truncate)) {$truncate = "100";}}
     if(!isset($content_placement)) { $content_placement = Style::POSITION_LEFT;}else{if(!in_array($content_placement, [Style::POSITION_BOTTOM, Style::POSITION_LEFT, Style::POSITION_RIGHT, Style::POSITION_TOP])) {$content_placement = Style::POSITION_LEFT;}}
     if(!isset($class)) { $class = "";}else{if(!is_string($class)) {$class = "";}}
     if(!isset($id)) { $id = "";}else{if(!is_string($id)) {$id = "";}}
@@ -64,12 +77,12 @@
 
     if($style == Style::ICON_MEDIA){ ?>
 
-        <span class="<?=$top_bottom_class?>">
-            <i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$btn_type.$color?> <?=$class?>"><?=$content_before?><img class='icon icon-<?=$size?>' src='medias/<?=$dirfile.$icon?>'><?=$content_after?></i>
+        <span class="<?=$top_bottom_class?> truncate-<?=$truncate?>">
+            <i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$btn_type.$color?> <?=$class?>"><?=$content_before?><img class='icon <?=$size?>' src='medias/<?=$dirfile.$icon?>'><?=$content_after?></i>
         </span>
         
     <?php } else { ?>
 
-        <span class="<?=$top_bottom_class?>"><?=$content_before?><i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$style?> fa-<?=$icon?> <?=$btn_type.$color?> <?=$class?> <?=$size?>"></i><?=$content_after?></span>
+        <span class="<?=$top_bottom_class?> truncate-<?=$truncate?>"><?=$content_before?><i style="<?=$css?>" <?=$data?> id="<?=$id?>" <?=$href?> <?=$onclick?> data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>" class="<?=$style?> fa-<?=$icon?> <?=$btn_type.$color?> <?=$class?> <?=$size?>"></i><?=$content_after?></span>
         
     <?php }

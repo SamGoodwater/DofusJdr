@@ -581,6 +581,7 @@ class Npc extends Content
                             "icon" => "pa.png",
                             "color" => "pa",
                             "tooltip" => "PA",
+                            "size" => 50,
                             "content" => $this->_pm,
                             "content_placement" => Style::POSITION_LEFT
                         ], 

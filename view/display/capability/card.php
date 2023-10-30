@@ -27,6 +27,8 @@
                     <div class="col-auto">
                         <div><?=$obj->getPa(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getTime_before_use_again(Content::FORMAT_BADGE)?></div>
+                        <div><?=$obj->getCasting_time(Content::FORMAT_BADGE)?></div>
+                        <div><?=$obj->getDuration(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getPo_editable(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getPo(Content::FORMAT_BADGE)?></div>
                     </div>

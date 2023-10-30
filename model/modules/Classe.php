@@ -163,7 +163,7 @@ class Classe extends Content
                     return $view->dispatch(
                         template_name : "badge",
                         data : [
-                            "content" => "Dé de vie : {$this->_life_dice}<img class='icon icon-sm ms-1 align-text-bottom' src='medias/icons/modules/dice12.svg' alt='Icône du dé de vie'>",
+                            "content" => "Dé de vie : {$this->_life_dice}<img class='icon icon-15 ms-1 align-text-bottom' src='medias/icons/modules/dice12.svg' alt='Icône du dé de vie'>",
                             "color" => "grey-d-4",
                             "tooltip" => "Valeur du dé de vie",
                             "style" => Style::STYLE_OUTLINE

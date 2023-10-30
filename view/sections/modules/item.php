@@ -31,18 +31,20 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
         "editable" => false,
         "editOnDblClick" => false,
         "onlyForAdmin" => false,
-        "shownListAddInPage" => true
+        "shownListAddInPage" => true,
+        "refStockDataOption" => "#itemListAdd"  // référence des données de l'option dans la page
     );
 
     ob_start(); ?>
         <a class="btn btn-sm btn-animate btn-underline-main" onclick="selectAllCategoryItem();">Tout sélectionner</a>
         <a class="btn btn-sm btn-animate btn-underline-main" onclick="deselectAllCategoryItem();">Tout désélectionner</a>
+        <input id="itemListAdd" type="hidden" value="">
         <div class="m-2">
             <p>Sélectionner une catégorie d'équipement</p>
-            <div id="option" class="mb-2 item">
+            <div id="optionitem" class="mb-2 item">
                 <?php foreach (Item::TYPES as $name => $value) {?>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" value="<?=$value?>" id="flexCheck<?=$name?>">
+                        <input onchange="Item.setDataInOptionInput();" class="form-check-input" type="checkbox" value="<?=$value?>" id="flexCheck<?=$name?>">
                         <label class="form-check-label" for="flexCheck<?=$name?>"><?=$name?></label>
                     </div>
                 <?php } ?>
