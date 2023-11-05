@@ -10,7 +10,10 @@
 
 <div class="card p-2 m-2 border-2 border-main">
     <div class="row justify-content-between mb-1">
-        <div class="col-auto"><?=$obj->getIs_unbewitchable(Content::FORMAT_BADGE)?></div>
+        <div class="col-auto">
+            <?=$obj->getIs_unbewitchable(Content::FORMAT_BADGE)?>
+            <?=$obj->getIs_malus(Content::FORMAT_BADGE)?>
+        </div>
         <div class="col-auto row justify-content-between">
             <div class="col-auto">
                 <?=$obj->getUsable(Content::FORMAT_BADGE)?>

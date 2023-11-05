@@ -63,7 +63,57 @@ $(document).ready(function() {
 
 	
 	const modal = document.getElementById('modal');
+	modal.addEventListener('show.bs.modal', event => {
+		let width = "600";
+		if($('#modal .modal-dialog').hasClass('modal-xl')){
+			width = "1200";
+		} else if($('#modal .modal-dialog').hasClass('modal-lg')){
+			width = "800";
+		} else if($('#modal .modal-dialog').hasClass('modal-md')){
+			width = "600";
+		} else if($('#modal .modal-dialog').hasClass('modal-sm')){
+			width = "400";
+		} else if($('#modal .modal-dialog').hasClass('modal-xs')){
+			width = "300";
+		} else {
+			width = "600";
+		}
+		$("#modal .modal-dialog").draggable({
+			cursor: "move",
+			handle: ".modal-header",
+			scroll: false,
+			opacity: 0.35
+		});
+		$("#modal .modal-dialog").resizable({
+			minHeight: 300,
+			minWidth: 300,
+			maxWidth: $(window).width() - 50,
+			maxHeight: $(window).height() - 50,
+		});
+	});
 	modal.addEventListener('hidden.bs.modal', event => {
+		let width = "600";
+		if($('#modal .modal-dialog').hasClass('modal-xl')){
+			width = "1200";
+		} else if($('#modal .modal-dialog').hasClass('modal-lg')){
+			width = "800";
+		} else if($('#modal .modal-dialog').hasClass('modal-md')){
+			width = "600";
+		} else if($('#modal .modal-dialog').hasClass('modal-sm')){
+			width = "400";
+		} else if($('#modal .modal-dialog').hasClass('modal-xs')){
+			width = "300";
+		} else {
+			width = "600";
+		}
+
+		if (!($('#modal.in').length)) {
+			$('.modal-dialog').css({
+				top: 0,
+				left: 0,
+				width: width
+			});
+		}
 		let bubbleId = $(".modal__bubbleshortcut_toggle").attr('onclick');
 		bubbleId = bubbleId.split("'")[1];
 		if(Bubbleshortcut.existFromBubbleId(bubbleId)){

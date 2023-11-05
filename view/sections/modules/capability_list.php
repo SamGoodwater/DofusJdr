@@ -61,7 +61,7 @@ ob_start(); ?>
             </div>
         </div>
         <input id="capacityListAdd<?=$this->getUniqid()?>" type="hidden" value="">
-        <div id="showResume<?=$this->getUniqid()?>" class="d-flex flex-row justify-content-start gap-2">
+        <div id="showResume<?=$this->getUniqid()?>" class="d-flex flex-row justify-content-start gap-2 flex-wrap">
             <?php if(isset($template_vars['content']) && !empty($template_vars['content'])){
                 $capabilities = explode(";", $template_vars['content']);
                 if(!empty($capabilities) && is_array($capabilities)){
@@ -80,7 +80,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
     $manager = new CapabilityManager();
 
     ob_start();?>
-         <div class="d-flex flex-row justify-content-start gap-2">
+         <div class="d-flex flex-row justify-content-start gap-2 flex-wrap">
             <?php if(isset($template_vars['content']) && !empty($template_vars['content'])){
                 $capabilities = explode(";", $template_vars['content']);
                 if(!empty($capabilities) && is_array($capabilities)){

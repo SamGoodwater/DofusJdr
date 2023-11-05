@@ -114,6 +114,7 @@ class ConditionManager extends Manager
                     name,
                     description,
                     is_unbewitchable,
+                    is_malus,
                     usable
                    )
             VALUES (
@@ -123,6 +124,7 @@ class ConditionManager extends Manager
                     :name,
                     :description,
                     :is_unbewitchable,
+                    :is_malus,
                     :usable
                 )');
 
@@ -133,6 +135,7 @@ class ConditionManager extends Manager
             'name' => $condition->getName(),
             'description' => $condition->getDescription(),
             'is_unbewitchable' => $condition->getIs_unbewitchable(),
+            'is_malus' => $condition->getIs_malus(),
             "usable" => $condition->getUsable()
         ));
     }
@@ -144,6 +147,7 @@ class ConditionManager extends Manager
                     name=:name,
                     description=:description,
                     is_unbewitchable=:is_unbewitchable,
+                    is_malus=:is_malus,
                     usable=:usable
             WHERE id = :id');
 
@@ -155,6 +159,7 @@ class ConditionManager extends Manager
             'name' => $condition->getName(),
             'description' => $condition->getDescription(),
             'is_unbewitchable' => $condition->getIs_unbewitchable(),
+            'is_malus' => $condition->getIs_malus(),
             "usable" => $condition->getUsable()
             ));
     }

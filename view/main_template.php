@@ -171,6 +171,13 @@
                 </div>
             </div>
         </div>
+        <script>
+            $("#diceroller .modal-dialog").draggable({
+                cursor: "move",
+                handle: ".modal-header",
+            });
+
+        </script>
 
     <!-- END POPUP -->
 

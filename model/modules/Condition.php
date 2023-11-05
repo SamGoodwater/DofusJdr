@@ -18,6 +18,7 @@ class Condition extends Content
         private $_name='';
         private $_description='';
         private $_is_unbewitchable=true;
+        private $_is_malus=true;
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function getName(int $format = Content::FORMAT_BRUT){
@@ -152,7 +153,99 @@ class Condition extends Content
                     return $this->_is_unbewitchable;
             }
         }
+        public function getIs_malus(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    ob_start(); ?>
+                        <div class="d-flex flex-row justify-content-start align-items-center"><?php
+                            $view->dispatch(
+                                template_name : "badge",
+                                data : [
+                                    "content" => "Bonus",
+                                    "color" => "light-green-d-3",
+                                    "style" => Style::STYLE_OUTLINE,
+                                    "tooltip" => "L'état est un bonus (positif).",
+                                    "tooltip_placement" => Style::DIRECTION_TOP,
+                                    "css" => "me-1"
+                                ], 
+                                write: true);
+        
+                            $view->dispatch(
+                                template_name : "input/checkbox",
+                                data : [
+                                    "class_name" => "condition",
+                                    "uniqid" => $this->getUniqid(),
+                                    "id" => "is_malus_" . $this->getUniqid(),
+                                    "input_name" => "is_malus",
+                                    "label" => "",
+                                    "color" => "deep-orange-d-3",
+                                    "checked" => $this->returnBool($this->_is_malus),
+                                    "style" => Style::CHECK_SWITCH
+                                ], 
+                                write: true);
 
+                                $view->dispatch(
+                                    template_name : "badge",
+                                    data : [
+                                        "content" => "Malus",
+                                        "color" => "brown-d-2",
+                                        "style" => Style::STYLE_OUTLINE,
+                                        "tooltip" => "L'état est un malus (négatif).",
+                                        "tooltip_placement" => Style::DIRECTION_TOP,
+                                        "class" => "me-1"
+                                    ], 
+                                    write: true);?>
+                        </div>
+                    <?php return ob_get_clean();
+                    
+                case Content::FORMAT_BADGE:
+                    if($this->_is_malus){
+                        $color = "deep-orange-d-3";
+                        $content = "Malus";
+                        $tooltip = "L'état est un malus (négatif).";
+                    } else {
+                        $color = "light-green-d-3";
+                        $content = "Bonus";
+                        $tooltip = "L'état est un bonus (positif).";
+                    }
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $content,
+                            "color" => $color,
+                            "style" => Style::STYLE_OUTLINE,
+                            "tooltip"
+                            => $tooltip,
+                            "tooltip_placement" => Style::DIRECTION_TOP
+                        ],
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    if($this->_is_malus){
+                        $color = "deep-orange-d-3";
+                        $icon = "square-minus";
+                        $tooltip = "L'état est un malus (négatif).";
+                    } else {
+                        $color = "light-green-d-3";
+                        $icon = "square-plus";
+                        $tooltip = "L'état est un bonus (positif).";
+                    }
+                    return $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_REGULAR,
+                            "icon" => $icon,
+                            "color" => $color,
+                            "tooltip" => $tooltip
+                        ], 
+                        write: false);
+
+                default:
+                    return $this->_is_malus;
+            }
+        }
+        
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function setName(string | int | null $data){
             $this->_name = $data;
@@ -164,6 +257,10 @@ class Condition extends Content
         }
         public function setIs_unbewitchable(bool | null $data){
             $this->_is_unbewitchable = $this->returnBool($data);
+            return true;
+        }
+        public function setIs_malus(bool | null $data){
+            $this->_is_malus = $this->returnBool($data);
             return true;
         }
 }

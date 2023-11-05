@@ -14,7 +14,10 @@
             <div class="card-body m-1 p-0">
                 <div class="d-flex flex-row justify-content-between ">
                     <p class="bold"><?=$obj->getName()?></p>
-                    <div class="me-1 mb-1"><?=$obj->getIs_unbewitchable(Content::FORMAT_ICON)?></div>
+                    <div class="me-1 mb-1 gap-1">
+                        <?=$obj->getIs_unbewitchable(Content::FORMAT_ICON)?>
+                        <?=$obj->getIs_malus(Content::FORMAT_ICON)?>
+                    </div>
                 </div>
             </div>
             <div class="d-flex flex-column justify-content-between ms-auto resume-rapid-menu">

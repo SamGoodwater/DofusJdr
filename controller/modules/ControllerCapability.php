@@ -408,7 +408,7 @@ class ControllerCapability extends ControllerModule{
                     $click_action = "onclick=\"Npc.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'capability', IS_VALUE);\"";
                   break;
                   case ControllerModule::SEARCH_DONE_GET_CAPABILITY:
-                    $click_action = "onclick=\"Capability.addToOptionSection('".$parameter."','".$object->getUniqid()."', '".$object->getName()."', '".$object->getElement(Content::FORMAT_COLOR_VERBALE)."');\"";
+                    $click_action = "onclick=\"Capability.addToOptionSection('".$parameter."','".$object->getUniqid()."', '".addslashes($object->getName())."', '".$object->getElement(Content::FORMAT_COLOR_VERBALE)."');\"";
                   break;
                   default:
                     $click_action = "onclick=\"Capability.open('".$object->getUniqid()."')\"";

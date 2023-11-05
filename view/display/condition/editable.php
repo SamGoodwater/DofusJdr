@@ -12,7 +12,10 @@
     
     <div class="row g-0">
         <div class="row justify-content-between mb-1">
-            <div class="col-auto"><?=$obj->getIs_unbewitchable(Content::FORMAT_EDITABLE)?></div>
+            <div class="col-auto">
+                <?=$obj->getIs_unbewitchable(Content::FORMAT_EDITABLE)?>
+                <?=$obj->getIs_malus(Content::FORMAT_EDITABLE)?>
+            </div>
             <div class="col-auto row justify-content-between">
                 <div class="col-auto">
                     <?=$obj->getUsable(Content::FORMAT_EDITABLE)?>

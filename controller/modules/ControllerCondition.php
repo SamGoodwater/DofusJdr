@@ -82,6 +82,7 @@ class ControllerCondition extends ControllerModule{
           'name' => "<b>".$obj->getName()."</b>",
           'description' => $obj->getDescription(),
           'is_unbewitchable' => $obj->getIs_unbewitchable(Content::FORMAT_ICON),
+          'is_malus' => $obj->getIs_malus(Content::FORMAT_ICON),
           'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='condition' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
           'edit' => $edit,
@@ -134,6 +135,7 @@ class ControllerCondition extends ControllerModule{
               'name' => "<b>".$obj->getName()."</b>",
               'description' => $obj->getDescription(),
               'is_unbewitchable' => $obj->getIs_unbewitchable(Content::FORMAT_ICON),
+              'is_malus' => $obj->getIs_malus(Content::FORMAT_ICON),
               'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='condition' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'edit' => $edit,
@@ -172,7 +174,8 @@ class ControllerCondition extends ControllerModule{
           $object = new Condition([
             'name' => trim($_REQUEST['name']),
             'uniqid' => uniqid(),
-            'is_unbewitchable' => 1
+            'is_unbewitchable' => 1,
+            'is_malus' => 1
           ]);
           $object->setTimestamp_add();
           $object->setTimestamp_updated();
