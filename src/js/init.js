@@ -78,6 +78,13 @@ $(document).ready(function() {
 		} else {
 			width = "600";
 		}
+		if (!($('#modal.in').length)) {
+			$('.modal-dialog').css({
+				top: 0,
+				left: 0,
+				width: width
+			});
+		}
 		$("#modal .modal-dialog").draggable({
 			cursor: "move",
 			handle: ".modal-header",

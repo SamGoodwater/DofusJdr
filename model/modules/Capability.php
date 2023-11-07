@@ -976,7 +976,7 @@ class Capability extends Content
                     ob_start(); ?>
                         <h4>Spécialisations</h4>
                         <p><small>Choisissez les spécialisations pouvant utiliser cette aptitude.</small></p>
-                        <div class="d-flex justify-content-start gap-1 align-baseline">
+                        <div class="d-flex justify-content-start gap-1 align-baseline flex-wrap">
                             <?php foreach (self::SPECIALIZATION as $id => $specialization) { 
                                 $checked = "";
                                 $class="";

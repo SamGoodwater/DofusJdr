@@ -154,6 +154,8 @@ class ControllerCapability extends ControllerModule{
           'time_before_use_again' => $obj->getTime_before_use_again(Content::FORMAT_ICON),
           'casting_time' => $obj->getCasting_time(Content::FORMAT_ICON),
           'duration' => $obj->getDuration(Content::FORMAT_ICON),
+          'casting_time' => $obj->getCasting_time(Content::FORMAT_ICON),
+          'duration' => $obj->getDuration(Content::FORMAT_ICON),
           'element' => $obj->getElement(Content::FORMAT_BADGE),
           'specialization' => $obj->getSpecialization(Content::FORMAT_BADGE),
           'ritual_available' => $obj->getRitual_available(Content::FORMAT_BADGE),
