@@ -41,7 +41,8 @@ class Module extends Content
           "shop" => User::RIGHT_READ,
           "spell" => User::RIGHT_READ,
           "user" => User::RIGHT_NO,
-          "social" => User::RIGHT_READ
+          "social" => User::RIGHT_READ,
+          "ArtificialIntelligence" => User::RIGHT_NO,
       ];
 
     // Style couleur
@@ -98,6 +99,5 @@ class Module extends Content
         "feu-air-eau" => ["red","green", "blue"],
         "terre-feu-air-eau" => ["brown","red","green", "blue"]
       ];
-
 
 }

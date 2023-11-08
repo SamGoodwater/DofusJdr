@@ -22,11 +22,13 @@ $GLOBALS['project'] = [
         "smtp_secure" => "ssl"
     ],
     "github" => "",
+    "openia_api" => "",
     "var_globals_project_not_accessible_to_js" => 
     [
         "mail",
         "author",
-        "github"
+        "github",
+        "openia_api"
     ]
 ]; 
 

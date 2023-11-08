@@ -151,11 +151,13 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title w-100"><i class="fa-solid fa-dice"></i> Jet de dés</h2>
+                        <h2 class="modal-title w-100"><i class="fa-solid fa-dice"></i> Outils</h2>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body justify-content-center text-center">
-                        <p>
+                        <!-- JEt de Dés -->
+                        <div class="mb-4">
+                            <h2>Jet de dés</h2>
                             <div class="input-group mb-3">
                                 <input onchange="minmaxDice()" type="text" class="form-control form-control-main-focus" placeholder="nombre de dé" id="number_dice">
                                 <span class="input-group-text">D</span>
@@ -163,21 +165,99 @@
                                 <span class="input-group-text"> + </span>
                                 <input onchange="minmaxDice()" type="text" class="form-control form-control-main-focus" placeholder="ajoute fixe" id="add_int">
                             </div>
-                        </p>
-                        <p class="text-grey-d-1 size-0-8" id="min-max"></p>
-                        <a class="btn btn-sm btn-animate btn-back-secondary" onclick="rollDice();">Lancer les dés</a>
-                        <p id="result_dice"></p>
+                            <p class="text-grey-d-1 size-0-8" id="min-max"></p>
+                            <a class="btn btn-sm btn-animate btn-back-secondary" onclick="rollDice();">Lancer les dés</a>
+                            <p id="result_dice"></p>
+                            <script>
+                                $("#diceroller .modal-dialog").draggable({
+                                    cursor: "move",
+                                    handle: ".modal-header",
+                                });
+                            </script>
+                        </div>
+
+                        <!-- Récupérer des noms -->
+                        <div class="mb-4" id="openai_getname_form">
+                            <h2>Générateur de nom aléatoire</h2>
+                            <p><small>Ce générateur utilise de l'intelligence artificielle et notamment ChatGPT (d'OpenAI).
+                                Cela permet d'avoir des résultats pertinents et originaux. Cependant cet outil a un coût (environnemental et monétaire), merci de ne pas en abuser.</small></p>
+                            <div class="d-flex justify-content-around flex-wrap gap-3">
+                                <div class="my-2">
+                                    <label for="openai_classe" class="form-label">Choisissez une classe</label>
+                                    <input id="openai_classe" class="form-control form-control-sm" list="OpenAIdatalistClasseOptions" id="openai_classe" placeholder="Choisissez une classe">
+                                    <datalist id="OpenAIdatalistClasseOptions">
+                                        <option value="Non générique">
+                                        <?php $manager = new ClasseManager;
+                                            $classes = $manager->getAll();
+                                            foreach($classes as $classe){
+                                                echo("<option value='".$classe->getName()."'>");
+                                            }
+                                        ?>
+                                    </datalist>
+                                </div>
+                                <div>
+                                    <label class="form-label">Choisissez le genre</label>
+                                    <select id="openai_genre" class="form-select form-select-sm" aria-label="liste des genres">
+                                        <option value="nb" selected>Non-binaire</option>
+                                        <option value="f">Féminin</option>
+                                        <option value="m">Masculin</option>
+                                        <option value="">Ne pas préciser</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <p>Facultatif - Vous pouvez préciser une culture pour inspirer le nom généré.</p>
+                                    <p><small>Cette culture peut être issu de la fiction mais aussi du réel.</small></p>
+                                    <p><input id="openai_inspiration_culturel" class="form-control form-control-sm" type="text" placeholder="indienne, malgache, bretonne, etc" aria-label="Inspiration culturel"></p>
+                                </div>
+                            </div>
+                            <p class="my-2">
+                                <label for="openai_result" class="form-label">Nom généré</label>
+                                <p class="d-flex">
+                                    <input class="form-control-sm form-control form-control-main" type="text" id="openai_result" readonly value="">
+                                    <a onclick="copyToClipboard($('#openai_result').val());"><i class="mx-2 btn-text-main fa-solid fa-copy"></i></a>
+                                </p>
+                            </p>
+                            <button class="btn btn-sm btn-back-secondary mt-2" onclick="generateName();">Générer</button>
+                            <script>
+                                function generateName(){
+                                    let URL = 'index.php?c=openai&a=call';
+                                    let classe = $('#openai_getname_form #openai_classe').val();
+                                    let genre = $('#openai_getname_form #openai_genre').val();
+                                    let inspiration_culturel = $('#openai_getname_form #openai_inspiration_culturel').val();
+
+                                    let data_post = {
+                                        classe:classe,
+                                        genre:genre,
+                                        inspiration_culturel:inspiration_culturel
+                                    };
+                                    
+                                    $.post(URL,
+                                        {
+                                            template:'modules/getname',
+                                            data:data_post
+                                        },
+                                        function(data, status)
+                                        {
+                                            if(data.script != ""){
+                                                $('body').append('<script>'+ data.script +'<//script>');
+                                            }
+                                            if(data.state){
+                                                $("#openai_result").val(data.value);
+                                                MsgAlert("Génération du nom", 'Le nom est ' + data.value, "green" , 3000);
+                                            } else {
+                                                MsgAlert("Échec de le la génération", 'Erreur : ' + data.error, "danger" , 4000);
+                                            }
+                                        },
+                                        "json"
+                                    ); 
+                                }
+                            </script>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
-        <script>
-            $("#diceroller .modal-dialog").draggable({
-                cursor: "move",
-                handle: ".modal-header",
-            });
-
-        </script>
 
     <!-- END POPUP -->
 

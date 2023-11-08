@@ -1,5 +1,20 @@
 // Exemple d'utilisation : copyToClipboard('<?=$_SERVER['SERVER_NAME'] . '/#'. $page->getUrl_name()?>')
+// Si élément dom input copié, alors copie la valeur de l'input.
 const copyToClipboard = str => {
+    if(str == ''){
+        MsgAlert("Le lien est vide","", "red" , 3000);
+    } else if(typeof str == "string"){
+        str = str.trim();
+    } else if(str instanceof jQuery){
+        str = str.val();
+    } else if(str instanceof HTMLElement){
+        str = str.innerText;
+    } else if(str instanceof HTMLInputElement){
+        str = str.value;
+    } else {
+        str = str.toString();
+    }
+
     const el = document.createElement('textarea');  // Create a <textarea> element                     
     el.value = str;                                 // Set its value to the string that you want copied
     el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
@@ -18,7 +33,7 @@ const copyToClipboard = str => {
       document.getSelection().addRange(selected);   // Restore the original selection
     }
     if(VERBAL_MODE){console.log('COPY : '+str);}
-    MsgAlert("Le lien a bien été copié","", "green" , 3000);
+    MsgAlert("Le texte a bien été copié","", "green" , 3000);
   };
   
   // M E S S A G E   A L E R T
