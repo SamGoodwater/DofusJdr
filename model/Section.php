@@ -114,6 +114,7 @@ class Section extends Content
                 <?php return ob_get_clean();
             
             default:
+                if(empty($this->_content)){return "";}
                 return html_entity_decode($this->_content);
         }
     }

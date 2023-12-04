@@ -114,6 +114,7 @@ class Classe extends Content
                         write: false);
                 
                 default:
+                    if(empty($this->_description)){return "";}
                     return html_entity_decode($this->_description);
             }
         }
@@ -135,6 +136,7 @@ class Classe extends Content
                         write: false);
                 
                 default:
+                    if(empty($this->_life)){return "";}
                     return html_entity_decode($this->_life);
             }
         }
@@ -204,6 +206,7 @@ class Classe extends Content
                         write: false);
                 
                 default:
+                    if(empty($this->_specificity)){return "";}
                     return html_entity_decode($this->_specificity);
             }
         }

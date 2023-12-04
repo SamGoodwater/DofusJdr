@@ -91,6 +91,12 @@ class ControllerMob extends ControllerModule{
           'intel'=> $obj->getIntel(Content::FORMAT_ICON),
           'agi'=> $obj->getAgi(Content::FORMAT_ICON),
           'chance'=> $obj->getChance(Content::FORMAT_ICON),
+          "do_fixe_neutre" => $obj->getDo_fixe_neutre(Content::FORMAT_VIEW),
+          "do_fixe_terre" => $obj->getDo_fixe_terre(Content::FORMAT_VIEW),
+          "do_fixe_feu" => $obj->getDo_fixe_feu(Content::FORMAT_VIEW),
+          "do_fixe_air" => $obj->getDo_fixe_air(Content::FORMAT_VIEW),
+          "do_fixe_eau" => $obj->getDo_fixe_eau(Content::FORMAT_VIEW),
+          "do_fixe_multiple" => $obj->getDo_fixe_multiple(Content::FORMAT_VIEW),
           'ca'=> $obj->getCa(Content::FORMAT_ICON),
           'fuite'=> $obj->getFuite(Content::FORMAT_ICON),
           'tacle'=> $obj->getTacle(Content::FORMAT_ICON),
@@ -107,13 +113,14 @@ class ControllerMob extends ControllerModule{
           'spell'=> $obj->getSpell(),
           'powerful'=> $obj->getPowerful(Content::FORMAT_ICON),
           'trait' => $obj->getTrait(Content::FORMAT_BADGE),
-          'path_img' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
+          'path_img' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_LG])),
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
           'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='mob' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
           'edit' => $edit,
           'resume' => "<div class='size-0-8 col'><div>{$obj->getPa(Content::FORMAT_ICON)}</div><div>{$obj->getPm(Content::FORMAT_ICON)}</div><div>{$obj->getPo(Content::FORMAT_ICON)}</div><div>{$obj->getIni(Content::FORMAT_ICON)}</div><div>{$obj->getTouch(Content::FORMAT_ICON)}</div></div>",
           'resumeattack' => "<div class='size-0-8 col'><div>{$obj->getVitality(Content::FORMAT_ICON)}</div><div>{$obj->getSagesse(Content::FORMAT_ICON)}</div><div>{$obj->getStrong(Content::FORMAT_ICON)}</div><div>{$obj->getIntel(Content::FORMAT_ICON)}</div><div>{$obj->getAgi(Content::FORMAT_ICON)}</div><div>{$obj->getChance(Content::FORMAT_ICON)}</div></div>",
           'resumedefend' => "<div class='size-0-8 col'><div>{$obj->getCa(Content::FORMAT_ICON)}</div><div>{$obj->getFuite(Content::FORMAT_ICON)}</div><div>{$obj->getTacle(Content::FORMAT_ICON)}</div><div>{$obj->getDodge_pa(Content::FORMAT_ICON)}</div><div>{$obj->getDodge_pm(Content::FORMAT_ICON)}</div></div>",
+          'resumedom' => "<div class='size-0-8 col'><div>{$obj->getDo_fixe_neutre(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_terre(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_feu(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_air(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_eau(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_multiple(Content::FORMAT_ICON)}</div></div>",
           'resumeres' => "<div class='size-0-8 col'><div>{$obj->getRes_neutre(Content::FORMAT_ICON)}</div><div>{$obj->getRes_terre(Content::FORMAT_ICON)}</div><div>{$obj->getRes_feu(Content::FORMAT_ICON)}</div><div>{$obj->getRes_air(Content::FORMAT_ICON)}</div><div>{$obj->getRes_eau(Content::FORMAT_ICON)}</div></div>",
           'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
         );
@@ -176,6 +183,12 @@ class ControllerMob extends ControllerModule{
               'intel'=> $obj->getIntel(Content::FORMAT_ICON),
               'agi'=> $obj->getAgi(Content::FORMAT_ICON),
               'chance'=> $obj->getChance(Content::FORMAT_ICON),
+              "do_fixe_neutre" => $obj->getDo_fixe_neutre(Content::FORMAT_VIEW),
+              "do_fixe_terre" => $obj->getDo_fixe_terre(Content::FORMAT_VIEW),
+              "do_fixe_feu" => $obj->getDo_fixe_feu(Content::FORMAT_VIEW),
+              "do_fixe_air" => $obj->getDo_fixe_air(Content::FORMAT_VIEW),
+              "do_fixe_eau" => $obj->getDo_fixe_eau(Content::FORMAT_VIEW),
+              "do_fixe_multiple" => $obj->getDo_fixe_multiple(Content::FORMAT_VIEW),
               'ca'=> $obj->getCa(Content::FORMAT_ICON),
               'fuite'=> $obj->getFuite(Content::FORMAT_ICON),
               'tacle'=> $obj->getTacle(Content::FORMAT_ICON),
@@ -192,13 +205,14 @@ class ControllerMob extends ControllerModule{
               'spell'=> $obj->getSpell(),
               'powerful'=> $obj->getPowerful(Content::FORMAT_ICON),
               'trait' => $obj->getTrait(Content::FORMAT_BADGE),
-              'path_img' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
+              'path_img' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_LG])),
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='mob' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'edit' => $edit,
               'resume' => "<div class='size-0-8 col'><div>{$obj->getPa(Content::FORMAT_ICON)}</div><div>{$obj->getPm(Content::FORMAT_ICON)}</div><div>{$obj->getPo(Content::FORMAT_ICON)}</div><div>{$obj->getIni(Content::FORMAT_ICON)}</div><div>{$obj->getTouch(Content::FORMAT_ICON)}</div></div>",
               'resumeattack' => "<div class='size-0-8 col'><div>{$obj->getVitality(Content::FORMAT_ICON)}</div><div>{$obj->getSagesse(Content::FORMAT_ICON)}</div><div>{$obj->getStrong(Content::FORMAT_ICON)}</div><div>{$obj->getIntel(Content::FORMAT_ICON)}</div><div>{$obj->getAgi(Content::FORMAT_ICON)}</div><div>{$obj->getChance(Content::FORMAT_ICON)}</div></div>",
               'resumedefend' => "<div class='size-0-8 col'><div>{$obj->getCa(Content::FORMAT_ICON)}</div><div>{$obj->getFuite(Content::FORMAT_ICON)}</div><div>{$obj->getTacle(Content::FORMAT_ICON)}</div><div>{$obj->getDodge_pa(Content::FORMAT_ICON)}</div><div>{$obj->getDodge_pm(Content::FORMAT_ICON)}</div></div>",
+              'resumedom' => "<div class='size-0-8 col'><div>{$obj->getDo_fixe_neutre(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_terre(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_feu(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_air(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_eau(Content::FORMAT_ICON)}</div><div>{$obj->getDo_fixe_multiple(Content::FORMAT_ICON)}</div></div>",
               'resumeres' => "<div class='size-0-8 col'><div>{$obj->getRes_neutre(Content::FORMAT_ICON)}</div><div>{$obj->getRes_terre(Content::FORMAT_ICON)}</div><div>{$obj->getRes_feu(Content::FORMAT_ICON)}</div><div>{$obj->getRes_air(Content::FORMAT_ICON)}</div><div>{$obj->getRes_eau(Content::FORMAT_ICON)}</div></div>",
               'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
             );
@@ -399,132 +413,143 @@ class ControllerMob extends ControllerModule{
       break;
     }
 
-    $intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];
+    $intel = Creature::CARACTERISTICS['intel']['balance']['mob']['base'];
     if($is_intel){
-        $intel = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $intel = $this::calcExp(Creature::CARACTERISTICS['intel']['balance']['mob']['expression'], ['level' => $level]);
         $intel = round($coef * $intel);
-        if($intel < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($intel < Creature::CARACTERISTICS['intel']['balance']['mob']['min']){$intel = Creature::CARACTERISTICS['intel']['balance']['mob']['min'];}
     }
-    $chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $chance = Creature::CARACTERISTICS['chance']['balance']['mob']['base'];
     if($is_chance){
-      $chance = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+      $chance = $this::calcExp(Creature::CARACTERISTICS['chance']['balance']['mob']['expression'], ['level' => $level]);
       $chance = round($coef * $chance);
-      if($chance < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+      if($chance < Creature::CARACTERISTICS['chance']['balance']['mob']['min']){$chance = Creature::CARACTERISTICS['chance']['balance']['mob']['min'];}
     }
-    $strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $strong = Creature::CARACTERISTICS['strong']['balance']['mob']['base'];
     if($is_strong){
-        $strong = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $strong = $this::calcExp(Creature::CARACTERISTICS['strong']['balance']['mob']['expression'], ['level' => $level]);
         $strong = round($coef * $strong);
-        if($strong < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($strong < Creature::CARACTERISTICS['strong']['balance']['mob']['min']){$strong = Creature::CARACTERISTICS['strong']['balance']['mob']['min'];}
     }
-    $agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $agi = Creature::CARACTERISTICS['agi']['balance']['mob']['base'];
     if($is_agi){
-        $agi = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $agi = $this::calcExp(Creature::CARACTERISTICS['agi']['balance']['mob']['expression'], ['level' => $level]);
         $agi = round($coef * $agi);
-        if($agi < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($agi < Creature::CARACTERISTICS['agi']['balance']['mob']['min']){$agi = Creature::CARACTERISTICS['agi']['balance']['mob']['min'];}
     }
-    $vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $vitality = Creature::CARACTERISTICS['vitality']['balance']['mob']['base'];
     if($is_vitality){
-        $vitality = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $vitality = $this::calcExp(Creature::CARACTERISTICS['vitality']['balance']['mob']['expression'], ['level' => $level]);
         $vitality = round($coef * $vitality);
-        if($vitality < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($vitality < Creature::CARACTERISTICS['vitality']['balance']['mob']['min']){$vitality = Creature::CARACTERISTICS['vitality']['balance']['mob']['min'];}
     }
-    $sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['base'];;
+    $sagesse = Creature::CARACTERISTICS['sagesse']['balance']['mob']['base'];
     if($is_sagesse){
-        $sagesse = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['expression'], ['level' => $level]);
+        $sagesse = $this::calcExp(Creature::CARACTERISTICS['sagesse']['balance']['mob']['expression'], ['level' => $level]);
         $sagesse = round($coef * $sagesse);
-        if($sagesse < ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min']){$sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['mob']['min'];}
+        if($sagesse < Creature::CARACTERISTICS['sagesse']['balance']['mob']['min']){$sagesse = Creature::CARACTERISTICS['sagesse']['balance']['mob']['min'];}
     }
 
-    $life =  $this::calcExp(ControllerModule::BALANCE_LIFE['mob']['expression'], ['level' => $level]);
+    $life =  $this::calcExp(Creature::CARACTERISTICS['life']['balance']['mob']['expression'], ['level' => $level]);
     $random = (int) rand(round(-0.1 * $life), round(0.1 * $life));
     $life = (int) round( (1+($coef-1)*1.7) * $life + $random);
     $life += $vitality * $level;
-    if($life < ControllerModule::BALANCE_LIFE['mob']['min']){$life = ControllerModule::BALANCE_LIFE['mob']['min'];}
+    if($life < Creature::CARACTERISTICS['life']['balance']['mob']['min']){$life = Creature::CARACTERISTICS['life']['balance']['mob']['min'];}
 
-    $pa = $this::calcExp(ControllerModule::BALANCE_PA['mob']['expression'], ['level' => $level]);
+    $pa = $this::calcExp(Creature::CARACTERISTICS['pa']['balance']['mob']['expression'], ['level' => $level]);
     $pa = round( (1+($coef-1)*0.8) * $pa);
-    if($pa < ControllerModule::BALANCE_PA['mob']['min']){$pa = ControllerModule::BALANCE_PA['mob']['min'];}
+    if($pa < Creature::CARACTERISTICS['pa']['balance']['mob']['min']){$pa = Creature::CARACTERISTICS['pa']['balance']['mob']['min'];}
 
-    $pm = $this::calcExp(ControllerModule::BALANCE_PM['mob']['expression'], ['level' => $level]);
+    $pm = $this::calcExp(Creature::CARACTERISTICS['pm']['balance']['mob']['expression'], ['level' => $level]);
     $pm = round( (1+($coef-1)*0.8) * $pm);
-    if($pm < ControllerModule::BALANCE_PM['mob']['min']){$pm = ControllerModule::BALANCE_PM['mob']['min'];}
+    if($pm < Creature::CARACTERISTICS['pm']['balance']['mob']['min']){$pm = Creature::CARACTERISTICS['pm']['balance']['mob']['min'];}
 
-    $po = $this::calcExp(ControllerModule::BALANCE_PO['mob']['expression'], ['level' => $level]);
+    $po = $this::calcExp(Creature::CARACTERISTICS['po']['balance']['mob']['expression'], ['level' => $level]);
     $po = round( (1+($coef-1)*0.8) * $po);
-    if($po < ControllerModule::BALANCE_PO['mob']['min']){$po = ControllerModule::BALANCE_PO['mob']['min'];}
+    if($po < Creature::CARACTERISTICS['po']['balance']['mob']['min']){$po = Creature::CARACTERISTICS['po']['balance']['mob']['min'];}
 
-    $ini = $this::calcExp(ControllerModule::BALANCE_INI['mob']['expression'], ['level' => $level]);
+    $ini = $this::calcExp(Creature::CARACTERISTICS['ini']['balance']['mob']['expression'], ['level' => $level]);
     $ini = $ini / 2;
     if($is_intel){
       if($this->returnBool($speficific_main['intel'])){
         $ini += $intel;
-        if($ini > ControllerModule::BALANCE_INI['mob']['max']){$ini = ControllerModule::BALANCE_INI['mob']['max'];}
+        if($ini > Creature::CARACTERISTICS['ini']['balance']['mob']['max']){$ini = Creature::CARACTERISTICS['ini']['balance']['mob']['max'];}
       }
     }
     $ini = round($coef * $ini);
-    if($ini < ControllerModule::BALANCE_INI['mob']['min']){$ini = ControllerModule::BALANCE_INI['mob']['min'];}
+    if($ini < Creature::CARACTERISTICS['ini']['balance']['mob']['min']){$ini = Creature::CARACTERISTICS['ini']['balance']['mob']['min'];}
 
-    $touch = $this::calcExp(ControllerModule::BALANCE_TOUCH['mob']['expression'], ['level' => $level]);
+    $touch = $this::calcExp(Creature::CARACTERISTICS['touch']['balance']['mob']['expression'], ['level' => $level]);
 
-    $res = $this::calcExp(ControllerModule::BALANCE_RES['mob']['expression'], ['level' => $level]);
-    $res = round( (1+($coef-1)*0.8) * $res);
-    if($res < ControllerModule::BALANCE_RES['mob']['min']){$res = ControllerModule::BALANCE_RES['mob']['min'];}
-    $res_neutre = ControllerModule::BALANCE_RES['mob']['base'];
-    if($powerful >= 5){
-        $res_neutre = $res;
-    }
-    $res_terre = ControllerModule::BALANCE_RES['mob']['base'];
-    if($is_strong){
-        $res_terre = $res;
-    }
-    $res_feu = ControllerModule::BALANCE_RES['mob']['base'];
-    if($is_intel){
-        $res_feu = $res;
-    }
-    $res_air = ControllerModule::BALANCE_RES['mob']['base'];
-    if($is_agi){
-        $res_air = $res;
-    }
-    $res_eau = ControllerModule::BALANCE_RES['mob']['base'];
-    if($is_chance){
-        $res_eau = $res;
-    }
+    $res_neutre = $this::calcExp(Creature::CARACTERISTICS['res_neutre']['balance']['mob']['expression'], ['level' => $level]);
+    $res_neutre = round( (1+($coef-1)*0.8) * $res_neutre);
+    if($res_neutre < Creature::CARACTERISTICS['res_neutre']['balance']['mob']['min']){$res_neutre = Creature::CARACTERISTICS['res_neutre']['balance']['mob']['min'];}
+    if($res_neutre > Creature::CARACTERISTICS['res_neutre']['balance']['mob']['max']){$res_neutre = Creature::CARACTERISTICS['res_neutre']['balance']['mob']['max'];}
 
-    $tacle = $this::calcExp(ControllerModule::BALANCE_TACLE['mob']['expression'], ['level' => $level]);
+    $res_terre = $this::calcExp(Creature::CARACTERISTICS['res_terre']['balance']['mob']['expression'], ['level' => $level]);
+    $res_terre = round( (1+($coef-1)*0.8) * $res_terre);
+    if($res_terre < Creature::CARACTERISTICS['res_terre']['balance']['mob']['min']){$res_terre = Creature::CARACTERISTICS['res_terre']['balance']['mob']['min'];}
+    if($res_terre > Creature::CARACTERISTICS['res_terre']['balance']['mob']['max']){$res_terre = Creature::CARACTERISTICS['res_terre']['balance']['mob']['max'];}
+
+    $res_feu = $this::calcExp(Creature::CARACTERISTICS['res_feu']['balance']['mob']['expression'], ['level' => $level]);
+    $res_feu = round( (1+($coef-1)*0.8) * $res_feu);
+    if($res_feu < Creature::CARACTERISTICS['res_feu']['balance']['mob']['min']){$res_feu = Creature::CARACTERISTICS['res_feu']['balance']['mob']['min'];}
+    if($res_feu > Creature::CARACTERISTICS['res_feu']['balance']['mob']['max']){$res_feu = Creature::CARACTERISTICS['res_feu']['balance']['mob']['max'];}
+
+    $res_air = $this::calcExp(Creature::CARACTERISTICS['res_air']['balance']['mob']['expression'], ['level' => $level]);
+    $res_air = round( (1+($coef-1)*0.8) * $res_air);
+    if($res_air < Creature::CARACTERISTICS['res_air']['balance']['mob']['min']){$res_air = Creature::CARACTERISTICS['res_air']['balance']['mob']['min'];}
+    if($res_air > Creature::CARACTERISTICS['res_air']['balance']['mob']['max']){$res_air = Creature::CARACTERISTICS['res_air']['balance']['mob']['max'];}
+
+    $res_eau = $this::calcExp(Creature::CARACTERISTICS['res_eau']['balance']['mob']['expression'], ['level' => $level]);
+    $res_eau = round( (1+($coef-1)*0.8) * $res_eau);
+    if($res_eau < Creature::CARACTERISTICS['res_eau']['balance']['mob']['min']){$res_eau = Creature::CARACTERISTICS['res_eau']['balance']['mob']['min'];}
+    if($res_eau > Creature::CARACTERISTICS['res_eau']['balance']['mob']['max']){$res_eau = Creature::CARACTERISTICS['res_eau']['balance']['mob']['max'];}
+
+
+    $tacle = $this::calcExp(Creature::CARACTERISTICS['tacle']['balance']['mob']['expression'], ['level' => $level]);
     $tacle = $tacle / 2;
     $fuite = $tacle;
     if($is_chance){
         $tacle += $chance;
-        if($tacle > ControllerModule::BALANCE_TACLE['mob']['max']){$tacle = ControllerModule::BALANCE_TACLE['mob']['max'];}
+        if($tacle > Creature::CARACTERISTICS['tacle']['balance']['mob']['max']){$tacle = Creature::CARACTERISTICS['tacle']['balance']['mob']['max'];}
     }
     $tacle = round( (1+($coef-1)*0.8) * $tacle);
-    if($tacle < ControllerModule::BALANCE_TACLE['mob']['min']){$tacle = ControllerModule::BALANCE_TACLE['mob']['min'];}
+    if($tacle < Creature::CARACTERISTICS['tacle']['balance']['mob']['min']){$tacle = Creature::CARACTERISTICS['tacle']['balance']['mob']['min'];}
 
     if($is_agi){
         $fuite += $agi;
-        if($fuite > ControllerModule::BALANCE_TACLE['mob']['max']){$fuite = ControllerModule::BALANCE_TACLE['mob']['max'];}
+        if($fuite > Creature::CARACTERISTICS['fuite']['balance']['mob']['max']){$fuite = Creature::CARACTERISTICS['fuite']['balance']['mob']['max'];}
     }
     $fuite = round( (1+($coef-1)*0.8) * $fuite);
-    if($fuite < ControllerModule::BALANCE_TACLE['mob']['min']){$fuite = ControllerModule::BALANCE_TACLE['mob']['min'];}
+    if($fuite < Creature::CARACTERISTICS['fuite']['balance']['mob']['min']){$fuite = Creature::CARACTERISTICS['fuite']['balance']['mob']['min'];}
 
-    $ca = $this::calcExp(ControllerModule::BALANCE_CA['mob']['expression'], ['level' => $level]);
+    $ca = $this::calcExp(Creature::CARACTERISTICS['ca']['balance']['mob']['expression'], ['level' => $level]);
     $ca -= 0.4*$level*$ca/24;
     if($is_vitality){
         $ca += $vitality;
-        if($ca > ControllerModule::BALANCE_CA['mob']['max']){$ca = ControllerModule::BALANCE_CA['mob']['max'];}
+        if($ca > Creature::CARACTERISTICS['ca']['balance']['mob']['max']){$ca = Creature::CARACTERISTICS['ca']['balance']['mob']['max'];}
     }
     $ca = round( (1+($coef-1)*0.8) * $ca);
-    if($ca < ControllerModule::BALANCE_CA['mob']['min']){$ca = ControllerModule::BALANCE_CA['mob']['min'];}
+    if($ca < Creature::CARACTERISTICS['ca']['balance']['mob']['min']){$ca = Creature::CARACTERISTICS['ca']['balance']['mob']['min'];}
 
-    $dodge = $this::calcExp(ControllerModule::BALANCE_DODGE['mob']['expression'], ['level' => $level]);
-    $dodge -= 0.4*$level*$dodge/24;
+    $dodge_pa = $this::calcExp(Creature::CARACTERISTICS['dodge_pa']['balance']['mob']['expression'], ['level' => $level]);
+    $dodge_pa -= 0.4*$level*$dodge_pa/24;
     if($is_sagesse){
-      $dodge += $sagesse;
-      if($dodge > ControllerModule::BALANCE_DODGE['mob']['max']){$dodge = ControllerModule::BALANCE_DODGE['mob']['max'];}
+      $dodge_pa += $sagesse;
+      if($dodge_pa > Creature::CARACTERISTICS['dodge_pa']['balance']['mob']['max']){$dodge_pa = Creature::CARACTERISTICS['tacle']['balance']['mob']['max'];}
     }
-    $dodge = round( (1+($coef-1)*0.8) * $dodge);
-    if($dodge < ControllerModule::BALANCE_DODGE['mob']['min']){$dodge = ControllerModule::BALANCE_DODGE['mob']['min'];}
+    $dodge_pa = round( (1+($coef-1)*0.8) * $dodge_pa);
+    if($dodge_pa < Creature::CARACTERISTICS['dodge_pa']['balance']['mob']['min']){$dodge_pa = Creature::CARACTERISTICS['dodge_pa']['balance']['mob']['min'];}
+
+    $dodge_pm = $this::calcExp(Creature::CARACTERISTICS['dodge_pm']['balance']['mob']['expression'], ['level' => $level]);
+    $dodge_pm -= 0.4*$level*$dodge_pm/24;
+    if($is_sagesse){
+      $dodge_pm += $sagesse;
+      if($dodge_pm > Creature::CARACTERISTICS['dodge_pm']['balance']['mob']['max']){$dodge_pm = Creature::CARACTERISTICS['tacle']['balance']['mob']['max'];}
+    }
+    $dodge_pm = round( (1+($coef-1)*0.8) * $dodge_pm);
+    if($dodge_pm < Creature::CARACTERISTICS['dodge_pm']['balance']['mob']['min']){$dodge_pm = Creature::CARACTERISTICS['dodge_pm']['balance']['mob']['min'];}
 
     $obj = new Mob(array(
       'name'=>$name,
@@ -536,8 +561,8 @@ class ControllerMob extends ControllerModule{
       'ini'=> round($ini),
       'touch'=> round($touch),
       'ca'=> round($ca),
-      'dodge_pa'=>round($dodge),
-      'dodge_pm'=>round($dodge),
+      'dodge_pa'=>round($dodge_pa),
+      'dodge_pm'=>round($dodge_pm),
       'fuite'=>round($fuite),
       'tacle'=>round($tacle),
       'vitality'=>round($vitality),

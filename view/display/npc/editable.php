@@ -16,56 +16,65 @@
         </div>
         <div class="col-auto">
             <h6 class="text-center">Classe</h6>
-            <?=$obj->getClasse(Content::FORMAT_OBJECT)->getVisual(new Style(["display" => Content::DISPLAY_RESUME]))?>
+            <?=$obj->getClasse(Content::FORMAT_OBJECT)->getVisual(new Style(["display" => Content::DISPLAY_EDITABLE]))?>
             <p class="mt-4 text-center"><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='btn btn-sm btn-animate btn-border-red' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$obj->getUniqid()?>'><i class='fa-solid fa-file-pdf'></i> Générer un pdf</a></p>
         </div>
         <div class="col ms-4">
             <div class="d-flex justify-content-between align-items-baseline">
-                <p class="text-center"><?=$obj->getLevel(Content::DISPLAY_RESUME)?></p>
+                <p class="text-center"><?=$obj->getLevel(Content::DISPLAY_EDITABLE)?></p>
             </div>
             <div class="d-flex flex-row">
-                <?=$obj->getAge(Content::DISPLAY_RESUME)?>
-                <?=$obj->getSize(Content::DISPLAY_RESUME)?>
-                <?=$obj->getWeight(Content::DISPLAY_RESUME)?>
+                <?=$obj->getAge(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getSize(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getWeight(Content::DISPLAY_EDITABLE)?>
             </div>
-            <?=$obj->getAlignment(Content::DISPLAY_RESUME)?>
-            <?=$obj->getHistorical(Content::DISPLAY_RESUME)?>
+            <?=$obj->getAlignment(Content::DISPLAY_EDITABLE)?>
+            <?=$obj->getHistorical(Content::DISPLAY_EDITABLE)?>
+            <?=$obj->getTrait(Content::DISPLAY_EDITABLE);?>
         </div>
     </div>
     <div class="card-body">
         <div class="nav-item-divider back-main-d-1"></div>
         <h4 class="text-main-d-1 text-center">Caractèristiques</h4>
         <div class="d-flex flex-row justify-content-between">
-            <?=$obj->getLife(Content::DISPLAY_RESUME)?>
-            <?=$obj->getPA(Content::DISPLAY_RESUME)?>
-            <?=$obj->getPM(Content::DISPLAY_RESUME)?>
-            <?=$obj->getPO(Content::DISPLAY_RESUME)?>
-            <?=$obj->getIni(Content::DISPLAY_RESUME)?>
-            <?=$obj->getInvocation(Content::DISPLAY_RESUME)?>
-            <?=$obj->getTouch(Content::DISPLAY_RESUME)?>
+            <?=$obj->getLife(Content::DISPLAY_EDITABLE)?>
+            <?=$obj->getPA(Content::DISPLAY_EDITABLE)?>
+            <?=$obj->getPM(Content::DISPLAY_EDITABLE)?>
+            <?=$obj->getPO(Content::DISPLAY_EDITABLE)?>
+            <?=$obj->getIni(Content::DISPLAY_EDITABLE)?>
+            <?=$obj->getInvocation(Content::DISPLAY_EDITABLE)?>
+            <?=$obj->getTouch(Content::DISPLAY_EDITABLE)?>
         </div>
         <div class="row justify-content-around">
             <div class="col-auto">
-                <?=$obj->getVitality(Content::DISPLAY_RESUME)?>
-                <?=$obj->getSagesse(Content::DISPLAY_RESUME)?>
-                <?=$obj->getStrong(Content::DISPLAY_RESUME)?>
-                <?=$obj->getIntel(Content::DISPLAY_RESUME)?>
-                <?=$obj->getAgi(Content::DISPLAY_RESUME)?>
-                <?=$obj->getChance(Content::DISPLAY_RESUME)?>
+                <?=$obj->getVitality(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getSagesse(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getStrong(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getIntel(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getAgi(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getChance(Content::DISPLAY_EDITABLE)?>
             </div>
             <div class="col-auto">
-                <?=$obj->getCa(Content::DISPLAY_RESUME)?>
-                <?=$obj->getDodge_pa(Content::DISPLAY_RESUME)?>
-                <?=$obj->getDodge_pm(Content::DISPLAY_RESUME)?>
-                <?=$obj->getFuite(Content::DISPLAY_RESUME)?>
-                <?=$obj->getTacle(Content::DISPLAY_RESUME)?>
+                <?=$obj->getCa(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDodge_pa(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDodge_pm(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getFuite(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getTacle(Content::DISPLAY_EDITABLE)?>
             </div>
             <div class="col-auto">
-                <?=$obj->getRes_neutre(Content::DISPLAY_RESUME)?>
-                <?=$obj->getRes_terre(Content::DISPLAY_RESUME)?>
-                <?=$obj->getRes_feu(Content::DISPLAY_RESUME)?>
-                <?=$obj->getRes_air(Content::DISPLAY_RESUME)?>
-                <?=$obj->getRes_eau(Content::DISPLAY_RESUME)?>
+                <?=$obj->getDo_fixe_neutre(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDo_fixe_terre(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDo_fixe_feu(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDo_fixe_air(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDo_fixe_eau(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDo_fixe_multiple(Content::DISPLAY_EDITABLE)?>
+            </div>
+            <div class="col-auto">
+                <?=$obj->getRes_neutre(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getRes_terre(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getRes_feu(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getRes_air(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getRes_eau(Content::DISPLAY_EDITABLE)?>
             </div>
         </div>
 
@@ -75,47 +84,66 @@
             <div class="col-auto my-2">
                 <p class="text-agi">Dépendant de l'agilité</p>
                 <p class="text-grey-d-1 size-0-9 mb-2"><?=$obj->getAgi(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                <?=$obj->getAcrobatie(Content::DISPLAY_RESUME)?>
-                <?=$obj->getDiscretion(Content::DISPLAY_RESUME)?>
-                <?=$obj->getEscamotage(Content::DISPLAY_RESUME)?>
+                <?=$obj->getAcrobatie_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getAcrobatie_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDiscretion_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDiscretion_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getEscamotage_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getEscamotage_mastery(Content::DISPLAY_EDITABLE)?>
                 <p class="text-force mt-2">Dépendant de la Force</p>
                 <p class="text-grey-d-1 size-0-9 mb-2"><?=$obj->getStrong(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                <?=$obj->getAthletisme(Content::DISPLAY_RESUME)?>
-                <?=$obj->getIntimidation(Content::DISPLAY_RESUME)?>
+                <?=$obj->getAthletisme_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getAthletisme_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getIntimidation_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getIntimidation_mastery(Content::DISPLAY_EDITABLE)?>
             </div>
             <div class="col-auto my-2">
                 <p class="text-intel">Dépendant de l'Intelligence</p>
                 <p class="text-grey-d-1 size-0-9 mb-2"><?=$obj->getIntel(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                <?=$obj->getArcane(Content::DISPLAY_RESUME)?>
-                <?=$obj->getHistoire(Content::DISPLAY_RESUME)?>
-                <?=$obj->getInvestigation(Content::DISPLAY_RESUME)?>
-                <?=$obj->getNature(Content::DISPLAY_RESUME)?>
-                <?=$obj->getReligion(Content::DISPLAY_RESUME)?>
+                <?=$obj->getArcane_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getArcane_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getHistoire_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getHistoire_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getInvestigation_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getInvestigation_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getNature_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getNature_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getReligion_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getReligion_mastery(Content::DISPLAY_EDITABLE)?>
             </div>
             <div class="col-auto my-2">
                 <p class="text-sagesse">Dépendant de la Sagesse</p>
                 <p class="text-grey-d-1 size-0-9 mb-2"><?=$obj->getSagesse(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                <?=$obj->getDressage(Content::DISPLAY_RESUME)?>
-                <?=$obj->getMedecine(Content::DISPLAY_RESUME)?>
-                <?=$obj->getPerception(Content::DISPLAY_RESUME)?>
-                <?=$obj->getPerspicacite(Content::DISPLAY_RESUME)?>
-                <?=$obj->getSurvie(Content::DISPLAY_RESUME)?>
+                <?=$obj->getDressage_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getDressage_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getMedecine_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getMedecine_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getPerception_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getPerception_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getPerspicacite_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getPerspicacite_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getSurvie_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getSurvie_mastery(Content::DISPLAY_EDITABLE)?>
             </div>
             <div class="col-auto my-2">
                 <p class="text-chance">Dépendant de la Chance</p>
                 <p class="text-grey-d-1 size-0-9 mb-2"><?=$obj->getChance(Content::FORMAT_BADGE)?> + Bonus d'équipement</p>
-                <?=$obj->getPersuasion(Content::DISPLAY_RESUME)?>
-                <?=$obj->getRepresentation(Content::DISPLAY_RESUME)?>
-                <?=$obj->getSupercherie(Content::DISPLAY_RESUME)?>
+                <?=$obj->getPersuasion_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getPersuasion_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getRepresentation_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getRepresentation_mastery(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getSupercherie_bonus(Content::DISPLAY_EDITABLE)?>
+                <?=$obj->getSupercherie_mastery(Content::DISPLAY_EDITABLE)?>
             </div>
         </div>
         <div class="nav-item-divider back-main-d-1"></div>
         <h4 class="text-main-d-1 text-center">Informations</h4>
-        <p class="card-text my-2"><?=$obj->getStory(Content::DISPLAY_RESUME);?></p>
-        <p class="card-text my-2"><?=$obj->getOther_info(Content::DISPLAY_RESUME);?></p>
+        <p class="card-text my-2"><?=$obj->getDescription(Content::DISPLAY_EDITABLE);?></p>
+        <p class="card-text my-2"><?=$obj->getStory(Content::DISPLAY_EDITABLE);?></p>
+        <p class="card-text my-2"><?=$obj->getOther_info(Content::DISPLAY_EDITABLE);?></p>
         <div class="d-flex flex-row justify-content-between my-2">
-            <div class="w-100 me-3"><?=$obj->getDrop_(Content::DISPLAY_RESUME)?></div>
-            <div><?=$obj->getKamas(Content::DISPLAY_RESUME)?></div>
+            <div class="w-100 me-3"><?=$obj->getDrop_(Content::DISPLAY_EDITABLE)?></div>
+            <div><?=$obj->getKamas(Content::DISPLAY_EDITABLE)?></div>
         </div>
         <div class="nav-item-divider back-main-d-1"></div>
         <div class="dy-2 px-1"><?=$obj->getSpell(Content::DISPLAY_EDITABLE);?></div>

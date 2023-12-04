@@ -278,11 +278,11 @@
     menu,
     ol,
     ul {
-    margin: 1em 0;
+        margin: 1em 0;
     }
      
     dd {
-    margin: 0 0 0 40px;
+        margin: 0 0 0 40px;
     }
      
     /*
@@ -292,7 +292,7 @@
     menu,
     ol,
     ul {
-    padding: 0 0 0 40px;
+        padding: 0 0 0 40px;
     }
      
     /*
@@ -301,8 +301,8 @@
      
     nav ul,
     nav ol {
-    list-style: none;
-    list-style-image: none;
+        list-style: none;
+        list-style-image: none;
     }
      
     /* ==========================================================================
@@ -315,8 +315,8 @@
     */
      
     img {
-    border: 0; /* 1 */
-    -ms-interpolation-mode: bicubic; /* 2 */
+        border: 0; /* 1 */
+        -ms-interpolation-mode: bicubic; /* 2 */
     }
      
     /*
@@ -324,7 +324,7 @@
     */
      
     svg:not(:root) {
-    overflow: hidden;
+        overflow: hidden;
     }
      
     /* ==========================================================================
@@ -336,7 +336,7 @@
     */
      
     figure {
-    margin: 0;
+        margin: 0;
     }
      
     /* ==========================================================================
@@ -348,7 +348,7 @@
     */
      
     form {
-    margin: 0;
+        margin: 0;
     }
      
     /*
@@ -356,9 +356,9 @@
     */
      
     fieldset {
-    border: 1px solid #c0c0c0;
-    margin: 0 2px;
-    padding: 0.35em 0.625em 0.75em;
+        border: 1px solid #c0c0c0;
+        margin: 0 2px;
+        padding: 0.35em 0.625em 0.75em;
     }
      
     /*
@@ -368,10 +368,10 @@
     */
      
     legend {
-    border: 0; /* 1 */
-    padding: 0;
-    white-space: normal; /* 2 */
-    *margin-left: -7px; /* 3 */
+        border: 0; /* 1 */
+        padding: 0;
+        white-space: normal; /* 2 */
+        *margin-left: -7px; /* 3 */
     }
      
     /*
@@ -385,20 +385,19 @@
     input,
     select,
     textarea {
-    font-size: 100%; /* 1 */
-    margin: 0; /* 2 */
-    vertical-align: baseline; /* 3 */
-    *vertical-align: middle; /* 3 */
+        font-size: 100%; /* 1 */
+        margin: 0; /* 2 */
+        vertical-align: baseline; /* 3 */
+        *vertical-align: middle; /* 3 */
     }
      
     /*
     * Addresses Firefox 3+ setting ’line-height’ on ’input’ using ’!important’ in
     * the UA stylesheet.
     */
-     
     button,
     input {
-    line-height: normal;
+        line-height: normal;
     }
      
     /*
@@ -415,9 +414,8 @@
     html input[type="button"], /* 1 */
     input[type="reset"],
     input[type="submit"] {
-    -webkit-appearance: button; /* 2 */
-    cursor: pointer; /* 3 */
-    *overflow: visible; /* 4 */
+        cursor: pointer; /* 3 */
+        *overflow: visible; /* 4 */
     }
      
     /*
@@ -451,7 +449,6 @@
     */
      
     input[type="search"] {
-    -webkit-appearance: textfield; /* 1 */
     -moz-box-sizing: content-box;
     -webkit-box-sizing: content-box; /* 2 */
     box-sizing: content-box;

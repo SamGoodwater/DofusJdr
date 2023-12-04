@@ -87,12 +87,13 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fa-solid fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
-                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="level"><span class="text-level">Niveau</span></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="powerful"><span class="text-deep-purple-d-3">Puissance</span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="level"><span class="text-level size-0-8">Niv.</span></th>
+                    <th class="text-center" data-sortable="true" data-visible="true" data-field="powerful"><span class="text-deep-purple-d-3 size-0-8">Puissance</span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="life"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Points de vie"><i class='fab fa-gratipay text-life'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resume"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resumeattack"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resumedefend"></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="resumedom"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resumeres"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="pa"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de point d'action"><img class='icon' src='medias/icons/modules/pa.png'></span></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="pm"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Nombre de point de mouvement"><img class='icon' src='medias/icons/modules/pm.png'></span></th>

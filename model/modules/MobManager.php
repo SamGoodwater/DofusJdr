@@ -125,6 +125,12 @@ class MobManager extends Manager
                     intel,
                     agi,
                     chance,
+                    do_fixe_neutre,
+                    do_fixe_terre,
+                    do_fixe_feu,
+                    do_fixe_air,
+                    do_fixe_eau,
+                    do_fixe_multiple,
                     ca,
                     fuite,
                     tacle,
@@ -135,10 +141,52 @@ class MobManager extends Manager
                     res_feu,
                     res_air,
                     res_eau,
+                    acrobatie_bonus,
+                    discretion_bonus,
+                    escamotage_bonus,
+                    athletisme_bonus,
+                    intimidation_bonus,
+                    arcane_bonus,
+                    histoire_bonus,
+                    investigation_bonus,
+                    nature_bonus,
+                    religion_bonus,
+                    dressage_bonus,
+                    medecine_bonus,
+                    perception_bonus,
+                    perspicacite_bonus,
+                    survie_bonus,
+                    persuasion_bonus,
+                    representation_bonus,
+                    supercherie_bonus,
+                    acrobatie_mastery,
+                    discretion_mastery,
+                    escamotage_mastery,
+                    athletisme_mastery,
+                    intimidation_mastery,
+                    arcane_mastery,
+                    histoire_mastery,
+                    investigation_mastery,
+                    nature_mastery,
+                    religion_mastery,
+                    dressage_mastery,
+                    medecine_mastery,
+                    perception_mastery,
+                    perspicacite_mastery,
+                    survie_mastery,
+                    persuasion_mastery,
+                    representation_mastery,
+                    supercherie_mastery,
                     zone,
                     hostility,
                     trait,
                     size,
+                    kamas,
+                    drop_,
+                    other_info,
+                    other_item,
+                    other_consumable,
+                    other_spell
                     usable
                    )
             VALUES (
@@ -160,6 +208,12 @@ class MobManager extends Manager
                     :intel,
                     :agi,
                     :chance,
+                    :do_fixe_neutre,
+                    :do_fixe_terre,
+                    :do_fixe_feu,
+                    :do_fixe_air,
+                    :do_fixe_eau,
+                    :do_fixe_multiple,
                     :ca,
                     :fuite,
                     :tacle,
@@ -170,10 +224,52 @@ class MobManager extends Manager
                     :res_feu,
                     :res_air,
                     :res_eau,
+                    :acrobatie_bonus,
+                    :discretion_bonus,
+                    :escamotage_bonus,
+                    :athletisme_bonus,
+                    :intimidation_bonus,
+                    :arcane_bonus,
+                    :histoire_bonus,
+                    :investigation_bonus,
+                    :nature_bonus,
+                    :religion_bonus,
+                    :dressage_bonus,
+                    :medecine_bonus,
+                    :perception_bonus,
+                    :perspicacite_bonus,
+                    :survie_bonus,
+                    :persuasion_bonus,
+                    :representation_bonus,
+                    :supercherie_bonus,
+                    :acrobatie_mastery,
+                    :discretion_mastery,
+                    :escamotage_mastery,
+                    :athletisme_mastery,
+                    :intimidation_mastery,
+                    :arcane_mastery,
+                    :histoire_mastery,
+                    :investigation_mastery,
+                    :nature_mastery,
+                    :religion_mastery,
+                    :dressage_mastery,
+                    :medecine_mastery,
+                    :perception_mastery,
+                    :perspicacite_mastery,
+                    :survie_mastery,
+                    :persuasion_mastery,
+                    :representation_mastery,
+                    :supercherie_mastery,
                     :zone,
                     :hostility,
                     :trait,
                     :size,
+                    :kamas,
+                    :drop_,
+                    :other_info,
+                    :other_item,
+                    :other_consumable,
+                    :other_spell,
                     :usable
                 )');
 
@@ -196,6 +292,12 @@ class MobManager extends Manager
             'intel' => $object->getIntel(),
             'agi' => $object->getAgi(),
             'chance' => $object->getChance(),
+            "do_fixe_neutre" => $object->getDo_fixe_neutre(),
+            "do_fixe_terre" => $object->getDo_fixe_terre(),
+            "do_fixe_feu" => $object->getDo_fixe_feu(),
+            "do_fixe_air" => $object->getDo_fixe_air(),
+            "do_fixe_eau" => $object->getDo_fixe_eau(),
+            "do_fixe_multiple" => $object->getDo_fixe_multiple(),
             "ca" => $object->getCa(),
             "fuite" => $object->getFuite(),
             "tacle" => $object->getTacle(),
@@ -206,6 +308,48 @@ class MobManager extends Manager
             'res_feu' => $object->getRes_feu(),
             'res_air' => $object->getRes_air(),
             'res_eau' => $object->getRes_eau(),
+            "acrobatie_bonus" => $object->getAcrobatie_bonus(),
+            "discretion_bonus" => $object->getDiscretion_bonus(),
+            "escamotage_bonus" => $object->getEscamotage_bonus(),
+            "athletisme_bonus" => $object->getAthletisme_bonus(),
+            "intimidation_bonus" => $object->getIntimidation_bonus(),
+            "arcane_bonus" => $object->getArcane_bonus(),
+            "histoire_bonus" => $object->getHistoire_bonus(),
+            "investigation_bonus" => $object->getInvestigation_bonus(),
+            "nature_bonus" => $object->getNature_bonus(),
+            "religion_bonus" => $object->getReligion_bonus(),
+            "dressage_bonus" => $object->getDressage_bonus(),
+            "medecine_bonus" => $object->getMedecine_bonus(),
+            "perception_bonus" => $object->getPerception_bonus(),
+            "perspicacite_bonus" => $object->getPerspicacite_bonus(),
+            "survie_bonus" => $object->getSurvie_bonus(),
+            "persuasion_bonus" => $object->getPersuasion_bonus(),
+            "representation_bonus" => $object->getRepresentation_bonus(),
+            "supercherie_bonus" => $object->getSupercherie_bonus(),
+            "acrobatie_mastery" => $object->getAcrobatie_mastery(),
+            "discretion_mastery" => $object->getDiscretion_mastery(),
+            "escamotage_mastery" => $object->getEscamotage_mastery(),
+            "athletisme_mastery" => $object->getAthletisme_mastery(),
+            "intimidation_mastery" => $object->getIntimidation_mastery(),
+            "arcane_mastery" => $object->getArcane_mastery(),
+            "histoire_mastery" => $object->getHistoire_mastery(),
+            "investigation_mastery" => $object->getInvestigation_mastery(),
+            "nature_mastery" => $object->getNature_mastery(),
+            "religion_mastery" => $object->getReligion_mastery(),
+            "dressage_mastery" => $object->getDressage_mastery(),
+            "medecine_mastery" => $object->getMedecine_mastery(),
+            "perception_mastery" => $object->getPerception_mastery(),
+            "perspicacite_mastery" => $object->getPerspicacite_mastery(),
+            "survie_mastery" => $object->getSurvie_mastery(),
+            "persuasion_mastery" => $object->getPersuasion_mastery(),
+            "representation_mastery" => $object->getRepresentation_mastery(),
+            "supercherie_mastery" => $object->getSupercherie_mastery(),
+            "kamas" => $object->getKamas(),
+            "drop_" => $object->getDrop_(),
+            "other_info" => $object->getOther_info(),
+            "other_item" => $object->getOther_item(),
+            "other_consumable" => $object->getOther_consumable(),
+            "other_spell" => $object->getOther_spell(),
             'zone' => $object->getZone(),
             'hostility' => $object->getHostility(),
             'trait' => $object->getTrait(),
@@ -233,6 +377,12 @@ class MobManager extends Manager
                     intel=:intel,
                     agi=:agi,
                     chance=:chance,
+                    do_fixe_neutre=:do_fixe_neutre,
+                    do_fixe_terre=:do_fixe_terre,
+                    do_fixe_feu=:do_fixe_feu,
+                    do_fixe_air=:do_fixe_air,
+                    do_fixe_eau=:do_fixe_eau,
+                    do_fixe_multiple=:do_fixe_multiple,
                     ca=:ca,
                     fuite=:fuite,
                     tacle=:tacle,
@@ -243,6 +393,48 @@ class MobManager extends Manager
                     res_feu=:res_feu,
                     res_air=:res_air,
                     res_eau=:res_eau,
+                    acrobatie_bonus=:acrobatie_bonus,
+                    discretion_bonus=:discretion_bonus,
+                    escamotage_bonus=:escamotage_bonus,
+                    athletisme_bonus=:athletisme_bonus,
+                    intimidation_bonus=:intimidation_bonus,
+                    arcane_bonus=:arcane_bonus,
+                    histoire_bonus=:histoire_bonus,
+                    investigation_bonus=:investigation_bonus,
+                    nature_bonus=:nature_bonus,
+                    religion_bonus=:religion_bonus,
+                    dressage_bonus=:dressage_bonus,
+                    medecine_bonus=:medecine_bonus,
+                    perception_bonus=:perception_bonus,
+                    perspicacite_bonus=:perspicacite_bonus,
+                    survie_bonus=:survie_bonus,
+                    persuasion_bonus=:persuasion_bonus,
+                    representation_bonus=:representation_bonus,
+                    supercherie_bonus=:supercherie_bonus,
+                    acrobatie_mastery=:acrobatie_mastery,
+                    discretion_mastery=:discretion_mastery,
+                    escamotage_mastery=:escamotage_mastery,
+                    athletisme_mastery=:athletisme_mastery,
+                    intimidation_mastery=:intimidation_mastery,
+                    arcane_mastery=:arcane_mastery,
+                    histoire_mastery=:histoire_mastery,
+                    investigation_mastery=:investigation_mastery,
+                    nature_mastery=:nature_mastery,
+                    religion_mastery=:religion_mastery,
+                    dressage_mastery=:dressage_mastery,
+                    medecine_mastery=:medecine_mastery,
+                    perception_mastery=:perception_mastery,
+                    perspicacite_mastery=:perspicacite_mastery,
+                    survie_mastery=:survie_mastery,
+                    persuasion_mastery=:persuasion_mastery,
+                    representation_mastery=:representation_mastery,
+                    supercherie_mastery=:supercherie_mastery,
+                    kamas=:kamas,
+                    drop_=:drop_,
+                    other_info=:other_info,
+                    other_item=:other_item,
+                    other_consumable=:other_consumable,
+                    other_spell=:other_spell
                     zone=:zone,
                     hostility=:hostility,
                     trait=:trait,
@@ -270,6 +462,12 @@ class MobManager extends Manager
             'intel' => $object->getIntel(),
             'agi' => $object->getAgi(),
             'chance' => $object->getChance(),
+            "do_fixe_neutre" => $object->getDo_fixe_neutre(),
+            "do_fixe_terre" => $object->getDo_fixe_terre(),
+            "do_fixe_feu" => $object->getDo_fixe_feu(),
+            "do_fixe_air" => $object->getDo_fixe_air(),
+            "do_fixe_eau" => $object->getDo_fixe_eau(),
+            "do_fixe_multiple" => $object->getDo_fixe_multiple(),
             "ca" => $object->getCa(),
             "fuite" => $object->getFuite(),
             "tacle" => $object->getTacle(),
@@ -280,6 +478,48 @@ class MobManager extends Manager
             'res_feu' => $object->getRes_feu(),
             'res_air' => $object->getRes_air(),
             'res_eau' => $object->getRes_eau(),
+            "acrobatie_bonus" => $object->getAcrobatie_bonus(),
+            "discretion_bonus" => $object->getDiscretion_bonus(),
+            "escamotage_bonus" => $object->getEscamotage_bonus(),
+            "athletisme_bonus" => $object->getAthletisme_bonus(),
+            "intimidation_bonus" => $object->getIntimidation_bonus(),
+            "arcane_bonus" => $object->getArcane_bonus(),
+            "histoire_bonus" => $object->getHistoire_bonus(),
+            "investigation_bonus" => $object->getInvestigation_bonus(),
+            "nature_bonus" => $object->getNature_bonus(),
+            "religion_bonus" => $object->getReligion_bonus(),
+            "dressage_bonus" => $object->getDressage_bonus(),
+            "medecine_bonus" => $object->getMedecine_bonus(),
+            "perception_bonus" => $object->getPerception_bonus(),
+            "perspicacite_bonus" => $object->getPerspicacite_bonus(),
+            "survie_bonus" => $object->getSurvie_bonus(),
+            "persuasion_bonus" => $object->getPersuasion_bonus(),
+            "representation_bonus" => $object->getRepresentation_bonus(),
+            "supercherie_bonus" => $object->getSupercherie_bonus(),
+            "acrobatie_mastery" => $object->getAcrobatie_mastery(),
+            "discretion_mastery" => $object->getDiscretion_mastery(),
+            "escamotage_mastery" => $object->getEscamotage_mastery(),
+            "athletisme_mastery" => $object->getAthletisme_mastery(),
+            "intimidation_mastery" => $object->getIntimidation_mastery(),
+            "arcane_mastery" => $object->getArcane_mastery(),
+            "histoire_mastery" => $object->getHistoire_mastery(),
+            "investigation_mastery" => $object->getInvestigation_mastery(),
+            "nature_mastery" => $object->getNature_mastery(),
+            "religion_mastery" => $object->getReligion_mastery(),
+            "dressage_mastery" => $object->getDressage_mastery(),
+            "medecine_mastery" => $object->getMedecine_mastery(),
+            "perception_mastery" => $object->getPerception_mastery(),
+            "perspicacite_mastery" => $object->getPerspicacite_mastery(),
+            "survie_mastery" => $object->getSurvie_mastery(),
+            "persuasion_mastery" => $object->getPersuasion_mastery(),
+            "representation_mastery" => $object->getRepresentation_mastery(),
+            "supercherie_mastery" => $object->getSupercherie_mastery(),
+            "kamas" => $object->getKamas(),
+            "drop_" => $object->getDrop_(),
+            "other_info" => $object->getOther_info(),
+            "other_item" => $object->getOther_item(),
+            "other_consumable" => $object->getOther_consumable(),
+            "other_spell" => $object->getOther_spell(),
             'zone' => $object->getZone(),
             'hostility' => $object->getHostility(),
             'trait' => $object->getTrait(),
@@ -294,6 +534,8 @@ class MobManager extends Manager
 
         $this->removeAllLinkCapabilityFromMob($object);
         $this->removeAllLinkSpellFromMob($object);
+        $this->removeAllLinkConsumableFromMob($object);
+        $this->removeAllLinkItemFromMob($object);
         
         $req = $this->_bdd->prepare('DELETE FROM mob WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
@@ -403,6 +645,164 @@ class MobManager extends Manager
     public function removeAllLinkCapabilityFromCapability(Capability $capability){
         $req = $this->_bdd->prepare('DELETE FROM link_mob_capability WHERE id_capability = :id');
         return $req->execute(array("id" =>  $capability->getId()));
+    }
+
+    // Link Consumable
+    public function getLinkConsumable(Mob $mob){
+        $req = $this->_bdd->prepare('SELECT * FROM link_mob_consumable INNER JOIN consumable ON link_mob_consumable.id_consumable = consumable.id WHERE link_mob_consumable.id_mob = ?');
+        $req->execute(array($mob->getId()));
+        $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        if(empty($ret)){return "";}
+        $return = array();
+        foreach ($ret as $link) {
+            $return[] = [
+                "obj" => new Consumable($this->securite($link)),
+                "quantity" => $link['quantity']
+            ];
+        }
+        return $return;
+    }
+    public function getLinkConsumableFromConsumable(Mob $mob , Consumable $consumable){
+        $req = $this->_bdd->prepare('SELECT * FROM link_mob_consumable INNER JOIN mob ON link_mob_consumable.id_consumable = consumable.id WHERE link_mob_consumable.id_mob = ? AND link_mob_consumable.id_consumable = ?');
+        $req->execute(array($mob->getId(), $consumable->getId()));
+        $link = $req->fetch(PDO::FETCH_ASSOC);
+        if(empty($link)){return "";}
+        $return = array();
+        $return = [
+            "obj" => new Consumable($this->securite($link)),
+            "quantity" => $link['quantity']
+        ];
+        return $return;
+    }
+    public function existsLinkConsumable(Mob $mob, Consumable $consumable){
+        $req = $this->_bdd->prepare('SELECT id FROM link_mob_consumable WHERE id_mob = ? AND id_consumable = ?');
+        $req->execute(array($mob->getId(), $consumable->getId()));
+        return $req->rowCount();
+    }
+    public function addLinkConsumable(Mob $mob, Consumable $consumable, string | int $quantity = null){
+        $req = $this->_bdd->prepare('INSERT INTO link_mob_consumable(
+                    id_mob,
+                    id_consumable,
+                    quantity
+                )
+            VALUES (
+                    :id_mob,
+                    :id_consumable,
+                    :quantity
+                )');
+
+        return $req->execute(array(
+            "id_mob" => $mob->getId(),
+            "id_consumable"=> $consumable->getId(),
+            "quantity" => $quantity
+        ));
+
+        // Renvoi le dernier ingredient ajouté
+        $post = $this->_bdd->prepare('SELECT id FROM link_mob_consumable ORDER BY id DESC LIMIT 1');
+        return $post->execute();
+    }
+    public function updateLinkConsumable(Mob $mob, Consumable $consumable, string | int $quantity = null){
+        $req = $this->_bdd->prepare('UPDATE link_mob_consumable SET
+                quantity=:quantity
+            WHERE   id_mob = :id_mob AND
+                    id_consumable = :id_consumable');
+
+        return $req->execute(array(
+            "id_mob" => $mob->getId(),
+            "id_consumable"=> $consumable->getId(),
+            "quantity" => $quantity
+        ));
+    }
+    public function removeLinkConsumable(Mob $mob, Consumable $consumable){
+        $req = $this->_bdd->prepare('DELETE FROM link_mob_consumable WHERE id_mob = :id_mob AND id_consumable = :id_consumable');
+        return $req->execute(array("id_mob" =>  $mob->getId(), "id_consumable" =>  $consumable->getId()));
+    }
+    public function removeAllLinkConsumableFromMob(Mob $mob){
+        $req = $this->_bdd->prepare('DELETE FROM link_mob_consumable WHERE id_mob = :id');
+        $req->execute(array("id" =>  $mob->getId()));
+    }
+    public function removeAllLinkConsumableFromConsumable(Consumable $consumable){
+        $req = $this->_bdd->prepare('DELETE FROM link_mob_consumable WHERE id_consumable = :id');
+        $req->execute(array("id" =>  $consumable->getId()));
+    }
+
+// Link Item
+    public function getLinkItem(Mob $mob){
+        $req = $this->_bdd->prepare('SELECT * FROM link_mob_item INNER JOIN item ON link_mob_item.id_item = item.id WHERE link_mob_item.id_mob = ?');
+        $req->execute(array($mob->getId()));
+        $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        if(empty($ret)){return "";}
+        $return = array();
+        foreach ($ret as $link) {
+            $return[] = [
+                "obj" => new Item($this->securite($link)),
+                "quantity" => $link['quantity']
+            ];
+        }
+        return $return;
+    }
+    public function getLinkItemFromItem(Mob $mob , Item $item){
+        $req = $this->_bdd->prepare('SELECT * FROM link_mob_item INNER JOIN item ON link_mob_item.id_item = item.id WHERE link_mob_item.id_mob = ? AND link_mob_item.id_item = ?');
+        $req->execute(array($mob->getId(), $item->getId()));
+        $link = $req->fetchAll(PDO::FETCH_ASSOC)[0];
+        if(empty($link)){return array();}
+        $return = array();
+        $return = [
+            "obj" => new Item($this->securite($link)),
+            "quantity" => $link['quantity']
+        ];
+        return $return;
+    }
+    public function existsLinkItem(Mob $mob, Item $item){
+        $req = $this->_bdd->prepare('SELECT id FROM link_mob_item WHERE id_mob = ? AND id_item = ?');
+        $req->execute(array($mob->getId(), $item->getId()));
+        return $req->rowCount();
+    } 
+    public function addLinkItem(Mob $mob, Item $item, string | int $quantity = null){
+        $req = $this->_bdd->prepare('INSERT INTO link_mob_item(
+                    id_mob,
+                    id_item,
+                    quantity
+                )
+            VALUES (
+                    :id_mob,
+                    :id_item,
+                    :quantity
+                )');
+
+        return $req->execute(array(
+            "id_mob" => $mob->getId(),
+            "id_item"=> $item->getId(),
+            "quantity" => $quantity
+        ));
+
+        // Renvoi le dernier ingredient ajouté
+        $post = $this->_bdd->prepare('SELECT id FROM link_mob_item ORDER BY id DESC LIMIT 1');
+        return $post->execute();
+    }
+    public function updateLinkItem(Mob $mob, Item $item, string | int $quantity = null){
+        $req = $this->_bdd->prepare('UPDATE link_mob_item SET
+                quantity=:quantity
+            WHERE   id_mob = :id_mob AND
+                    id_item = :id_item');
+
+        return $req->execute(array(
+            "id_mob" => $mob->getId(),
+            "id_item"=> $item->getId(),
+            "quantity" => $quantity
+        ));
+    }
+    public function removeLinkItem(Mob $mob, Item $item){
+        $req = $this->_bdd->prepare('DELETE FROM link_mob_item WHERE id_mob = :id_mob AND id_item = :id_item');
+        return $req->execute(array("id_mob" =>  $mob->getId(), "id_item" =>  $item->getId()));
+    }
+    public function removeAllLinkItemFromMob(Mob $mob){
+        $req = $this->_bdd->prepare('DELETE FROM link_mob_item WHERE id_mob = :id');
+        return $req->execute(array("id" =>  $mob->getId()));
+    }
+    public function removeAllLinkItemFromItem(Item $item){
+        $req = $this->_bdd->prepare('DELETE FROM link_mob_item WHERE id_item = :id');
+        return $req->execute(array("id" =>  $item->getId()));
     }
 
 // OTHER

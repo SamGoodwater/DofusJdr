@@ -7,7 +7,7 @@ class Controller {
     static DISPLAY_FULL = 103;
 
     static TABLE_OFFSET = 0;
-    static TABLE_LIMIT = 50;
+    static TABLE_LIMIT = 10;
 
     static MODEL_NAME = "";
 
@@ -305,6 +305,28 @@ class Controller {
         }
         
         createTable();
+    }
+
+    static updateDisplayCaracteristics(uniqid, lvl) {
+        var elementsToUpdate = $("#"+this.MODEL_NAME+uniqid).find("[data-formule]");
+
+        for (var i = 0; i < elementsToUpdate.length; i++) {
+            var dataKey = (lvl == 0) ? "formule" : "level" + lvl;
+            var newData = $(elementsToUpdate[i]).data(dataKey);
+            let add_text = true;
+
+            if($(elementsToUpdate[i]).data("event-display-caractistic-add-text") != undefined && $(elementsToUpdate[i]).data("event-display-caractistic-add-text") != ""){
+                if($(elementsToUpdate[i]).data("event-display-caractistic-add-text") != "false"){
+                    add_text = true;
+                } else {
+                    add_text = false;
+                }
+            }
+            if($(elementsToUpdate[i]).data("text") != undefined && $(elementsToUpdate[i]).data("text") != "" && add_text){
+                newData += " " + $(elementsToUpdate[i]).data("text");
+            }
+            $(elementsToUpdate[i]).text(newData);
+        }
     }
 
 }

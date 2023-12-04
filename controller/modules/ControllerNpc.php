@@ -83,6 +83,7 @@ class ControllerNpc extends ControllerModule{
           "timestamp_updated" => $obj->getTimestamp_updated(),
           "name" => $obj->getName(),
           "classe" => $obj->getClasse(Content::FORMAT_OBJECT)->getName(),
+          "description" => $obj->getDescription(),
           "story" => $obj->getStory(),
           "historical" => $obj->getHistorical(),
           "alignment" => $obj->getAlignment(),
@@ -111,6 +112,12 @@ class ControllerNpc extends ControllerModule{
           "intel" => $obj->getIntel(Content::FORMAT_VIEW),
           "agi" => $obj->getAgi(Content::FORMAT_VIEW),
           "chance" => $obj->getChance(Content::FORMAT_VIEW),
+          "do_fixe_neutre" => $obj->getDo_fixe_neutre(Content::FORMAT_VIEW),
+          "do_fixe_terre" => $obj->getDo_fixe_terre(Content::FORMAT_VIEW),
+          "do_fixe_feu" => $obj->getDo_fixe_feu(Content::FORMAT_VIEW),
+          "do_fixe_air" => $obj->getDo_fixe_air(Content::FORMAT_VIEW),
+          "do_fixe_eau" => $obj->getDo_fixe_eau(Content::FORMAT_VIEW),
+          "do_fixe_multiple" => $obj->getDo_fixe_multiple(Content::FORMAT_VIEW),
           "res_neutre" => $obj->getRes_neutre(Content::FORMAT_VIEW),
           "res_terre" => $obj->getRes_terre(Content::FORMAT_VIEW),
           "res_feu" => $obj->getRes_feu(Content::FORMAT_VIEW),
@@ -191,6 +198,7 @@ class ControllerNpc extends ControllerModule{
               "timestamp_updated" => $obj->getTimestamp_updated(),
               "name" => $obj->getName(),
               "classe" => $obj->getClasse(Content::FORMAT_OBJECT)->getName(),
+              "description" => $obj->getDescription(),
               "story" => $obj->getStory(),
               "historical" => $obj->getHistorical(),
               "alignment" => $obj->getAlignment(),
@@ -219,6 +227,12 @@ class ControllerNpc extends ControllerModule{
               "intel" => $obj->getIntel(Content::FORMAT_VIEW),
               "agi" => $obj->getAgi(Content::FORMAT_VIEW),
               "chance" => $obj->getChance(Content::FORMAT_VIEW),
+              "do_fixe_neutre" => $obj->getDo_fixe_neutre(Content::FORMAT_VIEW),
+              "do_fixe_terre" => $obj->getDo_fixe_terre(Content::FORMAT_VIEW),
+              "do_fixe_feu" => $obj->getDo_fixe_feu(Content::FORMAT_VIEW),
+              "do_fixe_air" => $obj->getDo_fixe_air(Content::FORMAT_VIEW),
+              "do_fixe_eau" => $obj->getDo_fixe_eau(Content::FORMAT_VIEW),
+              "do_fixe_multiple" => $obj->getDo_fixe_multiple(Content::FORMAT_VIEW),
               "res_neutre" => $obj->getRes_neutre(Content::FORMAT_VIEW),
               "res_terre" => $obj->getRes_terre(Content::FORMAT_VIEW),
               "res_feu" => $obj->getRes_feu(Content::FORMAT_VIEW),
@@ -374,7 +388,9 @@ class ControllerNpc extends ControllerModule{
     flush();
   }
 
-  protected function generate($level, $classe, $powerful = 4, $name = "", $speficific_main = []){
+  protected function generate(Npc $npc = null, $level, $classe, $powerful = 4, $name = "", $name_ai = [], $speficific_main = []){
+    $master_bonus = (1 + $level / 4); 
+    
     $is_intel = false;
     if(isset($speficific_main['intel'])){
       if($this->returnBool($speficific_main['intel'])){
@@ -421,10 +437,10 @@ class ControllerNpc extends ControllerModule{
     $coef = 1;
     switch ($powerful) {
       case 1:
-        $coef = 0.7;
+        $coef = 0.75;
       break;
       case 2:
-        $coef = 0.8;
+        $coef = 0.85;
       break;
       case 3:
         $coef = 0.9;
@@ -433,329 +449,474 @@ class ControllerNpc extends ControllerModule{
         $coef = 1.1;
       break;
       case 6:
-        $coef = 1.2;
+        $coef = 1.15;
       break;
       case 7:
-        $coef = 1.3;
+        $coef = 1.25;
       break;
       default:
         $coef = 1;
       break;
     }
 
-    $intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];
-    if($is_intel){
-      $intel = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
-      $intel = round($coef * $intel);
-      if($intel < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-      if($intel > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$intel = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
+    $points_to_distribution = 6;
+    if($powerful > 7){$points_to_distribution = 7;}
+    if($powerful < 3){$points_to_distribution = 5;}
+    switch ($level) {
+      case 2:
+        $points_to_distribution += 1;
+      break;
+      case 4:
+        $points_to_distribution += 2;
+      break;
+      case 6:
+        $points_to_distribution += 3;
+      break;
+      case 10:
+        $points_to_distribution += 4;
+      break;
+      case 12:
+        $points_to_distribution += 5;
+      break;
+      case 14:
+        $points_to_distribution += 6;
+      break;
+      case 16:
+        $points_to_distribution += 7;
+      break;
+      case 20:
+        $points_to_distribution += 8;
+      break;
     }
-    $chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
-    if($is_chance){
-        $chance = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
-        $chance = round($coef * $chance);
-        if($chance < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-        if($chance > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$chance = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
+
+    $caracteristicsFillingOrder = [];
+    if($is_intel){array_push($caracteristicsFillingOrder, "intel");}
+    if($is_strong){array_push($caracteristicsFillingOrder, "strong");}
+    if($is_chance){array_push($caracteristicsFillingOrder, "chance");}
+    if($is_agi){array_push($caracteristicsFillingOrder, "agi");}
+    if(!empty($caracteristicsFillingOrder)){
+      shuffle($caracteristicsFillingOrder);
     }
-    $strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
-    if($is_strong){
-      if($this->returnBool($speficific_main['strong'])){
-        $strong = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
-        $strong = round($coef * $strong);
-        if($strong < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-        if($strong > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$strong = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
-      }
-    }
-    $agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
-    if($is_agi){
-      $agi = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
-      $agi = round($coef * $agi);
-      if($agi < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-      if($agi > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$agi = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
-    }
-    $vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
-    if($is_vitality){
-      $vitality = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
-      $vitality = round($coef * $vitality);
-      if($vitality < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-      if($vitality > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$vitality = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
-    }
-    $sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['base'];;
-    if($is_sagesse){
-        $sagesse = $this::calcExp(ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['expression_item'], ['level' => $level]);
-        $sagesse = round($coef * $sagesse);
-        if($sagesse < ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min']){$sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['min'];}
-        if($sagesse > ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item']){$sagesse = ControllerModule::BALANCE_SPEFICIFIC_MAIN['classe']['max_item'];}
-      }
-
-    $pa = $this::calcExp(ControllerModule::BALANCE_PA['classe']['expression_item'], ['level' => $level]);
-    $pa = round( (1+($coef-1)*0.8) * $pa);
-    if($pa < ControllerModule::BALANCE_PA['classe']['min']){$pa = ControllerModule::BALANCE_PA['classe']['min'];}
-    if($pa > ControllerModule::BALANCE_PA['classe']['max_item']){$pa = ControllerModule::BALANCE_PA['classe']['max_item'];}
-
-    $pm = $this::calcExp(ControllerModule::BALANCE_PM['classe']['expression_item'], ['level' => $level]);
-    $pm = round( (1+($coef-1)*0.8) * $pm);
-    if($pm < ControllerModule::BALANCE_PM['classe']['min']){$pm = ControllerModule::BALANCE_PM['classe']['min'];}
-    if($pm > ControllerModule::BALANCE_PM['classe']['max_item']){$pm = ControllerModule::BALANCE_PM['classe']['max_item'];}
-
-    $po = $this::calcExp(ControllerModule::BALANCE_PO['classe']['expression_item'], ['level' => $level]);
-    $po = round( (1+($coef-1)*0.8) * $po);
-    if($po < ControllerModule::BALANCE_PO['classe']['min']){$po = ControllerModule::BALANCE_PO['classe']['min'];}
-    if($po > ControllerModule::BALANCE_PO['classe']['max_item']){$po = ControllerModule::BALANCE_PO['classe']['max_item'];}
-
-    $invoc = $this::calcExp(ControllerModule::BALANCE_INVOCATION['classe']['expression_item'], ['level' => $level]);
-    $invoc = round( (1+($coef-1)*0.8) * $invoc);
-    if($invoc < ControllerModule::BALANCE_INVOCATION['classe']['min']){$invoc = ControllerModule::BALANCE_INVOCATION['classe']['min'];}
-    if($invoc > ControllerModule::BALANCE_INVOCATION['classe']['max_item']){$invoc = ControllerModule::BALANCE_INVOCATION['classe']['max_item'];}
-
-    $ini = $this::calcExp(ControllerModule::BALANCE_INI['classe']['expression_base'], ['level' => $level]);
-    if(isset($speficific_main['intel'])){
-      if($this->returnBool($speficific_main['intel'])){
-        $ini += $intel;
-        if($ini > ControllerModule::BALANCE_INI['classe']['max_item']){$ini = ControllerModule::BALANCE_INI['classe']['max_item'];}
-      }
-    }
-    $ini = round($coef * $ini);
-    if($ini < ControllerModule::BALANCE_INI['classe']['min']){$ini = ControllerModule::BALANCE_INI['classe']['min'];}
-
-    $touch = $this::calcExp(ControllerModule::BALANCE_TOUCH['classe']['expression_item'], ['level' => $level]);
-
-    $res = $this::calcExp(ControllerModule::BALANCE_RES['classe']['expression_item'], ['level' => $level]);
-    $res = round( (1+($coef-1)*0.8) * $res);
-    if($res < ControllerModule::BALANCE_RES['classe']['min']){$res = ControllerModule::BALANCE_RES['classe']['min'];}
-    $res_neutre = ControllerModule::BALANCE_RES['classe']['base'];
-    if($powerful >= 5){
-        $res_neutre = $res;
-    }
-    $res_terre = ControllerModule::BALANCE_RES['classe']['base'];
-    if($is_strong){$res_terre = $res;}
-    $res_feu = ControllerModule::BALANCE_RES['classe']['base'];
-    if($is_intel){$res_feu = $res;}
-    $res_air = ControllerModule::BALANCE_RES['classe']['base'];
-    if($is_agi){$res_air = $res;}
-    $res_eau = ControllerModule::BALANCE_RES['classe']['base'];
-    if($is_chance){$res_eau = $res;}
-
-    $tacle = $this::calcExp(ControllerModule::BALANCE_TACLE['classe']['expression_base'], ['level' => $level]);
-    $fuite = $tacle;
-    $tacle = round( (1+($coef-1)*0.8) * $tacle);
-    if($tacle < ControllerModule::BALANCE_TACLE['classe']['min']){$tacle = ControllerModule::BALANCE_TACLE['classe']['min'];}
-    if($tacle > ControllerModule::BALANCE_TACLE['classe']['max_item']){$tacle = ControllerModule::BALANCE_TACLE['classe']['max_item'];}
-
-    $fuite = round( (1+($coef-1)*0.8) * $fuite);
-    if($fuite < ControllerModule::BALANCE_TACLE['classe']['min']){$fuite = ControllerModule::BALANCE_TACLE['classe']['min'];}
-    if($fuite > ControllerModule::BALANCE_TACLE['classe']['max_item']){$fuite = ControllerModule::BALANCE_TACLE['classe']['max_item'];}
-
-    $ca = $this::calcExp(ControllerModule::BALANCE_CA['classe']['expression_base'], ['level' => $level]);
-    $ca = round( (1+($coef-1)*0.8) * $ca);
-    if($ca < ControllerModule::BALANCE_CA['classe']['min']){$ca = ControllerModule::BALANCE_CA['classe']['min'];}
-    if($ca > ControllerModule::BALANCE_CA['classe']['max_item']){$ca = ControllerModule::BALANCE_CA['classe']['max_item'];}
-
-    $dodge = $this::calcExp(ControllerModule::BALANCE_DODGE['classe']['expression_base'], ['level' => $level]);
-    $dodge = round( (1+($coef-1)*0.8) * $dodge);
-    if($dodge < ControllerModule::BALANCE_DODGE['classe']['min']){$dodge = ControllerModule::BALANCE_DODGE['classe']['min'];}
-    if($dodge > ControllerModule::BALANCE_DODGE['classe']['max_item']){$dodge = ControllerModule::BALANCE_DODGE['classe']['max_item'];}
-
-    $skill = $this::calcExp(ControllerModule::BALANCE_SKILL['classe']['expression_base'], ['level' => $level]);
-
-    $acrobatie = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $discretion = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $escamotage = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $athletisme = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $intimidation = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $arcane = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $histoire = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $investigation = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $nature = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $religion = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $dressage = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $medecine = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $perception= round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $perspicacite = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $survie = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $persuasion = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $representation = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-    $supercherie = round(rand(-1, 6 * $coef * $coef * $coef) / 5);
-
-    if($is_agi){
-      $acrobatie += round($skill);
-      $discretion += $acrobatie;
-      $escamotage += $acrobatie;
-    }
-    if($is_strong){
-      $athletisme += round($skill);
-      $intimidation += $athletisme;
-    }
-    if($is_intel){
-      $arcane += round($skill);
-      $histoire += $arcane;
-      $investigation += $arcane;
-      $nature += $arcane;
-      $religion += $arcane;
-    }
-    if($is_sagesse){
-      $dressage += round($skill);
-      $medecine += $dressage;
-      $perception += $dressage;
-      $perspicacite += $dressage;
-      $survie += $dressage;
-    }
-    if($is_chance){
-      $persuasion += round($skill);
-      $representation += $persuasion;
-      $supercherie += $persuasion;
+    $caracteristicsFillingOrderVitaAndSagesse = [];
+    if($is_vitality){array_push($caracteristicsFillingOrderVitaAndSagesse, "vitality");}
+    if($is_sagesse){array_push($caracteristicsFillingOrderVitaAndSagesse, "sagesse");}
+    if(!empty($caracteristicsFillingOrderVitaAndSagesse)){
+      shuffle($caracteristicsFillingOrderVitaAndSagesse);
+      array_push($caracteristicsFillingOrder, $caracteristicsFillingOrderVitaAndSagesse);
     }
 
     switch ($_REQUEST['classe']) {
-      case Classe::FECA: // Intel et Eau
-        $name_auto = "JeanProtection";
-        $dice = 10;
-        $perspicacite += 3;
-        $religion += 2;
-        $arcane += 3;
+      case Classe::FECA: // Intel, force et chance
+        $caracteristicsToFill = [];
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        if(!in_array("strong", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "strong");}
+        if(!in_array("chance", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "chance");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::OSAMODAS: // Intel et Agi
-        $name_auto = "JeanInvoc";
-        $dice = 10;
-        $dressage += 4;
-        $perspicacite +=2;
-        $nature +=2;
+      case Classe::OSAMODAS: // Intel, agi et force
+        $caracteristicsToFill = [];
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        if(!in_array("agi", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "agi");}
+        if(!in_array("strong", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "strong");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::ENUTROF: // Eau et Intel
-        $name_auto = "JeanPelle";
-        $dice = 10;
-        $investigation += 2;
-        $perception += 2;
-        $persuasion += 3;
+      case Classe::ENUTROF: // Eau et Feu, terre
+        $caracteristicsToFill = [];
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        if(!in_array("strong", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "strong");}
+        if(!in_array("chance", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "chance");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::SRAM: // Force et Agi
-        $name_auto = "JeanPiège";
-        $dice = 8;
-        $discretion += 3;
-        $escamotage += 3;
-        $perception += 2;
+      case Classe::SRAM: // Terre, eau, air
+        $caracteristicsToFill = [];
+        if(!in_array("strong", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "strong");}
+        if(!in_array("chance", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "chance");}
+        if(!in_array("agi", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "agi");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::XELOR: // Force et Intel
-        $name_auto = "JeanHorloge";
-        $dice = 8;
-        $arcane += 3;
-        $histoire += 2;
-        $investigation += 3;
+      case Classe::XELOR: // Force et eau, feu
+        $caracteristicsToFill = [];
+        if(!in_array("strong", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "strong");}
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        if(!in_array("chance", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "chance");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
+
       break;
-      case Classe::ECAFLIP: // Force et Chance
-        $name_auto = "Jean4feuilles";
-        $dice = 10;
-        $acrobatie += 4;
-        $discretion += 2;
-        $representation += 2;
+      case Classe::ECAFLIP: // Feu, air et Chance
+        $caracteristicsToFill = [];
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        if(!in_array("agi", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "agi");}
+        if(!in_array("chance", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "chance");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::ENIRIPSA: // Intel et Agi
-        $name_auto = "JeanSoigne";
-        $dice = 8;
-        $arcane += 2;
-        $medecine += 4;
-        $perspicacite += 2;
+      case Classe::ENIRIPSA: // Intel et Agi, eau
+        $caracteristicsToFill = [];
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        if(!in_array("agi", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "agi");}
+        if(!in_array("chance", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "chance");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::IOP: // Force et Agi
-        $name_auto = "JeanCastagne";
-        $dice = 10;
-        $athletisme += 2;
-        $intimidation += 2;
-        $religion += 2;
-        $representation += 2;
+      case Classe::IOP: // Force et Agi, feu
+        $caracteristicsToFill = [];
+        if(!in_array("strong", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "strong");}
+        if(!in_array("agi", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "agi");}
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::CRA: // Chance et Intel
-        $name_auto = "JeanFleche";
-        $dice = 8;
-        $histoire += 3;
-        $perception += 3;
-        $persuasion += 2;
+      case Classe::CRA: // Chance et Intel, air
+        $caracteristicsToFill = [];
+        if(!in_array("chance", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "chance");}
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        if(!in_array("agi", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "agi");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::SADIDA: // Force et Chance
-        $name_auto = "JeanPousse";
-        $dice = 10;
-        $nature += 4;
-        $perception += 2;
-        $survie += 2;
+      case Classe::SADIDA: // Force et Chance, feu
+        $caracteristicsToFill = [];
+        if(!in_array("strong", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "strong");}
+        if(!in_array("chance", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "chance");}
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::SACRIER: // Force et Chance
-        $name_auto = "JeanCaisse";
-        $dice = 12;
-        $athletisme += 2;
-        $intimidation += 2;
-        $survie += 4;
+      case Classe::SACRIER: // Force et air, feu
+        $caracteristicsToFill = [];
+        if(!in_array("strong", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "strong");}
+        if(!in_array("agi", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "agi");}
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
-      case Classe::PANDAWA: // Force et intel
-        $name_auto = "JeanCabane";
-        $dice = 10;
-        $athletisme += 4;
-        $survie += 2;
-        $supercherie += 2;
+      case Classe::PANDAWA: // Force et intel, air
+        $caracteristicsToFill = [];
+        if(!in_array("strong", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "strong");}
+        if(!in_array("intel", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "intel");}
+        if(!in_array("agi", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "agi");}
+        shuffle($caracteristicsToFill);
+        array_push($caracteristicsFillingOrder, $caracteristicsToFill[0]);
       break;
     }
 
-    $life =  $this::calcExp(ControllerModule::BALANCE_LIFE['classe']['expression_item'], ['level' => $level, "dice" => $dice]);
+    $caracteristicsToFill = [];
+    if(!in_array("vitality", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "vitality");}
+    if(!in_array("sagesse", $caracteristicsFillingOrder)){array_push($caracteristicsToFill, "sagesse");}
+    shuffle($caracteristicsToFill);
+    array_push($caracteristicsFillingOrder, $caracteristicsToFill);
+
+    $mainCaracteristics = Creature::distribCaractericticsPoints(pointsTotals:$points_to_distribution, level:$level, caracteristicsFillingOrder:$caracteristicsFillingOrder);
+    $intel = $mainCaracteristics["intel"];
+    $strong = $mainCaracteristics["strong"];
+    $chance = $mainCaracteristics["chance"];
+    $agi = $mainCaracteristics["agi"];
+    $vitality = $mainCaracteristics["vitality"];
+    $sagesse = $mainCaracteristics["sagesse"];
+    
+    $pa = $this::calcExp(Creature::CARACTERISTICS['pa']['classe']['expression_base'], ['level' => $level]);
+    if($pa < Creature::CARACTERISTICS['pa']['classe']['min']){$pa = Creature::CARACTERISTICS['pa']['classe']['min'];}
+    if($pa > Creature::CARACTERISTICS['pa']['classe']['max_item']){$pa = Creature::CARACTERISTICS['pa']['classe']['max_item'];}
+
+    $pm = $this::calcExp(Creature::CARACTERISTICS['pm']['classe']['expression_base'], ['level' => $level]);
+    if($pm < Creature::CARACTERISTICS['pm']['classe']['min']){$pm = Creature::CARACTERISTICS['pm']['classe']['min'];}
+    if($pm > Creature::CARACTERISTICS['pm']['classe']['max_item']){$pm = Creature::CARACTERISTICS['pm']['classe']['max_item'];}
+
+    $po = $this::calcExp(Creature::CARACTERISTICS['po']['classe']['expression_base'], ['level' => $level]);
+    if($po < Creature::CARACTERISTICS['po']['classe']['min']){$po = Creature::CARACTERISTICS['po']['classe']['min'];}
+    if($po > Creature::CARACTERISTICS['po']['classe']['max_item']){$po = Creature::CARACTERISTICS['po']['classe']['max_item'];}
+
+    $invoc = $this::calcExp(Creature::CARACTERISTICS['invocation']['classe']['expression_base'], ['level' => $level]);
+    if($invoc < Creature::CARACTERISTICS['invocation']['classe']['min']){$invoc = Creature::CARACTERISTICS['invocation']['classe']['min'];}
+    if($invoc > Creature::CARACTERISTICS['invocation']['classe']['max_item']){$invoc = Creature::CARACTERISTICS['invocation']['classe']['max_item'];}
+
+    $ini = $this::calcExp(Creature::CARACTERISTICS['ini']['classe']['expression_base'], ['level' => $level]);
+    $ini += $intel;
+    if($ini > Creature::CARACTERISTICS['ini']['classe']['max_item']){$ini = Creature::CARACTERISTICS['ini']['classe']['max_item'];}
+    if($ini < Creature::CARACTERISTICS['ini']['classe']['min']){$ini = Creature::CARACTERISTICS['ini']['classe']['min'];}
+
+    $touch = $this::calcExp(Creature::CARACTERISTICS['touch']['classe']['expression_base'], ['level' => $level]);
+
+    $tacle = $this::calcExp(Creature::CARACTERISTICS['tacle']['classe']['expression_base'], ['level' => $level]);
+    $fuite = $tacle;
+    $tacle += $chance;
+    if($tacle < Creature::CARACTERISTICS['tacle']['classe']['min']){$tacle = Creature::CARACTERISTICS['tacle']['classe']['min'];}
+    if($tacle > Creature::CARACTERISTICS['tacle']['classe']['max_item']){$tacle = Creature::CARACTERISTICS['tacle']['classe']['max_item'];}
+
+    $fuite += $agi;
+    if($fuite < Creature::CARACTERISTICS['fuite']['classe']['min']){$fuite = Creature::CARACTERISTICS['fuite']['classe']['min'];}
+    if($fuite > Creature::CARACTERISTICS['fuite']['classe']['max_item']){$fuite = Creature::CARACTERISTICS['fuite']['classe']['max_item'];}
+
+    $ca = $this::calcExp(Creature::CARACTERISTICS['ca']['classe']['expression_base'], ['level' => $level]);
+    if($ca < Creature::CARACTERISTICS['ca']['classe']['min']){$ca = Creature::CARACTERISTICS['ca']['classe']['min'];}
+    if($ca > Creature::CARACTERISTICS['ca']['classe']['max_item']){$ca = Creature::CARACTERISTICS['ca']['classe']['max_item'];}
+
+    $dodge_pa = $this::calcExp(Creature::CARACTERISTICS['dodge_pa']['classe']['expression_base'], ['level' => $level]);
+    $dodge_pa += $sagesse;
+    if($dodge_pa < Creature::CARACTERISTICS['dodge_pa']['classe']['min']){$dodge_pa = Creature::CARACTERISTICS['dodge_pa']['classe']['min'];}
+    if($dodge_pa > Creature::CARACTERISTICS['dodge_pa']['classe']['max_item']){$dodge_pa = Creature::CARACTERISTICS['dodge_pa']['classe']['max_item'];}
+
+    $dodge_pm = $this::calcExp(Creature::CARACTERISTICS['dodge_pm']['classe']['expression_base'], ['level' => $level]);
+    $dodge_pm += $sagesse;
+    if($dodge_pm < Creature::CARACTERISTICS['dodge_pm']['classe']['min']){$dodge_pm = Creature::CARACTERISTICS['dodge_pm']['classe']['min'];}
+    if($dodge_pm > Creature::CARACTERISTICS['dodge_pm']['classe']['max_item']){$dodge_pm = Creature::CARACTERISTICS['dodge_pm']['classe']['max_item'];}
+
+    $skill_agi = $this::calcExp(Creature::CARACTERISTICS['skill_agi_of_choice']['classe']['expression_base'], ['level' => $level]);
+    $skill_agi += $agi;
+    $skill_force = $this::calcExp(Creature::CARACTERISTICS['skill_force_of_choice']['classe']['expression_base'], ['level' => $level]);
+    $skill_force += $strong;
+    $skill_intel = $this::calcExp(Creature::CARACTERISTICS['skill_intel_of_choice']['classe']['expression_base'], ['level' => $level]);
+    $skill_intel += $intel;
+    $skill_sagesse = $this::calcExp(Creature::CARACTERISTICS['skill_sagesse_of_choice']['classe']['expression_base'], ['level' => $level]);
+    $skill_sagesse += $sagesse;
+    $skill_chance = $this::calcExp(Creature::CARACTERISTICS['skill_chance_of_choice']['classe']['expression_base'], ['level' => $level]);
+    $skill_chance += $chance;
+
+    $acrobatie = round($agi);
+    $discretion = round($agi);
+    $escamotage = round($agi);
+    $athletisme = round($strong);
+    $intimidation = round($strong);
+    $arcane = round($intel);
+    $histoire = round($intel);
+    $investigation = round($intel);
+    $nature = round($intel);
+    $religion = round($intel);
+    $dressage = round($sagesse);
+    $medecine = round($sagesse);
+    $perception= round($sagesse);
+    $perspicacite = round($sagesse);
+    $survie = round($sagesse);
+    $persuasion = round($chance);
+    $representation = round($chance);
+    $supercherie = round($chance);
+
+    switch ($_REQUEST['classe']) {
+      case Classe::FECA:
+        $name_auto = "JeanProtection";
+        $dice = 10;
+        $perspicacite += $master_bonus;
+        $religion += $master_bonus;
+        $arcane += $master_bonus;
+      break;
+      case Classe::OSAMODAS:
+        $name_auto = "JeanInvoc";
+        $dice = 10;
+        $dressage += $master_bonus;
+        $perspicacite += $master_bonus;
+        $nature +=$master_bonus;
+      break;
+      case Classe::ENUTROF:
+        $name_auto = "JeanPelle";
+        $dice = 10;
+        $investigation += $master_bonus;
+        $perception += $master_bonus;
+        $persuasion += $master_bonus;
+      break;
+      case Classe::SRAM:
+        $name_auto = "JeanPiège";
+        $dice = 8;
+        $discretion += $master_bonus;
+        $escamotage += $master_bonus;
+        $perception += $master_bonus;
+      break;
+      case Classe::XELOR:
+        $name_auto = "JeanHorloge";
+        $dice = 8;
+        $arcane += $master_bonus;
+        $histoire += $master_bonus;
+        $investigation += $master_bonus;
+      break;
+      case Classe::ECAFLIP:
+        $name_auto = "Jean4feuilles";
+        $dice = 10;
+        $acrobatie += $master_bonus;
+        $discretion += $master_bonus;
+        $representation += $master_bonus;
+      break;
+      case Classe::ENIRIPSA:
+        $name_auto = "JeanSoigne";
+        $dice = $master_bonus;
+        $arcane += $master_bonus;
+        $medecine += $master_bonus;
+        $perspicacite += $master_bonus;
+      break;
+      case Classe::IOP:
+        $name_auto = "JeanCastagne";
+        $dice = 10;
+        $athletisme += $master_bonus;
+        $intimidation += $master_bonus;
+        $religion += $master_bonus;
+      break;
+      case Classe::CRA:
+        $name_auto = "JeanFleche";
+        $dice = 8;
+        $histoire += $master_bonus;
+        $perception += $master_bonus;
+        $persuasion += $master_bonus;
+      break;
+      case Classe::SADIDA:
+        $name_auto = "JeanPousse";
+        $dice = 10;
+        $nature += $master_bonus;
+        $perception += $master_bonus;
+        $survie += $master_bonus;
+      break;
+      case Classe::SACRIER:
+        $name_auto = "JeanCaisse";
+        $dice = 12;
+        $athletisme += $master_bonus;
+        $intimidation += $master_bonus;
+        $survie += $master_bonus;
+      break;
+      case Classe::PANDAWA:
+        $name_auto = "JeanCabane";
+        $dice = 10;
+        $athletisme += $master_bonus;
+        $survie += $master_bonus;
+        $supercherie += $master_bonus;
+      break;
+    }
+
+    if(!empty($name_ai)){
+      if(isset($name_ai['use_ai'])){
+        if($name_ai == true){
+          $manager = new ClasseManager;
+          if($manager->existsUniqid($_REQUEST['classe'])){
+            $classe_name = $manager->getFromUniqid($_REQUEST['classe'])->getName();
+            
+            if(isset($name_ai['genre'])){
+              $genre_ai = $name_ai['genre'];
+            }
+            if(isset($name_ai['genre'])){
+              $inspiration_culturel = $name_ai['inspiration_culturel'];
+            }
+    
+            $ai = new ArtificialIntelligence();
+            $state = $ai->dispatch(
+                name_file : $_REQUEST['template'],
+                data : [
+                    'classe' => $classe_name,
+                    'genre' => $genre_ai,
+                    'inspiration_culturel' => $inspiration_culturel
+                ]
+            );
+            if($state['state'] === true){
+                $name_auto = $state['value'];
+            }
+          }
+        }
+      }
+    }
+
+    $life =  $this::calcExp(Creature::CARACTERISTICS['life']['classe']['expression_base'], ['level' => $level, "dice" => $dice]);
     $life += $vitality * $level;
     $random = rand(-0.1 * $life, 0.1 * $life);
     $life = round( (1+($coef-1)*1.7) * $life + $random);
-    if($life < ControllerModule::BALANCE_LIFE['classe']['min']){$life = ControllerModule::BALANCE_LIFE['classe']['min'];}
+    if($life < Creature::CARACTERISTICS['life']['classe']['min']){$life = Creature::CARACTERISTICS['life']['classe']['min'];}
 
     if(empty($name)){$name = $name_auto;}
 
-    $obj = new Npc(array(
-      'name'=>$name,
-      'classe'=> $classe,
-      'trait'=>"PNJ",
-      'level'=>round($level),
-      'age'=>"25",
-      'size'=>'1m70',
-      'weight'=>'70 kg',
-      'life'=>round($life),
-      'pa'=> round($pa),
-      'pm'=> round($pm),
-      'po'=> round($po),
-      'ini'=> round($ini),
-      'touch'=> round($touch),
-      'invocation'=>round($level / 3.33),
-      'ca'=> round($ca) - 10,
-      'dodge_pa'=>round($dodge) - 10,
-      'dodge_pm'=>round($dodge) - 10,
-      'fuite'=>round($fuite),
-      'tacle'=>round($tacle),
-      'vitality'=>round($vitality),
-      'sagesse'=>round($sagesse),
-      'strong'=>round($strong),
-      'intel'=>round($intel),
-      'agi'=>round($agi),
-      'chance'=>round($chance),
-      'res_neutre'=>round($res_neutre),
-      'res_terre'=>round($res_terre),
-      'res_feu'=>round($res_feu),
-      'res_air'=>round($res_air),
-      'res_eau'=>round($res_eau),
-      'acrobatie'=>$acrobatie,
-      'discretion'=>$discretion,
-      'escamotage'=>$escamotage,
-      'athletisme'=>$athletisme,
-      'intimidation'=>$intimidation,
-      'arcane'=>$arcane,
-      'histoire'=>$histoire,
-      'investigation'=>$investigation,
-      'nature'=>$nature,
-      'religion'=>$religion,
-      'dressage'=>$dressage,
-      'medecine'=>$medecine,
-      'perception'=>$perception,
-      'perspicacite'=>$perspicacite,
-      'survie'=>$survie,
-      'persuasion'=>$persuasion,
-      'representation'=>$representation,
-      'supercherie'=>$supercherie
-    ));
-    $obj->setUniqid(uniqid());
-    $obj->setTimestamp_add();
-    $obj->setTimestamp_updated();
-    return $obj;
+    if(!empty($npc)){
+        $npc->getName($name);
+        $npc->getClasse($classe);
+        $npc->getTrait("PNJ");
+        $npc->getLevel(round($level));
+        $npc->getAge("25");
+        $npc->getSize('1m70');
+        $npc->getWeight('70 kg');
+        $npc->getLife(round($life));
+        $npc->getPa(round($pa));
+        $npc->getPm(round($pm));
+        $npc->getPo(round($po));
+        $npc->getIni(round($ini));
+        $npc->getTouch(round($touch));
+        $npc->getInvocation(round($level / 3.33));
+        $npc->getCa(round($ca) - 10);
+        $npc->getDodge_pa(round($dodge_pa) - 10);
+        $npc->getDodge_pm(round($dodge_pm) - 10);
+        $npc->getFuite(round($fuite));
+        $npc->getTacle(round($tacle));
+        $npc->getVitality(round($vitality));
+        $npc->getSagesse(round($sagesse));
+        $npc->getStrong(round($strong));
+        $npc->getIntel(round($intel));
+        $npc->getAgi(round($agi));
+        $npc->getChance(round($chance));
+        $npc->getAcrobatie($acrobatie);
+        $npc->getDiscretion($discretion);
+        $npc->getEscamotage($escamotage);
+        $npc->getAthletisme($athletisme);
+        $npc->getIntimidation($intimidation);
+        $npc->getArcane($arcane);
+        $npc->getHistoire($histoire);
+        $npc->getInvestigation($investigation);
+        $npc->getNature($nature);
+        $npc->getReligion($religion);
+        $npc->getDressage($dressage);
+        $npc->getMedecine($medecine);
+        $npc->getPerception($perception);
+        $npc->getPerspicacite($perspicacite);
+        $npc->getSurvie($survie);
+        $npc->getPersuasion($persuasion);
+        $npc->getRepresentation($representation);
+        $npc->getSupercherie($supercherie);
+    } else {
+      $npc = new Npc(array(
+        'name'=>$name,
+        'classe'=> $classe,
+        'trait'=>"PNJ",
+        'level'=>round($level),
+        'age'=>"25",
+        'size'=>'1m70',
+        'weight'=>'70 kg',
+        'life'=>round($life),
+        'pa'=> round($pa),
+        'pm'=> round($pm),
+        'po'=> round($po),
+        'ini'=> round($ini),
+        'touch'=> round($touch),
+        'invocation'=>round($level / 3.33),
+        'ca'=> round($ca) - 10,
+        'dodge_pa'=>round($dodge_pa) - 10,
+        'dodge_pm'=>round($dodge_pm) - 10,
+        'fuite'=>round($fuite),
+        'tacle'=>round($tacle),
+        'vitality'=>round($vitality),
+        'sagesse'=>round($sagesse),
+        'strong'=>round($strong),
+        'intel'=>round($intel),
+        'agi'=>round($agi),
+        'chance'=>round($chance),
+        'acrobatie'=>$acrobatie,
+        'discretion'=>$discretion,
+        'escamotage'=>$escamotage,
+        'athletisme'=>$athletisme,
+        'intimidation'=>$intimidation,
+        'arcane'=>$arcane,
+        'histoire'=>$histoire,
+        'investigation'=>$investigation,
+        'nature'=>$nature,
+        'religion'=>$religion,
+        'dressage'=>$dressage,
+        'medecine'=>$medecine,
+        'perception'=>$perception,
+        'perspicacite'=>$perspicacite,
+        'survie'=>$survie,
+        'persuasion'=>$persuasion,
+        'representation'=>$representation,
+        'supercherie'=>$supercherie
+      ));
+      $npc->setUniqid(uniqid());
+      $npc->setTimestamp_add();
+      $npc->setTimestamp_updated();
+    }
+    return $npc;
   }
   
   public function add(){
@@ -774,11 +935,31 @@ class ControllerNpc extends ControllerModule{
       } else {
 
           $name = $_REQUEST['name'];
+          $level = 1;
           if(isset($_REQUEST['level'])){
             $level = $_REQUEST['level'];
-          } else {
-            $level = 1;
           }
+          $powerful = 4;
+          if(isset($_REQUEST['powerful'])){
+            $powerful = $_REQUEST['powerful'];
+          }
+          $use_ai = false;
+          if($_REQUEST['use_ai']){
+            $use_ai = $this->returnBool($_REQUEST['use_ai']);
+          }
+
+          $obj = $this->generate(
+            level: $level,
+            classe: $_REQUEST['classe'],
+            powerful: $powerful,
+            name: $name,
+            name_ai:[
+              "use_ai" => $use_ai,
+              "genre" => $_REQUEST['genre'],
+              "inspiration_culturel" => $_REQUEST['inspiration_culturel']
+            ],
+          );
+
           $total_point = round((2 + $level)); // (60 + 200) / 20 => 13 mod par les niveaux et 13 mod par les équipements
           switch ($_REQUEST['classe']) {
             case Classe::FECA: // Intel et Eau
@@ -1166,69 +1347,16 @@ class ControllerNpc extends ControllerModule{
               $representation = 0 + rand(0, round($level / 9));
               $supercherie = 2 + rand(0, round($level / 6));
             break;
-            
           }
-        
-            $manager = new NpcManager();
-            $obj = new Npc(array(
-              'name'=>$name,
-              'classe'=> $_REQUEST['classe'],
-              'level'=>$level,
-              'age'=>"25",
-              'size'=>'1m70',
-              'weight'=>'70 kg',
-              'life'=>$life,
-              'pa'=> round( 6 + $level / 3.33),
-              'pm'=>round(3 + $level / 7.3),
-              'po'=> round($level / 3.33),
-              'ini'=>round($level / 3.33),
-              'invocation'=>round($level / 3.33),
-              'touch'=>round($level / 3),
-              'ca'=> round($level / 3.33),
-              'dodge_pa'=>round($level / 3.33),
-              'dodge_pm'=>round($level / 3.33),
-              'fuite'=>round($level / 3.33),
-              'tacle'=>round($level / 3.33),
-              'vitality'=>$vitality,
-              'sagesse'=>$sagesse,
-              'strong'=>$strong,
-              'intel'=>$intel,
-              'agi'=>$agi,
-              'chance'=>$chance,
-              'res_neutre'=>round($level / 4.4),
-              'res_terre'=>round($level / 4.4),
-              'res_feu'=>round($level / 4.4),
-              'res_air'=>round($level / 4.4),
-              'res_eau'=>round($level / 4.4),
-              'acrobatie'=>$acrobatie,
-              'discretion'=>$discretion,
-              'escamotage'=>$escamotage,
-              'athletisme'=>$athletisme,
-              'intimidation'=>$intimidation,
-              'arcane'=>$arcane,
-              'histoire'=>$histoire,
-              'investigation'=>$investigation,
-              'nature'=>$nature,
-              'religion'=>$religion,
-              'dressage'=>$dressage,
-              'medecine'=>$medecine,
-              'perception'=>$perception,
-              'perspicacite'=>$perspicacite,
-              'survie'=>$survie,
-              'persuasion'=>$persuasion,
-              'representation'=>$representation,
-              'supercherie'=>$supercherie
-            ));
-            $obj->setUniqid(uniqid());
-            $obj->setTimestamp_add();
-            $obj->setTimestamp_updated();
+
+          $manager = new NpcManager();        
             
-            if($manager->add($obj)){
-              $return['state'] = true;
-              $return['script'] = "Npc.open('".$obj->getUniqid()."', Controller.DISPLAY_EDITABLE)";
-            }else {
-              $return['error'] = 'Impossible d\'ajouter l\'objet';
-            }
+          if($manager->add($obj)){
+            $return['state'] = true;
+            $return['script'] = "Npc.open('".$obj->getUniqid()."', Controller.DISPLAY_EDITABLE)";
+          }else {
+            $return['error'] = 'Impossible d\'ajouter l\'objet';
+          }
       }
 
     }

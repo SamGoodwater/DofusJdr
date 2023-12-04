@@ -1,0 +1,12 @@
+{
+    "name": "sass-compile",
+    "version": "1.0.0",
+    "description": "A simple sass compile config.",
+    "main": "index.js",
+    "scripts": {
+        "sass": "sass --watch --update src/css:src/css/styles",
+        "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"
+    },
+    "author": "Goodwater",
+    "license": "ISC"
+  }

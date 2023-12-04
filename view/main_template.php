@@ -213,13 +213,18 @@
                             <p class="my-2">
                                 <label for="openai_result" class="form-label">Nom généré</label>
                                 <p class="d-flex">
-                                    <input class="form-control-sm form-control form-control-main" type="text" id="openai_result" readonly value="">
+                                    <input class="form-control-sm form-control form-control-main text-center" type="text" id="openai_result" readonly value="">
                                     <a onclick="copyToClipboard($('#openai_result').val());"><i class="mx-2 btn-text-main fa-solid fa-copy"></i></a>
                                 </p>
                             </p>
-                            <button class="btn btn-sm btn-back-secondary mt-2" onclick="generateName();">Générer</button>
+                            <div class="d-flex justify-content-center align-items-baseline gap-1">
+                                <button class="btn btn-sm btn-back-secondary mt-2" onclick="generateName();">Générer</button>
+                                <div id="openia_loading" class="spinner-border text-gray spinner-border-sm" role="status" style="display: none;"><span class="visually-hidden">Loading...</span></div>
+                            </div>
                             <script>
+
                                 function generateName(){
+                                    $("#openia_loading").show();
                                     let URL = 'index.php?c=openai&a=call';
                                     let classe = $('#openai_getname_form #openai_classe').val();
                                     let genre = $('#openai_getname_form #openai_genre').val();
@@ -238,6 +243,7 @@
                                         },
                                         function(data, status)
                                         {
+                                            $("#openia_loading").hide();
                                             if(data.script != ""){
                                                 $('body').append('<script>'+ data.script +'<//script>');
                                             }

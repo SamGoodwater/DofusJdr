@@ -60,7 +60,7 @@ class Router {
         return $this->_controller;
     }
     public function getAction(){
-        return $this->_action;
+        return $this->_action;   
     }
     public function getParams(string $name = null){
         if(isset($this->_params[$name])){
@@ -79,7 +79,6 @@ class Router {
                     "crossorigin" => "anonymous",
                     "integrity" => "sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
                 ],
-                "src/css/include_manually/init.css",
                 "https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css",
                 "https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css",
                 [
@@ -89,9 +88,8 @@ class Router {
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css",
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/panzoom.css",
                 "https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css",
-                "src/css/shortcuts",
-                "src/css/",
-                "src/css/common/"
+                "src/css/plugin",
+                "src/css/styles"
             ];?>
 
             <?php 

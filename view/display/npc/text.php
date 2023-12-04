@@ -59,6 +59,14 @@
                 <div><?=$obj->getDodge_pa(Content::FORMAT_ICON);?></div>
                 <div><?=$obj->getDodge_pm(Content::FORMAT_ICON);?></div>
             </div> 
+            <div class="col-auto gap-1">
+                <div><?=$obj->getDo_fixe_neutre(Content::FORMAT_ICON)?></div>
+                <div><?=$obj->getDo_fixe_terre(Content::FORMAT_ICON)?></div>
+                <div><?=$obj->getDo_fixe_feu(Content::FORMAT_ICON)?></div>
+                <div><?=$obj->getDo_fixe_air(Content::FORMAT_ICON)?></div>
+                <div><?=$obj->getDo_fixe_eau(Content::FORMAT_ICON)?></div>
+                <div><?=$obj->getDo_fixe_multiple(Content::FORMAT_ICON)?></div>
+            </div>
             <div class="col-auto">
                 <div><?=$obj->getRes_neutre(Content::FORMAT_ICON);?></div>
                 <div><?=$obj->getRes_terre(Content::FORMAT_ICON);?></div>

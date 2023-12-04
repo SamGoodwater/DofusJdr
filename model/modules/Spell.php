@@ -256,6 +256,7 @@ class Spell extends Content
                         write: false);
                 
                 default:
+                    if(empty($this->_description)){return "";}
                     return html_entity_decode($this->_description);
             }
         }
@@ -276,6 +277,7 @@ class Spell extends Content
                         write: false);
                 
                 default:
+                    if(empty($this->_effect)){return "";}
                     return html_entity_decode($this->_effect);
             }
         }

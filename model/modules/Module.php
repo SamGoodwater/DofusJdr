@@ -1,7 +1,7 @@
 <?php
 class Module extends Content
 {
-    // Permet de modifier le contenu des sections avant d'être affiché. La fonction se trouve dans la classe Secton et les paramètre sont ici.
+    // Permet de modifier le contenu des sections avant d'être affiché. La fonction se trouve dans la classe Section et les paramètre sont ici.
     // Doit être déclarer. Si aucune modification doit être faites, alors laisser la variable vide.
       const SOLVE_ADD_CLASS_TO_KEYWORD = [
         "text-vitality-d-3" => [
@@ -87,6 +87,8 @@ class Module extends Content
         "tacle" => "cyan",
         "neutre" => "grey",
         "shield" => "blue-grey",
+        "mastery" => "bleu-grey",
+        "expertise" => "bleu",
         "terre-feu" => ["brown", "red"],
         "terre-air" => ["brown", "green"],
         "terre-eau" => ["brown", "blue"],

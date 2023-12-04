@@ -9,69 +9,125 @@
 ?>
 
 <div class="card mb-3" id="mob<?=$obj->getUniqid()?>">
-    <div class="row g-0">
-        <div class="col-auto selector-image-main">
-            <a style="position:relative;top:5px;left:5px;" href="<?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT]))?>" download="<?=$obj->getName().'.'.substr(strrchr($obj->getFile('logo',new Style(['format' => Content::FORMAT_BRUT])),'.'),1);?>"><i class="fa-solid fa-download text-main-d-3 text-main-d-1-hover"></i></a>        
-            <?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-200"]))?>
+    <div class="d-flex flex-row justify-content-between align-items-center m-2">
+        <div class="selector-image-main"><?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-120"]));?></div>
+        <div class="d-flex justify-content-between align-items-baseline gap-2">
+            <?=$obj->getLevel(Content::FORMAT_LIST)?>
+            <?=$obj->getPowerful(Content::FORMAT_BADGE);?>
+            <?=$obj->getSize(Content::FORMAT_BADGE);?>
+            <?=$obj->getHostility(Content::FORMAT_BADGE);?>
+            <?=$obj->getTrait(Content::FORMAT_BADGE);?>
         </div>
-        <div class="col">
-            <div class="card-body">
-                <div class="row justify-content-between">
-                    <div class="col-auto">
-                        <div><?=$obj->getLevel(Content::FORMAT_LIST)?></div>
-                        <div><?=$obj->getLife(Content::FORMAT_BADGE)?></div>
-                        <div><?=$obj->getTouch(Content::FORMAT_BADGE)?></div>
-                        <div><?=$obj->getHostility(Content::FORMAT_BADGE)?></div>
-                        <div><?=$obj->getSize(Content::FORMAT_BADGE)?></div>
-                        <div> <?=$obj->getPowerful(Content::FORMAT_BADGE)?></div>
-                        <div><?=$obj->getTrait(Content::FORMAT_BADGE);?></div>
-                    </div>
-                    <div class="col-auto">
-                        <div><?=$obj->getPa(Content::FORMAT_BADGE)?></div>
-                        <div><?=$obj->getPm(Content::FORMAT_BADGE)?></div>
-                        <div><?=$obj->getPo(Content::FORMAT_BADGE)?></div>
-                        <div><?=$obj->getIni(Content::FORMAT_BADGE)?></div>
-                    </div>
-                    <div class="col-auto">
-                        <div><?=$obj->getVitality(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getSagesse(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getStrong(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getIntel(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getAgi(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getChance(Content::FORMAT_BADGE);?></div>
-                    </div>
-                    <div class="col-auto">
-                        <div><?=$obj->getCa(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getFuite(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getTacle(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getDodge_pa(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getDodge_pm(Content::FORMAT_BADGE);?></div>
-                    </div> 
-                    <div class="col-auto">
-                        <div><?=$obj->getRes_neutre(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getRes_terre(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getRes_feu(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getRes_air(Content::FORMAT_BADGE);?></div>
-                        <div><?=$obj->getRes_eau(Content::FORMAT_BADGE);?></div>
-                    </div>                
-                </div>
-                <div class="nav-item-divider back-main-d-1"></div>
-                <div class="d-flex justify-content-between">
-                    <h3><?=$obj->getName()?></h3>
-                    <div>
-                        <?=$obj->getUsable(Content::FORMAT_BADGE)?>
-                        <?php if($user->getRight('mob', User::RIGHT_WRITE)){ ?>
-                            <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Mob.open('<?=$obj->getUniqid()?>', Controller.DISPLAY_EDITABLE);"><i class='fa-regular fa-edit'></i></a>
-                        <?php } ?>
-                    </div> 
-                </div>
-            </div>
+        <div class="m-2 m-2 align-self-start">
+            <?php if($user->getRight('mob', User::RIGHT_WRITE)){ ?>
+                <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Mob.open('<?=$obj->getUniqid()?>', Controller.DISPLAY_EDITABLE);"><i class='fa-regular fa-edit'></i></a>
+            <?php } ?>
+            <p><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$obj->getUniqid()?>'><i class='fa-solid fa-file-pdf'></i> Générer un pdf</a></p>
         </div>
     </div>
-    <div class="mx-3">
-        <p class="card-text my-2"><?=$obj->getDescription()?></p>
+    <div class="card-body">
+        <div class="nav-item-divider back-main-l-3 m-0"></div>
+        <div class="d-flex justify-content-between align-items-center gap-1">
+            <?=$obj->getLife(Content::FORMAT_VIEW)?>
+            <?=$obj->getPa(Content::FORMAT_VIEW)?>
+            <?=$obj->getPm(Content::FORMAT_VIEW)?>
+            <?=$obj->getPo(Content::FORMAT_VIEW)?>
+            <?=$obj->getIni(Content::FORMAT_VIEW)?>
+            <?=$obj->getMaster_bonus(Content::FORMAT_VIEW)?>
+        </div>
+        <h4 class="text-main-d-1 text-center">Caractéristiques</h4>
+        <div class="d-flex justify-content-between align-items-center gap-1">
+            <?=$obj->getVitality(Content::FORMAT_VIEW)?>
+            <?=$obj->getSagesse(Content::FORMAT_VIEW)?>
+            <?=$obj->getStrong(Content::FORMAT_VIEW)?>
+            <?=$obj->getIntel(Content::FORMAT_VIEW)?>
+            <?=$obj->getAgi(Content::FORMAT_VIEW)?>
+            <?=$obj->getChance(Content::FORMAT_VIEW)?>
+        </div>
+        <h4 class="text-main-d-1 text-center">Dommages</h4>
+        <div class="d-flex justify-content-between align-items-center gap-1">
+            <?=$obj->getTouch(Content::FORMAT_VIEW)?>
+            <?=$obj->getDo_fixe_neutre(Content::FORMAT_VIEW)?>
+            <?=$obj->getDo_fixe_terre(Content::FORMAT_VIEW)?>
+            <?=$obj->getDo_fixe_feu(Content::FORMAT_VIEW)?>
+            <?=$obj->getDo_fixe_air(Content::FORMAT_VIEW)?>
+            <?=$obj->getDo_fixe_eau(Content::FORMAT_VIEW)?>
+            <?=$obj->getDo_fixe_multiple(Content::FORMAT_VIEW)?>
+        </div>
+        <h4 class="text-main-d-1 text-center">Protection</h4>
+        <div class="d-flex justify-content-between align-items-center gap-1">
+            <?=$obj->getCa(Content::FORMAT_VIEW)?>
+            <?=$obj->getDodge_pa(Content::FORMAT_VIEW)?>
+            <?=$obj->getDodge_pm(Content::FORMAT_VIEW)?>
+            <?=$obj->getFuite(Content::FORMAT_VIEW)?>
+            <?=$obj->getTacle(Content::FORMAT_VIEW)?>
+        </div>
+        <div class="d-flex justify-content-between align-items-center gap-1">
+            <?=$obj->getRes_neutre(Content::FORMAT_VIEW)?>
+            <?=$obj->getRes_terre(Content::FORMAT_VIEW)?>
+            <?=$obj->getRes_feu(Content::FORMAT_VIEW)?>
+            <?=$obj->getRes_air(Content::FORMAT_VIEW)?>
+            <?=$obj->getRes_eau(Content::FORMAT_VIEW)?>
+        </div>
+        <div class="nav-item-divider back-main-l-3 m-0"></div>
+        <h4 class="text-main-d-1 text-center">Compétences</h4>
+        <div class="d-flex justify-content-between align-items-start flex-wrap">
+            <div class="col-auto my-2">
+                <p class="text-agi mb-2">Dépendant de l'agilité
+                <?=$obj->getAcrobatie(Content::FORMAT_VIEW)?>
+                <?=$obj->getDiscretion(Content::FORMAT_VIEW)?>
+                <?=$obj->getEscamotage(Content::FORMAT_VIEW)?>
+            </div>
+            <div class="col-auto my-2">
+            <p class="text-force mb-2">Dépendant de la Force
+                <?=$obj->getAthletisme(Content::FORMAT_VIEW)?>
+                <?=$obj->getIntimidation(Content::FORMAT_VIEW)?>
+            </div>
+            <div class="col-auto my-2">
+                <p class="text-intel mb-2">Dépendant de l'Intelligence
+                <?=$obj->getArcane(Content::FORMAT_VIEW)?>
+                <?=$obj->getHistoire(Content::FORMAT_VIEW)?>
+                <?=$obj->getInvestigation(Content::FORMAT_VIEW)?>
+                <?=$obj->getNature(Content::FORMAT_VIEW)?>
+                <?=$obj->getReligion(Content::FORMAT_VIEW)?>
+            </div>
+            <div class="col-auto my-2">
+                <p class="text-sagesse mb-2">Dépendant de la Sagesse
+                <?=$obj->getDressage(Content::FORMAT_VIEW)?>
+                <?=$obj->getMedecine(Content::FORMAT_VIEW)?>
+                <?=$obj->getPerception(Content::FORMAT_VIEW)?>
+                <?=$obj->getPerspicacite(Content::FORMAT_VIEW)?>
+                <?=$obj->getSurvie(Content::FORMAT_VIEW)?>
+            </div>
+            <div class="col-auto my-2">
+                <p class="text-chance mb-2">Dépendant de la Chance
+                <?=$obj->getPersuasion(Content::FORMAT_VIEW)?>
+                <?=$obj->getRepresentation(Content::FORMAT_VIEW)?>
+                <?=$obj->getSupercherie(Content::FORMAT_VIEW)?>
+            </div>
+        </div>
+        <div class="nav-item-divider back-main-d-1"></div>
+        <h4 class="text-main-d-1 text-center">Informations</h4>
+        <p><?=$obj->getDescription();?></p>
         <p class="card-text my-2"><small class="text-muted"><i class="fa-solid fa-map-marker-alt text-main-d-2 me-2"></i> Zone de vie: <?=$obj->getZone()?></small></p>
-        <p class="card-text my-2"><?=$obj->getSpell(Content::DISPLAY_RESUME)?></p>
-        <p class="card-text my-2"><?=$obj->getCapability(Content::DISPLAY_RESUME)?></p>
+        <p><?=$obj->getOther_info();?></p>
+        <div class="d-flex flex-row justify-content-between">
+            <?=$obj->getDrop_()?>
+            <?=$obj->getKamas()?>
+        </div>
+        <div class="nav-item-divider back-main-d-1"></div>
+        <h4 class="pt-2 text-center">Sorts</h4>
+        <div class="dy-2 px-1"><?=$obj->getSpell(Content::DISPLAY_RESUME);?></div>
+        <div class="dy-2 px-1"><?=$obj->getOther_spell();?></div>
+        <h4 class="pt-2 text-center">Aptitudes</h4>
+        <div class="dy-2 px-1"><?=$obj->getCapability(Content::DISPLAY_RESUME);?></div>
+        <div class="nav-item-divider back-main-d-1"></div>
+        <h4 class="pt-2 text-center">Équipement</h4>
+        <div class="dy-2 px-1"><?=$obj->getItem();?></div>
+        <div class="dy-2 px-1"><?=$obj->getOther_item();?></div>
+        <div class="nav-item-divider back-main-d-1"></div>
+        <h4 class="pt-2 text-center">Consommables</h4>
+        <div class="dy-2 px-1"><?=$obj->getConsumable();?></div>
+        <div class="dy-2 px-1"><?=$obj->getOther_consumable();?></div>
     </div>
 </div>

@@ -71,19 +71,6 @@ class Mob extends Controller{
         ); 
     }
 
-    static updateDisplayCaracteristics(uniqid, lvl) {
-        var elementsToUpdate = $("#"+this.MODEL_NAME+uniqid).find("[data-formule]");
-
-        for (var i = 0; i < elementsToUpdate.length; i++) {
-            var dataKey = (lvl == 0) ? "formule" : "level" + lvl;
-            var newData = $(elementsToUpdate[i]).data(dataKey);
-            if($(elementsToUpdate[i]).data("text") != undefined && $(elementsToUpdate[i]).data("text") != ""){
-                newData += " " + $(elementsToUpdate[i]).data("text");
-            }
-            $(elementsToUpdate[i]).text(newData);
-        }
-    }
-
     static getSpellList(uniqid){
         let URL = 'index.php?c=mob&a=getSpellList';
         $.post(URL,{
