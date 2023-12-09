@@ -77,34 +77,46 @@
                         <div><?=$obj->getRes_feu(Content::FORMAT_ICON);?></div>
                         <div><?=$obj->getRes_air(Content::FORMAT_ICON);?></div>
                         <div><?=$obj->getRes_eau(Content::FORMAT_ICON);?></div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="truncate-100"><?=$obj->getDo_fixe_neutre(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_terre(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_feu(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_air(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_eau(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_multiple(Content::FORMAT_ICON);?></div>
                     </div> 
                 </div>
-                <div class="row">
+                <button class="p-0 px-2 pt-2 btn btn-text-grey d-flex align-items-baseline w-100 justify-content-between font-size-0-7" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_skill<?=$obj->getUniqid()?>" aria-expanded="true" aria-controls="collapse_skill<?=$obj->getUniqid()?>">
+                    <span>Compétences</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div id="collapse_skill<?=$obj->getUniqid()?>" class="row px-1">
                     <div class="col-auto my-1">
-                        <p class="m-1"><?=$obj->getAcrobatie(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getDiscretion(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getEscamotage(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getAthletisme(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getIntimidation(Content::FORMAT_VIEW)?></p>
+                        <p class="m-1"><?=$obj->getAcrobatie(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getDiscretion(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getEscamotage(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getAthletisme(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getIntimidation(Content::FORMAT_ICON)?></p>
                     </div>
                     <div class="col-auto my-1">
-                        <p class="m-1"><?=$obj->getArcane(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getHistoire(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getInvestigation(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getNature(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getReligion(Content::FORMAT_VIEW)?></p>
+                        <p class="m-1"><?=$obj->getArcane(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getHistoire(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getInvestigation(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getNature(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getReligion(Content::FORMAT_ICON)?></p>
                     </div>
                     <div class="col-auto my-1">
-                        <p class="m-1"><?=$obj->getDressage(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getMedecine(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getPerception(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getPerspicacite(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getSurvie(Content::FORMAT_VIEW)?></p>
+                        <p class="m-1"><?=$obj->getDressage(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getMedecine(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getPerception(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getPerspicacite(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getSurvie(Content::FORMAT_ICON)?></p>
                     </div>
                     <div class="col-auto my-1">
-                        <p class="m-1"><?=$obj->getPersuasion(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getRepresentation(Content::FORMAT_VIEW)?></p>
-                        <p class="m-1"><?=$obj->getSupercherie(Content::FORMAT_VIEW)?></p>
+                        <p class="m-1"><?=$obj->getPersuasion(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getRepresentation(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getSupercherie(Content::FORMAT_ICON)?></p>
                     </div>
                 </div>
                 <?php $spells = $obj->getSpell(Content::DISPLAY_LIST); 

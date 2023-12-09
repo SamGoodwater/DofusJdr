@@ -20,11 +20,11 @@
                 <div class="d-flex flex-row justify-content-between ">
                     <p class="resume-title"><?=$obj->getName()?></p>
                     <div class="d-flex flex-row align-content-center">
-                        <div style="height:18px;"><?=$obj->getPo_editable(Content::FORMAT_ICON)?></div>
-                        <div><?=$obj->getPa(Content::FORMAT_ICON)?></div>
+                        <div><?=$obj->getPa(Content::FORMAT_ICON, true)?></div>
                     </div>
                 </div>
-                <p class="d-flex flex-row justify-content-around align-items-center">
+                <p class="d-flex flex-row justify-content-around align-items-start">
+                    <?=$obj->getPo_editable(Content::FORMAT_ICON)?>
                     <?=$obj->getPo(Content::FORMAT_ICON)?> 
                     <?=$obj->getSight_line(Content::FORMAT_ICON)?> 
                     <?=$obj->getFrequency(Content::FORMAT_BADGE)?>
@@ -38,7 +38,7 @@
         <div class="card-hover-showed">
             <div class="d-flex flex-row justify-content-around align-items-baseline flex-wrap">
                 <div class="me-1 mb-1"><?=$obj->getIs_magic(Content::FORMAT_BADGE)?></div>
-                <div class="me-1 mb-1"><?=$obj->getType(Content::FORMAT_BADGE)?></div>
+                <div class="me-1"><?=$obj->getType(Content::FORMAT_BADGE)?></div>
                 <div class="me-1 mb-1"><?=$obj->getCategory(Content::FORMAT_BADGE)?></div>
                 <div class="me-1 mb-1"><?=$obj->getPowerful(Content::FORMAT_BADGE)?></div>
                 <div class="me-1 mb-1"><?=$obj->getElement(Content::FORMAT_BADGE)?></div>

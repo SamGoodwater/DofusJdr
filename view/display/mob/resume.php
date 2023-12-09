@@ -14,14 +14,16 @@
             <div class="d-flex flew-row flex-nowrap justify-content-start">
                 <div>
                     <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
+                    <div class="d-flex justify-content-around gap-1 mt-1">
+                        <?=$obj->getPowerful(Content::FORMAT_ICON)?>
+                        <?=$obj->getSize(Content::FORMAT_ICON)?>
+                    </div>
                 </div>
                 <div class="m-1 p-0">
                     <p class="bold ms-1"><?=$obj->getName()?></p>
                     <div class="d-flex flex-wrap justify-content-around align-items-baseline">
                         <p class="mt-1 text-level short-badge-150"><?=$obj->getLevel(Content::FORMAT_BADGE)?></p> 
-                        <div class="mt-1 mx-2"> <?=$obj->getPowerful(Content::FORMAT_ICON)?></div>
                         <p class="mt-1 short-badge-100"><?=$obj->getHostility(Content::FORMAT_BADGE)?></p>
-                        <div><?=$obj->getSize(Content::FORMAT_ICON)?></div>
                     </div>
                 </div>
                 <div class="d-flex flex-column justify-content-between ms-auto resume-rapid-menu">
@@ -33,35 +35,75 @@
             <div class="card-hover-showed">
                 <div class="d-flex justify-content-around flex-wrap">
                     <div class="col-auto">
-                        <div><?=$obj->getPa(Content::FORMAT_ICON)?></div>
-                        <div><?=$obj->getPm(Content::FORMAT_ICON)?></div>
-                        <div><?=$obj->getPo(Content::FORMAT_ICON)?></div>
-                        <div><?=$obj->getIni(Content::FORMAT_ICON)?></div>
-                        <div><?=$obj->getLife(Content::FORMAT_ICON)?></div>
-                        <div><?=$obj->getTouch(Content::FORMAT_ICON)?></div>
+                        <div class="truncate-100"><?=$obj->getPa(Content::FORMAT_ICON)?></div>
+                        <div class="truncate-100"><?=$obj->getPm(Content::FORMAT_ICON)?></div>
+                        <div class="truncate-100"><?=$obj->getPo(Content::FORMAT_ICON)?></div>
+                        <div class="truncate-100"><?=$obj->getIni(Content::FORMAT_ICON)?></div>
+                        <div class="truncate-100"><?=$obj->getLife(Content::FORMAT_ICON)?></div>
+                        <div class="truncate-100"><?=$obj->getTouch(Content::FORMAT_ICON)?></div>
                     </div>
                     <div class="col-auto">
-                        <div><?=$obj->getVitality(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getSagesse(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getStrong(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getIntel(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getAgi(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getChance(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getVitality(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getSagesse(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getStrong(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getIntel(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getAgi(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getChance(Content::FORMAT_ICON);?></div>
                     </div>
                     <div class="col-auto">
-                        <div><?=$obj->getCa(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getFuite(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getTacle(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getDodge_pa(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getDodge_pm(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getCa(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getFuite(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getTacle(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDodge_pa(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDodge_pm(Content::FORMAT_ICON);?></div>
                     </div> 
                     <div class="col-auto">
-                        <div><?=$obj->getRes_neutre(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getRes_terre(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getRes_feu(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getRes_air(Content::FORMAT_ICON);?></div>
-                        <div><?=$obj->getRes_eau(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getRes_neutre(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getRes_terre(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getRes_feu(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getRes_air(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getRes_eau(Content::FORMAT_ICON);?></div>
                     </div> 
+                    <div class="col-auto">
+                        <div class="truncate-100"><?=$obj->getDo_fixe_neutre(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_terre(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_feu(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_air(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_eau(Content::FORMAT_ICON);?></div>
+                        <div class="truncate-100"><?=$obj->getDo_fixe_multiple(Content::FORMAT_ICON);?></div>
+                    </div> 
+                </div>
+                <button class="p-0 px-2 pt-2 btn btn-text-grey d-flex align-items-baseline w-100 justify-content-between font-size-0-7" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_skill<?=$obj->getUniqid()?>" aria-expanded="false" aria-controls="collapse_skill<?=$obj->getUniqid()?>">
+                    <span>Compétences</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div id="collapse_skill<?=$obj->getUniqid()?>" class="row px-1">
+                    <div class="col-auto my-1">
+                        <p class="m-1"><?=$obj->getAcrobatie(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getDiscretion(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getEscamotage(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getAthletisme(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getIntimidation(Content::FORMAT_ICON)?></p>
+                    </div>
+                    <div class="col-auto my-1">
+                        <p class="m-1"><?=$obj->getArcane(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getHistoire(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getInvestigation(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getNature(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getReligion(Content::FORMAT_ICON)?></p>
+                    </div>
+                    <div class="col-auto my-1">
+                        <p class="m-1"><?=$obj->getDressage(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getMedecine(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getPerception(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getPerspicacite(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getSurvie(Content::FORMAT_ICON)?></p>
+                    </div>
+                    <div class="col-auto my-1">
+                        <p class="m-1"><?=$obj->getPersuasion(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getRepresentation(Content::FORMAT_ICON)?></p>
+                        <p class="m-1"><?=$obj->getSupercherie(Content::FORMAT_ICON)?></p>
+                    </div>
                 </div>
                 <?php $spells = $obj->getSpell(Content::DISPLAY_LIST); 
                     if(!empty($spells)){ ?>

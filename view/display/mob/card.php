@@ -109,7 +109,7 @@
         <div class="nav-item-divider back-main-d-1"></div>
         <h4 class="text-main-d-1 text-center">Informations</h4>
         <p><?=$obj->getDescription();?></p>
-        <p class="card-text my-2"><small class="text-muted"><i class="fa-solid fa-map-marker-alt text-main-d-2 me-2"></i> Zone de vie: <?=$obj->getZone()?></small></p>
+        <p class="card-text my-2"><small class="text-muted"><i class="fa-solid fa-map-marker-alt text-main-d-2 me-2"></i> Zone de vie: <?=$obj->getLocation()?></small></p>
         <p><?=$obj->getOther_info();?></p>
         <div class="d-flex flex-row justify-content-between">
             <?=$obj->getDrop_()?>

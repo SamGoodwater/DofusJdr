@@ -141,6 +141,7 @@
         <p class="card-text my-2"><?=$obj->getDescription(Content::DISPLAY_EDITABLE);?></p>
         <p class="card-text my-2"><?=$obj->getStory(Content::DISPLAY_EDITABLE);?></p>
         <p class="card-text my-2"><?=$obj->getOther_info(Content::DISPLAY_EDITABLE);?></p>
+        <?=$obj->getLocation(Content::DISPLAY_EDITABLE);?>
         <div class="d-flex flex-row justify-content-between my-2">
             <div class="w-100 me-3"><?=$obj->getDrop_(Content::DISPLAY_EDITABLE)?></div>
             <div><?=$obj->getKamas(Content::DISPLAY_EDITABLE)?></div>

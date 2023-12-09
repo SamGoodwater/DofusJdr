@@ -168,96 +168,109 @@ function loadSlider(idGroupSlider){
 }
 
 let is_tooltipsCustom_triggerable = true;
-function showTooltips(launcher, target){
+function showTooltips(element){
+    // Récupérer l'élément déclencheur de l'événement
+    const launcher = $(element);
+
+    // Récupérer l'élément cible en utilisant l'attribut data-event-target de l'élément launcher
+    const targetSelector = launcher.data('event-target');
+    const target = $(targetSelector);
+
+    if(target == undefined){ console.log("Impossible de charger le tooltips"); return; }
+
     if(is_tooltipsCustom_triggerable){
-    // Il n'est plus possible de déclencher cette fonction avant 200ms
-    is_tooltipsCustom_triggerable = false;
-    setTimeout(function(){is_tooltipsCustom_triggerable = true;}, 250);
+        // Il n'est plus possible de déclencher cette fonction avant 200ms
+        is_tooltipsCustom_triggerable = false;
+        setTimeout(function(){is_tooltipsCustom_triggerable = true;}, 250);
 
-    if ($('.container-tooltips').length === 0) {
-        // La div avec la classe "container-tooltips" n'existe pas dans la page
-        // Création de la div
-        let containerTooltips = $('<div>').addClass('container-tooltips');
-        // Insertion de la div dans le corps de la page
-        $('body').append(containerTooltips);
-    }
-    let tooltip = $('.container-tooltips');
-    let clone = $(target).clone();
-    clone.show();
-    tooltip.html(clone);
-    
-    let position_launcher = $(launcher).offset();
-    let direction = {
-        x: "",
-        y: ""
-    };
-    let point_centered_launcher = {
-        x: position_launcher.left + $(launcher).width() / 2,
-        y: position_launcher.top + $(launcher).height() / 2
-    };
+        if ($('.container-tooltips').length === 0) {
+            // La div avec la classe "container-tooltips" n'existe pas dans la page
+            // Création de la div
+            let containerTooltips = $('<div>').addClass('container-tooltips');
+            // Insertion de la div dans le corps de la page
+            $('body').append(containerTooltips);
+        }
+        let tooltip = $('.container-tooltips');
+        let clone = target.clone();
+        clone.show();
+        tooltip.html(clone);
+        
+        let position_launcher = launcher.offset();
+        let direction = {
+            x: "",
+            y: ""
+        };
+        
+        let point_centered_launcher = {
+            x: position_launcher.left + launcher.width() / 2,
+            y: position_launcher.top + launcher.height() / 2
+        };
 
-    let gap = 3; // Ecart entre le launcher et le tooltip
+        let gap = 3; // Ecart entre le launcher et le tooltip
 
-    if($(window).width() / 2 > point_centered_launcher.x){
-        // Le point est à gauche
-        direction.x = "L";
-    } else {
-        // Le point est à droite
-        direction.x = "R";
-    }
-    if($(window).height() / 2 > point_centered_launcher.y){
-        // Le point est plus en haut
-        direction.y += "T";
-    } else {
-        // Le point est plus en bas
-        direction.y += "B";
-    }
-
-    let x = $(window).width() / 2 - $(launcher).width() / 2;
-    let y = $(window).height() / 2 - $(launcher).height() / 2;
-
-    if($(launcher).width() < $(window).width() / 2 && $(launcher).height() < $(window).height() / 2){
-        if(direction.x == "L"){
-        // Le launcher est à gauche donc on met le tooltip à droite
-        x = position_launcher.left + $(launcher).width() + gap;
+        if($(window).width() / 2 > point_centered_launcher.x){
+            // Le point est à gauche
+            direction.x = "L";
         } else {
-        // Le launcher est à droite donc on met le tooltip à gauche
-        x = position_launcher.left - $(tooltip).width() - gap;
+            // Le point est à droite
+            direction.x = "R";
         }
-        if(direction.y == "T"){
-        // Le launcher est en haut donc on met le tooltip en bas
-        y = position_launcher.top + $(launcher).height() / 2 - $(tooltip).height() / 2;
-        if(y < 0){
-            y = 0;
-        }
+        if($(window).height() / 2 > point_centered_launcher.y){
+            // Le point est plus en haut
+            direction.y += "T";
         } else {
-        // Le launcher est en bas donc on met le tooltip en haut
-        y = position_launcher.top + $(launcher).height() / 2 - $(tooltip).height() / 2;
-        if(y + $(tooltip).height() > $(window).height()){
-            y = $(window).height() - $(tooltip).height();
+            // Le point est plus en bas
+            direction.y += "B";
         }
+
+        let x = $(window).width() / 2 - launcher.width() / 2;
+        let y = $(window).height() / 2 - launcher.height() / 2;
+
+        if(launcher.width() < $(window).width() / 2 && launcher.height() < $(window).height() / 2){
+            if(direction.x == "L"){
+            // Le launcher est à gauche donc on met le tooltip à droite
+            x = position_launcher.left + launcher.width() + gap;
+            } else {
+            // Le launcher est à droite donc on met le tooltip à gauche
+            x = position_launcher.left - tooltip.width() - gap;
+            }
+            if(direction.y == "T"){
+            // Le launcher est en haut donc on met le tooltip en bas
+            y = position_launcher.top + launcher.height() / 2 - tooltip.height() / 2;
+            if(y < 0){
+                y = 0;
+            }
+            } else {
+            // Le launcher est en bas donc on met le tooltip en haut
+            y = position_launcher.top + launcher.height() / 2 - tooltip.height() / 2;
+            if(y + tooltip.height() > $(window).height()){
+                y = $(window).height() - tooltip.height();
+            }
+            }
+        } else {
+            // Le launcher est trop proche du bord donc on le met au centre
+            x = $(window).width() / 2 - tooltip.width() / 2;
+            y = $(window).height() / 2 - tooltip.height() / 2;
         }
-    } else {
-        // Le launcher est trop proche du bord donc on le met au centre
-        x = $(window).width() / 2 - $(tooltip).width() / 2;
-        y = $(window).height() / 2 - $(tooltip).height() / 2;
-    }
 
-    tooltip.css('left', x);
-    tooltip.css('top', y);
+        x += $(window).scrollLeft();
+        y += $(window).scrollTop();
 
-    tooltip.css('position', 'absolute');
-    tooltip.show("clip", 100);
-    tooltip.css('display', 'flex');
+        tooltip.css('left', x);
+        tooltip.css('top', y);
 
-    $(launcher).on("mouseleave", function(){
-        tooltip.hide("clip", 100);
-    });
+        tooltip.css('position', 'absolute');
+        tooltip.show("clip", 100);
+        tooltip.css('display', 'flex');
+
+        launcher.on("mouseleave", function(){
+            tooltip.hide("clip", 100);
+        });
     }
 }
 
-function toogleToolbar($forced_hidden = false){
-    if($('.app-toolbar-content').hasClass('hidden') == false || $forced_hidden){
+function toogleToolbar(forced_hidden = false){
+    if($('.app-toolbar-content').hasClass('hidden') == false || forced_hidden){
         $(".app-toolbar-content").addClass("hidden");
         $(".app-btn-show-toolbar-footer").show("blind", 300);
         $(".dropdown-item-toogletoolbar-button").text("Afficher la barre d'outils");
@@ -267,8 +280,8 @@ function toogleToolbar($forced_hidden = false){
         $(".dropdown-item-toogletoolbar-button").text("Masquer la barre d'outils");
     }
 }
-function toogleFooter($forced_hidden = false){
-    if($('footer').hasClass('hidden') || $forced_hidden){
+function toogleFooter(forced_hidden = false){
+    if($('footer').hasClass('hidden') || forced_hidden){
         $("footer").addClass("hidden");
         $("footer").hide("blind", 300);
     } else {

@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="d-flex flex-row justify-content-around align-items-center gap-1">
-            <?=$obj->getPa(Content::FORMAT_ICON)?> 
+            <?=$obj->getPa(Content::FORMAT_ICON, true)?> 
             <?=$obj->getPo(Content::FORMAT_ICON)?> 
             <?=$obj->getTime_before_use_again(Content::FORMAT_ICON)?>
             <?=$obj->getCasting_time(Content::FORMAT_ICON)?>

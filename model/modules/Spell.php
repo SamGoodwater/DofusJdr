@@ -475,7 +475,7 @@ class Spell extends Content
                                 data : [
                                     "style" => Style::ICON_MEDIA,
                                     "icon" => "pa.png",
-                                    "size" => 50,
+                                    "size" => 35,
                                     "color" => "pa-d-2",
                                     "tooltip" => "Coût en point d'action du sort",
                                     "content" => $this->_pa,
@@ -989,7 +989,7 @@ class Spell extends Content
                 case Content::FORMAT_BADGE:
                     ob_start(); 
                         if(!empty($types)){?>
-                            <div class="d-flex flex-row justify-content-around flex-wrap">
+                            <div class="d-flex flex-row justify-content-around flex-wrap gap-1 p-1">
                                 <?php foreach ($types as $type) {
                                     $view->dispatch(
                                         template_name : "badge",

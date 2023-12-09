@@ -33,39 +33,11 @@ class Mob extends Creature
 
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
-        private $_zone="";
         private $_hostility="";
         private $_size=self::SIZE['moyenne'];
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
 
-        public function getZone(int $format = Content::FORMAT_BRUT){
-            $view = new View();
-            switch ($format) {
-                case Content::FORMAT_EDITABLE:
-                    return $view->dispatch(
-                        template_name : "input/text",
-                        data : [
-                            "class_name" => "Mob",
-                            "uniqid" => $this->getUniqid(),
-                            "input_name" => "zone",
-                            "label" => "Zone de vie",
-                            "placeholder" => "Zone de vie",
-                            "tooltip" => "Zone de vie",
-                            "value" => $this->_zone,
-                            "color" => "main-d-2",
-                            "style" => Style::INPUT_ICON,
-                            "size" => Style::SIZE_SM,
-                            "icon" => "map-marker-alt",
-                            "style_icon" => Style::ICON_SOLID
-                        ], 
-                        write: false);
-                
-                default:
-                    return $this->_zone;
-            }
-
-        }
         public function getHostility(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
@@ -318,10 +290,6 @@ class Mob extends Creature
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
 
-        public function setZone(string | int | null $data){
-            $this->_zone = $data;
-            return true;
-        }
         public function setHostility(int | null $data){
             if(in_array($data, Mob::HOSTILITY)){
                 $this->_hostility = $data;

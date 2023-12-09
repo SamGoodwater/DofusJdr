@@ -120,9 +120,10 @@
         </div>
         <div class="nav-item-divider back-main-d-1"></div>
         <h4 class="text-main-d-1 text-center">Informations</h4>
-        <p><?=$obj->getDescription();?></p>
-        <p ><?=$obj->getStory();?></p>
-        <p><?=$obj->getOther_info();?></p>
+        <?=$obj->getDescription();?>
+        <?=$obj->getStory();?>
+        <?=$obj->getOther_info();?>
+        <?=$obj->getLocation(Content::FORMAT_VIEW);?>
         <div class="d-flex flex-row justify-content-between">
             <?=$obj->getDrop_()?>
             <?=$obj->getKamas()?>

@@ -27,6 +27,7 @@
         <div class="card-hover-showed">
             <div class="d-flex flex-row justify-content-around align-items-baseline flex-wrap">
                 <div class="me-1 mb-1"><?=$obj->getIs_unbewitchable(Content::FORMAT_BADGE)?></div>
+                <div class="me-1 mb-1"><?=$obj->getIs_malus(Content::FORMAT_BADGE)?></div>
             </div>
             <?=$obj->getDescription()?>
         </div>

@@ -933,6 +933,7 @@ abstract class Creature extends Content
         protected $_trait='';
         protected $_level=1;
         protected $_other_info='';
+        protected $_location='';
 
         protected $_life=30;
         protected $_pa=6;
@@ -1202,6 +1203,37 @@ abstract class Creature extends Content
                     return html_entity_decode($this->_other_info);
             }
         }
+        public function getLocation(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+
+            switch ($format) {
+                case Content::DISPLAY_EDITABLE:
+                    return $view->dispatch(
+                        template_name : "input/textarea",
+                        data : [
+                            "class_name" => ucfirst(get_class($this)),
+                            "uniqid" => $this->getUniqid(),
+                            "input_name" => "location",
+                            "label" => "Localisation",
+                            "value" => $this->_location,
+                            "placeholder" => "Lieu de vie " . self::VERBAL_NAME_OF_CLASSE,
+                            "style" => Style::INPUT_FLOATING
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_VIEW:
+                    ob_start(); ?>
+                        <div>
+                            <p class="size-0-7 text-grey-d-2">Localisation :</p>
+                            <?=$this->_location?>
+                        </div>
+                    <?php return ob_get_clean();
+
+                default:
+                    return $this->_location;
+            }
+
+        }
       
         public function getLife(int $format = Content::FORMAT_BRUT){
             $view = new View();
@@ -1277,7 +1309,7 @@ abstract class Creature extends Content
                             "color" => "life-d-2",
                             "tooltip" => "Calcul des points de vie",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -1375,7 +1407,7 @@ abstract class Creature extends Content
                             "tooltip" => "PA",
                             "size" => 20,
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
                 
@@ -1473,7 +1505,7 @@ abstract class Creature extends Content
                             "color" => "pm",
                             "tooltip" => "PM",
                             "content" => $this->_pm,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -1571,7 +1603,7 @@ abstract class Creature extends Content
                             "color" => "po",
                             "tooltip" => "PO",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -1688,7 +1720,7 @@ abstract class Creature extends Content
                             "color" => "ini",
                             "tooltip" => "Bonus d'Initiative",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -1786,7 +1818,7 @@ abstract class Creature extends Content
                             "color" => "invocation",
                             "tooltip" => "Bonus d'Invocations",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -1884,7 +1916,7 @@ abstract class Creature extends Content
                             "color" => "touch",
                             "tooltip" => "Bonus de touche",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2000,7 +2032,7 @@ abstract class Creature extends Content
                             "color" => "ca-d-4",
                             "tooltip" => "Bonus de Classe d'armure",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2116,7 +2148,7 @@ abstract class Creature extends Content
                             "color" => "pa",
                             "tooltip" => "Bonus d'Esquive PA",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2232,7 +2264,7 @@ abstract class Creature extends Content
                             "color" => "pm",
                             "tooltip" => "Bonus d'Esquive PM",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2348,7 +2380,7 @@ abstract class Creature extends Content
                             "color" => "fuite",
                             "tooltip" => "Bonus de Fuite",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2463,7 +2495,7 @@ abstract class Creature extends Content
                             "color" => "tacle",
                             "tooltip" => "Bonus de Tacle",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2560,7 +2592,7 @@ abstract class Creature extends Content
                             "color" => "vitality",
                             "tooltip" => "Vitalité",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2657,7 +2689,7 @@ abstract class Creature extends Content
                             "color" => "sagesse",
                             "tooltip" => "Sagesse",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2754,7 +2786,7 @@ abstract class Creature extends Content
                             "color" => "strong",
                             "tooltip" => "Force",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2851,7 +2883,7 @@ abstract class Creature extends Content
                             "color" => "intel",
                             "tooltip" => "Intelligence",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -2948,7 +2980,7 @@ abstract class Creature extends Content
                             "color" => "agi",
                             "tooltip" => "Agilité",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3045,7 +3077,7 @@ abstract class Creature extends Content
                             "color" => "chance",
                             "tooltip" => "Chance",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3142,7 +3174,7 @@ abstract class Creature extends Content
                             "color" => "neutre-d-2",
                             "tooltip" => "Dommage fixe neutre",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3239,7 +3271,7 @@ abstract class Creature extends Content
                             "color" => "terre-d-2",
                             "tooltip" => "Dommage fixe terre",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3336,7 +3368,7 @@ abstract class Creature extends Content
                             "color" => "feu-d-2",
                             "tooltip" => "Dommage fixe feu",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3433,7 +3465,7 @@ abstract class Creature extends Content
                             "color" => "air-d-2",
                             "tooltip" => "Dommage fixe air",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3530,7 +3562,7 @@ abstract class Creature extends Content
                             "color" => "eau-d-2",
                             "tooltip" => "Dommage fixe eau",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3627,7 +3659,7 @@ abstract class Creature extends Content
                             "color" => "multiple-d-2",
                             "tooltip" => "Dommage fixe multiple",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3724,7 +3756,7 @@ abstract class Creature extends Content
                             "color" => "neutre-d-2",
                             "tooltip" => "Résistance neutre",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3821,7 +3853,7 @@ abstract class Creature extends Content
                             "color" => "terre",
                             "tooltip" => "Résistance terre",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -3918,7 +3950,7 @@ abstract class Creature extends Content
                             "color" => "feu",
                             "tooltip" => "Résistance feu",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -4015,7 +4047,7 @@ abstract class Creature extends Content
                             "color" => "air",
                             "tooltip" => "Résistance air",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -4112,7 +4144,7 @@ abstract class Creature extends Content
                             "color" => "eau",
                             "tooltip" => "Résistance eau",
                             "content" => $total,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -4198,6 +4230,31 @@ abstract class Creature extends Content
                             "tooltip" => "Acrobatie (Agilité + Bonus d'Acrobatie + Équipements + Maîtrise)",
                             "style" => Style::STYLE_BACK,
                             "data" => $data
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_agi.png",
+                            "color" => "agi",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Acrobatie",
+                            "color" => "agi",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Acrobatie (Agilité + Bonus d'Acrobatie + Équipements + Maîtrise)",
+                            "with_border" => false
                         ], 
                         write: false);
 
@@ -4374,6 +4431,31 @@ abstract class Creature extends Content
                         ], 
                         write: false);
 
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_agi.png",
+                            "color" => "agi",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Discrétion",
+                            "color" => "agi",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Discrétion (Agilité + Bonus de Discrétion + Équipements + Maîtrise)",
+                            "with_border" => false
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
                     return $view->dispatch(
                         template_name : "modules/characteristic",
@@ -4544,6 +4626,31 @@ abstract class Creature extends Content
                             "tooltip" => "Escamotage (Agilité + Bonus d'Escamotage + Équipements + Maîtrise)",
                             "style" => Style::STYLE_BACK,
                             "data" => $data
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_agi.png",
+                            "color" => "agi",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Escamotage",
+                            "color" => "agi",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Escamotage (Agilité + Bonus d'Escamotage + Équipements + Maîtrise)",
+                            "with_border" => false
                         ], 
                         write: false);
 
@@ -4720,6 +4827,31 @@ abstract class Creature extends Content
                         ], 
                         write: false);
 
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_force.png",
+                            "color" => "strong",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Athlétisme",
+                            "color" => "strong",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Athlétisme (Force + Bonus d'Athlétisme + Équipements + Maîtrise)",
+                            "with_border" => false
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
                     return $view->dispatch(
                         template_name : "modules/characteristic",
@@ -4890,6 +5022,31 @@ abstract class Creature extends Content
                             "tooltip" => "Intimidation (Force + Bonus d'Intimidation + Équipements + Maîtrise)",
                             "style" => Style::STYLE_BACK,
                             "data" => $data
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_force.png",
+                            "color" => "strong",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Intimidation",
+                            "color" => "strong",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Intimidation (Force + Bonus d'Intimidation + Équipements + Maîtrise)",
+                            "with_border" => false
                         ], 
                         write: false);
 
@@ -5066,6 +5223,31 @@ abstract class Creature extends Content
                         ], 
                         write: false);
 
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_intel.png",
+                            "color" => "intel",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Arcane",
+                            "color" => "intel",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Arcane (Force + Bonus d'Arcane + Équipements + Maîtrise)",
+                            "with_border" => false
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
                     return $view->dispatch(
                         template_name : "modules/characteristic",
@@ -5236,6 +5418,31 @@ abstract class Creature extends Content
                             "tooltip" => "Histoire (Intel + Bonus d'Histoire + Équipements + Maîtrise)",
                             "style" => Style::STYLE_BACK,
                             "data" => $data
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_intel.png",
+                            "color" => "intel",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Histoire",
+                            "color" => "intel",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Histoire (Intel + Bonus d'Histoire + Équipements + Maîtrise)",
+                            "with_border" => false
                         ], 
                         write: false);
 
@@ -5412,6 +5619,31 @@ abstract class Creature extends Content
                         ], 
                         write: false);
 
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_intel.png",
+                            "color" => "intel",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Investigation",
+                            "color" => "intel",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Investigation (Intel + Bonus d'Investigation + Équipements + Maîtrise)",
+                            "with_border" => false
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
                     return $view->dispatch(
                         template_name : "modules/characteristic",
@@ -5582,6 +5814,31 @@ abstract class Creature extends Content
                             "tooltip" => "Religion (Intel + Bonus de Religion + Équipements + Maîtrise)",
                             "style" => Style::STYLE_BACK,
                             "data" => $data
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_intel.png",
+                            "color" => "intel",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Religion",
+                            "color" => "intel",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Religion (Intel + Bonus de Religion + Équipements + Maîtrise)",
+                            "with_border" => false
                         ], 
                         write: false);
 
@@ -5758,6 +6015,31 @@ abstract class Creature extends Content
                         ], 
                         write: false);
 
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_intel.png",
+                            "color" => "intel",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Nature",
+                            "color" => "intel",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Nature (Force + Bonus d'Nature + Équipements + Maîtrise)",
+                            "with_border" => false
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
                     return $view->dispatch(
                         template_name : "modules/characteristic",
@@ -5928,6 +6210,31 @@ abstract class Creature extends Content
                             "tooltip" => "Dressage (Sagesse + Bonus de Dressage + Équipements + Maîtrise)",
                             "style" => Style::STYLE_BACK,
                             "data" => $data
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_sagesse.png",
+                            "color" => "sagesse",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Dressage",
+                            "color" => "sagesse",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Dressage (Sagesse + Bonus de Dressage + Équipements + Maîtrise)",
+                            "with_border" => false
                         ], 
                         write: false);
 
@@ -6104,6 +6411,31 @@ abstract class Creature extends Content
                         ], 
                         write: false);
 
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_sagesse.png",
+                            "color" => "sagesse",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Médecine",
+                            "color" => "sagesse",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Médecine (Sagesse + Bonus de Médecine + Équipements + Maîtrise)",
+                            "with_border" => false
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
                     return $view->dispatch(
                         template_name : "modules/characteristic",
@@ -6274,6 +6606,31 @@ abstract class Creature extends Content
                             "tooltip" => "Perception (Sagesse + Bonus de Perception + Équipements + Maîtrise)",
                             "style" => Style::STYLE_BACK,
                             "data" => $data
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_sagesse.png",
+                            "color" => "sagesse",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Perception",
+                            "color" => "sagesse",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Perception (Sagesse + Bonus de Perception + Équipements + Maîtrise)",
+                            "with_border" => false
                         ], 
                         write: false);
 
@@ -6450,6 +6807,31 @@ abstract class Creature extends Content
                         ], 
                         write: false);
 
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_sagesse.png",
+                            "color" => "sagesse",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Perspicacité",
+                            "color" => "sagesse",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Perspicacité (Sagesse + Bonus de Perspicacité + Équipements + Maîtrise)",
+                            "with_border" => false
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
                     return $view->dispatch(
                         template_name : "modules/characteristic",
@@ -6620,6 +7002,31 @@ abstract class Creature extends Content
                             "tooltip" => "Survie (Sagesse + Bonus de Survie + Équipements + Maîtrise)",
                             "style" => Style::STYLE_BACK,
                             "data" => $data
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_sagesse.png",
+                            "color" => "sagesse",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Survie",
+                            "color" => "sagesse",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Survie (Sagesse + Bonus de Survie + Équipements + Maîtrise)",
+                            "with_border" => false
                         ], 
                         write: false);
 
@@ -6796,6 +7203,31 @@ abstract class Creature extends Content
                         ], 
                         write: false);
 
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_chance.png",
+                            "color" => "chance",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Persuasion",
+                            "color" => "chance",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Persuasion (Chance + Bonus de Persuasion + Équipements + Maîtrise)",
+                            "with_border" => false
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
                     return $view->dispatch(
                         template_name : "modules/characteristic",
@@ -6966,6 +7398,31 @@ abstract class Creature extends Content
                             "tooltip" => "Représentation (Chance + Bonus de Représentation + Équipements + Maîtrise)",
                             "style" => Style::STYLE_BACK,
                             "data" => $data
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_chance.png",
+                            "color" => "chance",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Représentation",
+                            "color" => "chance",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Représentation (Chance + Bonus de Représentation + Équipements + Maîtrise)",
+                            "with_border" => false
                         ], 
                         write: false);
 
@@ -7142,6 +7599,31 @@ abstract class Creature extends Content
                         ], 
                         write: false);
 
+                case Content::FORMAT_ICON:
+                    $icon = $view->dispatch(
+                        template_name : "icon",
+                        data : [
+                            "style" => Style::ICON_MEDIA,
+                            "icon" => "skill_chance.png",
+                            "color" => "chance",
+                            "content" => $total,
+                            "size" => 10,
+                            "content_placement" => Style::POSITION_RIGHT
+                        ], 
+                        write: false);
+
+                    return $view->dispatch(
+                        template_name : "tile",
+                        data : [
+                            "title" => $icon,
+                            "text" => "Supercherie",
+                            "color" => "chance",
+                            "size" => Style::SIZE_SM,
+                            "tooltip" => "Supercherie (Chance + Bonus de Supercherie + Équipements + Maîtrise)",
+                            "with_border" => false
+                        ], 
+                        write: false);
+
                 case Content::FORMAT_VIEW:
                     return $view->dispatch(
                         template_name : "modules/characteristic",
@@ -7293,7 +7775,7 @@ abstract class Creature extends Content
                             "color" => "kamas-d-3",
                             "tooltip" => "Kamas",
                             "content" => $this->_kamas,
-                            "content_placement" => Style::POSITION_LEFT
+                            "content_placement" => Style::POSITION_RIGHT
                         ], 
                         write: false); 
 
@@ -7750,6 +8232,10 @@ abstract class Creature extends Content
         }
         public function setOther_info(string | null $data){
             $this->_other_info = $data;
+            return true;
+        }
+        public function setLocation(string | null $data){
+            $this->_location = $data;
             return true;
         }
       

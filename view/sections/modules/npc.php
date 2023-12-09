@@ -86,14 +86,20 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="master_bonus">Bonus de maitrise</th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="story">Histoire<br>du ou de la PNJ</th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="historical">Historique</th>
-                    <th class="text-center" data-sortable="false" data-visible="true" data-field="alignment">Alignement</th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="historical">Historique</th>
+                    <th class="text-center" data-sortable="false" data-visible="false" data-field="alignment">Alignement</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="trait">Traits</th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="location"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Zone de vie"><i class='fa-solid fa-map-marker-alt text-main-d-2'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="other_info">Informations</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="age">Age</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="size">Taille</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="weight">Poids</th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="life">Points de vie</th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="resume"></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="resumeattack"></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="resumedefend"></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="resumedom"></th>
+                    <th class="text-center" data-sortable="false" data-visible="true" data-field="resumeres"></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="pa"><img class='icon' src='medias/icons/modules/pa.png'></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="pm"><img class='icon' src='medias/icons/modules/pm.png'></th>
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="po"><img class='icon' src='medias/icons/modules/po.png'></th>

@@ -121,7 +121,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="spell"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Sorts"><i class='fa-solid fa-magic text-main-d-1'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="trait"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Traits">Traits</span></th>
                     <th data-sortable="false" data-visible="false"  data-field="description">Description</th>
-                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="zone"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Zone de vie"><i class='fa-solid fa-map-marker-alt text-main-d-2'></i></span></th>
+                    <th class="text-center" data-sortable="true" data-visible="false"  data-field="location"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Zone de vie"><i class='fa-solid fa-map-marker-alt text-main-d-2'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_add">Date de création</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="timestamp_updated">Date de mise à jour</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>

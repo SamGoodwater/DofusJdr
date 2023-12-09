@@ -79,7 +79,7 @@
     </div>
     <div class="card-text my-2"><?=$obj->getTrait(Content::DISPLAY_EDITABLE);?></div>
     <div class="card-text my-2"><?=$obj->getDescription(Content::DISPLAY_EDITABLE);?></div>
-    <div class="card-text my-2"><?=$obj->getZone(Content::DISPLAY_EDITABLE);?></div>
+    <div class="card-text my-2"><?=$obj->getLocation(Content::DISPLAY_EDITABLE);?></div>
     <div class="card-text my-2"><?=$obj->getSpell(Content::DISPLAY_EDITABLE)?></div>
     <div class="card-text my-2"><?=$obj->getCapability(Content::DISPLAY_EDITABLE)?></div>
     <div class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-animate btn-border-red' onclick="Mob.remove('<?=$obj->getUniqid()?>')"><i class="fa-solid fa-trash"></i> Supprimer</a></p>
@@ -188,7 +188,6 @@
         <p class='size-0-7 mb-1'>Mob <?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$obj->getTimestamp_updated(Content::DATE_FR);?></p>
         <h4 class="text-main-d-1 text-center">Informations</h4>
         <p><?=$obj->getDescription(Content::FORMAT_EDITABLE);?></p>
-        <p class="card-text my-2"><small class="text-muted"><i class="fa-solid fa-map-marker-alt text-main-d-2 me-2"></i> Zone de vie: <?=$obj->getZone(Content::FORMAT_EDITABLE)?></small></p>
         <p><?=$obj->getOther_info(Content::FORMAT_EDITABLE);?></p>
         <div class="d-flex flex-row justify-content-between">
             <?=$obj->getDrop_(Content::FORMAT_EDITABLE)?>

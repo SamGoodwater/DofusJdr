@@ -313,9 +313,9 @@ class Capability extends Content
                         write: false);
                 
                 case Content::FORMAT_BADGE:
-                    if(empty($this->_pa) && $not_show_if_free){return "";}
+                    if((empty($this->_pa) || $this->_pa == 0) && $not_show_if_free){return "";}
                     $pa = $this->_pa;
-                    if(empty($this->_pa)){$pa = "gratuit en ";}
+                    if(empty($this->_pa) || $this->_pa == 0){$pa = "gratuit en ";}
 
                     return $view->dispatch(
                         template_name : "badge",
@@ -328,7 +328,7 @@ class Capability extends Content
                         write: false);
                    
                 case Content::FORMAT_ICON:
-                    if(empty($this->_pa) && $not_show_if_free){return "";}
+                    if((empty($this->_pa) || $this->_pa == 0) && $not_show_if_free){return "";}
                     $pa = $this->_pa;
                     if(empty($this->_pa)){$pa = 0;}
 
@@ -339,7 +339,7 @@ class Capability extends Content
                                 data : [
                                     "style" => Style::ICON_MEDIA,
                                     "icon" => "pa.png",
-                                    "size" => 50,
+                                    "size" => 35,
                                     "color" => "pa-d-2",
                                     "tooltip" => "Coût en point d'action de l'aptitude",
                                     "content" => $pa,

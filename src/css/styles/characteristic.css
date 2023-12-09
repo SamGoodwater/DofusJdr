@@ -39,26 +39,14 @@
 .characteristic-card.card-xl:hover {
   width: 220px;
 }
-.characteristic-card.card-xl .text-title {
-  font-size: clamp(1rem, 2vw, 1.8rem);
-}
 .characteristic-card.card-lg:hover {
   width: 180px;
-}
-.characteristic-card.card-lg .text-title {
-  font-size: clamp(0.8rem, 1.5vw, 1.5rem);
 }
 .characteristic-card.card-md:hover {
   width: 150px;
 }
-.characteristic-card.card-md .text-title {
-  font-size: clamp(0.8rem, 1vw, 1.2rem);
-}
 .characteristic-card.card-sm:hover {
   width: 130px;
-}
-.characteristic-card.card-sm .text-title {
-  font-size: clamp(0.8rem, 1vw, 1rem);
 }
 .characteristic-card:hover {
   box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.16), -1px 5px 6px rgba(0, 0, 0, 0.23);

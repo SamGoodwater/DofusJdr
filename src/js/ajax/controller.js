@@ -170,6 +170,7 @@ class Controller {
                         $("#table").bootstrapTable('updateCell', {index: indexCell, field: index, value: element});
                     }
                 }
+                eventManager();
             },
             "json"
         ); 
@@ -263,6 +264,7 @@ class Controller {
                         if (loadedRows < total) {
                             offset += limit;
                             loadData();
+                            eventManager();
                         } else {
                             $(".fixed-table-toolbar .loading-spinner").html('');
                             currentRequest = null; // Réinitialisez la variable currentRequest une fois le chargement terminé
@@ -280,6 +282,7 @@ class Controller {
             $('#table').bootstrapTable({
                 onDblClickRow: function (row, $element, field) {
                     this_.open(row.uniqid);
+                    eventManager();
                     $('#table').bootstrapTable('collapseAllRows');
                 },
                 onLoadSuccess:refresh(),
@@ -308,24 +311,24 @@ class Controller {
     }
 
     static updateDisplayCaracteristics(uniqid, lvl) {
-        var elementsToUpdate = $("#"+this.MODEL_NAME+uniqid).find("[data-formule]");
+        let elementsToUpdate = $("#"+this.MODEL_NAME+uniqid).find("[data-formule]");
 
         for (var i = 0; i < elementsToUpdate.length; i++) {
-            var dataKey = (lvl == 0) ? "formule" : "level" + lvl;
-            var newData = $(elementsToUpdate[i]).data(dataKey);
+            let element = $(elementsToUpdate[i]);
+            let dataKey = (lvl == 0) ? "formule" : "level" + lvl;
+            let newData = element.data(dataKey);
             let add_text = true;
 
-            if($(elementsToUpdate[i]).data("event-display-caractistic-add-text") != undefined && $(elementsToUpdate[i]).data("event-display-caractistic-add-text") != ""){
-                if($(elementsToUpdate[i]).data("event-display-caractistic-add-text") != "false"){
-                    add_text = true;
-                } else {
-                    add_text = false;
-                }
+            if(element.data("addtext") != "false" && element.data("addtext") != false && element.data("addtext") != 0){
+                add_text = true;
+            } else {
+                add_text = false;
             }
-            if($(elementsToUpdate[i]).data("text") != undefined && $(elementsToUpdate[i]).data("text") != "" && add_text){
-                newData += " " + $(elementsToUpdate[i]).data("text");
+            
+            if(element.data("text") != undefined && element.data("text") != "" && add_text){
+                newData += " " + element.data("text");
             }
-            $(elementsToUpdate[i]).text(newData);
+            element.text(newData);
         }
     }
 

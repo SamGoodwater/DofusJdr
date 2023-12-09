@@ -11,22 +11,24 @@
 <div id="<?=$style->getId()?>" class="resume <?=$style->getClass()?>" style="width: <?=$style->getSize()?>px;">
     <div style="position:relative;">
         <div ondblclick="Consumable.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card border-secondary-d-2 border p-2 m-1" >
-            <div class="row">
+        <div class="row">
                 <div class="col-auto">
-                    <?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
+                    <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
                 </div>
                 <div class="col">
                     <p class="bold ms-1"><?=$obj->getName()?></p>
-                    <p class="row">
-                        <span class="col-auto me-1 mt-1 short-badge-150"><?=$obj->getType(Content::FORMAT_BADGE)?></span>
-                        <span class="col-auto me-1 mt-1 short-badge-150"><?=$obj->getLevel(Content::FORMAT_BADGE)?></span>
-                        <span class="col-auto me-1 mt-1 short-badge-150"><?=$obj->getPrice(Content::FORMAT_BADGE)?></span>
-                        <span class="col-auto me-1 mt-1 short-badge-150"><?=$obj->getRarity(Content::FORMAT_BADGE)?></span>
-                    </p>
+                    <div class="row">
+                        <div class="col-auto short-badge-150"><?=$obj->getType(Content::FORMAT_BADGE)?></div>
+                        <div class="col-auto short-badge-150"><?=$obj->getLevel(Content::FORMAT_BADGE)?></div>
+                    </div>
                 </div>
                 <div class="col-auto d-flex flex-column justify-content-between ms-auto resume-rapid-menu">
-                    <a onclick='User.changeBookmark(this);' data-classe='item' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
+                    <a onclick='User.changeBookmark(this);' data-classe='consumable' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
                 </div>
+            </div>
+            <div class="row gap-1 justify-content-around mt-1">
+                <div class="col-auto short-badge-150"><?=$obj->getPrice(Content::FORMAT_BADGE)?></div>
+                <div class="col-auto short-badge-150"><?=$obj->getRarity(Content::FORMAT_BADGE)?></div>
             </div>
             <div class="card-hover-showed">
                 <p class="card-text"><?=$obj->getBonus(Content::FORMAT_BADGE)?></p>

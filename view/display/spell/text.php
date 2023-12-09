@@ -22,7 +22,7 @@
 
     if(Content::exist($obj)){
         ob_start(); ?>
-            <p onmouseenter="showTooltips(this, '#spell<?=$obj->getUniqid()?>');" <?=$onclick?>>
+            <p data-event-trigger="mouseover" data-event-type="tooltips" data-event-target="#spell<?=$obj->getUniqid()?>" onmouseover="showTooltips(this);" <?=$onclick?>>
                 <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, "class" => "pe-1"]))?><span <?php if($in_competition){echo "class='competition_name'"; }?>><?=$obj->getName()?></span>
             </p>
         <?php $spell1_text = ob_get_clean();
@@ -72,7 +72,7 @@
     if($in_competition){
         if(Content::exist($obj2)){
             ob_start(); ?>
-                <p onmouseenter="showTooltips(this, '#spell<?=$obj2->getUniqid()?>');" <?=$onclick2?>>
+                <p data-event-trigger="mouseover" data-event-type="tooltips" data-event-target="#spell<?=$obj->getUniqid()?>" onmouseover="showTooltips(this);" <?=$onclick2?>>
                     <?=$obj2->getFile('logo', new Style(['format' => Content::FORMAT_ICON, "class" => "ps-1"]))?><span class="competition_name"><?=$obj2->getName()?></span>
                 </p>
             <?php $spell2_text = ob_get_clean();

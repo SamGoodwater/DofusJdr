@@ -43,36 +43,20 @@
         &:hover{
             width: 220px;
         }
-
-        .text-title{
-            font-size: clamp(1rem,2vw,1.8rem);
-        }
     }
     &.card-lg{
         &:hover{
             width: 180px;
-        }
-
-        .text-title{
-            font-size: clamp(0.8rem,1.5vw,1.5rem);
         }
     }
     &.card-md{
         &:hover{
             width: 150px;
         }
-        
-        .text-title{
-            font-size: clamp(0.8rem,1vw,1.2rem);
-        }
     }
     &.card-sm{
         &:hover{
             width: 130px;
-        }
-        
-        .text-title{
-            font-size: clamp(0.8rem,1vw,1rem);
         }
     }
 

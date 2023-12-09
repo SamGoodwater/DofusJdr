@@ -10,7 +10,7 @@
     }    
 ?>
 
-<p onmouseover="showTooltips(this, '#item<?=$obj->getUniqid()?>');" <?=$onclick?>>
+<p data-event-trigger="mouseover" data-event-type="tooltips" data-event-target="#item<?=$obj->getUniqid()?>" onmouseover="showTooltips(this);" <?=$onclick?>>
     <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'class' => "pe-1"]))?><?=$obj->getName()?>
 </p>
 <div id="item<?=$obj->getUniqid()?>" class="size-0-8"  style="display:none;">

@@ -174,3 +174,30 @@ function init() {
 	$('[data-toggle="tooltip"]').tooltip();
 	
 }
+
+function eventManager() {
+	if(VERBAL_MODE) {
+		console.log('Initialisation des événements');	
+	}
+	// Select all elements with data-event-trigger="mouseover"
+	const elements = document.querySelectorAll('[data-event-trigger="mouseover"]');
+
+	// Loop through each element
+	elements.forEach(element => {
+		// Check if the element already has a mouseover event
+		if (!element.onmouseover) {
+			// Add a mouseover event to the element
+			element.addEventListener('mouseover', function(event) {
+				switch (element.getAttribute('data-event-type')) {
+					case 'tooltips':
+						showTooltips(element);
+					break;
+				
+					default:
+						console.log('data-event-type not found');
+					break;
+				}
+			});
+		}
+	});
+}

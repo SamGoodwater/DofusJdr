@@ -25,26 +25,36 @@
         $tooltip = $name . " : " . $value;
     }
 
+    $coef = 1 - strlen($value) / 50;
     $size_icon = "";
     $size_name= "";
+    $size_value= "";
     $size_detail = "";
     $size_hover = "";
     switch ($size) {
         case Style::SIZE_XL:
+            if($coef < 0.5){$coef = 0.5;}
             $size_name = "size-1-3";
             $size_detail = "size-1";
+            $size_value = "1.8" * $coef;
         break;
         case Style::SIZE_LG:
+            if($coef < 0.6){$coef = 0.6;}
             $size_name = "size-1-2";
             $size_detail = "size-0-9";
+            $size_value = "1.5" * $coef;
         break;
         case Style::SIZE_MD:
+            if($coef < 0.65){$coef = 0.65;}
             $size_name = "size-1";
             $size_detail = "size-0-8";
+            $size_value = "1.3" * $coef;
         break;
         case Style::SIZE_SM:
+            if($coef < 0.7){$coef = 0.7;}
             $size_name = "size-0-9";
             $size_detail = "size-0-7";
+            $size_value = "1" * $coef;
         break;
     }
     if($style_icon != Style::ICON_MEDIA){
@@ -95,7 +105,7 @@
                             <?php } ?>
                         </span>
                     </div>
-                    <p <?=$data?> data-event-display-caractistic-add-text="false" class="text-<?=$color?>-d-4 text-title truncate-<?=$truncate?>"><?=$value?></p>
+                    <p data-addtext=0 <?=$data?> style="font-size:<?=$size_value?>rem;" class="text-<?=$color?>-d-4 truncate-<?=$truncate?>"><?=$value?></p>
                 </div>
                 <p style="position:relative;top:-0.5rem;" class="<?=$size_name?> text-<?=$color?>-d-4 text-center truncate-<?=$truncate?>"><?=ucfirst($name)?></p>
             </div>
