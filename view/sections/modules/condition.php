@@ -85,6 +85,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="false" data-field="id">ID</th>
                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
+                    <th data-sortable="false" data-visible="true" data-field="icon"><i class="fa-solid fa-image"></i></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
                     <th data-sortable="false" data-visible="true"  data-field="description">Description</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="is_unbewitchable"><span class="size-0-7">Désenvoutable</span></th>

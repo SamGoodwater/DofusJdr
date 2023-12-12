@@ -5,13 +5,13 @@ use SebastianBergmann\Type\VoidType;
 class Condition extends Content
 {
     const FILES = [
-        // "logo" => [
-        //     "type" => FileManager::FORMAT_IMG,
-        //     "default" => "medias/modules/conditions/default.svg",
-        //     "dir" => "medias/modules/conditions/",
-        //     "preferential_format" => "jpg",
-        //     "naming" => "[uniqid]"
-        // ]
+        "icon" => [
+            "type" => FileManager::FORMAT_IMG,
+            "default" => "medias/modules/conditions/default.png",
+            "dir" => "medias/modules/conditions/",
+            "preferential_format" => "png",
+            "naming" => "[uniqid]"
+        ]
     ];
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥

@@ -11,13 +11,18 @@
 <div id="<?=$style->getId()?>" class="resume <?=$style->getClass()?>" style="position:relative;width: <?=$style->getSize()?>px;">
     <div ondblclick="Condition.open('<?=$obj->getUniqid()?>');" class="card-hover-linked card p-2 m-1" >
         <div class="d-flex flew-row flex-nowrap">
-            <div class="card-body m-1 p-0">
+            <div class="m-1">
                 <div class="d-flex flex-row justify-content-between ">
-                    <p class="bold"><?=$obj->getName()?></p>
-                    <div class="me-1 mb-1 gap-1">
-                        <?=$obj->getIs_unbewitchable(Content::FORMAT_ICON)?>
-                        <?=$obj->getIs_malus(Content::FORMAT_ICON)?>
+                    <div class="col-auto">
+                        <?=$obj->getFile('icon', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-30"]))?>
                     </div>
+                    <div class="col-auto">
+                        <p class="bold"><?=$obj->getName()?></p>
+                    </div>
+                </div>
+                <div class="me-1 mb-1 gap-1">
+                    <?=$obj->getIs_unbewitchable(Content::FORMAT_ICON)?>
+                    <?=$obj->getIs_malus(Content::FORMAT_ICON)?>
                 </div>
             </div>
             <div class="d-flex flex-column justify-content-between ms-auto resume-rapid-menu">

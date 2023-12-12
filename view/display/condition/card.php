@@ -9,7 +9,10 @@
 ?>
 
 <div class="card p-2 m-2 border-2 border-main">
-    <div class="row justify-content-between mb-1">
+    <div class="row justify-content-between align-items-center mb-1">
+        <div class="col-auto selector-image-main">      
+            <?=$obj->getFile('icon', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-40"]))?>
+        </div>
         <div class="col-auto">
             <?=$obj->getIs_unbewitchable(Content::FORMAT_BADGE)?>
             <?=$obj->getIs_malus(Content::FORMAT_BADGE)?>

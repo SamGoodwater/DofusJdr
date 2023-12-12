@@ -12,6 +12,7 @@
     
     <div class="row g-0">
         <div class="row justify-content-between mb-1">
+            <div class="col-auto selector-image-main"><?=$obj->getFile('icon', new Style(['format' => Content::FORMAT_EDITABLE, "class" => "img-back-40"]))?></div>
             <div class="col-auto">
                 <?=$obj->getIs_unbewitchable(Content::FORMAT_EDITABLE)?>
                 <?=$obj->getIs_malus(Content::FORMAT_EDITABLE)?>

@@ -32,7 +32,7 @@
     padding: 0px 0px;
 }
 
-@for $i from 5 to 51 {
+@for $i from 2 to 51 {
     $size: $i * 10;
     .img-back-allH-#{$size} {
         background-size: cover;

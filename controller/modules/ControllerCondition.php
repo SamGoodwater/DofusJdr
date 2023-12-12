@@ -85,6 +85,7 @@ class ControllerCondition extends ControllerModule{
           'is_malus' => $obj->getIs_malus(Content::FORMAT_ICON),
           'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='condition' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
+          'icon' => $obj->getFile('icon', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_LG])),
           'edit' => $edit,
           'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
         );
@@ -138,6 +139,7 @@ class ControllerCondition extends ControllerModule{
               'is_malus' => $obj->getIs_malus(Content::FORMAT_ICON),
               'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='condition' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
+              'icon' => $obj->getFile('icon', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_LG])),
               'edit' => $edit,
               'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
             );
@@ -228,9 +230,10 @@ class ControllerCondition extends ControllerModule{
                 ob_start();   ?>
                   <a <?=$click_action?> class="d-flex justify-content-between align-items-baseline flex-nowrap">
                     <div class="d-flex justify-content-start align-item-baseline">
+                      <div class="img-back-20 me-2" style="background-image:url(<?=$object->getFile('icon', new Style(['format' => Content::FORMAT_BRUT]))?>)"></div>
                       <?=$name?>
                     </div>
-                    <p><small class='size-0-6 badge back-pink-l-1 mx-2'>Etats</small></p>
+                    <p><small class='size-0-6 badge back-pink-l-1 mx-2'>États</small></p>
                   </a>
                 <?php $visual = ob_get_clean();
 

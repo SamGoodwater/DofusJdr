@@ -199,9 +199,12 @@ class Page extends Content
                                         include $path__;
                                         $optionRefData = ""; if(isset($template['refStockDataOption'])){if(!empty($template['refStockDataOption'])){$optionRefData = $template['refStockDataOption'];}}
                                         $shownListAddInPage = true; if(isset($template["shownListAddInPage"])){$shownListAddInPage = $manager__->returnBool($template["shownListAddInPage"]);}
-                                        if(($user->getIs_admin() || $template['onlyForAdmin'] == false) && $shownListAddInPage){ ?>
-                                            <option value="<?=$value__?>" data-md5="<?=md5($path__)?>" data-ref_stock_data_option="<?=$optionRefData?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$template["description"]?>"><?=$template["title"]?></option>
-                                        <?php }
+                                        if($value__ != "home.php"){
+                                            $selected = ""; if($value__ == "text.php"){ $selected = "selected"; }
+                                            if(($user->getIs_admin() || $template['onlyForAdmin'] == false) && $shownListAddInPage){ ?>
+                                                <option value="<?=$value__?>" data-md5="<?=md5($path__)?>" data-ref_stock_data_option="<?=$optionRefData?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$template["description"]?>" <?=$selected?>><?=$template["title"]?></option>
+                                            <?php }
+                                        }
                                     } ?>
                                 </optgroup>
                             <?php } ?>

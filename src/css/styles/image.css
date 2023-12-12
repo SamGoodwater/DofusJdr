@@ -27,6 +27,78 @@
   padding: 0px 0px;
 }
 
+.img-back-allH-20 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 100%;
+}
+
+.img-back-20H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 20px;
+}
+
+.img-back-20 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+}
+
+.img-back-allH-30 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 100%;
+}
+
+.img-back-30H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 30px;
+}
+
+.img-back-30 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+}
+
+.img-back-allH-40 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 100%;
+}
+
+.img-back-40H-allL {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 40px;
+}
+
+.img-back-40 {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+}
+
 .img-back-allH-50 {
   background-size: cover;
   background-position: center center;
