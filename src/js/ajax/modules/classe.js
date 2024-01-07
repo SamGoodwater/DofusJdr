@@ -3,9 +3,9 @@ class Classe extends Controller{
     static MODEL_NAME = "classe";
     
     static add(){
-        var URL = 'index.php?c=classe&a=add';
-        var name = $('#modal #addClasse #name').val();
-        var weapons = $('#modal #addClasse #weapons').val();
+        let URL = 'index.php?c=classe&a=add';
+        let name = $('#modal #addClasse #name').val();
+        let weapons = $('#modal #addClasse #weapons').val();
         
         $.post(URL,
             {

@@ -32,7 +32,7 @@
 }
 .display-text_in_competition p::before {
   content: "";
-  background: white;
+  background: var(--grey-l-5);
   opacity: 0.5;
   width: 0%;
   height: 0%;

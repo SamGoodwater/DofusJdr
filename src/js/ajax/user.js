@@ -3,11 +3,11 @@ class User extends Controller{
     static MODEL_NAME = "user";
 
     static add(){
-        var URL = 'index.php?c=user&a=add';
-        var email = $('#modal #addUser #email').val();
-        var password = $('#modal #addUser #password').val();
-        var password_repeat = $('#modal #addUser #password_repeat').val();
-        var pseudo = $('#modal #addUser #pseudot').val();
+        let URL = 'index.php?c=user&a=add';
+        let email = $('#modal #addUser #email').val();
+        let password = $('#modal #addUser #password').val();
+        let password_repeat = $('#modal #addUser #password_repeat').val();
+        let pseudo = $('#modal #addUser #pseudot').val();
 
         if(email == "" || password == "" || password_repeat	== ""){
             $('#display_error').text("Veuillez remplir tous les champs");
@@ -45,7 +45,7 @@ class User extends Controller{
     static getBookmark(show = true){
         $("#onloadDisplay").show("slow");
 
-        var URL = 'index.php?c=user&a=getBookmark';
+        let URL = 'index.php?c=user&a=getBookmark';
         $.post(URL,
             {},
             function(data, status)
@@ -61,7 +61,7 @@ class User extends Controller{
         let url = "";
         let sentence = "";
 
-        var i = $(btn).find('i'); // REMOVE
+        let i = $(btn).find('i'); // REMOVE
         if(i.hasClass("fas") && i.hasClass("fa-bookmark")){
             i.removeClass("fas");
             i.addClass("far");
@@ -95,10 +95,10 @@ class User extends Controller{
                     if(data.state){
                         MsgAlert("Modification du "+ucFirst(globalThis.project.bookmark_name)+".", sentence, "green" , 3000);
                         if(data.cookie.serial != ""){
-                            var cookie = "bookmark="+data.cookie.serial+"; path=/; expires="+data.cookie.date+";"; 
+                            let cookie = "bookmark="+data.cookie.serial+"; path=/; expires="+data.cookie.date+";"; 
                             document.cookie = cookie;
                         }
-                        var i = $(btn).find('i'); // REMOVE
+                        let i = $(btn).find('i'); // REMOVE
                         if(i.hasClass("fas") && i.hasClass("fa-bookmark")){
                             i.removeClass("fas");
                             i.addClass("far");

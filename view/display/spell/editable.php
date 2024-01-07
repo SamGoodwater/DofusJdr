@@ -46,6 +46,7 @@
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
         <p class='size-0-7 mb-1'>Sort <?=$obj->getId(Content::FORMAT_BADGE);?> | Créé le <?=$obj->getTimestamp_add(Content::DATE_FR);?> | Modifié le <?=$obj->getTimestamp_updated(Content::DATE_FR);?></p>
         <p class="card-text mb-2"><?=$obj->getEffect(Content::FORMAT_EDITABLE)?></p>
+        <p class="card-text mb-2"><?=$obj->getEffect_array(Content::FORMAT_EDITABLE)?></p>
         <p class="card-text  my-2"><?=$obj->getDescription(Content::FORMAT_EDITABLE)?></p>
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
         <div class="my-2"><?=$obj->getInvocation(Content::FORMAT_EDITABLE)?></div>

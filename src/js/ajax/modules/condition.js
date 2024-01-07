@@ -3,8 +3,8 @@ class Condition extends Controller{
     static MODEL_NAME = "condition";
     
     static add(){
-        var URL = 'index.php?c=condition&a=add';
-        var name = $('#modal #addCondition #name').val();
+        let URL = 'index.php?c=condition&a=add';
+        let name = $('#modal #addCondition #name').val();
         
         $.post(URL,
             {

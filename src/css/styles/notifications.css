@@ -16,8 +16,8 @@
   margin-right: 5px;
 }
 
-#MsgAlert .notif {
-  background-color: white;
+MsgAlert .notif {
+  background-color: var(--grey-l-5);
   border-radius: 0.2rem;
   margin-bottom: 1rem;
   padding: 2px;

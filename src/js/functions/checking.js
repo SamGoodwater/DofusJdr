@@ -21,7 +21,7 @@ function getSizeScreen(){
     }
 }
 function isMobileSize(){
-    var x = window.matchMedia("(max-width: 768px)");
+    let x = window.matchMedia("(max-width: 768px)");
     if (x.matches) {
         return true;
     }

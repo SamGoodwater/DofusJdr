@@ -57,8 +57,8 @@
     </div>
     <div class="p-2 size-0-7 text-main-d-3 text-center">
         <a onclick="Page.show('cgu');">CGU</a>
-    </div>
+    </div>Z
     <div class="p-2 size-0-8 text-secondary-d-4 text-center">
-        <?=$GLOBALS['project']['name']?> version <?=$GLOBALS['project']['stability']?> <?=$GLOBALS['project']['version']?> <?=date("Y");?>
+        <img class="icon-25" src="<?=$GLOBALS['project']['icon']['dice']?>" alt="logo"> <?=$GLOBALS['project']['name']?> version <?=$GLOBALS['project']['stability']?> <?=$GLOBALS['project']['version']?> <?=date("Y");?>
     </div>
 </aside>

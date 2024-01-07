@@ -49,7 +49,7 @@ class Page extends Controller{
 
         if(size >= Page.SIZE_XXL && is_modal){size = Page.SIZE_XL;} // XXL is not supported by bootstrap modal
 
-        var clone = null;
+        let clone = null;
         if (content.jquery) {
             // La variable est un objet jQuery (sélecteur)
             clone = content.clone();
@@ -123,7 +123,7 @@ class Page extends Controller{
                     bookmark_obj.show();
                     bookmark_obj.data('classe', bookmark.classe);
                     bookmark_obj.data('uniqid', bookmark.uniqid);
-                    var i = bookmark_obj.find('i');
+                    let i = bookmark_obj.find('i');
                     if(bookmark.active){
                         i.removeClass("far");
                         i.addClass("fas");
@@ -217,7 +217,7 @@ class Page extends Controller{
 
     static show(url_name, settings){
         $("#onloadDisplay").show("slow");
-        var spinner = "<div class='d-flex justify-content-center'><div class='text-main-d-2 spinner-border' role='status'><span class='visually-hidden'>Loading...</span></div></div>";
+        let spinner = "<div class='d-flex justify-content-center'><div class='text-main-d-2 spinner-border' role='status'><span class='visually-hidden'>Loading...</span></div></div>";
         $(".app-content #content").html(spinner);
         $(".app-toolbar #title").html("");
 
@@ -225,7 +225,7 @@ class Page extends Controller{
             toogleMenu(true);
         }
 
-        var URL = 'index.php?c=page&a=show';
+        let URL = 'index.php?c=page&a=show';
         $.post(URL,
             {
                 url_name:url_name,
@@ -248,7 +248,7 @@ class Page extends Controller{
                     $(".app-content #content").show("fold");
                     $(".app-toolbar #title").show("fade");
                     Page.build(Page.RESPONSIVE, data.modal_title, data.modal_html);
-                    var url = url_name;
+                    let url = url_name;
                     if(settings !="" && settings != undefined && settings != null){url += "/" + settings;}
                     window.history.pushState({path:url},'',url);
                     eventManager();
@@ -333,7 +333,7 @@ class Page extends Controller{
     }
 
     static showSearchbar(){
-        var html = $("#globalsearch").parent().html();
+        let html = $("#globalsearch").parent().html();
         Page.build(Page.RESPONSIVE, "Recherche", html, Page.SIZE_SM, true);
         autocomplete_load("#modal #globalsearch");
     }

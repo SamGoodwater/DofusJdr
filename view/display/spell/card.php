@@ -48,6 +48,7 @@
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
         <h2 class="card-title"><?=$obj->getName()?></h2>
         <p class="card-text"><?=$obj->getEffect()?></p>
+        <p class="card-text"><?=$obj->getEffect_array(Content::FORMAT_VIEW)?></p>
         <p class="card-text"><small class="text-muted"><?=$obj->getDescription()?></small></p>
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
         <div class="d-flex justify-content-center"><?=$obj->getInvocation(Content::DISPLAY_RESUME)?></div>

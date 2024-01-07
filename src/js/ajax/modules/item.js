@@ -3,9 +3,9 @@ class Item extends Controller{
     static MODEL_NAME = "item";
 
     static add(){
-        var URL = 'index.php?c=item&a=add';
-        var name = $('#modal #addItem #name').val();
-        var type = $('#modal #addItem #type').val();
+        let URL = 'index.php?c=item&a=add';
+        let name = $('#modal #addItem #name').val();
+        let type = $('#modal #addItem #type').val();
         
         $.post(URL,
             {
@@ -34,8 +34,8 @@ class Item extends Controller{
 
     static setDataInOptionInput(){
         let option = "";
-        var checkboxes = document.querySelectorAll('#optionitem.item input[type="checkbox"]');
-        for (var checkbox of checkboxes) {
+        let checkboxes = document.querySelectorAll('#optionitem.item input[type="checkbox"]');
+        for (let checkbox of checkboxes) {
             if(checkbox.checked){
                 option += checkbox.value + "|";
             }

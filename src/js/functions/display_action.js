@@ -1,9 +1,9 @@
 function initCompetitionResume(target) {
     $(target).find('.resume').each(function() {
-      var $resume = $(this);
-      var $parentContainer = $resume.closest('.resume-parent-container');
-      var initialWidth = $resume.width(); // Récupère la valeur de la largeur initiale
-      var initialHeight = $resume.height(); // Récupère la valeur de la hauteur initiale
+      let $resume = $(this);
+      let $parentContainer = $resume.closest('.resume-parent-container');
+      let initialWidth = $resume.width(); // Récupère la valeur de la largeur initiale
+      let initialHeight = $resume.height(); // Récupère la valeur de la hauteur initiale
   
       // Ajoute la classe "reduced" à toutes les boîtes de résumé
       $resume.addClass('reduced').css('width', initialWidth / 2 + 'px');

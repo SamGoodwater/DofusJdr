@@ -28,38 +28,38 @@ const SEARCH_ACTION_REDIRECTION = 1;
 const SEARCH_ACTION_ADD = 2;
 
 function autocomplete_load(input, display_error = false) {
-    var error = "";
-    var input = $(input);
-    var sign = input.parent().parent().find("#search-sign");
+    let error = "";
+    let input_ = $(input);
+    let sign = input_.parent().parent().find("#search-sign");
     sign.html("");
-    if(input.data("url") != 'undefined'){
-        url = input.data("url");
+    if(input_.data("url") != 'undefined'){
+        url = input_.data("url");
     } else {
         MsgAlert("Aucun url trouvé", '' + data['error'], "red-d-3" , 2000);
         return "";
     }
-    if(input.data("parameter") != 'undefined'){
-        url += "&parameter=" + input.data("parameter");
+    if(input_.data("parameter") != 'undefined'){
+        url += "&parameter=" + input_.data("parameter");
     }
-    if(input.data("search_in") != 'undefined'){
-        url += "&search_in=" + input.data("search_in");
+    if(input_.data("search_in") != 'undefined'){
+        url += "&search_in=" + input_.data("search_in");
     }
-    if(input.data("action") != 'undefined'){
-        url += "&action=" + input.data("action");
+    if(input_.data("action") != 'undefined'){
+        url += "&action=" + input_.data("action");
     }
-    if(input.data("limit") != 'undefined'){
-        url += "&limit=" + input.data("limit");
+    if(input_.data("limit") != 'undefined'){
+        url += "&limit=" + input_.data("limit");
     }
-    if(input.data("only_usable") != 'undefined'){
-        url += "&only_usable=" + input.data("only_usable");
+    if(input_.data("only_usable") != 'undefined'){
+        url += "&only_usable=" + input_.data("only_usable");
     }
-    if(input.data("minlenght") != 'undefined'){
-        minLength = input.data("minlenght");
+    if(input_.data("minlenght") != 'undefined'){
+        minLength = input_.data("minlenght");
     } else {
         minLength = 3;
     }
 
-    input.autocomplete({
+    input_.autocomplete({
         source: url,
         minLength: minLength,
         search: function( event, ui ){

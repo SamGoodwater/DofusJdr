@@ -44,6 +44,21 @@
 
 <body>
     <div id="MsgAlert" style='z-index:10000'></div>
+    <div class="loading-container">
+        <img src="<?=$GLOBALS['project']['logo']?>" alt="Logo">
+        <p>
+            <span class="loading-letter">c</span>
+            <span class="loading-letter">h</span>
+            <span class="loading-letter">a</span>
+            <span class="loading-letter">r</span>
+            <span class="loading-letter">g</span>
+            <span class="loading-letter">e</span>
+            <span class="loading-letter">m</span>
+            <span class="loading-letter">e</span>
+            <span class="loading-letter">n</span>
+            <span class="loading-letter">t</span>
+        </p>
+    </div>
     <div id="onloadDisplay" style="z-index:10001">
         <div class='d-flex justify-content-center'><div class='spinner-border text-main-d-2' role='status'><span class='visually-hidden'>Loading...</span></div></div>
     </div>
@@ -168,12 +183,6 @@
                             <p class="text-grey-d-1 size-0-8" id="min-max"></p>
                             <a class="btn btn-sm btn-animate btn-back-secondary" onclick="rollDice();">Lancer les dés</a>
                             <p id="result_dice"></p>
-                            <script>
-                                $("#diceroller .modal-dialog").draggable({
-                                    cursor: "move",
-                                    handle: ".modal-header",
-                                });
-                            </script>
                         </div>
 
                         <!-- Récupérer des noms -->

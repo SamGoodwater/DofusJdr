@@ -22,16 +22,16 @@ class File {
     */
 
     static loadFileUpload(element) {
-        var fileInput = document.querySelector(element + " .file-input"),
+        let fileInput = document.querySelector(element + " .file-input"),
         form = document.querySelector(element + " form");
         form.addEventListener("click", () =>{
             fileInput.click();
         });
-        var isDropable = true; // Si on peut droper un fichier (défaut true)
+        let isDropable = true; // Si on peut droper un fichier (défaut true)
         if(form.dataset.dropable != "true") {isDropable = false;}
 
         if(isDropable) {
-            var dropZone = document.querySelector(form.dataset.dropzone);
+            let dropZone = document.querySelector(form.dataset.dropzone);
             if(!dropZone){dropZone = form;} // Si la dropzone n'existe pas, alors utiliser la form comme dropzone
 
             dropZone.ondragover = function () { this.className = 'dragable'; return false; };
@@ -39,7 +39,7 @@ class File {
             dropZone.ondrop = function(e) {
                 dropZone.classList.remove('dragable');
                 e.preventDefault();
-                var files_list = e.dataTransfer.files;
+                let files_list = e.dataTransfer.files;
                 const dT = new DataTransfer();
                 files_list.forEach(file => {
                     dT.items.add(file);
@@ -81,7 +81,7 @@ class File {
 
     // file upload function
     static uploadFile(name, element){
-        var form = document.querySelector(element + " form"),
+        let form = document.querySelector(element + " form"),
         progressArea = document.querySelector(element + " .progress-area"),
         uploadedArea = document.querySelector(element + " .uploaded-area"),
         input = document.querySelector(element + " .file-input");
@@ -112,10 +112,10 @@ class File {
 
             // uploadedArea.innerHTML = ""; //uncomment this line if you don't want to show upload history
             uploadedArea.classList.add("onprogress");
-                var thumbail = "<i class='fa-solid fa-file-alt'></i>";
+                let thumbail = "<i class='fa-solid fa-file-alt'></i>";
                 // Affichage de la mignature
-                var file = input.files[0];
-                var regex = /(image|jpg|jpeg|gif|png|svg|bmp|tif|tiff|raw|ico)/ig;
+                let file = input.files[0];
+                let regex = /(image|jpg|jpeg|gif|png|svg|bmp|tif|tiff|raw|ico)/ig;
                 let path = form.dataset.viewimgpath + file.name;
                 if(regex.test(file.type)) {
                     thumbail = "<img src='"+path+"' alt='Fichier téléchargé' class='img-fluid' width=30px>";
@@ -159,7 +159,7 @@ class File {
     }
 
     static remove(path){
-        var URL = 'index.php?c=file&a=remove';
+        let URL = 'index.php?c=file&a=remove';
     
         if (confirm("Etes vous sûr de vouloir supprimer définitivement ce fichier ?")) {
             $.post(URL,
@@ -184,7 +184,7 @@ class File {
     }
 
     static removeThumbnail(path){
-        var URL = 'index.php?c=file&a=removeThumbnail';
+        let URL = 'index.php?c=file&a=removeThumbnail';
     
         if (confirm("Etes vous sûr de supprimer et recréer les miniatures pour cette image ?")) {
             $.post(URL,
@@ -208,7 +208,7 @@ class File {
     
     }
     static addThumbnail(path){
-        var URL = 'index.php?c=file&a=addThumbnail';
+        let URL = 'index.php?c=file&a=addThumbnail';
         $.post(URL,
             {
                 path:path

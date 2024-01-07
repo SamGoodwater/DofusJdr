@@ -29,7 +29,7 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: radial-gradient(circle, #dfdfdf 0%, #fdfdfd 100%);
+        background: radial-gradient(circle, var(--grey-l-4) 0%, var(--grey-l-5) 100%);
         box-shadow: 1px 4px 6px 0px rgba(0, 0, 0, 0.3);
         cursor: pointer;
         transition: all .2s ease-in-out;

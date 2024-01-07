@@ -3,8 +3,8 @@ function ucFirst(str) {return str && str[0].toUpperCase() + str.slice(1);}
 
 // Permet de modifier le badge associer à un élément lorsqu'un range est modifié
 function changeRangeText(input){
-  var value = input.value;
-  var span = $(input).parent().find("span");
+  let value = input.value;
+  let span = $(input).parent().find("span");
   switch (value) {
       case '0':
           span.text("Aucun");
@@ -30,7 +30,7 @@ function changeRangeText(input){
 }
   
 function array_unique(array) { //cleanArray removes all duplicated elements
-  var i, j, len = array.length, out = [], obj = {};
+  let i, j, len = array.length, out = [], obj = {};
   for (i = 0; i < len; i++) {
     obj[array[i]] = 0;
   }
@@ -41,7 +41,7 @@ function array_unique(array) { //cleanArray removes all duplicated elements
 }
 
 function detailFormatter(index, row){ // Permet d'afficher les détails dans les tableaux
-  var html = []
+  let html = []
   $.each(row, function (key, value) {
       if(key == "detailView"){
           html.push(value)

@@ -188,8 +188,8 @@
     */
      
     mark {
-    background: #ff0;
-    color: #000;
+    background: var(--yellow-a-2);
+    color: var(--grey-d-5);
     }
      
     /*
@@ -356,7 +356,7 @@
     */
      
     fieldset {
-        border: 1px solid #c0c0c0;
+        border: 1px solid var(--grey-l-3);
         margin: 0 2px;
         padding: 0.35em 0.625em 0.75em;
     }

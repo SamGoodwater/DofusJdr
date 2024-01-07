@@ -3,9 +3,9 @@ class Section extends Controller{
 
     static add(url_name)
     {
-        var URL = 'index.php?c=section&a=add';
-        var type = $('#modal #type').val();
-        var title = $('#modal #title').val();
+        let URL = 'index.php?c=section&a=add';
+        let type = $('#modal #type').val();
+        let title = $('#modal #title').val();
         let option = "";
 
         let optionSelect = $('#modal #type').find("option:selected");
@@ -48,9 +48,9 @@ class Section extends Controller{
     }
 
     static upload(url_name){
-        var type = $('#modal #type').val();
-        var title = $('#modal #title').val();
-        var url = "index.php?c=section&a=upload&url_name="+url_name+"&title="+title+"&type="+type;
+        let type = $('#modal #type').val();
+        let title = $('#modal #title').val();
+        let url = "index.php?c=section&a=upload&url_name="+url_name+"&title="+title+"&type="+type;
 
         $('#fileupload').fileupload({
             url:url,
@@ -59,7 +59,7 @@ class Section extends Controller{
             add: function (e, data) {
                 data.submit();
                 $('#progressBar').removeClass('bg-info').removeClass('bg-success').removeClass('bg-danger');
-                var fileSize = data.originalFiles[0]["size"];
+                let fileSize = data.originalFiles[0]["size"];
                 if(fileSize > 15000000) {
                     $('#progressBar').attr("aria-valuenow",100);
                     $('#progressBar').css('width', '100%');
@@ -90,7 +90,7 @@ class Section extends Controller{
 
         }).on('fileuploadprogressall', function(e, data){
             $('#progressBar').removeClass('bg-danger').removeClass('bg-info').removeClass('bg-success');
-            var progress = parseInt(data.loaded / data.total * 100);
+            let progress = parseInt(data.loaded / data.total * 100);
             $('#progressBar').attr("aria-valuenow",progress);
             $('#progressBar').css('width', progress+'%');
             $('#progressBar').text(progress+'%');
@@ -98,12 +98,12 @@ class Section extends Controller{
     }
     
     static update(uniqid, input, type, value_type = IS_INPUT, fct = ""){
-        var URL = 'index.php?c=section&a=update';
-        var value = 0;
+        let URL = 'index.php?c=section&a=update';
+        let value = 0;
     
         switch (value_type) {
             case IS_INPUT:
-                var inp = $(input);
+                let inp = $(input);
                 if(inp.attr("required") && inp.val() == ""){
                     inp.addClass("is-invalid").removeClass('is-valid');
                     MsgAlert("Le champs est obligatoire.", '', "error" , 3000);
@@ -171,7 +171,7 @@ class Section extends Controller{
     }
     
     static remove(uniqid){
-        var URL = 'index.php?c=section&a=remove';
+        let URL = 'index.php?c=section&a=remove';
     
         if (confirm("Etes vous sûr de vouloir supprimer définitivement cette section ?")) {
             $.post(URL,
@@ -205,7 +205,7 @@ class Section extends Controller{
             $('#section'+uniqid+" .trash").hide("slow");
             $('#section'+uniqid+" #saveCkeditor").hide("slow");
 
-            var title = $("#section"+uniqid+" h1 input").val();
+            let title = $("#section"+uniqid+" h1 input").val();
             $("#section"+uniqid+" h1").html(title);
 
             Section.update(uniqid, CKEDITOR5['content'+uniqid].getData(), 'content', IS_VALUE);
@@ -218,8 +218,8 @@ class Section extends Controller{
             $('#section'+uniqid+" .trash").show("slow");
             $('#section'+uniqid+" #saveCkeditor").show("slow");
 
-            var title_text = $("#section"+uniqid+" h1").text();
-            var input = "<input class='form-control form-control-main-l-3-focus' onchange=\"Section.update('"+uniqid+"', this, 'title');\" placeholder='titre de la section' type='text' value=''>";
+            let title_text = $("#section"+uniqid+" h1").text();
+            let input = "<input class='form-control form-control-main-l-3-focus' onchange=\"Section.update('"+uniqid+"', this, 'title');\" placeholder='titre de la section' type='text' value=''>";
             $("#section"+uniqid+" h1").html(input);
             $("#section"+uniqid+" h1").find("input").val(title_text);
 
@@ -321,7 +321,7 @@ class Section extends Controller{
     }
 
     static getVisual(uniqid, show_modal = true){
-        var URL = 'index.php?c=section&a=getVisual';
+        let URL = 'index.php?c=section&a=getVisual';
         $.post(URL,
             {
                 uniqid:uniqid,

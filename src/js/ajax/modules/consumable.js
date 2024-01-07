@@ -3,9 +3,9 @@ class Consumable extends Controller{
     static MODEL_NAME = "consumable";
     
     static add(){
-        var URL = 'index.php?c=consumable&a=add';
-        var name = $('#modal #addConsumable #name').val();
-        var type = $('#modal #addConsumable #type').val();
+        let URL = 'index.php?c=consumable&a=add';
+        let name = $('#modal #addConsumable #name').val();
+        let type = $('#modal #addConsumable #type').val();
         
         $.post(URL,
             {

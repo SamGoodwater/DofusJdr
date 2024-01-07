@@ -3,10 +3,10 @@ class Social extends Controller{
     static MODEL_NAME = "social";
 
     static add(){
-        var URL = 'index.php?c=social&a=add';
-        var name = $('#modal #addSocial #name').val();
-        var text = $('#modal #addSocial #text').val();
-        var link = $('#modal #addSocial #link').val();
+        let URL = 'index.php?c=social&a=add';
+        let name = $('#modal #addSocial #name').val();
+        let text = $('#modal #addSocial #text').val();
+        let link = $('#modal #addSocial #link').val();
         
         $.post(URL,
             {

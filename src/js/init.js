@@ -25,19 +25,10 @@ const FORMAT_TEXT = 8;
 const FORMAT_PATH = 9;
 const FORMAT_LINK = 10;
 
-jQuery(document).ready(function($) {
+window.addEventListener("load", () => {
+	document.querySelector(".loading-container").classList.add("loading-animation-end");
 
-	"use strict";
 
-	[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {
-		new SelectFx(el);
-	} );
-
-	$('[data-bd-toggle="tooltip"]').tooltip();
-	
-});
-
-$(document).ready(function() {
     $(window).resize(function() {
         if ($(window).width() < 992) {
             $(".app").addClass("app-compacted");
@@ -47,7 +38,7 @@ $(document).ready(function() {
     });
 
 	// Ce code permet de détecter si des touches sont enfoncés et de jouer des fonctions.
-	var keys = {};
+	let keys = {};
 	$(window).on("keyup keydown", function (e) {
 		keys[e.keyCode] = e.type === 'keydown';
 
@@ -138,7 +129,19 @@ $(document).ready(function() {
 			$("#offcanvasbookmark").css("max-width", ui.size.width);
 		}
 	});
-});
+
+	
+	[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {
+		new SelectFx(el);
+	} );
+
+	$('[data-bd-toggle="tooltip"]').tooltip();
+
+	$("#diceroller .modal-dialog").draggable({
+		cursor: "move",
+		handle: ".modal-header",
+	});
+})
 
 function init() {
 
@@ -165,7 +168,7 @@ function init() {
 		$('.search-trigger').parent('.header-left').removeClass('open');
 	});
 
-	var tables = document.querySelectorAll("#table");
+	let tables = document.querySelectorAll("#table");
 	tables.forEach(function(userItem) {
 		$(userItem).bootstrapTable('destroy').bootstrapTable({
 			exportTypes: ['pdf','excel','xlsx','doc','png','csv','xml','json','sql','txt']});

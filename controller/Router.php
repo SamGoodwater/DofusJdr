@@ -70,10 +70,10 @@ class Router {
     }
 
     // Statics functions
-        static function includeCss(){ ?>
+        static function includeCss(){
+            $style_color_mode = "src/css/include_manually/color_light_mode.css";
 
-            <!-- C U S T O M -->
-            <?php $dir_import = [
+            $dir_import = [
                 [
                     "link" => "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css", // Bootstrap
                     "crossorigin" => "anonymous",
@@ -88,11 +88,11 @@ class Router {
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css",
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/panzoom.css",
                 "https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css",
+                $style_color_mode,
                 "src/css/plugin",
                 "src/css/styles"
-            ];?>
+            ];
 
-            <?php 
             foreach ($dir_import as $dir) {
                 if(is_array($dir)){
                     if(isset($dir['link'])){$link = $dir['link'];}else{$link = "";}
@@ -128,9 +128,9 @@ class Router {
                         ?> <link href="<?=$dir?>"  crossorigin="<?=$crossorigin?>" media="<?=$media?>" integrity="<?=$integrity?>" rel="stylesheet" type="text/css"> <?php
                     }
                 }
-            } ?>
+            }
 
-            <?php  require_once "src/css/common/color.php";
+            require_once "src/css/common/color_constructor.php";
         }
         static function includeJS(){  
             if($_SESSION['JqueryAppel'] == false ){?>

@@ -3,8 +3,8 @@ class Shop extends Controller{
     static MODEL_NAME = "shop";
 
     static add(){
-        var URL = 'index.php?c=shop&a=add';
-        var name = $('#modal #addShop #name').val();
+        let URL = 'index.php?c=shop&a=add';
+        let name = $('#modal #addShop #name').val();
         
         $.post(URL,
             {

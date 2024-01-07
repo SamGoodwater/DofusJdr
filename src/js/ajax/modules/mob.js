@@ -2,31 +2,31 @@ class Mob extends Controller{
     static MODEL_NAME = "mob";
 
     static add(){
-        var URL = 'index.php?c=mob&a=add';
-        var name = $('#modal #addMob #name').val();
-        var level = $('#modal #addMob #level').val();
-        var powerful = $('#modal #addMob #powerful').val();
-        var intel = "";
+        let URL = 'index.php?c=mob&a=add';
+        let name = $('#modal #addMob #name').val();
+        let level = $('#modal #addMob #level').val();
+        let powerful = $('#modal #addMob #powerful').val();
+        let intel = "";
         if($('#modal #ddMob #intel').is(':checked')){
             intel = true;
         }
-        var strong = "";
+        let strong = "";
         if($('#modal #addMob #strong').is(':checked')){
             strong = true;
         }
-        var chance = "";
+        let chance = "";
         if($('#modal #addMob #chance').is(':checked')){
             chance = true;
         }
-        var agi = "";
+        let agi = "";
         if($('#modal #addMob #agi').is(':checked')){
             agi = true;
         }
-        var sagesse = "";
+        let sagesse = "";
         if($('#modal #addMob #sagesse').is(':checked')){
             sagesse = true;
         }
-        var vitality = "";
+        let vitality = "";
         if($('#modal #addMob #vitality').is(':checked')){
             vitality = true;
         }

@@ -10,11 +10,41 @@ class Controller {
     static TABLE_LIMIT = 10;
 
     static MODEL_NAME = "";
+    
+    // static input = addEventListener(input, "change", function(){
+    //     let uniqid = "";
+    //     if($(input).data("uniqid") != undefined && $(input).data("uniqid") != ""){
+    //         uniqid = $(input).data("uniqid");
+    //     } else {
+    //         MsgAlert("Aucun identifiant unique spécifié", '', "error" , 3000);
+    //         return false;
+    //     }
+    //     let type = "";
+    //     if($(input).data("type") != undefined && $(input).data("type") != ""){
+    //         type = $(input).data("type");
+    //     } else {
+    //         MsgAlert("Aucun type spécifié", '', "error" , 3000);
+    //         return false;
+    //     }
+    //     let value_type = IS_VALUE;
+    //     if($(input).data("value_type") != undefined && $(input).data("value_type") != ""){
+    //         value_type = $(input).data("value_type");
+    //     }
+    //     let fct = "";
+    //     if($(input).data("fct") != undefined && $(input).data("fct") != ""){
+    //         fct = $(input).data("fct");
+    //     }
+    //     let reopen_modal = false;
+    //     if($(input).data("reopen_modal") != undefined && $(input).data("reopen_modal") != ""){
+    //         reopen_modal = $(input).data("reopen_modal");
+    //     }
+    //     this.MODEL_NAME.update(uniqid, input, type, value_type, fct, reopen_modal);  
+    // });
 
     static open(uniqid, display = Controller.DISPLAY_CARD){
         $("#onloadDisplay").show("slow");
 
-        var URL = 'index.php?c='+this.MODEL_NAME+'&a=getFromUniqid';
+        let URL = 'index.php?c='+this.MODEL_NAME+'&a=getFromUniqid';
         $.post(URL,
             {
                 uniqid:uniqid,
@@ -53,12 +83,12 @@ class Controller {
     
     static update(uniqid, input, type, value_type = IS_INPUT, fct = "", reopen_modal = false){
         let this_ = this;
-        var URL = 'index.php?c='+this.MODEL_NAME+'&a=update';
-        var value = 0;
+        let URL = 'index.php?c='+this.MODEL_NAME+'&a=update';
+        let value = 0;
     
         switch (value_type) {
             case IS_INPUT:
-                var inp = $(input);
+                let inp = $(input);
                 if(inp.attr("required") && inp.val() == ""){
                     inp.addClass("is-invalid").removeClass('is-valid');
                     MsgAlert("Le champs est obligatoire.", '', "error" , 3000);
@@ -130,7 +160,7 @@ class Controller {
     }
     
     static remove(uniqid){
-        var URL = 'index.php?c='+this.MODEL_NAME+'&a=remove';
+        let URL = 'index.php?c='+this.MODEL_NAME+'&a=remove';
     
         if (confirm("Etes vous sûr de vouloir supprimer définitivement cet objet ?")) {
             $.post(URL,
@@ -157,9 +187,9 @@ class Controller {
     }
 
     static updateDisplayRow(uniqid) {
-        var indexCell = $("#"+uniqid).parent().parent().data("index");
+        let indexCell = $("#"+uniqid).parent().parent().data("index");
 
-        var URL = 'index.php?c='+this.MODEL_NAME+'&a=getArrayFromUniqid';
+        let URL = 'index.php?c='+this.MODEL_NAME+'&a=getArrayFromUniqid';
         $.post(URL,{
                 uniqid:uniqid
             },
@@ -178,12 +208,12 @@ class Controller {
 
     static createAndLoadDataBootstrapTable(selectorOptions = []){
         let this_ = this;
-        var total = 0;
-        var optionurl = "";
-        var url = 'index.php?c='+this.MODEL_NAME+'&a=getAll';
-        var offset = this.TABLE_OFFSET;
-        var limit = this.TABLE_LIMIT;
-        var loadedRows = 0;
+        let total = 0;
+        let optionurl = "";
+        let url = 'index.php?c='+this.MODEL_NAME+'&a=getAll';
+        let offset = this.TABLE_OFFSET;
+        let limit = this.TABLE_LIMIT;
+        let loadedRows = 0;
         let currentRequest = null;
 
         let spinner = "<div class='spinner-border spinner-border-sm' role='status'><span class='visually-hidden'>Loading...</span></div> Chargement du tableau ";
@@ -217,7 +247,7 @@ class Controller {
                             }
                         break;
                         case IS_LIST_OF_CHECKBOX:
-                            var value = "";
+                            let value = "";
                             $(element.selector + " input").each(function(){
                                 if ($(this).is(":checked")) {
                                     value += $(this).val() + "|";
@@ -249,7 +279,7 @@ class Controller {
 
         let loadData = function loadData() {
             $(".fixed-table-toolbar .loading-spinner").html(spinner + Math.round(100 * (loadedRows / total)) + "%");
-            var nextUrl = url + optionurl + '&offset=' + offset + '&limit=' + limit;
+            let nextUrl = url + optionurl + '&offset=' + offset + '&limit=' + limit;
             $.post(nextUrl,
                 {},
                 function(data, status){
@@ -313,7 +343,7 @@ class Controller {
     static updateDisplayCaracteristics(uniqid, lvl) {
         let elementsToUpdate = $("#"+this.MODEL_NAME+uniqid).find("[data-formule]");
 
-        for (var i = 0; i < elementsToUpdate.length; i++) {
+        for (let i = 0; i < elementsToUpdate.length; i++) {
             let element = $(elementsToUpdate[i]);
             let dataKey = (lvl == 0) ? "formule" : "level" + lvl;
             let newData = element.data(dataKey);

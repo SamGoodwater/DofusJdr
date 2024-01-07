@@ -3,10 +3,10 @@ class Npc extends Controller{
     static MODEL_NAME = "npc";
     
     static add(){
-        var URL = 'index.php?c=npc&a=add';
-        var name = $('#modal #addNpc #name').val();
-        var classe = $('#modal #addNpc #classe').val();
-        var level = $('#modal #addNpc #level').val();
+        let URL = 'index.php?c=npc&a=add';
+        let name = $('#modal #addNpc #name').val();
+        let classe = $('#modal #addNpc #classe').val();
+        let level = $('#modal #addNpc #level').val();
         
         $.post(URL,
             {

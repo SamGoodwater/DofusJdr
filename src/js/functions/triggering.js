@@ -57,17 +57,17 @@ const copyToClipboard = str => {
         break;
       }
     
-        var liste = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"];
-        var result = '';
+        let liste = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"];
+        let result = '';
         for (i = 0; i < 7; i++) {
             result += liste[Math.floor(Math.random() * liste.length)];
         }
         
-        // var appendlink = '';
+        // let appendlink = '';
         // if(link !=''){
         //   appendlink = "<p class='text-center m-0 p-0 font-size-0-8'><a target='_blank' href='" + link + "'><i class='fa-solid fa-arrow-circle-right'></i></a></p>";
         // }
-        var append = "<div id='"+result+"' class='notif border-"+color+"'><div class='toast-header'><div class='msgSquare back-"+color+"'></div><strong class='me-auto'>"+title+"</strong><small></small><button type='button' class='btn-close' onclick='$(this).parent().parent().remove();' aria-label='Close'></button></div><div class='toast-body'>"+content+"</div></div>";
+        let append = "<div id='"+result+"' class='notif border-"+color+"'><div class='toast-header'><div class='msgSquare back-"+color+"'></div><strong class='me-auto'>"+title+"</strong><small></small><button type='button' class='btn-close' onclick='$(this).parent().parent().remove();' aria-label='Close'></button></div><div class='toast-body'>"+content+"</div></div>";
     
         $("#MsgAlert").append(append);
     
@@ -119,7 +119,7 @@ function loadSlider(idGroupSlider){
         slider_info.removeClass("showed");
         slider_global.animate({scrollTop: 0}, 1000, 'easeInOutQuint');
         slider_global.css("overflow-y", "hidden");
-        var delai = setTimeout(function(){
+        let delai = setTimeout(function(){
         slider_info.hide();
         }, 1000);
     }else{
@@ -134,14 +134,14 @@ function loadSlider(idGroupSlider){
     $(this).css("color", "white");
     });
 
-    var timer = 900;
+    let timer = 900;
     slider_img.bind('scroll',function () {
         clearTimeout(timer);
         timer = setTimeout(snapImg , 150);
     });
-    var snapImg = function () { 
-        var scrollLeft = slider_img.scrollLeft();
-        var snap = Math.round(scrollLeft / SNAP_X) * SNAP_X;
+    let snapImg = function () { 
+        let scrollLeft = slider_img.scrollLeft();
+        let snap = Math.round(scrollLeft / SNAP_X) * SNAP_X;
         slider_img.animate({scrollLeft: snap}, 200, 'easeInOutQuint');
         if(snap / SNAP_X > nbr_img - 1){
         state = nbr_img - 1;

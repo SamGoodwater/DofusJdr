@@ -3,8 +3,8 @@ class Spell extends Controller{
     static MODEL_NAME = "spell";
     
     static add(){
-        var URL = 'index.php?c=spell&a=add';
-        var name = $('#modal #addSpell #name').val();
+        let URL = 'index.php?c=spell&a=add';
+        let name = $('#modal #addSpell #name').val();
         
         $.post(URL,
             {
@@ -28,4 +28,7 @@ class Spell extends Controller{
             "json"
         ); 
     }
+
+    
+
 }

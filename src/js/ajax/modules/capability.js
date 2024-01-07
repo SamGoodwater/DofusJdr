@@ -3,8 +3,8 @@ class Capability extends Controller{
     static MODEL_NAME = "capability";
     
     static add(){
-        var URL = 'index.php?c=capability&a=add';
-        var name = $('#modal #addCapability #name').val();
+        let URL = 'index.php?c=capability&a=add';
+        let name = $('#modal #addCapability #name').val();
         
         $.post(URL,
             {

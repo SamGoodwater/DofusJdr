@@ -2,7 +2,7 @@ class Tools {
 
     static req(tool, token)
     {
-        var URL = 'index.php?c=tools&a='+tool;
+        let URL = 'index.php?c=tools&a='+tool;
         $.ajax({
             type: "POST",
             url: URL,

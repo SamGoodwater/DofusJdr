@@ -28,7 +28,7 @@ class Connect {
             }
         }
 
-        var URL = 'index.php?c=connect&a=setCookiePreference';
+        let URL = 'index.php?c=connect&a=setCookiePreference';
         $.post(URL,
             {
                 connexion:COOKIE_CONNEXION,
@@ -38,7 +38,7 @@ class Connect {
             {
                 if(data.state){
                     MsgAlert("Préférences enregistrées", '', "green" , 4000);
-                    var cookie = "cookie_preference="+data.cookie.preference+"; path=/; expires="+data.cookie.date+";"; 
+                    let cookie = "cookie_preference="+data.cookie.preference+"; path=/; expires="+data.cookie.date+";"; 
                     document.cookie = cookie;
                     $(".cookie-bar").hide("drop", 100);
                 } else {
@@ -51,7 +51,7 @@ class Connect {
 
     static getHeader(show_modal = true){
         $("#onloadDisplay").show("slow");
-        var URL = 'index.php?c=connect&a=getVisual';
+        let URL = 'index.php?c=connect&a=getVisual';
         $.post(URL,
             {is_flush:true},
             function(data, status)
@@ -66,10 +66,10 @@ class Connect {
     }
     static connect(){
         $("#onloadDisplay").show("slow");
-        var URL = 'index.php?c=connect&a=connexion';
-        var email = $('#modalConnexionUser #email').val();
-        var password = $('#modalConnexionUser #password').val();
-        var remember = 0;
+        let URL = 'index.php?c=connect&a=connexion';
+        let email = $('#modalConnexionUser #email').val();
+        let password = $('#modalConnexionUser #password').val();
+        let remember = 0;
         if ($('#modalConnexionUser #remember').is(":checked") && COOKIE_CONNEXION) {
             remember = 1;
         }
@@ -99,7 +99,7 @@ class Connect {
                     $('#modalConnexionUser #password').val("");
                     $('#table').bootstrapTable('refresh');
                     if(data.cookie != ""){
-                        var cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 
+                        let cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 
                         document.cookie = cookie;
                     }
                     Connect.getHeader(false);
@@ -115,7 +115,7 @@ class Connect {
     static disconnect(){
         $("#onloadDisplay").show("slow");
         
-        var URL = 'index.php?c=connect&a=disconnect';
+        let URL = 'index.php?c=connect&a=disconnect';
 
         $('#display_error').text("");
         
@@ -129,7 +129,7 @@ class Connect {
                 if(data.state){
                     $("#userVisual").html(data.value.header);
                     Page.build(Page.RESPONSIVE, data.value.title,  data.value.modal, data.value.size, false);
-                    var cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 
+                    let cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 
                     document.cookie = cookie;
                     location.reload();
                 } else {
@@ -143,8 +143,8 @@ class Connect {
     static passwordForgotten(){
         $("#onloadDisplay").show("slow");
         
-        var URL = 'index.php?c=connect&a=passwordForgotten';
-        var mail = $('#modalPasswordForgotten #email').val();
+        let URL = 'index.php?c=connect&a=passwordForgotten';
+        let mail = $('#modalPasswordForgotten #email').val();
         $('#display_error').text("");
         
         $.post(URL,
