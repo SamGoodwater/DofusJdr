@@ -35,7 +35,7 @@
     if(!isset($tooltip)) { $tooltip = "";}else{if(!is_string($tooltip) && !is_numeric($content)) {$tooltip = "";}}
     if(!isset($tooltip_placement)) { $tooltip_placement = Style::DIRECTION_BOTTOM;}else{if(!in_array($tooltip_placement, [Style::DIRECTION_BOTTOM, Style::DIRECTION_TOP, Style::DIRECTION_RIGHT, Style::DIRECTION_LEFT])) {$tooltip_placement = Style::DIRECTION_BOTTOM;}}
 
-    if($is_inline){$inline = "form-check-inline";}else{$inline = "";} ?>
+    if($is_inline){$inline = "form-check-inline ms-3";}else{$inline = "";} ?>
 
 <div class="<?=$inline?>"> 
 

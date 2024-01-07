@@ -46,7 +46,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <?php $checked = "";
                     foreach (Spell::CATEGORY as $key => $category_) { ?>
                         <li>
-                            <div class="form-check form-check-inline">
+                            <div class="form-check form-check-inline ms-3">
                                 <input class="form-check-input selectorCategory" type="checkbox" id="CheckboxCategory<?=$category_?>" value="<?=$category_?>">
                                 <label class="form-check-label badge back-<?=Style::getColorFromLetter($category_)?>-d-2 text-white" for="CheckboxCategory<?=$category_?>"><?=ucfirst($key)?></label>
                             </div>
@@ -60,7 +60,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <?php $checked = "";
                     foreach (Spell::ELEMENT as $id_element => $element_) { ?>
                         <li>
-                            <div class="form-check form-check-inline">
+                            <div class="form-check form-check-inline ms-3">
                                 <input class="form-check-input selectorElement" type="checkbox" id="CheckboxElement<?=$id_element?>" value="<?=$id_element?>">
                                 <label class="form-check-label badge back-<?=$element_['color']?> text-white" for="CheckboxElement<?=$id_element?>"><?=ucfirst($element_['name'])?></label>
                             </div>
@@ -75,7 +75,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <?php $checked = "";
                     for ($i=1; $i <= 20 ; $i++) { ?>
                         <li>
-                            <div class="form-check form-check-inline">
+                            <div class="form-check form-check-inline ms-3">
                                 <input class="form-check-input selectorLevel" type="checkbox" id="CheckboxLevel<?=$i?>" value="<?=$i?>">
                                 <label class="form-check-label badge back-<?=Style::getColorFromLetter($i, true)?>-d-3" for="CheckboxLevel<?=$i?>"><?=$i?></label>
                             </div>

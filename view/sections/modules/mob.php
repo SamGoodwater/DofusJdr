@@ -155,27 +155,27 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 <p><small>Sur une échelle de 9 valeurs, avec 1 étant une créature extrémement faible et 9 une créature extrément forte.</small></p>
             </div>
             <div class="my-2">
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline ms-3">
                     <input class="form-check-input" type="checkbox" id="intel">
                     <label class="form-check-label" for="intel">Intelligence <img class='icon-15' src='medias/icons/modules/intel.png'></label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline ms-3">
                     <input class="form-check-input" type="checkbox" id="strong">
                     <label class="form-check-label" for="strong">Force <img class='icon-15' src='medias/icons/modules/force.png'></label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline ms-3">
                     <input class="form-check-input" type="checkbox" id="chance">
                     <label class="form-check-label" for="chance">Chance <img class='icon-15' src='medias/icons/modules/chance.png'></label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline ms-3">
                     <input class="form-check-input" type="checkbox" id="agi">
                     <label class="form-check-label" for="agi">Agilité <img class='icon-15' src='medias/icons/modules/agi.png'></label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline ms-3">
                     <input class="form-check-input" type="checkbox" id="sagesse">
                     <label class="form-check-label" for="sagesse">Sagesse <img class='icon-15' src='medias/icons/modules/sagesse.png'></label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline ms-3">
                     <input class="form-check-input" type="checkbox" id="vitality">
                     <label class="form-check-label" for="vitality">Vitalité <img class='icon-15' src='medias/icons/modules/vitality.png'></label>
                 </div>
