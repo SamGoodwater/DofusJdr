@@ -1,6 +1,6 @@
 <?php
 
-class Classe extends Content
+class Classe extends Module
 {
     const FECA = "62057f83d450d";
     const OSAMODAS = "62057fc39235f";

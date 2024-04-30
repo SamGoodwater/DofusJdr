@@ -33,11 +33,68 @@ class Mob extends Creature
 
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ ATTRIBUTS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
+        private $_race = null;
         private $_hostility="";
         private $_size=self::SIZE['moyenne'];
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
+        public function getRace(int $format = Content::FORMAT_BRUT){
+            $view = new View();
+            $manager = New Mob_raceManager;
+            $object = null;
+            if(!empty($this->_race)){
+                if($manager->existsUniqid($this->_race)){
+                    $object = $manager->getFromUniqid($this->_race);
+                }
+            }
 
+            switch ($format) {
+                case Content::DISPLAY_EDITABLE:
+                    $races =  $manager->getAll();
+                    $items = [];
+                    if(empty($races)){ return ""; } 
+                    foreach ($races as $race) {
+                        $items[] = [
+                            "onclick" => "Mob.update('".$this->getUniqid()."', '".$race->getUniqid()."', 'race', ".Controller::IS_VALUE.");",
+                            "display" => "<span class='badge back-main-d-2'>" .ucfirst($race->getName())."</span>"
+                        ];
+                    }
+
+                    $label = $this->getRace(Content::FORMAT_BADGE);
+                    if(empty($label)) {$label = "Aucune race associée";}
+                    return $view->dispatch(
+                        template_name : "dropdown",
+                        data : [
+                            "tooltip" => "Race",
+                            "label" => $label,
+                            "size" => Style::SIZE_SM,
+                            "items" => $items,
+                            "is_search" => true
+                        ], 
+                        write: false);
+
+                case Content::FORMAT_OBJECT:
+                    if(empty($object)){return null;}
+
+                    return $object;
+
+                case Content::FORMAT_BADGE:
+                    if(empty($object)){return "";}
+
+                    return $view->dispatch(
+                        template_name : "badge",
+                        data : [
+                            "content" => $object->getName(),
+                            "color" => "main-d-2",
+                            "tooltip" => "Race",
+                            "style" => Style::STYLE_BACK
+                        ], 
+                        write: false);
+
+                default:
+                    return $this->_race;
+            }
+        }
         public function getHostility(int $format = Content::FORMAT_BRUT){
             $view = new View();
             switch ($format) {
@@ -289,7 +346,20 @@ class Mob extends Creature
         }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
-
+        public function setRace(string | int | null $data){
+            $manager = new Mob_raceManager;
+            if(is_object($data)){
+                $data = $data->getUniqid();
+            }
+            if(empty($data)){
+                $data = null;
+            }
+            if(!$manager->existsUniqid($data) && !empty($data)){
+                return false;
+            }
+            $this->_race = $data;
+            return true;
+        }
         public function setHostility(int | null $data){
             if(in_array($data, Mob::HOSTILITY)){
                 $this->_hostility = $data;

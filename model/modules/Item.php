@@ -1,5 +1,5 @@
 <?php
-class Item extends Content
+class Item extends Module
 {
     const FILES = [
         "logo" => [
@@ -26,7 +26,8 @@ class Item extends Content
         "Faux" => Item::TYPE_FAUX,
         "Arbalètes" => Item::TYPE_ARBALETE,
         "Armes magiques" => Item::TYPE_ARME_MAGIQUE,
-        "Chapeaux" => Item::TYPE_CHAPEAU,
+        "Lances" => Item::TYPE_LANCE,
+        "Coiffes" => Item::TYPE_COIFFE,
         "Capes" => Item::TYPE_CAPE,
         "Amulettes" => Item::TYPE_AMULETTE,
         "Anneaux" => Item::TYPE_ANNEAU,
@@ -34,8 +35,13 @@ class Item extends Content
         "Bottes" => Item::TYPE_BOTTES,
         "Boucliers" => Item::TYPE_BOUCLIER,
         "Dofus" => Item::TYPE_DOFUS,       
+        "Trophées" => Item::TYPE_TROPHEE,
         "Familiers" => Item::TYPE_FAMILIER,
-        "Montures" => Item::TYPE_MONTURE
+        "Montures" => Item::TYPE_MONTURE,
+        "Compagnons" => Item::TYPE_COMPAGNON,
+        "Objets vivants" => Item::TYPE_OBJET_VIVANT,
+        "Objets d'apparat" => Item::TYPE_OBJET_APPARAT,
+        "Autres" => Item::TYPE_OTHER
     ];
 
     const TYPE_ARC = 23;
@@ -51,8 +57,9 @@ class Item extends Content
     const TYPE_FAUX = 10;
     const TYPE_ARBALETE = 11;
     const TYPE_ARME_MAGIQUE = 12;
+    const TYPE_LANCE = 24;
 
-    const TYPE_CHAPEAU = 13;
+    const TYPE_COIFFE = 13;
     const TYPE_CAPE = 14;
     const TYPE_AMULETTE = 15;
     const TYPE_ANNEAU = 16;
@@ -60,9 +67,14 @@ class Item extends Content
     const TYPE_BOTTES = 18;
     const TYPE_BOUCLIER = 19;
     const TYPE_DOFUS = 20;
+    const TYPE_TROPHEE = 28;
 
     const TYPE_FAMILIER = 21;
     const TYPE_MONTURE = 22;
+    const TYPE_COMPAGNON = 29;
+    const TYPE_OBJET_VIVANT = 25;
+    const TYPE_OBJET_APPARAT = 26;
+    const TYPE_OTHER = 27;
 
     const RARITY_LIST = [
         "Unique" => 0,
@@ -195,7 +207,7 @@ class Item extends Content
                     return $this->_effect;
             }
         }
-
+        // Les bonus sont stockés sous forme de tableau sérialisé : chaque bonus est composé d'un type et d'une valeur. Le type correspond à une caractéristique de la classe Creature.
         public function getBonus(int $format = Content::FORMAT_BRUT){
             $view = new View();
             $bonus = [];
@@ -665,6 +677,69 @@ class Item extends Content
                     return $estimated_price;
             }       
         }
+        public function getRessource(int $format = Content::FORMAT_BRUT, bool $display_remove = false, $size = 300){
+            $manager = new ItemManager();
+            $ressources = $manager->getLinkRessource($this);
+            
+            switch ($format) {
+                case Content::FORMAT_EDITABLE:
+                    $view = new View();
+                    $html = $view->dispatch(
+                        template_name : "input/search",
+                        data : [
+                            "id" => "addRessource" . $this->getUniqid(),
+                            "title" => "Ajouter une ressource",
+                            "label" => "Rechercher une ressource",
+                            "placeholder" => "Rechercher une ressource",
+                            "search_in" => ControllerModule::SEARCH_IN_RESSOURCE,
+                            "parameter" => $this->getUniqid(),
+                            "action" => ControllerModule::SEARCH_DONE_ADD_RESSOURCE_TO_ITEM,
+                        ], 
+                        write: false);
+
+                    return $html . $this->getRessource(Content::DISPLAY_RESUME, true);
+
+                case Content::DISPLAY_RESUME:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($ressources)){
+                        return $view->dispatch(
+                            template_name : "ressource/list",
+                            data : [
+                                "ressources" => $ressources,
+                                "is_removable" => $display_remove,
+                                "uniqid" => $this->getUniqid(),
+                                "class_name" => "Ressource",
+                                "size" => $size
+                            ], 
+                            write: false);
+                    }
+                    return "";
+
+                case Content::DISPLAY_LIST:
+                    $view = new View(View::TEMPLATE_DISPLAY);
+                    if(!empty($ressources)){
+                        ob_start();
+                            ?> <ul class="list-unstyled"> <?php
+                                foreach ($ressources as $ressource) {?>
+                                    <li>
+                                        <?php $view->dispatch(
+                                            template_name : "ressource/text",
+                                            data : [
+                                                "obj" => $ressource,
+                                                "is_link" => true
+                                            ], 
+                                            write: true); ?>
+                                    </li> <?php
+                                }
+                            ?> </ul> <?php
+                        return ob_get_clean();
+                    }
+                    return "";
+
+                case Content::FORMAT_ARRAY:
+                    return $ressources;
+            }
+        }
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
         public function setName($data){
@@ -718,6 +793,44 @@ class Item extends Content
             } else {
                 $this->_rarity = Item::RARITY_LIST["Très répandu"];
                 throw new Exception("Rareté invalide");
+            }
+        }
+
+        /* Data = array(uniqid => id du ressource)
+            Js : Item.update(UniqidM,{action:'add|remove|update', uniqid:'R', quantity},'ressource', IS_VALUE);
+        */
+        public function setRessource(array $data){ 
+            $manager = new ItemManager;
+            $managerR = new RessourceManager;
+            if(!isset($data['uniqid'])){throw new Exception("L'uniqid de la ressource n'est pas défini");}
+            if($managerR->existsUniqid($data['uniqid'])){
+                $ressource = $managerR->getFromUniqid($data['uniqid']); 
+
+                if(isset($data['action'])){
+                    switch ($data['action']) {
+                        case 'add':
+                            $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
+                            if($manager->addLinkRessource($this, $ressource, $quantity)){
+                                return true;
+                            }else{
+                                throw new Exception("Erreur lors de l'ajout de la ressource");
+                            }
+               
+                        case "remove":
+                            if($manager->removeLinkRessource($this, $ressource)){
+                                return true;
+                            }else{
+                                throw new Exception("Erreur lors de la suppression de la ressource");
+                            }
+
+                        default:
+                            throw new Exception("L'action n'est pas valide");
+                    }
+
+                } else {
+                    throw new Exception("Une action est requise.");
+                }
+
             }
         }
 }

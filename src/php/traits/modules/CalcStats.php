@@ -5,11 +5,14 @@ trait CalcStats
     static function convertLevel($val){
       $val = trim($val);
       if(is_numeric($val)){
-        if($val <= 0){
-          return 0;
-        } else {
-          return round($val / 10);
+        $lvl = round($val / 10);
+        if($lvl > 20){
+          return 20;
         }
+        if($lvl < 1){
+          return 1;
+        }
+        return $lvl;
       } else {
         return -666;
       }  
@@ -18,11 +21,14 @@ trait CalcStats
     static function convertStat($val){
       $val = trim($val);
       if(is_numeric($val)){
-        if($val <= 0){
-          return 0;
-        } else {
-          return round($val / 10);
+        $stats = round($val / 20);
+        if($stats < -5){
+          return -5;
         }
+        if($stats > 8){
+          return 8;
+        }
+        return $stats;
       } else {
         return -666;
       }  
@@ -32,17 +38,20 @@ trait CalcStats
     static function convertIni($val){
       $val = trim($val);
       if(is_numeric($val)){
-        if($val <= 0){
-          return 0;
-        } else {
-          return round($val / 100);
+        $stats = round($val / 200);
+        if($stats < -10){
+          return -10;
         }
+        if($stats > 10){
+          return 10;
+        }
+        return $stats;
       } else {
         return -666;
       }  
     }
   
-    static function convertVitality($val){
+    static function convertLife($val){
       $val = trim($val);
       if(is_numeric($val)){
         if($val <= 0){
@@ -72,30 +81,53 @@ trait CalcStats
     static function convertDodge($val){
       $val = trim($val);
       if(is_numeric($val)){
-        if($val <= 0){
-          return 0;
-        } else {
-          return round($val * 20 / 100);
+        $stats = round($val * 20 / 100);
+        if($stats < -10){
+          return -10;
         }
+        if($stats > 10){
+          return 10;
+        }
+        return $stats;
       } else {
         return -666;
       }  
     }
   
-    // Met un pourcentage de résistance sur un échelle de 5
+    // Met un pourcentage de résistance sur un échelle de 10
     static function convertRes($val){
       $val = trim($val);
       if(is_numeric($val)){
-        if($val <= 0){
-          return 0;
-        } else {
-          return round($val * 5 / 100);
+        $stats = round($val * 10 / 100);
+        if($stats < -15){
+          return -15;
         }
+        if($stats > 15){
+          return 15;
+        }
+        return $stats;
       } else {
         return -666;
       }  
     }
-  
+    
+    // Met un pourcentage de résistance sur un échelle de 10
+    static function convertDamage_fixe($val){
+      $val = trim($val);
+      if(is_numeric($val)){
+        $stats = round($val / 3);
+        if($stats < -10){
+          return -10;
+        }
+        if($stats > 10){
+          return 10;
+        }
+        return $stats;
+      } else {
+        return -666;
+      }  
+    }
+
     // Permet de calculer une expression (exp) en changement les termes par des valeurs [name1 => value1, ...]
     static function calcExp($exp, $vars = []){
         if(!empty($vars)){

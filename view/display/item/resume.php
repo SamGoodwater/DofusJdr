@@ -35,7 +35,7 @@
                 <p class="card-text"><?=$obj->getEffect()?></p>
                 <div class="nav-item-divider back-main-d-1"></div>
                 <p class="card-text"><small class="size-0-9 text-secondary-d-3"><?=$obj->getDescription()?></small></p>
-                <p class="card-text"><small class="text-muted size-0-7 text-grey-d-2"><?=$obj->getRecepe()?></small></p>
+                <div class="card-text"><?=$obj->getRessource(Content::DISPLAY_LIST)?></div>
             </div>
         </div>
     </div>

@@ -102,6 +102,8 @@ class ClasseManager extends Manager
     public function add(Classe $object){
 
         $req = $this->_bdd->prepare('INSERT INTO classe(
+                    official_id,
+                    dofusdb_id,
                     uniqid,
                     timestamp_add,
                     timestamp_updated,
@@ -113,9 +115,12 @@ class ClasseManager extends Manager
                     specificity,
                     weapons_of_choice,
                     trait,
-                    usable
+                    usable,
+                    dofus_version
                    )
             VALUES (
+                    :official_id,
+                    :dofusdb_id,
                     :uniqid,
                     :timestamp_add,
                     :timestamp_updated,
@@ -127,10 +132,13 @@ class ClasseManager extends Manager
                     :specificity,
                     :weapons_of_choice,
                     :trait,
-                    :usable
+                    :usable,
+                    :dofus_version
                 )');
 
         return $req->execute(array(
+            'official_id' => $object->getOfficial_id(),
+            'dofusdb_id' => $object->getDofusdb_id(),
             'uniqid' => $object->getUniqid(),
             'timestamp_add' => $object->getTimestamp_add(),
             'timestamp_updated' => $object->getTimestamp_updated(),
@@ -142,11 +150,14 @@ class ClasseManager extends Manager
             'specificity' => $object->getSpecificity(),
             'weapons_of_choice' => $object->getWeapons_of_choice(),
             'trait' => $object->getTrait(),
-            "usable" => $object->getUsable()
+            "usable" => $object->getUsable(),
+            "dofus_version" => $object->getDofus_version()
         ));
     }
     public function update(Classe $object){
         $req = $this->_bdd->prepare('UPDATE classe SET
+                    official_id=:official_id,
+                    dofusdb_id=:dofusdb_id,
                     uniqid=:uniqid,
                     timestamp_add=:timestamp_add,
                     timestamp_updated=:timestamp_updated,
@@ -158,11 +169,14 @@ class ClasseManager extends Manager
                     specificity=:specificity,
                     weapons_of_choice=:weapons_of_choice,
                     trait=:trait,
-                    usable=:usable
+                    usable=:usable,
+                    dofus_version=:dofus_version
             WHERE id = :id');
 
         return $req->execute(array(
             'id' => $object->getId(),
+            'official_id' => $object->getOfficial_id(),
+            'dofusdb_id' => $object->getDofusdb_id(),
             'uniqid' => $object->getUniqid(),
             'timestamp_add' => $object->getTimestamp_add(),
             'timestamp_updated' => $object->getTimestamp_updated(),
@@ -174,7 +188,8 @@ class ClasseManager extends Manager
             'specificity' => $object->getSpecificity(),
             'weapons_of_choice' => $object->getWeapons_of_choice(),
             'trait' => $object->getTrait(),
-            "usable" => $object->getUsable()
+            "usable" => $object->getUsable(),
+            "dofus_version" => $object->getDofus_version()
         ));
     }
     public function delete(Classe $object){
@@ -183,6 +198,9 @@ class ClasseManager extends Manager
         
         $this->removeAllLinkSpellFromClasse($object);
         $this->removeAllLinkCapabilityFromClasse($object);
+
+        FileManager::remove($object->getFile('img'));
+        FileManager::remove($object->getFile('logo'));
         $req = $this->_bdd->prepare('DELETE FROM classe WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }
@@ -263,7 +281,6 @@ class ClasseManager extends Manager
             "id_spell2"=> $spell2->getId()
         ));
     }
-    
     public function updateLinkSpell(Classe $classe, Spell $spell, Spell $spellNew){
         if(!Content::exist($spell)){$spell->setId(0);}
         if($spell->getId() == $spellNew->getId()){return false;}
@@ -314,7 +331,6 @@ class ClasseManager extends Manager
         $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_spell1 = :id OR id_spell2 = :id');
         return $req->execute(array("id" =>  $spell->getId()));
     }
-
     public function cleanLinkSpell(){
         $req = $this->_bdd->prepare('DELETE FROM link_classe_spell WHERE id_spell1 = 0 AND id_spell2 = 0');
         return $req->execute();

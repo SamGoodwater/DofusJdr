@@ -498,7 +498,7 @@ class Npc extends Creature
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ SETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
 
-        public function setClasse(string$data){
+        public function setClasse(string | int $data){
             $this->_classe = $data;
             return true;
         }

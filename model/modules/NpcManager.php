@@ -559,6 +559,7 @@ class NpcManager extends Manager
         $this->removeAllLinkSpellFromNpc($object);    
         $this->removeAllLinkCapabilityFromNpc($object);    
 
+        FileManager::remove($object->getFile('logo'));
         $req = $this->_bdd->prepare('DELETE FROM npc WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }

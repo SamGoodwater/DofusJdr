@@ -161,6 +161,7 @@ class Router {
                         "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js", // Fancybox
                         "src/js/", // Ini et function
                         "src/js/functions",
+                        "src/js/components",
                         "src/js/modules",
                         "src/js/plugin/upload/",
                         "src/js/ajax/",

@@ -34,12 +34,12 @@
                 
                 if($page->getPublic() || ($currentUser->isConnect() && $currentUser->getRight('page', User::RIGHT_READ))){ ?>
                 
-                    <a href="<?=$page->getUrl_name()?>" onclick="Page.show('<?=$page->getUrl_name()?>'); return false;" data-uniqid="<?=$page->getUniqid()?>" class="menu-item-selector app-nav-item grid">
+                    <a href="<?=$page->getUrl_name()?>" onclick="Page.show('<?=$page->getUrl_name()?>'); return false;" data-uniqid="<?=$page->getUniqid()?>" class="app-nav-item grid">
                         <span><?=$page->getName()?></span>
                     </a>
                     <?php foreach ($manager->getAllFromCategory($page->getUniqid()) as $page_child) { 
                         if($page_child->getPublic() || ($currentUser->isConnect() && $currentUser->getRight('page', User::RIGHT_READ))){ ?>
-                            <a href="<?=$page_child->getUrl_name()?>" onclick="Page.show('<?=$page_child->getUrl_name()?>');return false;" data-uniqid="<?=$page_child->getUniqid()?>" class="menu-item-selector app-nav-item grid">
+                            <a href="<?=$page_child->getUrl_name()?>" onclick="Page.show('<?=$page_child->getUrl_name()?>');return false;" data-uniqid="<?=$page_child->getUniqid()?>" class="app-nav-item grid">
                                 <span class="item-child size-0-9" ><?=$page_child->getName()?></span>
                             </a>
                         <?php }
@@ -57,7 +57,7 @@
     </div>
     <div class="p-2 size-0-7 text-main-d-3 text-center">
         <a onclick="Page.show('cgu');">CGU</a>
-    </div>Z
+    </div>
     <div class="p-2 size-0-8 text-secondary-d-4 text-center">
         <img class="icon-25" src="<?=$GLOBALS['project']['icon']['dice']?>" alt="logo"> <?=$GLOBALS['project']['name']?> version <?=$GLOBALS['project']['stability']?> <?=$GLOBALS['project']['version']?> <?=date("Y");?>
     </div>

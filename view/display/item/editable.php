@@ -36,6 +36,6 @@
     <div class="card-text m-3"><?=$obj->getBonus(Content::FORMAT_EDITABLE);?></div>
     <div class="card-text m-3"><?=$obj->getEffect(Content::FORMAT_EDITABLE);?></div>
     <div class="card-text m-3"><?=$obj->getDescription(Content::FORMAT_EDITABLE);?></div>
-    <div class="card-text m-3"><?=$obj->getRecepe(Content::FORMAT_EDITABLE);?></div>
+    <div class="card-text m-3"><?=$obj->getRessource(Content::FORMAT_EDITABLE);?></div>
     <p class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-animate btn-border-red' onclick="Item.remove('<?=$obj->getUniqid()?>')"><i class="fa-solid fa-trash"></i> Supprimer</a></p>
 </div>

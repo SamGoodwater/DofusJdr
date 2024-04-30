@@ -55,6 +55,13 @@ class ItemManager extends Manager
         if(empty($req)){return "";}
         return new Item($this->securite($req));
     }
+    public function getFromName($name){
+        $post = $this->_bdd->prepare('SELECT * FROM item WHERE name = ?');
+        $post->execute(array($name));
+        $req = $post->fetch(PDO::FETCH_ASSOC);
+        if(empty($req)){return "";}
+        return new Item($this->securite($req));
+    }
     
     public function countAll(bool $usable = false, array $level = array(), array $type = array()){
         $whereClause = ($usable) ? 'WHERE usable = 1' : '';
@@ -146,6 +153,8 @@ class ItemManager extends Manager
 // WRITE
     public function add(Item $item){
         $req = $this->_bdd->prepare('INSERT INTO item(
+                    official_id,
+                    dofusdb_id,
                     uniqid,
                     timestamp_add,
                     timestamp_updated,
@@ -158,9 +167,12 @@ class ItemManager extends Manager
                     recepe,
                     price,
                     rarity,
-                    usable
+                    usable,
+                    dofus_version
                    )
             VALUES (
+                    :official_id,
+                    :dofusdb_id,
                     :uniqid,
                     :timestamp_add,
                     :timestamp_updated,
@@ -173,10 +185,13 @@ class ItemManager extends Manager
                     :recepe,
                     :price,
                     :rarity,
-                    :usable
+                    :usable,
+                    :dofus_version
                 )');
 
-        return $req->execute(array(
+        if($req->execute(array(
+            'official_id' => $item->getOfficial_id(),
+            'dofusdb_id' => $item->getDofusdb_id(),
             'uniqid' => $item->getUniqid(),
             'timestamp_add' => $item->getTimestamp_add(),
             'timestamp_updated' => $item->getTimestamp_updated(),
@@ -189,11 +204,18 @@ class ItemManager extends Manager
             'recepe' => $item->getRecepe(),
             'price' => $item->getPrice(),
             "rarity" => $item->getRarity(),
-            "usable" => $item->getUsable()
-        ));
+            "usable" => $item->getUsable(),
+            "dofus_version" => $item->getDofus_version()
+        ))) {
+            return $this->_bdd->lastInsertId();
+        } else {
+            return false;
+        }
     }
     public function update(Item $item){
         $req = $this->_bdd->prepare('UPDATE item SET
+                    official_id=:official_id,
+                    dofusdb_id=:dofusdb_id,
                     uniqid=:uniqid,
                     timestamp_add=:timestamp_add,
                     timestamp_updated=:timestamp_updated,
@@ -206,11 +228,14 @@ class ItemManager extends Manager
                     recepe=:recepe,
                     price=:price,
                     rarity=:rarity,
-                    usable=:usable
+                    usable=:usable,
+                    dofus_version=:dofus_version
             WHERE id = :id');
 
         return $req->execute(array(
             'id' => $item->getId(),
+            'official_id' => $item->getOfficial_id(),
+            'dofusdb_id' => $item->getDofusdb_id(),
             'uniqid' => $item->getUniqid(),
             'timestamp_add' => $item->getTimestamp_add(),
             'timestamp_updated' => $item->getTimestamp_updated(),
@@ -223,15 +248,74 @@ class ItemManager extends Manager
             'recepe' => $item->getRecepe(),
             'price' => $item->getPrice(),
             "rarity" => $item->getRarity(),
-            "usable" => $item->getUsable()
+            "usable" => $item->getUsable(),
+            "dofus_version" => $item->getDofus_version()
             ));
     }
     public function delete(Item $object){
         $managerUser = new UserManager();
         $managerUser->removeBookmarkFromObj($object);
 
+        FileManager::remove($object->getFile('logo'));
         $req = $this->_bdd->prepare('DELETE FROM item WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
+    }
+
+// Link Ressource
+    public function getLinkRessource(Item $item){
+        $req = $this->_bdd->prepare('   SELECT *, link_item_ressource.id AS link_id 
+                                        FROM link_item_ressource
+                                        INNER JOIN ressource ON link_item_ressource.id_ressource = ressource.id
+                                        WHERE id_item = ?
+                                        ORDER BY item.level ASC');
+        $req->execute(array($item->getId()));
+        $ret = $req->fetchAll(PDO::FETCH_ASSOC);
+        if(empty($ret)){return "";}
+        $return = array();
+        foreach ($ret as $link) {
+            $return[] = new Capability($this->securite($link));
+        }
+        return $return;
+    }
+    public function existsLinkRessource(Item $item, Ressource $ressource){
+        $req = $this->_bdd->prepare('SELECT id FROM link_item_ressource WHERE id_item = ? AND id_ressource = ?');
+        $req->execute(array($item->getId(), $ressource->getId()));
+        return $req->rowCount();
+    }
+    public function addLinkRessource(Item $item, Ressource $ressource, $quantity = 1){
+        if($this->existsLinkRessource($item, $ressource)){return false;}
+        $req = $this->_bdd->prepare('INSERT INTO link_item_ressource(
+                    id_item,
+                    id_ressource,
+                    quantity
+                )
+            VALUES (
+                    :id_item,
+                    :id_ressource,
+                    :quantity
+                )');
+
+        return $req->execute(array(
+            "id_item" => $item->getId(),
+            "id_ressource"=> $ressource->getId(),
+            "quantity" => $quantity
+        ));
+
+        // Renvoi le dernier ingredient ajouté
+        $post = $this->_bdd->prepare('SELECT id FROM link_item_ressource ORDER BY id DESC LIMIT 1');
+        return $post->execute();
+    }
+    public function removeLinkRessource(Item $item, Ressource $ressource){
+        $req = $this->_bdd->prepare('DELETE FROM link_item_ressource WHERE id_item = :id_item AND id_ressource = :id_ressource');
+        return $req->execute(array("id_item" =>  $item->getId(), "id_ressource" =>  $ressource->getId()));
+    }
+    public function removeAllLinkRessourceFromItem(Item $item){
+        $req = $this->_bdd->prepare('DELETE FROM link_item_ressource WHERE id_item = :id');
+        return $req->execute(array("id" =>  $item->getId()));
+    }
+    public function removeAllLinkRessourceFromRessource(Ressource $ressource){
+        $req = $this->_bdd->prepare('DELETE FROM link_item_ressource WHERE id_ressource = :id');
+        return $req->execute(array("id" =>  $ressource->getId()));
     }
 
 // OTHER

@@ -1,5 +1,9 @@
 const VERBAL_MODE = true;
 
+const BREAKPOINT_TABLET = 1024;
+const BREAKPOINT_MOBILE = 768;
+const BREAKPOINT_TINY_MOBILE_SMALL = 430;
+
 const IS_INPUT = 0;
 const IS_VALUE = 1;
 const IS_CHECKBOX = 2;
@@ -26,16 +30,7 @@ const FORMAT_PATH = 9;
 const FORMAT_LINK = 10;
 
 window.addEventListener("load", () => {
-	document.querySelector(".loading-container").classList.add("loading-animation-end");
-
-
-    $(window).resize(function() {
-        if ($(window).width() < 992) {
-            $(".app").addClass("app-compacted");
-        } else {
-            $(".app").removeClass("app-compacted");
-        }
-    });
+	closeLoadingContainer();
 
 	// Ce code permet de détecter si des touches sont enfoncés et de jouer des fonctions.
 	let keys = {};
@@ -52,7 +47,6 @@ window.addEventListener("load", () => {
 		}
 	});
 
-	
 	const modal = document.getElementById('modal');
 	modal.addEventListener('show.bs.modal', event => {
 		let width = "600";
@@ -141,6 +135,8 @@ window.addEventListener("load", () => {
 		cursor: "move",
 		handle: ".modal-header",
 	});
+
+	initInterface();
 })
 
 function init() {
@@ -178,29 +174,10 @@ function init() {
 	
 }
 
-function eventManager() {
-	if(VERBAL_MODE) {
-		console.log('Initialisation des événements');	
-	}
-	// Select all elements with data-event-trigger="mouseover"
-	const elements = document.querySelectorAll('[data-event-trigger="mouseover"]');
-
-	// Loop through each element
-	elements.forEach(element => {
-		// Check if the element already has a mouseover event
-		if (!element.onmouseover) {
-			// Add a mouseover event to the element
-			element.addEventListener('mouseover', function(event) {
-				switch (element.getAttribute('data-event-type')) {
-					case 'tooltips':
-						showTooltips(element);
-					break;
-				
-					default:
-						console.log('data-event-type not found');
-					break;
-				}
-			});
-		}
-	});
+function closeLoadingContainer(){
+	const loading_container = document.querySelector('.loading-container');
+	loading_container.classList.add("loading-animation--end");
+	setTimeout(() => {
+		loading_container.remove();
+	}, 500);
 }

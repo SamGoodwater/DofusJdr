@@ -24,7 +24,7 @@
                     <div class="mx-2"><?=$obj->getElement(Content::FORMAT_BADGE)?></div>
                 </div>
                 <div class="row justify-content-between">
-                    <div class="col-auto">
+                    <div class="col-auto d-flex justify-content-between gap-1">
                         <div><?=$obj->getPa(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getTime_before_use_again(Content::FORMAT_BADGE)?></div>
                         <div><?=$obj->getCasting_time(Content::FORMAT_BADGE)?></div>

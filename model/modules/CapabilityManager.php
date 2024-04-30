@@ -252,6 +252,8 @@ class CapabilityManager extends Manager
         $managerUser = new UserManager();
         $managerUser->removeBookmarkFromObj($object);
         $this->removeAllLinkSpecializationFromCapability($object);
+
+        FileManager::remove($object->getFile('logo'));
         $req = $this->_bdd->prepare('DELETE FROM capability WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }

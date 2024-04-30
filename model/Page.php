@@ -121,6 +121,27 @@ class Page extends Content
                     ob_start(); ?>
                         <div class="sortablebis">
 
+                            <?php if(count($this->getSection()) > 1){ ?>
+                                <nav class="page-navigation" title="Cliquer pour voir les sections de la page et y naviguer facilement.">
+                                    <div class="page-navigation__top">
+                                        <!-- <div> -->
+                                            <p class="page-navigation__top__select-item"></p>
+                                            <p class="page-navigation__top__text">Plan de la page</p>
+                                        <!-- </div> -->
+                                        <button class="page-navigation__top__toggle"><i class="fa-solid fa-ellipsis"></i></button>
+                                    </div>
+                                    <ul class="page-navigation__menu">
+                                        <?php foreach ($this->getSection() as $section) { ?>
+                                            <li class="page-navigation__menu__item">
+                                                <a class="page-navigation__menu__item__link" href="#section<?=$section->getUniqid()?>">
+                                                    <span class="page-navigation__menu__item__link__text"><?=$section->getName()?></span>
+                                                </a>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                </nav>
+                            <?php } ?>
+
                             <?php if(empty($this->getSection())){ ?>
                                 <p>La page est vide <i class="fa-solid fa-sad-tear"></i></p>
                                 <p><a data-bs-toggle="collapse" onclick="Section.getVisual('<?=$this->getUniqid()?>', true);">Ajouter une section pour commencer.</a></p>
@@ -162,6 +183,26 @@ class Page extends Content
                 
                 default:
                     ob_start(); ?>
+
+                        <?php if(count($this->getSection()) > 1){ ?>
+                            <nav class="page-navigation" title="Cliquer pour voir les sections de la page et y naviguer facilement.">
+                                <p class="page-navigation__text">Plan de la page</p>
+                                <button class="page-navigation__toggle">
+                                    <span class="page-navigation__toggle__icon"></span>
+                                    <span class="page-navigation__toggle__icon"></span>
+                                    <span class="page-navigation__toggle__icon"></span>
+                                </button>
+                                <ul class="page-navigation__menu">
+                                    <?php foreach ($this->getSection() as $section) { ?>
+                                        <li class="page-navigation__menu__item">
+                                            <a class="page-navigation__menu__item__link" href="#section<?=$section->getUniqid()?>">
+                                                <span class="page-navigation__menu__item__link__text"><?=$section->getName()?></span>
+                                            </a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </nav>
+                        <?php } ?>
 
                         <?php foreach ($this->getSection() as $section__) { ?>
                             <?= $section__->getVisual(); ?>        

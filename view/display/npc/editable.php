@@ -18,7 +18,7 @@
             <h6 class="text-center">Classe</h6>
             <?=$obj->getClasse(Content::FORMAT_OBJECT)->getVisual(new Style(["display" => Content::DISPLAY_EDITABLE]))?>
             <p class="mt-4 text-center"><a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='btn btn-sm btn-animate btn-border-red' target='_blank' href='index.php?c=npc&a=getPdf&uniqid=<?=$obj->getUniqid()?>'><i class='fa-solid fa-file-pdf'></i> Générer un pdf</a></p>
-        </div>
+        </div>E
         <div class="col ms-4">
             <div class="d-flex justify-content-between align-items-baseline">
                 <p class="text-center"><?=$obj->getLevel(Content::DISPLAY_EDITABLE)?></p>

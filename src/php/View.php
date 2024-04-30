@@ -149,7 +149,7 @@ class View {
         }
         static function shortcutDispatch(string $template_type = self::TEMPLATE_SNIPPET, string $template_name = null, array $data = null, array $attributes = null, bool $write = true) {
             $view = new View($template_type);
-            $view->dispatch($template_name, $data, $attributes, $write);
+            return $view->dispatch($template_name, $data, $attributes, $write);
         }
 
         private function getAttributeString(array $attributes) {

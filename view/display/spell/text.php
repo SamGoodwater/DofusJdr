@@ -14,7 +14,7 @@
     if($is_link){
         $onclick = "ondblclick=\"Spell.open('".$obj->getUniqid()."');\"";
         if($in_competition){
-            $onclick2 = "ondblclick=\"Spell.open('".$obj2->getUniqid()."');\"";
+            $onclick2 = "ondblclick=\"ESpell.open('".$obj2->getUniqid()."');\"";
         }
     }    
 
@@ -22,7 +22,7 @@
 
     if(Content::exist($obj)){
         ob_start(); ?>
-            <p data-event-trigger="mouseover" data-event-type="tooltips" data-event-target="#spell<?=$obj->getUniqid()?>" onmouseover="showTooltips(this);" <?=$onclick?>>
+            <p class="text_resume_tooltops-show" data-target="#spell<?=$obj->getUniqid()?>"  <?=$onclick?>>
                 <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, "class" => "pe-1"]))?><span <?php if($in_competition){echo "class='competition_name'"; }?>><?=$obj->getName()?></span>
             </p>
         <?php $spell1_text = ob_get_clean();
@@ -47,6 +47,7 @@
                                 <?=$obj->getPo(Content::FORMAT_ICON)?> 
                                 <?=$obj->getSight_line(Content::FORMAT_ICON)?> 
                                 <?=$obj->getFrequency(Content::FORMAT_BADGE)?>
+                                <?=$obj->getArea(Content::FORMAT_BADGE)?>
                             </p>
                         </div>
                     </div>
@@ -72,7 +73,7 @@
     if($in_competition){
         if(Content::exist($obj2)){
             ob_start(); ?>
-                <p data-event-trigger="mouseover" data-event-type="tooltips" data-event-target="#spell<?=$obj->getUniqid()?>" onmouseover="showTooltips(this);" <?=$onclick2?>>
+                <p class="text_resume_tooltops-show" data-target="#spell<?=$obj2->getUniqid()?>"  <?=$onclick2?>>
                     <?=$obj2->getFile('logo', new Style(['format' => Content::FORMAT_ICON, "class" => "ps-1"]))?><span class="competition_name"><?=$obj2->getName()?></span>
                 </p>
             <?php $spell2_text = ob_get_clean();

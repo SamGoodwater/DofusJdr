@@ -4,19 +4,17 @@
     if(!isset($spell)) {throw new Exception("spell is not set");}else{if(get_class($spell) != "Spell") {throw new Exception("spell is not set");}}
 ?>    
 
-<div id="effects_array_tabs<?=$spell->getUniqid()?>">
+<div id="effects_array_tabs<?=$spell->getUniqid()?>" class="effects_array_tabs">
     <ul>
         <?php foreach ($propsSortByLevelAndType as $lvl => $val) { ?>
-            <li><a href="#effects_array_tabs-<?=$lvl?>">Niveau <?=$lvl?></a></li>
+            <li class="btn btn-sm btn-back-main btn-animate"><a href="#effects_array_tabs-<?=$lvl?>">Niveau <?=$lvl?></a></li>
         <?php } ?>
     </ul>
     <div class="effects_arrays_container_tab">
         <?php foreach ($propsSortByLevelAndType as $lvl => $props) { ?>
             <div id="effects_array_tabs-<?=$lvl?>" class="effects_arrays_tab">
                 <?php foreach ($props as $type => $prop_html) {
-                    ?> <div class="effects_array_prop">
-                        <?=$prop_html?>
-                    </div><?php
+                    echo $prop_html;
                 } ?>
             </div>
         <?php } ?>

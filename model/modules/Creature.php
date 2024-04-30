@@ -2,7 +2,7 @@
 
 use Dompdf\Css\Color;
 
-abstract class Creature extends Content
+abstract class Creature extends Module
 {
     protected const VERBAL_NAME_OF_CLASSE = "de la créature";
 
@@ -8791,7 +8791,7 @@ abstract class Creature extends Content
 
     // AUTRES FONCTIONS
         static function distribCaractericticsPoints(int $pointsTotals = 1, int $level = 1, array $caracteristicsFillingOrder = []) {
-            $caracteristics = ['strong', 'intel', 'agi', 'chance','vitality', 'sagesse'];
+            $caracteristics = ['force', 'intel', 'agi', 'chance','vitality', 'sagesse'];
 
             foreach ($caracteristics as $caracteristic) {
                 if (!in_array($caracteristic, $caracteristicsFillingOrder)) {
@@ -8800,7 +8800,7 @@ abstract class Creature extends Content
             }
 
             $result = [
-                'strong' =>  Creature::BALANCE_CARACTERISTICS_MAIN['classe']['base'],
+                'force' =>  Creature::BALANCE_CARACTERISTICS_MAIN['classe']['base'],
                 'vitality' =>  Creature::BALANCE_CARACTERISTICS_MAIN['classe']['base'],
                 'sagesse' =>  Creature::BALANCE_CARACTERISTICS_MAIN['classe']['base'],
                 'intel' =>  Creature::BALANCE_CARACTERISTICS_MAIN['classe']['base'],

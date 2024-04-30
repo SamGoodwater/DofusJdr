@@ -14,6 +14,8 @@ abstract class ControllerModule extends Controller{
         public const SEARCH_IN_CONSUMABLE = 8;
         public const SEARCH_IN_CAPABILITY = 9;
         public const SEARCH_IN_SOCIAL = 10;
+        public const SEARCH_IN_MOB_RACE = 11;
+        public const SEARCH_IN_RESSOURCE = 12;
 
         public const SELECT_CONTROLLER_FROM_SEARCH_IN = [
             self::SEARCH_IN_ALL => [
@@ -26,7 +28,9 @@ abstract class ControllerModule extends Controller{
                 "shop",
                 "spell",
                 "capability",
-                "social"
+                // "social",
+                "mob_race",
+                "ressource"
             ],
             self::SEARCH_IN_SECTION => [
                 "section"
@@ -60,6 +64,12 @@ abstract class ControllerModule extends Controller{
             ],
             self::SEARCH_IN_SOCIAL => [
                 "social"
+            ],
+            self::SEARCH_IN_MOB_RACE => [
+                "mob_race"
+            ],
+            self::SEARCH_IN_RESSOURCE => [
+                "ressource"
             ]
         ];
     
@@ -78,4 +88,5 @@ abstract class ControllerModule extends Controller{
         public const SEARCH_DONE_ADD_CAPABILITY_TO_MOB = 12;
         public const SEARCH_DONE_GET_CAPABILITY = 13;
         public const SEARCH_DONE_ADD_TO_BOOKMARK = 14;
+        public const SEARCH_DONE_ADD_RESSOURCE_TO_ITEM = 15;
 }

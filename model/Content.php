@@ -178,6 +178,7 @@ abstract class Content
                 return $this->_id;
         }
     }
+
     public function getUniqid(){
         return $this->_uniqid;
     }

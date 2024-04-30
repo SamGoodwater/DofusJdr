@@ -23,6 +23,7 @@
                     <p class="bold ms-1"><?=$obj->getName()?></p>
                     <div class="d-flex flex-wrap justify-content-around align-items-baseline">
                         <p class="mt-1 text-level short-badge-150"><?=$obj->getLevel(Content::FORMAT_BADGE)?></p> 
+                        <p class="mt-1 short-badge-100"><?=$obj->getRace(Content::FORMAT_BADGE)?></p>
                         <p class="mt-1 short-badge-100"><?=$obj->getHostility(Content::FORMAT_BADGE)?></p>
                     </div>
                 </div>

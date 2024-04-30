@@ -22,7 +22,7 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <style type="text/css">
             * {
-                font-family: Roboto !important;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
             }
             header,
 			footer {

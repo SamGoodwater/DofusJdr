@@ -8,100 +8,26 @@
     if(!isset($style)){ $style = new Style; }else{ if(!get_class($style) == "Style"){ $style = new Style; } }
 ?>
 
-<div class="card mb-3">
-    <div class="row g-0">
-        <div class="col-auto selector-image-main">
-            <?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_EDITABLE, "class" => "img-back-200"]))?>
-            <div class="text-center mt-2">
-                <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
-                <?=$obj->getHostility(Content::DISPLAY_EDITABLE)?>
-                <?=$obj->getSize(Content::DISPLAY_EDITABLE)?>
-            </div>
-        </div>
-        <div class="col">
-                <div class="d-flex justify-content-between">
-                    <a class="text-grey-d-3" data-bs-toggle="collapse" href="#collapse<?=$obj->getUniqid()?>" role="button" aria-expanded="false" aria-controls="collapseExample">Comment calculer les caractéristiques ?</a>
-                    <?=$obj->getUsable(Content::DISPLAY_EDITABLE)?>
-                </div>
-                <div class="collapse mb-2 size-0-9 text-grey-d-1" id="collapse<?=$obj->getUniqid()?>">
-                    <p>
-                        Certaines caractéristiques découlent des autres caractéristiques notamment du niveau de la créature.<br>
-                        Pour les calculer, les formules sont indiqués sous la forme suivant [n * + / ou - caractéristique].
-                    </p>
-                    <ul class="size-0-9 text-grey-d-1">
-                        <li>n est nombre entier</li>
-                        <li>L'opérateur est * ou / pour les mutiplications ou divisions et + ou - pour les additions ou soustractions</li>
-                        <li>La caractéristique fait référence à la valeur d'une autre caractéristique.</li>
-                    </ul>
-                    <p>
-                        Lorsque le résultat n'est pas un nombre entier, il faut troncaturer le résultat, c'est à dire arrondir à l'inférieur.
-                        Par exemple, si pour les PM de la créature la formule est [niveau / 3] et le niveau est 11, alors le résultat sera 11/3 = 3,66, soit 3 PM.
-                    </p>
-                </div>
-
-                <div class="row">
-                    <div class="col-auto">
-                        <?=$obj->getLevel(Content::DISPLAY_EDITABLE)?>
-                        <?=$obj->getIni(Content::DISPLAY_EDITABLE)?>
-                        <?=$obj->getLife(Content::DISPLAY_EDITABLE)?>
-                        <?=$obj->getPa(Content::DISPLAY_EDITABLE)?>
-                        <?=$obj->getPm(Content::DISPLAY_EDITABLE)?>
-                        <?=$obj->getPo(Content::DISPLAY_EDITABLE)?>
-                        <?=$obj->getTouch(Content::DISPLAY_EDITABLE)?>
-                    </div>  
-                    <div class="col-auto">
-                        <?=$obj->getVitality(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getSagesse(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getStrong(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getIntel(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getAgi(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getChance(Content::DISPLAY_EDITABLE);?>
-                    </div>   
-                    <div class="col-auto">
-                        <?=$obj->getCa(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getFuite(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getTacle(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getDodge_pa(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getDodge_pm(Content::DISPLAY_EDITABLE);?>
-                    </div> 
-                    <div class="col-auto">
-                        <?=$obj->getRes_neutre(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getRes_terre(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getRes_feu(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getRes_air(Content::DISPLAY_EDITABLE);?>
-                        <?=$obj->getRes_eau(Content::DISPLAY_EDITABLE);?>
-                    </div>            
-                </div>
-                <div class="nav-item-divider back-main-d-1"></div>
-
-            </div>
-        </div>
-    </div>
-    <div class="card-text my-2"><?=$obj->getTrait(Content::DISPLAY_EDITABLE);?></div>
-    <div class="card-text my-2"><?=$obj->getDescription(Content::DISPLAY_EDITABLE);?></div>
-    <div class="card-text my-2"><?=$obj->getLocation(Content::DISPLAY_EDITABLE);?></div>
-    <div class="card-text my-2"><?=$obj->getSpell(Content::DISPLAY_EDITABLE)?></div>
-    <div class="card-text my-2"><?=$obj->getCapability(Content::DISPLAY_EDITABLE)?></div>
-    <div class="text-right font-size-0-8 m-1"><a class='btn btn-sm btn-animate btn-border-red' onclick="Mob.remove('<?=$obj->getUniqid()?>')"><i class="fa-solid fa-trash"></i> Supprimer</a></p>
-</div>
-
-
-
 <div class="card mb-3" id="mob<?=$obj->getUniqid()?>">
     <div class="d-flex flex-row justify-content-between align-items-start m-2">
         <div class="selector-image-main"><?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_EDITABLE, "class" => "img-back-200"]))?></div>
         <div>
             <div class="d-flex justify-content-between align-items-baseline">
-                <h4><?=$obj->getName(Content::FORMAT_EDITABLE)?></h4>
-                <p class="text-center"><?=$obj->getLevel(Content::FORMAT_EDITABLE)?></p>
-                <p>
+                <div class="col-auto gap-2">
+                    <h4><?=$obj->getName(Content::FORMAT_EDITABLE)?></h4>
+                    <p class="text-center"><?=$obj->getLevel(Content::FORMAT_EDITABLE)?></p>
+                </div>
+                <div class="col-auto gap-2">
                     <?=$obj->getPowerful(Content::FORMAT_BADGE);?>
                     <?=$obj->getSize(Content::FORMAT_EDITABLE);?>
+                </div>
+                <div class="col-auto gap-2">
                     <?=$obj->getHostility(Content::FORMAT_EDITABLE);?>
-                    <?=$obj->getTrait(Content::FORMAT_EDITABLE);?>
-                </p>
+                    <?=$obj->getRace(Content::FORMAT_EDITABLE);?>
+                </div>
             </div>
         </div>
+        <?=$obj->getTrait(Content::FORMAT_EDITABLE);?>
     </div>
     <div class="card-body">
         <div class="nav-item-divider back-main-l-3 m-0"></div>

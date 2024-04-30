@@ -10,7 +10,7 @@
     }    
 ?>
 
-<p data-event-trigger="mouseover" data-event-type="tooltips" data-event-target="#mob<?=$obj->getUniqid()?>" onmouseover="showTooltips(this);" <?=$onclick?>>
+<p class="text_resume_tooltops-show" data-target="#mob<?=$obj->getUniqid()?>"  <?=$onclick?>>
     <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'class' => "pe-1"]))?><?=$obj->getName()?>
 </p>
 <div id="mob<?=$obj->getUniqid()?>" class="size-0-8"  style="display:none;">
@@ -24,6 +24,7 @@
                 <p class="mt-1 text-level short-badge-150"><?=$obj->getLevel(Content::FORMAT_BADGE)?></p> 
                 <div class="mt-1 mx-2"> <?=$obj->getPowerful(Content::FORMAT_ICON)?></div>
                 <p class="mt-1 short-badge-100"><?=$obj->getHostility(Content::FORMAT_BADGE)?></p>
+                <?=$obj->getRace(Content::FORMAT_BADGE);?>
             </div>
         </div>
     </div>

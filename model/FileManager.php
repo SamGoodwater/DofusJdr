@@ -171,6 +171,7 @@ class FileManager extends Manager{
             "jpg",
             "gif",
             "jpg",
+            "webp",
             'svg', 
             'bmp',
             'tif',
@@ -552,7 +553,7 @@ class FileManager extends Manager{
                 return false;
             }
         }
-        static function remove(string $path, bool $removeRoot = true){ // supprimer un fichier et un dossier avec son contenu. RemoveRoot permet de supprimer ou non le dossier racine
+        static function remove(string $path, bool $removeRoot = true, bool $removeThumbnail = true){ // supprimer un fichier et un dossier avec son contenu. RemoveRoot permet de supprimer ou non le dossier racine
             if(file_exists($path)){
 
                 if(is_dir($path)){
@@ -561,21 +562,28 @@ class FileManager extends Manager{
                     foreach (scandir($dir) as $file) {
                         if($file != '.' && $file != '..'){
                             if(is_dir($dir . $file)){
-                                if(!FileManager::remove($dir . $file . '/')){return false;}
+                                if(!FileManager::remove($dir . $file . '/', true, true)){return false;}
                             } else {
                                 if(!unlink($dir . $file)){return false;}
+                                if($removeThumbnail){
+                                    self::removeThumbnail(new File($dir . $file));
+                                }
                             }
                         }
                     }
                     if($removeRoot){
                         if(!rmdir($dir)){return false;}
                     }
+
                     return true;
 
                 } elseif(is_file($path)) {
 
                     if(!unlink($path)){
                         return false;
+                    }
+                    if($removeThumbnail){
+                        self::removeThumbnail(new File($path));
                     }
                     return true;
                     
@@ -741,6 +749,6 @@ class FileManager extends Manager{
                         return false;
                     }
                 }
-                return FileManager::remove(path:$file->getPath(), removeRoot:false);
+                return FileManager::remove(path:$file->getPath(), removeRoot:false, removeThumbnail:false);
             }
 }

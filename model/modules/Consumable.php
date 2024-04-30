@@ -1,5 +1,5 @@
 <?php
-class Consumable extends Content
+class Consumable extends Module
 {
 
     const TYPE_POTION = 1;
@@ -7,13 +7,19 @@ class Consumable extends Content
     const TYPE_FOOD = 3;
     const TYPE_PARCHMENT = 4;
     const TYPE_STONE= 5;
+    const TYPE_DRINKS= 6;
+    const TYPE_MODIFIER= 7;
+    const TYPE_OTHER = 8;
 
     const TYPES = [
         "nourriture" => Consumable::TYPE_FOOD,
         "potion" => Consumable::TYPE_POTION,
         "confiserie" => Consumable::TYPE_TREAT,
         "parchemin" => Consumable::TYPE_PARCHMENT,
-        "pierre" => Consumable::TYPE_STONE
+        "Rune" => Consumable::TYPE_STONE,
+        "boisson" => Consumable::TYPE_DRINKS,
+        "modificateur" => Consumable::TYPE_MODIFIER,
+        "autre" => Consumable::TYPE_OTHER
     ];
 
     const FILES = [

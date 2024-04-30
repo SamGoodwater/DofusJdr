@@ -56,6 +56,13 @@ class ConsumableManager extends Manager
         if(empty($req)){return "";}
         return new Consumable($this->securite($req));
     }
+    public function getFromName($name){
+        $post = $this->_bdd->prepare('SELECT * FROM consumable WHERE name = ?');
+        $post->execute(array($name));
+        $req = $post->fetch(PDO::FETCH_ASSOC);
+        if(empty($req)){return "";}
+        return new Consumable($this->securite($req));
+    }
 
     public function countAll(bool $usable = false, array $level = array(), array $type = array()){
         $whereClause = ($usable) ? 'WHERE usable = 1' : '';
@@ -136,6 +143,8 @@ class ConsumableManager extends Manager
 // WRITE
     public function add(Consumable $object){
         $req = $this->_bdd->prepare('INSERT INTO consumable(
+                    official_id,
+                    dofusdb_id,
                     uniqid,
                     timestamp_add,
                     timestamp_updated,
@@ -147,9 +156,12 @@ class ConsumableManager extends Manager
                     recepe,
                     price,
                     rarity,
-                    usable
+                    usable,
+                    dofus_version
                    )
             VALUES (
+                    :official_id,
+                    :dofusdb_id,
                     :uniqid,
                     :timestamp_add,
                     :timestamp_updated,
@@ -161,10 +173,13 @@ class ConsumableManager extends Manager
                     :recepe,
                     :price,
                     :rarity,
-                    :usable
+                    :usable,
+                    :dofus_version
                 )');
 
         return $req->execute(array(
+            'official_id' => $object->getOfficial_id(),
+            'dofusdb_id' => $object->getDofusdb_id(),
             'uniqid' => $object->getUniqid(),
             'timestamp_add' => $object->getTimestamp_add(),
             'timestamp_updated' => $object->getTimestamp_updated(),
@@ -176,11 +191,14 @@ class ConsumableManager extends Manager
             'recepe' => $object->getRecepe(),
             'price' => $object->getPrice(),
             "rarity" => $object->getRarity(),
-            "usable" => $object->getUsable()
+            "usable" => $object->getUsable(),
+            "dofus_version" => $object->getDofus_version()
         ));
     }
     public function update(Consumable $object){
         $req = $this->_bdd->prepare('UPDATE consumable SET
+                    official_id=:official_id,
+                    dofusdb_id=:dofusdb_id,
                     uniqid=:uniqid,
                     timestamp_add=:timestamp_add,
                     timestamp_updated=:timestamp_updated,
@@ -192,11 +210,14 @@ class ConsumableManager extends Manager
                     recepe=:recepe,
                     price=:price,
                     rarity=:rarity,
-                    usable=:usable
+                    usable=:usable,
+                    dofus_version=:dofus_version
             WHERE id = :id');
 
         return $req->execute(array(
             'id' => $object->getId(),
+            'official_id' => $object->getOfficial_id(),
+            'dofusdb_id' => $object->getDofusdb_id(),
             'uniqid' => $object->getUniqid(),
             'timestamp_add' => $object->getTimestamp_add(),
             'timestamp_updated' => $object->getTimestamp_updated(),
@@ -208,13 +229,15 @@ class ConsumableManager extends Manager
             'recepe' => $object->getRecepe(),
             'price' => $object->getPrice(),
             "rarity" => $object->getRarity(),
-            "usable" => $object->getUsable()
+            "usable" => $object->getUsable(),
+            "dofus_version" => $object->getDofus_version()
             ));
     }
     public function delete(Consumable $object){
         $managerUser = new UserManager();
         $managerUser->removeBookmarkFromObj($object);
         
+        FileManager::remove($object->getFile('logo'));
         $req = $this->_bdd->prepare('DELETE FROM consumable WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }

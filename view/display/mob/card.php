@@ -12,11 +12,19 @@
     <div class="d-flex flex-row justify-content-between align-items-center m-2">
         <div class="selector-image-main"><?=$obj->getFile('logo',new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-120"]));?></div>
         <div class="d-flex justify-content-between align-items-baseline gap-2">
-            <?=$obj->getLevel(Content::FORMAT_LIST)?>
-            <?=$obj->getPowerful(Content::FORMAT_BADGE);?>
-            <?=$obj->getSize(Content::FORMAT_BADGE);?>
-            <?=$obj->getHostility(Content::FORMAT_BADGE);?>
-            <?=$obj->getTrait(Content::FORMAT_BADGE);?>
+            <div class="col-auto">
+                <?=$obj->getLevel(Content::FORMAT_LIST)?>
+                <?=$obj->getRace(Content::FORMAT_BADGE)?>
+                <?=$obj->getPowerful(Content::FORMAT_BADGE);?>
+            </div>
+            <div class="col-auto">
+                <?=$obj->getSize(Content::FORMAT_BADGE);?>
+                <?=$obj->getRace(Content::FORMAT_BADGE);?>
+                <?=$obj->getHostility(Content::FORMAT_BADGE);?>
+            </div>
+            <div class="col-auto">
+                <?=$obj->getTrait(Content::FORMAT_BADGE);?>
+            </div>
         </div>
         <div class="m-2 m-2 align-self-start">
             <?php if($user->getRight('mob', User::RIGHT_WRITE)){ ?>

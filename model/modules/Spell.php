@@ -2,7 +2,7 @@
 
 use function PHPUnit\Framework\isJson;
 
-class Spell extends Content
+class Spell extends Module
 {
     const EXPRESSION_CAC = ["1","0", "1,5", "1.5", "1,5m", "1.5m", "1m5", "1 mètre 5", "1 mètre 50", "1m50", "1mètre 50", "1mètre 5"];
     const FILES = [
@@ -146,7 +146,7 @@ class Spell extends Content
         "Sort consommable" => self::CATEGORY_CONSUMABLE
     ];
 
-    const PATH_ICON_AREA = "medias/icons/modules/spell_zone/";
+    const PATH_ICON_AREA = "icons/modules/spell_zone/";
     const AREA = [
         0 => [
             "name" => "Pas de cible",
@@ -159,6 +159,18 @@ class Spell extends Content
             "description" => "Le sort doit cibler une créature pour être lancé.",
             "size" => "1x1",
             "icon" => self::PATH_ICON_AREA . "targeted.svg"
+        ],
+        50 => [
+            "name" => "Au corps à corps",
+            "description" => "Le sort affecte toutes les créatures présentes au corps à corps d'une cible.",
+            "size" => "3x3",
+            "icon" => self::PATH_ICON_AREA . "cac.svg"
+        ],
+        51 => [
+            "name" => "En croix au corps à corps",
+            "description" => "Le sort affecte toutes les créatures présentes au corps à corps d'une cible dans une croix de 1 case (soit les 4 cases en opposées).",
+            "size" => "2x2",
+            "icon" => self::PATH_ICON_AREA . "croix_cac.svg"
         ],
         2 => [
             "name" => "Croix de 1 case",
@@ -448,18 +460,6 @@ class Spell extends Content
             "size" => "infinie",
             "icon" => self::PATH_ICON_AREA . "ligne_infini.svg"
         ],
-        50 => [
-            "name" => "Au corps à corps",
-            "description" => "Le sort affecte toutes les créatures présentes au corps à corps d'une cible.",
-            "size" => "3x3",
-            "icon" => self::PATH_ICON_AREA . "cac.svg"
-        ],
-        51 => [
-            "name" => "En croix au corps à corps",
-            "description" => "Le sort affecte toutes les créatures présentes au corps à corps d'une cible dans une croix de 1 case (soit les 4 cases en opposées).",
-            "size" => "2x2",
-            "icon" => self::PATH_ICON_AREA . "croix_cac.svg"
-        ],
     ];
 
     // ----------- EFFECTS
@@ -473,40 +473,142 @@ class Spell extends Content
     const CIBLE_SELF = 3;
     // Type
     const EFFECT_TYPE = [
-        'variety' => 0, // attack ou jet de sauvegarde
-        'touch' => 1,
-        'dd' => 2,
-        'damage' => 3,
-        'health' => 4,
-        'lifesteal' => 5,
-        'effect' => 6,
-        'pa' => 7,
-        'state' => 8,
-        'malus_pa' => 9,
-        'malus_pm' => 10,
-        'malus_po' => 11,
-        'malus_ca' => 12,
-        'malus_touch' => 13,
-        'malus_dodge_pa' => 14,
-        'malus_dodge_pm' => 15,
-        'vulnerability' => 16,
-        'malus_damage' => 17,
-        'bonus_pa' => 18,
-        'bonus_pm' => 19,
-        'bonus_po' => 20,
-        'bonus_ca' => 21,
-        'bonus_touch' => 22,
-        'bonus_dodge_pa' => 23,
-        'bonus_dodge_pm' => 24,
-        'resistance' => 25,
-        'bonus_damage' => 26,
-        'area' => 27,
-        'po' => 28,
-        'po_editable' => 29,
-        'sight_line' => 30,
-        'cast_per_turn' => 31,
-        'cast_per_target' => 32,
-        'number_between_two_cast' => 33
+        'variety' => [
+            'id' => 0,
+            'name' => 'Variété'
+        ],
+        'touch' => [
+            'id' => 1,
+            'name' => 'Touche'
+        ],
+        'dd' => [
+            'id' => 2,
+            'name' => 'Degré de difficulté'
+        ],
+        'damage' => [
+            'id' => 3,
+            'name' => 'Dommage'
+        ],
+        'health' => [
+            'id' => 4,
+            'name' => 'Soin'
+        ],
+        'lifesteal' => [
+            'id' => 5,
+            'name' => 'Vol de vie'
+        ],
+        'effect' => [
+            'id' => 6,
+            'name' => 'Effet'
+        ],
+        'pa' => [
+            'id' => 7,
+            'name' => 'PA'
+        ],
+        'state' => [
+            'id' => 8,
+            'name' => 'Etat'
+        ],
+        'malus_pa' => [
+            'id' => 9,
+            'name' => 'Malus PA'
+        ],
+        'malus_pm' => [
+            'id' => 10,
+            'name' => 'Malus PM'
+        ],
+        'malus_po' => [
+            'id' => 11,
+            'name' => 'Malus PO'
+        ],
+        'malus_ca' => [
+            'id' => 12,
+            'name' => 'Malus CA'
+        ],
+        'malus_touch' => [
+            'id' => 13,
+            'name' => 'Malus à la Touche'
+        ],
+        'malus_dodge_pa' => [
+            'id' => 14,
+            'name' => "Malus d'Esquive PA"
+        ],
+        'malus_dodge_pm' => [
+            'id' => 15,
+            'name' => "Malus d'Esquive PM"
+        ],
+        'vulnerability' => [
+            'id' => 16,
+            'name' => 'Vulnérabilité'
+        ],
+        'malus_damage' => [
+            'id' => 17,
+            'name' => 'Malus de Dommage'
+        ],
+        'bonus_pa' => [
+            'id' => 18,
+            'name' => 'Bonus de PA'
+        ],
+        'bonus_pm' => [
+            'id' => 19,
+            'name' => 'Bonus de PM'
+        ],
+        'bonus_po' => [
+            'id' => 20,
+            'name' => 'Bonus de PO'
+        ],
+        'bonus_ca' => [
+            'id' => 21,
+            'name' => 'Bonus de CA'
+        ],
+        'bonus_touch' => [
+            'id' => 22,
+            'name' => 'Bonus de Touche'
+        ],
+        'bonus_dodge_pa' => [
+            'id' => 23,
+            'name' => "Bonus d'Esquive PA"
+        ],
+        'bonus_dodge_pm' => [
+            'id' => 24,
+            'name' => "Bonus d'Esquive PM"
+        ],
+        'resistance' => [
+            'id' => 25,
+            'name' => 'Résistance'
+        ],
+        'bonus_damage' => [
+            'id' => 26,
+            'name' => 'Bonus de Dommage'
+        ],
+        'area' => [
+            'id' => 27,
+            'name' => "Zone d'effet"
+        ],
+        'po' => [
+            'id' => 28,
+            'name' => 'Portée'
+        ],
+        'po_editable' => [
+            'id' => 29,
+            'name' => 'PO modifiable'
+        ],
+        'sight_line' => [
+            'id' => 30,
+            'name' => 'Ligne de vue'
+        ],
+        'cast_per_turn' => [
+            'id' => 31,
+            'name' => 'Lancer par tour'
+        ],
+        'cast_per_target' => [
+            'id' => 32,
+            'name' => 'Lancer par cible'
+        ],
+        'number_between_two_cast' => [
+            'id' => 33,
+            'name' => 'Nombre de tour entre deux lancers'
+        ]
     ];
     const OCCURENCE_TYPE_SEPARATOR = "||";
 
@@ -652,29 +754,29 @@ class Spell extends Content
         public function getEffect_array(int $format = Content::FORMAT_BRUT){
             $test_tableau_type = [
                 3 => [ // level
-                    self::EFFECT_TYPE["variety"] => self::VARIETY_ATTACK,
-                    self::EFFECT_TYPE['touch'] => [
+                    self::EFFECT_TYPE['variety']['id'] => self::VARIETY_ATTACK,
+                    self::EFFECT_TYPE['touch']['id'] => [
                         "value" => "1d20 + [force] + [touch]", // Auto possible
-                        "comment" => "",
+                        "comment" => "eadeazlkenjazlkde",
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['dd'] => [
+                    self::EFFECT_TYPE['dd']['id'] => [
                         "value" => "[ca]", // ca par défault
                         "comment" => "",
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['damage'] => [
+                    self::EFFECT_TYPE['damage']['id'] => [
                         "value" => "1d6 + [force]",
                         "element" => self::ELEMENT_TERRE,
                         "cible" => self::CIBLE_ALL, // allies, ennemies, all
                         "duration" => 0, // Si dégât sur plusieurs tours comme un poison, si 0 ou rien alors dégât instantané
-                        "comment" => "",
-                        "critical" => "",
+                        "comment" => "Salut",
+                        "critical" => "6 + 1d6 + [force]",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['health'] => [
+                    self::EFFECT_TYPE['health']['id'] => [
                         "value" => "1d6 + [intel]",
                         "element" => self::ELEMENT_FEU,
                         "cible" => self::CIBLE_ALL, // allies, ennemies, all
@@ -683,7 +785,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['lifesteal'] => [
+                    self::EFFECT_TYPE['lifesteal']['id'] => [
                         "value" => "1d6 + [intel]",
                         "element" => self::ELEMENT_FEU,
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
@@ -692,7 +794,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['effect'] => [
+                    self::EFFECT_TYPE['effect']['id'] => [
                         "value" => "Description de l'effet, avantage bonus ou malus ou autre",
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
                         "duration" => 0,
@@ -700,7 +802,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],  
-                    self::EFFECT_TYPE['state'] => [
+                    self::EFFECT_TYPE['state']['id'] => [
                         "value" => "Etat à appliquer",
                         "cible" => self::CIBLE_SELF, // soit même, allies, ennemies, all
                         "duration" => 0,
@@ -708,7 +810,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['malus_pa'] => [
+                    self::EFFECT_TYPE['malus_pa']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
                         "duration" => 0,
@@ -716,7 +818,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['malus_pm'] => [
+                    self::EFFECT_TYPE['malus_pm']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
                         "duration" => 0,
@@ -724,7 +826,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['malus_po'] => [
+                    self::EFFECT_TYPE['malus_po']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
                         "duration" => 0,
@@ -732,7 +834,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['malus_ca'] => [
+                    self::EFFECT_TYPE['malus_ca']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
                         "duration" => 0,
@@ -740,7 +842,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['malus_touch'] => [
+                    self::EFFECT_TYPE['malus_touch']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
                         "duration" => 0,
@@ -748,7 +850,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['malus_dodge_pa'] => [
+                    self::EFFECT_TYPE['malus_dodge_pa']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
                         "duration" => 0,
@@ -756,7 +858,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['malus_dodge_pm'] => [
+                    self::EFFECT_TYPE['malus_dodge_pm']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
                         "duration" => 0,
@@ -764,7 +866,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['vulnerability'] => [
+                    self::EFFECT_TYPE['vulnerability']['id'] => [
                         "value" => "1",
                         "element" => self::ELEMENT_FEU,
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
@@ -773,7 +875,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['malus_damage'] => [
+                    self::EFFECT_TYPE['malus_damage']['id'] => [
                         "value" => "1",
                         "element" => self::ELEMENT_FEU, // Si rien, à tout les dégâts
                         "cible" => self::CIBLE_ENEMY, // allies, ennemies, all
@@ -782,7 +884,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['bonus_pa'] => [
+                    self::EFFECT_TYPE['bonus_pa']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ALLY, // allies, ennemies, all
                         "duration" => 0,
@@ -790,7 +892,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['bonus_pm'] => [
+                    self::EFFECT_TYPE['bonus_pm']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ALLY, // allies, ennemies, all
                         "duration" => 0,
@@ -798,7 +900,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['bonus_po'] => [
+                    self::EFFECT_TYPE['bonus_po']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ALLY, // allies, ennemies, all
                         "duration" => 0,
@@ -806,7 +908,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['bonus_ca'] => [
+                    self::EFFECT_TYPE['bonus_ca']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ALLY, // allies, ennemies, all
                         "duration" => 0,
@@ -814,7 +916,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['bonus_touch'] => [
+                    self::EFFECT_TYPE['bonus_touch']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ALLY, // allies, ennemies, all
                         "duration" => 0,
@@ -822,7 +924,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['bonus_dodge_pa'] => [
+                    self::EFFECT_TYPE['bonus_dodge_pa']['id'] => [
                         "value" => "[Sagesse>1=1:Sagesse>5=5]",
                         "cible" => self::CIBLE_ALLY, // allies, ennemies, all
                         "duration" => 0,
@@ -830,7 +932,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['bonus_dodge_pm'] => [
+                    self::EFFECT_TYPE['bonus_dodge_pm']['id'] => [
                         "value" => "1",
                         "cible" => self::CIBLE_ALL, // allies, ennemies, all
                         "duration" => 0,
@@ -838,7 +940,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['resistance'] => [
+                    self::EFFECT_TYPE['resistance']['id'] => [
                         "value" => "1",
                         "element" => self::ELEMENT_FEU, // Si rien, à tout les dégâts
                         "cible" => self::CIBLE_ALLY, // allies, ennemies, all
@@ -847,7 +949,7 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['bonus_damage'] => [
+                    self::EFFECT_TYPE['bonus_damage']['id'] => [
                         "value" => "1",
                         "element" => self::ELEMENT_FEU, // Si rien, à tout les dégâts
                         "cible" => self::CIBLE_ALLY, // allies, ennemies, all
@@ -856,53 +958,119 @@ class Spell extends Content
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['area'] => [
-                        "value" => self::AREA[3],
-                        "comment" => "",
-                        "critical" => "",
+                    self::EFFECT_TYPE['area']['id'] => [
+                        "value" => 3,
+                        "comment" => "test",
+                        "critical" => 2,
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['po'] => [
+                    self::EFFECT_TYPE['po']['id'] => [
                         "value" => "1 + [bonus mastery]",
                         "comment" => ""
                     ],
-                    self::EFFECT_TYPE['po_editable'] => [
+                    self::EFFECT_TYPE['po_editable']['id'] => [
                         "value" => false,
                         "comment" => "",
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['sight_line'] => [
+                    self::EFFECT_TYPE['sight_line']['id'] => [
                         "value" => true,
                         "comment" => "",
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['pa'] => [
+                    self::EFFECT_TYPE['pa']['id'] => [
                         "value" => 4,
                         "comment" => "",
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['cast_per_turn'] => [
+                    self::EFFECT_TYPE['cast_per_turn']['id'] => [
                         "value" => 1,
                         "comment" => "",
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['cast_per_target'] => [
+                    self::EFFECT_TYPE['cast_per_target']['id'] => [
                         "value" => 1,
                         "comment" => "",
                         "critical" => "",
                         "occurence" => 0
                     ],
-                    self::EFFECT_TYPE['number_between_two_cast'] => [
-                        "value" => 0,
-                        "comment" => "",
+                    self::EFFECT_TYPE['number_between_two_cast']['id'] => [
+                        "value" => 23,
+                        "comment" => "Salut",
                         "critical" => "",
                         "occurence" => 0
                     ],
-                ]
+                    self::EFFECT_TYPE['number_between_two_cast']['id'] => [
+                        "value" => 20,
+                        "comment" => "Salut",
+                        "critical" => "",
+                        "occurence" => 2
+                    ],
+                ],
+                5 => [
+                    self::EFFECT_TYPE['damage']['id'] => [
+                        "value" => "1d7 + [force]",
+                        "element" => self::ELEMENT_TERRE,
+                        "cible" => self::CIBLE_ALL, // allies, ennemies, all
+                        "duration" => 0, // Si dégât sur plusieurs tours comme un poison, si 0 ou rien alors dégât instantané
+                        "comment" => "Salut",
+                        "critical" => "6 + 1d6 + [force]",
+                        "occurence" => 2
+                    ],
+                    self::EFFECT_TYPE['health']['id'] => [
+                        "value" => "1d6 + [intel]",
+                        "element" => self::ELEMENT_FEU,
+                        "cible" => self::CIBLE_ALL, // allies, ennemies, all
+                        "duration" => 0,
+                        "comment" => "",
+                        "critical" => "",
+                        "occurence" => 0
+                    ]
+                ],
+                7 => [
+                    self::EFFECT_TYPE['damage']['id'] => [
+                        "value" => "1d10 + [force]",
+                        "element" => self::ELEMENT_TERRE,
+                        "cible" => self::CIBLE_ALL, // allies, ennemies, all
+                        "duration" => 0, // Si dégât sur plusieurs tours comme un poison, si 0 ou rien alors dégât instantané
+                        "comment" => "Salut",
+                        "critical" => "6 + 1d6 + [force]",
+                        "occurence" => 0
+                    ],
+                    self::EFFECT_TYPE['health']['id'] => [
+                        "value" => "1d8 + [intel]",
+                        "element" => self::ELEMENT_FEU,
+                        "cible" => self::CIBLE_ALL, // allies, ennemies, all
+                        "duration" => 0,
+                        "comment" => "",
+                        "critical" => "",
+                        "occurence" => 0
+                    ]
+                ],
+                11 => [
+                    self::EFFECT_TYPE['damage']['id'] => [
+                        "value" => "3d12 + [force]",
+                        "element" => self::ELEMENT_TERRE,
+                        "cible" => self::CIBLE_ALL, // allies, ennemies, all
+                        "duration" => 0, // Si dégât sur plusieurs tours comme un poison, si 0 ou rien alors dégât instantané
+                        "comment" => "Salut",
+                        "critical" => "6 + 1d6 + [force]",
+                        "occurence" => 0
+                    ],
+                    self::EFFECT_TYPE['health']['id'] => [
+                        "value" => "1d9 + [intel]",
+                        "element" => self::ELEMENT_FEU,
+                        "cible" => self::CIBLE_ALL, // allies, ennemies, all
+                        "duration" => 0,
+                        "comment" => "",
+                        "critical" => "",
+                        "occurence" => 0
+                    ]
+                ],
             ];
 
             $view = new View();
@@ -920,24 +1088,171 @@ class Spell extends Content
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
                     ob_start(); ?>
-                        <div id="effect_array<?=$this->getUniqid()?>" class="m-2">
-                            <button class="btn btn-sm btn-text-grey">Afficher l'éditeur en mode texte</button>
-                            <input type="hidden" value="<?=$this->_effect_array?>">
-                            <div class="edit_text">
-                                <textarea class="form-control" rows="10"><?=$this->_effect_array?></textarea>
-                                <button class="btn btn-sm btn-back-main"><i class="fa-solid fa-arrows-rotate"></i></button>
+
+
+                        <div id="effect_array<?=$this->getUniqid()?>" class="container_effect_array">
+                            <div class="d-none">
+                                <!-- Touch : value, critique, comment-->
+                                <div id="template-edit-mode-spell-effect">
+
+                                    <!-- VALUE -->
+                                    <div class="template-value-container" data-model=1>
+                                        <h4>Valeur</h4>
+                                        <select class="template-value-select-type form-select form-select-sm select-collapse" aria-label="">
+                                            <option selected>Type de valeur</option>
+                                            <option data-target=".template-value-free">Libre</option>
+                                            <option data-target=".template-value-conditionnal">Valeurs conditionnelles</option>
+                                        </select>
+                                        <div class="template-value-free">
+                                            <input type="text" class="template-value-input form-control form-control-sm" placeholder="Valeur" aria-label="">
+                                        </div>
+                                        <div class="template-value-conditionnal">
+                                            <select class="template-value-select-caract form-select form-select-sm" aria-label="">
+                                                <option selected>Caractéristiques</option>
+                                                <option value="<?=self::ELEMENT_SAGESSE?>">Sagesse</option>
+                                                <option value="<?=self::ELEMENT_VITALITY?>">Vitalité</option>
+                                                <option value="<?=self::ELEMENT_TERRE?>">Force</option>
+                                                <option value="<?=self::ELEMENT_FEU?>">Intel</option>
+                                                <option value="<?=self::ELEMENT_AIR?>">Agilité</option>
+                                                <option value="<?=self::ELEMENT_EAU?>">Chance</option>
+                                            </select>
+                                            <select class="template-value-select-operator form-select form-select-sm" aria-label="">
+                                                <option selected>Opérateur</option>
+                                                <option value="=">=</option>
+                                                <option value=">=">>=</option>
+                                                <option value="<="><=</option>
+                                            </select>
+                                            <input type="text" class="template-value-input-limit form-control form-control-sm" placeholder="Limite" aria-label="">
+                                            <p> <i class="fa-solid fa-arrow-right"></i> </p>
+                                            <input type="text" class="template-value-input-value form-control form-control-sm" placeholder="valeur" aria-label="">
+                                        </div>
+                                    </div>
+
+                                    <!-- CRITICAL -->
+                                    <div class="template-critical-container" data-model=1>
+                                        <h4>Critique</h4>
+                                        <select class="template-critical-select-type form-select form-select-sm select-collapse" aria-label="">
+                                            <option selected>Type de valeur lors d'un critique</option>
+                                            <option data-target=".template-critical-free">Libre</option>
+                                            <option data-target=".template-critical-conditionnal">Valeurs conditionnelles</option>
+                                        </select>
+                                        <div class="template-critical-free">
+                                            <input type="text" class="template-critical-input form-control form-control-sm" placeholder="Valeur" aria-label="">
+                                        </div>
+                                        <div class="template-critical-conditionnal">
+                                            <select class="template-critical-select-caract form-select form-select-sm" aria-label="">
+                                                <option selected>Caractéristiques</option>
+                                                <option value="<?=self::ELEMENT_SAGESSE?>">Sagesse</option>
+                                                <option value="<?=self::ELEMENT_VITALITY?>">Vitalité</option>
+                                                <option value="<?=self::ELEMENT_TERRE?>">Force</option>
+                                                <option value="<?=self::ELEMENT_FEU?>">Intel</option>
+                                                <option value="<?=self::ELEMENT_AIR?>">Agilité</option>
+                                                <option value="<?=self::ELEMENT_EAU?>">Chance</option>
+                                            </select>
+                                            <select class="template-critical-select-sign form-select form-select-sm" aria-label="">
+                                                <option selected>Signe</option>
+                                                <option value="=">=</option>
+                                                <option value=">=">>=</option>
+                                                <option value="<="><=</option>
+                                            </select>
+                                            <input type="text" class="form-control form-control-sm" placeholder="Seuil" aria-label="">
+                                            <p> <i class="fa-solid fa-arrow-right"></i> </p>
+                                            <input type="text" class="form-control form-control-sm" placeholder="Valeur du critique" aria-label="">
+                                        </div>
+                                    </div>
+
+                                    <!-- DURATION -->
+                                    <div class="template-duration-container" data-model=1>
+                                        <h4>Durée</h4>
+                                        <p>Pendant combien de tour cette effet va durer ? Pour les dégâts cela se traduit par un poison</p>
+                                        <input type="text" class="template-duration-input form-control form-control-sm" placeholder="Nombre de tour" aria-label="">
+                                    </div>
+
+                                    <!-- CIBLE -->
+                                    <div class="template-cible-container" data-model=1>
+                                        <h4>Cible</h4>
+                                        <p>Qui est affecté par cet effet ?</p>
+                                        <select class="template-cible-select form-select form-select-sm" aria-label="">
+                                            <option selected>Cible</option>
+                                            <option value="<?=Spell::CIBLE_ALL?>">Tout lde monde</option>
+                                            <option value="<?=Spell::CIBLE_ALLY?>">Alliés</option>
+                                            <option value="<?=Spell::CIBLE_ENEMY?>">Ennemis</option>
+                                            <option value="<?=Spell::CIBLE_SELF?>">Soit-même</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- COMMENT -->
+                                    <div class="template-comment-container" data-model=1>
+                                        <h4>Commentaire</h4>
+                                        <input type="text" class="template-comment-input form-control form-control-sm" placeholder="Commentaire" aria-label="">
+                                    </div>
+                                    
+                                </div>
+
+                                <input type="hidden" class="input__props d-none" value="<?=$this->_effect_array?>">
                             </div>
-                            <div class="edit_gui">
+
+
+                            <div class="display__props">
+                                <p class="display__props__message"></p>
+                                <div id="effects_array_tabs_new" class="effects_array_tabs">
+                                    <ul></ul>
+                                    <div class="effects_arrays_container_tab"></div>
+                                </div>
+                            </div>
+
+                            <div class="display__adding">
+                                <h3 class="display__adding__title">Ajouter les propriétés et les effets du sort</h3>
+
+                                <div class="display__adding__prop d-flex justify-content-between align-items-center gap-2 mb-2">
+                                    <div>
+                                        <p class="display__adding__prop__subtitle"><small>Créer la propriété</small></p>
+                                        <div class="display__adding__prop__container d-flex justify-content-between align-items-center gap-2">
+                                            <select class="display__adding__prop__container__select-level form-select form-select-sm select-collapse" aria-label="">
+                                                <?php $lvl = $this->getLevel(); if($lvl > 20){$lvl = 20;} if($lvl < 1) { $lvl = 1;}
+                                                    for($i=$lvl; $i<=20; $i++): ?>
+                                                    <option value="<?=$i?>">Niveau <?=$i?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                            <select class="display__adding__prop__container__select-type form-select form-select-sm" aria-label="">
+                                                <?php foreach (self::EFFECT_TYPE as $var_name => $val) {
+                                                    if(!in_array($var_name, ['variety'])){ ?>
+                                                        <option value="<?=$var_name?>"><?=$val['name']?></option>
+                                                    <?php }
+                                                } ?>
+                                            </select>
+                                            <button class="display__adding__prop__container__btn-add btn btn-sm btn-text-secondary size-1-8" title="Ajouter un effet"><i class="fa-solid fa-square-plus"></i></button>
+                                        </div>
+                                    </div>
+                                    <button class="display__adding__prop__insert btn btn-back-secondary" disabled><i class="fa-solid fa-circle-chevron-up"></i> Insérer la propriété</button>
+                                </div>
+
+                                <div class="display__adding__gui">
+                                    <p><span class="text-grey-d-2">Ajout de la propriété <b class="display__adding__gui__type"></b> au niveau <b class="display__adding__gui__level"></b></span></p>
+                                    <div class="display__adding__gui__content"></div>
+                                </div>
+
+                                <div class="display_adding_text d-none">
+                                    <textarea class="display_adding_text__textarea form-control" rows="3"><?=$this->_effect_array?></textarea>
+                                    <button class="display_adding_text__btn btn btn-sm btn-back-main"><i class="fa-solid fa-arrows-rotate"></i></button>
+                                </div>
 
                             </div>
-                            <div class="d-flex justify-content-end align-item-baseline">
-                                <button class="btn btn-sm btn-back-green"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
-                                <div class="form-check form-check-inline ms-2">
-                                    <input class="form-check-input" type="checkbox" id="checkboxAutoSave<?=$this->getUniqid()?>" value="1">
-                                    <label class="form-check-label text-grey size-0-7" for="checkboxAutoSave<?=$this->getUniqid()?>">Auto enregistrement</label>
+
+
+                            <div class="item-divider-main"></div>
+                            <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap">
+                                <div class="d-flex align-items-center gap-2 justify-content-start">
+                                    <boutton class="spell-effect-btn-toggle-mode btn btn-sm btn-text-grey" title="Afficher le mode texte."><i class="fa-solid fa-file-lines"></i></boutton>
+                                    <button class="btn btn-sm btn-back-secondary"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
+                                    <div class="form-check form-check-inline ms-2">
+                                        <input class="form-check-input" type="checkbox" id="checkboxAutoSave<?=$this->getUniqid()?>" value="1">
+                                        <label class="form-check-label text-grey size-0-7" for="checkboxAutoSave<?=$this->getUniqid()?>">Auto enregistrement</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <script>Spell.initEditionModeSpellEffect();</script>
                     <?php return ob_get_clean();
 
 
@@ -946,18 +1261,25 @@ class Spell extends Content
                     $variety = self::VARIETY_ATTACK;
                     $propsSortByLevelAndType = [];
 
+                    $last_lvl = null;
                     foreach ($effects as $lvl => $val) { 
-                        if(isset($val[self::EFFECT_TYPE['variety']])){ 
-                            if(in_array($val[self::EFFECT_TYPE['variety']], [self::VARIETY_ATTACK, self::VARIETY_SAVE])){
-                                $variety = $val[self::EFFECT_TYPE['variety']];
+                        if(isset($val[self::EFFECT_TYPE['variety']['id']])){ 
+                            if(in_array($val[self::EFFECT_TYPE['variety']['id']], [self::VARIETY_ATTACK, self::VARIETY_SAVE])){
+                                $variety = $val[self::EFFECT_TYPE['variety']['id']];
                             } else {
                                 $variety = self::VARIETY_ATTACK;
                             }
                         }
+                        if(!empty($last_lvl)){
+                            $propsSortByLevelAndType[$lvl] = $propsSortByLevelAndType[$last_lvl];
+                        }
+                        $last_lvl = $lvl;
+
                         foreach ($val as $type => $prop) {
+                            $element = "";
                             switch ($type) {
                                 // touch : type | value (défault = réussite automatique) | critical | comment | occurrence : type obligatoire
-                                case self::EFFECT_TYPE['touch']:
+                                case self::EFFECT_TYPE['touch']['id']:
                                     if(empty($prop['value'])){ $prop['value'] = "réussite automatique"; }
                                     $title = "Touche"; $tooltip = "Jet d'attaque pour toucher votre ou vos cible(s)";
                                     if($variety == self::VARIETY_SAVE){
@@ -981,7 +1303,7 @@ class Spell extends Content
                                             $comment = trim($prop['comment']);
                                         }
                                     }
-                                    $name_type_occurence = "";
+                                    $name_type_occurence = $type;
                                     if(isset($prop['occurence'])){ 
                                         if(!empty($prop['occurence'])){
                                             if(is_numeric($prop['occurence'])){
@@ -1009,12 +1331,13 @@ class Spell extends Content
                                             "value" => $value,
                                             "critical" => $critical,
                                             "color" => "touch",
-                                            "comment" => $comment
+                                            "comment" => $comment,
+                                            "element" => $element
                                         ], 
                                         write: false);
                                 break;
                                 // DD : type | value (default = CA) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['dd']:
+                                case self::EFFECT_TYPE['dd']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Degré de difficulté"; $tooltip = "Valeur que vous devez atteindre pour que votre sort touche.";
                                         if($variety == self::VARIETY_SAVE){
@@ -1038,7 +1361,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1066,19 +1389,22 @@ class Spell extends Content
                                                 "value" => $value,
                                                 "critical" => $critical,
                                                 "color" => "grey",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;
                                 // DÉGÂTS : type | value | element (default = neutre) | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['damage']:
+                                case self::EFFECT_TYPE['damage']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Dégâts"; $tooltip = "Dégâts infligés à la cible";
                                         $element = self::ELEMENT_NEUTRE;
+                                        $color = self::ELEMENT[self::ELEMENT_NEUTRE]['color'];
                                         if(isset($prop['element'])){
                                             if(!empty($prop['element']) && isset(self::ELEMENT[$prop['element']])){
                                                 $element = $prop['element'];
+                                                $color = self::ELEMENT[$prop['element']]['color'];
                                             }
                                         }
                                         $value = "";
@@ -1095,7 +1421,7 @@ class Spell extends Content
                                         }
                                         $duration = "";
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1111,7 +1437,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1136,24 +1462,27 @@ class Spell extends Content
                                             data : [
                                                 "title" => $title,
                                                 "description" => $tooltip,
-                                                "element" => $element,
                                                 "value" => $value,
                                                 "critical" => $critical,
                                                 "duration" => $duration,
                                                 "cible" => $cible,
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "color" => $color,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;
                                 // SOIN : type | value | element (default = feu) | cible (default = alliés) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['health']:
+                                case self::EFFECT_TYPE['health']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Soins"; $tooltip = "Soins prodigués à la cible";
                                         $element = self::ELEMENT_NEUTRE;
+                                        $color = self::ELEMENT[self::ELEMENT_NEUTRE]['color'];
                                         if(isset($prop['element'])){
                                             if(!empty($prop['element']) && isset(self::ELEMENT[$prop['element']])){
                                                 $element = $prop['element'];
+                                                $color = self::ELEMENT[$prop['element']]['color'];
                                             }
                                         }
                                         $value = "";
@@ -1170,7 +1499,7 @@ class Spell extends Content
                                         }
                                         $duration = "";
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1186,7 +1515,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1211,24 +1540,27 @@ class Spell extends Content
                                             data : [
                                                 "title" => $title,
                                                 "description" => $tooltip,
-                                                "element" => $element,
                                                 "value" => $value,
                                                 "critical" => $critical,
                                                 "duration" => $duration,
                                                 "cible" => $cible,
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "color" => $color,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;
                                 // VOL DE VIE : type | value | element (default = feu) | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['lifesteal']:
+                                case self::EFFECT_TYPE['lifesteal']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Vol de vie"; $tooltip = "Nombre de points de vie volés à la cible";
                                         $element = self::ELEMENT_NEUTRE;
+                                        $color = self::ELEMENT[self::ELEMENT_NEUTRE]['color'];
                                         if(isset($prop['element'])){
                                             if(!empty($prop['element']) && isset(self::ELEMENT[$prop['element']])){
                                                 $element = $prop['element'];
+                                                $color = self::ELEMENT[$prop['element']]['color'];
                                             }
                                         }
                                         $value = "";
@@ -1245,7 +1577,7 @@ class Spell extends Content
                                         }
                                         $duration = "";
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1261,7 +1593,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1286,18 +1618,19 @@ class Spell extends Content
                                             data : [
                                                 "title" => $title,
                                                 "description" => $tooltip,
-                                                "element" => $element,
                                                 "value" => $value,
                                                 "critical" => $critical,
                                                 "duration" => $duration,
                                                 "cible" => $cible,
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "color" => $color,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break; 
                                 // EFFETS : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['effect']:
+                                case self::EFFECT_TYPE['effect']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Effets"; $tooltip = "Effets appliqués à la cible";
                                         $value = "";
@@ -1312,9 +1645,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1330,7 +1663,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1360,13 +1693,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "grey",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break; 
                                 // ÉTAT : type | value | cible (default = self) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['state']:
+                                case self::EFFECT_TYPE['state']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "État"; $tooltip = "État appliqué à la cible";
                                         $value = "";
@@ -1381,9 +1715,8 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1399,7 +1732,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1429,13 +1762,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "deep-purple",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break; 
                                 // RETRAIT PA : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['malus_pa']:
+                                case self::EFFECT_TYPE['malus_pa']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Retrait PA"; $tooltip = "Nombre de PA retiré à la cible";
                                         $value = "";
@@ -1450,9 +1784,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1468,7 +1802,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1498,13 +1832,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "pa",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break; 
                                 // RETRAIT PM : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['malus_pm']:
+                                case self::EFFECT_TYPE['malus_pm']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Retrait PM"; $tooltip = "Nombre de PM retiré à la cible";
                                         $value = "";
@@ -1519,9 +1854,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1537,7 +1872,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1567,13 +1902,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "pm",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }                                                     
                                 break; 
                                 // RETRAIT PO : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['malus_po']:
+                                case self::EFFECT_TYPE['malus_po']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Retrait PO"; $tooltip = "Nombre de PO retiré à la cible";
                                         $value = "";
@@ -1588,9 +1924,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1606,7 +1942,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1636,13 +1972,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "po",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }  
                                 break; 
                                 // MALUS CA : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['malus_ca']:
+                                case self::EFFECT_TYPE['malus_ca']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "malus CA"; $tooltip = "Malus infligé à la classe d'armure";
                                         $value = "";
@@ -1657,9 +1994,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1675,7 +2012,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1705,13 +2042,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "ca",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }  
                                 break;     
                                 // MALUS TOUCHE : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence                                      
-                                case self::EFFECT_TYPE['malus_touch']:                                                                       
+                                case self::EFFECT_TYPE['malus_touch']['id']:                                                                       
                                     if(!empty($prop['value'])){ 
                                         $title = "malus de touche"; $tooltip = "Malus infligé à la touche";
                                         $value = "";
@@ -1726,9 +2064,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1744,7 +2082,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1774,13 +2112,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "touch",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;
                                 // MALUS ESQUIVE PA : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence                                      
-                                case self::EFFECT_TYPE['malus_dodge_pa']:                                                           
+                                case self::EFFECT_TYPE['malus_dodge_pa']['id']:                                                           
                                     if(!empty($prop['value'])){ 
                                         $title = "malus à l'esquive PA"; $tooltip = "Malus infligé à la l'esquive PA";  
                                         $value = "";
@@ -1795,9 +2134,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1813,7 +2152,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1843,13 +2182,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "dodge_pa",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }  
                                 break;
                                 // MALUS ESQUIVE PM : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['malus_dodge_pm']:
+                                case self::EFFECT_TYPE['malus_dodge_pm']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "malus à l'esquive PM"; $tooltip = "Malus infligé à la l'esquive PM";  
                                         $value = "";
@@ -1864,9 +2204,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1882,7 +2222,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1912,19 +2252,22 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "dodge_pm",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     } 
                                 break;
                                 // VULNERABILITE : type | value | element (default = neutre) | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['vulnerability']:  
+                                case self::EFFECT_TYPE['vulnerability']['id']:  
                                     if(!empty($prop['value'])){ 
                                         $title = "Vulnérabilités"; $tooltip = "Nombre de dommage supplémentaire que la cible perd lors ce qu'on l'attaque";
                                         $element = self::ELEMENT_NEUTRE;
+                                        $color = self::ELEMENT[self::ELEMENT_NEUTRE]['color'];
                                         if(isset($prop['element'])){
                                             if(!empty($prop['element']) && isset(self::ELEMENT[$prop['element']])){
                                                 $element = $prop['element'];
+                                                $color = self::ELEMENT[$prop['element']]['color'];
                                             }
                                         }
                                         $value = "";
@@ -1941,7 +2284,7 @@ class Spell extends Content
                                         }
                                         $duration = "";
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -1957,7 +2300,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -1982,24 +2325,27 @@ class Spell extends Content
                                             data : [
                                                 "title" => $title,
                                                 "description" => $tooltip,
-                                                "element" => $element,
                                                 "value" => $value,
                                                 "critical" => $critical,
                                                 "duration" => $duration,
                                                 "cible" => $cible,
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "color" => $color,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;                                                    
                                 // malus dégâts : type | value | element (default = neutre) | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence                                          
-                                case self::EFFECT_TYPE['malus_damage']:
+                                case self::EFFECT_TYPE['malus_damage']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Malus aux dégâts"; $tooltip = "Nombre de dommage que la cible perd lors de ces attaques. Ce malus peut-être lié à un élément.";
                                         $element = self::ELEMENT_NEUTRE;
+                                        $color = self::ELEMENT[self::ELEMENT_NEUTRE]['color'];
                                         if(isset($prop['element'])){
                                             if(!empty($prop['element']) && isset(self::ELEMENT[$prop['element']])){
                                                 $element = $prop['element'];
+                                                $color = self::ELEMENT[$prop['element']]['color'];
                                             }
                                         }
                                         $value = "";
@@ -2016,7 +2362,7 @@ class Spell extends Content
                                         }
                                         $duration = "";
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2032,7 +2378,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2057,18 +2403,19 @@ class Spell extends Content
                                             data : [
                                                 "title" => $title,
                                                 "description" => $tooltip,
-                                                "element" => $element,
                                                 "value" => $value,
                                                 "critical" => $critical,
                                                 "duration" => $duration,
                                                 "cible" => $cible,
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "color" => $color,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;
                                 // BONUS PA : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence                                      
-                                case self::EFFECT_TYPE['bonus_pa']:
+                                case self::EFFECT_TYPE['bonus_pa']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Bonus PA"; $tooltip = "Nombre de PA ajouté à la cible";     
                                         $value = "";
@@ -2083,9 +2430,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2101,7 +2448,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2131,13 +2478,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "pa",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }  
                                 break;
                                 // BONUS PM : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['bonus_pm']:
+                                case self::EFFECT_TYPE['bonus_pm']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Bonus PM"; $tooltip = "Nombre de PM ajouté à la cible";
                                         $value = "";
@@ -2152,9 +2500,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2170,7 +2518,8 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2200,13 +2549,15 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "pm",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }  
                                 break;
                                 // BONUS PO : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['bonus_po']:
+                                case self::EFFECT_TYPE['bonus_po']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Bonus PO"; $tooltip = "Nombre de PO ajouté à la cible";
                                         $value = "";
@@ -2221,9 +2572,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2239,7 +2590,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2269,13 +2620,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "po",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;
                                 // BONUS CA : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['bonus_ca']:
+                                case self::EFFECT_TYPE['bonus_ca']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Bonus CA"; $tooltip = "Bonus de classe d'armure ajouté à la cible";  
                                         $value = "";
@@ -2290,9 +2642,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2308,7 +2660,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2338,13 +2690,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "ca",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;
                                 // BONUS TOUCHE : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['bonus_touch']:
+                                case self::EFFECT_TYPE['bonus_touch']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Bonus de touche"; $tooltip = "Bonus de touche aux attaques ajouté à la cible";  
                                         $value = "";
@@ -2359,9 +2712,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2377,7 +2730,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2407,13 +2760,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "touch",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }  
                                 break;
                                 // BONUS ESQUIVE PA : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence                                      
-                                case self::EFFECT_TYPE['bonus_dodge_pa']:
+                                case self::EFFECT_TYPE['bonus_dodge_pa']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Bonus d'esquive PA"; $tooltip = "Bonus d'esquive PA ajouté à la cible"; 
                                         $value = "";
@@ -2428,9 +2782,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2446,7 +2800,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2476,13 +2830,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "dodge_pa",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }  
                                 break;
                                 // BONUS ESQUIVE PA : type | value | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence                                      
-                                case self::EFFECT_TYPE['bonus_dodge_pm']:
+                                case self::EFFECT_TYPE['bonus_dodge_pm']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Bonus d'esquive PM"; $tooltip = "Bonus d'esquive Pm ajouté à la cible";
                                         $value = "";
@@ -2497,9 +2852,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2515,7 +2870,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2545,19 +2900,22 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "dodge_pm",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;                                                    
                                 // RESISTANCE : type | value | element (default = neutre) | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['resistance']:
+                                case self::EFFECT_TYPE['resistance']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Résistance"; $tooltip = "Nombre de dommage que la cible évite lors ce qu'on l'attaque";
                                         $element = self::ELEMENT_NEUTRE;
+                                        $color = self::ELEMENT[self::ELEMENT_NEUTRE]['color'];
                                         if(isset($prop['element'])){
                                             if(!empty($prop['element']) && isset(self::ELEMENT[$prop['element']])){
                                                 $element = $prop['element'];
+                                                $color = self::ELEMENT[$prop['element']]['color'];
                                             }
                                         }
                                         $value = "";
@@ -2574,7 +2932,7 @@ class Spell extends Content
                                         }
                                         $duration = "";
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2590,7 +2948,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2615,24 +2973,27 @@ class Spell extends Content
                                             data : [
                                                 "title" => $title,
                                                 "description" => $tooltip,
-                                                "element" => $element,
                                                 "value" => $value,
                                                 "critical" => $critical,
                                                 "duration" => $duration,
                                                 "cible" => $cible,
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "color" => $color,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break; 
                                 // BONUS DEGATS : type | value | element (default = neutre) | cible (default = ennemies) | duration (default = 0) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['bonus_damage']:
+                                case self::EFFECT_TYPE['bonus_damage']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Bonus de dégâts"; $tooltip = "Bonus de dégâts que la cible ajoute à ces propres dommages lors de ces attaques.";      
                                         $element = self::ELEMENT_NEUTRE;
+                                        $color = self::ELEMENT[self::ELEMENT_NEUTRE]['color'];
                                         if(isset($prop['element'])){
                                             if(!empty($prop['element']) && isset(self::ELEMENT[$prop['element']])){
                                                 $element = $prop['element'];
+                                                $color = self::ELEMENT[$prop['element']]['color'];
                                             }
                                         }
                                         $value = "";
@@ -2649,7 +3010,7 @@ class Spell extends Content
                                         }
                                         $duration = "";
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2665,7 +3026,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2690,42 +3051,48 @@ class Spell extends Content
                                             data : [
                                                 "title" => $title,
                                                 "description" => $tooltip,
-                                                "element" => $element,
                                                 "value" => $value,
                                                 "critical" => $critical,
                                                 "duration" => $duration,
                                                 "cible" => $cible,
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "color" => $color,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;
                                 // ZONE : type | (int) value (default = self::AREA[3]) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['area']:
+                                case self::EFFECT_TYPE['area']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Zone"; $tooltip = "Zone d'effet du sort"; 
                                         $value = "";
                                         if(isset($prop['value'])){ 
                                             if(!empty($prop['value'])){
-                                                if(is_numeric($prop['value'])){
-                                                    if(isset(self::AREA[$prop['value']])){
-                                                        $spell_temp = new Spell();
-                                                        $spell_temp->setArea($prop['value']);
-                                                        echo $spell_temp->getArea(Content::FORMAT_BADGE);
-                                                        unset($spell_temp);
-                                                    } 
+                                                if(isset(self::AREA[$prop['value']])){
+                                                    $spell_temp = new Spell();
+                                                    $spell_temp->setArea($prop['value']);
+                                                    $value = $spell_temp->getArea(Content::FORMAT_BADGE);
+                                                    unset($spell_temp);
                                                 }
                                             }
                                         }
                                         $critical = "";
                                         if(isset($prop['critical'])){ 
                                             if(!empty($prop['critical'])){
-                                                $critical = $this->formatEffectProp($prop['critical']);
+                                                if(!empty($prop['critical'])){
+                                                    if(isset(self::AREA[$prop['critical']])){
+                                                        $spell_temp = new Spell();
+                                                        $spell_temp->setArea($prop['critical']);
+                                                        $critical = $spell_temp->getArea(Content::FORMAT_BADGE);
+                                                        unset($spell_temp);
+                                                    }
+                                                }
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2741,7 +3108,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2771,24 +3138,23 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "main",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }  
                                 break;
                                 // PO : type | (int) value (default = self::AREA[3]) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['po']:
+                                case self::EFFECT_TYPE['po']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "PO"; $tooltip = "Distance maximale jusqu'à laquelle le sort peut-être lancer";
                                         $value = "";
                                         if(isset($prop['value'])){ 
                                             if(!empty($prop['value'])){
-                                                if(is_numeric($prop['value'])){
-                                                    $spell_temp = new Spell();
-                                                    $spell_temp->setPo($prop['value']);
-                                                    echo $spell_temp->getPo(Content::FORMAT_BADGE);
-                                                    unset($spell_temp);
-                                                }
+                                                $spell_temp = new Spell();
+                                                $spell_temp->setPo($prop['value']);
+                                                $value = $spell_temp->getPo(Content::FORMAT_BADGE);
+                                                unset($spell_temp);
                                             }
                                         }
                                         $critical = "";
@@ -2797,9 +3163,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2815,7 +3181,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2845,13 +3211,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "po",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     } 
                                 break;   
                                 // PO MODIFIABLE : type | (bool) value (default = self::AREA[3]) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['po_editable']: 
+                                case self::EFFECT_TYPE['po_editable']['id']: 
                                     if(!empty($prop['value'])){ 
                                         $title = "PO Modifiable"; $tooltip = "Défini si la portée du sort est modifiable ou non";
                                         $value = "";
@@ -2860,7 +3227,7 @@ class Spell extends Content
                                                 if(is_bool($prop['value'])){
                                                     $spell_temp = new Spell();
                                                     $spell_temp->setPo_editable($prop['value']);
-                                                    echo $spell_temp->getPo_editable(Content::FORMAT_BADGE);
+                                                    $value = $spell_temp->getPo_editable(Content::FORMAT_BADGE);
                                                     unset($spell_temp);
                                                 }
                                             }
@@ -2871,9 +3238,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2889,7 +3256,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2919,13 +3286,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "po_editable",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     } 
                                 break;  
                                 // LIGNE DE VUE : type | (bool) value (default = self::AREA[3]) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['sight_line']:
+                                case self::EFFECT_TYPE['sight_line']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Ligne de vue"; $tooltip = "Défini si la ligne de vue sur la zone d'effet est obligatoire pour lancer le sort";
                                         $value = "";
@@ -2934,7 +3302,7 @@ class Spell extends Content
                                                 if(is_bool($prop['value'])){
                                                     $spell_temp = new Spell();
                                                     $spell_temp->setSight_line($prop['value']);
-                                                    echo $spell_temp->getSight_line(Content::FORMAT_BADGE);
+                                                    $value = $spell_temp->getSight_line(Content::FORMAT_BADGE);
                                                     unset($spell_temp);
                                                 }
                                             }
@@ -2945,9 +3313,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -2963,7 +3331,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -2993,13 +3361,14 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "sight_line",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;  
                                 // PA : type | (bool) value (default = self::AREA[3]) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['pa']:
+                                case self::EFFECT_TYPE['pa']['id']:
                                     if(!empty($prop['value'])){ 
                                         $title = "Coût en PA"; $tooltip = "Défini le coût en PA du sort";
                                         $value = "";
@@ -3008,7 +3377,7 @@ class Spell extends Content
                                                 if(is_numeric($prop['value'])){
                                                     $spell_temp = new Spell();
                                                     $spell_temp->setPa($prop['value']);
-                                                    echo $spell_temp->getPa(Content::FORMAT_BADGE);
+                                                    $value = $spell_temp->getPa(Content::FORMAT_BADGE);
                                                     unset($spell_temp);
                                                 }
                                             }
@@ -3019,9 +3388,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -3037,7 +3406,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -3067,22 +3436,23 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "pa",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }  
                                 break;
                                 // Nombre de lancer par tour : type | value (default = self::AREA[3]) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['cast_per_turn']:
+                                case self::EFFECT_TYPE['cast_per_turn']['id']:
                                     if(!empty($prop['value'])){ 
-                                        $title = "Nombre de lancer par tour"; $tooltip = "Défini le nombre de lancer du sort par tour";
+                                        $title = "Nb de lancer / tour"; $tooltip = "Défini le nombre de lancer du sort par tour";
                                         $value = "";
                                         if(isset($prop['value'])){ 
                                             if(!empty($prop['value'])){
                                                 if(is_numeric($prop['value'])){
                                                     $spell_temp = new Spell();
                                                     $spell_temp->setCast_per_turn($prop['value']);
-                                                    echo $spell_temp->getCast_per_turn(Content::FORMAT_BADGE);
+                                                    $value = $spell_temp->getCast_per_turn(Content::FORMAT_BADGE);
                                                     unset($spell_temp);
                                                 }
                                             }
@@ -3093,9 +3463,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -3111,7 +3481,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -3141,22 +3511,23 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "cast_per_turn",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     }
                                 break;
                                 // Utilisation par cible : type | value (default = self::AREA[3]) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['cast_per_target']:
+                                case self::EFFECT_TYPE['cast_per_target']['id']:
                                     if(!empty($prop['value'])){ 
-                                        $title = "Nombre de lancer par cible"; $tooltip = "Défini le nombre de lancer du sort une cible pendant un tour";
+                                        $title = "Nb de lancer / cible"; $tooltip = "Défini le nombre de lancer du sort une cible pendant un tour";
                                         $value = "";
                                         if(isset($prop['value'])){ 
                                             if(!empty($prop['value'])){
                                                 if(is_numeric($prop['value'])){
                                                     $spell_temp = new Spell();
                                                     $spell_temp->setCast_per_target($prop['value']);
-                                                    echo $spell_temp->getCast_per_target(Content::FORMAT_BADGE);
+                                                    $value = $spell_temp->getCast_per_target(Content::FORMAT_BADGE);
                                                     unset($spell_temp);
                                                 }
                                             }
@@ -3167,9 +3538,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -3185,7 +3556,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -3215,22 +3586,23 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "cast_per_target",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     } 
                                 break;
                                 // nombre de tour entre deux lancer : type | value (default = self::AREA[3]) | critical | comment | occurrence
-                                case self::EFFECT_TYPE['number_between_two_cast']:
+                                case self::EFFECT_TYPE['number_between_two_cast']['id']:
                                     if(!empty($prop['value'])){ 
-                                        $title = "Nombre de lancer par cible"; $tooltip = "Défini le nombre de lancer du sort une cible pendant un tour";
+                                        $title = "Nb de tour entre 2 lancer"; $tooltip = "Défini le nombre de tour qu'il faut attendre entre deux lancer du sort";
                                         $value = "";
                                         if(isset($prop['value'])){ 
                                             if(!empty($prop['value'])){
                                                 if(is_numeric($prop['value'])){
                                                     $spell_temp = new Spell();
                                                     $spell_temp->setNumber_between_two_cast($prop['value']);
-                                                    echo $spell_temp->getNumber_between_two_cast(Content::FORMAT_BADGE);
+                                                    $value = $spell_temp->getNumber_between_two_cast(Content::FORMAT_BADGE);
                                                     unset($spell_temp);
                                                 }
                                             }
@@ -3241,9 +3613,9 @@ class Spell extends Content
                                                 $critical = $this->formatEffectProp($prop['critical']);
                                             }
                                         }
-                                        $duration = 1;
+                                        $duration = 0;
                                         if(isset($prop['duration'])){ 
-                                            if(!empty($prop['duration'])){
+                                            if(!empty($prop['duration']) && $prop['duration'] >= 2){
                                                 $duration = $prop['duration'];
                                             }
                                         }
@@ -3259,7 +3631,7 @@ class Spell extends Content
                                                 $comment = trim($prop['comment']);
                                             }
                                         }
-                                        $name_type_occurence = "";
+                                        $name_type_occurence = $type;
                                         if(isset($prop['occurence'])){ 
                                             if(!empty($prop['occurence'])){
                                                 if(is_numeric($prop['occurence'])){
@@ -3289,7 +3661,8 @@ class Spell extends Content
                                                 "duration" => $duration,
                                                 "cible" => $cible,
                                                 "color" => "number_between_two_cast",
-                                                "comment" => $comment
+                                                "comment" => $comment,
+                                                "element" => $element
                                             ], 
                                             write: false);
                                     } 
@@ -3475,7 +3848,7 @@ class Spell extends Content
                     $items = [];
                     foreach(self::AREA as $id => $area) { 
                         ob_start() ?>
-                            <p data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$area['description']?>"><span><img class="icon icon-25 me-2" src="<?=$area['icon']?>" alt=""><?=$area['name']?></span><br><span class='text-grey size-0-7'><?=$area['description']?></span></p>
+                            <p data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$area['description']?>"><span><img class="icon icon-35 me-2" src="medias/<?=$area['icon']?>" alt=""><?=$area['name']?></span><br><span class='text-grey size-0-7'><?=$area['description']?></span></p>
                         <?php $visual = ob_get_clean();
                         $items[] = [
                             "onclick" => "Spell.update('".$this->getUniqid()."', ".$id.", 'area', ".Controller::IS_VALUE.");",
@@ -3483,15 +3856,21 @@ class Spell extends Content
                         ];
                     }
 
-                    return $view->dispatch(
-                        template_name : "dropdown",
-                        data : [
-                            "tooltip" => "Zone d'effet du sort",
-                            "label" => $this->getArea(Content::FORMAT_BADGE),
-                            "size" => Style::SIZE_SM,
-                            "items" => $items
-                        ], 
-                        write: false);
+                    ob_start(); 
+                        if(empty($this->_area)){ ?>
+                            <p class="italic size-0-8 text-grey-d-3">Zone d'effet du sort :</p>
+                        <?php }
+                        $view->dispatch(
+                            template_name : "dropdown",
+                            data : [
+                                "tooltip" => "Zone d'effet du sort",
+                                "label" => $this->getArea(Content::FORMAT_BADGE),
+                                "size" => Style::SIZE_SM,
+                                "items" => $items,
+                                'is_search' => true
+                            ], 
+                            write: true);
+                    return ob_get_clean();
                     
                 case Content::FORMAT_BADGE:
                     if(empty($this->_area)){return "";}
@@ -3504,18 +3883,21 @@ class Spell extends Content
                         $description = self::AREA[1]['description'];
                         $icon = self::AREA[1]['icon'];
                     }
-                    return $view->dispatch(
-                        template_name : "icon",
-                        data : [
-                            "icon" => $icon,
-                            "size" => 40,
-                            "style" => Style::ICON_MEDIA,
-                            "dirfile" => "",
-                            "content_placement" => Style::POSITION_LEFT,
-                            "content" => $name,
-                            "tooltip" => $description
-                        ],
-                        write: false);
+                    ob_start(); ?>
+                        <p class="italic size-0-8 text-grey-d-3">Zone d'effet du sort :</p>
+                        <?php $view->dispatch(
+                            template_name : "icon",
+                            data : [
+                                "icon" => $icon,
+                                "size" => 50,
+                                "style" => Style::ICON_MEDIA,
+                                "dirfile" => "",
+                                "content_placement" => Style::POSITION_LEFT,
+                                "content" => $name,
+                                "tooltip" => $description
+                            ],
+                            write: true);
+                    return ob_get_clean();
 
                 case Content::FORMAT_ICON:
                     if(empty($this->_area)){return "";}
@@ -3528,17 +3910,19 @@ class Spell extends Content
                         $description = self::AREA[1]['description'];
                         $icon = self::AREA[1]['icon'];
                     }
-                    return $view->dispatch(
-                        template_name : "icon",
-                        data : [
-                            "icon" => $icon,
-                            "size" => 40,
-                            "style" => Style::ICON_MEDIA,
-                            "dirfile" => "",
-                            "content_placement" => Style::POSITION_LEFT,
-                            "tooltip" => $description
-                        ],
-                        write: false);
+                    ob_start(); ?>
+                        <?php $view->dispatch(
+                            template_name : "icon",
+                            data : [
+                                "icon" => $icon,
+                                "size" => 40,
+                                "style" => Style::ICON_MEDIA,
+                                "dirfile" => "",
+                                "content_placement" => Style::POSITION_LEFT,
+                                "tooltip" => $description
+                            ],
+                            write: true);
+                    return ob_get_clean();
 
                 case Content::FORMAT_PATH:
                     if(empty($this->_area)){return "";}
@@ -3682,7 +4066,7 @@ class Spell extends Content
                             "value" => $this->_cast_per_target,
                             "color" => "cast_per_target-d-2",
                             "style" => Style::INPUT_ICON,
-                            "icon" => "²",
+                            "icon" => "cast_per_target.png",
                             "style_icon" => Style::ICON_MEDIA
                         ], 
                         write: false);

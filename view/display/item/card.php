@@ -41,9 +41,9 @@
     </div>
     <div>
         <div class="card-text m-2"><small class="text-muted"><?=$obj->getDescription()?></small></div>
-        <?php if(!empty($obj->getRecepe())){ ?>
+        <?php if(!empty($obj->getRessource())){ ?>
             <div class="nav-item-divider back-main-d-1 mx-4"></div>
-            <p class="card- m-2"><small class="text-muted"><?=$obj->getRecepe()?></small></p>
+            <div class="m-2"><?=$obj->getRessource(Content::DISPLAY_RESUME)?></div>
         <?php } ?>
     </div>
 </div>

@@ -136,9 +136,23 @@ class Section extends Content
 
         }
     }
+
+    // Fonction permettant de récupérer le nom de la section (soit le titre, soit le nom du type de la section si pas de titre)
+    public function getName(int $format = Content::FORMAT_BRUT){
+        include SectionManager::PATH_SECTION . $this->getType();
+
+        if(!empty($this->getTitle())){
+            return $this->getTitle();
+        } elseif(isset($template['title'])) {
+            return $template['title'];
+        } else {
+            return "Section";
+        }
+    }
     
     public function getVisual(Style $style = new Style(["display" => Content::DISPLAY_CARD, "size" => "300"])){
         $user = ControllerConnect::getCurrentUser();
+        $name = addslashes($this->getName());
 
         switch ($style->getDisplay()) {
             case Content::DISPLAY_EDITABLE:
@@ -167,8 +181,9 @@ class Section extends Content
                             }
                         }
                     }
+
                     ob_start(); ?>
-                        <section id="section<?=$this->getUniqid()?>" data-type="<?=trim($this->getType(), ".php")?>" class="sectionselector mb-4" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
+                        <section id="section<?=$this->getUniqid()?>" data-name="<?=$name?>" data-type="<?=trim($this->getType(), ".php")?>" class="sectionselector mb-4" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
                             <div class="section-title d-flex flex-row justify-content-between">
                                 <h2 class="text-secondary-d-3 mb-3 light" style="width:initial;"><?=$this->getTitle()?></h2>
                                 <?php if($user->getRight('page', User::RIGHT_WRITE)){ ?>
@@ -188,7 +203,7 @@ class Section extends Content
                     <?php return ob_get_clean();
                 } else {
                     ob_start(); ?>
-                        <section id="section<?=$this->getUniqid()?>">
+                        <section id="section<?=$this->getUniqid()?>" data-name="<?=$name?>">
                             <p>Erreur : Aucun template associé à la section
                                 <a class="btn btn-sm btn-animate btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fa-solid fa-trash"></i> Supprimer la section</a>
                             </p>
@@ -216,7 +231,7 @@ class Section extends Content
                     }
                     
                     ob_start(); ?>
-                        <section>
+                        <section id="section<?=$this->getUniqid()?>" data-name="<?=$name?>">
                             <h2 class="text-main-d-4 mb-3 light"><?=$this->getTitle()?></h2>
                             <div><?=$template["content"]?></div>
                         </section>
@@ -224,7 +239,7 @@ class Section extends Content
 
                 } else {
                     ob_start(); ?>
-                        <section id="section<?=$this->getUniqid()?>">
+                        <section id="section<?=$this->getUniqid()?>" data-name="<?=$name?>">
                             <p>Erreur : Aucun template associé à la section
                                 <a class="btn btn-sm btn-animate btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fa-solid fa-trash"></i> Supprimer la section</a>
                             </p>

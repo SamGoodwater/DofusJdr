@@ -92,6 +92,7 @@ class MobManager extends Manager
         $req = $this->_bdd->prepare('SELECT *
         FROM mob        
         WHERE ( description like :term 
+            OR race like :term
             OR name like :term ) '.$usable . $limit.'');
         
         $req->execute(array("term" => $term));
@@ -107,11 +108,14 @@ class MobManager extends Manager
 // WRITE
     public function add(Mob $object){
         $req = $this->_bdd->prepare('INSERT INTO mob(
+                    official_id,
+                    dofusdb_id,
                     uniqid,
                     timestamp_add,
                     timestamp_updated,
                     name,
                     description,
+                    race,
                     location,
                     level,
                     vitality,
@@ -186,15 +190,19 @@ class MobManager extends Manager
                     other_info,
                     other_item,
                     other_consumable,
-                    other_spell
-                    usable
+                    other_spell,
+                    usable,
+                    dofus_version
                    )
             VALUES (
+                    :official_id,
+                    :dofusdb_id,
                     :uniqid,
                     :timestamp_add,
                     :timestamp_updated,
                     :name,
                     :description,
+                    :race,
                     :location,
                     :level,
                     :vitality,
@@ -270,15 +278,19 @@ class MobManager extends Manager
                     :other_item,
                     :other_consumable,
                     :other_spell,
-                    :usable
+                    :usable,
+                    :dofus_version
                 )');
 
         return $req->execute(array(
+            'official_id' => $object->getOfficial_id(),
+            'dofusdb_id' => $object->getDofusdb_id(),
             'uniqid' => $object->getUniqid(),
             'timestamp_add' => $object->getTimestamp_add(),
             'timestamp_updated' => $object->getTimestamp_updated(),
             'name' => $object->getName(),
             'description' => $object->getDescription(),
+            'race' => $object->getRace(),
             'location' => $object->getLocation(),
             'level' => $object->getLevel(),
             'vitality' => $object->getVitality(),
@@ -354,16 +366,20 @@ class MobManager extends Manager
             'hostility' => $object->getHostility(),
             'trait' => $object->getTrait(),
             'size' => $object->getSize(),
-            "usable" => $object->getUsable()
+            "usable" => $object->getUsable(),
+            "dofus_version" => $object->getDofus_version()
         ));
     }
     public function update(Mob $object){
         $req = $this->_bdd->prepare('UPDATE mob SET
+                    official_id=:official_id,
+                    dofusdb_id=:dofusdb_id,
                     uniqid=:uniqid,
                     timestamp_add=:timestamp_add,
                     timestamp_updated=:timestamp_updated,
                     name=:name,
                     description=:description,
+                    race=:race,
                     location=:location,
                     level=:level,
                     vitality=:vitality,
@@ -435,20 +451,24 @@ class MobManager extends Manager
                     other_info=:other_info,
                     other_item=:other_item,
                     other_consumable=:other_consumable,
-                    other_spell=:other_spell
+                    other_spell=:other_spell,
                     hostility=:hostility,
                     trait=:trait,
                     size=:size,
-                    usable=:usable
+                    usable=:usable,
+                    dofus_version=:dofus_version
             WHERE id = :id');
 
         return $req->execute(array(
             'id' => $object->getId(),
+            'official_id' => $object->getOfficial_id(),
+            'dofusdb_id' => $object->getDofusdb_id(),
             'uniqid' => $object->getUniqid(),
             'timestamp_add' => $object->getTimestamp_add(),
             'timestamp_updated' => $object->getTimestamp_updated(),
             'name' => $object->getName(),
             'description' => $object->getDescription(),
+            'race' => $object->getRace(),
             'location' => $object->getLocation(),
             'level' => $object->getLevel(),
             'vitality' => $object->getVitality(),
@@ -524,7 +544,8 @@ class MobManager extends Manager
             'hostility' => $object->getHostility(),
             'trait' => $object->getTrait(),
             'size' => $object->getSize(),
-            "usable" => $object->getUsable()
+            "usable" => $object->getUsable(),
+            "dofus_version" => $object->getDofus_version()
             ));
 
     }
@@ -536,7 +557,8 @@ class MobManager extends Manager
         $this->removeAllLinkSpellFromMob($object);
         $this->removeAllLinkConsumableFromMob($object);
         $this->removeAllLinkItemFromMob($object);
-        
+
+        FileManager::remove($object->getFile('logo'));
         $req = $this->_bdd->prepare('DELETE FROM mob WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }

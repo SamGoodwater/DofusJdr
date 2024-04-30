@@ -4,8 +4,8 @@
     
     // Conseillé
     if(!isset($is_btn)) { $is_btn = false;}else{if(!is_bool($is_btn)) {$is_btn = false;}}
-    if($is_btn){
-        if(!isset($btn_type)) { $btn_type = Style::STYLE_TEXT;}else{if(!in_array($btn_type, [Style::STYLE_BACK, Style::STYLE_BORDER, STYLE::STYLE_UNDERLINE, Style::STYLE_TEXT])) {$btn_type = Style::STYLE_TEXT;}}
+    if(!isset($btn_type)) { $btn_type = Style::STYLE_TEXT;}else{if(!in_array($btn_type, [Style::STYLE_BACK, Style::STYLE_BORDER, STYLE::STYLE_UNDERLINE, Style::STYLE_TEXT, Style::STYLE_NONE])) {$btn_type = Style::STYLE_TEXT;}}
+    if($is_btn || $btn_type == Style::STYLE_NONE){
         $btn_type = "btn-".$btn_type."-";
     } else {
         $btn_type = "text-";

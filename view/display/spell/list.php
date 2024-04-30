@@ -14,7 +14,7 @@
     }
 ?>
 
-<div>
+<div>E
     <div class="d-flex flex-row justify-content-around flex-wrap">
         <?php $i=0; foreach ($spells as $spell) { $i++;
             $ran = rand(0,1000000) . "_" . $i;
@@ -89,7 +89,7 @@
                 </div>
 
             </div>
-            <script>initCompetitionResume('#resume_in_competition<?=$ran?>');</script>
+
 
         <?php }
     }

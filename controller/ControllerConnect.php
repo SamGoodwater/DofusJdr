@@ -111,7 +111,7 @@ class ControllerConnect extends Controller{
     /* ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥
                 V I E W S
     ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥ */
-        public function getVisual($is_flush = true){
+        public function getVisual(){
             $return = [
                 "size" => "lg",
                 "title" => "",
@@ -124,6 +124,7 @@ class ControllerConnect extends Controller{
 
             if(ControllerConnect::isConnect() && !empty($user->getEmail())){
 
+                // A supprimer si nouvelle version fonctionne
                 ob_start(); ?>
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-animate btn-back-secondary" onclick="Connect.getHeader(true);"><?=$user->getPseudo()?></button>
@@ -137,6 +138,7 @@ class ControllerConnect extends Controller{
                             <?php } ?>
                             <?php if($user->getIs_admin()){ ?>
                                 <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
+                                <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('dbtools');">Outils de la base de donnée</a></li>
                             <?php } ?>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item btn-animate back-secondary-l-4-hover dropdown-item-toogletoolbar-button" onclick="toogleToolbar();">Masquer la barre d'outils</a></li>
@@ -144,53 +146,65 @@ class ControllerConnect extends Controller{
                             <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
                         </ul>
                     </div>
-                    <?php $return["header"] = ob_get_clean();
-                        ob_start(); ?>
-                        <div class="dropup-center dropup">
-                            <button type="button"  class="dropdown-toggle border-none back-transparent" data-bs-toggle="dropdown" aria-expanded="false">
-                                <?php View::shortcutDispatch(
-                                    template_type: View::TEMPLATE_SNIPPET,
-                                    template_name : "icon",
-                                    data : [
-                                        "style" => Style::ICON_SOLID,
-                                        "icon" => "user",
-                                        "color" => "secondary",
-                                        "is_btn" => true,
-                                        "btn_type" => Style::STYLE_TEXT,
-                                        "size" => "size-1-3",
-                                        "tooltip" => "Accèder à mon compte",
-                                        "onclick" => "",
-                                        "content" => "Mon compte",
-                                        "content_placement" => Style::POSITION_BOTTOM
-                                    ], 
-                                    write: true); ?>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li class="italic text-center"><?=$user->getPseudo()?></li>
-                                <li class="item-divider-main"></li>
-                                <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="User.open('<?=$user->getUniqid()?>');">Paramètres</a></li>
-                                <?php if($user->getRight("page", User::RIGHT_WRITE)){ ?>
-                                    <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
-                                <?php } ?>
-                                <?php if($user->getIs_admin()){ ?>
-                                    <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
-                                <?php } ?>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
-                            </ul>
-                        </div>
-                    <?php $return["header_mobile"] = ob_get_clean();
+                <?php $return["header__"] = ob_get_clean();
+                ob_start(); ?>
+                    <div class="dropup-center dropup">
+                        <button type="button"  class="dropdown-toggle border-none back-transparent" data-bs-toggle="dropdown" aria-expanded="false">
+                            <?php View::shortcutDispatch(
+                                template_type: View::TEMPLATE_SNIPPET,
+                                template_name : "icon",
+                                data : [
+                                    "style" => Style::ICON_SOLID,
+                                    "icon" => "user",
+                                    "color" => "secondary",
+                                    "is_btn" => true,
+                                    "btn_type" => Style::STYLE_TEXT,
+                                    "size" => "size-1-3",
+                                    "tooltip" => "Accèder à mon compte",
+                                    "onclick" => "",
+                                    "content" => "Mon compte",
+                                    "content_placement" => Style::POSITION_BOTTOM
+                                ], 
+                                write: true); ?>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li class="italic text-center"><?=$user->getPseudo()?></li>
+                            <li class="item-divider-main"></li>
+                            <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="User.open('<?=$user->getUniqid()?>');">Paramètres</a></li>
+                            <?php if($user->getRight("page", User::RIGHT_WRITE)){ ?>
+                                <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('gestion_des_pages');">Gérer les pages</a></li>
+                            <?php } ?>
+                            <?php if($user->getIs_admin()){ ?>
+                                <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
+                            <?php } ?>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
+                        </ul>
+                    </div>
+                <?php $return["header_mobile"] = ob_get_clean();
 
+                // Nouvelle version
+                $return["header"] = View::shortcutDispatch(
+                    template_type: View::TEMPLATE_DISPLAY,
+                    template_name : "user/header_btn",
+                    data : [
+                        "is_connect" => true,
+                        "user" => $user
+                    ],
+                    write: false
+                );
                 $return["modal"] = $user->getVisual(new Style(["display" => Content::DISPLAY_EDITABLE]));
                 $return["size"] = "lg";
                 $return["title"] = "Compte";
 
             } else {
+
+                // A supprimer si nouvelle version fonctionne
                 ob_start(); ?>
                     <div>
                         <button type="button" onclick="Connect.getHeader(true);" class="btn btn-sm btn-animate btn-back-secondary">Connexion</button>
                     </div>
-                <?php $return["header"] = ob_get_clean();
+                <?php $return["header__"] = ob_get_clean();
                 ob_start(); ?>
                     <div>
                         <?php View::shortcutDispatch(
@@ -199,9 +213,9 @@ class ControllerConnect extends Controller{
                             data : [
                                 "style" => Style::ICON_SOLID,
                                 "icon" => "user",
-                                "color" => "secondary",
-                                "is_btn" => true,
-                                "btn_type" => Style::STYLE_TEXT,
+                                "color" => "white",
+                                "is_btn" => false,
+                                "btn_type" => Style::STYLE_NONE,
                                 "size" => "size-1-3",
                                 "tooltip" => "Se connecter ou créer un compte",
                                 "onclick" => "Connect.getHeader(true);",
@@ -210,7 +224,8 @@ class ControllerConnect extends Controller{
                             ], 
                             write: true); ?>
                     </div>
-                <?php $return["header_mobile"] = ob_get_clean();
+                <?php $return["header_mobile__"] = ob_get_clean();
+                // Ancienne version
                 ob_start(); ?>
                     <div class="text-center user__modal_connexion">
                         <div class="d-flex flex-row justify-content-around align-item-baseline pb-4 pt-2 px-4">
@@ -282,18 +297,33 @@ class ControllerConnect extends Controller{
                             $(btn).css("border-bottom", "solid 1px var(--main-d-2)");
                         }
                     </script>
-                <?php $return["modal"] = ob_get_clean();
+                <?php $return["modal__"] = ob_get_clean();
+
+                // Nouvelle version
+                $return["header"] = View::shortcutDispatch(
+                    template_type: View::TEMPLATE_DISPLAY,
+                    template_name : "user/header_btn",
+                    data : [
+                        "is_connect" => false,
+                        "user" => $user
+                    ],
+                    write: false
+                );
+                // Nouvelle version
+                $return["modal"] = View::shortcutDispatch(
+                    template_type: View::TEMPLATE_DISPLAY,
+                    template_name : "user/connect_modal",
+                    data : [
+                        "user" => $user
+                    ],
+                    write: false
+                );
                 $return["size"] = "xl";
                 $return["title"] = "Connexion / Inscription";
             }
                       
-            if(isset($_REQUEST['is_flush'])){$is_flush = true;}
-            if($is_flush){
-                echo json_encode($return);
-                flush();
-            } else {
-                return $return;
-            }
+            echo json_encode($return);
+            flush();
         }
         
         public function connexion(){

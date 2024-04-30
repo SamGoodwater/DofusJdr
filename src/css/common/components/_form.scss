@@ -23,3 +23,20 @@
         border-color: var(--main-d-1)!important;
         box-shadow: 0 0 0 .2rem var(--main-d-1)!important;
     }
+
+// ----------------- D R O P D O W N -----------------
+    .dropdown__search__container {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        padding-inline: 10px;
+
+        &__input {
+            margin-inline-start: 5px;
+            padding: 0.5rem;
+            width: 100%;
+            border: solid 1px var(--main-l-4);
+            border-radius: 5px;
+            min-height: 2rem;
+        }
+    }

@@ -4,7 +4,7 @@
     if(!isset($value)) {throw new Exception("value is not set");}else{if(!is_string($value) && !is_numeric($value) && !empty($value)) {throw new Exception("value is not set");}}
     if(!isset($description)) { $description = "";}else{if(!is_string($description)) {$description = "";}}
     if(!isset($critical)) { $critical = "";}else{if(!is_string($critical)) {$critical = "";}}
-    if(!isset($element)) { $element = "";}else{if(!Spell::ELEMENT[$element]) {$element = "";}}
+    if(!isset($element)) { $element = "";}else{if(!isset(Spell::ELEMENT[$element]) && empty($element)) {$element = "";}}
     if(!isset($cible)) { $cible = null;}else{if(!in_array($cible, [Spell::CIBLE_ALL, Spell::CIBLE_ALLY, Spell::CIBLE_ENEMY, Spell::CIBLE_SELF])) {$cible = null;}}
     if(!isset($color)) { $color = "main";}else{if(!Style::isValidColor($color)) {$color = "main";}}
     if(!isset($comment)) { $comment = "";}else{if(!is_string($comment)) {$comment = "";}}
@@ -19,9 +19,25 @@
             }
         }
     }
-?>    
 
-<div>
+    $grid_col = "";
+    $grid_row = "";
+    if(!empty($duration)){
+        $grid_col .= "-duration";
+    }
+    if(!empty($cible)){
+        $grid_col .= "-cible";
+    }
+
+    if(!empty($critical)){
+        $grid_row .= "-critical";
+    }
+    if(!empty($comment) || $variety == Spell::VARIETY_SAVE){
+        $grid_row .= "-comment";
+    }
+?>
+
+<div class="effects_array_prop spell_prop_col<?=$grid_col?> spell_prop_row<?=$grid_row?>">
     <div class="spell_prop_title">
         <?php $display_view->dispatch(
             template_name : "badge",
@@ -36,6 +52,15 @@
     <div class="spell_prop_value">
         <?=$value?>
     </div>
+    <?php if(!empty($duration)){ ?>
+        <div class="spell_prop_duration">
+            <?php if(strlen($duration) < 20){ ?>
+                <p>Les effets sont réparties sur <?=$duration?> tours</p>
+            <?php } else { ?>
+                <p>Les effets sont réparties sur plusieurs tours comme décrit ci-après</p><?=$duration?>    
+            <?php } ?>
+        </div>
+    <?php } ?>
     <?php if(!empty($cible)){ ?>
         <div class="spell_prop_cible">
             <?php switch ($cible) {
@@ -71,21 +96,14 @@
                 write: true); ?>
         </div>
     <?php } ?>
-    <?php if(!empty($duration)){ ?>
-        <div class="spell_prop_duration">
-            <?php if(strlen($duration) < 20){ ?>
-                <p>Les effets sont réparties sur <?=$duration?> tours</p>
-            <?php } else { ?>
-                <p>Les effets sont réparties sur plusieurs tours comme décrit ci-après</p><?=$duration?>    
-            <?php } ?>
-        </div>
-    <?php } ?>
     <?php if(!empty($critical)){ ?>
+        <p class="spell_prop_critical_title">Critique :</p>
         <div class="spell_prop_critical">
-            <span>Critiques : </span><?=$critical?>
+            <?=$critical?>
         </div>
     <?php } ?>
     <?php if(!empty($comment) || $variety == Spell::VARIETY_SAVE){ ?>
+        <p class="spell_prop_comment_title">Commentaire :</p>
         <div class="spell_prop_comment">
             <?php if(isset($comment)){ 
                 if(!empty($comment)){ ?>

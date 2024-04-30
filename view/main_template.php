@@ -45,19 +45,26 @@
 <body>
     <div id="MsgAlert" style='z-index:10000'></div>
     <div class="loading-container">
-        <img src="<?=$GLOBALS['project']['logo']?>" alt="Logo">
-        <p>
-            <span class="loading-letter">c</span>
-            <span class="loading-letter">h</span>
-            <span class="loading-letter">a</span>
-            <span class="loading-letter">r</span>
-            <span class="loading-letter">g</span>
-            <span class="loading-letter">e</span>
-            <span class="loading-letter">m</span>
-            <span class="loading-letter">e</span>
-            <span class="loading-letter">n</span>
-            <span class="loading-letter">t</span>
-        </p>
+        <button onclick="closeLoadingContainer();" class="loading-container__close-btn"><i class="fa-solid fa-xmark"></i></button>
+        <div class="loading-container__bubble">
+        <?php for ($i = 0; $i < 50; $i++) {
+            if($i % 2 == 0) {
+                $del = mt_rand(-15, 0);
+            } else {
+                $del = mt_rand(0, 15);
+            }
+            $o = mt_rand(50, 95) / 100;
+            $s = mt_rand(50, 100) / 100;
+            echo "<span style='--del:{$del};--o:{$o};--s:{$s}'></span>\n";
+        } ?>
+        </div>
+        <div class="loading-container__animation">
+            <?php for ($i = 0; $i < 10; $i++) {
+                echo "<span style='--del:{$i};'></span>\n";
+            } ?>
+        </div>
+        <img class="loading-container__logo" src="<?=$GLOBALS['project']['logo']?>" alt="Logo">
+        <p class="loading-container__text" data-text="Chargement">Chargement</p>
     </div>
     <div id="onloadDisplay" style="z-index:10001">
         <div class='d-flex justify-content-center'><div class='spinner-border text-main-d-2' role='status'><span class='visually-hidden'>Loading...</span></div></div>

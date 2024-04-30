@@ -175,6 +175,7 @@ class Controller {
                     if(data.state){
                         MsgAlert("Suppression de l'objet", "L'objet a bien été supprimé.", "green" , 3000);
                         $('#table').bootstrapTable('refresh');
+                        $('#modal').modal("hide");
                     } else {
                         $('#display_error').text(data.error);
                         MsgAlert("Echec de la suppresion", 'Erreur : ' + data.error, "danger" , 4000);
@@ -200,7 +201,7 @@ class Controller {
                         $("#table").bootstrapTable('updateCell', {index: indexCell, field: index, value: element});
                     }
                 }
-                eventManager();
+                View.initDisplay();
             },
             "json"
         ); 
@@ -276,7 +277,6 @@ class Controller {
             );
         }
 
-
         let loadData = function loadData() {
             $(".fixed-table-toolbar .loading-spinner").html(spinner + Math.round(100 * (loadedRows / total)) + "%");
             let nextUrl = url + optionurl + '&offset=' + offset + '&limit=' + limit;
@@ -294,8 +294,8 @@ class Controller {
                         if (loadedRows < total) {
                             offset += limit;
                             loadData();
-                            eventManager();
                         } else {
+                            View.initDisplay();
                             $(".fixed-table-toolbar .loading-spinner").html('');
                             currentRequest = null; // Réinitialisez la variable currentRequest une fois le chargement terminé
                         }
@@ -312,15 +312,15 @@ class Controller {
             $('#table').bootstrapTable({
                 onDblClickRow: function (row, $element, field) {
                     this_.open(row.uniqid);
-                    eventManager();
-                    $('#table').bootstrapTable('collapseAllRows');
+                    View.initDisplay();
                 },
                 onLoadSuccess:refresh(),
                 exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]
             });
 
             $('#table tbody').on('click', function (e) {
-                if($(e.target).attr('class').includes("bootstrap-table-filter-control-")){
+                let classlist_ = e.target.classList.value;
+                if (classlist_.includes("bootstrap-table-filter-control-")) {
                     $(e.target).blur();
                 }
             });
@@ -335,6 +335,30 @@ class Controller {
                 }
             });
             $(".fixed-table-toolbar").append("<div class='loading-spinner text-grey-d-2' style='top:15px;left:15px;position:relative;z-index:-1;'></div>");
+
+            const toolbar = document.querySelector(".fixed-table-toolbar .columns");
+            const btnExpand = document.createElement("button");
+            btnExpand.classList.add("btn", "btn-secondary");
+            btnExpand.setAttribute("type", "button");
+            btnExpand.setAttribute("name", "expandAllDetails");
+            btnExpand.setAttribute("title", "Déplier tout");
+            btnExpand.setAttribute("aria-label", "Déplier tout");
+            btnExpand.innerHTML = "<i class='fa-solid fa-angle-double-down'></i>";
+            btnExpand.onclick = function () {
+                $('#table').bootstrapTable('expandAllRows');
+            }
+            const btnCollapse = document.createElement("button");
+            btnCollapse.classList.add("btn", "btn-secondary");
+            btnCollapse.setAttribute("type", "button");
+            btnCollapse.setAttribute("name", "collapseAllDetails");
+            btnCollapse.setAttribute("title", "Replier tout");
+            btnCollapse.setAttribute("aria-label", "Replier tout");
+            btnCollapse.innerHTML = "<i class='fa-solid fa-angle-double-up'></i>";
+            btnCollapse.onclick = function () {
+                $('#table').bootstrapTable('collapseAllRows');
+            }
+            toolbar.prepend(btnCollapse);
+            toolbar.prepend(btnExpand);
         }
         
         createTable();

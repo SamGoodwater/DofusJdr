@@ -359,6 +359,11 @@ textarea {
 button,
 input {
   line-height: normal;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  background-color: transparent;
+  border: none;
 }
 
 /*

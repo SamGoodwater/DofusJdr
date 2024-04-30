@@ -35,6 +35,9 @@
                         <div><?=$obj->getSight_line(Content::FORMAT_BADGE)?></div>
                     </div>
                     <div class="col-auto">
+                        <?=$obj->getArea(Content::FORMAT_BADGE)?>
+                    </div>
+                    <div class="col-auto">
                         <?=$obj->getUsable(Content::FORMAT_BADGE)?>
                         <?php if($user->getRight('spell', User::RIGHT_WRITE)){ ?>
                             <a class='text-main-d-2 text-main-l-3-hover' title='Modifier' onclick="Spell.open('<?=$obj->getUniqid()?>', Controller.DISPLAY_EDITABLE);"><i class='fa-regular fa-edit'></i></a>
@@ -42,13 +45,13 @@
                     </div>                      
                 </div>
             </div>
-        </div>
+        </div>E
     </div>
     <div>
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
         <h2 class="card-title"><?=$obj->getName()?></h2>
         <p class="card-text"><?=$obj->getEffect()?></p>
-        <p class="card-text"><?=$obj->getEffect_array(Content::FORMAT_VIEW)?></p>
+        <!-- <p class="card-text"><?php //$obj->getEffect_array(Content::FORMAT_VIEW)?></p> -->
         <p class="card-text"><small class="text-muted"><?=$obj->getDescription()?></small></p>
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>
         <div class="d-flex justify-content-center"><?=$obj->getInvocation(Content::DISPLAY_RESUME)?></div>

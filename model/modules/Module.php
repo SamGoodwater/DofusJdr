@@ -43,6 +43,8 @@ class Module extends Content
           "user" => User::RIGHT_NO,
           "social" => User::RIGHT_READ,
           "ArtificialIntelligence" => User::RIGHT_NO,
+          "mob_race" => User::RIGHT_READ,
+          "ressource" => User::RIGHT_READ
       ];
 
     // Style couleur
@@ -101,5 +103,57 @@ class Module extends Content
         "feu-air-eau" => ["red","green", "blue"],
         "terre-feu-air-eau" => ["brown","red","green", "blue"]
       ];
+
+      protected $_dofus_version = "1";
+      protected $_official_id ='';
+      protected $_dofusdb_id ='';
+
+      public function getDofus_version(int $format = Content::FORMAT_BRUT){
+          switch ($format) {
+              case Content::FORMAT_BADGE:
+                  return "<span class='badge bg-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' title='Version de Dofus'>{$this->_dofus_version}</span>";
+              
+              default:
+                  return $this->_dofus_version;
+          }
+      }
+      public function setDofus_version($data){
+            $this->_dofus_version = $data;
+            return true;
+      }
+      public function getOfficial_id(int $format = Content::FORMAT_BRUT){
+          switch ($format) {
+              case Content::FORMAT_BADGE:
+                  return "<span class='badge bg-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' title='Identifiant official d'Ankama {$this->_official_id}'>N°{$this->_official_id}</span>";
+              
+              default:
+                  return $this->_official_id;
+          }
+      }
+      public function setOfficial_id($data){
+          if($data >= 0){
+              $this->_official_id = $data;
+              return true;
+          } else {
+              return -1;
+          }
+      }
+      public function getDofusdb_id(int $format = Content::FORMAT_BRUT){
+          switch ($format) {
+              case Content::FORMAT_BADGE:
+                  return "<span class='badge bg-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' title='Identifiant de DofusDB {$this->_dofusdb_id}'>N°{$this->_dofusdb_id}</span>";
+              
+              default:
+                  return $this->_dofusdb_id;
+          }
+      }
+      public function setDofusdb_id($data){
+          if($data >= 0){
+              $this->_dofusdb_id = $data;
+              return true;
+          } else {
+              return -1;
+          }
+      }
 
 }

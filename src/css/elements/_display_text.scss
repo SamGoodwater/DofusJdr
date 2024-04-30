@@ -1,0 +1,53 @@
+.display-text_in_competition{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    p{
+        margin: 3px;
+        z-index: 0;
+        width: 50%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: fade(5px);
+        transition: all ease-out 0.5s;
+        cursor: pointer;
+    }
+    p:first-child{
+        text-align: left;
+    }
+    p:last-child{
+        text-align: right;
+        direction: rtl;
+    }
+
+    p:hover {
+        z-index: 1; 
+        width: 100%;
+
+        background-color: rgb(240, 240, 240);
+        border-radius: 3px;
+        box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5.5px);
+        -webkit-backdrop-filter: blur(5.5px);
+    }
+    p::before {
+        content: '';
+        background: var(--grey-l-5);
+        opacity: 0.5;
+        width: 0%;
+        height: 0%;
+        top: 0%;
+        left: 0%;
+        transform: skew(45deg);
+        position: absolute;
+        transition: left 0.5s ease;
+    }
+    p:hover::before{
+        left: 150%;
+        width: 60%;
+        height: 100%;
+    }
+}

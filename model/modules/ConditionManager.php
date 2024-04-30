@@ -166,6 +166,8 @@ class ConditionManager extends Manager
     public function delete(Condition $object){
         $managerUser = new UserManager();
         $managerUser->removeBookmarkFromObj($object);
+
+        FileManager::remove($object->getFile('icon'));
         $req = $this->_bdd->prepare('DELETE FROM condition_ WHERE uniqid = :uniqid');
         return $req->execute(array("uniqid" => $object->getUniqid()));
     }

@@ -954,19 +954,28 @@ class ControllerNpc extends ControllerModule{
             $powerful = $_REQUEST['powerful'];
           }
           $use_ai = false;
-          if($_REQUEST['use_ai']){
+          if(isset($_REQUEST['use_ai'])){
             $use_ai = $this->returnBool($_REQUEST['use_ai']);
+          }
+          $genre = "non binaire";
+          if(isset($_REQUEST['genre'])){
+            $genre = $_REQUEST['genre'];
+          }
+          $inspiration_culturel = "";
+          if(isset($_REQUEST['inspiration_culturel'])){
+            $inspiration_culturel = $_REQUEST['inspiration_culturel'];
           }
 
           $obj = $this->generate(
+            npc: null,
             level: $level,
             classe: $_REQUEST['classe'],
             powerful: $powerful,
             name: $name,
             name_ai:[
               "use_ai" => $use_ai,
-              "genre" => $_REQUEST['genre'],
-              "inspiration_culturel" => $_REQUEST['inspiration_culturel']
+              "genre" => $genre,
+              "inspiration_culturel" => $inspiration_culturel
             ],
           );
 

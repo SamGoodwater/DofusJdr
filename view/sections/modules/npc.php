@@ -182,8 +182,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 <label for="level">Niveau du ou de la PNJ</label>
             </div>
             <div class="modal-footer d-flex flex-row justify-content-between">
-                <button type="button" class="btn btn-sm btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="Npc.add();" class="btn btn-sm btn-animate btn-back-secondary">Créer</button>
+                <button type="button" class="btn btn-animate btn-border-grey" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="Npc.add();" class="btn btn-animate btn-back-secondary">Créer</button>
             </div>
         </div>
 
