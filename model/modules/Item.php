@@ -810,10 +810,18 @@ class Item extends Module
                     switch ($data['action']) {
                         case 'add':
                             $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
-                            if($manager->addLinkRessource($this, $ressource, $quantity)){
-                                return true;
-                            }else{
-                                throw new Exception("Erreur lors de l'ajout de la ressource");
+                            if($manager->existsLinkRessource($this, $ressource)){
+                                if($manager->updateLinkRessource($this, $ressource, $quantity)){
+                                    return true;
+                                }else{
+                                    throw new Exception("Erreur lors de la mise à jour de la ressource");
+                                }
+                            } else {
+                                if($manager->addLinkRessource($this, $ressource, $quantity)){
+                                    return true;
+                                }else{
+                                    throw new Exception("Erreur lors de l'ajout de la ressource");
+                                }
                             }
                
                         case "remove":
@@ -821,6 +829,22 @@ class Item extends Module
                                 return true;
                             }else{
                                 throw new Exception("Erreur lors de la suppression de la ressource");
+                            }
+
+                        case "update":
+                            $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
+                            if($manager->existsLinkRessource($this, $ressource)){
+                                if($manager->updateLinkRessource($this, $ressource, $quantity)){
+                                    return true;
+                                }else{
+                                    throw new Exception("Erreur lors de la mise à jour de la ressource");
+                                }
+                            } else {
+                                if($manager->addLinkRessource($this, $ressource, $quantity)){
+                                    return true;
+                                }else{
+                                    throw new Exception("Erreur lors de l'ajout de la ressource");
+                                }
                             }
 
                         default:

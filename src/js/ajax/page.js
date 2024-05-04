@@ -382,6 +382,7 @@ class Page extends Controller{
     static initPageNavigation(){
         const container = document.querySelector('.page-navigation');
         const btn = document.querySelector('.page-navigation__top__toggle');
+        const btn_minimize = document.querySelector('.page-navigation__top__minimize');
         const selectItem_text = document.querySelector('.page-navigation__top__select-item');
         const textnav = document.querySelector('.page-navigation__top__text');
         const titles = [...document.querySelectorAll('.section-title')];
@@ -392,7 +393,7 @@ class Page extends Controller{
 
         window.addEventListener('scroll', () => {
 
-            if(window.innerWidth > BREAKPOINT_MOBILE){
+            if(window.innerWidth > BREAKPOINT_MOBILE && container.classList.contains('page-navigation--minimized') == false){
 
                 let index = null;
                 const  {scrollTop} = document.documentElement;
@@ -432,6 +433,7 @@ class Page extends Controller{
         });
 
         btn.onclick = function() {
+
             container.classList.toggle('page-navigation--open');
 
             if (container.classList.contains('page-navigation--open')) {
@@ -441,6 +443,23 @@ class Page extends Controller{
                 btn.setAttribute('aria-label', 'Ouvrir la navigation');
                 btn.innerHTML = '<i class="fa-solid fa-ellipsis"></i>';
             }
+        }
+
+        btn_minimize.onclick = function() {
+            container.classList.toggle('page-navigation--minimized');
+
+            if (container.classList.contains('page-navigation--minimize')) {
+                btn_minimize.setAttribute('aria-label', 'Agrandir le menu de navigation');
+                btn_minimize.setAttribute('title', 'Agrandir le menu de navigation');
+                btn_minimize.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i>';
+            } else {
+                btn_minimize.setAttribute('aria-label', 'Réduire le menu de navigation');
+                btn_minimize.setAttribute('title', 'Réduire le menu de navigation');
+                btn_minimize.innerHTML = '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>';
+            }
+
+            textnav.style.display = "none";
+            selectItem_text.style.display = "none";
         }
 
         

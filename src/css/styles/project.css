@@ -5465,6 +5465,7 @@ div[data-select=false] #is_selected i {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
   padding: 10px;
+  transition: all 0.3s ease-in-out;
 }
 .page-navigation:hover {
   opacity: 0.95;
@@ -5487,6 +5488,17 @@ div[data-select=false] #is_selected i {
   font-size: 2rem;
 }
 .page-navigation__top__toggle:hover i {
+  color: var(--main-d-2);
+}
+.page-navigation__top__minimize {
+  cursor: pointer;
+}
+.page-navigation__top__minimize i {
+  color: var(--main);
+  transition: all 0.3s ease-in-out;
+  font-size: 1rem;
+}
+.page-navigation__top__minimize:hover i {
   color: var(--main-d-2);
 }
 .page-navigation__top__text, .page-navigation__top__select-item {
@@ -5542,6 +5554,16 @@ div[data-select=false] #is_selected i {
 .page-navigation--open .page-navigation__menu__item--active {
   background-color: var(--main-d-3);
   color: var(--main-l-4);
+}
+.page-navigation--minimized {
+  right: 20px;
+  margin: 5px;
+  gap: 5px;
+  border-radius: 50%;
+}
+.page-navigation--minimized .page-navigation__top__text, .page-navigation--minimized .page-navigation__top__select-item, .page-navigation--minimized .page-navigation__top__toggle, .page-navigation--minimized .page-navigation__top__menu {
+  visibility: hidden;
+  display: none;
 }
 @media screen and (max-width: 768px) {
   .page-navigation {

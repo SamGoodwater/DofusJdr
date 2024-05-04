@@ -405,7 +405,7 @@ class FileManager extends Manager{
             }
         }
         
-        static function add(string $path_read, string $dir_dest, string $rename = "", bool $compress = true, bool $set_format_png = true, bool $resize = true, bool | string $thumbnail = "auto"){ // Ecrit après avoir convertit une image en png et la redimention (max 800 * 800) puis la compresse si besoins (- de 2Mo)
+        static function add(string $path_read, string $dir_dest, string $rename = "", bool $compress = true, bool $set_format_webp = true, bool $resize = true, bool | string $thumbnail = "auto"){ // Ecrit après avoir convertit une image en png et la redimention (max 800 * 800) puis la compresse si besoins (- de 2Mo)
             $dir_dest = FileManager::formatPath($dir_dest, false, true);
             if(is_file($path_read)){
                 $file_read = new File($path_read);
@@ -417,7 +417,7 @@ class FileManager extends Manager{
                     path_read: $file_read->getPath(),
                     path_write: $file_write->getPath(),
                     compress: $compress,
-                    set_format_png: $set_format_png,
+                    set_format_webp: $set_format_webp,
                     resize: $resize
                 );
 
@@ -432,7 +432,7 @@ class FileManager extends Manager{
                                 path_read: $new_file->getPath(),
                                 path_write: $file_thumbnail->getPath(),
                                 compress: $compress,
-                                set_format_png: $set_format_png,
+                                set_format_webp: $set_format_webp,
                                 resize: $resize,
                                 is_thumbnail: true
                             );
@@ -448,11 +448,11 @@ class FileManager extends Manager{
                 return false;
             }
         }
-        static function write(string $path_read, string $path_write, bool $compress = true, bool $set_format_png = true, bool $resize = true, bool $is_thumbnail = false){
+        static function write(string $path_read, string $path_write, bool $compress = true, bool $set_format_webp = true, bool $resize = true, bool $is_thumbnail = false){
                 $im = new Imagick($path_read);
                 
-                if($set_format_png){
-                    if($im->setImageFormat("png") == false){
+                if($set_format_webp){
+                    if($im->setImageFormat("webp") == false){
                         return false;
                     }
                 }
@@ -731,7 +731,7 @@ class FileManager extends Manager{
                             path_read:$file->getPath(),
                             path_write:$thumb->getPath(),
                             compress:true,
-                            set_format_png:false,
+                            set_format_webp:false,
                             resize:true,
                             is_thumbnail:true
                         );

@@ -305,6 +305,17 @@ class ItemManager extends Manager
         $post = $this->_bdd->prepare('SELECT id FROM link_item_ressource ORDER BY id DESC LIMIT 1');
         return $post->execute();
     }
+    public function updateLinkRessource(Item $item, Ressource $ressource, $quantity){
+        $req = $this->_bdd->prepare('UPDATE link_item_ressource SET
+                    quantity=:quantity
+            WHERE id_item = :id_item AND id_ressource = :id_ressource');
+
+        return $req->execute(array(
+            "id_item" => $item->getId(),
+            "id_ressource"=> $ressource->getId(),
+            "quantity" => $quantity
+        ));
+    }
     public function removeLinkRessource(Item $item, Ressource $ressource){
         $req = $this->_bdd->prepare('DELETE FROM link_item_ressource WHERE id_item = :id_item AND id_ressource = :id_ressource');
         return $req->execute(array("id_item" =>  $item->getId(), "id_ressource" =>  $ressource->getId()));

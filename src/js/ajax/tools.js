@@ -32,13 +32,17 @@ class Tools {
         let data_max = document.getElementById("data_max");
         let data_total = document.getElementById("data_total");
         let data_write = document.getElementById("data_write");
+        let data_show = document.getElementById("data_show");
         let data_submit = document.getElementById("data_submit");
+        let data_cancel = document.getElementById("data_cancel");
         let data_gettotal = document.getElementById("data_gettotal");
         let result = document.getElementById("result");
         let info = document.getElementById("data_info");
         let data_showitems = document.getElementById("data_showItems");
         let data_showconsumables = document.getElementById("data_showConsumables");
         let data_showresources = document.getElementById("data_showRessources");
+        let data_progress = document.getElementById("data_progress");
+        let data_progress_text = data_progress.querySelector("div");
 
         let offset = null;
         let limit = null;
@@ -46,6 +50,7 @@ class Tools {
         let total = null;
         let current_object = null;
         let is_writing = 0;
+        let is_showing = 0;
         let is_showitems = 0;
         let is_showconsumables = 0;
         let is_showresources = 0;
@@ -53,6 +58,8 @@ class Tools {
 
         let super_category = {};
         let category = {};
+
+        let continu = true;
 
         data_gettotal.addEventListener("click", function(){
             Tools.getTotalElementFromDofusDB(token);
@@ -69,6 +76,9 @@ class Tools {
             if(data_write.checked){
                 is_writing = 1;
             }
+            if(data_show.checked){
+                is_showing = 1;
+            }
             is_showitems = 0;
             if(data_showitems.checked){
                 is_showitems = 1;
@@ -83,15 +93,32 @@ class Tools {
             }
             
             total = data_total.getAttribute("data-total");
-            if(offset > max && max > 0 && total > 0){
-                MsgAlert("Erreur", "L'offset ne peut pas être supérieur à la limite", "danger", 0);
+            if(Number(offset) > Number(max)){
+                MsgAlert("Erreur", "L'offset ne peut pas être supérieur à la valeur max", "danger", 0);
                 return false;
             } else {
-                request(token);
+                if(Number(limit) > 50){
+                    MsgAlert("Erreur", "La limite ne doit pas être supérieur à 50.", "danger", 0);
+                    return false;
+                } else {
+                    request(token);
+                }
             }
+
+        });
+
+        data_cancel.addEventListener("click", function(){
+            info.innerHTML = "";
+            result.innerHTML = "";
+            data_progress_text.innerHTML = "0%";
+            data_progress_text.setAttribute("style", "width:0%");
+            data_progress.setAttribute("aria-valuenow", 0);
+            continu = false;
+            data_cancel.classList.add("disabled");
         });
 
         let request = (token) => {
+            data_cancel.classList.remove("disabled");
             let URL = 'index.php?c=tools&a=updatedbFromDofusDB';
             let is_writing_text = "";
             if(is_writing){
@@ -99,7 +126,11 @@ class Tools {
             } else {
                 is_writing_text = "affichage seulement";
             }
-            info.innerHTML += "Récupération de la page " + current_object + " sur " + max + " (type : "+type+", "+ is_writing_text +")<br>";
+            let ratio = (current_object / max) * 100;
+            info.innerHTML = "Récupération de la page " + current_object + " sur " + max + " (type : "+type+", "+ is_writing_text +")<br>";
+            data_progress_text.innerHTML = Math.round(ratio) + "%";
+            data_progress_text.setAttribute("style", "width:"+Math.round(ratio)+"%");
+            data_progress.setAttribute("aria-valuenow", Math.round(ratio));
             
             $.ajax({
                 url: URL,
@@ -113,41 +144,17 @@ class Tools {
                     offset: current_object,
                     limit: limit,
                     write: is_writing,
+                    show: is_showing,
                     showitems: is_showitems,
                     showconsumables: is_showconsumables,
                     showresources: is_showresources
                 },
                 dataType: "json",
                 success: function(data, status) {
+                    if(!continu){
+                        return false;
+                    }
                     if (data.state) {
-                        // if(data.super_category_list != undefined){
-                        //     if(data.super_category_list != ""){
-                        //         Object.entries(data.super_category_list).forEach(element => {
-                        //             const [key, value] = element;
-                        //             if (super_category[key] == undefined) {
-                        //                 super_category[key] = value;
-                        //                 let text = document.createElement('p');
-                        //                 text.innerHTML = key + ' => "' + value + '",';
-                        //                 super_category_list.appendChild(text);
-                        //             }
-                        //         });
-                        //     }
-                        // }
-    
-                        // if(data.category_list != undefined){
-                        //     if(data.category_list != ""){
-                        //         Object.entries(data.category_list).forEach(element => {
-                        //             const [key, value] = element;
-                        //             if (category[key] == undefined) {
-                        //                 category[key] = value;
-                        //                 let text = document.createElement('p');
-                        //                 text.innerHTML = key + ' => "' + value + '",';
-                        //                 category_list.appendChild(text);
-                        //             }
-                        //         });
-                        //     }
-                        // }
-
                         result.innerHTML += data.value;
                         current_object = Number(current_object) + Number(limit);
                         if (Number(current_object) <= Number(max)) {
@@ -155,6 +162,7 @@ class Tools {
                         } else {
                             info.innerHTML += "<span class='text-green bold'>Récupération terminée</span><br>";
                             MsgAlert("Aspiration terminée", "Les données ont été aspirées", "success", 0);
+                            data_cancel.classList.add("disabled");
                             return true;
                         }
                     } else {

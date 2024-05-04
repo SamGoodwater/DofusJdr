@@ -13,6 +13,7 @@
     background: rgb(255, 255, 255, 0.9);
     border-radius: 10px;
     padding: 10px;
+    transition: all 0.3s ease-in-out;
 
     &:hover {
         opacity: 0.95;
@@ -42,6 +43,21 @@
                 }
             }
         }
+        &__minimize {
+            cursor: pointer;
+    
+            i{
+                color:var(--main);
+                transition: all 0.3s ease-in-out;
+                font-size: 1rem;
+            }
+    
+            &:hover{
+                i{
+                    color:var(--main-d-2);
+                }
+            }
+        }
 
         &__text, &__select-item {
             font-weight: 400;
@@ -58,6 +74,7 @@
                 opacity: 1;
             }
         }
+
     }
 
     &__menu {
@@ -103,6 +120,20 @@
                     background-color: var(--main-d-3);
                     color: var(--main-l-4);
                 }
+            }
+        }
+    }
+
+    &--minimized {
+        right: 20px;
+        margin: 5px;
+        gap: 5px;
+        border-radius: 50%;
+
+        .page-navigation__top {
+            &__text, &__select-item, &__toggle, &__menu {
+                visibility: hidden;
+                display: none;
             }
         }
     }

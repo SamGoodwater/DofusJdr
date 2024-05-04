@@ -826,7 +826,7 @@ class ControllerTools extends Controller{
                                     $uniqid = $ressource->getUniqid();
                                   } else {
                                     $content_ressource = $content_recipe['ingredients'][$key];
-                                    $recipe_type = isset($content_ressource['typeId']) ? self::VACUM_CATEGORY_TO_RESSOURCES[$content_ressource['typeId']] : Ressource::TYPE_RESSOURCES_DIV;
+                                    $recipe_type = isset($content_ressource['typeId']) && isset(self::VACUM_CATEGORY_TO_RESSOURCES[$content_ressource['typeId']]) ? self::VACUM_CATEGORY_TO_RESSOURCES[$content_ressource['typeId']] : Ressource::TYPE_RESSOURCES_DIV;
                                     $uniqid = uniqid();
                                     $ressource = new Ressource([
                                       'uniqid' => $uniqid,
@@ -1011,7 +1011,13 @@ class ControllerTools extends Controller{
                                   } else {
                                       $effect = "Effets 2.0 : " . $effect;
                                   }
+                                  if(!empty($recipe)){
+                                    foreach ($recipe AS $rec) {
+                                      $obj->setRessource($rec);
+                                    }
+                                  }
                                   $obj->setEffect($effect);
+                                  
                                 } elseif($object_type == 'Ressource'){
                                   $obj->setWeight($weight);
                                 }
@@ -1028,8 +1034,6 @@ class ControllerTools extends Controller{
                                 if(FileManager::remove($obj->getFile('logo', new Style(["display" => Content::FORMAT_BRUT]))) == false){
                                   $creation_text .= " <span class='strong' style='color:red;'>Erreur lors de la suppression de l'image</span>";
                                 }
-    
-                                $creation_text .= " <span class='strong' style='color:green;'>Mis à jour</span><br>";
                               }
                               
                             }
@@ -1080,9 +1084,17 @@ class ControllerTools extends Controller{
                         $exist_category = '<i class="fa-solid text-green fa-check"></i>';
                       }
 
+                      $show = true;
                       $show_items = false;
                       $show_consumables = false;
                       $show_ressources = false;
+                      if(isset($_REQUEST['show'])){
+                        if($_REQUEST['show'] == "true" || $_REQUEST['show'] == true || $_REQUEST['show'] == 1 || $_REQUEST['show'] == "1"){
+                          $show = true;
+                        } else {
+                          $show = false;
+                        }
+                      }
                       if(isset($_REQUEST['showitems'])){
                         if($_REQUEST['showitems'] == "true" || $_REQUEST['showitems'] == true || $_REQUEST['showitems'] == 1 || $_REQUEST['showitems'] == "1"){
                           $show_items = true;
@@ -1106,6 +1118,7 @@ class ControllerTools extends Controller{
                       }
 
                       if(
+                        $show &&
                         $show_items == true && in_array($category, array_keys(self::VACUM_CATEGORY_TO_ITEM)) ||
                         $show_consumables == true && in_array($category, array_keys(self::VACUM_CATEGORY_TO_CONSOMABLE)) ||
                         $show_ressources == true && in_array($category, array_keys(self::VACUM_CATEGORY_TO_RESSOURCES))
@@ -1119,7 +1132,7 @@ class ControllerTools extends Controller{
                             <p><?=$creation_text?></p>               
                           </div>
                         <?php $return['value'] .= ob_get_clean();
-                      }
+                      } 
                   
                   }
               }

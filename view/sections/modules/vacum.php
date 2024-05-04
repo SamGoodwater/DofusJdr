@@ -66,15 +66,25 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     </div>
                 </div>
                 <div>
-                    <p>Ecrire les données ? (sinon elles seront seulement affichées)</p>
-                    <input id="data_write" type="checkbox" class="form-check-input">
-                    <p id="data_info"></p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="data_show">
+                        <label class="form-check-label" for="data_show">Afficher les données</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="data_write">
+                        <label class="form-check-label" for="data_write">Ecrire les données</label>
+                    </div>
                 </div>
 
                 <div>
                     <button id="data_gettotal" class="btn btn-back-green m-3">Récupérer le total</button>
                     <button id="data_submit" class="btn btn-back-green m-3 disabled">Aspirer</button>
+                    <button id="data_cancel" class="btn btn-back-red m-3 disabled">Annuler</button>
                 </div>
+                <div class="progress my-3" id="data_progress" role="progressbar" aria-label="Avancement de l'aspiration des données" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: 0%">0%</div>
+                </div>
+                <p id="data_info"></p>
             </div>
             <div class="d-flex justify-content-around gap-2 m-4">
                 <div id="super_category_list"></div>
