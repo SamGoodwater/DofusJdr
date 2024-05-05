@@ -524,57 +524,83 @@ class Classe extends Module
         /* Data = array(
                         uniqid => id du spell
                     )
-            Js : REMOVE : Classe.update(UniqidM,{action:'add|remove', uniqid:'uniqidS'},'spell', IS_VALUE);
-            Js : UPDATE : Classe.update(UniqidM,{action:'update', uniqidS:'uniqid', uniqidSNew:'uniqidNew'},'spell', IS_VALUE);
-            Js : ADD : Classe.update(UniqidM,{action:'update', uniqidS1:'uniqid1', uniqidS2:'uniqid2'},'spell', IS_VALUE);
+            Js : REMOVE : Classe.update(UniqidM,{action:'remove', uniqid:'uniqidS', group;'id_group'},'spell', IS_VALUE);
+            Js : UPDATE : Classe.update(UniqidM,{action:'update', uniqid:'uniqidS', uniqidNew:'uniqidSNew', group;'id_group'},'spell', IS_VALUE);
+            Js : ADD : Classe.update(UniqidM,{action:'add', uniqid:'uniqidS', group;'id_group'},'spell', IS_VALUE);
         */
         public function setSpell(array $data){ 
             $managerC = new ClasseManager;
             $managerS = new SpellManager;
 
-            if(isset($data['action'])){
-                switch ($data['action']) {
-                    case 'add':
-                        if(!isset($data['uniqid'])){return "L'uniqid du sort n'est pas défini";}
-                        if(!$managerS->existsUniqid($data['uniqid'])){return "Le sort existe déjà";}
-                        $spell = $managerS->getFromUniqid($data['uniqid']);
-                        if($managerC->addLinkSpell($this, $spell, new Spell(["id" => 0]))){	
-                            return true;
-                        }else{
-                            return "Erreur lors de l'ajout du sort";
-                        }
-
-                    case "update":
-                        if(!isset($data['uniqid']) && !isset($data['uniqidNew'])){return "L'uniqid du sort n'est pas défini";}
-                        if(!$managerS->existsUniqid($data['uniqid'])){return "Le sort n'existe pas";}
-                        if(!$managerS->existsUniqid($data['uniqidNew'])){return "Le sort n'existe pas";}
-                        $spell = $managerS->getFromUniqid($data['uniqid']);
-                        $spellNew = $managerS->getFromUniqid($data['uniqidNew']);
-                        if($managerC->updateLinkSpell($this, $spell, $spellNew)){
-                            return true;
-                        }else{
-                            return "Erreur lors de la mise à jour du lien";
-                        }
-           
-                    case "remove":          
-                        if(!isset($data['uniqid'])){return "L'uniqid du sort n'est pas défini";}
-                        if($managerS->existsUniqid($data['uniqid'])){
-                            $spell = $managerS->getFromUniqid($data['uniqid']); 
-                            if($managerC->removeLinkSpell($this, $spell)){
-                                return true;
-                            }else{
-                                return "Erreur lors de la suppression du sort";
-                            }
-                        }
-
-                    default:
-                        return "L'action n'est pas valide";
-                }
-
-            } else {
-                return "Une action est requise.";
+            if(!isset($data['action'])) {
+                throw new InvalidArgumentException("Une action est requise.");
+            }
+            if(!isset($data['uniqid'])) {
+                throw new InvalidArgumentException("L'uniqid du sort et l'indicateur de sort sont requis pour ajouter un sort.");
+            }
+            if(!$managerS->existsUniqid($data['uniqid'])) {
+                throw new InvalidArgumentException("Le sort spécifié n'existe pas.");
+            }
+            $spell = $managerS->getFromUniqid($data['uniqid']);
+        
+            switch ($data['action']) {
+                case 'add':
+                    if(isset($data['group'])) {
+                        $groupID = $data['group'];
+                    } else {
+                        // Création d'un nouveau groupe si aucun id_group n'est fourni
+                        $groupID = uniqid();
+                    }
+        
+                    // Vérification si le lien existe déjà
+                    if($managerC->existsLinkSpell($this, $spell, $groupID)) {
+                        throw new RuntimeException("Ce lien entre la classe et le sort existe déjà.");
+                    }
+                    if($managerC->addLinkSpell($this, $spell, $groupID)) {
+                        return true;
+                    } else {
+                        throw new RuntimeException("Erreur lors de l'ajout du sort à la classe.");
+                    }
+        
+                case "update":
+                    if(!isset($data['uniqidNew']) || !isset($data['group'])) {
+                        throw new InvalidArgumentException("Le nouvel uniqid et l'identifiant du groupe sont requis pour mettre à jour un sort.");
+                    }
+        
+                    if(!$managerS->existsUniqid($data['uniqidNew'])) {
+                        throw new InvalidArgumentException("L'un des sorts spécifiés n'existe pas.");
+                    }
+                    $spellNew = $managerS->getFromUniqid($data['uniqidNew']);
+                    $groupID = $data['id_group'];
+        
+                    if(!$managerC->existsLinkSpell($this, $spell, $groupID)) {
+                        throw new RuntimeException("Ce lien entre la classe et le sort n'existe pas.");
+                    }
+        
+                    if($managerC->updateLinkSpell($this, $spell, $spellNew, $groupID)) {
+                        return true;
+                    } else {
+                        throw new RuntimeException("Erreur lors de la mise à jour du lien entre la classe et le sort.");
+                    }
+                
+                case "remove":          
+                    if(!isset($data['id_group'])) {
+                        throw new InvalidArgumentException("L'identifiant du groupe et l'indicateur de sort sont requis pour supprimer un sort.");
+                    }
+        
+                    $groupID = $data['id_group'];
+        
+                    if(!$managerC->removeLinkSpell($this, $spell, $groupID)) {
+                        throw new RuntimeException("Erreur lors de la suppression du sort de la classe.");
+                    }
+        
+                    return true;
+        
+                default:
+                    throw new InvalidArgumentException("L'action spécifiée n'est pas valide.");
             }
         }
+        
 
         /* Data = array(uniqid => id du capability)
             Js : Classe.update(UniqidM,{action:'add|remove|update', uniqid:'uniqIdS'},'capability', IS_VALUE);

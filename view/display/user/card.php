@@ -21,6 +21,16 @@
             <?php } ?>
         </div>
     </div>
+    <?php if($obj->getIs_admin()){ ?>
+        <h3>ToolsBox</h3>
+        <div class="flex-row justify-content-start align-item-baseline mb-2">
+            <a data-tool='savedb' onclick="Tools.req(this, '<?=$obj->generateAndSaveToken()?>');" class="btn-sm btn btn-back-main">Sauver la base de donnée</a>
+            <a data-tool='verifAndCreatePageNeeded' onclick="Tools.req(this, '<?=$obj->generateAndSaveToken()?>');" class="btn-sm btn btn-back-main">Vérifier et créer les pages obligatoires</a>
+            <a onclick="Page.show('vacum');" class="btn-sm btn btn-back-main">Mise à jour de la base de donnée</a>
+            <a data-tool='cleanImage'  onclick="Tools.req(this, '<?=$obj->generateAndSaveToken()?>');" class="btn-sm btn btn-back-main">Nettoyer les images non utilisées</a>
+        </div>
+        <div id="tools-answer" class="m-2"></div>
+    <?php } ?>
     <?php if($user->getRight("user", User::RIGHT_WRITE)){ ?>
         <div class="nav-item-divider back-main"></div>
         <h6>Droits</h6>
