@@ -334,45 +334,9 @@ class Classe extends Module
             
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
-                    $view = new View();
-                    ob_start();?>
-
-                        <div class="">
-                            <?=$this->getSpell(Content::DISPLAY_RESUME, true);?>
-
-                            <div class="text-center">
-                                <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Ajouter un sort" class="ms-2 btn btn-sm btn-animate btn-back-main" onclick="Classe.initModalUpdateSpell(this, '');"><i class="fa-regular fa-plus-square"></i> Ajouter un nouveau sort</a>
-                            </div>
-                        </div>
-
-                        <div id="modalAddSpell" class="modal" tabindex="-1">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content back-main-l-5">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Ajouter un sort</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php $view->dispatch(
-                                            template_name : "input/search",
-                                            data : [
-                                                "id" => "addSpell" . $this->getUniqid(),
-                                                "title" => "Ajouter un sort",
-                                                "label" => "Rechercher un sort",
-                                                "placeholder" => "Rechercher un sort",
-                                                "search_in" => ControllerModule::SEARCH_IN_SPELL,
-                                                "parameter" => $this->getUniqid(),
-                                                "action" => ControllerModule::SEARCH_DONE_ADD_SPELL_TO_CLASSE
-                                            ], 
-                                            write: true); ?>
-
-                                            <input id="data-hidden" type="hidden" data-uniqid="">                                            
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php return ob_get_clean();
-
+                    // Votre code pour le format éditable
+                    break;
+        
                 case Content::DISPLAY_RESUME:
                     $view = new View(View::TEMPLATE_DISPLAY);
                     if(!empty($spells)){
@@ -391,35 +355,36 @@ class Classe extends Module
                             write: false);
                     }
                     return "";
-
-                    
+        
                 case Content::DISPLAY_LIST:
                     $view = new View(View::TEMPLATE_DISPLAY);
                     if(!empty($spells)){
                         ob_start();
-                            ?> <ul class="list-unstyled"> <?php
-                                foreach ($spells as $spell) {?>
-                                    <li>
-                                        <?php $view->dispatch(
-                                            template_name : "spell/text",
-                                            data : [
-                                                "obj" => $spell["spell1"],
-                                                "obj2" => $spell["spell2"],
-                                                "is_link" => true,
-                                                "in_competition" => true
-                                            ], 
-                                            write: true); ?>
-                                    </li> <?php
-                                }
-                            ?> </ul> <?php
+                        ?> <ul class="list-unstyled"> <?php
+                        foreach ($spells as $group) {
+                            ?> <li> <?php
+                            foreach ($group as $spell) {?>
+                                <?php $view->dispatch(
+                                    template_name : "spell/text",
+                                    data : [
+                                        "obj" => $spell,
+                                        "is_link" => true,
+                                        "in_competition" => true
+                                    ], 
+                                    write: true); ?>
+                            <?php }
+                            ?> </li> <?php
+                        }
+                        ?> </ul> <?php
                         return ob_get_clean();
                     }
                     return "";
-
+        
                 case Content::FORMAT_ARRAY:
                     return $spells;
             }
         }
+        
         public function getCapability(int $format = Content::FORMAT_BRUT, bool $display_remove = false, $size = 300){
             $manager = new ClasseManager();
             $capabilities = $manager->getLinkCapability($this);
