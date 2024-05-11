@@ -27,6 +27,7 @@ class Tools {
 
     static initVacum(token){
         // let data_select = document.getElementById("data_select");
+        let data_template = document.getElementById("data_template");
         let data_offset = document.getElementById("data_offset");
         let data_limit = document.getElementById("data_limit");
         let data_max = document.getElementById("data_max");
@@ -54,7 +55,12 @@ class Tools {
         let is_showitems = 0;
         let is_showconsumables = 0;
         let is_showresources = 0;
-        let type = "";
+        if(data_template.value == "items" || data_template.value == "mobs" || data_template.value == "spells"){
+            let template = data_template.value;
+        } else {
+            MsgAlert("Erreur", "Le template n'est pas correct", "danger", 0);
+            return false;
+        }
 
         let super_category = {};
         let category = {};
@@ -127,7 +133,7 @@ class Tools {
                 is_writing_text = "affichage seulement";
             }
             let ratio = (current_object / max) * 100;
-            info.innerHTML = "Récupération de la page " + current_object + " sur " + max + " (type : "+type+", "+ is_writing_text +")<br>";
+            info.innerHTML = "Récupération de la page " + current_object + " sur " + max + " (template : "+template+", "+ is_writing_text +")<br>";
             data_progress_text.innerHTML = Math.round(ratio) + "%";
             data_progress_text.setAttribute("style", "width:"+Math.round(ratio)+"%");
             data_progress.setAttribute("aria-valuenow", Math.round(ratio));
@@ -140,7 +146,7 @@ class Tools {
                     "Authorization": "Bearer " + token
                 },
                 data: {
-                    template: "items",
+                    template: template,
                     offset: current_object,
                     limit: limit,
                     write: is_writing,
@@ -176,6 +182,7 @@ class Tools {
     }
 
     static getTotalElementFromDofusDB(token){
+        let data_template = document.getElementById("data_template");
         let data_total = document.getElementById("data_total");
         let data_max = document.getElementById("data_max");
         let data_offset = document.getElementById("data_offset");
@@ -183,6 +190,13 @@ class Tools {
 
         let super_category_list = document.getElementById("super_category_list");
         let category_list = document.getElementById("category_list");
+
+        if(data_template.value == "items" || data_template.value == "mobs" || data_template.value == "spells"){
+            let template = data_template.value;
+        } else {
+            MsgAlert("Erreur", "Le template n'est pas correct", "danger", 0);
+            return false;
+        }
 
         data_total.setAttribute("data-max", 0);
         data_total.innerHTML = `<div class="spinner-border text-secondary" role="status">
@@ -197,6 +211,9 @@ class Tools {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "Authorization": "Bearer " + token
+            },
+            data: {
+                template: template
             },
             dataType: "json",
             success: function(data, status) {

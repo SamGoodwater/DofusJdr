@@ -87,7 +87,7 @@ class ControllerSocial extends ControllerModule{
             "visible" => $obj->getVisible(Content::FORMAT_ICON),
             "usable" => $obj->getUsable(Content::FORMAT_ICON),
             "logo" => $obj->getFile('logo',new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_MD])),
-            'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='social' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+            'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='social' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
             'edit' => $edit
           );
         }
@@ -141,7 +141,7 @@ class ControllerSocial extends ControllerModule{
               "visible" => $obj->getVisible(Content::FORMAT_ICON),
               "usable" => $obj->getUsable(Content::FORMAT_ICON),
               "logo" => $obj->getFile('logo',new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_MD])),
-              'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='social' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+              'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='social' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'edit' => $edit
             );
 

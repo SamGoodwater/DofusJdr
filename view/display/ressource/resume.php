@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="d-flex flex-column justify-content-between ms-auto resume-rapid-menu">
-                <a onclick='User.changeBookmark(this);' data-classe='condition' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
+                <a onclick='User.toogleBookmark(this);' data-classe='condition' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
             </div>
         </div>
         <div class="card-hover-showed">

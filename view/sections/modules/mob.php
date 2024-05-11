@@ -90,7 +90,6 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="level"><span class="text-level size-0-8">Niv.</span></th>
                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="race"><span class="text-grey-d-1 size-0-8">Race</span></th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="powerful"><span class="text-deep-purple-d-3 size-0-8">Puissance</span></th>
-                    <th class="text-center" data-sortable="true" data-visible="true" data-field="race">Race</th>
                     <th class="text-center" data-sortable="true" data-visible="true" data-field="life"><span data-bs-toggle='tooltip' data-bs-placement='bottom' title="Points de vie"><i class='fab fa-gratipay text-life'></i></span></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resume"></th>
                     <th class="text-center" data-sortable="false" data-visible="true" data-field="resumeattack"></th>

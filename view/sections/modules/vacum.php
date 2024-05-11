@@ -42,6 +42,12 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <div class="p-2">
                 <h2>Aspirateur de donnée</h2>
 
+                <select id="data_template" class="form-select form-select-sm m-2" aria-label="Sélectionner le type de donnée à aspirer">
+                    <option value="items" selected>Ressources, équipements et consommables</option>
+                    <option value="mobs">Créatures</option>
+                    <option value="spells">Sorts</option>
+                </select>
+
                 <div class="m-2">
                     <p>Il y a <span id="data_total" data-total=0>0</span> objet(s) sélectionné(s)</p>
                     <p>Objet de départ (offset)</p>

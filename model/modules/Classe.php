@@ -331,11 +331,50 @@ class Classe extends Module
         public function getSpell(int $format = Content::FORMAT_BRUT, bool $is_editable = false, $size = 300){
             $manager = new ClasseManager();
             $spells = $manager->getLinkSpell($this);
+            // La liste de spell est composé de plusieurs sous tableau de sorts, la key de chaque sous tableau correspond à l'id du groupe.
             
             switch ($format) {
                 case Content::FORMAT_EDITABLE:
-                    // Votre code pour le format éditable
-                    break;
+                    $view = new View();
+                    ob_start();?>
+
+                        <div class="">
+                            <?=$this->getSpell(Content::DISPLAY_RESUME, true);?>
+
+                            <div class="d-flex flex-colum align-items-center justify-content-center">
+                                <a data-bs-toggle='tooltip' data-bs-placement='bottom' title="Ajouter un sort" class="ms-2 btn btn-sm btn-animate btn-back-main" onclick="Classe.initModalUpdateSpell('group_<?=uniqid()?>');"><i class="fa-regular fa-plus-square"></i> Ajouter un nouveau sort</a>
+                            </div>
+                        </div>
+
+                        <div id="modalAddSpell" class="modal" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content back-main-l-5">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Ajouter un sort</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php $view->dispatch(
+                                            template_name : "input/search",
+                                            data : [
+                                                "id" => "addSpell" . $this->getUniqid(),
+                                                "title" => "Ajouter un sort",
+                                                "label" => "Rechercher un sort",
+                                                "placeholder" => "Rechercher un sort",
+                                                "search_in" => ControllerModule::SEARCH_IN_SPELL,
+                                                "parameter" => $this->getUniqid(),
+                                                "action" => ControllerModule::SEARCH_DONE_ADD_SPELL_TO_CLASSE
+                                            ], 
+                                            write: true); ?>
+
+                                            <input id="data-uniqid" type="hidden" value>                                                                                      
+                                            <input id="data-id_group" type="hidden" value>                                                                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php return ob_get_clean();
+                break;
         
                 case Content::DISPLAY_RESUME:
                     $view = new View(View::TEMPLATE_DISPLAY);
@@ -349,8 +388,7 @@ class Classe extends Module
                                 "uniqid" => $this->getUniqid(),
                                 "class_name" => "Classe",
                                 "size" => $size,
-                                'in_competition' => true,
-                                "add_new_spell" => $is_editable
+                                'in_competition' => true
                             ], 
                             write: false);
                     }
@@ -363,17 +401,15 @@ class Classe extends Module
                         ?> <ul class="list-unstyled"> <?php
                         foreach ($spells as $group) {
                             ?> <li> <?php
-                            foreach ($group as $spell) {?>
-                                <?php $view->dispatch(
+                                $view->dispatch(
                                     template_name : "spell/text",
                                     data : [
-                                        "obj" => $spell,
+                                        "objs" => $group,
                                         "is_link" => true,
                                         "in_competition" => true
                                     ], 
                                     write: true); ?>
-                            <?php }
-                            ?> </li> <?php
+                            </li> <?php
                         }
                         ?> </ul> <?php
                         return ob_get_clean();
@@ -510,8 +546,8 @@ class Classe extends Module
         
             switch ($data['action']) {
                 case 'add':
-                    if(isset($data['group'])) {
-                        $groupID = $data['group'];
+                    if(isset($data['id_group'])) {
+                        $groupID = $data['id_group'];
                     } else {
                         // Création d'un nouveau groupe si aucun id_group n'est fourni
                         $groupID = uniqid();
@@ -528,7 +564,7 @@ class Classe extends Module
                     }
         
                 case "update":
-                    if(!isset($data['uniqidNew']) || !isset($data['group'])) {
+                    if(!isset($data['uniqidNew']) || !isset($data['id_group'])) {
                         throw new InvalidArgumentException("Le nouvel uniqid et l'identifiant du groupe sont requis pour mettre à jour un sort.");
                     }
         

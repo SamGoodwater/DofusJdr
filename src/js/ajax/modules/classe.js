@@ -49,23 +49,38 @@ class Classe extends Controller{
         ); 
     }
 
-    static initModalUpdateSpell(btn, targetSpellToKeep){
-        let $inputdata = $("#modalAddSpell #data-hidden");
-        let $parent = $(btn).closest('.resume_in_competition');
-        let $spell = $parent.find(targetSpellToKeep);
-        $inputdata.attr('data-uniqid', $spell.attr('data-uniqid'));
+    static initModalUpdateSpell(id_group, uniqid_old_spell = ""){
+        if ($("#modalAddSpell #data-id_group").length === 0 || id_group == "") {
+            MsgAlert("Impossible de récupérer les informations", "Veuillez réessayer", "danger", 4000);
+            return false;
+        }    
+        if(uniqid_old_spell != null && uniqid_old_spell != "") {
+            if($("#modalAddSpell #data-uniqid").length === 0){
+                MsgAlert("Impossible de récupérer les informations", "Veuillez réessayer", "danger", 4000);
+                return false;
+            }
+        }
+        $("#modalAddSpell #data-uniqid").val(uniqid_old_spell);
+        $("#modalAddSpell #data-id_group").val(id_group);
         $('#modalAddSpell').modal('show');
     }
     static updateSpell(uniqidClasse, uniqidSpellNew){
-        let uniqidSpell = $("#modalAddSpell #data-hidden").attr('data-uniqid');
+        let uniqid_old_spell = $("#modalAddSpell #data-uniqid").val();
+        let id_group = $("#modalAddSpell #data-id_group").val();	
+        if(id_group == "" || uniqidClasse == "" || uniqidSpellNew == ""){
+            MsgAlert("Impossible de récupérer les informations", "Veuillez réessayer", "danger", 4000);
+            return false;
+        }
+        
         let action = {};
-        if(uniqidSpell == undefined || uniqidSpell == ""){
+        if(uniqid_old_spell == undefined || uniqid_old_spell == ""){
             if(VERBAL_MODE){
                 console.log("add");
             }
             action = {
                 action : "add",
-                uniqid : uniqidSpellNew
+                uniqid : uniqidSpellNew,
+                id_group : id_group
             };
         } else {
             if(VERBAL_MODE){
@@ -73,8 +88,9 @@ class Classe extends Controller{
             }
             action = {
                 action : "update",
-                uniqid : uniqidSpell,
-                uniqidNew : uniqidSpellNew
+                uniqid : uniqid_old_spell,
+                uniqidNew : uniqidSpellNew,
+                id_group : id_group
             };
         }
 

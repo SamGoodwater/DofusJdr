@@ -83,7 +83,7 @@ class ControllerCondition extends ControllerModule{
           'description' => $obj->getDescription(),
           'is_unbewitchable' => $obj->getIs_unbewitchable(Content::FORMAT_ICON),
           'is_malus' => $obj->getIs_malus(Content::FORMAT_ICON),
-          'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='condition' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+          'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='condition' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
           'icon' => $obj->getFile('icon', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_LG])),
           'edit' => $edit,
@@ -137,7 +137,7 @@ class ControllerCondition extends ControllerModule{
               'description' => $obj->getDescription(),
               'is_unbewitchable' => $obj->getIs_unbewitchable(Content::FORMAT_ICON),
               'is_malus' => $obj->getIs_malus(Content::FORMAT_ICON),
-              'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='condition' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+              'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='condition' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
               'icon' => $obj->getFile('icon', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_LG])),
               'edit' => $edit,
@@ -219,7 +219,7 @@ class ControllerCondition extends ControllerModule{
                 $click_action = "";
                 switch ($action) {
                   case ControllerModule::SEARCH_DONE_ADD_TO_BOOKMARK:
-                    $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                    $click_action = "onclick=\"User.toogleBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
                   break;
                   default:
                     $click_action = "onclick=\"Condition.open('".$object->getUniqid()."')\"";
