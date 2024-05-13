@@ -55,8 +55,9 @@ class Tools {
         let is_showitems = 0;
         let is_showconsumables = 0;
         let is_showresources = 0;
+        let template = null;
         if(data_template.value == "items" || data_template.value == "mobs" || data_template.value == "spells"){
-            let template = data_template.value;
+            template = data_template.value;
         } else {
             MsgAlert("Erreur", "Le template n'est pas correct", "danger", 0);
             return false;
@@ -187,12 +188,10 @@ class Tools {
         let data_max = document.getElementById("data_max");
         let data_offset = document.getElementById("data_offset");
         let data_submit = document.getElementById("data_submit");
-
-        let super_category_list = document.getElementById("super_category_list");
-        let category_list = document.getElementById("category_list");
+        let template = null;
 
         if(data_template.value == "items" || data_template.value == "mobs" || data_template.value == "spells"){
-            let template = data_template.value;
+            template = data_template.value;
         } else {
             MsgAlert("Erreur", "Le template n'est pas correct", "danger", 0);
             return false;

@@ -267,7 +267,7 @@ abstract class Content
                 return $this->_usable;
         }
     }
-    public function getFile(string $name_file, Style $style = new Style([]), $getfirst = false){
+    public function getFile(string $name_file, Style $style = new Style([]), $getfirst = false, $getThumbnail = false){
         $className = strtolower(get_class($this));
         $view = new View();
         $multi_files = false;
@@ -276,6 +276,9 @@ abstract class Content
             if(is_array($this->_files[$name_file])){         
                 if($getfirst){
                     $file = $this->_files[$name_file][0];
+                    if($getThumbnail){
+                        $file = $file->getThumbnail();
+                    }
                     $is_removable = false;
                     if($style->getIs_removable() && $file->getPath() != $className::FILES[$name_file]["default"] && $file->getPath() != Content::PATH_FILE_GENERAL_DEFAULT){
                         $is_removable = true;   
@@ -288,6 +291,9 @@ abstract class Content
                     $multi_files = true;
                     foreach ($this->_files[$name_file] as $file) {
                         $is_removable = false;
+                        if($getThumbnail){
+                            $file = $file->getThumbnail();
+                        }
                         if($style->getIs_removable() && $file->getPath() != $className::FILES[$name_file]["default"] && $file->getPath() != Content::PATH_FILE_GENERAL_DEFAULT){
                             $is_removable = true;   
                         }
@@ -299,6 +305,9 @@ abstract class Content
                 }
             } else {
                 $file = $this->_files[$name_file];
+                if($getThumbnail){
+                    $file = $file->getThumbnail();
+                }
                 $is_removable = false;
                 if($style->getIs_removable() && $file->getPath() != $className::FILES[$name_file]["default"] && $file->getPath() != Content::PATH_FILE_GENERAL_DEFAULT){
                     $is_removable = true;   

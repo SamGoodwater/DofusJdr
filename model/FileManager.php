@@ -136,8 +136,6 @@ class FileManager extends Manager{
                         }
                     }
 
-
-
                     if(FileManager::isImage($fileObj) && class_exists('Imagick')){
                         $success = FileManager::add($this->getFile()['tmp_name'], $path);
                     } else {
@@ -449,8 +447,17 @@ class FileManager extends Manager{
             }
         }
         static function write(string $path_read, string $path_write, bool $compress = true, bool $set_format_webp = true, bool $resize = true, bool $is_thumbnail = false){
-                $im = new Imagick($path_read);
+            if(class_exists('Imagick') == false){
+                $content = @file_get_contents($path_read);
+                if(file_put_contents($path_write, $content)){
+                    return true;
+                } else {
+                    return false;
+                }
                 
+            } else {
+                $im = new Imagick($path_read);
+            
                 if($set_format_webp){
                     if($im->setImageFormat("webp") == false){
                         return false;
@@ -479,6 +486,7 @@ class FileManager extends Manager{
                     $im->thumbnailImage(150,150, true);
                 }
                 return $im->writeImage($path_write);
+            }
         }
 
     // Autres
@@ -726,7 +734,7 @@ class FileManager extends Manager{
             static function addThumbnail(File $file){
                 if(!$file->isThumbnail()){
                     if(!$file->existThumbnail()){
-                        $thumb = $file->getThumbnail();
+                        $thumb = new File($file->getDirname() . $file->getName(with_extention:false) ."_thumb". $file->getExtention());
                         return FileManager::write(
                             path_read:$file->getPath(),
                             path_write:$thumb->getPath(),
