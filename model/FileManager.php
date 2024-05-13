@@ -22,6 +22,19 @@ class FileManager extends Manager{
     const UPLOAD_ACTION_EXIST_NAME_ERROR = 2;
     const UPLOAD_ACTION_EXIST_NAME_DEFAULT = FileManager::UPLOAD_ACTION_EXIST_NAME_REPLACE;
 
+    private const PROTECTED_FILE = [
+        "/",
+        "medias/",
+        "medias/files/",
+        "medias/modules/",
+        "medias/logos/",
+        "medias/safeDir/",
+        "medias/icons/",
+        "medias/font/",
+        "medias/regulatory/",
+        Content:: PATH_FILE_GENERAL_DEFAULT,
+    ];
+
     public function __construct(array $donnees){
         $this->hydrate($donnees);
     }
@@ -33,6 +46,26 @@ class FileManager extends Manager{
               $this->$method($valeur);
           }
         }
+    }
+    static function getProtectedFile(){
+        $protected_file = FileManager::PROTECTED_FILE;
+
+        $includedClasses = get_declared_classes();
+        foreach ($includedClasses as $className) {
+            $reflectionClass = new ReflectionClass($className);
+            if ($reflectionClass->hasConstant('FILE')) {
+                $fileConstant = $reflectionClass->getConstant('FILE');
+                if (is_array($fileConstant)) {
+                    foreach ($fileConstant as $subArray) {
+                        if (isset($subArray['default'])) {
+                            $default = $subArray['default'];
+                            $protected_file[] = $default;
+                        }
+                    }
+                }
+            }
+        }
+        return $protected_file;
     }
     public function setFile(array $file){
         $this->_file = $file;
@@ -135,8 +168,6 @@ class FileManager extends Manager{
                             }
                         }
                     }
-
-
 
                     if(FileManager::isImage($fileObj) && class_exists('Imagick')){
                         $success = FileManager::add($this->getFile()['tmp_name'], $path);
@@ -405,7 +436,7 @@ class FileManager extends Manager{
             }
         }
         
-        static function add(string $path_read, string $dir_dest, string $rename = "", bool $compress = true, bool $set_format_webp = true, bool $resize = true, bool | string $thumbnail = "auto"){ // Ecrit après avoir convertit une image en png et la redimention (max 800 * 800) puis la compresse si besoins (- de 2Mo)
+        static function add(string $path_read, string $dir_dest, string $rename = "", bool $set_format_webp = true, bool $resize = true, bool | string $thumbnail = "auto", $overwrite = true){ // Ecrit après avoir convertit une image en png et la redimention (max 800 * 800) puis la compresse si besoins (- de 2Mo)
             $dir_dest = FileManager::formatPath($dir_dest, false, true);
             if(is_file($path_read)){
                 $file_read = new File($path_read);
@@ -416,9 +447,10 @@ class FileManager extends Manager{
                 $success = FileManager::write(
                     path_read: $file_read->getPath(),
                     path_write: $file_write->getPath(),
-                    compress: $compress,
                     set_format_webp: $set_format_webp,
-                    resize: $resize
+                    resize: $resize,
+                    is_thumbnail: false,
+                    overwrite: $overwrite
                 );
 
                 if(file_exists($file_write->getPath()) && $success){
@@ -431,10 +463,10 @@ class FileManager extends Manager{
                             FileManager::write(
                                 path_read: $new_file->getPath(),
                                 path_write: $file_thumbnail->getPath(),
-                                compress: $compress,
                                 set_format_webp: $set_format_webp,
                                 resize: $resize,
-                                is_thumbnail: true
+                                is_thumbnail: true,
+                                overwrite: $overwrite
                             );
                         }
                     }
@@ -448,37 +480,73 @@ class FileManager extends Manager{
                 return false;
             }
         }
-        static function write(string $path_read, string $path_write, bool $compress = true, bool $set_format_webp = true, bool $resize = true, bool $is_thumbnail = false){
-                $im = new Imagick($path_read);
-                
-                if($set_format_webp){
-                    if($im->setImageFormat("webp") == false){
+
+        static function write(string $path_read, string $path_write, bool $compress = true, bool $set_format_webp = true, bool $resize = true, bool $is_thumbnail = false, $overwrite = true) {
+            if (file_exists($path_read)) {
+                if (file_exists($path_write)) {
+                    if ($overwrite) {
+                        FileManager::remove($path_write);
+                    } else {
                         return false;
                     }
                 }
-                if($resize){
-                    $ratio = $im->getImageWidth() / $im->getImageHeight();
-                    if($ratio > 1){
-                        $im->resizeImage(800,800/$ratio,Imagick::FILTER_LANCZOS,1, true);
+
+                // Si Tinify n'est pas disponible, copiez simplement le fichier
+                if (!class_exists('Tinify\Tinify')) {
+                    $content = @file_get_contents($path_read);
+                    if($content === false){return false;}
+                    if(file_put_contents($path_write, $content)) {
+                        return true;
                     } else {
-                        $im->resizeImage(800*$ratio,800,Imagick::FILTER_LANCZOS,1, true);
-                    }
-                }  
-                if($compress){
-                    for ($i=10; $i < 90; $i += 10) { 
-                        if($im->getImageLength() > 1000000){
-                            if($im->setCompressionQuality(100 - $i) == false){
-                                return false;
-                            }
-                        } else {
-                            break;
-                        }
+                        return false;
                     }
                 }
+
+                if(\Tinify\compressionCount() >= 500){
+                    $content = @file_get_contents($path_read);
+                    if($content === false){return false;}
+                    if (file_put_contents($path_write, $content)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                // Configuration de la clé API Tinify
+                \Tinify\setKey("nBtl9x8L1TvVWdmp3n6lxbNVZ1tF3NNV");
+
+                // Redimensionner, compresser et convertir l'image avec Tinify
+                $source = @file_get_contents($path_read);
+                $source = \Tinify\fromFile($path_read);
+
+                if ($resize) {
+                    // Redimensionner l'image si nécessaire
+                    $source = $source->resize(array(
+                        "method" => "fit",
+                        "width" => 800,
+                        "height" => 800
+                    ));
+                }
+                
+                if ($set_format_webp) {
+                    // Compression de l'image
+                    $source = $source->convert("image/webp");
+                }
+
                 if($is_thumbnail){
-                    $im->thumbnailImage(150,150, true);
+                    $source = $source->resize(array(
+                        "method" => "fit",
+                        "width" => 150,
+                        "height" => 150
+                    ));
                 }
-                return $im->writeImage($path_write);
+
+                // Enregistrer l'image
+                $source->toFile($path_write);
+
+                return true;
+            }
+            return false;
         }
 
     // Autres
@@ -505,6 +573,10 @@ class FileManager extends Manager{
         static function rename(string $path, string $newname){ // Nouveau nom sans l'extention, précisé l'extention dans un 2ème paramètre si elle change
             $path_parts = pathinfo($path);
             if(file_exists($path)){
+                if(in_array($path, FileManager::getProtectedFile())){
+                    return false;
+                }
+                
                 $newname = FileManager::formatPath($newname, false, false);
 
                 if(!file_exists($path_parts['dirname'] . '/' . $newname)){
@@ -524,6 +596,11 @@ class FileManager extends Manager{
         }
         static function move(string $path, string $newdir, bool $remove = true){
             if(file_exists($path)){
+                
+                if(in_array($path, FileManager::getProtectedFile())){
+                    return false;
+                }
+
                 $newdir = FileManager::formatPath($newdir, false, true);
                 if(!FileManager::setDir($newdir)){return false;} // On créer le dossier si il ne l'est pas.
 
@@ -555,6 +632,10 @@ class FileManager extends Manager{
         }
         static function remove(string $path, bool $removeRoot = true, bool $removeThumbnail = true){ // supprimer un fichier et un dossier avec son contenu. RemoveRoot permet de supprimer ou non le dossier racine
             if(file_exists($path)){
+
+                if(in_array($path, FileManager::getProtectedFile())){
+                    return false;
+                }
 
                 if(is_dir($path)){
                     
@@ -726,7 +807,7 @@ class FileManager extends Manager{
             static function addThumbnail(File $file){
                 if(!$file->isThumbnail()){
                     if(!$file->existThumbnail()){
-                        $thumb = $file->getThumbnail();
+                        $thumb = new File($file->getDirname() . $file->getName(with_extention:false) ."_thumb". $file->getExtention());
                         return FileManager::write(
                             path_read:$file->getPath(),
                             path_write:$thumb->getPath(),

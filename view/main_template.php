@@ -159,7 +159,7 @@
                     <div class="modal-header">
                         <h2 class="modal-title w-100"></h2>
                         <a class="modal__share_object btn-text-grey mx-2" title="Copier le lien vers cette objet" onclick=""><i class="fa-solid fa-share-alt"></i></a>
-                        <a class="modal__bookmark_toogle btn-text-grey mx-2" title="Ajouter aux favoris" data-uniqid="" data-classe="" onclick="User.changeBookmark(this);"><i class="fa-regular fa-bookmark"></i></a>
+                        <a class="modal__bookmark_toogle btn-text-grey mx-2" title="Ajouter aux favoris" data-uniqid="" data-classe="" onclick="User.toogleBookmark(this);"><i class="fa-regular fa-bookmark"></i></a>
                         <a class="modal__bubbleshortcut_toggle mx-2" title="Ajouter cette bulle de raccourcis" onclick=""></a>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>

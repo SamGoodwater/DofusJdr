@@ -91,37 +91,36 @@
 
 ?>
 
-<div>
-    <div style="position:relative;">
-        <div class="characteristic-card card-<?=$size?> border-<?=$color?>-d-4 back-white">
-            <div class="d-flex flex-column align-items-center" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>">
-                <div class="d-flex flex-nowrap justify-content-center gap-1 align-items-center">
-                    <div>
-                        <span class="text-<?=$color?>-d-4">
-                            <?php if($style_icon == Style::ICON_MEDIA){ ?>
-                                <img src="<?=$dirfile . $icon?>" alt="<?=$name?>" class="icon <?=$size_icon?>"/>
-                            <?php } else { ?>
-                                <i class="<?=$style_icon?> fa-<?=$icon?>"></i>
-                            <?php } ?>
-                        </span>
-                    </div>
-                    <p data-addtext=0 <?=$data?> style="font-size:<?=$size_value?>rem;" class="text-<?=$color?>-d-4 truncate-<?=$truncate?>"><?=$value?></p>
+<div class="minicard__card">
+    <div class="minicard__card__visible" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="<?=$tooltip_placement?>" title="<?=$tooltip?>">
+        <div class="d-flex flex-column align-items-center" >
+            <div class="d-flex flex-nowrap justify-content-center gap-1 align-items-center">
+                <div>
+                    <span class="text-<?=$color?>-d-4">
+                        <?php if($style_icon == Style::ICON_MEDIA){ ?>
+                            <img src="<?=$dirfile . $icon?>" alt="<?=$name?>" class="icon <?=$size_icon?>"/>
+                        <?php } else { ?>
+                            <i class="<?=$style_icon?> fa-<?=$icon?>"></i>
+                        <?php } ?>
+                    </span>
                 </div>
-                <p style="position:relative;top:-0.5rem;" class="<?=$size_name?> text-<?=$color?>-d-4 text-center truncate-<?=$truncate?>"><?=ucfirst($name)?></p>
+                <p data-addtext=0 <?=$data?> style="font-size:<?=$size_value?>rem;" class="text-<?=$color?>-d-4 truncate-<?=$truncate?>"><?=$value?></p>
             </div>
-            <div class="characteristic-card-showed back-white border-<?=$color?>-d-4 px-1 pb-1">
-                <div class="nav-item-divider m-0 back-<?=$color?>-l-2 mx-4"></div>
-                <p class="text-grey-d-1 size-0-6 italic">Provenance de la caractéristique</p>
-                <p class="text-center <?=$size_detail?>"><?=$detail?></p>
-                <?php if(!empty($detail_on_level)){ ?>
-                    <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-1">
-                        <?=$detail_on_level?>
-                    </div>
-                <?php } ?>
-                <?php if(!empty($comment)){ ?>
-                    <p><small class="text-grey-d-2"><?=$comment?> </small></p>
-                <?php } ?>
-            </div>
+            <p style="position:relative;top:-0.5rem;" class="<?=$size_name?> text-<?=$color?>-d-4 text-center truncate-<?=$truncate?>"><?=ucfirst($name)?></p>
         </div>
     </div>
+    <div class="minicard__card__hidden border-<?=$color?>-d-4">
+        <p class="text-grey-d-1 size-0-6 text-center italic">Provenance de la caractéristique</p>
+        <div class="nav-item-divider m-0 back-<?=$color?>-l-2 mx-4"></div>
+        <p class="text-center <?=$size_detail?>"><?=$detail?></p>
+        <?php if(!empty($detail_on_level)){ ?>
+            <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-1">
+                <?=$detail_on_level?>
+            </div>
+        <?php } ?>
+        <?php if(!empty($comment)){ ?>
+            <p><small class="text-grey-d-2"><?=$comment?> </small></p>
+        <?php } ?>
+    </div>
 </div>
+

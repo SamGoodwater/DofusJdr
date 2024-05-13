@@ -267,15 +267,42 @@ abstract class Content
                 return $this->_usable;
         }
     }
-    public function getFile(string $name_file, Style $style = new Style([]), $getfirst = false){
+    public function getFile(string $name_file, Style $style = new Style([]), $getfirst = false, $getThumbnail = false){
         $className = strtolower(get_class($this));
+        if(!isset($className::FILES[$name_file])){
+            throw new Exception("Ce nom de fichier n'est pas associé à cet objet.");
+        }
+
         $view = new View();
         $multi_files = false;
         if(isset($this->_files[$name_file])){
             $files = null;
             if(is_array($this->_files[$name_file])){         
                 if($getfirst){
-                    $file = $this->_files[$name_file][0];
+                    if(!is_object($this->_files[$name_file][0])){
+                        throw new Exception("Le type de l'objet n'est pas correcte.");
+                    }
+                    if(file_exists($this->_files[$name_file][0]->getPath())){
+                        $file = $this->_files[$name_file][0];
+                        if($getThumbnail){
+                            $file = $file->getThumbnail();
+                        }
+                    } else {
+                        $file = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                        if(isset($className::FILES[$name_file]["default"])){
+                            if(file_exists($className::FILES[$name_file]["default"])) {
+                                $file = new File($className::FILES[$name_file]["default"]);
+                            }
+                        }
+                    }
+
+                    if($getThumbnail){
+                        $file = $file->getThumbnail();
+                    }
+                    if(get_class($file) != "File"){
+                        throw new Exception("Le type de l'objet n'est pas correcte.");
+                    }
+
                     $is_removable = false;
                     if($style->getIs_removable() && $file->getPath() != $className::FILES[$name_file]["default"] && $file->getPath() != Content::PATH_FILE_GENERAL_DEFAULT){
                         $is_removable = true;   
@@ -287,6 +314,30 @@ abstract class Content
                 }else{
                     $multi_files = true;
                     foreach ($this->_files[$name_file] as $file) {
+                        if(!is_object($file)){
+                            throw new Exception("Le type de l'objet n'est pas correcte.");
+                        }
+                        if(file_exists($file->getPath())){
+                            $file = $file;
+                            if($getThumbnail){
+                                $file = $file->getThumbnail();
+                            }
+                        } else {
+                            $file = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                            if(isset($className::FILES[$name_file]["default"])){
+                                if(file_exists($className::FILES[$name_file]["default"])) {
+                                    $file = new File($className::FILES[$name_file]["default"]);
+                                }
+                            }
+                        }
+
+                        if($getThumbnail){
+                            $file = $file->getThumbnail();
+                        }
+                        if(get_class($file) != "File"){
+                            throw new Exception("Ce nom de fichier est associé à un ensemble de fichiers, vous devez utiliser la méthode getFiles().");
+                        }
+
                         $is_removable = false;
                         if($style->getIs_removable() && $file->getPath() != $className::FILES[$name_file]["default"] && $file->getPath() != Content::PATH_FILE_GENERAL_DEFAULT){
                             $is_removable = true;   
@@ -298,7 +349,26 @@ abstract class Content
                     }
                 }
             } else {
-                $file = $this->_files[$name_file];
+                if(!is_object($this->_files[$name_file])){
+                    throw new Exception("Le type de l'objet n'est pas correcte.");
+                }
+                if(file_exists($this->_files[$name_file]->getPath())){
+                    $file = $this->_files[$name_file];
+                    if($getThumbnail){
+                        $file = $file->getThumbnail();
+                    }
+                } else {
+                    $file = new File(Content::PATH_FILE_GENERAL_DEFAULT);
+                    if(isset($className::FILES[$name_file]["default"])){
+                        if(file_exists($className::FILES[$name_file]["default"])) {
+                            $file = new File($className::FILES[$name_file]["default"]);
+                        }
+                    }
+                }
+                if(get_class($file) != "File"){
+                    throw new Exception("Le type de l'objet n'est pas correcte.");
+                }
+
                 $is_removable = false;
                 if($style->getIs_removable() && $file->getPath() != $className::FILES[$name_file]["default"] && $file->getPath() != Content::PATH_FILE_GENERAL_DEFAULT){
                     $is_removable = true;   

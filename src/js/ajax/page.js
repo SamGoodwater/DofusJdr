@@ -380,11 +380,11 @@ class Page extends Controller{
 
     // Evenements et fonctions de la page-navigation
     static initPageNavigation(){
-        const container = document.querySelector('.page-navigation');
-        const btn = document.querySelector('.page-navigation__top__toggle');
-        const btn_minimize = document.querySelector('.page-navigation__top__minimize');
-        const selectItem_text = document.querySelector('.page-navigation__top__select-item');
-        const textnav = document.querySelector('.page-navigation__top__text');
+        const container = document.querySelector('page-navigation');
+        const btn = document.querySelector('page-navigation__top__toggle');
+        const btn_minimize = document.querySelector('page-navigation__top__minimize');
+        const selectItem_text = document.querySelector('page-navigation__top__select-item');
+        const textnav = document.querySelector('page-navigation__top__text');
         const titles = [...document.querySelectorAll('.section-title')];
         let posTitles = titles.map(title => title.offsetTop);
         const links = [...document.querySelectorAll('.page-navigation__menu__item')];
@@ -393,38 +393,40 @@ class Page extends Controller{
 
         window.addEventListener('scroll', () => {
 
-            if(window.innerWidth > BREAKPOINT_MOBILE && container.classList.contains('page-navigation--minimized') == false){
+            if(container != null && container.length > 0){
+                if(window.innerWidth > BREAKPOINT_MOBILE && container.classList.contains('page-navigation--minimized') == false){
 
-                let index = null;
-                const  {scrollTop} = document.documentElement;
+                    let index = null;
+                    const  {scrollTop} = document.documentElement;
 
-                textnav.style.display = "block";
-                selectItem_text.style.display = "none";
+                    textnav.style.display = "block";
+                    selectItem_text.style.display = "none";
 
-                if(scrollTop > 3){
-                    posTitles.forEach(pos => {
-                        if(scrollTop >= pos){
-                            index = posTitles.indexOf(pos);
-                        }
-                    });
-                    if(index != null){
-                        if(index != currentIndex){
-                            currentIndex = index;
-                            links.forEach(link => link.classList.remove('page-navigation__menu__item--active'));
-                            links[index].classList.add('page-navigation__menu__item--active');
-                            selectItem_text.innerText = links[index].querySelector('.page-navigation__menu__item__link__text').innerText;
-                            selectItem_text.classList.remove('page-navigation__top__select-item--transition');
-                            setTimeout(() => {
-                                selectItem_text.classList.add('page-navigation__top__select-item--transition');
-                            }, 50);
-                        }
+                    if(scrollTop > 3){
+                        posTitles.forEach(pos => {
+                            if(scrollTop >= pos){
+                                index = posTitles.indexOf(pos);
+                            }
+                        });
+                        if(index != null){
+                            if(index != currentIndex){
+                                currentIndex = index;
+                                links.forEach(link => link.classList.remove('page-navigation__menu__item--active'));
+                                links[index].classList.add('page-navigation__menu__item--active');
+                                selectItem_text.innerText = links[index].querySelector('.page-navigation__menu__item__link__text').innerText;
+                                selectItem_text.classList.remove('page-navigation__top__select-item--transition');
+                                setTimeout(() => {
+                                    selectItem_text.classList.add('page-navigation__top__select-item--transition');
+                                }, 50);
+                            }
 
-                        if(container.classList.contains('page-navigation--open')){
-                            textnav.style.display = "block";
-                            selectItem_text.style.display = "none";
-                        } else {
-                            textnav.style.display = "none";
-                            selectItem_text.style.display = "block";
+                            if(container.classList.contains('page-navigation--open')){
+                                textnav.style.display = "block";
+                                selectItem_text.style.display = "none";
+                            } else {
+                                textnav.style.display = "none";
+                                selectItem_text.style.display = "block";
+                            }
                         }
                     }
                 }
@@ -432,36 +434,39 @@ class Page extends Controller{
 
         });
 
-        btn.onclick = function() {
+        if(btn != null && btn.length > 0){
+            btn.onclick = function() {
 
-            container.classList.toggle('page-navigation--open');
+                container.classList.toggle('page-navigation--open');
 
-            if (container.classList.contains('page-navigation--open')) {
-                btn.setAttribute('aria-label', 'Fermer la navigation');
-                btn.innerHTML = '<i class="fa-solid fa-times"></i>';
-            } else {
-                btn.setAttribute('aria-label', 'Ouvrir la navigation');
-                btn.innerHTML = '<i class="fa-solid fa-ellipsis"></i>';
+                if (container.classList.contains('page-navigation--open')) {
+                    btn.setAttribute('aria-label', 'Fermer la navigation');
+                    btn.innerHTML = '<i class="fa-solid fa-times"></i>';
+                } else {
+                    btn.setAttribute('aria-label', 'Ouvrir la navigation');
+                    btn.innerHTML = '<i class="fa-solid fa-ellipsis"></i>';
+                }
             }
         }
 
-        btn_minimize.onclick = function() {
-            container.classList.toggle('page-navigation--minimized');
+        if(btn_minimize != null && btn_minimize.length > 0){
+            btn_minimize.onclick = function() {
+                container.classList.toggle('page-navigation--minimized');
 
-            if (container.classList.contains('page-navigation--minimize')) {
-                btn_minimize.setAttribute('aria-label', 'Agrandir le menu de navigation');
-                btn_minimize.setAttribute('title', 'Agrandir le menu de navigation');
-                btn_minimize.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i>';
-            } else {
-                btn_minimize.setAttribute('aria-label', 'Réduire le menu de navigation');
-                btn_minimize.setAttribute('title', 'Réduire le menu de navigation');
-                btn_minimize.innerHTML = '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>';
+                if (container.classList.contains('page-navigation--minimize')) {
+                    btn_minimize.setAttribute('aria-label', 'Agrandir le menu de navigation');
+                    btn_minimize.setAttribute('title', 'Agrandir le menu de navigation');
+                    btn_minimize.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i>';
+                } else {
+                    btn_minimize.setAttribute('aria-label', 'Réduire le menu de navigation');
+                    btn_minimize.setAttribute('title', 'Réduire le menu de navigation');
+                    btn_minimize.innerHTML = '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>';
+                }
+
+                textnav.style.display = "none";
+                selectItem_text.style.display = "none";
             }
-
-            textnav.style.display = "none";
-            selectItem_text.style.display = "none";
         }
-
         
     }
 

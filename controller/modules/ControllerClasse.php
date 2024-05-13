@@ -91,7 +91,7 @@ class ControllerClasse extends ControllerModule{
           'path_img_logo' => $obj->getFile("logo", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
           'path_img' => $obj->getFile("img", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
-          'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='classe' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+          'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='classe' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
           'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=classe&a=getPdf&uniqid=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
           'edit' => $edit,
           'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
@@ -151,7 +151,7 @@ class ControllerClasse extends ControllerModule{
               'path_img_logo' => $obj->getFile("logo", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
               'path_img' => $obj->getFile("img", new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
-              'bookmark' => "<a onclick='User.changeBookmark(this);' data-classe='classe' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+              'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='classe' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=classe&a=getPdf&uniqid=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
               'edit' => $edit,
               'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
@@ -322,7 +322,7 @@ class ControllerClasse extends ControllerModule{
             $click_action = "";
             switch ($action) {
               case ControllerModule::SEARCH_DONE_ADD_TO_BOOKMARK:
-                $click_action = "onclick=\"User.changeBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                $click_action = "onclick=\"User.toogleBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
               break;
               default:
                 $click_action = "onclick=\"Classe.open('".$object->getUniqid()."')\"";

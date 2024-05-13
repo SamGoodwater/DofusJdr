@@ -4202,75 +4202,42 @@ button {
   background-image: url("/medias/icons/bubbles-listed.svg");
 }
 
-.characteristic-card {
+.minicard__card {
   position: relative;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  z-index: 0;
 }
-.characteristic-card > div {
+.minicard__card__visible {
   overflow: hidden;
 }
-.characteristic-card-showed {
+.minicard__card__hidden {
+  overflow: hidden;
   position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background: inherit;
-  border: inherit;
-  z-index: 1;
-  box-shadow: 1px 10px 6px rgba(0, 0, 0, 0.16), -1px 5px 6px rgba(0, 0, 0, 0.23);
+  display: block;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(100% + 2px);
+  visibility: hidden;
+  width: auto;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.122), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  opacity: 0;
+  padding-inline: 5px;
   pointer-events: none;
+  background: white;
+  border: solid 1px;
+  border-color: inherit;
+  border-radius: 5px;
+  padding: 5px;
+  transition: opacity 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-.characteristic-card-showed::after {
-  content: "";
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: inherit;
-  z-index: -1;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+.minicard__card:hover {
+  z-index: 1;
 }
-.characteristic-card::after {
-  content: "";
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: inherit;
-  z-index: -1;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+.minicard__card:hover .minicard__card__visible {
+  transform: scale(1.15);
 }
-.characteristic-card.card-xl:hover {
-  width: 220px;
-}
-.characteristic-card.card-lg:hover {
-  width: 180px;
-}
-.characteristic-card.card-md:hover {
-  width: 150px;
-}
-.characteristic-card.card-sm:hover {
-  width: 130px;
-}
-.characteristic-card:hover {
-  box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.16), -1px 5px 6px rgba(0, 0, 0, 0.23);
-  border-width: 1px;
-  border-style: solid;
-  border-bottom-width: 0px;
-  z-index: 3;
-}
-.characteristic-card:hover .characteristic-card-showed {
-  opacity: 1;
+.minicard__card:hover .minicard__card__hidden {
   pointer-events: auto;
-  border-width: 1px;
-  border-style: solid;
-  border-top-width: 0px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  overflow: hidden;
+  visibility: visible;
 }
 
 .bootstrap-table .fixed-table-toolbar .columns .dropdown-menu {

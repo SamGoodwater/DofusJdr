@@ -1,4 +1,5 @@
 <?php 
+    $uniqid = uniqid();
 
     // Obligatoire
     if(!isset($action)) {throw new Exception("action is not set");}else{if(!is_numeric($action)) {throw new Exception("action is not set");}}

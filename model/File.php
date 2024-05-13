@@ -154,6 +154,12 @@ class File
         public function getThumbnail(){
             if($this->existThumbnail()){
                 return new File($this->getDirname() . $this->getName(with_extention:false) ."_thumb". $this->getExtention());
+            } else {
+                if(FileManager::addThumbnail($this)){
+                    return new File($this->getDirname() . $this->getName(with_extention:false) ."_thumb". $this->getExtention());
+                } else {
+                    return new File($this->getPath());
+                }
             }
         }
         public function existThumbnail(){

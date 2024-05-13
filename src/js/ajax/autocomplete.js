@@ -69,7 +69,7 @@ function autocomplete_load(input, display_error = false) {
             sign.html("");
         },
         select: function( event, ui ) {
-            input.val('');
+            input_.val('');
         }
     })
     .autocomplete( "instance" )._renderItem = function( ul, item ) {

@@ -111,7 +111,7 @@ class ControllerConnect extends Controller{
     /* ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥
                 V I E W S
     ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥ */
-        public function getVisual(){
+        public function getVisual($is_flush = true){
             $return = [
                 "size" => "lg",
                 "title" => "",
@@ -321,9 +321,13 @@ class ControllerConnect extends Controller{
                 $return["size"] = "xl";
                 $return["title"] = "Connexion / Inscription";
             }
-                      
-            echo json_encode($return);
-            flush();
+            if(isset($_REQUEST['is_flush'])){$is_flush = true;}
+            if($is_flush){
+                echo json_encode($return);
+                flush();
+            } else {
+                return $return;
+            }
         }
         
         public function connexion(){

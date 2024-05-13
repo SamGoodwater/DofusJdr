@@ -3,7 +3,7 @@
 trait CalcStats
 { 
     static function convertLevel($val){
-      $val = trim($val);
+      $val = (int) trim($val);
       if(is_numeric($val)){
         $lvl = round($val / 10);
         if($lvl > 20){
@@ -19,7 +19,7 @@ trait CalcStats
     }
   
     static function convertStat($val){
-      $val = trim($val);
+      $val = (int) trim($val);
       if(is_numeric($val)){
         $stats = round($val / 20);
         if($stats < -5){
@@ -36,7 +36,7 @@ trait CalcStats
   
     // Rapporte la valeur d'initiative sur 20 en partant d'un max de 2000
     static function convertIni($val){
-      $val = trim($val);
+      $val = (int) trim($val);
       if(is_numeric($val)){
         $stats = round($val / 200);
         if($stats < -10){
@@ -52,7 +52,7 @@ trait CalcStats
     }
   
     static function convertLife($val){
-      $val = trim($val);
+      $val = (int) trim($val);
       if(is_numeric($val)){
         if($val <= 0){
           return 1;
@@ -79,7 +79,7 @@ trait CalcStats
   
     // Met un pourcentage d'esquive sur un échelle de 20
     static function convertDodge($val){
-      $val = trim($val);
+      $val = (int) trim($val);
       if(is_numeric($val)){
         $stats = round($val * 20 / 100);
         if($stats < -10){
@@ -96,7 +96,7 @@ trait CalcStats
   
     // Met un pourcentage de résistance sur un échelle de 10
     static function convertRes($val){
-      $val = trim($val);
+      $val = (int) trim($val);
       if(is_numeric($val)){
         $stats = round($val * 10 / 100);
         if($stats < -15){
@@ -113,7 +113,7 @@ trait CalcStats
     
     // Met un pourcentage de résistance sur un échelle de 10
     static function convertDamage_fixe($val){
-      $val = trim($val);
+      $val = (int) trim($val);
       if(is_numeric($val)){
         $stats = round($val / 3);
         if($stats < -10){

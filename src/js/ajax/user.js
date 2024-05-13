@@ -57,22 +57,16 @@ class User extends Controller{
         ); 
     }
 
-    static changeBookmark(btn){
+    static toogleBookmark(btn){
         let url = "";
         let sentence = "";
 
         let i = $(btn).find('i'); // REMOVE
         if(i.hasClass("fas") && i.hasClass("fa-bookmark")){
-            i.removeClass("fas");
-            i.addClass("far");
-            $(btn).attr('title', "Ajouter aux favoris");
             url = "index.php?c=user&a=removeBookmark";
-            sentence = "Le favoris a bien été enlevé du "+ucFirst(globalThis.project.bookmark_name)+".";
+            sentence = "Le favoris a bien été retiré du "+ucFirst(globalThis.project.bookmark_name)+".";
 
         }else if(i.hasClass("far") && i.hasClass("fa-bookmark")){ // AJOUT
-            i.removeClass("far");
-            i.addClass("fas");
-            $(btn).attr('title', "Retirer des favoris");
             url = "index.php?c=user&a=addBookmark";
             sentence = "Le favoris a bien été ajouté au "+ucFirst(globalThis.project.bookmark_name)+".";
         }
