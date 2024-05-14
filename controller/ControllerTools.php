@@ -60,7 +60,7 @@ class ControllerTools extends Controller
 					$now   = time();
 					$n = 0;
 					foreach ($files as $file) {
-						if (is_file($file)) {
+						if (FileManager::isFile($file)) {
 							if ($now - filemtime($file) >= $days_keeping_db * 24 * 60 * 60) {
 								unlink($file);
 								$n++;
@@ -813,7 +813,7 @@ class ControllerTools extends Controller
 							$return['value'] .= "Les paramètres sont incorrects<br>";
 						} else {
 
-							try {
+							// try {
 								// Récupération des données
 									$content = @file_get_contents($url);
 									if($content === false){
@@ -836,7 +836,7 @@ class ControllerTools extends Controller
 			
 											// Récupération de la version de Dofus
 												$dofus_version = @file_get_contents("https://api.dofusdb.fr/version?lang=fr");
-												if($dofus_version !== false){
+												if($dofus_version === false){
 													$dofus_version = "2.x";
 												}
 			
@@ -882,9 +882,9 @@ class ControllerTools extends Controller
 										}
 									}
 									
-							} catch (\Throwable $th) {
-								$return["value"] = "Erreur lors de la récupération des objets : " . $th->getMessage();
-							}
+							// } catch (\Throwable $th) {
+							// 	$return["value"] = "Erreur lors de la récupération des objets : " . $th->getMessage();
+							// }
 						}
 					} else {
 						$return["value"] = "Le template est manquant";
@@ -1054,22 +1054,41 @@ class ControllerTools extends Controller
 										if(is_array($rec['ressource']) && !empty($rec['ressource'])){
 											$obj->setRessource($rec['ressource']);
 											if($write == true && $rec['action'] == "add"){
-												FileManager::add(
-													path_read: $rec['img']['path'],
-													dir_dest: Ressource::FILES['logo']['dir'], 
-													rename: $rec['ressource']->getUniqid() . ".webp", 
-													set_format_webp: true, 
-													resize: true, 
-													thumbnail: false
-												);
-												FileManager::add(
-													path_read: $rec['img']['thumbnail'],
-													dir_dest: Ressource::FILES['logo']['dir'], 
-													rename: $rec['ressource']->getUniqid() . "_thumb" . ".webp", 
-													set_format_webp: true, 
-													resize: false, 
-													thumbnail: true
-												);
+												// Image
+													$content = @file_get_contents($rec['img']['path']);
+													if ($content !== false) {
+														$path = Ressource::FILES['logo']['dir'] . $rec['ressource']->getUniqid() . ".png";
+														if (!file_put_contents($path, $content)) {
+															$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement de l'image</span>";
+														}
+													}
+												// Thumbnail
+													$content = @file_get_contents($rec['img']['thumbnail']);
+													if ($content !== false) {
+														$path = Ressource::FILES['logo']['dir'] . $rec['ressource']->getUniqid() . "_thumb.png";
+														if (!file_put_contents($path, $content)) {
+															$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement du thumbnail</span>";
+														}
+													}
+
+												// FileManager::add(
+												// 	path_read: $rec['img']['path'],
+												// 	dir_dest: Ressource::FILES['logo']['dir'], 
+												// 	rename: $rec['ressource']->getUniqid(), 
+												// 	set_format_webp: true, 
+												// 	resize: true, 
+												// 	create_thumbnail: false,
+												// 	is_thumbnail: false
+												// );
+												// FileManager::add(
+												// 	path_read: $rec['img']['thumbnail'],
+												// 	dir_dest: Ressource::FILES['logo']['dir'], 
+												// 	rename: $rec['ressource']->getUniqid() . "_thumb", 
+												// 	set_format_webp: true, 
+												// 	resize: false, 
+												// 	create_thumbnail: false,
+												// 	is_thumbnail: true
+												// );
 											}
 										}
 									}
@@ -1083,22 +1102,40 @@ class ControllerTools extends Controller
 					// Ecritures
 						if ($object_type != "Inconnu" && $write == true) {
 							if ($manager->add($obj)) {
-								FileManager::add(
-									path_read: $url_img,
-									dir_dest: $path_img, 
-									rename: $obj->getUniqid() . ".webp", 
-									set_format_webp: true, 
-									resize: false, 
-									thumbnail: false
-								);
-								FileManager::add(
-									path_read: $url_img_thumbnail,
-									dir_dest: $path_img, 
-									rename: $obj->getUniqid() . "_thumb" . ".webp",  
-									set_format_webp: true, 
-									resize: false, 
-									thumbnail: true
-								);
+								// Image
+									$content = @file_get_contents($url_img);
+									if ($content !== false) {
+										$path = $path_img . $obj->getUniqid() . ".png";
+										if (!file_put_contents($path, $content)) {
+											$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement de l'image</span>";
+										}
+									}
+								// Thumbnail
+									$content = @file_get_contents($url_img_thumbnail);
+									if ($content !== false) {
+										$path = $path_img . $obj->getUniqid() . "_thumb.png";
+										if (!file_put_contents($path, $content)) {
+											$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement du thumbnail</span>";
+										}
+									}
+								// FileManager::add(
+								// 	path_read: $url_img,
+								// 	dir_dest: $path_img, 
+								// 	rename: $obj->getUniqid(), 
+								// 	set_format_webp: true, 
+								// 	resize: false, 
+								// 	create_thumbnail: false,
+								// 	is_thumbnail: false
+								// );
+								// FileManager::add(
+								// 	path_read: $url_img_thumbnail,
+								// 	dir_dest: $path_img, 
+								// 	rename: $obj->getUniqid() . "_thumb",  
+								// 	set_format_webp: true, 
+								// 	resize: false, 
+								// 	create_thumbnail: false,
+								// 	is_thumbnail: false
+								// );
 								$display['creation'] .= " <span class='strong' style='color:green;'>Ajouté</span>";
 							} else {
 								$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors de l'ajout</span>";
@@ -1140,22 +1177,41 @@ class ControllerTools extends Controller
 											if(is_array($rec['ressource']) && !empty($rec['ressource'])){
 												$obj->setRessource($rec['ressource']);
 												if($write == true && $rec['action'] == "add"){
-													FileManager::add(
-														path_read: $rec['img']['path'],
-														dir_dest: Ressource::FILES['logo']['dir'], 
-														rename: $rec['ressource']->getUniqid() . ".webp", 
-														set_format_webp: true, 
-														resize: true, 
-														thumbnail: false
-													);
-													FileManager::add(
-														path_read: $rec['img']['thumbnail'],
-														dir_dest: Ressource::FILES['logo']['dir'], 
-														rename: $rec['ressource']->getUniqid() . "_thumb" . ".webp", 
-														set_format_webp: true, 
-														resize: false, 
-														thumbnail: true
-													);
+													// Image
+														$content = @file_get_contents($rec['img']['path']);
+														if ($content !== false) {
+															$path = Ressource::FILES['logo']['dir'] . $rec['ressource']->getUniqid() . ".png";
+															if (!file_put_contents($path, $content)) {
+																$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement de l'image</span>";
+															}
+														}
+													// Thumbnail
+														$content = @file_get_contents($rec['img']['thumbnail']);
+														if ($content !== false) {
+															$path = Ressource::FILES['logo']['dir'] . $rec['ressource']->getUniqid() . "_thumb.png";
+															if (!file_put_contents($path, $content)) {
+																$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement du thumbnail</span>";
+															}
+														}
+
+													// FileManager::add(
+													// 	path_read: $rec['img']['path'],
+													// 	dir_dest: Ressource::FILES['logo']['dir'], 
+													// 	rename: $rec['ressource']->getUniqid(), 
+													// 	set_format_webp: true, 
+													// 	resize: true, 
+													// 	create_thumbnail: false,
+													// 	is_thumbnail: false
+													// );
+													// FileManager::add(
+													// 	path_read: $rec['img']['thumbnail'],
+													// 	dir_dest: Ressource::FILES['logo']['dir'], 
+													// 	rename: $rec['ressource']->getUniqid() . "_thumb", 
+													// 	set_format_webp: true, 
+													// 	resize: false, 
+													// 	create_thumbnail: false,
+													// 	is_thumbnail: true
+													// );
 												}
 											}
 										}
@@ -1172,22 +1228,204 @@ class ControllerTools extends Controller
 									if(FileManager::remove($obj->getFile('logo', new Style(["display" => Content::FORMAT_BRUT]))) == false) {
 										$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors de la suppression de l'image</span> - ";
 									}
-									FileManager::add(
-										path_read: $url_img,
-										dir_dest: $path_img, 
-										rename: $obj->getUniqid() . ".webp", 
-										set_format_webp: true, 
-										resize: true, 
-										thumbnail: false
-									);
-									FileManager::add(
-										path_read: $url_img_thumbnail,
-										dir_dest: $path_img, 
-										rename: $obj->getUniqid() . "_thumb" . ".webp", 
-										set_format_webp: true, 
-										resize: false, 
-										thumbnail: true
-									);
+									// Image
+										$content = @file_get_contents($url_img);
+										if ($content !== false) {
+											$path = $path_img . $obj->getUniqid() . ".png";
+											if (!file_put_contents($path, $content)) {
+												$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement de l'image</span>";
+											}
+										}
+									// Thumbnail
+										$content = @file_get_contents($url_img_thumbnail);
+										if ($content !== false) {
+											$path = $path_img . $obj->getUniqid() . "_thumb.png";
+											if (!file_put_contents($path, $content)) {
+												$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement du thumbnail</span>";
+											}
+										}
+
+									// FileManager::add(
+									// 	path_read: $url_img,
+									// 	dir_dest: $path_img, 
+									// 	rename: $obj->getUniqid(), 
+									// 	set_format_webp: true, 
+									// 	resize: true, 
+									// 	create_thumbnail: false,
+									// 	is_thumbnail: false
+									// );
+									// FileManager::add(
+									// 	path_read: $url_img_thumbnail,
+									// 	dir_dest: $path_img, 
+									// 	rename: $obj->getUniqid() . "_thumb", 
+									// 	set_format_webp: true, 
+									// 	resize: false, 
+									// 	create_thumbnail: false,
+									// 	is_thumbnail: true
+									// );
+									$display['creation'] .= " <span class='strong' style='color:green;'>Mis à jour</span>";
+								} else {
+									$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors de la mise à jour</span>";
+								}
+							}
+				} else {
+					$display['creation'] .= " - <span style='color:green;'>utilisé</span>";
+				}
+			}
+
+			// Suppression des fichiers résiduels
+				// FileManager::clearTemp();
+
+			return [
+				'state' => true,
+				'obj' => $obj,
+				"display" => $display,
+				"img" => $url_img_thumbnail
+			];
+		}
+
+	// Extraction des sports
+		private function extractSpell($data, $dofus_version, $write = false): array {
+			$manager = new SpellManager();
+			$display = [];
+
+			// Identifiacation
+				$official_id = isset($data['iconId']) ? $data['iconId'] : 0;
+				$dofusdb_id = isset($data['id']) ? $data['id'] : 0;
+
+			// Général
+				$name = isset($data['name']['fr']) ? $data['name']['fr'] : "Inconnu";
+				$description = isset($data['description']['fr']) ? $data['description']['fr'] : "";
+				if(str_contains($description, "[UNKNOWN_TEXT_ID_")){
+					$description = "";
+				}
+
+			// IMAGES
+				$url_img = isset($data['img']) ? $data['img'] : "";
+
+			// AUTRES INFORMATIONS
+				$effect = [];
+				$level = [];
+				$pa=[];
+				$min_po = [];
+				$max_po = [];
+				$po_editable= [];
+				$area = [];
+				$cast_per_turn=[];
+				$cast_per_target=[];
+				$sight_line=[];
+				$number_between_two_cast=[];
+				$element = [];
+				$category = [];
+				$is_magic = true;
+
+				$grades = isset($data['spellLevels']) ? $data['spellLevels'] : [];
+				if(!empty($grades) && is_array($grades)){
+					// Récupération des informations de chaque grade
+						foreach ($grades as $grade) {
+							if(!empty($grade)){
+								$url_grade = "https://api.dofusdb.fr/spell-levels/" . $grade . "?lang=fr";
+								$grade_details = @file_get_contents($url_grade);
+								if($grade_details !== false){
+									$grade_details = json_decode($grade_details, true);
+									if (!empty($grade_details)) {
+										$level[] = isset($grade_details['minPlayerLevel']) ? (int) $grade_details['minPlayerLevel'] : 1;
+										$pa[] = isset($grade_details['apCost']) ? (int) $grade_details['apCost'] : 0;
+										$min_po[] = isset($grade_details['minRange']) ? (int) $grade_details['minRange'] : 0;
+										$max_po[] = isset($grade_details['range']) ? (int) $grade_details['range'] : 0;
+										$po_editable[] = isset($grade_details['rangeCanBeBoosted']) ? $grade_details['rangeCanBeBoosted'] : false;
+										$cast_per_turn[] = isset($grade_details['maxCastPerTurn']) ? (int) $grade_details['maxCastPerTurn'] : 0;
+										$cast_per_target[] = isset($grade_details['maxCastPerTarget']) ? (int) $grade_details['maxCastPerTarget'] : 0;
+										$number_between_two_cast[] = isset($grade_details['minCastInterval']) ? (int) $grade_details['minCastInterval'] : 0;
+										$sight_line[] = isset($grade_details['needVisibleEntity']) ? $grade_details['needVisibleEntity'] : true;
+
+										// .......... A CONTINUER
+
+									}
+								}
+							}
+						}
+					// Traitement des informations
+						$level = is_array($level) ? $this->convertLevel(array_sum($level) / count($level)) : $this->convertLevel($level);
+						$pa = is_array($pa) ? round(array_sum($pa) / count($pa)) : $pa;
+
+						// .......... A CONTINUER
+	
+				}
+
+			if ($manager->existsName($name) == false) { // L'objet n'existe pas dans la DB
+				$display['creation'] = "<span style='color:red;'>N'existe pas</span>";
+
+				$uniqid = uniqid();
+				$obj = new Spell([]);
+				
+				// Création de l'objet et ajout si write = true
+					// Ajout des informations générales
+						$obj->setName($name);
+						$obj->setUniqid($uniqid);
+						$obj->setTimestamp_add();
+						$obj->setTimestamp_updated();
+						$obj->setOfficial_id($official_id);
+						$obj->setDofusdb_id($dofusdb_id);
+						$obj->setDofus_version($dofus_version);
+						$obj->setLevel($level);
+						$obj->setDescription($description);
+
+						// .......... A CONTINUER
+
+					// Ecritures
+						if ($write == true) {
+							if ($manager->add($obj)) {
+								// Image
+									$content = @file_get_contents($url_img);
+									if ($content !== false) {
+										$path = Spell::FILES['logo']['dir'] . $obj->getUniqid() . ".png";
+										if (!file_put_contents($path, $content)) {
+											$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement de l'image</span>";
+										}
+									}
+								$display['creation'] .= " <span class='strong' style='color:green;'>Ajouté</span>";
+							} else {
+								$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors de l'ajout</span>";
+							}
+						} else {
+							$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors de la création</span>";
+						}
+						
+			} else { // L'objet existe dans la DB - si il n'est pas utilisé, on le met à jour
+				$display['creation'] = "<span style='color:green;'>Existe</span>";
+
+				$obj = $manager->getFromName($name);
+				$uniqid = $obj->getUniqid();
+
+				if ($obj->getUsable() == false) {
+					$display['creation'] .= " - <span style='color:red;'>non utilisé</span> - ";
+
+					// Création de l'objet et ajout si write = true
+						// Ajout des informations générales
+							$obj->setTimestamp_updated();
+							$obj->setOfficial_id($official_id);
+							$obj->setDofusdb_id($dofusdb_id);
+							$obj->setDofus_version($dofus_version);
+							$obj->setDescription($description);
+
+							// .......... A CONTINUER
+
+						// Ecritures
+							if ($write == true){
+								if ($manager->update($obj)) {
+									if(FileManager::remove($obj->getFile('logo', new Style(["display" => Content::FORMAT_BRUT]))) == false) {
+										$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors de la suppression de l'image</span> - ";
+									}
+									// Image
+										$content = @file_get_contents($url_img);
+										if ($content !== false) {
+											$path = Spell::FILES['logo']['dir'] . $obj->getUniqid() . ".png";
+											if (!file_put_contents($path, $content)) {
+												$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors du téléchargement de l'image</span>";
+											}
+										}
+
 									$display['creation'] .= " <span class='strong' style='color:green;'>Mis à jour</span>";
 								} else {
 									$display['creation'] .= " <span class='strong' style='color:red;'>Erreur lors de la mise à jour</span>";
@@ -1202,7 +1440,7 @@ class ControllerTools extends Controller
 				'state' => true,
 				'obj' => $obj,
 				"display" => $display,
-				"img" => $url_img_thumbnail
+				"img" => $url_img
 			];
 		}
 
@@ -1413,7 +1651,7 @@ class ControllerTools extends Controller
 					}
 					$files = glob($manager["path"] . "*");
 					foreach ($files as $file) {
-						if (is_file($file)) {
+						if (FileManager::isFile($file)) {
 							if (!in_array($file, $path_obj)) {
 								$path_trash = self::TRASH_PATH . "/" . $manager['trash_name'] . '/' . basename($file);
 								FileManager::move($file, $path_trash);

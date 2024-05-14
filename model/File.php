@@ -9,18 +9,35 @@ class File
     private $_dirname = "";
 
     public function __construct(string $path){
-        if(is_file($path)){
-            $path_parts = pathinfo($path);
+        if(!empty($path)){
+             // On vérifie si le fichier existe (local ou en ligne)
+            if(FileManager::isFilePathValid($path) || FileManager::isUrlFile($path)){
 
-            $this->_path = $path;
-            $this->_dirname = $path_parts['dirname'];
-            $this->_name = basename($path);
-            $this->_size = filesize($path);
-            if(isset($path_parts['extension'])){
-                $this->_extention = strtolower($path_parts['extension']);
+                // Si le fichier est en ligne, on le télécharge en local
+                if(FileManager::isUrlFile($path)){
+                    $path = FileManager::uploadInTempFromUrl($path);
+                    if($path == false){
+                        return false;
+                    }
+                }
+                $path_parts = pathinfo($path);
+
+                $this->_path = $path;
+                $this->_dirname = $path_parts['dirname'];
+                $this->_name = basename($path);
+                if(!FileManager::isFilePathValid($path)){
+                    $this->_size = filesize($path);
+                }
+                if(isset($path_parts['extension'])){
+                    $this->_extention = strtolower($path_parts['extension']);
+                } else {
+                    $this->_extention = "";
+                }
             } else {
-                $this->_extention = "";
+                throw new Exception("Le chemin du fichier n'est pas valide.");
             }
+        } else {
+            throw new Exception("Le chemin du fichier est vide.");
         }
     }
 
@@ -153,10 +170,10 @@ class File
         }
         public function getThumbnail(){
             if($this->existThumbnail()){
-                return new File($this->getDirname() . $this->getName(with_extention:false) ."_thumb". $this->getExtention());
+                return new File($this->getDirname() . $this->getName(with_extention:false) ."_thumb.". $this->getExtention());
             } else {
                 if(FileManager::addThumbnail($this)){
-                    return new File($this->getDirname() . $this->getName(with_extention:false) ."_thumb". $this->getExtention());
+                    return new File($this->getDirname() . $this->getName(with_extention:false) ."_thumb.". $this->getExtention());
                 } else {
                     return new File($this->getPath());
                 }
