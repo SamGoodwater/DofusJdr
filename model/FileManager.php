@@ -32,6 +32,7 @@ class FileManager extends Manager{
         "medias/icons/",
         "medias/font/",
         "medias/regulatory/",
+        "medias/no_file_found_logo_thumb.svg",
         Content:: PATH_FILE_GENERAL_DEFAULT,
     ];
 
@@ -169,8 +170,14 @@ class FileManager extends Manager{
                         }
                     }
 
-                    if(FileManager::isImage($fileObj) && class_exists('Imagick')){
-                        $success = FileManager::add($this->getFile()['tmp_name'], $path);
+                    if(FileManager::isImage($fileObj)){
+                        $success = FileManager::add(
+                            path_read: $this->getFile()['tmp_name'],
+                            dir_dest: $path,
+                            set_format_webp: true,
+                            resize: true,
+                            create_thumbnail: true,
+                            is_thumbnail: false);
                     } else {
                         $success = move_uploaded_file($this->getFile()['tmp_name'], $path);
                     }
@@ -436,29 +443,33 @@ class FileManager extends Manager{
             }
         }
         
-        static function add(string $path_read, string $dir_dest, string $rename = "", bool $set_format_webp = true, bool $resize = true, bool | string $thumbnail = "auto", $overwrite = true){ // Ecrit après avoir convertit une image en png et la redimention (max 800 * 800) puis la compresse si besoins (- de 2Mo)
+        static function add(string $path_read, string $dir_dest, string $rename = "", bool $set_format_webp = true, bool $resize = true, bool | string $create_thumbnail = "auto", $is_thumbnail = false, $overwrite = true){ // Ecrit après avoir convertit une image en webp et la redimention (max 800 * 800) puis la compresse si besoins (- de 10Mo)
+            if(empty($path_read) || empty($dir_dest)){return false;}
+            if(in_array($path_read, self::getProtectedFile())){return false;}
+
             $dir_dest = FileManager::formatPath($dir_dest, false, true);
-            if(is_file($path_read)){
+            if(self::isFile($path_read)){
                 $file_read = new File($path_read);
                 $name = $file_read->getName(with_extention: false);
                 if($rename != ""){$name = $rename;}
-                $file_write = new File($dir_dest . "/" . $name . $file_read->getExtention());
-    
+                $file_write = new File($dir_dest . $name . "." . $file_read->getExtention());
+                if(in_array($file_write->getPath(), self::getListeExtention())){return false;}
+
                 $success = FileManager::write(
                     path_read: $file_read->getPath(),
                     path_write: $file_write->getPath(),
                     set_format_webp: $set_format_webp,
                     resize: $resize,
-                    is_thumbnail: false,
+                    is_thumbnail: $is_thumbnail,
                     overwrite: $overwrite
                 );
 
                 if(file_exists($file_write->getPath()) && $success){
 
-                    if($thumbnail == "auto" || $thumbnail == true){
+                    if($create_thumbnail == "auto" || $create_thumbnail == true){
                         $new_file = new File($file_write->getPath());
 
-                        if($new_file->getSize() > 1000000 || $thumbnail == true){
+                        if($new_file->getSize() > 1000000 || $create_thumbnail == true){
                             $file_thumbnail = new File($dir_dest . $name . "_thumb". $file_read->getExtention());
                             FileManager::write(
                                 path_read: $new_file->getPath(),
@@ -481,94 +492,129 @@ class FileManager extends Manager{
             }
         }
 
-        static function write(string $path_read, string $path_write, bool $compress = true, bool $set_format_webp = true, bool $resize = true, bool $is_thumbnail = false, $overwrite = true) {
+        static function write(string $path_read, string $path_write, bool $set_format_webp = true, bool $resize = true, bool $is_thumbnail = false, $overwrite = true) {
+            return self::move($path_read, $path_write, $overwrite);
+            
+            // Code non fonctionnel - trouver une librairie qui fonctionne enfin !!!!
             if (file_exists($path_read)) {
-                if (file_exists($path_write)) {
-                    if ($overwrite) {
-                        FileManager::remove($path_write);
-                    } else {
-                        return false;
-                    }
+                if (file_exists($path_write) && $overwrite) {
+                    FileManager::remove($path_write);
                 }
-
-                // Si Tinify n'est pas disponible, copiez simplement le fichier
-                if (!class_exists('Tinify\Tinify')) {
-                    $content = @file_get_contents($path_read);
-                    if($content === false){return false;}
-                    if(file_put_contents($path_write, $content)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+        
+                // Vérifier si l'extension de l'image est supportée par GD
+                $image_info = exif_imagetype($path_read);
+                $mime_type = $image_info['mime'];
+                $supported_formats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        
+                if (!in_array($mime_type, $supported_formats)) {
+                    // Extension non supportée par GD, copiez simplement le fichier
+                    return self::move($path_read, $path_write, $overwrite);
                 }
-
-                if(\Tinify\compressionCount() >= 500){
-                    $content = @file_get_contents($path_read);
-                    if($content === false){return false;}
-                    if (file_put_contents($path_write, $content)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+        
+                // Charger l'image avec GD
+                $image = null;
+                switch ($mime_type) {
+                    case 'image/jpeg':
+                        $image = imagecreatefromjpeg($path_read);
+                        break;
+                    case 'image/png':
+                        $image = imagecreatefrompng($path_read);
+                        break;
+                    case 'image/gif':
+                        $image = imagecreatefromgif($path_read);
+                        break;
                 }
-
-                // Configuration de la clé API Tinify
-                \Tinify\setKey("nBtl9x8L1TvVWdmp3n6lxbNVZ1tF3NNV");
-
-                // Redimensionner, compresser et convertir l'image avec Tinify
-                $source = @file_get_contents($path_read);
-                $source = \Tinify\fromFile($path_read);
-
-                if ($resize) {
-                    // Redimensionner l'image si nécessaire
-                    $source = $source->resize(array(
-                        "method" => "fit",
-                        "width" => 800,
-                        "height" => 800
-                    ));
+        
+                if (!$image) {
+                    // Impossible de charger l'image avec GD
+                    return false;
                 }
-                
+        
+                // Redimensionner l'image si nécessaire
+                if ($is_thumbnail) {
+                    $new_width = 150;
+                    $new_height = 150;
+                    $image = imagescale($image, $new_width, $new_height);
+                } elseif($resize){
+                    $new_width = 800;
+                    $new_height = 800;
+                    $image = imagescale($image, $new_width, $new_height);
+                }
+        
+                $success = false;
+                // Conversion en format WebP si nécessaire
                 if ($set_format_webp) {
-                    // Compression de l'image
-                    $source = $source->convert("image/webp");
+                    $path_write = pathinfo($path_write, PATHINFO_DIRNAME) . '/' . pathinfo($path_write, PATHINFO_FILENAME) . '.webp';
+                    $success = imagewebp($image, $path_write);
                 }
-
-                if($is_thumbnail){
-                    $source = $source->resize(array(
-                        "method" => "fit",
-                        "width" => 150,
-                        "height" => 150
-                    ));
+                if(!$success && $set_format_webp){
+                    $path_png = pathinfo($path_write, PATHINFO_DIRNAME) . '/' . pathinfo($path_write, PATHINFO_FILENAME) . '.png';
+                    $success = imagepng($image, $path_png);
                 }
+        
+                // Libérer la mémoire
+                imagedestroy($image);
 
-                // Enregistrer l'image
-                $source->toFile($path_write);
-
+                if ($success) {
+                    // Supprimer le fichier original si l'écriture a réussi
+                    unlink($path_read);
+                    return true;
+                } else {
+                    return false;
+                }
+        
                 return true;
             }
             return false;
         }
 
+        static function uploadInTempFromUrl(string $path_url): string | bool {
+            if (self::isLocalFile($path_url)) {
+                return false; // Si le fichier est local, retourne faux
+            }
+            $path_temp = "medias/temp/upload/";
+            // Créer le dossier temporaire si il n'existe pas
+            if (!file_exists($path_temp)) {
+                self::setDir($path_temp);
+            }
+            // Extraire le nom du fichier de l'URL
+            $file_name = basename($path_url);
+            // Ajouter le nom du fichier au chemin temporaire
+            $path_temp .= $file_name;
+            // Récupérer le contenu de l'URL
+            $content = @file_get_contents($path_url);
+            if ($content !== false) {
+                // Écrire le contenu dans le fichier temporaire
+                if (file_put_contents($path_temp, $content)) {
+                    return $path_temp;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    
     // Autres
         static function setDir(string $dirname){
             $dirname = FileManager::formatPath($dirname, false, true);
-            $dirnameArray = explode('/',$dirname);
-            if(!is_array($dirnameArray)){
-                return false;
+            
+            // Vérifier si le chemin désigne un répertoire
+            if (!is_dir($dirname)) {
+                // Utiliser le répertoire parent comme chemin
+                $path = dirname($dirname) . '/';
+            } else {
+                // Utiliser le chemin donné directement
+                $path = $dirname;
             }
-            $dirnameArray = array_filter($dirnameArray);
-            $path = "";
-
-            foreach ($dirnameArray as $dir) {
-                $path .= $dir . "/";
-                if(!file_exists($path)){
-                    if(!mkdir($path)){
-                        return false;
-                    }
+        
+            // Créer tous les répertoires nécessaires
+            if(!file_exists($path)){
+                if(mkdir($path, 0777, true)){ // Créer les répertoires récursivement
+                    return true;
                 }
             }
-            return true;
-
+            return false;
         }
         static function rename(string $path, string $newname){ // Nouveau nom sans l'extention, précisé l'extention dans un 2ème paramètre si elle change
             $path_parts = pathinfo($path);
@@ -713,6 +759,107 @@ class FileManager extends Manager{
             }
             return false;
         }
+        static function isFile(File | string $file): bool {
+            if (is_object($file)) {
+                if ($file instanceof File) {
+                    $path = $file->getPath();
+                } else {
+                    return false;
+                }
+            } else {
+                $path = $file;
+            }
+        
+            // Si le chemin est une URL
+            if(filter_var($path, FILTER_VALIDATE_URL)) {
+                $headers = get_headers($path);
+                // Vérifie si les en-têtes contiennent un code 200
+                if (strpos($headers[0], '200') !== false) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } elseif(is_file(trim($path))){ // Si le chemin est un fichier local
+                return true;
+            } elseif(is_dir(trim($path))){ // Si le chemin est un répertoire
+                return false;
+            } else {
+                return self::isFilePathValid($path, true); // Si le chemin est valide mais le fichier n'existe pas
+            }
+        }
+        static function isFilePathValid(string $file_path, $createDir = false): bool {
+            // Récupérer le répertoire parent du fichier
+            $parent_dir = dirname($file_path);
+        
+            // Vérifier si le répertoire parent existe
+            if (!is_dir($parent_dir)) {
+                if($createDir){
+                    // Créer le répertoire parent s'il n'existe pas
+                    self::setDir($parent_dir);
+                } else {
+                    return false;
+                }
+            }
+        
+            // Extraire le nom du fichier de son chemin
+            $file_name = basename($file_path);
+        
+            // Vérifier si le nom du fichier est vide
+            if ($file_name === '') {
+                return false;
+            }
+        
+            // Vérifier si le nom du fichier contient des caractères invalides
+            $invalid_chars = array('\\', '/', ':', '*', '?', '"', '<', '>', '|');
+            foreach ($invalid_chars as $char) {
+                if (strpos($file_name, $char) !== false) {
+                    return false;
+                }
+            }
+            // Le chemin du fichier semble être valide
+            return true;
+        }        
+        static function isLocalFile(File | string $file): bool {
+            if (is_object($file)) {
+                if ($file instanceof File) {
+                    $path = $file->getPath();
+                } else {
+                    return false;
+                }
+            } else {
+                $path = $file;
+            }
+        
+            // Si le chemin est une URL
+            if (filter_var($path, FILTER_VALIDATE_URL)) {
+                return false;
+            } else {
+                // Si le chemin est un fichier local
+                if(is_file(trim($path))){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        static function isUrlFile(File | string $file): bool {
+            if (is_object($file)) {
+                if ($file instanceof File) {
+                    $path = $file->getPath();
+                } else {
+                    return false;
+                }
+            } else {
+                $path = $file;
+            }
+        
+            // Si le chemin est une URL
+            if (filter_var($path, FILTER_VALIDATE_URL)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
         
         const ARRAY_REPLACE_SPECIAL_CARACTERE = [
             "<" => "_",
@@ -807,11 +954,10 @@ class FileManager extends Manager{
             static function addThumbnail(File $file){
                 if(!$file->isThumbnail()){
                     if(!$file->existThumbnail()){
-                        $thumb = new File($file->getDirname() . $file->getName(with_extention:false) ."_thumb". $file->getExtention());
+                        $thumb = new File($file->getDirname() . $file->getName(with_extention:false) ."_thumb.". $file->getExtention());
                         return FileManager::write(
                             path_read:$file->getPath(),
                             path_write:$thumb->getPath(),
-                            compress:true,
                             set_format_webp:false,
                             resize:true,
                             is_thumbnail:true

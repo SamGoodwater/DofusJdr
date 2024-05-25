@@ -65,7 +65,7 @@ abstract class Content
     //     ...
     // ]
 
-    const PATH_FILE_GENERAL_DEFAULT = "medias/no_file_found_logo.png";
+    const PATH_FILE_GENERAL_DEFAULT = "medias/no_file_found_logo.svg";
 
     protected $_id ='';
     protected $_uniqid ='';
