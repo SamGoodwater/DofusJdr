@@ -45,7 +45,7 @@
                     </div>                      
                 </div>
             </div>
-        </div>E
+        </div>
     </div>
     <div>
         <div class="nav-item-divider back-<?=$obj->getElement(Content::FORMAT_COLOR_VERBALE)?>"></div>

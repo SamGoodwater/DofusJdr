@@ -13,7 +13,7 @@
 <p class="text_resume_tooltops-show" data-target="#consumable<?=$obj->getUniqid()?>"  <?=$onclick?>>
     <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'class' => "pe-1"]))?><?=$obj->getName()?>
 </p>
-<div id="consumable<?=$obj->getUniqid()?>" class="size-0-8"  style="display:none;">
+<div id="consumable<?=$obj->getUniqid()?>" class="box_resume_tooltips"  style="display:none;">
     <div class="row">
         <div class="col-auto">
             <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-30"]))?>

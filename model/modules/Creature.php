@@ -8028,19 +8028,13 @@ abstract class Creature extends Module
                         $view = new View(View::TEMPLATE_DISPLAY);
                         if(!empty($spells)){
                             ob_start();
-                                ?> <ul class="list-unstyled"> <?php
-                                    foreach ($spells as $spell) {?>
-                                        <li>
-                                            <?php $view->dispatch(
-                                                template_name : "spell/text",
-                                                data : [
-                                                    "obj" => $spell,
-                                                    "is_link" => true
-                                                ], 
-                                                write: true); ?>
-                                        </li> <?php
-                                    }
-                                ?> </ul> <?php
+                             $view->dispatch(
+                                template_name : "spell/text",
+                                    data : [
+                                        "spells" => $spells,
+                                        "is_link" => true
+                                    ], 
+                                    write: true);
                             return ob_get_clean();
                         }
                         return "";

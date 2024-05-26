@@ -1,18 +1,18 @@
 <?php
 // Obligatoire
-    if(!isset($objs)) {throw new Exception("objs is not set");}else{if(!is_object($objs) && !is_array($objs)) {throw new Exception("objs is not set");}}
+    if(!isset($spells)) {throw new Exception("spells is not set");}else{if(!is_object($spells) && !is_array($spells)) {throw new Exception("spells is not set");}}
 
 // Conseillé
     if(!isset($is_link)){ $is_link = false; }else{ if(!is_bool($is_link)){ $is_link = false; } }
     if(!isset($in_competition)){ $in_competition = false; }else{ if(!is_bool($in_competition)){ $in_competition = false; } }
 
     $onclick = "";
-    $spells = []; 
+    $new_spells = []; 
 
-    if(is_array($objs)){
+    if(is_array($spells)){
        $i=0;
 
-        foreach ($objs as $spell) {
+        foreach ($spells as $spell) {
 
             if(Content::exist($spell)){
                 $i++;
@@ -25,11 +25,11 @@
                     <p class="text_resume_tooltops-show" data-target="#spell<?=$spell->getUniqid()?>"  <?=$onclick?>>
                         <?=$spell->getFile('logo', new Style(['format' => Content::FORMAT_ICON, "class" => "pe-1"]))?><span <?php if($in_competition){echo "class='competition_name'"; }?>><?=$spell->getName()?></span>
                     </p>
-                <?php $spells[$i]['text'] = ob_get_clean();
+                <?php $new_spells[$i]['text'] = ob_get_clean();
                 
                 ob_start(); ?>
-                    <div id="spell<?=$spell->getUniqid()?>" style="display:none;">
-                        <div class="p-2 m-1 size-0-8 shadow-box-3 back-<?=$spell->getElement(Content::FORMAT_COLOR_VERBALE)?>-l-5">
+                    <div id="spell<?=$spell->getUniqid()?>" class="box_resume_tooltips back-<?=$spell->getElement(Content::FORMAT_COLOR_VERBALE)?>-l-4 border-<?=$spell->getElement(Content::FORMAT_COLOR_VERBALE)?>-d-2" style="display:none;">
+                        <div class="p-2 m-1">
                             <div class="d-flex flew-row flex-nowrap">
                                 <div>
                                     <?=$spell->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-50"]))?>
@@ -68,7 +68,7 @@
                             <?php } ?>
                         </div>
                     </div>
-                <?php $spells[$i]['box'] = ob_get_clean();
+                <?php $new_spells[$i]['box'] = ob_get_clean();
 
             }
 
@@ -78,11 +78,13 @@
 
 $in_competition ? print("<div class='display-text_in_competition'>") : print('');
 
-if(is_array($spells) && !empty($spells)){
-    foreach ($spells as $spell) {
-        echo($spell['text']);
-        echo($spell['box']);
-    }
+if(is_array($new_spells) && !empty($new_spells)){
+    echo "<ul class='list-unstyled'> ";
+        foreach ($new_spells as $spell) {
+            echo("<li>" . $spell['text'] . "</li>");
+            echo($spell['box']);
+        }
+    echo "</ul>";
 }
 
 $in_competition ? print('</div>') : print('');

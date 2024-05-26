@@ -66,8 +66,8 @@
         <img class="loading-container__logo" src="<?=$GLOBALS['project']['logo']?>" alt="Logo">
         <p class="loading-container__text" data-text="Chargement">Chargement</p>
     </div>
-    <div id="onloadDisplay" style="z-index:10001">
-        <div class='d-flex justify-content-center'><div class='spinner-border text-main-d-2' role='status'><span class='visually-hidden'>Loading...</span></div></div>
+    <div id="onloadDisplay">
+        <div class="progress" role="progressbar" aria-label="Bar de chargement" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><div></div></div>
     </div>
     
     <div class='app app-extend'>

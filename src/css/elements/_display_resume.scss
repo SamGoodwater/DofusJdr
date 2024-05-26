@@ -169,5 +169,16 @@
 
 .text_resume_tooltops-show{
     cursor: pointer;
+    width: fit-content;
+}
+.box_resume_tooltips{
+    size: 0.8rem;
+    border-width: 1px;
+    border-style: solid;
+    background-color: white;
+    border-color: var(--main-d-2);
+    box-shadow: $box-shadow-2;
+    width: max-content;
+    padding: 4px;
 }
   

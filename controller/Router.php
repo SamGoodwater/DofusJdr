@@ -74,20 +74,16 @@ class Router {
             $style_color_mode = "src/css/include_manually/color_light_mode.css";
 
             $dir_import = [
+                "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css", // Bootstrap
+                "https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css", // Bootstrap Table
+                "https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css", // Resizable Columns
                 [
-                    "link" => "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css", // Bootstrap
-                    "crossorigin" => "anonymous",
-                    "integrity" => "sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-                ],
-                "https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css",
-                "https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css",
-                [
-                    "link" => "https://use.fontawesome.com/releases/v6.4.0/css/all.css",
+                    "link" => "https://use.fontawesome.com/releases/v6.4.0/css/all.css", // FontAwesome
                     "media" => "all"
                 ],
-                "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css",
-                "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/panzoom.css",
-                "https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css",
+                "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css", // Fancybox
+                "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/panzoom.css", // Panzoom
+                "https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css", // JSTree
                 $style_color_mode,
                 "src/css/plugin",
                 "src/css/styles"
@@ -136,21 +132,19 @@ class Router {
             if($_SESSION['JqueryAppel'] == false ){?>
                     
                     <?php $dir_import = [
+                        "https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js", // Jquery,
                         [
-                            "link" => "https://code.jquery.com/jquery-3.7.0.min.js", // Jquery
+                            "link" => "https://code.jquery.com/ui/1.13.3/jquery-ui.min.js", // Jquery UI
                             "crossorigin" => "anonymous",
-                            "integrity" => "sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+                            "integrity" => "sha256-sw0iNNXmOJbQhYFuC9OF2kOlD5KQKe1y5lfBn4C9Sjg="
                         ],
+                        "src/js/plugin/upload/vendor/jquery.ui.widget.js", // Jquery WIDGET UI
+                        "https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.2", // Floating UI
+                        'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.5', // Floating UI
                         [
-                            "link" => "https://code.jquery.com/ui/1.13.2/jquery-ui.min.js", // Jquery UI
+                            "link" => "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js", // Bootstrap
                             "crossorigin" => "anonymous",
-                            "integrity" => "sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0="
-                        ],
-                        "src/js/plugin/upload/vendor/jquery.ui.widget.js",
-                        [
-                            "link" => "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js", // Bootstrap
-                            "crossorigin" => "anonymous",
-                            "integrity" => "sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+                            "integrity" => "sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
                         ],
                         [
                             "link" => "https://kit.fontawesome.com/a416056d6c.js",  // FontAwesome
@@ -170,16 +164,16 @@ class Router {
                         "src/js/plugin/",
                         "src/js/plugin/table-bootstrap-export/libs/",
                         "src/js/plugin/table-bootstrap-export/tableExport.min.js",
-                        "https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js",
-                        "https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js",
-                        "https://unpkg.com/bootstrap-table@1.18.2/dist/locale/bootstrap-table-fr-FR.min.js",
-                        "https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js",
-                        "https://cdn.jsdelivr.net/gh/wenzhixin/bootstrap-table-examples@master/utils/natural-sorting/dist/natural-sorting.js",
-                        "https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/filter-control/bootstrap-table-filter-control.min.js",
-                        "https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js",
-                        "https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/toolbar/bootstrap-table-toolbar.min.js",
-                        "https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/resizable/bootstrap-table-resizable.min.js",
-                        "https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.js"
+                        "https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js", // Table Export
+                        "https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js", // Bootstrap Table
+                        "https://unpkg.com/bootstrap-table@1.18.2/dist/locale/bootstrap-table-fr-FR.min.js", // Bootstrap Table
+                        "https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js", // Bootstrap Table
+                        "https://cdn.jsdelivr.net/gh/wenzhixin/bootstrap-table-examples@master/utils/natural-sorting/dist/natural-sorting.js", // Bootstrap Table
+                        "https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/filter-control/bootstrap-table-filter-control.min.js", // Bootstrap Table
+                        "https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js", // Bootstrap Table
+                        "https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/toolbar/bootstrap-table-toolbar.min.js", // Bootstrap Table
+                        "https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/resizable/bootstrap-table-resizable.min.js", // Bootstrap Table
+                        "https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.js" // Resizable Columns
                     ];?>
 
                     <?php 

@@ -398,20 +398,14 @@ class Classe extends Module
                     $view = new View(View::TEMPLATE_DISPLAY);
                     if(!empty($spells)){
                         ob_start();
-                        ?> <ul class="list-unstyled"> <?php
-                        foreach ($spells as $group) {
-                            ?> <li> <?php
-                                $view->dispatch(
-                                    template_name : "spell/text",
-                                    data : [
-                                        "objs" => $group,
-                                        "is_link" => true,
-                                        "in_competition" => true
-                                    ], 
-                                    write: true); ?>
-                            </li> <?php
-                        }
-                        ?> </ul> <?php
+                         $view->dispatch(
+                            template_name : "spell/text",
+                                data : [
+                                    "spells" => $spells,
+                                    "is_link" => true,
+                                    "in_competition" => true
+                                ], 
+                                write: true);
                         return ob_get_clean();
                     }
                     return "";

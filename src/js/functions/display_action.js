@@ -1,3 +1,5 @@
+import { computePosition, autoPlacement, offset } from '@floating-ui/dom';
+
 function initResponsiveCKEditorTable(){
   
 }
@@ -68,59 +70,45 @@ function tooglePinCard(card){
   }
 }
 
-let is_tooltipsCustom_triggerable = true;
-function initTooltipResume(){
-  const offset = 10;
-
-  const cleanTooltips = () => {
-    const clones = document.querySelectorAll(".container-tooltips");
-    clones.forEach(clone => {
-      clone.remove();
+// Initialisation du tooltip
+function initTooltipResume() {
+  const triggers = document.querySelectorAll('.text_resume_tooltops-show');
+  
+  triggers.forEach(trigger => {
+    trigger.addEventListener('mouseenter', async () => {
+      const targetElement = document.querySelector(trigger.dataset.target);
+      if (targetElement) {
+        targetElement.style.display = 'block';
+        const { x, y } = await computePosition(trigger, targetElement, {
+          placement: 'auto',
+          middleware: [
+            offset(10),
+            autoPlacement({
+              boundary: document.body,
+              padding: 10,
+            }),
+          ],
+        });
+        
+        Object.assign(targetElement.style, {
+          position: 'absolute',
+          top: `${y}px`,
+          left: `${x}px`,
+        });
+      }
     });
-  };
 
-    const triggers = document.querySelectorAll('.text_resume_tooltops-show');
-    triggers.forEach(trigger => {
-
-        trigger.onmouseleave = function (event) {
-          if (event.target.classList.contains('container-tooltips') !== true) {
-            cleanTooltips();
-          }
-        };
-
-        trigger.onmouseover = function () {
-          if(is_tooltipsCustom_triggerable){
-            is_tooltipsCustom_triggerable = false;
-            setTimeout(function(){is_tooltipsCustom_triggerable = true;}, 250);
-
-            const targetElement = document.querySelector(trigger.dataset.target);
-            if (targetElement) {
-              let x = 0; let y = 0;
-              const triggerRect = trigger.getBoundingClientRect();
-              if(triggerRect.right + targetElement.offsetWidth > window.innerWidth){
-                x = triggerRect.x - targetElement.offsetWidth - offset;
-              } else {
-                x = triggerRect.width + offset;
-              }
-              y = triggerRect.y + offset;
-
-              let clone = targetElement.cloneNode(true);
-              clone.style.display = 'flex';
-              clone.style.position = "fixed";
-              clone.classList.add('container-tooltips');
-              clone.style.top = x + "px";
-              clone.style.left = y + "px";
-              clone.onmouseleave = function () {
-                cleanTooltips();
-              };
-              document.body.appendChild(clone);
-
-              targetElement.style.display = 'none';
-            }
-          }
-        };
+    trigger.addEventListener('mouseleave', () => {
+      const targetElement = document.querySelector(trigger.dataset.target);
+      if (targetElement) {
+        targetElement.style.display = 'none';
+      }
     });
+  });
 }
+
+document.addEventListener('DOMContentLoaded', initTooltipResume);
+
 
 function initSearchDropdown(){
   const searchContainers = document.querySelectorAll('.dropdown__search__container');

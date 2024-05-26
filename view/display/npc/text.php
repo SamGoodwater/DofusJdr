@@ -13,7 +13,7 @@
 <p class="text_resume_tooltops-show" data-target="#npc<?=$obj->getUniqid()?>"  <?=$onclick?>>
     <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'class' => "pe-1"]))?><?=$obj->getName()?>
 </p>
-<div id="npc<?=$obj->getUniqid()?>" class="size-0-8"  style="display:none;">
+<div id="npc<?=$obj->getUniqid()?>" class="box_resume_tooltips"  style="display:none;">
     <div class="d-flex flew-row flex-nowrap justify-content-start">
         <div>
             <?=$obj->getFile('logo', new Style(['format' => Content::FORMAT_VIEW, "class" => "img-back-30"]))?>
