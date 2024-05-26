@@ -200,6 +200,7 @@ class ControllerTools extends Controller
 	const VACUM_ITEMS_URL = 'https://api.dofusdb.fr/items?typeId%5B$ne%5D=203&$sort=level&lang=fr';
 	const VACUM_MOBS_URL = 'https://api.dofusdb.fr/monsters?$sort[level]=1lang=fr';
 	const VACUM_SPELLS_URL = 'https://api.dofusdb.fr/spells?lang=fr';
+	const VACUM_CLASS_URL = 'https://api.dofusdb.fr/breeds?lang=fr';
 
 	// --DEBUT - ITEMS CONVERSION
 	const VACUM_ITEMS_CATEGORY = [
@@ -669,6 +670,8 @@ class ControllerTools extends Controller
 
 		if (isset($token)) {
 			if ($this->isTokenValid($token)) {
+
+				// return $this->getIdDofusDBSpellFromClass();
 
 				if (isset($_REQUEST['template'])) {
 					if (in_array($_REQUEST['template'], [self::TEMPLATE_ITEMS, self::TEMPLATE_MOBS, self::TEMPLATE_SPELLS])) {
@@ -1288,6 +1291,8 @@ class ControllerTools extends Controller
 		private function extractSpell($data, $dofus_version, $write = false): array {
 			$manager = new SpellManager();
 			$display = [];
+			$class_spell_id_dofusdb = $this->getIdDofusDBSpellFromClass();
+			if(!is_array($class_spell_id_dofusdb)){$class_spell_id_dofusdb = [];}
 
 			// Identifiacation
 				$official_id = isset($data['iconId']) ? $data['iconId'] : 0;
@@ -1299,6 +1304,8 @@ class ControllerTools extends Controller
 				if(str_contains($description, "[UNKNOWN_TEXT_ID_")){
 					$description = "";
 				}
+
+				$category = in_array($dofusdb_id, $class_spell_id_dofusdb) ? Spell::CATEGORY_CLASS : Spell::CATEGORY_MOB;
 
 			// IMAGES
 				$url_img = isset($data['img']) ? $data['img'] : "";
@@ -1316,7 +1323,6 @@ class ControllerTools extends Controller
 				$sight_line=[];
 				$number_between_two_cast=[];
 				$element = [];
-				$category = [];
 				$is_magic = true;
 
 				$grades = isset($data['spellLevels']) ? $data['spellLevels'] : [];
@@ -1370,6 +1376,9 @@ class ControllerTools extends Controller
 						$obj->setDofus_version($dofus_version);
 						$obj->setLevel($level);
 						$obj->setDescription($description);
+						$obj->setCategory($category);
+
+						$obj->setIs_magic($is_magic);
 
 						// .......... A CONTINUER
 
@@ -1573,6 +1582,47 @@ class ControllerTools extends Controller
 				'img' => $img,
 				'display' => $display
 			];
+		}
+		private function getIdDofusDBSpellFromClass() : array {
+			$spell_id = [];
+			$offset = 0;
+			$total = null;
+			$url = self::VACUM_CLASS_URL . '&$skip=' . $offset;
+			$content = @file_get_contents($url);
+			if($content !== false){
+				$content = json_decode($content, true);
+				$total = $content['total'];
+				$class = $content['data'];
+				foreach ($class as $cl) {
+					if(isset($cl['breedSpellsId'])){
+						if(is_array($cl['breedSpellsId']) && !empty($cl['breedSpellsId'])){
+							foreach ($cl['breedSpellsId'] as $id) {
+								$spell_id[] = $id;
+							}
+						}
+					}
+				}
+				while(count($spell_id) < $total){
+					$offset += 10;
+					$url = self::VACUM_CLASS_URL . '&$skip=' . $offset;
+					$content = @file_get_contents($url);
+					if($content !== false){
+						$content = json_decode($content, true);
+						$class = $content['data'];
+						foreach ($class as $cl) {
+							if(isset($cl['breedSpellsId'])){
+								if(is_array($cl['breedSpellsId']) && !empty($cl['breedSpellsId'])){
+									foreach ($cl['breedSpellsId'] as $id) {
+										$spell_id[] = $id;
+									}
+								}
+							}
+						}
+					}
+				}
+
+			}
+			return $spell_id;
 		}
 
 	public function cleanImage(){
