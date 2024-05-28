@@ -172,6 +172,8 @@
     width: fit-content;
 }
 .box_resume_tooltips{
+    z-index: 99999;
+    position: fixed;
     size: 0.8rem;
     border-width: 1px;
     border-style: solid;

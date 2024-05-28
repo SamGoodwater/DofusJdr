@@ -1,5 +1,3 @@
-import { computePosition, autoPlacement, offset } from '@floating-ui/dom';
-
 function initResponsiveCKEditorTable(){
   
 }
@@ -61,54 +59,16 @@ function toogleResumeCard(card, extend = true){
 
 function tooglePinCard(card){
   const pin = card.querySelector('.pincard');
-  if(pin.dataset.pin != "on"){
-    pin.dataset.pin = "on";
-    toogleResumeCard(card, true);
-  } else {
-    pin.dataset.pin = "off";
-    toogleResumeCard(card, false);
+  if(pin != null){
+    if(pin.dataset.pin != "on"){
+      pin.dataset.pin = "on";
+      toogleResumeCard(card, true);
+    } else {
+      pin.dataset.pin = "off";
+      toogleResumeCard(card, false);
+    }
   }
 }
-
-// Initialisation du tooltip
-function initTooltipResume() {
-  const triggers = document.querySelectorAll('.text_resume_tooltops-show');
-  
-  triggers.forEach(trigger => {
-    trigger.addEventListener('mouseenter', async () => {
-      const targetElement = document.querySelector(trigger.dataset.target);
-      if (targetElement) {
-        targetElement.style.display = 'block';
-        const { x, y } = await computePosition(trigger, targetElement, {
-          placement: 'auto',
-          middleware: [
-            offset(10),
-            autoPlacement({
-              boundary: document.body,
-              padding: 10,
-            }),
-          ],
-        });
-        
-        Object.assign(targetElement.style, {
-          position: 'absolute',
-          top: `${y}px`,
-          left: `${x}px`,
-        });
-      }
-    });
-
-    trigger.addEventListener('mouseleave', () => {
-      const targetElement = document.querySelector(trigger.dataset.target);
-      if (targetElement) {
-        targetElement.style.display = 'none';
-      }
-    });
-  });
-}
-
-document.addEventListener('DOMContentLoaded', initTooltipResume);
-
 
 function initSearchDropdown(){
   const searchContainers = document.querySelectorAll('.dropdown__search__container');
@@ -162,3 +122,71 @@ function initCollapse() {
     };
   });
 }
+
+function initTooltipsResume() {
+  const tooltipElements = document.querySelectorAll('.text_resume_tooltops-show');
+
+  tooltipElements.forEach(element => {
+    const targetSelector = element.dataset.target;
+    const targetElement = document.querySelector(targetSelector);
+
+    if (!targetElement) {
+      console.warn(`Tooltip target not found: ${targetSelector}`);
+      return;
+    }
+
+    // Create a clone of the target element
+    const clonedTooltip = targetElement.cloneNode(true);
+    clonedTooltip.style.display = 'none';
+    document.body.appendChild(clonedTooltip);
+
+    element.addEventListener('mouseenter', (event) => {
+      clonedTooltip.style.display = 'block';
+      clonedTooltip.style.zindex = 99999;
+
+      const updateTooltipPosition = (event) => {
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const cursorX = event.clientX;
+        const cursorY = event.clientY;
+        const offset = 3;
+        const tooltipHeight = clonedTooltip.offsetHeight;
+
+        // Determine horizontal position
+        if (cursorX > screenWidth / 2) {
+          // Cursor in the right half of the screen
+          clonedTooltip.style.left = `${cursorX - clonedTooltip.offsetWidth - offset}px`;
+        } else {
+          // Cursor in the left half of the screen
+          clonedTooltip.style.left = `${cursorX + offset}px`;
+        }
+
+        // Determine vertical position
+        if (cursorY + tooltipHeight + offset > screenHeight) {
+          // Not enough space below
+          if (cursorY - tooltipHeight - offset < 0) {
+            // Not enough space above either, place in the middle
+            clonedTooltip.style.top = `${screenHeight / 2 - tooltipHeight / 2}px`;
+          } else {
+            // Place above the cursor
+            clonedTooltip.style.top = `${cursorY - tooltipHeight - offset}px`;
+          }
+        } else {
+          // Enough space below, place below the cursor
+          clonedTooltip.style.top = `${cursorY + offset}px`;
+        }
+      };
+
+      updateTooltipPosition(event); // Initial position
+      document.addEventListener('mousemove', updateTooltipPosition);
+
+      element.addEventListener('mouseleave', () => {
+        clonedTooltip.style.display = 'none';
+        document.removeEventListener('mousemove', updateTooltipPosition);
+      }, { once: true });
+    });
+  });
+}
+
+// Initialize tooltips
+initTooltipsResume();

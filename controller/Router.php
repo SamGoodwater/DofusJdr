@@ -139,8 +139,6 @@ class Router {
                             "integrity" => "sha256-sw0iNNXmOJbQhYFuC9OF2kOlD5KQKe1y5lfBn4C9Sjg="
                         ],
                         "src/js/plugin/upload/vendor/jquery.ui.widget.js", // Jquery WIDGET UI
-                        "https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.2", // Floating UI
-                        'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.5', // Floating UI
                         [
                             "link" => "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js", // Bootstrap
                             "crossorigin" => "anonymous",
