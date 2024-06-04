@@ -3,7 +3,7 @@ class Bubbleshortcut {
 
     static init(){
         if($(window).width() < 768){
-            Bubbleshortcut.dropdownToogle();
+            Bubbleshortcut.dropdownToggle();
         }
     }
 
@@ -133,7 +133,7 @@ class Bubbleshortcut {
         return exist;
     }
 
-    static dropdownToogle(){
+    static dropdownToggle(){
         let button = $(".bubbleshorcut__button_dropdown");
         let dropdown = $(".bubbleshorcut_item");
         if(dropdown.hasClass("show")){

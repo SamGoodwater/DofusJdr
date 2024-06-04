@@ -1,7 +1,16 @@
 $hight-toolbar: 84px;
 $width-nav: 278px;
 
-  .app {
+$z-index-content:0;
+$z-index-footer:1;
+$z-index-toolbar:2;
+$z-index-toolbar-mobile:3;
+$z-index-footer-toggle:4;
+$z-index-overlay:5;
+$z-index-nav:6;
+$z-index-nav-mobile:1070;
+
+.app {
     @include flexbox(row);
     flex-grow: 1;
     min-height: 100vh;
@@ -17,15 +26,16 @@ $width-nav: 278px;
       .app-nav {
         min-width: $width-nav;
         box-shadow: 3px 0px 5px 0px rgba(0, 0, 0, 0.2);
-        z-index: 4;
+        z-index: $z-index-nav;
         margin: 0px;
         padding: 0px;
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 
         @media screen and (max-width: $breakpoint-tablet) {
           min-width: 0;
         }
 
-        .app-nav-content{
+        &-content{
           margin: 0px;
           position: fixed;
           left: 0;
@@ -229,7 +239,7 @@ $width-nav: 278px;
             color: var(--main-d-3);
             cursor: pointer;
             transition: all ease-out 0.5s;
-            z-index: 4;
+            z-index: calc($z-index-nav + 1);
             display: none;
 
             @media (max-width: $breakpoint-tablet) {
@@ -249,7 +259,7 @@ $width-nav: 278px;
         padding: 8px 27px;
         box-shadow: 3px 3px 5px rgba(0, 0, 0  , 0.2);
         background: radial-gradient(circle,  var(--grey-l-4) 0%, var(--grey-l-5) 100%);
-        z-index: 2;
+        z-index: $z-index-toolbar;
         transition: all 0.4s ease;
         min-height: $hight-toolbar;
 
@@ -316,7 +326,7 @@ $width-nav: 278px;
             left: 0;
             right: 0;
             width: 100vw;
-            z-index: 4;
+            z-index: $z-index-toolbar-mobile;
             display:grid;
             grid-auto-columns: 1fr;
             grid-auto-rows: 1fr;
@@ -502,7 +512,7 @@ $width-nav: 278px;
     // --------------------------- C O N T E N T ---------------------------
       .app-content {
         flex-grow: 2;
-        z-index: 0;
+        z-index: $z-index-content;
 
         #content{
           padding: 3rem 2rem;
@@ -537,7 +547,7 @@ $width-nav: 278px;
         font-size: 0.8rem;
         padding: 5px;
         font-weight: 400;
-        z-index:-1;
+        z-index:$z-index-footer;
         box-shadow: 3px -2px 3px rgba(0, 0, 0, 0.2);
         margin: 0;
 
@@ -560,7 +570,7 @@ $width-nav: 278px;
       border-radius: 50%;
       background-color: var(--secondary-d-2);
       box-shadow: 3px -3px 3px rgba(0, 0, 0, 0.2);
-      z-index: 100;
+      z-index: $z-index-footer-toggle;
       transition: all ease-out 0.5s;
 
       a{
@@ -589,26 +599,37 @@ $width-nav: 278px;
 
   // --------------------------- R E S P O N S I V E ---------------------------
 
-  .app-compacted {
+  &.app-compacted {
     .app-nav {
-      display: none;
       position: fixed;
       top: 0;
       right: 0;
       left: 0;
       bottom: 0;
-      z-index: 1070;
+      z-index: $z-index-nav-mobile;
       justify-content: center;
+
     }
-    .app-content {
-      margin-left: 0;
-    }
-    footer{
-      margin-left: 0;
+    .app-content, footer {
+      // margin-left: 0;
     }
   }
-  .app-extend .app-contentZ, .app-extend footer{
-    margin-left: 0;
+  &.app-extend {
+    .app-content, footer {
+      // margin-left: 0;
+    }
+    .app-nav {
+      display: block;
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  &.app-fold{
+    .app-nav{
+      display: none;
+      transform: translateY(-100%);
+      opacity: 0;
+    }
   }
 
   // ---------------- S E C T I O N ----------------------
@@ -621,4 +642,22 @@ $width-nav: 278px;
     }
   }
 
+}
+
+.overlay{
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: $z-index-overlay;
+
+  &--visible{
+    opacity: 1;
+    display: block;
+  }
 }

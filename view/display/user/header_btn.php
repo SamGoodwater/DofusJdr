@@ -38,7 +38,7 @@
                     <li><a class="dropdown-item btn-animate back-secondary-d-2-hover text-white-hover" onclick="Page.show('user_manager');">Gérer les utilisateurs·trices</a></li>
                 <?php } ?>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item btn-animate back-secondary-d-2-hover text-white-hover" onclick="toogleToolbar();">Masquer l'entête</a></li>
+                <li><a class="dropdown-item btn-animate back-secondary-d-2-hover text-white-hover" onclick="toggleToolbar();">Masquer l'entête</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item btn-animate back-secondary-d-2-hover text-white-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
             </ul>

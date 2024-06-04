@@ -141,7 +141,7 @@ class ControllerConnect extends Controller{
                                 <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Page.show('dbtools');">Outils de la base de donnée</a></li>
                             <?php } ?>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item btn-animate back-secondary-l-4-hover dropdown-item-toogletoolbar-button" onclick="toogleToolbar();">Masquer la barre d'outils</a></li>
+                            <li><a class="dropdown-item btn-animate back-secondary-l-4-hover dropdown-item-toggletoolbar-button" onclick="toggleToolbar();">Masquer la barre d'outils</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item btn-animate back-secondary-l-4-hover" onclick="Connect.disconnect();">Deconnexion</a></li>
                         </ul>

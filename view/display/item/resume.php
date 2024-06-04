@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="col-auto d-flex flex-column justify-content-between ms-auto resume-rapid-menu">
-                    <a onclick='User.toogleBookmark(this);' data-classe='consumable' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
+                    <a onclick='User.toggleBookmark(this);' data-classe='consumable' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
                 </div>
             </div>
             <div class="row gap-1 justify-content-around mt-1">

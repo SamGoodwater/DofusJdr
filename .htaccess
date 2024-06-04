@@ -3,27 +3,46 @@ Options +FollowSymLinks
 RewriteEngine On
 RewriteBase /
 
-# Si l'URL ne contient pas "index.php" et que la requête n'est pas un répertoire ou un fichier existant
+# Mise en cache des ressources statiques
+<IfModule mod_expires.c>
+    ExpiresActive On
+    # Images
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 month"
+    # CSS
+    ExpiresByType text/css "access plus 1 month"
+    # JavaScript
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    # Others
+    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+</IfModule>
+
+# Compression des ressources
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript
+    AddOutputFilterByType DEFLATE application/xml application/xhtml+xml application/rss+xml application/atom_xml
+    AddOutputFilterByType DEFLATE image/svg+xml application/x-font-ttf application/x-font-opentype application/vnd.ms-fontobject
+</IfModule>
+
+# Règles de réécriture existantes
 RewriteCond %{REQUEST_URI} !^/(index\.php|images|css|js)/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-# Réécrivez l'URL en incluant les paramètres c, a et p
 RewriteRule ^([^/]+)/([^/]+)/([^/]+)/?$ index.php?c=$1&a=$2&p=$3 [L,QSA]
 RewriteRule ^([^/]+)/([^/]+)/([^/]+):([^/]+)/?$ index.php?c=$1&a=$2&$3=$4 [L,QSA]
 
-# Si l'URL ne contient pas "index.php" et que la requête n'est pas un répertoire ou un fichier existant
 RewriteCond %{REQUEST_URI} !^/(index\.php|images|css|js)/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-# Réécrivez l'URL en incluant les paramètres c et a
 RewriteRule ^([^/]+)/([^/]+)/?$ index.php?c=$1&a=$2 [L,QSA]
 
-# Si l'URL ne contient pas "index.php" et que la requête n'est pas un répertoire ou un fichier existant
 RewriteCond %{REQUEST_URI} !^/(index\.php|images|css|js)/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-# Réécrivez l'URL en incluant les paramètres url_name pour l'affichage des pages de bases
 RewriteRule ^([^/]+)/?$ index.php?url_name=$1 [L,QSA]

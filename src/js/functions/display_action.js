@@ -9,7 +9,7 @@ function initCardHover(){
     const pin = card.querySelector('.pincard');
     if(pin != null) {
       pin.onclick = function() {
-        tooglePinCard(card);
+        togglePinCard(card);
       };
     }
     // Initiation des cartes résumés DUO
@@ -23,19 +23,19 @@ function initCardHover(){
         }
       }
     card.onmouseover = function() {
-      toogleResumeCard(card, true);
+      toggleResumeCard(card, true);
     };
     card.onmouseleave = function() {
       setTimeout(() => {
         if(pin.dataset.pin != "on"){
-          toogleResumeCard(card, false);
+          toggleResumeCard(card, false);
         }
       }, timeout);
     }
   });
 }
 
-function toogleResumeCard(card, extend = true){
+function toggleResumeCard(card, extend = true){
   if(card != null){
     if(extend){
       if(card.classList.value.includes('duo')){
@@ -57,15 +57,15 @@ function toogleResumeCard(card, extend = true){
   }
 }
 
-function tooglePinCard(card){
+function togglePinCard(card){
   const pin = card.querySelector('.pincard');
   if(pin != null){
     if(pin.dataset.pin != "on"){
       pin.dataset.pin = "on";
-      toogleResumeCard(card, true);
+      toggleResumeCard(card, true);
     } else {
       pin.dataset.pin = "off";
-      toogleResumeCard(card, false);
+      toggleResumeCard(card, false);
     }
   }
 }

@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-column justify-content-between ms-auto resume-rapid-menu">
-                    <a onclick='User.toogleBookmark(this);' data-classe='mob' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
+                    <a onclick='User.toggleBookmark(this);' data-classe='mob' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
                     <p class="align-self-end"><a class="btn-text-secondary" title="Afficher les sorts" onclick="Mob.getSpellList('<?=$obj->getUniqid()?>');"><i class="fa-solid fa-magic"></i></a></p>
                 </div>
             </div>

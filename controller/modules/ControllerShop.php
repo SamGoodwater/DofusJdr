@@ -86,7 +86,7 @@ class ControllerShop extends ControllerModule{
             "price" => $obj->getPrice(Content::FORMAT_BADGE),
             "seller" => $obj->getId_seller(Content::FORMAT_BADGE),
             "logo" => $obj->getId_seller(Content::FORMAT_VIEW),
-            'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='shop' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+            'bookmark' => "<a onclick='User.toggleBookmark(this);' data-classe='shop' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
             'edit' => $edit,
             'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=shop&a=getPdf&uniqid=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
             'detailView' => $obj->getVisual(new Style(["display" => Content::DISPLAY_CARD]))
@@ -140,7 +140,7 @@ class ControllerShop extends ControllerModule{
               "location" => $obj->getLocation(Content::FORMAT_ICON),
               "price" => $obj->getPrice(Content::FORMAT_BADGE),
               "seller" => $obj->getId_seller(Content::FORMAT_BADGE),
-              'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='shop' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+              'bookmark' => "<a onclick='User.toggleBookmark(this);' data-classe='shop' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               "logo" => $obj->getId_seller(Content::FORMAT_OBJECT)->getClasse(Content::FORMAT_OBJECT)->getPath_img_logo(Content::FORMAT_VIEW, "img-back-30"),
               'edit' => $edit,
               'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=shop&a=getPdf&uniqid=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
@@ -257,7 +257,7 @@ class ControllerShop extends ControllerModule{
                 $click_action = "";
                 switch ($action) {
                   case ControllerModule::SEARCH_DONE_ADD_TO_BOOKMARK:
-                    $click_action = "onclick=\"User.toogleBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                    $click_action = "onclick=\"User.toggleBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
                   break;
                   default:
                     $click_action = "onclick=\"Shop.open('".$object->getUniqid()."');\"";

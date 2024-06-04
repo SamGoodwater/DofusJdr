@@ -57,7 +57,7 @@ class User extends Controller{
         ); 
     }
 
-    static toogleBookmark(btn){
+    static toggleBookmark(btn){
         let url = "";
         let sentence = "";
 

@@ -114,7 +114,7 @@ class Page extends Controller{
                 $(".modal__bubbleshortcut_toggle").hide();
             }
             
-            let bookmark_obj = $(".modal__bookmark_toogle");
+            let bookmark_obj = $(".modal__bookmark_toggle");
             if(bookmark != null){
                 if( bookmark['classe'] !== "undefined" && bookmark['classe'] != "" &&
                     bookmark['uniqid'] !== "undefined" && bookmark['uniqid'] != "" &&
@@ -222,8 +222,9 @@ class Page extends Controller{
         $(".app-content #content").html(spinner);
         $(".app-toolbar #title").html("");
 
-        if (isMobileSize()) {
-            toogleMenu(true);
+        const app = document.querySelector('.app');
+        if (app.classList.contains('app-compacted')) {
+            toggleMenu(true);
         }
 
         let URL = 'index.php?c=page&a=show';
@@ -379,95 +380,114 @@ class Page extends Controller{
     }
 
     // Evenements et fonctions de la page-navigation
-    static initPageNavigation(){
-        const container = document.querySelector('page-navigation');
-        const btn = document.querySelector('page-navigation__top__toggle');
-        const btn_minimize = document.querySelector('page-navigation__top__minimize');
-        const selectItem_text = document.querySelector('page-navigation__top__select-item');
-        const textnav = document.querySelector('page-navigation__top__text');
-        const titles = [...document.querySelectorAll('.section-title')];
-        let posTitles = titles.map(title => title.offsetTop);
-        const links = [...document.querySelectorAll('.page-navigation__menu__item')];
+    static initPageNavigation() {
+        const container = document.querySelector('.page-navigation');
+        if (container) {
+            const btnMinimize = document.querySelector('.page-navigation__top__minimize');
+            const selectItemText = document.querySelector('.page-navigation__top__select-item');
+            const titles = [...document.querySelectorAll('.section-title')];
+            let posTitles = titles.map(title => title.offsetTop);
+            const links = [...document.querySelectorAll('.page-navigation__menu__item')];
+    
+            let currentIndex = null;
 
-        let currentIndex = null;
-
-        window.addEventListener('scroll', () => {
-
-            if(container != null && container.length > 0){
-                if(window.innerWidth > BREAKPOINT_MOBILE && container.classList.contains('page-navigation--minimized') == false){
-
-                    let index = null;
-                    const  {scrollTop} = document.documentElement;
-
-                    textnav.style.display = "block";
-                    selectItem_text.style.display = "none";
-
-                    if(scrollTop > 3){
-                        posTitles.forEach(pos => {
-                            if(scrollTop >= pos){
-                                index = posTitles.indexOf(pos);
-                            }
-                        });
-                        if(index != null){
-                            if(index != currentIndex){
-                                currentIndex = index;
-                                links.forEach(link => link.classList.remove('page-navigation__menu__item--active'));
-                                links[index].classList.add('page-navigation__menu__item--active');
-                                selectItem_text.innerText = links[index].querySelector('.page-navigation__menu__item__link__text').innerText;
-                                selectItem_text.classList.remove('page-navigation__top__select-item--transition');
-                                setTimeout(() => {
-                                    selectItem_text.classList.add('page-navigation__top__select-item--transition');
-                                }, 50);
-                            }
-
-                            if(container.classList.contains('page-navigation--open')){
-                                textnav.style.display = "block";
-                                selectItem_text.style.display = "none";
-                            } else {
-                                textnav.style.display = "none";
-                                selectItem_text.style.display = "block";
-                            }
+            // SCROLL TO SECTION
+            links.forEach((link, index) => {
+                link.addEventListener('click', () => {
+                    window.scrollTo({ top: posTitles[index], behavior: 'smooth' });
+                });
+            });
+    
+            // SCROLL
+            window.addEventListener('scroll', () => {
+                let index = null;
+                const { scrollTop } = document.documentElement;
+                if (scrollTop <= 3) {
+                    index = -1;
+                    if(index != currentIndex){
+                        changeActiveItem(index);
+                        currentIndex = index;
+                    }
+                } else {
+                    posTitles.forEach(pos => {
+                        if (scrollTop >= pos) {
+                            index = posTitles.indexOf(pos);
                         }
+                    });
+                    if (index !== null && index != currentIndex) {
+                        changeActiveItem(index);
+                        if (container.classList.contains('page-navigation--minimized')) {
+                            container.classList.remove('page-navigation--minimized');
+                            setTimeout(() => {
+                                container.classList.add('page-navigation--minimized');
+                            }, 1000);
+                        }
+                        currentIndex = index;
                     }
                 }
-            }
-
-        });
-
-        if(btn != null && btn.length > 0){
-            btn.onclick = function() {
+            });
+    
+            const changeActiveItem = function(index = -1) {
+                clearActiveItem();
+                let title = "Plan de la page";
+                if (index > -1 && index < links.length) {
+                    title = links[index].querySelector('.page-navigation__menu__item__link__text').innerText;
+                    links[index].classList.add('page-navigation__menu__item--active');
+                }
+                selectItemText.textContent = title;
+                selectItemText.classList.remove('page-navigation__top__select-item--transition');
+                setTimeout(() => {
+                    selectItemText.classList.add('page-navigation__top__select-item--transition');
+                }, 50);
+            };
+    
+            const clearActiveItem = function() {
+                selectItemText.textContent = "";
+                links.forEach(link => link.classList.remove('page-navigation__menu__item--active'));
+            };
+    
+            // OPEN MENU
+            let isMinimized = false;
+            const toggleMenu = function() {
+                if(container.classList.contains('page-navigation--minimized')) {
+                    isMinimized = true;
+                }
 
                 container.classList.toggle('page-navigation--open');
-
-                if (container.classList.contains('page-navigation--open')) {
-                    btn.setAttribute('aria-label', 'Fermer la navigation');
-                    btn.innerHTML = '<i class="fa-solid fa-times"></i>';
-                } else {
-                    btn.setAttribute('aria-label', 'Ouvrir la navigation');
-                    btn.innerHTML = '<i class="fa-solid fa-ellipsis"></i>';
+                if (container.classList.contains('page-navigation--open')) { // Open
+                    container.setAttribute('aria-label', 'Cacher la navigation');
+                    container.setAttribute('title', 'Cacher la navigation');
+                    if(isMinimized){
+                        container.classList.remove('page-navigation--minimized');
+                    }
+                } else { // Close
+                    container.setAttribute('aria-label', 'Afficher la navigation');
+                    container.setAttribute('title', 'Afficher la navigation');
+                    if(isMinimized){
+                        container.classList.add('page-navigation--minimized');
+                    }
                 }
-            }
-        }
-
-        if(btn_minimize != null && btn_minimize.length > 0){
-            btn_minimize.onclick = function() {
+            };
+            container.addEventListener('mouseenter', toggleMenu);
+            container.addEventListener('mouseleave', toggleMenu);
+    
+            // MINIMIZE MENU
+            const toggleMenuMinimize = function() {
                 container.classList.toggle('page-navigation--minimized');
-
-                if (container.classList.contains('page-navigation--minimize')) {
-                    btn_minimize.setAttribute('aria-label', 'Agrandir le menu de navigation');
-                    btn_minimize.setAttribute('title', 'Agrandir le menu de navigation');
-                    btn_minimize.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i>';
+                if (container.classList.contains('page-navigation--minimized')) {
+                    btnMinimize.setAttribute('aria-label', 'Agrandir le menu de navigation');
+                    btnMinimize.setAttribute('title', 'Agrandir le menu de navigation');
+                    btnMinimize.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i>';
+                    selectItemText.style.display = "block";
                 } else {
-                    btn_minimize.setAttribute('aria-label', 'Réduire le menu de navigation');
-                    btn_minimize.setAttribute('title', 'Réduire le menu de navigation');
-                    btn_minimize.innerHTML = '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>';
+                    btnMinimize.setAttribute('aria-label', 'Réduire le menu de navigation');
+                    btnMinimize.setAttribute('title', 'Réduire le menu de navigation');
+                    btnMinimize.innerHTML = '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>';
+                    selectItemText.style.display = "none";
                 }
-
-                textnav.style.display = "none";
-                selectItem_text.style.display = "none";
-            }
+            };
+            btnMinimize.addEventListener('click', toggleMenuMinimize);
         }
-        
     }
-
+    
 }

@@ -110,7 +110,7 @@ class Router {
                     }
                     foreach(scandir($dir) as $file) {
                         $path =  $dir_url . $file;
-                        if($file != '.' && $file != '..' && !empty($file) && !is_dir($dir.$file)){
+                        if($file != '.' && $file != '..' && !empty($file) && !is_dir($path)){
                             if(substr($path, -4) == ".css"){
                                 ?> <link href="<?=$path?>" crossorigin="<?=$crossorigin?>" media="<?=$media?>" integrity="<?=$integrity?>" rel="stylesheet" type="text/css"> <?php
                             }
@@ -140,6 +140,11 @@ class Router {
                         ],
                         "src/js/plugin/upload/vendor/jquery.ui.widget.js", // Jquery WIDGET UI
                         [
+                            "link" => "https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js", // POPPER
+                            "crossorigin" => "anonymous",
+                            "integrity" => "sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
+                        ],
+                        [
                             "link" => "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js", // Bootstrap
                             "crossorigin" => "anonymous",
                             "integrity" => "sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
@@ -152,12 +157,12 @@ class Router {
                         "https://cdn.jsdelivr.net/npm/amplitudejs@5.3.2/dist/amplitude.js", // Amplitude JS, outil d'aide à la création d'un lecteur
                         "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js", // Fancybox
                         "src/js/", // Ini et function
-                        "src/js/functions",
-                        "src/js/components",
-                        "src/js/modules",
+                        "src/js/functions/",
+                        "src/js/components/",
+                        "src/js/modules/",
                         "src/js/plugin/upload/",
                         "src/js/ajax/",
-                        "src/js/ajax/modules",
+                        "src/js/ajax/modules/",
                         "src/js/plugin/ckeditor5/", //https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js
                         "src/js/plugin/",
                         "src/js/plugin/table-bootstrap-export/libs/",
@@ -194,8 +199,8 @@ class Router {
                             }
                             foreach(scandir($dir) as $file) {
                                 $path = $dir_url . $file;
-                                if($file != '.' && $file != '..' && !empty($file) && !is_dir($dir.$file)){
-                                    if(substr($path, -2) == "js"){
+                                if($file != '.' && $file != '..' && !empty($file) && !is_dir($path)){
+                                    if(substr($path, -3) == ".js"){
                                         ?> <script src="<?=$path?>" crossorigin="<?=$crossorigin?>" integrity="<?=$integrity?>" type="text/javascript"></script> <?php
                                     }
                                 }

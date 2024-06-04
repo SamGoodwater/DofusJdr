@@ -1723,4 +1723,31 @@ class ControllerTools extends Controller
 		echo json_encode($return);
 		flush();
 	}
+
+	// Fichier à mettre en cache
+		public function getListFileToBeCache() {
+			$directories = ['/src/css', '/src/js', '/medias'];
+			$allFiles = [];
+	
+			foreach ($directories as $dir) {
+				$allFiles = array_merge($allFiles, $this->getFiles($_SERVER['DOCUMENT_ROOT'] . $dir));
+			}
+	
+			header('Content-Type: application/json');
+			echo json_encode($allFiles);
+		}
+	
+		private function getFiles($dir, &$results = array()) {
+			$files = scandir($dir);
+			foreach ($files as $file) {
+				$path = realpath($dir . DIRECTORY_SEPARATOR . $file);
+				if (!is_dir($path)) {
+					$results[] = str_replace($_SERVER['DOCUMENT_ROOT'], '', $path);
+				} else if ($file != "." && $file != "..") {
+					$this->getFiles($path, $results);
+				}
+			}
+			return $results;
+		}
+	
 }

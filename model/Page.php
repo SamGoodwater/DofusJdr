@@ -121,14 +121,11 @@ class Page extends Content
                     ob_start(); ?>
                         <div class="sortablebis">
 
-                            <?php if(count($this->getSection()) > 1){ ?>
-                                <nav class="page-navigation" title="Cliquer pour voir les sections de la page et y naviguer facilement.">
+                            <?php if(count($this->getSection()) > 3){ ?>
+                                <nav class="page-navigation page-navigation--minimized--" title="Afficher les sections de la page et y naviguer facilement.">
                                     <div class="page-navigation__top">
-                                        <!-- <div> -->
-                                            <p class="page-navigation__top__select-item"></p>
-                                            <p class="page-navigation__top__text">Plan de la page</p>
-                                        <!-- </div> -->
-                                        <button class="page-navigation__top__toggle"><i class="fa-solid fa-ellipsis"></i></button>
+                                        <p class="page-navigation__top__select-item">Plan de la page</p>
+                                        <button class="page-navigation__top__minimize" aria-label="Agrandir le menu de navigation" title="Agrandir le menu de navigation"><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
                                     </div>
                                     <ul class="page-navigation__menu">
                                         <?php foreach ($this->getSection() as $section) { ?>
@@ -184,14 +181,12 @@ class Page extends Content
                 default:
                     ob_start(); ?>
 
-                        <?php if(count($this->getSection()) > 1){ ?>
-                            <nav class="page-navigation" title="Cliquer pour voir les sections de la page et y naviguer facilement.">
-                                <p class="page-navigation__text">Plan de la page</p>
-                                <button class="page-navigation__toggle">
-                                    <span class="page-navigation__toggle__icon"></span>
-                                    <span class="page-navigation__toggle__icon"></span>
-                                    <span class="page-navigation__toggle__icon"></span>
-                                </button>
+                        <?php if(count($this->getSection()) > 3){ ?>
+                            <nav class="page-navigation page-navigation--minimized" title="Afficher les sections de la page et y naviguer facilement.">
+                                <div class="page-navigation__top">
+                                    <p class="page-navigation__top__select-item">Plan de la page</p>
+                                    <button class="page-navigation__top__minimize" aria-label="Agrandir le menu de navigation" title="Agrandir le menu de navigation"><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
+                                </div>
                                 <ul class="page-navigation__menu">
                                     <?php foreach ($this->getSection() as $section) { ?>
                                         <li class="page-navigation__menu__item">

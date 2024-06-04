@@ -4,16 +4,45 @@ function initInterface() {
     });
     compactMenu();
     initGlobalSearch();
+    const overlay = document.querySelector('.overlay');
+    overlay.addEventListener('click', closeOverlay());
+}
 
-    // Lorque le menu est ouvert en mode tablette ou mobile, et que l'on clique à l'extérieur du menu, alors le menu se ferme
-    // const container = document.querySelector('.app');
-    // document.addEventListener('click', function(e) {
-    //     if ($(window).width() <= BREAKPOINT_TABLET && !$(container).is(e.target) && $(container).has(e.target).length === 0) {
-    //         if ($(".app").hasClass("app-extend")) {
-    //             toogleMenu();
-    //         }
-    //     }
-    // }, false);
+function toggleToolbar(forced_hidden = false){
+    if($('.app-toolbar-content').hasClass('hidden') == false || forced_hidden){
+        $(".app-toolbar-content").addClass("hidden");
+        $(".app-btn-show-toolbar-footer").show("blind", 300);
+        $(".dropdown-item-toggletoolbar-button").text("Afficher la barre d'outils");
+    } else {
+        $(".app-toolbar-content").removeClass("hidden");
+        $(".app-btn-show-toolbar-footer").hide("blind", 300);
+        $(".dropdown-item-toggletoolbar-button").text("Masquer la barre d'outils");
+    }
+}
+function toggleFooter(forced_hidden = false){
+    if($('footer').hasClass('hidden') || forced_hidden){
+        $("footer").addClass("hidden");
+        $("footer").hide("blind", 300);
+    } else {
+        $("footer").removeClass("hidden");
+        $("footer").show("blind", 300);
+    }
+}
+function toggleMenu(forcedClosed = false){
+    const app = document.querySelector('.app');
+    if (app.classList.contains('app-extend') || forcedClosed) { // Fermeture du menu
+        app.classList.remove('app-extend');
+        app.classList.add('app-fold');
+        closeOverlay();
+    } else {                                                    // Ouverture du menu
+        app.classList.remove('app-fold');
+        app.classList.add('app-extend');
+        
+        // Lorque le menu est ouvert en mode tablette ou mobile, et que l'on clique à l'extérieur du menu (sur l'overlay), alors le menu se ferme
+        if(app.classList.contains('app-compacted')){
+            useOverlay(() => toggleMenu(true));
+        }
+    }
 }
 
 function compactMenu(){
@@ -37,7 +66,7 @@ function initGlobalSearch() {
             input.focus();
             
             if($(window).width() <= BREAKPOINT_TABLET){
-                toogleMenu();
+                toggleMenu();
             }
         } else {
             button.querySelector('span i').classList.remove('fa-times');
@@ -64,4 +93,21 @@ function switchConnectInscript(tab, btn){
     $(".user__modal_connexion .user__modal_btn-switch").css("border-bottom", "none");
     $(tab).show();
     $(btn).css("border-bottom", "solid 1px var(--main-d-2)");
+}
+
+function useOverlay(fct) {
+    const overlay = document.querySelector("#overlay");
+    if (typeof fct === 'function') {
+        overlay.addEventListener('click', () => {
+            fct();
+            // Masque l'overlay après l'exécution de la fonction
+            overlay.classList.remove('overlay--open');
+        }, { once: true });
+    }
+    // Affiche l'overlay
+    overlay.classList.add('overlay--visible');
+}
+function closeOverlay(){
+    const overlay = document.querySelector("#overlay");
+    overlay.classList.remove('overlay--visible');
 }

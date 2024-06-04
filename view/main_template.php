@@ -80,7 +80,7 @@
                 <?php include_once "header.php";?>
             </div>
             <div class="app-btn-show-toolbar-footer" style="display: none;">
-                <a onclick="toogleToolbar(false);toogleFooter(false)"><i class="fa-solid fa-caret-down"></i></a>
+                <a onclick="toggleToolbar(false);toggleFooter(false)"><i class="fa-solid fa-caret-down"></i></a>
             </div>
             
             <main class='app-content'>
@@ -150,7 +150,7 @@
 
         <div id="bubbleshorcut" class="bubbleshorcut">
             <div class="bubbleshorcut_item show"></div>
-            <a title="Cacher les bulles de raccourcis" class="bubbleshorcut__button_dropdown active" onclick="Bubbleshortcut.dropdownToogle();"><i class="fa-solid fa-caret-down"></i></a> 
+            <a title="Cacher les bulles de raccourcis" class="bubbleshorcut__button_dropdown active" onclick="Bubbleshortcut.dropdownToggle();"><i class="fa-solid fa-caret-down"></i></a> 
         </div>
 
         <div id="modal" class="modal" tabindex="-1">
@@ -159,7 +159,7 @@
                     <div class="modal-header">
                         <h2 class="modal-title w-100"></h2>
                         <a class="modal__share_object btn-text-grey mx-2" title="Copier le lien vers cette objet" onclick=""><i class="fa-solid fa-share-alt"></i></a>
-                        <a class="modal__bookmark_toogle btn-text-grey mx-2" title="Ajouter aux favoris" data-uniqid="" data-classe="" onclick="User.toogleBookmark(this);"><i class="fa-regular fa-bookmark"></i></a>
+                        <a class="modal__bookmark_toggle btn-text-grey mx-2" title="Ajouter aux favoris" data-uniqid="" data-classe="" onclick="User.toggleBookmark(this);"><i class="fa-regular fa-bookmark"></i></a>
                         <a class="modal__bubbleshortcut_toggle mx-2" title="Ajouter cette bulle de raccourcis" onclick=""></a>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -280,6 +280,8 @@
                 </div>
             </div>
         </div>
+
+        <div class="overlay" id="overlay"></div>
 
     <!-- END POPUP -->
 

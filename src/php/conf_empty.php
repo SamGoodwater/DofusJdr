@@ -8,9 +8,9 @@ $GLOBALS['project'] = [
     "description" => "",
     "version" => "0",
     "bookmark_name" => "Signet",
-    "stability" => "α", // β ou α
-    "stability_verbal" => "alpha",
-    "base_url" => "http://exemple.com/",
+    "stability" => "α", // β ou α ou S
+    "stability_verbal" => "alpha", // béta, alpha ou stable
+    "base_url" => stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://' . $_SERVER['SERVER_NAME'],
     "author" => "",
     "mail" => [
         "contact" => "contact@mail.fr",

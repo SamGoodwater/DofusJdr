@@ -984,7 +984,7 @@ class Capability extends Content
                                 $class="";
                                 if($manager->existsLinkSpecialization($this, $id)) { $checked = "checked"; $class="bold text-white back-".$specialization['color']."-d-2"; } ?>
                                 <div>
-                                    <input <?=$checked?> onchange="checkboxButtonToogle(this, Capability, '<?=$this->getUniqid()?>', 'specialization', <?=$id?>, 'specialization');" data-color="<?=$specialization['color']?>" type="checkbox" class="btn-check" id="specialization-btn-check-<?=$id?>" autocomplete="off">
+                                    <input <?=$checked?> onchange="checkboxButtonToggle(this, Capability, '<?=$this->getUniqid()?>', 'specialization', <?=$id?>, 'specialization');" data-color="<?=$specialization['color']?>" type="checkbox" class="btn-check" id="specialization-btn-check-<?=$id?>" autocomplete="off">
                                     <label class="btn btn-sm btn-outline <?=$class?> border-<?=$specialization['color']?>-d-2" for="specialization-btn-check-<?=$id?>"><?=ucfirst($specialization['name'])?></label>
                                 </div>
                             <?php } ?>

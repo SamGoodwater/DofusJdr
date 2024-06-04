@@ -116,7 +116,7 @@ class ControllerMob extends ControllerModule{
           'trait' => $obj->getTrait(Content::FORMAT_BADGE),
           'path_img' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_LG])),
           'usable' => $obj->getUsable(Content::FORMAT_ICON),
-          'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='mob' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+          'bookmark' => "<a onclick='User.toggleBookmark(this);' data-classe='mob' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
           'edit' => $edit,
           'resume' => "<div class='size-0-8 col'><div>{$obj->getPa(Content::FORMAT_ICON)}</div><div>{$obj->getPm(Content::FORMAT_ICON)}</div><div>{$obj->getPo(Content::FORMAT_ICON)}</div><div>{$obj->getIni(Content::FORMAT_ICON)}</div><div>{$obj->getTouch(Content::FORMAT_ICON)}</div></div>",
           'resumeattack' => "<div class='size-0-8 col'><div>{$obj->getVitality(Content::FORMAT_ICON)}</div><div>{$obj->getSagesse(Content::FORMAT_ICON)}</div><div>{$obj->getStrong(Content::FORMAT_ICON)}</div><div>{$obj->getIntel(Content::FORMAT_ICON)}</div><div>{$obj->getAgi(Content::FORMAT_ICON)}</div><div>{$obj->getChance(Content::FORMAT_ICON)}</div></div>",
@@ -209,7 +209,7 @@ class ControllerMob extends ControllerModule{
               'trait' => $obj->getTrait(Content::FORMAT_BADGE),
               'path_img' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_LG])),
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
-              'bookmark' => "<a onclick='User.toogleBookmark(this);' data-classe='mob' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+              'bookmark' => "<a onclick='User.toggleBookmark(this);' data-classe='mob' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
               'edit' => $edit,
               'resume' => "<div class='size-0-8 col'><div>{$obj->getPa(Content::FORMAT_ICON)}</div><div>{$obj->getPm(Content::FORMAT_ICON)}</div><div>{$obj->getPo(Content::FORMAT_ICON)}</div><div>{$obj->getIni(Content::FORMAT_ICON)}</div><div>{$obj->getTouch(Content::FORMAT_ICON)}</div></div>",
               'resumeattack' => "<div class='size-0-8 col'><div>{$obj->getVitality(Content::FORMAT_ICON)}</div><div>{$obj->getSagesse(Content::FORMAT_ICON)}</div><div>{$obj->getStrong(Content::FORMAT_ICON)}</div><div>{$obj->getIntel(Content::FORMAT_ICON)}</div><div>{$obj->getAgi(Content::FORMAT_ICON)}</div><div>{$obj->getChance(Content::FORMAT_ICON)}</div></div>",
@@ -651,7 +651,7 @@ class ControllerMob extends ControllerModule{
                 $click_action = "";
                 switch ($action) {
                   case ControllerModule::SEARCH_DONE_ADD_TO_BOOKMARK:
-                    $click_action = "onclick=\"User.toogleBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
+                    $click_action = "onclick=\"User.toggleBookmark(this);\" data-classe=\"".strtolower(get_class($object))."\" data-uniqid=\"".$object->getUniqid()."\"";
                   break;
                   case ControllerModule::SEARCH_DONE_ADD_MOB_TO_SPELL:
                     $click_action = "onclick=\"Spell.update('".$parameter."',{action:'add', uniqid:'".$object->getUniqid()."'},'mob', IS_VALUE);\"";

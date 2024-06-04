@@ -24,7 +24,7 @@
                     <div class="size-0-7 text-grey-d-2"><?=$obj->getDescription_fast()?></div>
                 </div>
                 <div class="d-flex flex-column justify-content-between ms-auto resume-rapid-menu">
-                    <a onclick='User.toogleBookmark(this);' data-classe='classe' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
+                    <a onclick='User.toggleBookmark(this);' data-classe='classe' data-uniqid='<?=$obj->getUniqid()?>'><i class='<?=$bookmark_icon?> fa-bookmark text-main-d-2 text-main-hover'></i></a>
                     <p class="align-self-end"><a class="btn-text-secondary" title="Afficher les sorts" onclick="Classe.getSpellList('<?=$obj->getUniqid()?>');"><i class="fa-solid fa-magic"></i></a></p>
                     <a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=classe&a=getPdf&uniqid=<?=$obj->getUniqid()?>'><i class='fa-solid fa-file-pdf'></i></a>
                 </div>
