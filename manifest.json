@@ -1,0 +1,16 @@
+{
+    "name": "Jeu de rôle Dofus",
+    "short_name": "DofusJDR",
+    "description": "Ce jeu de rôle est un mode de Donjon & Dragon où les règles ont été adapté au monde des douze, c'est à dire à l'univers du jeu vidéo Dofus.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fafafa",
+    "theme_color": "#009688",
+    "icons": [
+        {
+            "src": "/medias/logos/logo_dice_20.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

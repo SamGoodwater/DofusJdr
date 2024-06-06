@@ -402,7 +402,7 @@ class Page extends Controller{
             window.addEventListener('scroll', () => {
                 let index = null;
                 const { scrollTop } = document.documentElement;
-                if (scrollTop <= 3) {
+                if (scrollTop <= 1) {
                     index = -1;
                     if(index != currentIndex){
                         changeActiveItem(index);
@@ -415,13 +415,8 @@ class Page extends Controller{
                         }
                     });
                     if (index !== null && index != currentIndex) {
+                        selectItemText.classList.remove('page-navigation__top__select-item--transition');
                         changeActiveItem(index);
-                        if (container.classList.contains('page-navigation--minimized')) {
-                            container.classList.remove('page-navigation--minimized');
-                            setTimeout(() => {
-                                container.classList.add('page-navigation--minimized');
-                            }, 1000);
-                        }
                         currentIndex = index;
                     }
                 }
@@ -435,10 +430,18 @@ class Page extends Controller{
                     links[index].classList.add('page-navigation__menu__item--active');
                 }
                 selectItemText.textContent = title;
-                selectItemText.classList.remove('page-navigation__top__select-item--transition');
-                setTimeout(() => {
-                    selectItemText.classList.add('page-navigation__top__select-item--transition');
-                }, 50);
+
+                // Animation
+                selectItemText.classList.add('page-navigation__top__select-item--transition');
+                if (container.classList.contains('page-navigation--minimized')) {
+                    container.classList.remove('page-navigation--minimized');
+                    setTimeout(() => {
+                        selectItemText.classList.remove('page-navigation__top__select-item--transition');
+                    }, 1500);
+                    setTimeout(() => {
+                        container.classList.add('page-navigation--minimized');
+                    }, 1500);
+                }
             };
     
             const clearActiveItem = function() {
@@ -446,44 +449,18 @@ class Page extends Controller{
                 links.forEach(link => link.classList.remove('page-navigation__menu__item--active'));
             };
     
-            // OPEN MENU
-            let isMinimized = false;
-            const toggleMenu = function() {
-                if(container.classList.contains('page-navigation--minimized')) {
-                    isMinimized = true;
-                }
-
-                container.classList.toggle('page-navigation--open');
-                if (container.classList.contains('page-navigation--open')) { // Open
-                    container.setAttribute('aria-label', 'Cacher la navigation');
-                    container.setAttribute('title', 'Cacher la navigation');
-                    if(isMinimized){
-                        container.classList.remove('page-navigation--minimized');
-                    }
-                } else { // Close
-                    container.setAttribute('aria-label', 'Afficher la navigation');
-                    container.setAttribute('title', 'Afficher la navigation');
-                    if(isMinimized){
-                        container.classList.add('page-navigation--minimized');
-                    }
-                }
-            };
-            container.addEventListener('mouseenter', toggleMenu);
-            container.addEventListener('mouseleave', toggleMenu);
-    
             // MINIMIZE MENU
             const toggleMenuMinimize = function() {
-                container.classList.toggle('page-navigation--minimized');
                 if (container.classList.contains('page-navigation--minimized')) {
+                    container.classList.remove('page-navigation--minimized');
                     btnMinimize.setAttribute('aria-label', 'Agrandir le menu de navigation');
                     btnMinimize.setAttribute('title', 'Agrandir le menu de navigation');
                     btnMinimize.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i>';
-                    selectItemText.style.display = "block";
                 } else {
+                    container.classList.add('page-navigation--minimized');
                     btnMinimize.setAttribute('aria-label', 'Réduire le menu de navigation');
                     btnMinimize.setAttribute('title', 'Réduire le menu de navigation');
                     btnMinimize.innerHTML = '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>';
-                    selectItemText.style.display = "none";
                 }
             };
             btnMinimize.addEventListener('click', toggleMenuMinimize);

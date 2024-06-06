@@ -5,8 +5,8 @@
     z-index: 10;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: end;
+    align-items: end;
+    justify-content: center;
     opacity: 0.85;
     overflow: hidden;
     box-shadow: $box-shadow-1;
@@ -46,6 +46,7 @@
         }
 
         &__select-item {
+            display: block;
             font-weight: 400;
             color: var(--main-d-2);
             font-size: 0.9rem;
@@ -67,51 +68,57 @@
         align-items: end;
         flex-direction: column;
         text-align: right;
-    }
-
-    &--open {
         backdrop-filter: blur(64px);
         background: rgb(255, 255, 255);
         border-radius: 10px;
         padding: 10px;
-        flex-direction: column;
-        align-items: end;
-        opacity: 0.95;
-        box-shadow: $box-shadow-2;
 
-        &:hover {
-            opacity: 0.97;
-            box-shadow: $box-shadow-3;
-        }
+        &__item{
+            border-radius: 3px;
+            padding: 1px;
 
-        .page-navigation__menu {
-            display: flex;
+            &:hover{
+                background-color: var(--main-l-4);
+                color: var(--main-d-3);
+            }
 
-            &__item{
-                border-radius: 3px;
-                padding: 1px;
-
-                &:hover{
-                    background-color: var(--main-l-4);
-                    color: var(--main-d-3);
-                }
-
-                &--active{
-                    background-color: var(--main-d-3);
-                    color: var(--main-l-4);
-                }
+            &--active{
+                background-color: var(--main-d-3);
+                color: var(--main-l-4);
             }
         }
     }
 
     &--minimized {
 
-        .page-navigation__top_select-item {
-            visibility: hidden;
-            display: none;
+        .page-navigation{
+
+            &__top {
+                opacity: 0.70;
+
+                &__select-item {
+                    display: none;
+                }
+
+            }
         }
-        .page-navigation__menu {
-            display: none;
+    }
+
+    &:hover {
+        .page-navigation{
+            &__top{
+                opacity: 0.95;
+                
+                &__select-item {
+                    display: block;
+                    opacity: 1;
+                    transform: translateX(0px);
+                }
+            }
+            &__menu {
+                display: flex;
+                opacity: 0.95;
+            }
         }
     }
 
