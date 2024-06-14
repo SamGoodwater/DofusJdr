@@ -11,14 +11,16 @@
 .text-right{text-align: right;}
 .text-left{text-align: left;}
 
-@for $i from 5 through 100 {
-    $i: $i / 10;
+$i: 5;
+@while $i <= 100 {
+    $i: calc($i / 10);
     $i-string: unquote('#{$i}'); // Convertir en chaîne de caractères
     $index: str-index($i-string, '.');
     $name: if($index, str-slice($i-string, 1, $index - 1) + '-' + str-slice($i-string, $index + 1), $i-string);
     .size-#{$name} {
         font-size: #{$i}em!important;
     }
+    $i: $i + 1;
 }
 
 .sectionContentSelector {

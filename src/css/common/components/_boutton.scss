@@ -1,348 +1,300 @@
 /* -------------------------------------------- B O U T O N S ------------------------------ */
-/* https://openclassrooms.com/fr/courses/5919246-creez-des-animations-css-modernes/6340912-decouvrez-les-animations-web */
-/* Animation */
 
-  button{
+// MIXINS
+  @mixin btn-init {
     cursor: pointer;
     outline: none;
     border: none;
     background-color: transparent;
-    color:inherit;
+    color: inherit;
     text-decoration: none;
-    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    backdrop-filter:  blur(0px);
+    -webkit-backdrop-filter:  blur(0px);
   }
 
-  .btn {
-    /* propriété durée délais timming , autres animations ... */
+  @mixin btn-styles {
     transition: transform .15s cubic-bezier(.71,.12,1,.6), background-color .14s 50ms ease-in-out;
- 
     padding: 0.3rem 0.6rem;
     font-size: 1rem;
     line-height: 1.35;
     border-radius: 0.35rem;
-
-    &:hover{
+  
+    &:hover {
       text-decoration: none;
       box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(5.5px);
       -webkit-backdrop-filter: blur(5.5px);
     }
-
-    &:active{
+  
+    &:active {
       display: inline-block;
     }
-
-    // Blur ANIMATION
-    &.btn-animate{
-
-      overflow: hidden;
-      backdrop-filter: blur(5.5px);
-      -webkit-backdrop-filter: blur(5.5px);
-
-        &::before {
-          content: '';
-          background: rgb(255, 255, 255);
-          opacity: 0.1;
-          width: 0%;
-          height: 0%;
-          top: 0%;
-          left: 0%;
-          transform: skew(45deg);
-          position: absolute;
-          transition: left 0.3s ease;
-        }
-
-        &:hover::before{
-          left: 150%;
-          width: 60%;
-          height: 100%;
-        }
-    }
-
   }
 
-  [class*="btn-text"]:hover{
-    text-decoration: none;
-    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
+  @mixin btn-size($size) {
+    @if $size == "xl" {
+      padding: 0.5rem 1rem;
+      font-size: 1.3rem;
+      line-height: 1.75;
+      border-radius: 0.5rem;
+    } @else if $size == "lg" {
+      padding: 0.375rem 0.75rem;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      border-radius: 0.375rem;
+    } @else if $size == "md" {
+      padding: 0.3rem 0.6rem;
+      font-size: 1rem;
+      line-height: 1.35;
+      border-radius: 0.35rem;
+    } @else if $size == "sm" {
+      padding: 0.2rem 0.3rem;
+      font-size: 0.8rem;
+      line-height: 1.25;
+      border-radius: 0.2rem;
+    } @else if $size == "xs" {
+      padding: 0.1rem 0.2rem;
+      font-size: 0.7rem;
+      line-height: 1.1;
+      border-radius: 0.2rem;
+    }  @else {
+      padding: 0.3rem 0.6rem;
+      font-size: 1rem;
+      line-height: 1.35;
+      border-radius: 0.35rem;
+    }
+  }
+
+  @mixin btn-animation {
+    overflow: hidden;
+    backdrop-filter: blur(5.5px);
+    -webkit-backdrop-filter: blur(5.5px);
+  
+    &::before {
+      content: '';
+      background: rgb(255, 255, 255);
+      opacity: 0.1;
+      width: 0;
+      height: 0;
+      top: 0;
+      left: 0;
+      transform: skew(45deg);
+      position: absolute;
+      transition: left 0.3s ease;
+    }
+  
+    &:hover::before {
+      left: 150%;
+      width: 60%;
+      height: 100%;
+    }
+  }
+
+  // Mixin pour les boutons avec fond (background)
+  @mixin btn-back($border-color, $bg-color, $hover-bg, $hover-border, $hover-color) {
+    border: 2px solid $border-color;
+    background-color: $bg-color;
+    color: var(--grey-l-5);
+
+    &:hover {
+      background-color: $hover-bg;
+      border: 2px solid $hover-border;
+      color: $hover-color;
+    }
+    
+    &.btn-animate::before {
+      background: $bg-color;
+      backdrop-filter: brightness(1.15);
+    }
+  }
+    
+  // Mixin pour les boutons avec bordure (border)
+  @mixin btn-border($border-color, $hover-bg, $hover-color) {
+    border: 2px solid $border-color;
+    color: $border-color;
+    background-color: var(--grey-l-5);
+  
+    &:hover{
+      border-color: $border-color;
+      background-color: $hover-bg;
+      color: $hover-color;
+    }
+  
+    &.btn-animate::before {
+      background: $border-color;
+      backdrop-filter: brightness(0.85);
+    }
+  }
+    
+  // Mixin pour les boutons avec soulignement (underline)
+  @mixin btn-underline($color, $hover-border, $hover-color) {
+    border: none;
+    background-color: transparent;
+    color: $color;
+  
+    &:hover{
+      border-bottom: 2px solid $hover-border;
+      color: $hover-color;
+    }
+  }
+    
+  // Mixin pour les boutons de texte (text)
+  @mixin btn-text($color, $hover-color) {
+    border: none;
+    background-color: transparent;
+    color: $color;
+  
+    &:hover{
+      color: $hover-color;
+    }
+  }
+
+  @mixin btn-disabled {
+    filter: grayscale(85%);
+    cursor: default;
+    transition: none;
+
+    &:hover {
+      background-color: inherit;
+      border:inherit;
+      color:inherit;
+      transform: none;
+    }
+  }
+
+  // Mixin principal pour les boutons
+  @mixin btn-general($size:md, $animation:true, $disabled:false) {
+    @include btn-init;
+    @include btn-styles;
+
+    @include btn-size($size);
+
+    @if $animation == true {
+      @include btn-animation;
+    }
+
+    @if $disabled == true {
+      @include btn-disabled;
+    }
+  }
+  @mixin btn($size:'md', $animation: true, $type:'back', $disabled: false, $color:var(--main-d-2), $hover-color:var(--main-l-2)) {
+    @include btn-general($type, $size, $animation, $disabled);
+
+    @if $type == "back" {
+      @include btn-back($color, $color, lighten($color, 15%), lighten($color, 15%), darken($color, 15%));
+    } @else if $type == "border" {
+      @include btn-border($color, lighten($color, 15%), $hover-color);
+    } @else if $type == "underline" {
+      @include btn-underline($color, lighten($color, 15%), $hover-color);
+    } @else if $type == "text" {
+      @include btn-text($color, $hover-color);
+    }
+  }
+
+
+// SELECTEURS
+  button{
+    @include btn-init;
+  }
+  .btn {
+    @include btn-init;
+    @include btn-styles;
   }
 
   .btn-xl{
-    padding: 0.5rem 1rem;
-    font-size: 1.3rem;
-    line-height: 1.75;
-    border-radius: 0.5rem;
+    @include btn-size("xl");
   }
   .btn-lg{
-    padding: 0.375rem 75rem;
-    font-size: 1.1rem;
-    line-height: 1.5;
-    border-radius: 0.375rem;
+    @include btn-size("lg");
   }
   .btn-md{
-    padding: 0.3rem 0.6rem;
-    font-size: 1rem;
-    line-height: 1.35;
-    border-radius: 0.35rem;
+    @include btn-size("md");
   }
   .btn-sm {
-    padding: 0.2rem 0.3rem;
-    font-size: 0.8rem;
-    line-height: 1.25;
-    border-radius: 0.2rem;
+    @include btn-size("sm");
   }
   .btn-xs{
-    padding: 0.1rem 0.2rem;
-    font-size: 0.7rem;
-    line-height: 1.1;
-    border-radius: 0.2rem;
-  }
-  
-  /* Bouton fond rempli */
-  [class*="btn-back-"] {
-    color: var(--grey-l-5);
-  }
-  .btn-back-main{
-    border: 2px solid var(--main-d-2);
-    background-color: var(--main-d-2);
-
-      &:hover{
-        background-color: var(--main-l-3);
-        border: 2px solid var(--main-l-3);
-        color: var(--main-d-4);
-      }
-      &.btn-animate::before{
-        background: var(--main-l-5);
-      }
+    @include btn-size("xs");
   }
 
-  .btn-back-secondary{
-    border: 2px solid var(--secondary-d-2);
-    background-color: var(--secondary-d-2);
-
-    &:hover{
-      background-color: var(--secondary-l-3);
-      border: 2px solid var(--secondary-l-3);
-      color: var(--secondary-d-4);
-    }
-    &.btn-animate::before{
-      background: var(--secondary-l-5);
-    }
+  .btn-animate{
+    @include btn-animation;
   }
 
-  .btn-back-tertiary{
-    border: 2px solid var(--tertiary-d-2);
-    background-color: var(--tertiary-d-2);
-
-    &:hover{
-      background-color: var(--tertiary-l-3);
-      border: 2px solid var(--tertiary-l-3);
-      color: var(--tertiary-d-4);
-    }
-    &.btn-animate::before{
-      background: var(--tertiary-l-5);
-    }
+  // Boutons fond rempli
+  .btn-back-main {
+    @include btn-back(var(--main-d-2), var(--main-d-2), var(--main-l-3), var(--main-l-3), var(--main-d-4));
   }
-
-  .btn-back-red{
-    border: 2px solid var(--red-d-2);
-    background-color: var(--red-d-2);
-
-    &:hover{
-      background-color: var(--red-l-3);
-      border: 2px solid var(--red-l-3);
-      color: var(--red-d-4);
-    }
-    &.btn-animate::before{
-      background: var(--red-l-5);
-    }
+  .btn-back-secondary {
+    @include btn-back(var(--secondary-d-2), var(--secondary-d-2), var(--secondary-l-3), var(--secondary-l-3), var(--secondary-d-4));
   }
-
-  .btn-back-green{
-    border: 2px solid var(--green-d-2);
-    background-color: var(--green-d-2);
-
-    &:hover{
-      background-color: var(--green-l-3);
-      border: 2px solid var(--green-l-3);
-      color: var(--green-d-4);
-    }
-    &.btn-animate::before{
-      background: var(--green-l-5);
-    }
+  .btn-back-tertiary {
+    @include btn-back(var(--tertiary-d-2), var(--tertiary-d-2), var(--tertiary-l-3), var(--tertiary-l-3), var(--tertiary-d-4));
   }
-
-  .btn-back-grey{
-    border: 2px solid var(--grey-d-2);
-    background-color: var(--grey-d-2);
-
-    &:hover{
-      background-color: var(--grey-l-3);
-      border: 2px solid var(--grey-l-3);
-      color: var(--grey-d-4);
-    }
-    &.btn-animate::before{
-      background: var(--grey-l-5);
-    }
+  .btn-back-red {
+    @include btn-back(var(--red-d-2), var(--red-d-2), var(--red-l-3), var(--red-l-3), var(--red-d-4));
   }
-  
-  /* Bouton border */
-  [class*="btn-border-"] {
-    background-color: var(--grey-l-5);
+  .btn-back-green {
+    @include btn-back(var(--green-d-2), var(--green-d-2), var(--green-l-3), var(--green-l-3), var(--green-d-4));
   }
-  [class*="btn-border-"]:hover {
-    color: var(--grey-l-5);
+  .btn-back-grey {
+    @include btn-back(var(--grey-d-2), var(--grey-d-2), var(--grey-l-3), var(--grey-l-3), var(--grey-d-4));
   }
-  .btn-border-main{
-    border: 2px solid var(--main-d-2);
-    color: var(--main-d-2);
-
-    &:hover{
-      border: 2px solid var(--main-d-2);
-      background-color: var(--main-d-2);
-    }
-    &.btn-animate::before{
-      background: var(--main-d-5);
-    }
+  // Boutons bordure
+  .btn-border-main {
+    @include btn-border(var(--main-d-2), var(--main-d-2), var(--main-d-2));
   }
-
-  .btn-border-secondary{
-    border: 2px solid var(--secondary-d-2);
-    color: var(--secondary-d-2);
-
-    &:hover{
-      border: 2px solid var(--secondary-d-2);
-      background-color: var(--secondary-d-2);
-    }
-    &.btn-animate::before{
-      background: var(--secondary-d-5);
-    }
+  .btn-border-secondary {
+    @include btn-border(var(--secondary-d-2), var(--secondary-d-2), var(--secondary-d-2));
   }
-
-  .btn-border-tertiary{
-    border: 2px solid var(--tertiary-d-2);
-    color: var(--main-d-2);
-
-    &:hover{
-      border: 2px solid var(--tertiary-d-2);
-      background-color: var(--tertiary-d-2);
-    }
-    &.btn-animate::before{
-      background: var(--tertiary-d-5);
-    }
+  .btn-border-tertiary {
+    @include btn-border(var(--tertiary-d-2), var(--tertiary-d-2), var(--tertiary-d-2));
   }
-
-  .btn-border-red{
-    border: 2px solid var(--red-d-2);
-    color: var(--red-d-2);
-
-    &:hover{
-      border: 2px solid var(--red-d-2);
-      background-color: var(--red-d-2);
-    }
-    &.btn-animate::before{
-      background: var(--red-d-5);
-    }
+  .btn-border-red {
+    @include btn-border(var(--red-d-2), var(--red-d-2), var(--red-d-2));
   }
-
-  .btn-border-green{
-    border: 2px solid var(--green-d-2);
-    color: var(--green-d-2);
-
-    &:hover{
-      border: 2px solid var(--green-d-2);
-      background-color: var(--green-d-2);
-    }
-    &.btn-animate::before{
-      background: var(--green-d-5);
-    }
+  .btn-border-green {
+    @include btn-border(var(--green-d-2), var(--green-d-2), var(--green-d-2));
   }
-
-  .btn-border-grey{
-    border: 2px solid var(--grey-d-2);
-    color: var(--grey-d-2);
-
-    &:hover{
-      border: 2px solid var(--grey-d-2);
-      background-color: var(--grey-d-2);
-    }
-    &.btn-animate::before{
-      background: var(--grey-d-5);
-    }
+  .btn-border-grey {
+    @include btn-border(var(--grey-d-2), var(--grey-d-2), var(--grey-d-2));
   }
-  
-  /* Bouton underline */
-  [class*="btn-underline-"] {
-    border: none;
-    background-color: transparent;
+  // Boutons soulignés
+  .btn-underline-main {
+    @include btn-underline(var(--main-d-2), var(--main-d-4), var(--main-d-4));
+  }    
+  .btn-underline-secondary {
+    @include btn-underline(var(--secondary-d-2), var(--secondary-d-4), var(--secondary-d-4));
   }
-  .btn-underline-main{color: var(--main-d-2);}
-  .btn-underline-main:hover{
-    border-bottom: 2px solid var(--main-d-4);
-    color: var(--main-d-4);
+  .btn-underline-tertiary {
+    @include btn-underline(var(--tertiary-d-2), var(--tertiary-d-4), var(--tertiary-d-4));
   }
-  .btn-underline-secondary{color: var(--secondary-d-2);}
-  .btn-underline-secondary:hover{
-    border-bottom: 2px solid var(--secondary-d-4);
-    color: var(--secondary-d-4);
+  .btn-underline-red {
+    @include btn-underline(var(--red-d-2), var(--red-d-4), var(--red-d-4));
   }
-  .btn-underline-tertiary{color: var(--tertiary-d-2);}
-  .btn-underline-tertiary:hover{
-    border-bottom: 2px solid var(--tertiary-d-4);
-    color: var(--tertiary-d-4);
+  .btn-underline-green {
+    @include btn-underline(var(--green-d-2), var(--green-d-4), var(--green-d-4));
   }
-  .btn-underline-red{color: var(--red-d-2);}
-  .btn-underline-red:hover{
-    border-bottom: 2px solid var(--red-d-4);
-    color: var(--red-d-4);
+  .btn-underline-grey {
+    @include btn-underline(var(--grey-d-2), var(--grey-d-4), var(--grey-d-4));
   }
-  .btn-underline-green{color: var(--green-d-2);}
-  .btn-underline-green:hover{
-    border-bottom: 2px solid var(--green-d-4);
-    color: var(--green-d-4);
+  // Boutons texte
+  .btn-text-main {
+    @include btn-text(var(--main-d-2), var(--main-d-4));
   }
-  .btn-underline-grey{color: var(--grey-d-2);}
-  .btn-underline-grey:hover{
-    border-bottom: 2px solid var(--grey-d-4);
-    color: var(--grey-d-4);
+  .btn-text-secondary {
+    @include btn-text(var(--secondary-d-2), var(--secondary-d-4));
   }
-  
-  /* Bouton text */
-  [class*="btn-text-"] {
-    border: none;
-    background-color: transparent;
+  .btn-text-tertiary {
+    @include btn-text(var(--tertiary-d-2), var(--tertiary-d-4));
   }
-  .btn-text-main{color: var(--main-d-2);}
-  .btn-text-main:hover{color: var(--main-d-4);}
-  .btn-text-secondary{color: var(--secondary-d-2);}
-  .btn-text-secondary:hover{color: var(--secondary-d-4);}
-  .btn-text-tertiary{color: var(--tertiary-d-2);}
-  .btn-text-tertiary:hover{color: var(--tertiary-d-4);}
-  .btn-text-red{color: var(--red-d-2);}
-  .btn-text-red:hover{color: var(--red-d-4);}
-  .btn-text-green{color: var(--green-d-2);}
-  .btn-text-green:hover{color: var(--green-d-4);}
-  .btn-text-grey{color: var(--grey-d-2);}
-  .btn-text-grey:hover{color: var(--grey-d-4);}
-
-  /* Bouton Disabled */
-  [class*="btn-back-"]:disabled{
-    border: 2px solid var(--grey-d-1);
-    color: var(--grey-d-4);
-    background-color: var(--grey-l-1);
+  .btn-text-red {
+    @include btn-text(var(--red-d-2), var(--red-d-4));
   }
-  [class*="btn-border-"]:disabled{
-    border: 2px solid var(--grey);
-    color: var(--grey);
-    background-color: var(--grey-l-3);
+  .btn-text-green {
+    @include btn-text(var(--green-d-2), var(--green-d-4));
   }
-  [class*="btn-underline-"]:disabled{
-    border-bottom: 2px solid var(--grey-l-2);
-    color: var(--grey);
-  }
-  [class*="btn-text-"]:disabled{
-    color: var(--grey);
+  .btn-text-grey {
+    @include btn-text(var(--grey-d-2), var(--grey-d-4));
   }

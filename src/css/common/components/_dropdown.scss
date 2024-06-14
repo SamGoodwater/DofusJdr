@@ -1,0 +1,131 @@
+/* -------------------------------------------- D R O P D O W N ------------------------------ */
+
+/*
+<div>
+  <button data-type="dropdown" data-target="#dropdown">Dropdown button </button>
+  <div>
+    <ul id="dropdown">
+      <li>...</li>
+      <li>...</li>
+      <li>...</li>
+    </ul>
+  </div>
+</div>
+*/
+
+/* -------------------------------------------- D R O P D O W N ------------------------------ */
+
+// Mixin pour le conteneur de dropdown
+@mixin dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+// Mixin pour le menu de dropdown
+@mixin dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 1rem;
+  text-align: left;
+  list-style: none;
+  background-color: var(--grey-l-5);
+  background-clip: padding-box;
+  border: 1px solid var(--grey-d-2);
+  border-radius: 0.25rem;
+}
+
+// Mixin pour les éléments du menu de dropdown
+@mixin dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  clear: both;
+  font-weight: 400;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+
+  &:hover {
+    text-decoration: none;
+    background-color: var(--grey-l-3);
+  }
+
+  &.active {
+    text-decoration: none;
+    background-color: var(--grey-l-1);
+  }
+
+  &.disabled,
+  &:disabled {
+    color: var(--grey-d-3);
+    pointer-events: none;
+    background-color: transparent;
+  }
+}
+
+// Mixin pour activer le menu de dropdown
+@mixin dropdown-toggle-show {
+  display: block;
+}
+
+// Mixin pour le bouton de dropdown avec une flèche
+@mixin dropdown-button {
+  @include btn-init; // Utiliser le mixin de bouton pour les styles de base
+  @include btn-styles; // Utiliser le mixin de bouton pour les styles de base
+  position: relative;
+
+  &::after {
+    content: '▼';
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+  }
+
+  &.show::after {
+    transform: rotate(180deg);
+  }
+}
+  
+  // Utilisation des mixins
+  
+  [data-type="dropdown"] {
+    @include btn-init; // Utiliser le mixin de bouton pour les styles de base
+    @include btn-styles; // Utiliser le mixin de bouton pour les styles de base
+    position: relative;
+
+    &::after {
+        content: '▼';
+        font-size: 0.75rem;
+        margin-left: 0.5rem;
+        transition: transform 0.3s ease;
+      }
+    
+      &.show::after {
+        transform: rotate(180deg);
+      }
+  }
+  
+  [data-type="dropdown"] + div {
+    @include dropdown-container;
+  }
+  
+  [data-type="dropdown"] + div ul {
+    @include dropdown-menu;
+  }
+  
+  [data-type="dropdown"] + div ul li {
+    @include dropdown-item;
+  }
+  
+  [data-type="dropdown"]:focus + div ul,
+  [data-type="dropdown"].show + div ul {
+    @include dropdown-toggle-show;
+  }
+  

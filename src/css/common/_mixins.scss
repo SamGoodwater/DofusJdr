@@ -8,3 +8,10 @@
     flex-wrap: if($wrap, $wrap, nowrap);
 }
   
+@mixin show(){
+    display:block;
+    transition:all 0.3 ease-in-out;
+}
+.show{
+    @include show();
+}

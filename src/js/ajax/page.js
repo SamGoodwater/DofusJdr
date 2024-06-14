@@ -161,7 +161,7 @@ class Page extends Controller{
                 $('[data-toggle="tooltip"]').tooltip();
             }
         }
-        View.initDisplay();
+        ViewManager.initDisplay();
         Page.initPageNavigation();
     }
 
@@ -196,7 +196,7 @@ class Page extends Controller{
 
         $("#offcanvasbookmark .offcanvas-title").html(title);
         $("#offcanvasbookmark .offcanvas-body #offcanvas-content").html(content);
-        View.initDisplay();
+        ViewManager.initDisplay();
     }
 
     static offCanvasFullscreen(){
@@ -253,7 +253,7 @@ class Page extends Controller{
                     let url = url_name;
                     if(settings !="" && settings != undefined && settings != null){url += "/" + settings;}
                     window.history.pushState({path:url},'',url);
-                    View.initDisplay();
+                    ViewManager.initDisplay();
                 } else {
                     MsgAlert("Impossible d'afficher la page", data.error, "danger" , 7000);
                 }

@@ -201,7 +201,7 @@ class Controller {
                         $("#table").bootstrapTable('updateCell', {index: indexCell, field: index, value: element});
                     }
                 }
-                View.initDisplay();
+                ViewManager.initDisplay();
             },
             "json"
         ); 
@@ -295,7 +295,7 @@ class Controller {
                             offset += limit;
                             loadData();
                         } else {
-                            View.initDisplay();
+                            ViewManager.initDisplay();
                             $(".fixed-table-toolbar .loading-spinner").html('');
                             currentRequest = null; // Réinitialisez la variable currentRequest une fois le chargement terminé
                         }
@@ -312,7 +312,7 @@ class Controller {
             $('#table').bootstrapTable({
                 onDblClickRow: function (row, $element, field) {
                     this_.open(row.uniqid);
-                    View.initDisplay();
+                    ViewManager.initDisplay();
                 },
                 onLoadSuccess:refresh(),
                 exportTypes: ["pdf","doc","xlsx","xls","xml", "json", "png", "sql", "txt", "tsv"]

@@ -27,8 +27,8 @@ audio,
 canvas,
 video {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
+  display: inline;
+  zoom: 1;
 }
 
 /*
@@ -410,7 +410,9 @@ input[type=radio] {
 * 2. Addresses ’box-sizing’ set to ’border-box’ in Safari 5 and Chrome
 * (include ’-moz’ to future-proof).
 */
-input[type=search] { /* 2 */
+input[type=search] {
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; /* 2 */
   box-sizing: content-box;
 }
 
@@ -482,4 +484,6 @@ a:hover {
 /* Correction de Bootstrap-table */
 .bootstrap-table #toolbar {
   display: none;
-}/*# sourceMappingURL=init.css.map */
+}
+
+/*# sourceMappingURL=init.css.map */
