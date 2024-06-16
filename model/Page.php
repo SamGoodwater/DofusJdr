@@ -122,10 +122,17 @@ class Page extends Content
                         <div class="sortablebis">
 
                             <?php if(count($this->getSection()) > 3){ ?>
+<<<<<<< Updated upstream
                                 <nav class="page-navigation page-navigation--minimized" title="Afficher le menu de sections de la page et y naviguer facilement.">
                                     <div class="page-navigation__top">
                                         <p class="page-navigation__top__select-item">Plan de la page</p>
                                         <button class="page-navigation__top__minimize" aria-label="Agrandir / Diminuer le menu de navigation" title="Agrandir le menu de navigation"><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
+=======
+                                <nav class="page-navigation page-navigation--minimized--" title="Afficher les sections de la page et y naviguer facilement.">
+                                    <div class="page-navigation__top">
+                                        <p class="page-navigation__top__select-item">Plan de la page</p>
+                                        <button class="page-navigation__top__minimize" aria-label="Agrandir le menu de navigation" title="Agrandir le menu de navigation"><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
+>>>>>>> Stashed changes
                                     </div>
                                     <ul class="page-navigation__menu">
                                         <?php foreach ($this->getSection() as $section) { ?>

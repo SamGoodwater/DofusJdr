@@ -221,6 +221,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
     ob_start(); ?>
         <div class="view-container">
 
+            <!----------- TOP ----------->
             <div class="view-container__top">
                 <div class="view-container__top__settings">
                     <!-- SEARCH -->
@@ -231,6 +232,11 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             <option value="<?=ControllerView::VIEW_MINIMAL_CARD?>">Cartes simplifiées</option>
                             <option value="<?=ControllerView::VIEW_DETAILED_CARD?>">Cartes détaillées</option>
                         </select>
+                    <!-- Is Usable -->
+                    <div class="view-container__top__settings__usable-box form-check form-switch">
+                        <input class="view-container__top__settings__usable-box__checkbox form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
+                        <label class="view-container__top__settings__usable-box__label" for="toggleUsableSwitch">Afficher seulement les sorts<br>compatibles avec le JDR</label>
+                    </div>
                     <!-- SORT -->
                         <div class="view-container__top__settings__sort-box">
                             <?php foreach ($properties as $property => $val) { 
@@ -243,7 +249,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         </div>
                     <!-- FILTRES BTN-->
                         <div class="view-container__top_settings__filter-box">
-                            <button class="dropdown-toggle view-container__top_settings__filter-box__btn" type="button" data-type="collapse" data-target=".dropdown-menu dropdown-toggle view-container__top_settings__filter-box__menu" data-expanded="false">Filtre</button>
+                            <button class="dropdown-toggle view-container__top_settings__filter-box__btn" type="button" data-type="drawer" data-target=".dropdown-menu dropdown-toggle view-container__top_settings__filter-box__menu" data-expanded="false">Filtre</button>
                             <div class="view-container__top__settings__filter-box__menu" data-expanded="false">
                             <?php foreach ($properties as $property => $val) { 
                                 if(isset($val['filter'])){?>
@@ -254,6 +260,8 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                 <?php }
                             } ?>
                         </div>
+                    <!-- BTN SHOW FILTRES AVANCÉS -->
+                        <button class="view-container__top__settings__advanced-settings-btn" type="button">Filtre avancé</button>
                     </div>
                 </div>
 
@@ -268,43 +276,21 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </div>
             </div>
 
+            <!----------- DISPLAY ERROR ----------->
+            <div class="view-container__error-box">
+                <h4 class='view-container__error-box__title'></h4>
+                <p class='view-container__error-box__description'></p>
+            </div>
+
+            <!----------- BOTTOM ----------->
             <div class="view-container__bottom">
+                <div class="view-container__bottom__progress">
+                    <div class="view-container__bottom__progress__bar"></div>
+                    <div class="view-container__bottom__progress__text"></div>
+                </div>
                 <div class="view-container__bottom__list">
                     <div class="view_container_bottom__list__table-view">
-                        <table 
-                            id="table"
-                            class="table table-striped"
-                            data-bs-toggle="table" 
-                            data-virtual-scroll="true"
-                            data-classes="table-no-bordered" 
-                            data-remember-order='true'
-                            data-locale="fr-FR"
-                            data-show-export="true" 
-                            data-show-refresh="true"
-                            data-show-fullscreen="true"
-                            data-show-columns="true"
-                            data-show-multi-sort="true"
-                            data-pagination="true" 
-                            data-page-size="30" 
-                            data-page-list="[10, 25, 50, 100, 200, All]"
-                            data-search="true"
-                            data-search-accent-neutralise="true"
-                            data-search-align="left"
-                            data-search-highlight="true"
-                            data-search-on-enter-key="true"
-                            data-advanced-search="true"
-                            data-filter-control="true"
-                            data-sort-empty-last="true"
-                            data-sort-reset="true"
-                            data-toolbar="#toolbar"
-                            data-show-toggle="true"
-                            data-detail-view="true"
-                            data-detail-view-icon="false"
-                            data-detail-view-by-click="true"
-                            data-resizable="true"
-                            data-detail-formatter="detailFormatter"
-                            >
-                            
+                        <table class="table view_container_bottom__list__table-view__table">
                             <thead>
                                 <tr>
                                     <th class="text-center" data-sortable="false" data-visible="true" data-field="edit"></th>
@@ -313,7 +299,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                                     <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fa-solid fa-image"></i></th>
-                                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
+                                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="name_bold">Nom</th>
                                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="resume"></th>
                                     <th class="text-center" data-sortable="true" data-visible="false" data-field="is_magic"><i class="fa-solid fa-fist-raised text-brown-d-2"></i> | <i class="fa-solid fa-magic text-purple-d-2"></i></th>
                                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="category">Catégorie</th>
@@ -336,13 +322,14 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                     <th class="text-center" data-sortable="true" data-visible="true" data-field="usable"><span data-bs-toggle='tooltip' data-bs-placement='top' title="L'objet est adapté au jdr"><i class='fa-solid fa-check text-green-d-3'></i> JDR</span></th>
                                 </tr>
                             </thead>
-
                             <tbody>
                             </tbody>
                         </table>
                     </div>
+                    <div class="view_container_bottom__list__detailled-card-view"></div>
+                    <div class="view_container_bottom__list__minimal-card-view"></div>
+
                 </div>
-                <div class="view_container_bottom__list__table-view"></div>
 
                 <div class="view-container__bottom__advanced-settings">
                     <!-- TRIES -->
@@ -362,7 +349,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         </div>
                     <!-- FILTRES -->
                         <div class="view-container__bottom__advanced-settings__filter-box">
-                        <button class="view-container__bottom__advanced-settings__filter-box__btn" type="button" data-type="collapse" data-target=".view-container__bottom__advanced-settings__filter-box__menu" data-expanded="false">Filtre avancé</button>
+                            <button class="view-container__bottom__advanced-settings__filter-box__btn" type="button" data-type="collapse" data-target=".view-container__bottom__advanced-settings__filter-box__menu" data-expanded="false">Filtre avancé</button>
                             <p>
                                 Ce système de filtre avancé permet de rechercher certains des sorts selon leurs caractéristiques.
                                 <ul>
@@ -396,12 +383,19 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 </div>
             </div>
 
-
-
-
-
         </div>
         <script>
+            // Récupération des données
+            let view = new View(
+                fetchUrlCount = "index.php?c=spell&a=count",
+                fetchUrlObj = "index.php?c=spell&a=getAll",
+                fetchUrlTemplate = "index.php?c=view&a=getTemplate&obj_type=spell",
+                limit = 100,
+                offset = 0,
+            );
+
+
+            // Initialisation de la vue
             View.toogleSortOrderBtn();
         </script>
 
