@@ -299,7 +299,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                                     <th class="text-center" data-sortable="false" data-visible="false" data-field="uniqid"></th>
                                     <th class="text-center" data-sortable="false" data-visible="true" data-field="bookmark"></th>
                                     <th data-sortable="false" data-visible="true" data-field="path_img"><i class="fa-solid fa-image"></i></th>
-                                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="name">Nom</th>
+                                    <th class="text-center" data-sortable="true" data-visible="true"  data-field="name_bold">Nom</th>
                                     <th class="text-center" data-sortable="true" data-visible="true"  data-field="resume"></th>
                                     <th class="text-center" data-sortable="true" data-visible="false" data-field="is_magic"><i class="fa-solid fa-fist-raised text-brown-d-2"></i> | <i class="fa-solid fa-magic text-purple-d-2"></i></th>
                                     <th class="text-center" data-sortable="true" data-visible="false"  data-field="category">Catégorie</th>
