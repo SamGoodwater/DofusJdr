@@ -4,7 +4,7 @@
     "description": "A simple sass compile config.",
     "main": "index.js",
     "scripts": {
-        "sass": "sass --watch --update src/css:src/css/styles",
+        "sass": "sass --watch --update src/styles:src/styles/css",
         "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"
     },
     "author": "Goodwater",

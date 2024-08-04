@@ -70,8 +70,8 @@ class ControllerSpell extends ControllerModule{
       $json = "Vous n'avez pas les droits pour lire cet objet";}else{
       
       $managerS = new SpellManager();
-      $usable = 0;
 
+      $usable = 0;
       if(isset($_REQUEST['usable'])){
         if($_REQUEST['usable'] == 1 || $_REQUEST['usable'] == 0){
           $usable = $_REQUEST['usable'];
@@ -131,88 +131,120 @@ class ControllerSpell extends ControllerModule{
       );
 
       foreach ($objs as $obj) {
-        ob_start();?>
-          <div class="text-left">
-              <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
-              <?=$obj->getIs_magic(Content::FORMAT_BADGE)?>
-              <?=$obj->getElement(Content::FORMAT_BADGE)?>
-              <?=$obj->getCategory(Content::FORMAT_BADGE)?>
-              <?=$obj->getType(Content::FORMAT_BADGE)?>
-          </div>
-        <?php $resume = ob_get_clean();
-        
-        $bookmark_icon = Style::ICON_REGULAR;
-        if($currentUser->in_bookmark($obj)){
-            $bookmark_icon = Style::ICON_SOLID;
-        }
+          ob_start();?>
+              <div class="d-flex justify-content-center align-items-center gap-1 flex-wrap">
+                  <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
+                  <?=$obj->getIs_magic(Content::FORMAT_BADGE)?>
+                  <?=$obj->getElement(Content::FORMAT_BADGE)?>
+                  <?=$obj->getCategory(Content::FORMAT_BADGE)?>
+                  <?=$obj->getType(Content::FORMAT_BADGE)?>
+              </div>
+          <?php $resume1 = ob_get_clean();
 
-        // $edit = "";
-        // if($currentUser->getRight('spell', User::RIGHT_WRITE)){
-        //   $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
-        // }
+          ob_start();?>
+            <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                <?=$obj->getPa(Content::FORMAT_ICON)?>
+                <?=$obj->getPo(Content::FORMAT_ICON)?>
+                <?=$obj->getPo_editable(Content::FORMAT_ICON)?>
+                <?=$obj->getSight_line(Content::FORMAT_ICON)?>
+                <?=$obj->getNumber_between_two_cast(Content::FORMAT_ICON)?>
+                <?=$obj->getCast_per_turn(Content::FORMAT_ICON)?>
+                <?=$obj->getCast_per_target(Content::FORMAT_ICON)?>
+            </div>
+          <?php $resume2 = ob_get_clean();
+          
+          $bookmark_icon = Style::ICON_REGULAR;
+          if($currentUser->in_bookmark($obj)){
+              $bookmark_icon = Style::ICON_SOLID;
+          }
 
-        $json = array(
-          'id' => $obj->getId(),
-          'uniqid' => $obj->getUniqid(),
-          'timestamp_add' => $obj->getTimestamp_add(Content::DATE_FR),
-          'timestamp_updated' => $obj->getTimestamp_updated(Content::DATE_FR),
-          'name' => $obj->getName(),
-          'name_bold' => "<b>". $obj->getName()."</b>",
-          'description' => $obj->getDescription(),
-          'effect' => $obj->getEffect(),
-          'level' => $obj->getLevel(),
-          'level_icon' => $obj->getLevel(Content::FORMAT_ICON),
-          'level_badge' => $obj->getLevel(Content::FORMAT_BADGE),
-          'po' => $obj->getPo(Content::FORMAT_ICON),
-          'po_icon' => $obj->getPo(Content::FORMAT_ICON),
-          'po_badge' => $obj->getPo(Content::FORMAT_BADGE),
-          'po_editable' => $obj->getPo_editable(),
-          'po_editable_icon' => $obj->getPo_editable(Content::FORMAT_ICON),
-          'po_editable_badge' => $obj->getPo_editable(Content::FORMAT_BADGE),
-          'pa' => $obj->getPa(),
-          'pa_icon' => $obj->getPa(Content::FORMAT_ICON),
-          'pa_badge' => $obj->getPa(Content::FORMAT_BADGE),
-          'cast_per_turn' => $obj->getCast_per_turn(),
-          'cast_per_turn_icon' => $obj->getCast_per_turn(Content::FORMAT_ICON),
-          'cast_per_turn_badge' => $obj->getCast_per_turn(Content::FORMAT_BADGE),
-          'cast_per_target' => $obj->getCast_per_target(),
-          'cast_per_target_icon' => $obj->getCast_per_target(Content::FORMAT_ICON),
-          'cast_per_target_badge' => $obj->getCast_per_target(Content::FORMAT_BADGE),
-          'sight_line' => $obj->getSight_line(),
-          'sight_line_icon' => $obj->getSight_line(Content::FORMAT_ICON),
-          'sight_line_badge' => $obj->getSight_line(Content::FORMAT_BADGE),
-          'number_between_two_cast' => $obj->getNumber_between_two_cast(),
-          'number_between_two_cast_icon' => $obj->getNumber_between_two_cast(Content::FORMAT_ICON),
-          'number_between_two_cast_badge' => $obj->getNumber_between_two_cast(Content::FORMAT_BADGE),
-          'element' => $obj->getElement(),
-          'element_text' => $obj->getElement(Content::FORMAT_TEXT),
-          'element_badge' => $obj->getElement(Content::FORMAT_BADGE),
-          'category' => $obj->getCategory(),
-          'category_text' => $obj->getCategory(Content::FORMAT_TEXT),
-          'category_badge' => $obj->getCategory(Content::FORMAT_BADGE),
-          'invocation' => $obj->getInvocation(),
-          'invocation_resume' => $obj->getInvocation(Content::DISPLAY_RESUME),
-          'invocation_list' => $obj->getInvocation(Content::DISPLAY_LIST),
-          'is_magic' => $obj->getIs_magic(),
-          'is_magic_icon' => $obj->getIs_magic(Content::FORMAT_ICON),
-          'is_magic_badge' => $obj->getIs_magic(Content::FORMAT_BADGE),
-          'powerful' => $obj->getPowerful(),
-          'powerful_text' => $obj->getPowerful(Content::FORMAT_TEXT),
-          'powerful_badge' => $obj->getPowerful(Content::FORMAT_BADGE),
-          'type' => $obj->getType(),
-          'type_text' => $obj->getType(Content::FORMAT_TEXT),
-          'type_badge' => $obj->getType(Content::FORMAT_BADGE),
-          'path_img_path' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_BRUT])),
-          'path_img' => $obj->getFile('logo',new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
-          'bookmark' => "<a onclick='User.toggleBookmark(this);' data-classe='spell' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
-          'usable' => $obj->getUsable(),
-          'usable_icon' => $obj->getUsable(Content::FORMAT_ICON),
-          'usable_badge' => $obj->getUsable(Content::FORMAT_BADGE),
-          'resume' => $resume,
-          'couleur' => $obj->getElement(Content::FORMAT_COLOR_VERBALE),
-          // 'edit' => $edit,
-          // 'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
-        );
+          $edit = "";
+          if($currentUser->getRight('spell', User::RIGHT_WRITE)){
+            $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
+          }
+
+          $json_other = null; $json_base = null; $json_text = null; $json_icon = null; $json_badge = null;
+          $json_other = array(
+            'edit' => $edit,
+            'resume1' => $resume1,
+            'resume2' => $resume2,
+            'logo' => $obj->getFile('logo',new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])), 
+            'bookmark' => "<a onclick='User.toggleBookmark(this);' data-classe='spell' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+            'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
+            'color' => $obj->getElement(Content::FORMAT_COLOR_VERBALE)
+          );
+
+          $json_base = array(
+            'id' => $obj->getId(),
+            'uniqid' => $obj->getUniqid(),
+            'timestamp_add' => $obj->getTimestamp_add(Content::DATE_FR),
+            'timestamp_updated' => $obj->getTimestamp_updated(Content::DATE_FR),
+            'name' => $obj->getName(),
+            'description' => $obj->getDescription(),
+            'effect' => $obj->getEffect(),
+            'level' => $obj->getLevel(),
+            'po' => $obj->getPo(),
+            'po_editable' => $obj->getPo_editable(),
+            'pa' => $obj->getPa(),
+            'cast_per_turn' => $obj->getCast_per_turn(),
+            'cast_per_target' => $obj->getCast_per_target(),
+            'sight_line' => $obj->getSight_line(),
+            'number_between_two_cast' => $obj->getNumber_between_two_cast(),
+            'element' => $obj->getElement(),
+            'category' => $obj->getCategory(),
+            'invocation' => $obj->getInvocation(),
+            'is_magic' => $obj->getIs_magic(),
+            'powerful' => $obj->getPowerful(),
+            'type' => $obj->getType(),
+            'logo' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_BRUT])),
+            'bookmark' => $bookmark_icon == Style::ICON_SOLID ? true : false,
+            'usable' => $obj->getUsable(),
+          );
+
+          $json_text = array(
+            'name' => "<b>". $obj->getName()."</b>",
+            'invocation' => $obj->getInvocation(Content::DISPLAY_LIST),
+            'powerful' => $obj->getPowerful(Content::FORMAT_TEXT),
+            'type' => $obj->getType(Content::FORMAT_TEXT),
+          );
+
+          $json_icon = array(
+            'level' => $obj->getLevel(Content::FORMAT_ICON),
+            'po' => $obj->getPo(Content::FORMAT_ICON),
+            'po_editable' => $obj->getPo_editable(Content::FORMAT_ICON),
+            'pa' => $obj->getPa(Content::FORMAT_ICON),
+            'cast_per_turn' => $obj->getCast_per_turn(Content::FORMAT_ICON),
+            'cast_per_target' => $obj->getCast_per_target(Content::FORMAT_ICON),
+            'sight_line' => $obj->getSight_line(Content::FORMAT_ICON),
+            'number_between_two_cast' => $obj->getNumber_between_two_cast(Content::FORMAT_ICON),
+            'is_magic' => $obj->getIs_magic(Content::FORMAT_ICON),
+            'usable' => $obj->getUsable(Content::FORMAT_ICON),
+          );
+
+          $json_badge = array(
+            'name' => $obj->getName(Content::FORMAT_BADGE),
+            'level' => $obj->getLevel(Content::FORMAT_BADGE),
+            'po' => $obj->getPo(Content::FORMAT_BADGE),
+            'po_editable' => $obj->getPo_editable(Content::FORMAT_BADGE),
+            'pa' => $obj->getPa(Content::FORMAT_BADGE),
+            'cast_per_turn' => $obj->getCast_per_turn(Content::FORMAT_BADGE),
+            'cast_per_target' => $obj->getCast_per_target(Content::FORMAT_BADGE),
+            'sight_line' => $obj->getSight_line(Content::FORMAT_BADGE),
+            'number_between_two_cast' => $obj->getNumber_between_two_cast(Content::FORMAT_BADGE),
+            'category' => $obj->getCategory(Content::FORMAT_BADGE),
+            'is_magic' => $obj->getIs_magic(Content::FORMAT_BADGE),
+            'powerful' => $obj->getPowerful(Content::FORMAT_BADGE),
+            'type' => $obj->getType(Content::FORMAT_BADGE),
+            'usable' => $obj->getUsable(Content::FORMAT_BADGE),
+          );
+
+          $json[] = array(
+            'base' => $json_base,
+            'other' => $json_other,
+            'text' => $json_text,
+            'icon' => $json_icon,
+            'badge' => $json_badge
+          );
       }
 
     }
@@ -242,86 +274,118 @@ class ControllerSpell extends ControllerModule{
           if($managerS->existsUniqid($_REQUEST['uniqid'])){
             $obj = $managerS->getFromUniqid($_REQUEST['uniqid']);
             ob_start();?>
-              <div class="text-left">
-                  <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
-                  <?=$obj->getIs_magic(Content::FORMAT_BADGE)?>
-                  <?=$obj->getElement(Content::FORMAT_BADGE)?>
-                  <?=$obj->getCategory(Content::FORMAT_BADGE)?>
-                  <?=$obj->getType(Content::FORMAT_BADGE)?>
-              </div>
-            <?php $resume = ob_get_clean();
+            <div class="d-flex justify-content-center align-items-center gap-1 flex-wrap">
+                <?=$obj->getPowerful(Content::FORMAT_BADGE)?>
+                <?=$obj->getIs_magic(Content::FORMAT_BADGE)?>
+                <?=$obj->getElement(Content::FORMAT_BADGE)?>
+                <?=$obj->getCategory(Content::FORMAT_BADGE)?>
+                <?=$obj->getType(Content::FORMAT_BADGE)?>
+            </div>
+        <?php $resume1 = ob_get_clean();
 
-            $bookmark_icon = Style::ICON_REGULAR;
-            if($currentUser->in_bookmark($obj)){
-                $bookmark_icon = Style::ICON_SOLID;
-            }
+        ob_start();?>
+          <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+              <?=$obj->getPa(Content::FORMAT_ICON)?>
+              <?=$obj->getPo(Content::FORMAT_ICON)?>
+              <?=$obj->getPo_editable(Content::FORMAT_ICON)?>
+              <?=$obj->getSight_line(Content::FORMAT_ICON)?>
+              <?=$obj->getNumber_between_two_cast(Content::FORMAT_ICON)?>
+              <?=$obj->getCast_per_turn(Content::FORMAT_ICON)?>
+              <?=$obj->getCast_per_target(Content::FORMAT_ICON)?>
+          </div>
+        <?php $resume2 = ob_get_clean();
+        
+        $bookmark_icon = Style::ICON_REGULAR;
+        if($currentUser->in_bookmark($obj)){
+            $bookmark_icon = Style::ICON_SOLID;
+        }
 
-            // $edit = "";
-            // if($currentUser->getRight('spell', User::RIGHT_WRITE)){
-            //   $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
-            // }
+        $edit = "";
+        if($currentUser->getRight('spell', User::RIGHT_WRITE)){
+          $edit = "<a id='{$obj->getUniqid()}' class='text-main-d-2 text-main-l-3-hover' onclick=\"Spell.open('{$obj->getUniqid()}', Controller.DISPLAY_EDITABLE)\"><i class='fa-regular fa-edit'></i></a>";
+        }
 
-            $return["value"] = array(
+            $json_other = null; $json_base = null; $json_text = null; $json_icon = null; $json_badge = null;
+            $json_other = array(
+              'edit' => $edit,
+              'resume1' => $resume1,
+              'resume2' => $resume2,
+              'logo' => $obj->getFile('logo',new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])), 
+              'bookmark' => "<a onclick='User.toggleBookmark(this);' data-classe='spell' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+              'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
+              'color' => $obj->getElement(Content::FORMAT_COLOR_VERBALE)
+            );
+
+            $json_base = array(
               'id' => $obj->getId(),
               'uniqid' => $obj->getUniqid(),
               'timestamp_add' => $obj->getTimestamp_add(Content::DATE_FR),
               'timestamp_updated' => $obj->getTimestamp_updated(Content::DATE_FR),
               'name' => $obj->getName(),
-              'name_bold' => "<b>". $obj->getName()."</b>",
               'description' => $obj->getDescription(),
               'effect' => $obj->getEffect(),
               'level' => $obj->getLevel(),
-              'level_icon' => $obj->getLevel(Content::FORMAT_ICON),
-              'level_badge' => $obj->getLevel(Content::FORMAT_BADGE),
-              'po' => $obj->getPo(Content::FORMAT_ICON),
-              'po_icon' => $obj->getPo(Content::FORMAT_ICON),
-              'po_badge' => $obj->getPo(Content::FORMAT_BADGE),
+              'po' => $obj->getPo(),
               'po_editable' => $obj->getPo_editable(),
-              'po_editable_icon' => $obj->getPo_editable(Content::FORMAT_ICON),
-              'po_editable_badge' => $obj->getPo_editable(Content::FORMAT_BADGE),
               'pa' => $obj->getPa(),
-              'pa_icon' => $obj->getPa(Content::FORMAT_ICON),
-              'pa_badge' => $obj->getPa(Content::FORMAT_BADGE),
               'cast_per_turn' => $obj->getCast_per_turn(),
-              'cast_per_turn_icon' => $obj->getCast_per_turn(Content::FORMAT_ICON),
-              'cast_per_turn_badge' => $obj->getCast_per_turn(Content::FORMAT_BADGE),
               'cast_per_target' => $obj->getCast_per_target(),
-              'cast_per_target_icon' => $obj->getCast_per_target(Content::FORMAT_ICON),
-              'cast_per_target_badge' => $obj->getCast_per_target(Content::FORMAT_BADGE),
               'sight_line' => $obj->getSight_line(),
-              'sight_line_icon' => $obj->getSight_line(Content::FORMAT_ICON),
-              'sight_line_badge' => $obj->getSight_line(Content::FORMAT_BADGE),
               'number_between_two_cast' => $obj->getNumber_between_two_cast(),
-              'number_between_two_cast_icon' => $obj->getNumber_between_two_cast(Content::FORMAT_ICON),
-              'number_between_two_cast_badge' => $obj->getNumber_between_two_cast(Content::FORMAT_BADGE),
               'element' => $obj->getElement(),
-              'element_text' => $obj->getElement(Content::FORMAT_TEXT),
-              'element_badge' => $obj->getElement(Content::FORMAT_BADGE),
               'category' => $obj->getCategory(),
-              'category_text' => $obj->getCategory(Content::FORMAT_TEXT),
-              'category_badge' => $obj->getCategory(Content::FORMAT_BADGE),
               'invocation' => $obj->getInvocation(),
-              'invocation_resume' => $obj->getInvocation(Content::DISPLAY_RESUME),
-              'invocation_list' => $obj->getInvocation(Content::DISPLAY_LIST),
               'is_magic' => $obj->getIs_magic(),
-              'is_magic_icon' => $obj->getIs_magic(Content::FORMAT_ICON),
-              'is_magic_badge' => $obj->getIs_magic(Content::FORMAT_BADGE),
               'powerful' => $obj->getPowerful(),
-              'powerful_text' => $obj->getPowerful(Content::FORMAT_TEXT),
-              'powerful_badge' => $obj->getPowerful(Content::FORMAT_BADGE),
               'type' => $obj->getType(),
-              'type_text' => $obj->getType(Content::FORMAT_TEXT),
-              'type_badge' => $obj->getType(Content::FORMAT_BADGE),
-              'path_img_path' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_BRUT])),
-              'path_img' => $obj->getFile('logo',new Style(['format' => Content::FORMAT_ICON, 'size' => Style::SIZE_XL])),
-              'bookmark' => "<a onclick='User.toggleBookmark(this);' data-classe='spell' data-uniqid='".$obj->getUniqid()."'><i class='".$bookmark_icon." fa-bookmark text-main-d-2 text-main-hover'></i></a>",
+              'logo' => $obj->getFile('logo', new Style(['format' => Content::FORMAT_BRUT])),
+              'bookmark' => $bookmark_icon == Style::ICON_SOLID ? true : false,
               'usable' => $obj->getUsable(),
-              'usable_icon' => $obj->getUsable(Content::FORMAT_ICON),
-              'usable_badge' => $obj->getUsable(Content::FORMAT_BADGE),
-              'resume' => $resume,
-              'couleur' => $obj->getElement(Content::FORMAT_COLOR_VERBALE),
-              // 'edit' => $edit,
-              // 'pdf' => "<a data-bs-toggle='tooltip' data-bs-placement='top' title='Générer un pdf' class='text-red-d-2 text-red-l-3-hover' target='_blank' href='index.php?c=spell&a=getPdf&uniqids=".$obj->getUniqid()."'><i class='fa-solid fa-file-pdf'></i></a>",
+            );
+
+            $json_text = array(
+              'name' => "<b>". $obj->getName()."</b>",
+              'invocation' => $obj->getInvocation(Content::DISPLAY_LIST),
+              'powerful' => $obj->getPowerful(Content::FORMAT_TEXT),
+              'type' => $obj->getType(Content::FORMAT_TEXT),
+            );
+
+            $json_icon = array(
+              'level' => $obj->getLevel(Content::FORMAT_ICON),
+              'po' => $obj->getPo(Content::FORMAT_ICON),
+              'po_editable' => $obj->getPo_editable(Content::FORMAT_ICON),
+              'pa' => $obj->getPa(Content::FORMAT_ICON),
+              'cast_per_turn' => $obj->getCast_per_turn(Content::FORMAT_ICON),
+              'cast_per_target' => $obj->getCast_per_target(Content::FORMAT_ICON),
+              'sight_line' => $obj->getSight_line(Content::FORMAT_ICON),
+              'number_between_two_cast' => $obj->getNumber_between_two_cast(Content::FORMAT_ICON),
+              'is_magic' => $obj->getIs_magic(Content::FORMAT_ICON),
+              'usable' => $obj->getUsable(Content::FORMAT_ICON),
+            );
+
+            $json_badge = array(
+              'name' => $obj->getName(Content::FORMAT_BADGE),
+              'level' => $obj->getLevel(Content::FORMAT_BADGE),
+              'po' => $obj->getPo(Content::FORMAT_BADGE),
+              'po_editable' => $obj->getPo_editable(Content::FORMAT_BADGE),
+              'pa' => $obj->getPa(Content::FORMAT_BADGE),
+              'cast_per_turn' => $obj->getCast_per_turn(Content::FORMAT_BADGE),
+              'cast_per_target' => $obj->getCast_per_target(Content::FORMAT_BADGE),
+              'sight_line' => $obj->getSight_line(Content::FORMAT_BADGE),
+              'number_between_two_cast' => $obj->getNumber_between_two_cast(Content::FORMAT_BADGE),
+              'category' => $obj->getCategory(Content::FORMAT_BADGE),
+              'is_magic' => $obj->getIs_magic(Content::FORMAT_BADGE),
+              'powerful' => $obj->getPowerful(Content::FORMAT_BADGE),
+              'type' => $obj->getType(Content::FORMAT_BADGE),
+              'usable' => $obj->getUsable(Content::FORMAT_BADGE),
+            );
+
+            $return['value'] = array(
+              'base' => $json_base,
+              'other' => $json_other,
+              'text' => $json_text,
+              'icon' => $json_icon,
+              'badge' => $json_badge
             );
 
             $return['state'] = true;

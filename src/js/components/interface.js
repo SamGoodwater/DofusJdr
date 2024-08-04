@@ -6,6 +6,9 @@ function initInterface() {
     initGlobalSearch();
     const overlay = document.querySelector('.overlay');
     overlay.addEventListener('click', closeOverlay());
+
+    let menuToggle = document.querySelector('.menu-toggle');
+    menuToggle.addEventListener('click', toggleMenu);
 }
 
 function toggleToolbar(forced_hidden = false){

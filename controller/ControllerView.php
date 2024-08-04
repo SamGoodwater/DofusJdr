@@ -88,6 +88,8 @@ class ControllerView extends Controller{
             case self::VIEW_LIST:
                 $filename = "list.php";
             break;
+            default:
+                $filename = "panel.php";
         }
         return self::PATH_ROOT . $this->_obj_type . "/view/" . $filename;
     }

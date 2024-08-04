@@ -164,6 +164,12 @@ class Page extends Controller{
         ViewManager.initDisplay();
         Page.initPageNavigation();
     }
+    static buildInModal(){
+
+    }
+    static buildInSelector(){
+
+    }
 
     static buildOffcanvas(title, content, placement = Page.PLACEMENT_START, show = false, displayBack = false){
 

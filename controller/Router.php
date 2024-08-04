@@ -71,7 +71,7 @@ class Router {
 
     // Statics functions
         static function includeCss(){
-            $style_color_mode = "src/css/include_manually/color_light_mode.css";
+            $style_color_mode = "src/styles/include_manually/color_light_mode.css";
 
             $dir_import = [
                 "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css", // Bootstrap
@@ -85,8 +85,8 @@ class Router {
                 "https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/panzoom.css", // Panzoom
                 "https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css", // JSTree
                 $style_color_mode,
-                "src/css/plugin",
-                "src/css/styles"
+                "src/styles/plugin",
+                "src/styles/css"
             ];
 
             foreach ($dir_import as $dir) {
@@ -126,7 +126,7 @@ class Router {
                 }
             }
 
-            require_once "src/css/common/color_constructor.php";
+            require_once "src/styles/common/color_constructor.php";
         }
         static function includeJS(){  
             if($_SESSION['JqueryAppel'] == false ){?>

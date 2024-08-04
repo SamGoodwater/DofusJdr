@@ -15,7 +15,6 @@
                     "btn_type" => Style::STYLE_TEXT,
                     "size" => "size-1-3",
                     "tooltip" => "Ouvrir le Menu",
-                    "onclick" => "toggleMenu()",
                     "content" => "Menu",
                     "content_placement" => Style::POSITION_BOTTOM
                 ], 

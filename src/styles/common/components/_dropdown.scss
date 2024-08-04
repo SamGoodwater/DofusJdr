@@ -1,0 +1,189 @@
+/* SYNTAXE
+
+  <div data-type='dropdown' data-expanded="false"> <!-- Le data-type = dropdown activera le JS, le css se fait soit avec la classe dropdown-size avec size = xs, sm, md, lg ou xl ou en incluant le mixin dropdown. Il prend en paramètre la taille et la couleur (plus foncé) -->
+      <button>Nom du bouton</button>
+      <div> <!-- Le div doit être un enfant direct de data-type=dropdown. Il est correspond au menu des options. Lorsque div[data-type=dropdown] a la classe active, alors cette div apparait et son contenu avec. -->
+          <!-- Peu importe le contenu tant qu'il fait parti de la div "option décrire au dessus -->
+          <div></div>
+          <button></button>
+          <img src="" alt="">
+          <input type="date" name="" id="">
+      </div>
+  </div>
+
+*/
+
+$size-xl: (
+  "width": 300px,
+  "height": 60px,
+  "font-size": 1.5rem,
+  "padding": 20px,
+  "border-radius": 1rem,
+);
+$size-lg: (
+  "width": 250px,
+  "height": 50px,
+  "font-size": 1.25rem,
+  "padding": 0.8rem,
+  "border-radius": 0.4rem,
+);
+$size-md: (
+  "width": 200px,
+  "height": 40px,
+  "font-size": 1.1rem,
+  "padding": 0.7rem,
+  "border-radius": 0.35rem,
+);
+$size-sm: (
+  "width": 150px,
+  "height": 30px,
+  "font-size": 0.9rem,
+  "padding": 0.5rem,
+  "border-radius": 0.25rem,
+);
+$size-xs: (
+  "width": 100px,
+  "height": 20px,
+  "font-size": 0.7rem,
+  "padding": 0.25rem,
+  "border-radius": 0.15rem,
+);
+
+/*
+  size : "xl", "lg", "md", "sm", "xs"
+  color : Couleur généré par le thème
+  gap : 
+        "auto" pour prendre la valeur défini par size, 
+        "glued" pour que le bouton et le menu soit collé,
+        "Une valeur en unité CSS" pour définir un espace personnalisé entre le bouton et le menu
+
+
+*/
+
+@mixin dropdown($size, $color : var(--main-d-2), $gap : "auto") {
+  // Variable pour stocker les valeurs de taille
+  $size-value: $size-md;
+
+  @if $size == "xl" {
+    $size: $size-xl;
+  } @else if $size == "lg" {
+    $size: $size-lg;
+  } @else if $size == "md" {
+    $size: $size-md;
+  } @else if $size == "sm" {
+    $size: $size-sm;
+  } @else if $size == "xs" {
+    $size: $size-xs;
+  } @else {
+    $size: $size-md;
+  }
+
+    position: relative;
+    width: map-get($size-value, "width");
+    height: map-get($size-value, "height");
+
+    &.active {
+      > button i {
+        transform: rotate(180deg);
+      }
+
+      > div {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
+    > button {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      border-radius: map-get($size-value, "border-radius");
+      padding: map-get($size-value, "padding") calc(map-get($size-value, "padding"));
+      font-size: map-get($size-value, "font-size");
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    > div { // Options
+      position: absolute;
+      top: calc(map-get($size-value, "height") + calc(map-get($size-value, "padding") * 1.5));
+      left: 0;
+      width: 100%;
+      padding: calc(map-get($size-value, "padding") * 2);
+      @include shadow-box(1);
+      background-color: var(--grey-l-5);
+      border: 1px solid $color;
+      border-radius: map-get($size-value, "border-radius");
+      overflow: hidden;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+      justify-content: stretch;
+    }
+}
+
+@mixin dropdown-disabled {
+
+  > button {
+    filter: grayscale(85%);
+    cursor: not-allowed;
+    transition: none;
+    background-color: var(--grey-l-2);
+    color: var(--grey-d-2);
+    border: none;
+    box-shadow: none;
+  
+    &:hover {
+      background-color: inherit;
+      border:inherit;
+      color:inherit;
+      transform: none;
+    }
+  }
+}
+
+.dropdown-xl {
+  @include dropdown("xl");
+}
+.dropdown-lg {
+  @include dropdown("lg");
+}
+.dropdown-md {
+  @include dropdown("md");
+}
+.dropdown-sm {
+  @include dropdown("sm");
+}
+.dropdown-xs {
+  @include dropdown("xs");
+}
+
+// Dropdown désactivés
+  .dropdown-disabled, [class^="dropdown-"]:disabled{
+    @include dropdown-disabled;
+  }
+
+// Prendre le temps de supprimer cette classe si elle est inutile 
+.dropdown__search__container {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding-inline: 10px;
+
+  &__input {
+      margin-inline-start: 5px;
+      padding: 0.5rem;
+      width: 100%;
+      border: solid 1px var(--main-l-4);
+      border-radius: 5px;
+      min-height: 2rem;
+  }
+}

@@ -1726,7 +1726,7 @@ class ControllerTools extends Controller
 
 	// Fichier à mettre en cache
 		public function getListFileToBeCache() {
-			$directories = ['/src/css', '/src/js', '/medias'];
+			$directories = ['/src/styles', '/src/js', '/medias'];
 			$allFiles = [];
 	
 			foreach ($directories as $dir) {
