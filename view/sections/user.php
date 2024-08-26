@@ -38,7 +38,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
-        <button type="button" class="btn btn-sm btn-animate btn-back-secondary me-2" onclick="Page.build(true, 'Création d\'un utilisateur·trice', $('#addUser'), Page.SIZE_MD, true);">Nouvel·le Utilisateur·trice</button>
+        <button type="button" class="user__add btn btn-sm btn-animate btn-back-secondary me-2">Nouvel·le Utilisateur·trice</button>
 
         <table 
             id="table"
@@ -128,6 +128,17 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                 }
                 
             }
+
+            const user__add = document.querySelector('.user__add');
+            user__add.addEventListener('click', function(){
+                Page.build({
+                        target : "modal", 
+                        title : 'Création d\'un utilisateur·trice',
+                        content :  $('#addUser'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
 
         </script>
     <?php $template["content"] = ob_get_clean();

@@ -4,6 +4,11 @@ RewriteEngine On
 RewriteBase /
 
 # Mise en cache des ressources statiques
+
+<IfModule mod_headers.c>
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'https://cdn.jsdelivr.net' 'https://unpkg.com', 'https://use.fontawesome.com', 'https://cdnjs.cloudflare.com', 'https://code.jquery.com', 'https://kit.fontawesome.com';"
+</IfModule>
+
 <IfModule mod_expires.c>
     ExpiresActive On
     # Images

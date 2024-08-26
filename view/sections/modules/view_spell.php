@@ -366,39 +366,39 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             <div class="view-container__top">
                 <div class="view-container__top__settings">
                     <!-- SEARCH -->
-                     <div class="view-container__top__settings__search-container">
-                        <input type="search" class="view-container__top__settings__search-container__input" id="search" title="Rechercher des sorts en fonction de leurs noms, leurs, descriptions, leurs effets  etc..." placeholder="Rechercher un sort">
-                        <div class="view-container__top__settings__search-container__search-box">
-                            <button class="view-container__top__settings__search-container__search-box__btn" type="button" title="Modifier les propriétés prises en compte pour la recherche"><i class="fa-solid fa-magnifying-glass-arrow-right"></i></button>
-                            <div class="view-container__top__settings__search-container__search-box__menu">
-                                <div class="view-container__top__settings__search-container__search-box__menu__header">
-                                    <h4 class="view-container__top__settings__search-container__search-box__menu__header__title">Cocher les propriétés prise en compte pour la recherche</h4>
-                                    <button class="view-container__top__settings__search-container__search-box__menu__header__close" type="button" aria-label='Fermer le menu de filtre'><i class="fa-solid fa-xmark"></i></button>
-                                </div>
-                                <div class="view-container__top__settings__search-container__search-box__menu__container">
-                                    <?php foreach ($properties as $property => $val) { 
-                                        if(isset($val['search'])){?>
-                                            <div class="view-container__top__settings__search-container__search-box__menu__container__item">
-                                                <input data-checked="<?=$val['search'] ? "true" : "false"?>" type="checkbox" id="search-<?=$property?>" <?=$val['search'] ? "checked" : ""?> data-property="<?=$property?>" autocomplete="off" class="btn-check view-container__top__settings__search-container__search-box__menu__container__item__checkbox">
-                                                <label data-property="<?=$property?>" for="search-<?=$property?>" class="btn btn-sm btn-outline-secondary view-container__top__settings__search-container__search-box__menu__container__item__label"><?=$val['name']?></label>
-                                            </div>
-                                        <?php }
-                                    } ?>
+                        <div class="view-container__top__settings__search-container">
+                            <input type="search" class="view-container__top__settings__search-container__input" id="search" title="Rechercher des sorts en fonction de leurs noms, leurs, descriptions, leurs effets  etc..." placeholder="Rechercher un sort">
+                            <div class="view-container__top__settings__search-container__search-box">
+                                <button class="view-container__top__settings__search-container__search-box__btn" type="button" title="Modifier les propriétés prises en compte pour la recherche"><i class="fa-solid fa-magnifying-glass-arrow-right"></i></button>
+                                <div class="view-container__top__settings__search-container__search-box__menu">
+                                    <div class="view-container__top__settings__search-container__search-box__menu__header">
+                                        <h4 class="view-container__top__settings__search-container__search-box__menu__header__title">Cocher les propriétés prise en compte pour la recherche</h4>
+                                        <button class="view-container__top__settings__search-container__search-box__menu__header__close" type="button" aria-label='Fermer le menu de filtre'><i class="fa-solid fa-xmark"></i></button>
+                                    </div>
+                                    <div class="view-container__top__settings__search-container__search-box__menu__container">
+                                        <?php foreach ($properties as $property => $val) { 
+                                            if(isset($val['search'])){?>
+                                                <div class="view-container__top__settings__search-container__search-box__menu__container__item">
+                                                    <input data-checked="<?=$val['search'] ? "true" : "false"?>" type="checkbox" id="search-<?=$property?>" <?=$val['search'] ? "checked" : ""?> data-property="<?=$property?>" autocomplete="off" class="btn-check view-container__top__settings__search-container__search-box__menu__container__item__checkbox">
+                                                    <label data-property="<?=$property?>" for="search-<?=$property?>" class="btn btn-sm btn-outline-secondary view-container__top__settings__search-container__search-box__menu__container__item__label"><?=$val['name']?></label>
+                                                </div>
+                                            <?php }
+                                        } ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                     </div>
                     <!-- CHOIX DE LA VUE -->
-                        <select id="view-choice" class="view-container__top__settings__view-choice" title="En cours de développement" disabled>
+                        <select id="view-choice" class="view-container__top__settings__view-choice" title="Sélectionnez une vue">
                             <option value="<?=ControllerView::VIEW_TABLE?>">Tableau</option>
                             <option value="<?=ControllerView::VIEW_MINIMAL_CARD?>">Cartes simplifiées</option>
                             <option value="<?=ControllerView::VIEW_DETAILED_CARD?>">Cartes détaillées</option>
                         </select>
-                        <button class="view-container__top__settings__btn-refresh" type="button"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="view-container__top__settings__btn-refresh" title="Rafraichir les données." type="button"><i class="fa-solid fa-arrows-rotate"></i></button>
                     <!-- Is Usable -->
                         <div class="view-container__top__settings__usable-box form-check form-switch">
                             <input class="view-container__top__settings__usable-box__checkbox form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
-                            <label class="view-container__top__settings__usable-box__label" title="Afficher seulement les sorts<br>compatibles avec le JDR" for="toggleUsableSwitch">Afficher seulement les sorts<br>compatibles avec le JDR</label>
+                            <label class="view-container__top__settings__usable-box__label" title="Afficher seulement les sorts compatibles avec le JDR" for="toggleUsableSwitch">Seulement les objets validés</label>
                         </div>
                     <!-- SORT -->
                         <div data-type='dropdown' data-trigger-target=".view-container__top__settings__sort-box__trigger" data-expanded="false" class="view-container__top__settings__sort-box" >
@@ -438,7 +438,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             </div>
                         </div>
                     <!-- BTN SHOW FILTRES AVANCÉS -->
-                        <button class="view-container__top__settings__advanced-settings-btn" type="button" disabled title="En cours de développement">Filtre avancé</button>
+                        <button class="view-container__top__settings__advanced-settings-btn" type="button" style="display:none;" disabled title="En cours de développement">Filtre avancé</button>
                 </div>
 
                 <div class="view-container__top__select-interaction">
@@ -574,8 +574,9 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                         </div>
                 </div>
                 
-                <div class="view-container__preview">
-                    
+                <div class="view-container__bottom__preview">
+                    <button title="Fermer la visualiation de l'objet." class="view-container__bottom__preview__close"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="view-container__bottom__preview__content"></div>
                 </div>
             </div>
 

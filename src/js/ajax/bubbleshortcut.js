@@ -91,7 +91,20 @@ class Bubbleshortcut {
             let content = "";
             if(bubble.content != "" || bubble.content != null || bubble.content != undefined){
                 content = bubble.content;
-                Page.build(is_modal, title, content, size, true, bubbleId);
+                Page.build({
+                    target : "modal", 
+                    title : title,
+                    content : content,
+                    options : {
+                        remove : null,
+                        edit : null,
+                        linkShare : null,
+                        bookmark : null,
+                        bubbleId : bubbleId
+                    }, 
+                    size : size, 
+                    show : true
+                });
                 bubbleRef.addClass("active");
             } else {
                 MsgAlert("Erreur de chargement", "Il n'y a pas de contenu chargé pour cette bulle de raccourcis.", "danger" , 4000);

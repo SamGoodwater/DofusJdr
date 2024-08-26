@@ -29,8 +29,8 @@ class Style {
     const INPUT_FLOATING = 1;
     const INPUT_ICON = 2;
 
-    const ICON_SOLID = "fas";
-    const ICON_REGULAR = "far";
+    const ICON_SOLID = "fa-solid";
+    const ICON_REGULAR = "fa-regular";
     const ICON_MEDIA = "media";
 
     const CHECK_CHECKBOX = 0;

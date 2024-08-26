@@ -56,9 +56,19 @@ class Connect {
             {is_flush:true},
             function(data, status)
             {
+                if(data.script != ""){
+                    $('body').append("<script>"+data.script+"</script>");
+                }
+
                 $("#userVisual").html(data.header);
-                $("#account_btn_toolbar_mobile").html(data.header_mobile);
-                Page.build(Page.RESPONSIVE, data.title, data.modal, data.size, show_modal)
+                Page.build({
+                    target : "modal", 
+                    title : data.title,
+                    content : data.modal,
+                    options : {}, 
+                    size : data.size, 
+                    show : show_modal
+                });
                 $("#onloadDisplay").hide("slow");
             },
             "json"
@@ -67,8 +77,10 @@ class Connect {
     static connect(){
         $("#onloadDisplay").show("slow");
         let URL = 'index.php?c=connect&a=connexion';
-        let email = $('#modalConnexionUser #email').val();
-        let password = $('#modalConnexionUser #password').val();
+        const email_element = document.querySelector('.user-connexion-container__tab-connexion #email');
+        const password_element = document.querySelector('.user-connexion-container__tab-connexion #password');
+        const email = email_element.value;
+        const password = password_element.value;
         let remember = 0;
         if ($('#modalConnexionUser #remember').is(":checked") && COOKIE_CONNEXION) {
             remember = 1;
@@ -94,10 +106,15 @@ class Connect {
                 }
                 if(data.state){
                     $("#userVisual").html(data.value.header);
-                    Page.build(Page.RESPONSIVE, data.value.title,  data.value.modal, data.value.size, false);
-                    $('#modalConnexionUser #email').val("");
-                    $('#modalConnexionUser #password').val("");
-                    $('#table').bootstrapTable('refresh');
+                    Page.build({
+                        target : "modal", 
+                        title : data.value.title,
+                        content : data.value.modal,
+                        size : data.value.size, 
+                        show : false
+                    });
+                    email_element.value = "";
+                    password_element.value = "";
                     if(data.cookie != ""){
                         let cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 
                         document.cookie = cookie;
@@ -128,7 +145,13 @@ class Connect {
                 }
                 if(data.state){
                     $("#userVisual").html(data.value.header);
-                    Page.build(Page.RESPONSIVE, data.value.title,  data.value.modal, data.value.size, false);
+                    Page.build({
+                        target : "modal", 
+                        title : data.value.title,
+                        content : data.value.modal,
+                        size : data.value.size, 
+                        show : false
+                    });
                     let cookie = "connexion="+data.cookie.token+"; path=/; expires="+data.cookie.date+";"; 
                     document.cookie = cookie;
                     location.reload();
@@ -158,7 +181,13 @@ class Connect {
                 }
                 if(data.state){
                     $("#userVisual").html(data.value.header);
-                    Page.build(Page.RESPONSIVE, data.value.title,  data.value.modal, data.value.size, false);
+                    Page.build({
+                        target : "modal", 
+                        title : data.value.title,
+                        content : data.value.modal,
+                        size : data.value.size, 
+                        show : false
+                    });
                     $('#modalPasswordForgotten #email').val("");
                     MsgAlert("Mot de passe oublié", 'Un mail vous a été envoyé', "green" , 4000);
                 } else {

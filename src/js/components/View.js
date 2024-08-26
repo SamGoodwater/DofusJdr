@@ -122,6 +122,11 @@ class View {
               this.initAdaptDisplaySize();
 
             // --------- Settings
+
+              // View Choice
+              document.querySelector('.view-container__top__settings__view-choice').addEventListener('change', (e) => {
+                this.refresh();
+              });
             
               // FILTER
               document.querySelector('.view-container__top__settings__filter-box__btn')
@@ -241,6 +246,9 @@ class View {
                   document.querySelector('.view-container__top__settings__filter-box__menu')
                 ];
                 document.addEventListener('click', function(event) {
+                  const preview = document.querySelector('.view-container__bottom__preview');
+                  preview.classList.remove("view-container__bottom__preview--open");
+
                   popoversToClose.forEach(popover => {
                     const isClickInside = popover.contains(event.target);
                     if (!isClickInside) {
@@ -285,18 +293,22 @@ class View {
               this.view = View.VIEW_MINIMAL_CARD;
           }
           
+          this.minimalCardElement.classList.remove('show');
+          this.detailedCardElement.classList.remove('show');
+          this.tableElement.classList.remove('show');
+
           switch (Number(this.view)) {
               case Number(View.VIEW_MINIMAL_CARD):
-              this.minimalCardElement.classList.add('show');
+                this.minimalCardElement.classList.add('show');
               break;
               case Number(View.VIEW_DETAILED_CARD):
-              this.detailedCardElement.classList.add('show');
+                this.detailedCardElement.classList.add('show');
               break;
               case Number(View.VIEW_TABLE):
-              this.tableElement.classList.add('show');
+                this.tableElement.classList.add('show');
               break;
               default:
-              this.minimalCardElement.classList.add('show');
+                this.minimalCardElement.classList.add('show');
               break;
           }
       }
@@ -342,6 +354,7 @@ class View {
           await this.setView();
           await this.setTotalItems();
           this.currentPage = 1;
+          await this.fetchTemplates();
           await this.fetchObjects();
           await this.setTotalPages();
       }
@@ -358,7 +371,6 @@ class View {
                       name : 'detailedCard'
                   }
               };
-
               for (const [key, value] of Object.entries(requestSettings)) {
                   const response = await fetch(value.url);
                   const data = await response.json();
@@ -369,7 +381,6 @@ class View {
                       return false;
                   }
               }
-
           } catch (error) {
               View.showError('Erreur lors de la récupération du template', error, "red-d-3", 7000);
           }
@@ -472,7 +483,6 @@ class View {
           this.updateDisplay();
         }, 500); // 500ms de délai avant de lancer la recherche
       }
-      
       
       sortItems(sortParams = [['level', 1]]) {
         // Filtrer et valider les propriétés et ordres
@@ -650,25 +660,116 @@ class View {
           this.minimalCardElement.classList.remove('show');
       }
 
+      // Open Preview
+      openPreview(model_name = "", uniqid = "", display = Controller.DISPLAY_CARD) {
+        const preview = document.querySelector('.view-container__bottom__preview');
+        preview.classList.remove("view-container__bottom__preview--open");
+
+        const preview_close = document.querySelector('.view-container__bottom__preview__close');
+        preview_close.addEventListener('click', (e) => {
+          preview.classList.remove("view-container__bottom__preview--open");
+        });
+  
+          let URL = 'index.php?c='+model_name+'&a=getFromUniqid';
+          $.post(URL,
+              {
+                  uniqid:uniqid,
+                  display:display
+              },
+              function(data, status)
+              {
+                  if(data.state){
+                    preview.querySelector('.view-container__bottom__preview__content').innerHTML = data.value.visual;
+                    preview.classList.add("view-container__bottom__preview--open");
+                  } else {
+                      MsgAlert("Impossible de récupérer l'élément", 'Erreur : ' + data.error, "danger" , 4000);
+                  }
+              },
+              "json"
+          ); 
+      }
+
     //_____________________________________________
     // ---------------- MINIMAL CARD --------------
-      async initMinimalCard() {
-
-      }
       initMinimalCardWhenFetchLimitReachedItemsPerPage() {
+        this.displayMinimalCard(this.currentObjects.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage));
       }
       initMinimalCardWhenFetchFinished() {
-        
+        this.displayMinimalCard(this.currentObjects);
       }
       displayMinimalCard(objects) {
-        console.log(objects);
+        if(objects.length > 0) {
+          objects.forEach(obj => {
+
+            const tempElement = document.createElement('div');
+            tempElement.innerHTML = this.templates.minimalCard;
+
+            for (const [key, value] of Object.entries(obj.base)) {
+              let val = value;
+              let element = tempElement.querySelector(`[data-prop="${key}"]`);
+              console.log(element);
+              if(element) {
+
+                if(element.getAttribute('data-format') == 'badge') {
+                  val = obj.badge[key];
+                } else if(element.getAttribute('data-format') == 'icon') {
+                  val = obj.icon[key];
+                } else if(element.getAttribute('data-format') == 'text') {
+                  val = obj.text[key];
+                } else if(element.getAttribute('data-format') == 'other') {
+                  val = obj.other[key];
+                } else {
+                  val = obj.base[key];
+                }
+
+                if(element.getAttribute('data-location') == 'content') {
+                  element.innerHTML = val;
+                } else if(element.getAttribute('data-location') == 'src') {
+                  element.setAttribute('src', val);
+                } else [
+                  element.setAttribute('data-'.element.getAttribute("data-location"), val)
+                ]
+              }
+
+            };
+
+            if(obj.other.color) {
+              const card = tempElement.querySelector('.minimal-card');
+              card.classList.add('back-'+obj.other.color+"-l-5");
+              card.classList.add('border-'+obj.other.color+"-d-2");
+            }
+
+            tempElement.querySelector(".minimal-card__footer__btn").addEventListener('click', (e) => {
+              tempElement.querySelector('.minimal-card__footer__content').classList.toggle('show');
+            });
+
+            tempElement.addEventListener('click', (e) => {
+              this.openPreview(this.className, obj.base.uniqid, Controller.DISPLAY_CARD);
+            });
+            tempElement.addEventListener('dblclick', (e) => {
+              if (this.classReference && typeof this.classReference.open === 'function') {
+                this.classReference.open(obj.base.uniqid);
+              } else {
+                View.showError('Erreur d\'ouverture de l\'objet', 'Impossible d\'accéder à la classe', "red-d-3", 7000);
+              }
+            });
+
+            this.minimalCardElement.appendChild(tempElement);
+
+          });
+        }
+      }
+      filterMinimalCard(){
+        this.propertiesFilteredMinimalCard.forEach(property => {
+          let element = this.minimalCardElement.querySelector(`[data-prop="${property}"]`);
+          if(element) {
+            element.style.display = 'none';
+          }
+        });
       }
 
     //_____________________________________________
     // --------------- DETAILED CARD --------------
-      async initDetailedCard() {
-
-      }
       initDetailedCardWhenFetchLimitReachedItemsPerPage() {
       }
       initDetailedCardWhenFetchFinished() {
@@ -680,9 +781,6 @@ class View {
 
     //_____________________________________________
     // ------------------- TABLE -------------------
-      async initTable() {
-
-      }
       initTableWhenFetchLimitReachedItemsPerPage() {
         this.displayTable(this.currentObjects.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage));
       }
@@ -693,7 +791,6 @@ class View {
       }
       displayTable(objects) {
         const tbody = this.tableElement.querySelector('tbody');
-        
         // Obtenir toutes les colonnes pour identifier les data-property
         const columns = this.tableElement.querySelectorAll('thead th');
         let idrow = 0;
@@ -701,6 +798,7 @@ class View {
             const tr = document.createElement('tr');
             tr.setAttribute('data-idrow', idrow);
             tr.addEventListener('click', (e) => {
+              this.openPreview(this.className, obj.base.uniqid, Controller.DISPLAY_CARD);
               if(tr.classList.contains('selected')) {
                 this.idRowSelected = this.idRowSelected.filter(id => id != idrow);
                 tr.classList.remove('selected');

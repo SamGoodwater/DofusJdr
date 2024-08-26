@@ -50,7 +50,21 @@ abstract class Controller{
     $currentUser = ControllerConnect::getCurrentUser();
     $return = [
       'state' => false,
-      'value' => "",
+      'value' => [
+        'visual' => "",
+        'title' => "",
+        "options" => [
+          "remove" => "",
+          'edit' => "",
+          'linkshare' => "",
+          'bubbleid' => "",
+          'bookmark' => [
+            'uniqid' => "",
+            'classe' => "",
+            'active' => false
+          ]
+        ]
+      ],
       'error' => 'erreur inconnue',
       'script' => ""
     ];
@@ -79,13 +93,32 @@ abstract class Controller{
               $title = ucfirst($title);
             }
 
+            $edit = ucfirst(get_class($obj)).".open('".$obj->getUniqid()."', Controller.DISPLAY_CARD);";
+
+            if($user->getRight($this->_model_name, User::RIGHT_WRITE)){
+              $remove = ucfirst(get_class($obj)).".remove('".$obj->getUniqid()."');";
+              if($_REQUEST['display'] != Content::DISPLAY_EDITABLE){
+                $edit = ucfirst(get_class($obj)).".open('".$obj->getUniqid()."', Controller.DISPLAY_EDITABLE);";
+              }
+            } else {
+              $remove = "";
+              $edit = "";
+            }
+
             $return['value'] = array(
               'visual' => $obj->getVisual(new Style(["display" => $display])),
               "title" => $obj->getName($display),
-              "bubbleId" => strtolower(get_class($obj)) . $obj->getUniqid(),
-              'linkshare' => "@" . get_class($obj) . "~" . $obj->getUniqid(),
-              'bookmark_active' => $user->in_bookmark($obj),
-              "classe" => strtolower(get_class($obj))
+              'options' => [
+                "remove" => $remove,
+                'edit' => $edit,
+                'linkshare' => "@" . get_class($obj) . "~" . $obj->getUniqid(),
+                'bubbleid' => $obj->getUniqid(), 
+                'bookmark' => [
+                  'uniqid' => $obj->getUniqid(),
+                  'classe' => strtolower(get_class($obj)),
+                  'active' => $user->in_bookmark($obj)
+                ],
+              ]
             );
             $return['state'] = true;
           }else {

@@ -183,11 +183,11 @@ class Section extends Content
                     }
 
                     ob_start(); ?>
-                        <section id="section<?=$this->getUniqid()?>" data-name="<?=$name?>" data-type="<?=trim($this->getType(), ".php")?>" class="sectionselector mb-4" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
-                            <div class="section-title d-flex flex-row justify-content-between">
-                                <h2 class="text-secondary-d-3 mb-3 light" style="width:initial;"><?=$this->getTitle()?></h2>
+                        <section id="section<?=$this->getUniqid()?>" data-name="<?=$name?>" data-type="<?=trim($this->getType(), ".php")?>" class="section__container" data-editing="false" <?=$ondbldclick?> data-uniqid="<?=$this->getUniqid()?>">
+                            <div class="d-flex flex-row justify-content-between">
+                                <h2 class="section__container__title" style="width:initial;"><?=$this->getTitle()?></h2>
                                 <?php if($user->getRight('page', User::RIGHT_WRITE)){ ?>
-                                    <div class="section-options row justify-content-between text-right">
+                                    <div class="section__container__options">
                                         <div>
                                             <a data-bs-toggle="tooltip" data-bs-placement="left" title="Modifier la section" onclick="Section.showEdit('<?=$this->getUniqid()?>');" class="text-main-d-3 text-main-d-1-hover"><i class="fa-solid fa-edit"></i></a>
                                             <a data-bs-toggle="tooltip" data-bs-placement="left" title="Glisser à déposer pour trier les sections dans l'ordre southaiter." class="handleSection text-main-d-3 text-main-d-1-hover"><i class="fa-solid fa-sort"></i></a>
@@ -203,7 +203,7 @@ class Section extends Content
                     <?php return ob_get_clean();
                 } else {
                     ob_start(); ?>
-                        <section id="section<?=$this->getUniqid()?>" data-name="<?=$name?>">
+                        <section id="section<?=$this->getUniqid()?>" class="section__container" data-name="<?=$name?>">
                             <p>Erreur : Aucun template associé à la section
                                 <a class="btn btn-sm btn-animate btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fa-solid fa-trash"></i> Supprimer la section</a>
                             </p>
@@ -231,15 +231,15 @@ class Section extends Content
                     }
                     
                     ob_start(); ?>
-                        <section id="section<?=$this->getUniqid()?>" data-name="<?=$name?>">
-                            <h2 class="text-main-d-4 mb-3 light"><?=$this->getTitle()?></h2>
+                        <section id="section<?=$this->getUniqid()?>" class="section__container" data-name="<?=$name?>">
+                            <h2 class="section__container__title"><?=$this->getTitle()?></h2>
                             <div><?=$template["content"]?></div>
                         </section>
                     <?php return ob_get_clean();
 
                 } else {
                     ob_start(); ?>
-                        <section id="section<?=$this->getUniqid()?>" data-name="<?=$name?>">
+                        <section id="section<?=$this->getUniqid()?>" class="section__container" data-name="<?=$name?>">
                             <p>Erreur : Aucun template associé à la section
                                 <a class="btn btn-sm btn-animate btn-text-red" onclick="Section.remove('<?=$this->getUniqid()?>');"><i class="fa-solid fa-trash"></i> Supprimer la section</a>
                             </p>

@@ -62,11 +62,11 @@ class User extends Controller{
         let sentence = "";
 
         let i = $(btn).find('i'); // REMOVE
-        if(i.hasClass("fas") && i.hasClass("fa-bookmark")){
+        if((i.hasClass("fas") || i.hasClass('fa-solid') ) && i.hasClass("fa-bookmark")){
             url = "index.php?c=user&a=removeBookmark";
             sentence = "Le favoris a bien été retiré du "+ucFirst(globalThis.project.bookmark_name)+".";
 
-        }else if(i.hasClass("far") && i.hasClass("fa-bookmark")){ // AJOUT
+        }else if((i.hasClass("far") || i.hasClass('fa-regular')) && i.hasClass("fa-bookmark")){ // AJOUT
             url = "index.php?c=user&a=addBookmark";
             sentence = "Le favoris a bien été ajouté au "+ucFirst(globalThis.project.bookmark_name)+".";
         }
@@ -93,13 +93,13 @@ class User extends Controller{
                             document.cookie = cookie;
                         }
                         let i = $(btn).find('i'); // REMOVE
-                        if(i.hasClass("fas") && i.hasClass("fa-bookmark")){
-                            i.removeClass("fas");
-                            i.addClass("far");
+                        if((i.hasClass("fas") || i.hasClass('fa-solid')) && i.hasClass("fa-bookmark")){
+                            i.removeClass("fas").removeClass('fa-solid');
+                            i.addClass("fa-regular");
                             $(btn).attr('title', "Ajouter aux favoris");
-                        }else if(i.hasClass("far") && i.hasClass("fa-bookmark")){ // AJOUT
-                            i.removeClass("far");
-                            i.addClass("fas");
+                        }else if((i.hasClass("far") || i.hasClass('fa-regular')) && i.hasClass("fa-bookmark")){ // AJOUT
+                            i.removeClass("far").removeClass('fa-regular');
+                            i.addClass("fa-solid");
                             $(btn).attr('title', "Retirer des favoris");
                         }
                         if($("#offcanvasbookmark").css("visibility") == 'visible'){

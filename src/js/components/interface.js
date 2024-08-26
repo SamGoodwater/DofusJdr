@@ -91,13 +91,6 @@ function initGlobalSearch() {
     autocomplete_load("#globalsearch");
 }
 
-function switchConnectInscript(tab, btn){
-    $(".user__modal_tab").hide();
-    $(".user__modal_connexion .user__modal_btn-switch").css("border-bottom", "none");
-    $(tab).show();
-    $(btn).css("border-bottom", "solid 1px var(--main-d-2)");
-}
-
 function useOverlay(fct) {
     const overlay = document.querySelector("#overlay");
     if (typeof fct === 'function') {

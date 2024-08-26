@@ -86,7 +86,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-item-end flex-wrap gap-1" id="sortableRessources">
-            <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'une ressource', $('#addRessource'), Page.SIZE_MD, true);">Ajouter une ressource</button>
+            <button type="button" class="ressource__add me-2 btn-sm btn btn-back-secondary btn-animate">Ajouter une ressource</button>
             <div id="selectorTypeListCheckbox" class="dropdown">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" id="typesort" data-bs-toggle="dropdown" aria-expanded="false">Catégorie d'équipement</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
@@ -238,6 +238,17 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     }
                 ]
             );
+
+            const ressource__add = document.querySelector('.ressource__add');
+            ressource__add.addEventListener('click', function(){
+                Page.build({
+                        target : "modal", 
+                        title : 'Création d\'une ressource',
+                        content :  $('#addRessource'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
         </script>
     <?php $template["content"] = ob_get_clean();
 

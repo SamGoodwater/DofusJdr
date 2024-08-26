@@ -159,6 +159,8 @@ class Router {
                         "src/js/", // Ini et function
                         "src/js/functions/",
                         "src/js/components/",
+                        "src/js/components/displayUI/",
+                        "src/js/components/displayUI/components/",
                         "src/js/modules/",
                         "src/js/plugin/upload/",
                         "src/js/ajax/",

@@ -53,24 +53,28 @@ class Controller {
             function(data, status)
             {
                 if(data.state){
-                    let bubbleId = ""; 
-                    if(data.value.bubbleId != ""){
-                        bubbleId = data.value.bubbleId;
+                    let bubbleid = ""; 
+                    if(data.value.bubbleid != ""){
+                        bubbleid = data.value.bubbleid;
                     }
-                    Page.build(
-                        Page.RESPONSIVE,
-                        data.value.title, 
-                        data.value.visual, 
-                        Page.SIZE_XL, 
-                        true, 
-                        bubbleId, 
-                        data.value.linkshare, 
-                        {
-                            active : data.value.bookmark_active,
-                            uniqid : uniqid,
-                            classe : data.value.classe
-                        }
-                    );
+                    Page.build({
+                        target : "modal", 
+                        title : data.value.title,
+                        content : data.value.visual,
+                        options : {
+                            remove : data.value.options.remove,
+                            edit : data.value.options.edit,
+                            linkshare : data.value.options.linkshare,
+                            bookmark : {
+                                classe : data.value.options.bookmark.classe,
+                                uniqid : uniqid,
+                                active : data.value.options.bookmark.active
+                            },
+                            bubbleid : bubbleid
+                        }, 
+                        size : Page.SIZE_XL, 
+                        show : true
+                    });
                 } else {
                     MsgAlert("Impossible de récupérer l'élément", 'Erreur : ' + data.error, "danger" , 4000);
                 }

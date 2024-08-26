@@ -38,7 +38,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
-        <button type="button" class="btn btn-sm btn-animate btn-back-secondary me-2" onclick="Page.build(true, 'Création d\'un·e personnage non joueur·euse', $('#addNpc'), Page.SIZE_MD, true);">Nouveau / Nouvelle PNJ</button>
+        <button type="button" class="npc_add btn btn-sm btn-animate btn-back-secondary me-2">Nouveau / Nouvelle PNJ</button>
 
         <table 
             id="table"
@@ -189,6 +189,17 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
         <script>
             Npc.createAndLoadDataBootstrapTable();
+
+            const npc_add = document.querySelector('.npc_add');
+            npc_add.addEventListener('click', function(){
+                Page.build({
+                        target : "modal", 
+                        title : 'Création d\'un·e personnage non joueur·euse',
+                        content :  $('#addNpc'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
         </script>
     <?php $template["content"] = ob_get_clean();
 

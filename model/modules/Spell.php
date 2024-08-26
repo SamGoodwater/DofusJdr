@@ -632,7 +632,7 @@ class Spell extends Module
         private $_powerful = 1;
 
     //♥♥♥♥♥♥♥♥♥♥♥♥♥♥ GETTERS ♥♥♥♥♥♥♥♥♥♥♥♥♥♥
-        public function getName(int $format = Content::FORMAT_BRUT){
+        public function getName(int $format = Content::FORMAT_BRUT) {
             $view = new View();
             switch ($format) {
                 case Content::FORMAT_EDITABLE:  
@@ -4501,6 +4501,10 @@ class Spell extends Module
                         if(!empty($types)){?>
                             <div class="d-flex flex-row justify-content-around flex-wrap gap-1 p-1">
                                 <?php foreach ($types as $type) {
+                                    $remove = "";
+                                    if($is_remove){
+                                        $remove = "Spell.update('".$this->getUniqid()."',{action:'remove', type:'".$type."'},'type', IS_VALUE);$(this).remove();";
+                                    } 
                                     $view->dispatch(
                                         template_name : "badge",
                                         data : [
@@ -4508,7 +4512,7 @@ class Spell extends Module
                                             "color" => Style::getColorFromLetter($type) . "-d-4",
                                             "tooltip" => "Puissance d'un sort sur 9 niveaux",
                                             "style" => Style::STYLE_OUTLINE,
-                                            "onclick" => "Spell.update('".$this->getUniqid()."',{action:'remove', type:'".$type."'},'type', IS_VALUE);$(this).remove();"
+                                            "onclick" => $remove
                                         ], 
                                         write: true);
                                 } ?>

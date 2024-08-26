@@ -39,7 +39,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end flex-wrap gap-1" id='sortableCondition'>
-            <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'un état', $('#addCondition'), Page.SIZE_MD, true);">Ajouter un état</button>
+            <button type="button" class="condition__add me-2 btn-sm btn btn-back-secondary btn-animate">Ajouter un état</button>
             <div class="form-check form-switch">
                 <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
                 <label class="form-check-label" for="toggleUsableSwitch">Afficher seulement les états compatibles avec le JDR</label>
@@ -122,6 +122,17 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     }
                 ]
             );
+
+            const condition__add = document.querySelector('.condition__add');
+            condition__add.addEventListener('click', function(){
+                Page.build({
+                        target : "modal", 
+                        title : 'Création d\'un état',
+                        content :  $('#addCondition'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
         </script>
     <?php $template["content"] = ob_get_clean();
 

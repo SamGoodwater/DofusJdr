@@ -98,7 +98,7 @@
         <div class="cookie-bar">
             <div class="mx-5 d-flex flex-column-reverse flex-md-row align-items-center">
                 <div>
-                    <p>Ce site recquière l'utilisation de certains cookies pour fonctionner, d'autres sont optionnelles. Lesquels acceptes-vous ?</p>
+                    <p><span class="bold">Ce site recquière l'utilisation de certains cookies pour fonctionner, d'autres sont optionnelles.</span> Vous pouvez accepté ou non certains cookies.</p>
                     <ul class="list-unstyled">
                         <li>
                             <div class="form-check">
@@ -135,7 +135,7 @@
         <div class="offcanvas offcanvas-start back-main-l-4" data-bs-scroll="true" tabindex="-1" id="offcanvasbookmark" aria-labelledby="offcanvasbookmark">
             <div class="offcanvas-header">
                 <a id="back-bookmark" class="btn-text-main size-1-4 me-2" onclick="User.getBookmark();"><i class="fa-solid fa-chevron-circle-left"></i></a>
-                <h2 class="offcanvas-title text-secondary-d-2"></h2>
+                <h2 class="offcanvas-title text-secondary-d-4"></h2>
                 <div>
                     <a id="btn-fullscreen" title="Agrandir" class="btn-text-main size-1-4" onclick="Page.offCanvasFullscreen();"><i class="fa-solid fa-expand"></i></a>
                     <button type="button" title="Fermer le <?=ucfirst($GLOBALS['project']['bookmark_name'])?> (Echap)" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -153,19 +153,10 @@
             <a title="Cacher les bulles de raccourcis" class="bubbleshorcut__button_dropdown active" onclick="Bubbleshortcut.dropdownToggle();"><i class="fa-solid fa-caret-down"></i></a> 
         </div>
 
+        <?= include_once 'object_viewer.php'; ?>
+
         <div id="modal" class="modal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title w-100"></h2>
-                        <a class="modal__share_object btn-text-grey mx-2" title="Copier le lien vers cette objet" onclick=""><i class="fa-solid fa-share-alt"></i></a>
-                        <a class="modal__bookmark_toggle btn-text-grey mx-2" title="Ajouter aux favoris" data-uniqid="" data-classe="" onclick="User.toggleBookmark(this);"><i class="fa-regular fa-bookmark"></i></a>
-                        <a class="modal__bubbleshortcut_toggle mx-2" title="Ajouter cette bulle de raccourcis" onclick=""></a>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                </div>
+            <div class="modal-dialog modal-dialog-centered modal__obj-viewer-insert">
             </div>
         </div>
 
@@ -313,6 +304,7 @@
         } ?>
 
         $(document).ready(function(){ 
+            $('#modal').hide();
             // Renvoi vers la page demandée
             let settings_modal = window.location.pathname.split('@').filter(function(value) {
                 return value !== '' && value !== null && typeof value !== 'undefined';

@@ -218,6 +218,7 @@ class ControllerSpell extends ControllerModule{
             'sight_line' => $obj->getSight_line(Content::FORMAT_ICON),
             'number_between_two_cast' => $obj->getNumber_between_two_cast(Content::FORMAT_ICON),
             'is_magic' => $obj->getIs_magic(Content::FORMAT_ICON),
+            'powerful' => $obj->getPowerful(Content::FORMAT_ICON),
             'usable' => $obj->getUsable(Content::FORMAT_ICON),
           );
 
@@ -233,6 +234,7 @@ class ControllerSpell extends ControllerModule{
             'number_between_two_cast' => $obj->getNumber_between_two_cast(Content::FORMAT_BADGE),
             'category' => $obj->getCategory(Content::FORMAT_BADGE),
             'is_magic' => $obj->getIs_magic(Content::FORMAT_BADGE),
+            'element' => $obj->getElement(Content::FORMAT_BADGE),
             'powerful' => $obj->getPowerful(Content::FORMAT_BADGE),
             'type' => $obj->getType(Content::FORMAT_BADGE),
             'usable' => $obj->getUsable(Content::FORMAT_BADGE),
@@ -360,6 +362,7 @@ class ControllerSpell extends ControllerModule{
               'sight_line' => $obj->getSight_line(Content::FORMAT_ICON),
               'number_between_two_cast' => $obj->getNumber_between_two_cast(Content::FORMAT_ICON),
               'is_magic' => $obj->getIs_magic(Content::FORMAT_ICON),
+              'powerful' => $obj->getPowerful(Content::FORMAT_ICON),
               'usable' => $obj->getUsable(Content::FORMAT_ICON),
             );
 
@@ -376,6 +379,7 @@ class ControllerSpell extends ControllerModule{
               'category' => $obj->getCategory(Content::FORMAT_BADGE),
               'is_magic' => $obj->getIs_magic(Content::FORMAT_BADGE),
               'powerful' => $obj->getPowerful(Content::FORMAT_BADGE),
+              'element' => $obj->getElement(Content::FORMAT_BADGE),
               'type' => $obj->getType(Content::FORMAT_BADGE),
               'usable' => $obj->getUsable(Content::FORMAT_BADGE),
             );

@@ -122,17 +122,10 @@ class Page extends Content
                         <div class="sortablebis">
 
                             <?php if(count($this->getSection()) > 3){ ?>
-<<<<<<< Updated upstream
                                 <nav class="page-navigation page-navigation--minimized" title="Afficher le menu de sections de la page et y naviguer facilement.">
                                     <div class="page-navigation__top">
                                         <p class="page-navigation__top__select-item">Plan de la page</p>
                                         <button class="page-navigation__top__minimize" aria-label="Agrandir / Diminuer le menu de navigation" title="Agrandir le menu de navigation"><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
-=======
-                                <nav class="page-navigation page-navigation--minimized--" title="Afficher les sections de la page et y naviguer facilement.">
-                                    <div class="page-navigation__top">
-                                        <p class="page-navigation__top__select-item">Plan de la page</p>
-                                        <button class="page-navigation__top__minimize" aria-label="Agrandir le menu de navigation" title="Agrandir le menu de navigation"><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
->>>>>>> Stashed changes
                                     </div>
                                     <ul class="page-navigation__menu">
                                         <?php foreach ($this->getSection() as $section) { ?>
@@ -148,7 +141,9 @@ class Page extends Content
 
                             <?php if(empty($this->getSection())){ ?>
                                 <p>La page est vide <i class="fa-solid fa-sad-tear"></i></p>
-                                <p><a data-bs-toggle="collapse" onclick="Section.getVisual('<?=$this->getUniqid()?>', true);">Ajouter une section pour commencer.</a></p>
+                                <?php if($user->getRight('section', User::RIGHT_WRITE) && $user->IsConnect() && $this->getIs_editable()){ ?>
+                                    <p><a data-bs-toggle="collapse" onclick="Section.getVisual('<?=$this->getUniqid()?>', true);">Ajouter une section pour commencer.</a></p>
+                                <?php } ?>
                             <?php }
 
                             $format = Content::FORMAT_BRUT; if($this->getIs_editable()){$format = Content::FORMAT_EDITABLE;}
@@ -157,10 +152,10 @@ class Page extends Content
                             <?php } ?>
 
                         </div>
-                        <?php if($user->IsConnect() && $this->getIs_editable()){ ?>
-                                <div class="text-right">
-                                    <a onclick="Section.getVisual('<?=$this->getUniqid()?>', true);" class="size-2 text-main-d-3 text-main-d-1-hover mx-3"><i class="fa-regular fa-plus-square"></i></a>
-                                </div>   
+                        <?php if($user->getRight('section', User::RIGHT_WRITE) && $user->IsConnect() && $this->getIs_editable()){ ?>
+                            <div class="text-right">
+                                <a onclick="Section.getVisual('<?=$this->getUniqid()?>', true);" class="size-2 text-main-d-3 text-main-d-1-hover mx-3"><i class="fa-regular fa-plus-square"></i></a>
+                            </div>   
                         <?php } ?>
 
                         <script>

@@ -22,16 +22,18 @@
                 display: flex;
                 justify-content: start;
                 align-items: center;
-                gap: 10px;
+                width: 100%;
 
                 &__input{
                     @include form-control;
                     @include form-control-size(md);
+                    margin: 0rem;
                 }
                 &__search-box{
                     
                     &__btn{
                         color: var(--main);
+                        transform: translateX(-30px);
 
                         &:hover{
                             color: var(--main-d-2);
@@ -40,7 +42,7 @@
     
                     &__menu{
                         position:absolute;
-                        top:50px;
+                        top:90px;
                         left:5px;
                         z-index: 100;
                         background-color: var(--main-l-5);
@@ -115,14 +117,26 @@
 
             &__view-choice{
                 @include form-select;
+                width: auto;
+                margin:0rem;
+                margin-inline-end: 1rem;
             }
 
             &__btn-refresh{
                 @include btn-general(md, true, false);
-                @include btn-border(var(--main-d-2), var(--main-l-3), var(--main-d-3));
+                @include btn-border(var(--main-d-2), var(--main-d-2), var(--main-l-4));
+                padding: 0.54rem 0.8rem;
+                display: block;
+
+                i {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
             }
 
             &__usable-box{
+                margin-inline-start: 1rem;
                 &__label{
                     font-size: 0.8rem;
                     color: var(--grey-d-3);
@@ -131,12 +145,16 @@
 
             &__sort-box{
                 @include dropdown(md);
+                height:35px;
+                margin-inline-end: 1rem;
 
                 &__trigger {
                     @include btn-general(md, true, false);
                     @include btn-border(var(--main-d-2), var(--main-d-2), var(--main-l-4));
                 }
                 &__menu{
+                    z-index:10;
+                    
                     &__option{
                         @include btn-general(sm, true, false);
                         @include btn-border(var(--main-d-2), var(--main-l-3), var(--main-d-2));
@@ -174,7 +192,8 @@
             }
 
             &__filter-box{
-                
+                margin-inline-end: 1rem;
+
                 &__btn{
                     @include btn-general(md, true, false);
                     @include btn-border(var(--main-d-2), var(--main-d-2), var(--main-l-4));
@@ -308,7 +327,6 @@
             flex-direction: column;
             justify-content: stretch;
             align-items: stretch;
-            max-width: calc(95vw - $width-nav);
             width: 100%;
 
             @media screen and (max-width: $breakpoint-tablet) {
@@ -317,9 +335,11 @@
 
             &__progress {
                 display: none;
+                opacity: 0;
                 justify-content: stretch;
                 align-items: stretch;
                 margin-block: 10px;
+                transition: opacity 0.3s ease-in-out;
     
                 &__bar{
                     width: 100%;
@@ -335,13 +355,17 @@
     
                 &.show {
                     display: flex;
+                    opacity: 1;
                 }
             }
 
             &__table-view {
+                display: none;
+                opacity: 0;
                 width: 100%; /* Prend la largeur maximale disponible */
                 max-width: 100%; /* Ne dépasse pas la largeur du parent */
-                overflow-x: auto; /* Permet le défilement horizontal */
+                overflow-x: auto; /* Permet le défilement horizontal */;
+                transition: opacity 0.3s ease-in-out;
 
                 &__table{
                     width: 100%; /* Assure que la table prenne la largeur du conteneur */
@@ -406,13 +430,50 @@
                     }
                 
                 }
+
+                &.show {
+                    display: block;
+                    opacity: 1;
+                }
+            }
+
+            &__minimal-card-view {
+                display: none;
+                opacity: 0;
+                flex-wrap: wrap;
+                justify-content: start;
+                align-items: start;
+                gap: 1rem;
+                margin:1rem;
+                transition: opacity 0.3s ease-in-out;
+
+                &.show {
+                    display: flex;
+                    opacity: 1;
+                }
+            }
+
+            &__detailled-card-view {
+                display: none;
+                opacity: 0;
+                flex-wrap: wrap;
+                justify-content: start;
+                align-items: start;
+                gap: 1rem;
+                margin:1rem;
+                transition: opacity 0.3s ease-in-out;
+
+                &.show {
+                    display: flex;
+                    opacity: 1;
+                }
             }
 
             &__pagination  {
                 display : flex;
                 justify-content: start;
-                align-items: end;
-                gap: 10px;
+                align-items: center;
+                gap: 1rem;
 
                 &__controls {
                     display: flex;
@@ -428,6 +489,7 @@
                     }
                     &__select{
                         @include form-select(var(--main-d-2), sm);
+                        margin: 0rem;
                     }
                 }
 
@@ -480,16 +542,42 @@
         }
 
         &__preview {
+            position: fixed;
+            right: -100%;
+            top:100px;
             display: none;
             justify-content: stretch;
             align-items: stretch;
+            @include shadow-box(2);
+            z-index: 100;
+            transition: right 0.3s ease-in-out;
+            max-width: 600px;
+            background-color: white;
+            /* Nouveau code pour gérer le débordement */
+            max-height: calc(100vh - 100px); /* Hauteur maximale de la fenêtre disponible, moins 100px pour tenir compte du décalage top */
+            overflow-y: auto; /* Active la barre de défilement verticale */
 
             &--open {
                 display: flex;
+                right: 0;
+            }
+
+            &__close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                z-index:100;
+                @include btn-general(lg, false, false);
+                @include btn-text(var(--main-d-4), var(--main-d-2));
             }
         }
     }
+}
 
+.object__viewer__container{
+    display:none;
 
-
+    &--visible{
+        display:block;
+    }
 }

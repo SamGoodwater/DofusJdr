@@ -38,7 +38,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
     if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
         ob_start(); ?>
-            <a class="btn btn-sm btn-animate back-grey text-d-2 mb-2" onclick="return false; Page.build(true, 'Création d\'une classe', $('#addClasse'), Page.SIZE_MD, true);">Ajouter une classe</a>
+            <a class="classe_add btn btn-sm btn-animate back-grey text-d-2 mb-2">Ajouter une classe</a>
             <table 
                 id="table"
                 class="table table-striped"
@@ -127,6 +127,17 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 
             <script>
                 Classe.createAndLoadDataBootstrapTable();
+
+                const classe_add = document.querySelector('.classe_add');
+                classe_add.addEventListener('click', function(){
+                    Page.build({
+                        target : "modal", 
+                        title : 'Création d\'une classe',
+                        content :  $('#addClasse'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
             </script>
         <?php $template["content"] = ob_get_clean();
     }

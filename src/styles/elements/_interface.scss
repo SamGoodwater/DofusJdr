@@ -42,8 +42,8 @@ $z-index-nav-mobile:1070;
           top: 0;
           bottom: 0;
           background-color: var(--main-l-4);
-          background: radial-gradient(circle, var(--main-l-4) 0%, var(--main-l-3) 100%);
-          color: var(--main-d-3);
+          background: radial-gradient(circle, var(--main-l-5) 0%, var(--main-l-4) 100%);
+          color: var(--main-d-4);
           overflow-y: scroll;
           overflow-x: hidden;
           scrollbar-width: none;
@@ -90,7 +90,7 @@ $z-index-nav-mobile:1070;
           .app-nav-list {
             display: flex;
             flex-direction: column;
-            color: var(--main-d-4);
+            color: var(--main-d-5);
 
             &-title {
               margin: 10px 0px;
@@ -542,7 +542,7 @@ $z-index-nav-mobile:1070;
       footer{
         background-color: var(--main-l-5);
         @include flexbox(null, center, center);
-        color: var(--main-d-3);
+        color: var(--main-d-5);
         text-align: center;
         font-size: 0.8rem;
         padding: 5px;
@@ -633,16 +633,34 @@ $z-index-nav-mobile:1070;
   }
 
   // ---------------- S E C T I O N ----------------------
-  .sectionselector .section-title {
-    .section-options {
-      display: none;
+  .section__container {
+    margin-block-end: 3.2rem;
+
+    &__title{
+      color:var(--secondary-d-4);
+      font-weight: 400;
+      margin-block-end: 1.4rem;
     }
-    &:hover .section-options {
+    &__options{
+      opacity: 0%;
+      visibility: hidden;
       display: flex;
+      justify-content: space-between;
+      text-align: right;
+      flex-wrap: wrap;
+      margin: 3px 5px;
+      transition: opacity 0.4s ease-out, visibility 0s 0.4s;
     }
+
+    &:hover .section__container__options{
+      opacity: 100%;
+      visibility: visible;
+      transition: opacity 0.4s ease-out, visibility 0.4s;
+    }
+    
   }
 
-}
+} // fin de .app
 
 .overlay{
   position: fixed;

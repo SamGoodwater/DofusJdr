@@ -39,7 +39,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end flex-wrap gap-1" id='sortableItems'>
-            <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'une aptitude', $('#addCapability'), Page.SIZE_MD, true);">Ajouter une aptitude</button>
+            <button type="button" class="capability__add me-2 btn-sm btn btn-back-secondary btn-animate">Ajouter une aptitude</button>
             <div id="selectorSpcializationListCheckbox" class="dropdown">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" data-bs-toggle="dropdown" aria-expanded="false">Trier par Spécialisations</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
@@ -194,6 +194,17 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     }
                 ]
             );
+
+            const capability_add = document.querySelector('.capability__add');
+            capability_add.addEventListener('click', function(){
+                Page.build({
+                        target : "modal", 
+                        title : 'Création d\'une aptitude',
+                        content :  $('#addCapability'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
         </script>
     <?php $template["content"] = ob_get_clean();
 

@@ -23,7 +23,7 @@
     </div>
     <?php if($obj->getIs_admin()){ ?>
         <h3>ToolsBox</h3>
-        <div class="flex-row justify-content-start align-item-baseline mb-2">
+        <div class="justify-content-start align-item-baseline mb-1 gap-2 d-flex">
             <a data-tool='savedb' onclick="Tools.req(this, '<?=$obj->generateAndSaveToken()?>');" class="btn-sm btn btn-back-main">Sauver la base de donnée</a>
             <a data-tool='verifAndCreatePageNeeded' onclick="Tools.req(this, '<?=$obj->generateAndSaveToken()?>');" class="btn-sm btn btn-back-main">Vérifier et créer les pages obligatoires</a>
             <a onclick="Page.show('vacum');" class="btn-sm btn btn-back-main">Mise à jour de la base de donnée</a>

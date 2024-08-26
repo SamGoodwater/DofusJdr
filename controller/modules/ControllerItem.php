@@ -229,7 +229,7 @@ class ControllerItem extends ControllerModule{
 
         if($manager->existsName($_REQUEST['name']) == false && !empty(trim($_REQUEST['name']))){
 
-          $type = Item::TYPE_CHAPEAU ;
+          $type = Item::TYPE_COIFFE;
           if(in_array($_REQUEST['type'], Item::TYPES)){
             $type = $_REQUEST['type'];
           }

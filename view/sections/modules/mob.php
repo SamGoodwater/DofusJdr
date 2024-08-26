@@ -39,7 +39,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end flex-wrap gap-1">
-            <button type="button" class="me-2 btn btn-sm btn-animate btn-back-secondary" onclick="Page.build(true, 'Création d\'une créature', $('#addMob'), Page.SIZE_MD, true);">Ajouter une créature</button>
+            <button type="button" class="mob_add me-2 btn btn-sm btn-animate btn-back-secondary">Ajouter une créature</button>
             <div class="form-check form-switch">
                 <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
                 <label class="form-check-label" for="toggleUsableSwitch">Afficher seulement les créatures compatibles avec le JDR</label>
@@ -197,6 +197,17 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     }
                 ]
             );
+
+            const mob_add = document.querySelector('.mob_add');
+            mob_add.addEventListener('click', function(){
+                Page.build({
+                        target : "modal", 
+                        title : 'Création d\'une créature',
+                        content :  $('#addMob'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
         </script>
     <?php $template["content"] = ob_get_clean();
 

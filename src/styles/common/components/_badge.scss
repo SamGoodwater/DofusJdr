@@ -64,4 +64,5 @@ $i: 50;
 
 .badge-outline-tertiary {
   @include badge-outline(var(--tertiary-d-2), var(--grey-l-5), var(--tertiary-d-2));
+  color:#367730;
 }

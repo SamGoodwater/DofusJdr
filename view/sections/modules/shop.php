@@ -38,7 +38,7 @@ if(!isset($template_vars['get'])){ $template_vars['get'] = Section::GET_SECTION_
 if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
-        <button type="button" class="btn-sm btn btn-border-secondary btn-animate" onclick="Page.build(true, 'Création d\'un hôtel de vente', $('#addShop'), Page.SIZE_MD, true);">Nouvel Hôtel de Vente</button>
+        <button type="button" class="shop__add btn-sm btn btn-border-secondary btn-animate">Nouvel Hôtel de Vente</button>
 
         <table 
             id="table"
@@ -111,6 +111,17 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
         <script>
             Shop.createAndLoadDataBootstrapTable();
+
+            const shop__add = document.querySelector('.shop__add');
+            shop__add.addEventListener('click', function(){
+                Page.build({
+                        target : "modal", 
+                        title : 'Création d\'un hôtel de vente',
+                        content :  $('#addShop'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
         </script>
     <?php $template["content"] = ob_get_clean();
 

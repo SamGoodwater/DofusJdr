@@ -21,9 +21,12 @@
 @import "common/components/_image.scss";
 @import "common/components/_medias.scss";
 @import "common/components/_tooltips.scss";
+    // DisplayUI
+    @import "common/components/displayUI/_tabs.scss";
 // Elements
 @import "elements/_bubbleshorcut.scss";
 @import "elements/_characteristic.scss";
+@import "elements/_connexion.scss";
 @import "elements/_custom_boostrap.scss";
 @import "elements/_custom_ckeditor.scss";
 @import "elements/_detailed_card.scss";

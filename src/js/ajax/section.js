@@ -315,7 +315,7 @@ class Section extends Controller{
     }
 
     static updateOrder_num(){
-        $('.sectionselector').each(function(index, value) {
+        $('.section__container').each(function(index, value) {
             Section.update($(this).data("uniqid"),index,'order_num', IS_VALUE);
         });
     }
@@ -331,7 +331,13 @@ class Section extends Controller{
                 if(data.script != ""){
                     $('body').append("<script>"+data.script +   "</script>");
                 }
-                Page.build(Page.RESPONSIVE, data.title,  data.modal.html, data.size, show_modal);
+                Page.build({
+                    target : "modal", 
+                    title : data.title,
+                    content : data.modql.html,
+                    size : data.size, 
+                    show : show_modal
+                });
             },
             "json"
         ); 

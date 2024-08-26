@@ -1,0 +1,52 @@
+.user-connexion-container{
+    &__tab{
+        &__container {
+            padding-inline: 2rem;
+            padding-block-end: 1rem;
+            display: flex!important;
+            flex-direction: column!important;
+            align-items: start!important;
+
+            &__input{
+                @include form-control(var(--secondary-d-2));
+                @include form-control-size(md);
+                width: 100%;
+            }
+            
+            label {
+                font-size: 0.8rem;
+                text-align: left;
+                color: var(--secondary-d-4);
+                display: flex;
+                align-items: start;
+            }
+        }
+
+        &__container-check{
+            padding-inline: 3.5rem;
+            padding-block-end: 1rem;
+            display: flex!important;
+            flex-direction: row!important;
+            align-items: start!important;
+            justify-content: start!important;
+
+            input {
+                margin-inline-end: 1rem;
+            }
+        }
+
+        > p {
+            margin-inline: 2rem;
+            margin-block:1rem;
+            text-align: left;
+        }
+
+        &__btn-valid{
+            @include btn-general("lg", "true");
+            @include btn-back(var(--secondary-d-2), var(--secondary-d-2), var(--secondary-l-3), var(--secondary-l-3), var(--secondary-d-4));
+            margin: auto;
+            margin-top: 2rem;
+        }
+    }
+
+}

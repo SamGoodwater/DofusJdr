@@ -6,6 +6,7 @@ class ViewManager{
 		initResponsiveCKEditorTable();
 		initTooltipsResume();
 		initSearchDropdown();
+		$('[data-toggle="tooltip"]').tooltip();
 	}
 	
 	// Le bouton d'initialisation du collapse prend comme attribu le data-type="colapse" et le data-target="selecteur de la box à afficher" et data-expanded="false" correspond à l'état du collapse

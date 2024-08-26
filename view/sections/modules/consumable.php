@@ -85,7 +85,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
         <div class="d-flex flex-row justify-content-between align-items-end flex-wrap gap-1" id="sortableConsomables">
-            <button type="button" class="me-2 btn-sm btn btn-back-secondary btn-animate" onclick="Page.build(true, 'Création d\'un consommable', $('#addConsumable'), Page.SIZE_MD, true);">Ajouter un consommable</button>
+            <button type="button" class="consumable__add me-2 btn-sm btn btn-back-secondary btn-animate">Ajouter un consommable</button>
             <div id="selectorTypeListCheckbox" class="dropdown">
                 <a class="btn btn-sm btn-border-secondary dropdown-toggle btn-animate" type="button" id="typesort" data-bs-toggle="dropdown" aria-expanded="false">Catégorie du consommable</a>
                 <ul class="dropdown-menu p-3" aria-labelledby="typesort">
@@ -221,6 +221,17 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                     }
                 ]
             );
+
+            const consumable_add = document.querySelector('.consumable__add');
+            consumable_add.addEventListener('click', function(){
+                Page.build({
+                        target : "modal", 
+                        title : 'Création d\'un consommable',
+                        content :  $('#addConsumable'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
         </script>
     <?php $template["content"] = ob_get_clean();
 

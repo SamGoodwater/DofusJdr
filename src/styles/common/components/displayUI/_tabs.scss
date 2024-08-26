@@ -1,0 +1,28 @@
+[data-component="tabs"] {
+    div:first-child {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: baseline;
+        padding-inline: 2rem;
+        padding-block-end: 2rem;
+
+        button {
+            @include btn-general('lg', 'false');
+            @include btn-text(var(--main-d-2), var(--main-l-1));
+
+            &.active {
+                border-bottom: 3px solid var(--main-d-2);
+            }   
+        }
+    }
+
+    > div:not(:first-child) {
+        display: none;
+
+        &.visible {
+            display: block;
+        }
+    }
+
+}

@@ -39,7 +39,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
     ob_start(); ?>
     <div class="d-flex flex-row justify-content-between gap-1 align-item-center">
-        <button type="button" class="btn btn-sm btn-animate btn-back-secondary me-2" onclick="Page.build(true, 'Création d\'une novelle race', $('#addMob_race'), Page.SIZE_MD, true);">Nouvelle Race</button>
+        <button type="button" class="mob__race__add btn btn-sm btn-animate btn-back-secondary me-2">Nouvelle Race</button>
 
         <div class="form-check form-switch">
             <input class="form-check-input back-main-d-1 border-main-d-1" type="checkbox" role="switch" id="toggleUsableSwitch" checked>
@@ -125,6 +125,17 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
 
         <script>
             Mob_race.createAndLoadDataBootstrapTable();
+
+            const mob__race__add = document.querySelector('.mob__race__add');
+            mob__race__add.addEventListener('click', function(){
+                Page.build({
+                        target : "modal", 
+                        title : 'Création d\'une novelle race',
+                        content :  $('#addMob_race'),
+                        size : Page.SIZE_MD, 
+                        show : true
+                    });
+            });
         </script>
     <?php $template["content"] = ob_get_clean();
 

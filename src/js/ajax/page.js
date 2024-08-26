@@ -20,8 +20,8 @@ class Page extends Controller{
         this.table_indexes_row_to_child = [];
     }
 
-    // Changement de Nom de build à build
-    static build(is_modal = true, title, content, size = Page.SIZE_MD, show = false, bubbleId = null, linkShare = "", bookmark = {}){
+    // Function obsolète
+    static buildOld(is_modal = true, title, content, size = Page.SIZE_MD, show = false, bubbleId = null, linkShare = "", bookmark = {}){
         if(show){
             $('#modal').modal('hide');
         }
@@ -125,12 +125,12 @@ class Page extends Controller{
                     bookmark_obj.data('uniqid', bookmark.uniqid);
                     let i = bookmark_obj.find('i');
                     if(bookmark.active){
-                        i.removeClass("far");
-                        i.addClass("fas");
+                        i.removeClass("far").removeClass("fa-regular");
+                        i.addClass("fa-solid");
                         bookmark_obj.attr('title', "Retirer des favoris");
                     }else{
-                        i.removeClass("fas");
-                        i.addClass("far");
+                        i.removeClass("fas").removeClass("fa-solid");
+                        i.addClass("fa-regular");
                         bookmark_obj.attr('title', "Ajouter aux favoris");
                     }
                 } else {
@@ -164,11 +164,249 @@ class Page extends Controller{
         ViewManager.initDisplay();
         Page.initPageNavigation();
     }
-    static buildInModal(){
 
+    /*
+     option {
+        bubbleId : null,
+        linkShare : "",
+        bookmark : {
+        'classe' : null,
+        'uniqid' : null,
+        'state' : null
+        },
+        edit : false,
+        remove : false,
+    }    
+
+    Les crochets {} sont obligatoires pour nommé les paramètres.
+    */
+    static build({target = "modal", title, content, options = {}, size = Page.SIZE_MD, show = false} = {}){
+        // nettoyage de l'interface et des évenements
+            Page.closeBuild();
+
+        // Conversion de SIZE
+            switch (size) {
+                case "sm":
+                    size = Page.SIZE_SM;    
+                break;
+                case "md":
+                    size = Page.SIZE_MD;    
+                break;
+                case "lg":
+                    size = Page.SIZE_LG;    
+                break;
+                case "xl":
+                    size = Page.SIZE_XL;
+                break;
+                case "xxl":
+                    size = Page.SIZE_XXL;    
+                break;
+                case "fl":
+                    size = Page.SIZE_FL;    
+                break;
+                case "responsive":
+                    size = Page.RESPONSIVE;
+                break;
+            }
+
+        // Initialisation des constances
+            const object_viewer_container = document.querySelector(".object__viewer__container.object__viewer__container--template");
+            const obj_viewer_duplicate = object_viewer_container.cloneNode(true);
+            obj_viewer_duplicate.classList.remove("object__viewer__container--template");
+            obj_viewer_duplicate.classList.add("object__viewer__container--visible")
+
+            const modal_obj_insert = document.querySelector("#modal .modal__obj-viewer-insert");
+
+            const object_title = obj_viewer_duplicate.querySelector(".modal-title");
+            const object_content = obj_viewer_duplicate.querySelector(".modal-body");
+            const object_btn_close = obj_viewer_duplicate.querySelector(".btn-close");
+            const option_share = obj_viewer_duplicate.querySelector(".modal__share_object");
+            const option_remove = obj_viewer_duplicate.querySelector(".modal__remove_object");
+            const option_edit = obj_viewer_duplicate.querySelector(".modal__edit_object");
+            const option_bubble = obj_viewer_duplicate.querySelector(".modal__bubbleshortcut_toggle");
+            const option_bookmark = obj_viewer_duplicate.querySelector(".modal__bookmark_toggle");
+
+        // Récupération de la cible
+            let targetElement = document.querySelector("#modal .modal__obj-viewer-insert");
+            let is_modal = true;
+            let is_fullscreen = false;
+            if(target == null || target == ""){target = "modal";}
+
+            if(target == "modal"){
+                targetElement = document.querySelector("#modal .modal__obj-viewer-insert");
+                is_modal = true;
+                is_fullscreen = false;
+
+            } else if(target == "fullscreen" || target == "full" || target == "fl"){
+                document.querySelector(".app-content .undercontent").remove();
+                let div = document.createElement("div");
+                div.classList.add("undercontent");
+                document.querySelector(".app-content").appendChild(div);
+                targetElement = document.querySelector(".app-content .undercontent");
+                is_modal = false;
+                is_fullscreen = true;
+
+            } else {
+                targetElement = document.querySelector(target);
+                is_modal = false;
+                is_fullscreen = false;
+            }
+
+            if(targetElement.length == 0){ 
+                MsgAlert("Erreur", "Impossible de trouver la cible", "danger", 5000);
+                return; 
+            }
+
+            let clone = null;
+            if (content.jquery) {
+                // La variable est un objet jQuery (sélecteur)
+                clone = content.clone();
+                clone.show();
+            } else {
+                // La variable ne contient pas un objet jQuery (probablement du code HTML)
+                clone = content;
+            }
+
+        // Ecriture des contenus
+            object_title.innerHTML = title;
+            object_content.innerHTML = clone;;
+            object_btn_close.addEventListener('click', Page.closeBuild);
+        
+        // Gestion des options
+            option_share.style.display = "none";
+            option_remove.style.display = "none";
+            option_edit.style.display = "none";
+            option_bubble.style.display = "none";
+            option_bookmark.style.display = "none";
+
+            if(options != null && options != undefined){
+
+                // Gestion de l'option remove
+                    if(options.remove != null && options.remove != undefined && options.remove != ""){
+                        option_remove.style.display = "block";
+                        option_remove.addEventListener('click', () => {
+                             let func = new Function(options.remove);
+                             func();
+                        });
+                    }
+                // Gestion de l'option edit
+                    if(options.edit != null && options.edit != undefined && options.edit != ""){
+                        if(options.edit.includes('EDITABLE')){
+                            option_edit.setAttribute('title', "Modifier cette objet");
+                            option_edit.querySelector('i').classList.add("fa-pen-to-square");
+                            option_edit.querySelector('i').classList.remove("fa-eye");
+                        } else {
+                            option_edit.setAttribute('title', "Visualiser cette objet");
+                            option_edit.querySelector('i').classList.add("fa-eye");
+                            option_edit.querySelector('i').classList.remove("fa-pen-to-square");
+                        }
+                        option_edit.style.display = "block";
+                        option_edit.addEventListener('click', () => {
+                            let func = new Function(options.edit);
+                            func();
+                         });
+                    }
+                // Gestion de l'option share
+                    if(options.linkshare != null && options.linkshare != undefined && options.linkshare != ""){
+                        option_share.style.display = "block";
+                        option_share.addEventListener('click', () => { copyToClipboard(document.location.href + options.linkshare) });
+                    }
+                // Gestion de l'option bubble
+                    if(options.bubbleid != null && options.bubbleid != undefined && options.bubbleid != ""){
+                        option_bubble.style.display = "block";
+                        if(Bubbleshortcut.existFromBubbleId(options.bubbleid)){
+                            option_bubble.classList.add("listed");
+                            option_bubble.addEventListener('click', () => { Bubbleshortcut.remove(options.bubbleid) });
+                        } else {
+                            option_bubble.classList.remove("listed");
+                            option_bubble.addEventListener('click', () => { Bubbleshortcut.update(options.bubbleid) });
+                        }
+                    }
+                // Gestion de l'option bookmark
+                    if(options.bookmark != null && options.bookmark != undefined){
+                        if( options.bookmark['classe'] != "undefined" && options.bookmark['classe'] != "" &&
+                            options.bookmark['uniqid'] != "undefined" && options.bookmark['uniqid'] != "" &&
+                            options.bookmark['active'] != "undefined" 
+                        ){
+                            option_bookmark.style.display = "block";
+                            option_bookmark.setAttribute('data-classe', options.bookmark.classe);
+                            option_bookmark.setAttribute('data-uniqid', options.bookmark.uniqid);
+                            let icon = option_bookmark.querySelector('i');
+                            if(options.bookmark.active){
+                                icon.classList.remove("far");
+                                icon.classList.remove("fa-regular");
+                                icon.classList.add("fa-solid");
+                                option_bookmark.setAttribute('title', "Retirer des favoris");
+                            }else{
+                                icon.classList.remove("fas");
+                                icon.classList.remove("fa-solid");
+                                icon.classList.add("fa-regular");
+                                option_bookmark.setAttribute('title', "Ajouter aux favoris");
+                            }
+                        }
+                    }
+
+            }
+
+        // Affichage
+            targetElement.appendChild(obj_viewer_duplicate)
+
+            if(is_modal){ // MODAL
+
+                if(size >= Page.SIZE_XXL && is_modal){size = Page.SIZE_XL;} // XXL is not supported by bootstrap modal
+        
+                modal_obj_insert.classList.remove("modal-xl");
+                modal_obj_insert.classList.remove("modal-lg");
+                modal_obj_insert.classList.remove("modal-sm");
+                modal_obj_insert.classList.remove("modal-fullscreen");
+
+                if(size == Page.RESPONSIVE){
+                    if(getSizeScreen() <= Page.SIZE_MD) {
+                        size = Page.SIZE_FL;
+                    }
+                }
+                switch (size) {
+                    case Page.SIZE_XL:
+                        modal_obj_insert.classList.add("modal-xl");
+                    break;
+                    case Page.SIZE_LG:
+                        modal_obj_insert.classList.add("modal-lg");
+                    break;
+                    case Page.SIZE_SM:
+                        modal_obj_insert.classList.add("modal-sm");
+                    break;
+                    case Page.SIZE_FL:
+                        modal_obj_insert.classList.add("modal-fullscreen");
+                    break;
+                }
+                
+                if(show){
+                    $('#modal').modal('show');
+                }
+
+            } else { // FULLSCREEN
+
+                if(show){
+                    targetElement.style.display = "block";
+                }
+
+            }
+
+            ViewManager.initDisplay();
+            Page.initPageNavigation();
+            DisplayUI.update();
     }
-    static buildInSelector(){
 
+    static closeBuild(){
+        const modal_obj_insert = document.querySelector("#modal .modal__obj-viewer-insert");
+        modal_obj_insert.innerHTML = "";
+  
+        $('#modal').modal('hide');
+
+        modal_obj_insert.classList.remove("modal-xl");
+        modal_obj_insert.classList.remove("modal-lg");
+        modal_obj_insert.classList.remove("modal-sm");
+        modal_obj_insert.classList.remove("modal-fullscreen");
     }
 
     static buildOffcanvas(title, content, placement = Page.PLACEMENT_START, show = false, displayBack = false){
@@ -255,7 +493,24 @@ class Page extends Controller{
                     document.title = data.title;
                     $(".app-content #content").show("fold");
                     $(".app-toolbar #title").show("fade");
-                    Page.build(Page.RESPONSIVE, data.modal_title, data.modal_html);
+                    Page.build({
+                        target : "modal", 
+                        title : data.modal_title,
+                        content : data.modal_html,
+                        options : {
+                            remove : null,
+                            edit : null,
+                            linkShare : null,
+                            bookmark : {
+                                classe : null,
+                                uniqid : null,
+                                active : null
+                            },
+                            bubbleId : null
+                        }, 
+                        size : Page.RESPONSIVE, 
+                        show : false
+                    });
                     let url = url_name;
                     if(settings !="" && settings != undefined && settings != null){url += "/" + settings;}
                     window.history.pushState({path:url},'',url);
