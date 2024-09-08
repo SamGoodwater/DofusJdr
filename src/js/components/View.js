@@ -33,7 +33,7 @@ class View {
 
         // Element du DOM
         this.tableElement = document.querySelector('.view-container__bottom__list__table-view');
-        this.detailedCardElement = document.querySelector('.view-container__bottom__list__detailled-card-view');
+        this.detailedCardElement = document.querySelector('.view-container__bottom__list__detailed-card-view');
         this.minimalCardElement = document.querySelector('.view-container__bottom__list__minimal-card-view');
 
         this.viewChoiceSelectElement = document.querySelector('.view-container__top__settings__view-choice');
@@ -81,19 +81,6 @@ class View {
           this.hiddenAllViews();
           this.clearDataDisplay();
           this.initEvents();
-
-          switch (Number(this.view)) {
-            case Number(View.VIEW_MINIMAL_CARD):
-                this.initMinimalCard();
-            break;
-            case Number(View.VIEW_DETAILED_CARD):
-                this.initDetailedCard();
-            break;
-            case Number(View.VIEW_TABLE):
-                this.initTable();
-            break;
-          }
-
           this.startFetch();
       }
       initEvents() {
@@ -221,11 +208,13 @@ class View {
                   });
 
                   let order = e.target.getAttribute('data-order');
-                  if(order == 1) {
+                  if(order == 1 || order == 0) {
                     order = -1;
                   } else {
                     order = 1;
                   }
+                  e.target.setAttribute('data-order', order);
+
                   let property = e.target.getAttribute('data-property');
                   this.sortItems([
                     [property, order]
@@ -352,6 +341,7 @@ class View {
           await this.setUsable();
           await this.setLimit();
           await this.setView();
+          await this.updateFilterMenu();
           await this.setTotalItems();
           this.currentPage = 1;
           await this.fetchTemplates();
@@ -601,6 +591,7 @@ class View {
               await this.setUsable();
               await this.setLimit();
               await this.setView();
+              await this.updateFilterMenu();
               await this.setTotalItems();
               this.currentPage = 1;
               await this.updateDisplay();
@@ -707,8 +698,7 @@ class View {
             for (const [key, value] of Object.entries(obj.base)) {
               let val = value;
               let element = tempElement.querySelector(`[data-prop="${key}"]`);
-              console.log(element);
-              if(element) {
+              if(element && !this.propertiesFilteredMinimalCard.includes(key)) {
 
                 if(element.getAttribute('data-format') == 'badge') {
                   val = obj.badge[key];
@@ -759,24 +749,71 @@ class View {
           });
         }
       }
-      filterMinimalCard(){
-        this.propertiesFilteredMinimalCard.forEach(property => {
-          let element = this.minimalCardElement.querySelector(`[data-prop="${property}"]`);
-          if(element) {
-            element.style.display = 'none';
-          }
-        });
-      }
 
     //_____________________________________________
     // --------------- DETAILED CARD --------------
       initDetailedCardWhenFetchLimitReachedItemsPerPage() {
+        this.displayDetailedCard(this.currentObjects.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage));
       }
       initDetailedCardWhenFetchFinished() {
-        
+        this.displayDetailedCard(this.currentObjects);
       }
       displayDetailedCard(objects) {
-        console.log(objects);
+        if(objects.length > 0) {
+          objects.forEach(obj => {
+
+            const tempElement = document.createElement('div');
+            tempElement.innerHTML = this.templates.detailedCard;
+
+            for (const [key, value] of Object.entries(obj.base)) {
+              let val = value;
+              let element = tempElement.querySelector(`[data-prop="${key}"]`);
+              if(element && !this.propertiesFilteredDetailedCard.includes(key)) {
+
+                if(element.getAttribute('data-format') == 'badge') {
+                  val = obj.badge[key];
+                } else if(element.getAttribute('data-format') == 'icon') {
+                  val = obj.icon[key];
+                } else if(element.getAttribute('data-format') == 'text') {
+                  val = obj.text[key];
+                } else if(element.getAttribute('data-format') == 'other') {
+                  val = obj.other[key];
+                } else {
+                  val = obj.base[key];
+                }
+
+                if(element.getAttribute('data-location') == 'content') {
+                  element.innerHTML = val;
+                } else if(element.getAttribute('data-location') == 'src') {
+                  element.setAttribute('src', val);
+                } else [
+                  element.setAttribute('data-'.element.getAttribute("data-location"), val)
+                ]
+              }
+
+            };
+
+            if(obj.other.color) {
+              const card = tempElement.querySelector('.detailed-card');
+              card.classList.add('back-'+obj.other.color+"-l-5");
+              card.classList.add('border-'+obj.other.color+"-d-2");
+            }
+
+            tempElement.addEventListener('click', (e) => {
+              this.openPreview(this.className, obj.base.uniqid, Controller.DISPLAY_CARD);
+            });
+            tempElement.addEventListener('dblclick', (e) => {
+              if (this.classReference && typeof this.classReference.open === 'function') {
+                this.classReference.open(obj.base.uniqid);
+              } else {
+                View.showError('Erreur d\'ouverture de l\'objet', 'Impossible d\'accéder à la classe', "red-d-3", 7000);
+              }
+            });
+
+            this.detailedCardElement.appendChild(tempElement);
+
+          });
+        }
       }
 
     //_____________________________________________

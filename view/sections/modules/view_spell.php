@@ -321,7 +321,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
             "search" => false
         ],
         'logo' => [
-            'name' => 'Fréquence de lancer',
+            'name' => 'Logo',
             "filter" => [
                 'table' => true,
                 'minimal_card' => true,
@@ -503,7 +503,7 @@ if($template_vars['get'] == Section::GET_SECTION_CONTENT){
                             </tbody>
                         </table>
                     </div>
-                    <div class="view-container__bottom__list__detailled-card-view"></div>
+                    <div class="view-container__bottom__list__detailed-card-view"></div>
                     <div class="view-container__bottom__list__minimal-card-view"></div>
 
                     <div class="view-container__bottom__list__pagination">
