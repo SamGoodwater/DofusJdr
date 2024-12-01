@@ -30,6 +30,7 @@ return new class extends Migration
             $table->boolean('ritual_available')->default(true);
             $table->integer('powerful')->default(2);
             $table->boolean('usable')->default(false);
+            $table->softDeletes();
         });
     }
 

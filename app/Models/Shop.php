@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @mixin IdeHelperShop
@@ -10,9 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 class Shop extends Model
 {
     protected $fillable = ['uniqid', 'name', 'description', 'location', 'price', 'usable', 'npc_id'];
-    protected $hidden = ['id', 'created_at', 'updated_at'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
-    public function consumables()
+    public function consumables(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Consumable::class)->withPivot(
             'quantity',
@@ -21,7 +22,7 @@ class Shop extends Model
         );
     }
 
-    public function items()
+    public function items(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Item::class)->withPivot(
             'quantity',
@@ -30,7 +31,7 @@ class Shop extends Model
         );
     }
 
-    public function ressources()
+    public function ressources(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Ressource::class)->withPivot(
             'quantity',
@@ -39,8 +40,18 @@ class Shop extends Model
         );
     }
 
-    public function npc()
+    public function npc(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Npc::class);
+    }
+
+    public function campaigns(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Campaign::class);
+    }
+
+    public function scenarios(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Scenario::class);
     }
 }

@@ -17,12 +17,14 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('capabilitys_specializations', function (Blueprint $table) {
             $table->foreignIdFor(\App\Models\Capability::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Specialization::class)->constrained()->cascadeOnDelete();
             $table->primary(['capability_id', 'specialization_id']);
+            $table->softDeletes();
         });
     }
 

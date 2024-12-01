@@ -25,10 +25,10 @@ class SectionFilterRequest extends FormRequest
         return [
             "component" => ["string", "min:4", "max:255", "required"],
             "title" => ["string", "min:4", "max:255", "required"],
-            "content" => ["string"],
-            "order_num" => ["integer"],
+            "content" => ["string", "nullable"],
+            "order_num" => ["integer",],
             "visible" => ["boolean"],
-            "page_id" => ["integer", "exists:pages,uniqid"],
+            "page_id" => ["integer", "exists:pages,uniqid", "nullable"],
             "uniqid" => ["string", "min:1", "max:255", "required", Rule::unique("sections", "uniqid")->ignore($this->route()->parameter('section'))]
         ];
     }

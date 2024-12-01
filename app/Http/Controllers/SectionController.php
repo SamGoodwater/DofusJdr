@@ -11,7 +11,7 @@ class SectionController extends Controller
 {
     public function index(): \Inertia\Response
     {
-        $sections = Section::with('page')->get();
+        $sections = Section::orderBy("order_num")->with('page')->get();
 
         return Inertia::render('Sections/Index', [
             'sections' => $sections
@@ -30,7 +30,7 @@ class SectionController extends Controller
         $section = new Section();
         return Inertia::render('Sections/Create', [
             'section' => $section,
-            'pages' => Page::select("uniqid", "name", "is_editable", "public", "is_dropdown")->get()
+            'pages' => Page::pluck("name", "is_editable", "public", "is_dropdown", "uniqid",)
         ]);
     }
 
@@ -45,7 +45,7 @@ class SectionController extends Controller
     {
         return Inertia::render('Sections/Edit', [
             'section' => $section,
-            'pages' => Page::select("uniqid", "name", "is_editable", "public", "is_dropdown")->get()
+            'pages' => Page::pluck("name", "is_editable", "public", "is_dropdown", "uniqid",)
         ]);
     }
 
@@ -61,5 +61,25 @@ class SectionController extends Controller
         $section->delete();
 
         return redirect()->route('sections.index')->with('success', 'La section a bien été supprimée');
+    }
+
+    public function forcedDelete(Section $section): RedirectResponse
+    {
+        if (!$section->trashed()) {
+            return redirect()->route('sections.index')->with('error', 'La section n\'est pas dans la corbeille');
+        }
+        $section->forceDelete();
+
+        return redirect()->route('sections.index')->with('success', 'La section a bien été supprimée définitivement');
+    }
+
+    public function restore(Section $section): RedirectResponse
+    {
+        if (!$section->trashed()) {
+            return redirect()->route('sections.index')->with('error', 'La section n\'est pas dans la corbeille');
+        }
+        $section->restore();
+
+        return redirect()->route('sections.index')->with('success', 'La section a bien été restaurée');
     }
 }

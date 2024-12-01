@@ -25,21 +25,30 @@ return new class extends Migration
             $table->integer('life_dice')->default(10);
             $table->string('specificity')->nullable();
             $table->integer('weapons_of_choice')->nullable();
-            $table->string('trait')->nullable();
             $table->boolean('usable')->default(false);
             $table->string('dofus_version')->default('3');
+            $table->softDeletes();
         });
 
         Schema::create('classe_spell', function (Blueprint $table) {
             $table->foreignIdFor(\App\Models\Classe::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Spell::class)->constrained()->cascadeOnDelete();
             $table->primary(['classe_id', 'spell_id']);
+            $table->softDeletes();
         });
 
         Schema::create('capability_classe', function (Blueprint $table) {
             $table->foreignIdFor(\App\Models\Capability::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Classe::class)->constrained()->cascadeOnDelete();
             $table->primary(['capability_id', 'classe_id']);
+            $table->softDeletes();
+        });
+
+        Schema::create('attribute_classe', function (Blueprint $table) {
+            $table->foreignIdFor(\App\Models\Classe::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Attribute::class)->constrained()->cascadeOnDelete();
+            $table->primary(['classe_id', 'attribute_id']);
+            $table->softDeletes();
         });
     }
 
@@ -51,5 +60,6 @@ return new class extends Migration
         Schema::dropIfExists('classes');
         Schema::dropIfExists('classe_spell');
         Schema::dropIfExists('capability_classe');
+        Schema::dropIfExists('attribute_classe');
     }
 };

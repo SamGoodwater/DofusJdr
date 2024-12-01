@@ -35,18 +35,21 @@ return new class extends Migration
             $table->boolean('is_magic')->default(true);
             $table->integer('powerful')->default(2);
             $table->boolean('usable')->default(false);
+            $table->softDeletes();
         });
 
         Schema::create('spell_invocation', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Spell::class);
-            $table->foreignIdFor(\App\Models\Mob::class);
+            $table->foreignIdFor(\App\Models\Spell::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Mob::class)->constrained()->cascadeOnDelete();
             $table->primary(['spell_id', 'mob_id']);
+            $table->softDeletes();
         });
 
         Schema::create('spell_type', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Spell::class);
-            $table->foreignIdFor(\App\Models\Spelltype::class);
+            $table->foreignIdFor(\App\Models\Spell::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Spelltype::class)->constrained()->cascadeOnDelete();
             $table->primary(['spell_id', 'spelltype_id']);
+            $table->softDeletes();
         });
     }
 

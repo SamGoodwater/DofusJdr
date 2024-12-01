@@ -26,6 +26,7 @@ return new class extends Migration
             $table->integer('rarity')->default(5);
             $table->boolean('usable')->default(true);
             $table->string('dofus_version')->default('3');
+            $table->softDeletes();
         });
     }
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('is_unbewitchable')->default(false);
             $table->boolean('is_malus')->default(true);
             $table->boolean('usable')->default(false);
+            $table->softDeletes();
         });
     }
 

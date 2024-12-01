@@ -32,13 +32,15 @@ return new class extends Migration
             $table->integer('rarity')->default(5);
             $table->boolean('usable')->default(false);
             $table->string('dofus_version')->default('3');
+            $table->softDeletes();
         });
 
         Schema::create('item_ressource', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Item::class);
-            $table->foreignIdFor(\App\Models\Ressource::class);
+            $table->foreignIdFor(\App\Models\Item::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Ressource::class)->constrained()->cascadeOnDelete();
             $table->string('quantity')->default('1');
             $table->primary(['item_id', 'ressource_id']);
+            $table->softDeletes();
         });
     }
 

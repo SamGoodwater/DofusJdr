@@ -24,6 +24,8 @@ class PageController extends Controller
         }
 
         // $pages = Page::paginate($paginationMaxDisplay);
+
+        // Il faut orderBy les sections par order_num
         $pages = Page::with('page', 'sections')->get();
 
         return Inertia::render('Pages/Index', [
@@ -34,7 +36,8 @@ class PageController extends Controller
     public function show(Page $page): \Inertia\Response
     {
         return Inertia::render('Pages/Show', [
-            'page' => $page
+            'page' => $page,
+            "sections" => $page->sections()->orderBy("order_num")->get()
         ]);
     }
 
@@ -43,14 +46,14 @@ class PageController extends Controller
         $page = new Page();
         return Inertia::render('Pages/Create', [
             'page' => $page,
-            'pages' => Page::select("uniqid", "name", "is_editable", "public", "is_dropdown")->get()
+            'pages' => Page::pluck("name", "is_editable", "public", "is_dropdown", "uniqid",)
         ]);
     }
 
     public function store(PageFilterRequest $request): RedirectResponse
     {
         $page = Page::create($request->validated());
-
+        $page->sections()->sync($request->validated('sections'));
         return redirect()->route('pages.show', ['page' => $page])->with('success', 'La page a bien été créée');
     }
 
@@ -58,14 +61,14 @@ class PageController extends Controller
     {
         return Inertia::render('Pages/Edit', [
             'page' => $page,
-            'pages' => Page::select("uniqid", "name", "is_editable", "public", "is_dropdown")->get()
+            'pages' => Page::pluck("name", "is_editable", "public", "is_dropdown", "uniqid",)
         ]);
     }
 
     public function update(Page $page, PageFilterRequest $request): RedirectResponse
     {
         $page->update($request->validated());
-
+        $page->sections()->sync($request->validated('sections'));
         return redirect()->route('pages.show', ['page' => $page])->with('success', 'La page a bien été modifiée');
     }
 
@@ -74,5 +77,25 @@ class PageController extends Controller
         $page->delete();
 
         return redirect()->route('pages.index')->with('success', 'La page a bien été supprimée');
+    }
+
+    public function forcedDelete(Page $page): RedirectResponse
+    {
+        if (!$page->trashed()) {
+            return redirect()->route('pages.index')->with('error', 'La page n\'est pas dans la corbeille');
+        }
+        $page->forceDelete();
+
+        return redirect()->route('pages.index')->with('success', 'La page a bien été supprimée définitivement');
+    }
+
+    public function restore(Page $page): RedirectResponse
+    {
+        if (!$page->trashed()) {
+            return redirect()->route('pages.index')->with('error', 'La page n\'est pas dans la corbeille');
+        }
+        $page->restore();
+
+        return redirect()->route('pages.index')->with('success', 'La page a bien été restaurée');
     }
 }

@@ -33,9 +33,10 @@ return new class extends Migration
             $table->timestamps();
             $table->string('component')->default('0');
             $table->string('title')->nullable();
-            $table->string('content')->nullable();
+            $table->longText('content')->nullable();
             $table->integer('order_num')->default(0);
             $table->boolean('visible')->default(true);
+            $table->softDeletes();
 
             $table->foreignIdFor(Page::class)->nullable()->constrained()->cascadeOnDelete();
         });

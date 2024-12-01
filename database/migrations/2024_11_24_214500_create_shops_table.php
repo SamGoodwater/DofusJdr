@@ -20,35 +20,39 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->integer('price')->default(0);
             $table->boolean('usable')->default(true);
+            $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\Npc::class)->nullable();
         });
 
         Schema::create('consumable_shop', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Consumable::class);
-            $table->foreignIdFor(\App\Models\Shop::class);
+            $table->foreignIdFor(\App\Models\Consumable::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Shop::class)->constrained()->cascadeOnDelete();
             $table->primary(['consumable_id', 'shop_id']);
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
             $table->string('comment')->nullable();
+            $table->softDeletes();
         });
 
         Schema::create('item_shop', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Item::class);
-            $table->foreignIdFor(\App\Models\Shop::class);
+            $table->foreignIdFor(\App\Models\Item::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Shop::class)->constrained()->cascadeOnDelete();
             $table->primary(['item_id', 'shop_id']);
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
             $table->string('comment')->nullable();
+            $table->softDeletes();
         });
 
         Schema::create('ressource_shop', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Ressource::class);
-            $table->foreignIdFor(\App\Models\Shop::class);
+            $table->foreignIdFor(\App\Models\Ressource::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Shop::class)->constrained()->cascadeOnDelete();
             $table->primary(['ressource_id', 'shop_id']);
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
             $table->string('comment')->nullable();
+            $table->softDeletes();
         });
     }
 

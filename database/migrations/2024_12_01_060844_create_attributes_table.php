@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('spelltypes', function (Blueprint $table) {
+        Schema::create('attributes', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('uniqid', 20)->unique();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('color')->default("zinc");
-            $table->string('icon')->nullable();
+            $table->timestamps();
             $table->softDeletes();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('spelltypes');
+        Schema::dropIfExists('attributes');
     }
 };

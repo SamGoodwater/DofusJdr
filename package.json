@@ -23,6 +23,7 @@
     },
     "dependencies": {
         "@inertiajs/vue3": "^1.2.0",
-        "flowbite": "^2.5.2"
+        "flowbite": "^2.5.2",
+        "laravel-precognition-vue-inertia": "^0.5.13"
     }
 }
