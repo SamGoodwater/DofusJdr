@@ -14,7 +14,7 @@ defileProps({
 <template>
 
     <Head title="{{ page.name }}">
-        <meta head-key="description" name="description" content="Paje du site DofusJDR : {{ page.name }}" />
+        <meta head-key="description" name="description" content="Page du site KrosmosJDR : {{ page.name }}" />
         <meta head-key="keywords" name="keywords" content="Accueil, JDR, Jeu de Rôle, Dofus" />
     </Head>
     <h1>{{ page.name }}</h1>

@@ -94,7 +94,7 @@ Route::prefix('auth')->name("auth.")->middleware('guest')->group(function () {
     Route::get('/register', [ProfileController::class, 'register'])->name('register');
 });
 
-Route::middleware('auth')->name('profile.')->group(function () {
+Route::middleware(['auth', 'verified'])->name('profile.')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('destroy');

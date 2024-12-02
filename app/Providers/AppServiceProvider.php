@@ -12,7 +12,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Inscrire le service pour aspire la base de donnée DOFUSDB
+        // $this->app->singleton(DofusDB::class, function () { return new DofusDB(); });
     }
 
     /**

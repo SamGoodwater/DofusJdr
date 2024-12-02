@@ -7,7 +7,7 @@ import Footer from '@/Layouts/Footer.vue';
 <template>
 
     <Head>
-        <meta head-key="description" name="description" content="DofusJDR">
+        <meta head-key="description" name="description" content="KrosmosJDR">
         <meta head-key="keywords" name="keywords" content="Accueil, JDR, Jeu de Rôle, Dofus, Donjon & Dragon" />
     </Head>
 
@@ -19,8 +19,10 @@ import Footer from '@/Layouts/Footer.vue';
         <Aside />
     </nav>
 
-    <main class="p-2 m-8 sm:ml-72">
-        <slot />
+    <main class="pt-6 pb-20 sm:ml-64 flex justify-center">
+        <div class="">
+            <slot />
+        </div>
     </main>
 
     <div>

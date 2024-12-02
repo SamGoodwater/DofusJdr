@@ -7,7 +7,7 @@ import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import DefaultLayout from "/resources/js/Layouts/default.vue";
 
-const appName = import.meta.env.VITE_APP_NAME || "DofusJDR";
+const appName = import.meta.env.VITE_APP_NAME || "KrosmosJDR";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -21,7 +21,9 @@ createInertiaApp({
             return module;
         }),
     setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
+        const app = createApp({ render: () => h(App, props) });
+        app.config.globalProperties.$appName = appName; // Définir la propriété globale
+        return app
             .use(plugin)
             .use(ZiggyVue)
             .component("Head", Head)
