@@ -1,9 +1,5 @@
 <script setup>
-import Layout from '@/Layouts/Default.vue';
 import { ref } from 'vue';
-defineOptions({
-    layout: Layout
-});
 
 const convertStability = {
     alpha: "α",

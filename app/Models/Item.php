@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin IdeHelperItem
  */
 class Item extends Model
 {
+    use HasFactory, SoftDeletes;
+
     protected $fillable = ['official_id', 'dofusdb_id', 'uniqid', 'name', 'level', 'description', 'type', 'effect', 'bonus', 'recepe', 'actif', 'twohands', 'pa', 'po', 'price', 'rarity', 'usable', 'dofus_version'];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 

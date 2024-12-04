@@ -23,15 +23,32 @@ const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
         </button>
 
         <aside id="default-sidebar"
-            class="px-2 pt-4 fixed top-0 left-0 bottom-0 z-40 w-64 transition-transform -translate-x-full sm:translate-x-0 bg-base-200 border-e-2 border-base-300"
+            class="px-2 pt-4 fixed top-0 left-0 bottom-0 z-40 w-64 transition-transform -translate-x-full sm:translate-x-0 bg-base-200"
             aria-label="Sidenav">
 
             <div id="header">
                 <h2 class="text-2xl text-secondary text-center">{{ appName }}</h2>
             </div>
 
-            <div id="nav">
-
+            <div id="nav" class="my-10">
+                <ul>
+                    <li class="my-2">
+                        <Link :href="route('home')" class="w-full p-2 ps-8 block rounded hover:bg-primary/25"
+                            :class="{ 'bg-primary/10': $page.component.includes('Home') }">
+                        Accueil
+                        </Link>
+                    </li>
+                    <li class="my-2">
+                        <Link :href="route('page.index')" class="w-full p-2 ps-8 block rounded hover:bg-primary/25"
+                            :class="{ 'bg-primary/10': $page.component.startsWith('/page') }">Pages
+                        </Link>
+                    </li>
+                    <li class="my-2">
+                        <Link :href="route('page.create')" class="w-full p-2 ps-8 block rounded hover:bg-primary/25"
+                            :class="{ 'bg-primary/10': $page.component.startsWith('/page/create') }">Créer
+                        une page</Link>
+                    </li>
+                </ul>
             </div>
 
             <div id="footer">
@@ -79,3 +96,9 @@ const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
     </div>
 
 </template>
+
+<style scoped>
+aside {
+    background-image: linear-gradient(195deg, #1e40af 0%, #1e3a8a 3%, #172554 10%, #1e293b 25%, #1e293b 40%, #0f172a 62%, #020617 81%, #020617 100%)
+}
+</style>

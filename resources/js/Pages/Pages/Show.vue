@@ -1,8 +1,4 @@
 <script setup>
-import Layout from '@/Layouts/Default.vue';
-defineOptions({
-    layout: Layout
-});
 defileProps({
     page: {
         type: Array,

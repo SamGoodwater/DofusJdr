@@ -5,12 +5,19 @@ import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
-import DefaultLayout from "/resources/js/Layouts/default.vue";
+import DefaultLayout from "/resources/js/Layouts/main.vue";
 
 const appName = import.meta.env.VITE_APP_NAME || "KrosmozJDR";
 const appDescription = import.meta.env.VITE_APP_DESCRIPTION;
 const appVersion = import.meta.env.VITE_APP_VERSION;
 const appStability = import.meta.env.VITE_APP_STABILITY;
+const convertStability = {
+    alpha: "α",
+    beta: "β",
+    rc: "rc",
+    stable: "",
+};
+const appStabilitySymbol = convertStability[appStability] || appStability;
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -29,6 +36,7 @@ createInertiaApp({
         app.config.globalProperties.$appDescription = appDescription;
         app.config.globalProperties.$appVersion = appVersion;
         app.config.globalProperties.$appStability = appStability;
+        app.config.globalProperties.$appStabilitySymbol = appStabilitySymbol;
         return app
             .use(plugin)
             .use(ZiggyVue)

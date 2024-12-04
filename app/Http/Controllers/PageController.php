@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PageFilterRequest;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
-use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PageController extends Controller
@@ -28,12 +27,10 @@ class PageController extends Controller
             $paginationMaxDisplay = (int) $paginationMaxDisplay;
         }
 
-        // $pages = Page::paginate($paginationMaxDisplay);
-
         // Il faut orderBy les sections par order_num
-        $pages = Page::with('page', 'sections')->get();
+        $pages = Page::with('page', 'sections')->orderBy('order_num')->paginate($paginationMaxDisplay);
 
-        return Inertia::render('Pages/Index', [
+        return inertia('Pages/index', [
             'pages' => $pages
         ]);
     }
@@ -42,7 +39,7 @@ class PageController extends Controller
     {
         $this->authorize('view', $page);
 
-        return Inertia::render('Pages/Show', [
+        return inertia('Pages/Show', [
             'page' => $page,
             "sections" => $page->sections()->orderBy("order_num")->get()
         ]);
@@ -53,9 +50,9 @@ class PageController extends Controller
         $this->authorize('create', Page::class);
 
         $page = new Page();
-        return Inertia::render('Pages/Create', [
+        return inertia('Pages/Create', [
             'page' => $page,
-            'pages' => Page::pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",)
+            'pages' => Page::orderBy('order_num')->pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",)
         ]);
     }
 
@@ -72,9 +69,9 @@ class PageController extends Controller
     {
         $this->authorize('update', $page);
 
-        return Inertia::render('Pages/Edit', [
+        return inertia('Pages/Edit', [
             'page' => $page,
-            'pages' => Page::pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",)
+            'pages' => Page::orderBy('order_num')->pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",)
         ]);
     }
 

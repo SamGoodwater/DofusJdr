@@ -33,7 +33,7 @@ const appKeywords = ref(import.meta.env.VITE_APP_KEYWORDS);
         <Aside />
     </nav>
 
-    <main class="pt-6 pb-20 sm:ml-64 flex justify-center">
+    <main class="my-8 mx-6 pt-6 pb-20 sm:ml-64 flex justify-center">
         <div class="">
             <slot />
         </div>

@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin IdeHelperClasse
  */
 class Classe extends Model
 {
+    use HasFactory, SoftDeletes;
+
     protected $fillable = ['official_id', 'dofusdb_id', 'uniqid', 'name', 'description_fast', 'description', 'life', 'life_dice', 'specificity', 'weapons_of_choice', 'usable', 'dofus_version'];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 

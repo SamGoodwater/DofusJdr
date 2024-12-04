@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin IdeHelperSpecialization
  */
 class Specialization extends Model
 {
+    use HasFactory, SoftDeletes;
+
     protected $fillable = ['uniqid', 'name', 'description'];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 

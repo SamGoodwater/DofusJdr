@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin IdeHelperNpc
  */
 class Npc extends Creature
 {
+    use HasFactory, SoftDeletes;
+
     protected $fillable = [];
 
     public function __construct(array $attributes = [])

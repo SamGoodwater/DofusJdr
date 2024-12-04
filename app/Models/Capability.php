@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin IdeHelperCapability
  */
 class Capability extends Model
 {
+    use HasFactory, SoftDeletes;
+
     protected $fillable = ['name', 'description', 'effect', 'level', 'pa', 'po', 'po_editable', 'time_before_use_again', 'casting_time', 'duration', 'element', 'is_magic', 'ritual_available', 'powerful', 'usable'];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 

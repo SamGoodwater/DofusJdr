@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin IdeHelperCampaign
  */
 class Campaign extends Model
 {
+    use HasFactory, SoftDeletes;
+
     protected $fillable = ['name', 'description', 'keyword', "slug", "state", 'is_public', 'uniqid'];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', "created_by"];
 

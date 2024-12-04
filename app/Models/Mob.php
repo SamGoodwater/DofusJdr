@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin IdeHelperMob
  */
 class Mob extends Creature
 {
+    use HasFactory, SoftDeletes;
 
     const SIZE = [
         "très petite" => 0,

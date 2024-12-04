@@ -50,7 +50,7 @@ class PageFilterRequest extends FormRequest
             "is_visible" => $this->input("is_visible") ?: false,
             "is_editable" => $this->input("is_editable") ?: true,
             "page_id" => $this->input("page_id") ?: 0,
-            'created_by' => Auth::user()->id,
+            'created_by' => Auth::user()->id ?? null,
         ]);
     }
 }

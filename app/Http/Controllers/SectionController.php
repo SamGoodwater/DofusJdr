@@ -39,7 +39,7 @@ class SectionController extends Controller
         $section = new Section();
         return Inertia::render('Sections/Create', [
             'section' => $section,
-            'pages' => Page::pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",)
+            'pages' => Page::orderBy('order_num')->pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",)
         ]);
     }
 
