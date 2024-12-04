@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Ressource extends Model
 {
     protected $fillable = ['official_id', 'dofusdb_id', 'uniqid', 'name', 'description', 'level', 'type', 'price', 'weight', 'rarity', 'usable', 'dofus_version'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     public function mobs(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

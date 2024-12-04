@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Attribute extends Model
 {
     protected $fillable = ['uniqid', 'name', 'description'];
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ["id", 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     public function classes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

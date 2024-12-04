@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Spelltype extends Model
 {
     protected $fillable = ['name', 'description', "color", "icon"];
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     public function spells(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

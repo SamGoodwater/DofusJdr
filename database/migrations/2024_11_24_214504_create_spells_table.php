@@ -36,6 +36,8 @@ return new class extends Migration
             $table->integer('powerful')->default(2);
             $table->boolean('usable')->default(false);
             $table->softDeletes();
+
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
 
         Schema::create('spell_invocation', function (Blueprint $table) {
@@ -59,6 +61,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('spells');
+        Schema::table('spells', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
         Schema::dropIfExists('spell_types');
         Schema::dropIfExists('spell_invocation');
     }

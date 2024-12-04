@@ -10,8 +10,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Page extends Model
 {
-    protected $fillable = ['name', 'keyword', 'slug', 'order_num', "page_id", 'is_dropdown', 'public', 'is_editable', "page_id", "uniqid"];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = [
+        'name',
+        'keyword',
+        'slug',
+        'order_num',
+        "page_id",
+        'is_dropdown',
+        'is_public',
+        "is_visible",
+        'is_editable',
+        "page_id",
+        "uniqid"
+
+    ];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 
 
     public function page(): \Illuminate\Database\Eloquent\Relations\BelongsTo

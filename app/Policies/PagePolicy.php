@@ -28,7 +28,15 @@ class PagePolicy
      */
     public function view(User $user, Page $page): bool
     {
-        return true;
+        if ($page->is_public || $page->is_visible) {
+            return true;
+        } else {
+            if (!$page->is_visible) {
+                return $user->verifyRole(User::ROLES['moderator']);
+            } else {
+                return $user->verifyRole(User::ROLES['user']);
+            }
+        }
     }
 
     /**
@@ -36,11 +44,7 @@ class PagePolicy
      */
     public function create(User $user): bool
     {
-        return in_array($user->role, [
-            User::ROLES['admin'],
-            User::ROLES['moderator'],
-            User::ROLES['contributor']
-        ]);
+        return $user->verifyRole(User::ROLES['contributor']);
     }
 
     /**
@@ -48,11 +52,17 @@ class PagePolicy
      */
     public function update(User $user, Page $page): bool
     {
-        return in_array($user->role, [
-            User::ROLES['admin'],
-            User::ROLES['moderator'],
-            User::ROLES['contributor']
-        ]);
+        if ($page->is_editable) {
+            if ($page->created_by === $user->id) {
+                return $user->verifyRole(User::ROLES['game_master']);
+            } else {
+                return $user->verifyRole(User::ROLES['contributor']);
+            }
+        } elseif ($user->verifyRole(User::ROLES['admin'])) {
+            return true;
+        } else {
+            false;
+        }
     }
 
     /**
@@ -60,10 +70,11 @@ class PagePolicy
      */
     public function delete(User $user, Page $page): bool
     {
-        return in_array($user->role, [
-            User::ROLES['admin'],
-            User::ROLES['moderator'],
-        ]);
+        if ($page->created_by === $user->id) {
+            return $user->verifyRole(User::ROLES['game_master']);
+        } else {
+            return $user->verifyRole(User::ROLES['moderator']);
+        }
     }
 
     /**
@@ -71,7 +82,7 @@ class PagePolicy
      */
     public function restore(User $user, Page $page): bool
     {
-        return $user->role === User::ROLES['admin'];
+        return $user->verifyRole(User::ROLES['admin']);
     }
 
     /**
@@ -79,6 +90,6 @@ class PagePolicy
      */
     public function forceDelete(User $user, Page $page): bool
     {
-        return $user->role === User::ROLES['admin'];
+        return $user->verifyRole(User::ROLES['admin']);
     }
 }

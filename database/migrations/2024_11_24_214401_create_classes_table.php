@@ -28,6 +28,8 @@ return new class extends Migration
             $table->boolean('usable')->default(false);
             $table->string('dofus_version')->default('3');
             $table->softDeletes();
+
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
 
         Schema::create('classe_spell', function (Blueprint $table) {
@@ -61,5 +63,8 @@ return new class extends Migration
         Schema::dropIfExists('classe_spell');
         Schema::dropIfExists('capability_classe');
         Schema::dropIfExists('attribute_classe');
+        Schema::table('classes', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
     }
 };

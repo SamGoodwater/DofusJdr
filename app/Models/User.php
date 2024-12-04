@@ -64,4 +64,87 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function verifyRole(string $role): bool
+    {
+        if (!in_array($role, self::ROLES) || !in_array($this->role, self::ROLES)) {
+            return false;
+        }
+        if ($this->role === self::ROLES['super_admin']) {
+            return true;
+        }
+
+        switch ($role) {
+            case self::ROLES['guest']:
+                return in_array($this->role, [
+                    self::ROLES['guest'],
+                    self::ROLES['user'],
+                    self::ROLES['player'],
+                    self::ROLES['game_master'],
+                    self::ROLES['contributor'],
+                    self::ROLES['moderator'],
+                    self::ROLES['admin'],
+                    self::ROLES['super_admin']
+                ]);
+
+            case self::ROLES['user']:
+                return in_array($this->role, [
+                    self::ROLES['user'],
+                    self::ROLES['player'],
+                    self::ROLES['game_master'],
+                    self::ROLES['contributor'],
+                    self::ROLES['moderator'],
+                    self::ROLES['admin'],
+                    self::ROLES['super_admin']
+                ]);
+
+            case self::ROLES['player']:
+                return in_array($this->role, [
+                    self::ROLES['player'],
+                    self::ROLES['game_master'],
+                    self::ROLES['contributor'],
+                    self::ROLES['moderator'],
+                    self::ROLES['admin'],
+                    self::ROLES['super_admin']
+                ]);
+
+            case self::ROLES['game_master']:
+                return in_array($this->role, [
+                    self::ROLES['game_master'],
+                    self::ROLES['contributor'],
+                    self::ROLES['moderator'],
+                    self::ROLES['admin'],
+                    self::ROLES['super_admin']
+                ]);
+
+            case self::ROLES['contributor']:
+                return in_array($this->role, [
+                    self::ROLES['contributor'],
+                    self::ROLES['moderator'],
+                    self::ROLES['admin'],
+                    self::ROLES['super_admin']
+                ]);
+
+            case self::ROLES['moderator']:
+                return in_array($this->role, [
+                    self::ROLES['moderator'],
+                    self::ROLES['admin'],
+                    self::ROLES['super_admin']
+                ]);
+
+            case self::ROLES['admin']:
+                return in_array($this->role, [
+                    self::ROLES['admin'],
+                    self::ROLES['super_admin']
+                ]);
+
+            case self::ROLES['super_admin']:
+                return in_array($this->role, [
+                    self::ROLES['super_admin']
+                ]);
+
+            default:
+                return false;
+        }
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Models\Creature;
+use Illuminate\Support\Facades\Auth;
 
 class CreatureFilterRequest extends FormRequest
 {
@@ -101,6 +102,7 @@ class CreatureFilterRequest extends FormRequest
             'other_spell' => ["string", "max:2000", "nullable"],
             'hostility' => ["integer", Rule::in(Creature::HOSTILITY), "required"],
             'usable' => ["boolean"],
+            'created_by' => ["integer", "nullable", "exists:users,id"],
         ];
     }
 
@@ -112,6 +114,7 @@ class CreatureFilterRequest extends FormRequest
             'level' => $this->input('level') ?: 1,
             'usable' => $this->input('usable') ?: true,
             "hostility" => $this->input('hostility') ?: Creature::HOSTILITY["neutre"],
+            'created_by' => Auth::user()->id,
         ]);
     }
 }

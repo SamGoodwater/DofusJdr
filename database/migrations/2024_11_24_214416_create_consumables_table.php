@@ -28,6 +28,8 @@ return new class extends Migration
             $table->boolean('usable')->default(false);
             $table->string('dofus_version')->default('3');
             $table->softDeletes();
+
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
 
         Schema::create('consumable_ressource', function (Blueprint $table) {
@@ -46,5 +48,8 @@ return new class extends Migration
     {
         Schema::dropIfExists('consumables');
         Schema::dropIfExists('consumable_ressource');
+        Schema::table('consumables', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
     }
 };

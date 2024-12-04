@@ -14,7 +14,7 @@ class Mobrace extends Model
         'super_race',
         'uniqid'
     ];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     public function mobs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

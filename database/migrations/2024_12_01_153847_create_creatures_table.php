@@ -44,11 +44,16 @@ return new class extends Migration
             $table->string('do_fixe_feu')->default('0');
             $table->string('do_fixe_air')->default('0');
             $table->string('do_fixe_eau')->default('0');
-            $table->integer('res_neutre')->default(0);
-            $table->integer('res_terre')->default(0);
-            $table->integer('res_feu')->default(0);
-            $table->integer('res_air')->default(0);
-            $table->integer('res_eau')->default(0);
+            $table->tinyText('res_fixe_neutre')->default(0);
+            $table->tinyText('res_fixe_terre')->default(0);
+            $table->tinyText('res_fixe_feu')->default(0);
+            $table->tinyText('res_fixe_air')->default(0);
+            $table->tinyText('res_fixe_eau')->default(0);
+            $table->integer('res_neutre')->default(0)->comment('0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%');
+            $table->integer('res_terre')->default(0)->comment('0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%');
+            $table->integer('res_feu')->default(0)->comment('0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%');
+            $table->integer('res_air')->default(0)->comment('0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%');
+            $table->integer('res_eau')->default(0)->comment('0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%');
             $table->integer('acrobatie_bonus')->default(0);
             $table->integer('discretion_bonus')->default(0);
             $table->integer('escamotage_bonus')->default(0);
@@ -67,24 +72,24 @@ return new class extends Migration
             $table->integer('persuasion_bonus')->default(0);
             $table->integer('representation_bonus')->default(0);
             $table->integer('supercherie_bonus')->default(0);
-            $table->integer('acrobatie_mastery')->default(0);
-            $table->integer('discretion_mastery')->default(0);
-            $table->integer('escamotage_mastery')->default(0);
-            $table->integer('athletisme_mastery')->default(0);
-            $table->integer('intimidation_mastery')->default(0);
-            $table->integer('arcane_mastery')->default(0);
-            $table->integer('histoire_mastery')->default(0);
-            $table->integer('investigation_mastery')->default(0);
-            $table->integer('nature_mastery')->default(0);
-            $table->integer('religion_mastery')->default(0);
-            $table->integer('dressage_mastery')->default(0);
-            $table->integer('medecine_mastery')->default(0);
-            $table->integer('perception_mastery')->default(0);
-            $table->integer('perspicacite_mastery')->default(0);
-            $table->integer('survie_mastery')->default(0);
-            $table->integer('persuasion_mastery')->default(0);
-            $table->integer('representation_mastery')->default(0);
-            $table->integer('supercherie_mastery')->default(0);
+            $table->integer('acrobatie_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('discretion_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('escamotage_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('athletisme_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('intimidation_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('arcane_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('histoire_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('investigation_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('nature_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('religion_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('dressage_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('medecine_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('perception_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('perspicacite_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('survie_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('persuasion_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('representation_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
+            $table->integer('supercherie_mastery')->default(0)->comment("0 = pas de maitrise, 1 = maitrise, 2 = expertise");
             $table->string('kamas')->nullable();
             $table->string('drop_')->nullable();
             $table->string('other_item')->nullable();
@@ -93,6 +98,8 @@ return new class extends Migration
             $table->string('other_spell')->nullable();
             $table->boolean('usable')->default(true);
             $table->softDeletes();
+
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
 
         Schema::create('capability_creature', function (Blueprint $table) {
@@ -147,6 +154,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('creatures');
+        Schema::table('creatures', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
         Schema::dropIfExists('capability_creature');
         Schema::dropIfExists('consumable_creature');
         Schema::dropIfExists('creature_item');

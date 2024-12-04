@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class SectionFilterRequest extends FormRequest
 {
@@ -27,9 +28,10 @@ class SectionFilterRequest extends FormRequest
             "title" => ["string", "min:4", "max:255", "required"],
             "content" => ["string", "nullable"],
             "order_num" => ["integer",],
-            "visible" => ["boolean"],
+            "is_visible" => ["boolean"],
             "page_id" => ["integer", "exists:pages,uniqid", "nullable"],
-            "uniqid" => ["string", "min:1", "max:255", "required", Rule::unique("sections", "uniqid")->ignore($this->route()->parameter('section'))]
+            "uniqid" => ["string", "min:1", "max:255", "required", Rule::unique("sections", "uniqid")->ignore($this->route()->parameter('section'))],
+            'created_by' => ["integer", "nullable", "exists:users,id"],
         ];
     }
 
@@ -38,8 +40,9 @@ class SectionFilterRequest extends FormRequest
         $this->merge([
             "uniqid" => $this->input("uniqid") ?: uniqid(),
             "order_num" => $this->input("order_num") ?: 0,
-            "visible" => $this->input("visible") ?: true,
-            "page_id" => $this->input("page_id") ?: null
+            "is_visible" => $this->input("is_visible") ?: true,
+            "page_id" => $this->input("page_id") ?: null,
+            'created_by' => Auth::user()->id,
         ]);
     }
 }

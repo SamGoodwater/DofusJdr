@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'KrosmosJDR'),
+    'name' => env('APP_NAME', 'KrosmozJDR'),
 
     /*
     |--------------------------------------------------------------------------

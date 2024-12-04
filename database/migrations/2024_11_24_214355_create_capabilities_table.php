@@ -31,6 +31,8 @@ return new class extends Migration
             $table->integer('powerful')->default(2);
             $table->boolean('usable')->default(false);
             $table->softDeletes();
+
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 
@@ -40,5 +42,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('capabilitys');
+        Schema::table('capabilitys', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
     }
 };

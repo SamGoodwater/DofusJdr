@@ -22,6 +22,8 @@ return new class extends Migration
             $table->tinyInteger('state')->default(0);
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
 
         Schema::create('scenario_page', function (Blueprint $table) {
@@ -103,6 +105,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('scenarios');
+        Schema::table('scenarios', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
         Schema::dropIfExists('scenario_page');
         Schema::dropIfExists('consumable_scenario');
         Schema::dropIfExists('item_scenario');

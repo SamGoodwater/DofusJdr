@@ -48,11 +48,16 @@ class Creature extends Model
         'do_fixe_feu',
         'do_fixe_air',
         'do_fixe_eau',
-        'res_neutre',
-        'res_terre',
-        'res_feu',
-        'res_air',
-        'res_eau',
+        'res_fixe_neutre',
+        'res_fixe_terre',
+        'res_fixe_feu',
+        'res_fixe_air',
+        'res_fixe_eau',
+        'res_neutre', // 0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%
+        'res_terre', // 0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%
+        'res_feu', // 0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%
+        'res_air', // 0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%
+        'res_eau', // 0 = 0%, 1 = 50%, 2 = 100%, -1 = -50%, -2 = -100%, -3 = -150%, -4 = -200%
         'acrobatie_bonus',
         'discretion_bonus',
         'escamotage_bonus',
@@ -71,24 +76,24 @@ class Creature extends Model
         'persuasion_bonus',
         'representation_bonus',
         'supercherie_bonus',
-        'acrobatie_mastery',
-        'discretion_mastery',
-        'escamotage_mastery',
-        'athletisme_mastery',
-        'intimidation_mastery',
-        'arcane_mastery',
-        'histoire_mastery',
-        'investigation_mastery',
-        'nature_mastery',
-        'religion_mastery',
-        'dressage_mastery',
-        'medecine_mastery',
-        'perception_mastery',
-        'perspicacite_mastery',
-        'survie_mastery',
-        'persuasion_mastery',
-        'representation_mastery',
-        'supercherie_mastery',
+        'acrobatie_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'discretion_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'escamotage_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'athletisme_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'intimidation_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'arcane_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'histoire_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'investigation_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'nature_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'religion_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'dressage_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'medecine_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'perception_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'perspicacite_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'survie_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'persuasion_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'representation_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
+        'supercherie_mastery', // 0 = pas de maitrise, 1 = maitrise, 2 = expertise
         'kamas',
         'drop_',
         'other_item',
@@ -101,7 +106,8 @@ class Creature extends Model
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by'
     ];
 
     public function ressources(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

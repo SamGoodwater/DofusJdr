@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Section extends Model
 {
-    protected $fillable = ['uniqid', 'component', 'title', 'content', 'order_num', 'visible', 'page_id'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['uniqid', 'component', 'title', 'content', 'order_num', 'is_visible', 'page_id'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     public function page(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

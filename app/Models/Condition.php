@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Condition extends Model
 {
     protected $fillable = ['name', 'description', 'is_unbewitchable', 'is_malus', 'usable'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     //
 }

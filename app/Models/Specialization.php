@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Specialization extends Model
 {
     protected $fillable = ['uniqid', 'name', 'description'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     public function capabilities(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

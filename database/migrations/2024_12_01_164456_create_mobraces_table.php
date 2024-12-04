@@ -18,6 +18,8 @@ return new class extends Migration
             $table->softDeletes();
             $table->string('name');
             $table->string('super_race')->nullable();
+
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 
@@ -27,5 +29,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('mobraces');
+        Schema::table('mobraces', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
     }
 };

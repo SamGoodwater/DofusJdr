@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Page;
+use App\Models\Section;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -26,9 +26,13 @@ class SectionPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Page $page): bool
+    public function view(User $user, Section $section): bool
     {
-        return true;
+        if (!$section->is_visible) {
+            return $user->verifyRole(User::ROLES['moderator']);
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -36,49 +40,46 @@ class SectionPolicy
      */
     public function create(User $user): bool
     {
-        return in_array($user->role, [
-            User::ROLES['admin'],
-            User::ROLES['moderator'],
-            User::ROLES['contributor']
-        ]);
+        return $user->verifyRole(User::ROLES['game_master']);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Page $page): bool
+    public function update(User $user, Section $section): bool
     {
-        return in_array($user->role, [
-            User::ROLES['admin'],
-            User::ROLES['moderator'],
-            User::ROLES['contributor']
-        ]);
+        if ($section->created_by === $user->id) {
+            return $user->verifyRole(User::ROLES['game_master']);
+        } else {
+            return $user->verifyRole(User::ROLES['contributor']);
+        }
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Page $page): bool
+    public function delete(User $user, Section $section): bool
     {
-        return in_array($user->role, [
-            User::ROLES['admin'],
-            User::ROLES['moderator'],
-        ]);
+        if ($section->created_by === $user->id) {
+            return $user->verifyRole(User::ROLES['game_master']);
+        } else {
+            return $user->verifyRole(User::ROLES['moderator']);
+        }
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Page $page): bool
+    public function restore(User $user, Section $section): bool
     {
-        return $user->role === User::ROLES['admin'];
+        return $user->verifyRole(User::ROLES['admin']);
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Page $page): bool
+    public function forceDelete(User $user, Section $section): bool
     {
-        return $user->role === User::ROLES['admin'];
+        return $user->verifyRole(User::ROLES['admin']);
     }
 }

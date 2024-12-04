@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 
@@ -27,5 +29,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('attributes');
+        Schema::table('atttributes', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
     }
 };

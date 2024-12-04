@@ -7,7 +7,10 @@ import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import DefaultLayout from "/resources/js/Layouts/default.vue";
 
-const appName = import.meta.env.VITE_APP_NAME || "KrosmosJDR";
+const appName = import.meta.env.VITE_APP_NAME || "KrosmozJDR";
+const appDescription = import.meta.env.VITE_APP_DESCRIPTION;
+const appVersion = import.meta.env.VITE_APP_VERSION;
+const appStability = import.meta.env.VITE_APP_STABILITY;
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -23,6 +26,9 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) });
         app.config.globalProperties.$appName = appName; // Définir la propriété globale
+        app.config.globalProperties.$appDescription = appDescription;
+        app.config.globalProperties.$appVersion = appVersion;
+        app.config.globalProperties.$appStability = appStability;
         return app
             .use(plugin)
             .use(ZiggyVue)

@@ -55,7 +55,7 @@ class PageController extends Controller
         $page = new Page();
         return Inertia::render('Pages/Create', [
             'page' => $page,
-            'pages' => Page::pluck("name", "is_editable", "public", "is_dropdown", "uniqid",)
+            'pages' => Page::pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",)
         ]);
     }
 
@@ -74,7 +74,7 @@ class PageController extends Controller
 
         return Inertia::render('Pages/Edit', [
             'page' => $page,
-            'pages' => Page::pluck("name", "is_editable", "public", "is_dropdown", "uniqid",)
+            'pages' => Page::pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",)
         ]);
     }
 

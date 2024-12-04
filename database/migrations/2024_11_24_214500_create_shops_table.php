@@ -22,6 +22,8 @@ return new class extends Migration
             $table->boolean('usable')->default(true);
             $table->softDeletes();
 
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
+
             $table->foreignIdFor(\App\Models\Npc::class)->nullable();
         });
 
@@ -64,6 +66,9 @@ return new class extends Migration
         Schema::dropIfExists('shops');
         Schema::table('shops', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\Npc::class);
+        });
+        Schema::table('shops', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
         });
         Schema::dropIfExists('consumable_shop');
         Schema::dropIfExists('item_shop');

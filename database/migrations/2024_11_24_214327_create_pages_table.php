@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Page;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,10 +22,13 @@ return new class extends Migration
             $table->string('slug');
             $table->integer('order_num')->default(0);
             $table->boolean('is_dropdown')->default(false);
-            $table->boolean('public')->default(true);
+            $table->boolean('is_public')->default(false);
+            $table->boolean('is_visible')->default(false);
             $table->boolean('is_editable')->default(true);
+            $table->softDeletes();
 
             $table->foreignIdFor(Page::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
 
         Schema::create('sections', function (Blueprint $table) {
@@ -35,10 +39,11 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->longText('content')->nullable();
             $table->integer('order_num')->default(0);
-            $table->boolean('visible')->default(true);
+            $table->boolean('is_visible')->default(true);
             $table->softDeletes();
 
             $table->foreignIdFor(Page::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 
@@ -54,6 +59,12 @@ return new class extends Migration
         });
         Schema::table('pages', function (Blueprint $table) {
             $table->dropForeignIdFor(Page::class);
+        });
+        Schema::table('pages', function (Blueprint $table) {
+            $table->dropForeignIdFor(User::class, 'created_by');
+        });
+        Schema::table('sections', function (Blueprint $table) {
+            $table->dropForeignIdFor(User::class, 'created_by');
         });
     }
 };

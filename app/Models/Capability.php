@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Capability extends Model
 {
     protected $fillable = ['name', 'description', 'effect', 'level', 'pa', 'po', 'po_editable', 'time_before_use_again', 'casting_time', 'duration', 'element', 'is_magic', 'ritual_available', 'powerful', 'usable'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     public function specializations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

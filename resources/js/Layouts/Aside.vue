@@ -1,13 +1,10 @@
-<script>
-export default {
-    data() {
-        return {
-            siteName: this.$appName
-        };
-    }
-};
-</script>
+<script setup>
+import { ref } from 'vue';
 
+const appName = ref(import.meta.env.VITE_APP_NAME);
+const appVersion = ref(import.meta.env.VITE_APP_VERSION);
+const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
+</script>
 
 <template>
 
@@ -30,7 +27,7 @@ export default {
             aria-label="Sidenav">
 
             <div id="header">
-                <h2 class="text-2xl text-secondary text-center">{{ siteName }}</h2>
+                <h2 class="text-2xl text-secondary text-center">{{ appName }}</h2>
             </div>
 
             <div id="nav">

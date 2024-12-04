@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Scenario extends Model
 {
     protected $fillable = ['name', 'description', 'keyword', "slug", "state", 'is_public', 'uniqid'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', "created_by"];
 
     public function pages(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

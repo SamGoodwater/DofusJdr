@@ -22,6 +22,8 @@ return new class extends Migration
             $table->tinyInteger('state')->default(0);
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
 
         Schema::create('campaign_page', function (Blueprint $table) {
@@ -96,6 +98,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('campaigns');
+        Schema::table('campaigns', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
         Schema::dropIfExists('campaign_page');
         Schema::dropIfExists('consumable_campaign');
         Schema::dropIfExists('item_campaign');

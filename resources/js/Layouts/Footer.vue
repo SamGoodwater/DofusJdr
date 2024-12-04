@@ -1,11 +1,17 @@
-<script>
-export default {
-    data() {
-        return {
-            siteName: this.$appName
-        };
-    }
+<script setup>
+import { ref } from 'vue';
+
+const convertStability = {
+    alpha: "α",
+    beta: "β",
+    rc: "rc",
+    stable: ""
 };
+
+const appName = ref(import.meta.env.VITE_APP_NAME);
+const appVersion = ref(import.meta.env.VITE_APP_VERSION);
+const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
+const appStability = ref(convertStability[import.meta.env.VITE_APP_STABILITY]);
 </script>
 
 
@@ -15,7 +21,8 @@ export default {
 
         <!-- Si l'affichage est plus grand que sm : alors on affiche un footer classique -->
         <div class="block max-sm:hidden content-center">
-            <p class="text-sm">{{ siteName }} - &copy; {{ new Date().getFullYear() }}</p>
+            <p class="text-sm">{{ appName }} - version {{ appVersion + " " + appStability }} - {{ new
+                Date().getFullYear() }}</p>
         </div>
 
         <!-- Si l'affichage est plus petit ou  égale à sm : alors on affiche le menu-->

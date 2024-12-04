@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Shop extends Model
 {
     protected $fillable = ['uniqid', 'name', 'description', 'location', 'price', 'usable', 'npc_id'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     public function consumables(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
