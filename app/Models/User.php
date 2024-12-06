@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin IdeHelperUser
@@ -148,5 +149,10 @@ class User extends Authenticatable implements MustVerifyEmail
             default:
                 return false;
         }
+    }
+
+    public function imagePath(): string
+    {
+        return Storage::disk('modules')->url($this->image);
     }
 }

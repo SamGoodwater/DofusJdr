@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CampaignController extends Controller
 {
@@ -48,12 +49,14 @@ class CampaignController extends Controller
     {
         $this->authorize('create', Campaign::class);
 
-        $data = $request->validated();
+        $campaign = new Campaign();
+        $data = self::extractData($request, $campaign, ['image', 'file'], 'campaigns');
         $data['created_by'] = Auth::user()?->id ?? "-1";
-        $data['image'] = $request->file('image')?->store('campaigns', 'modules');
+        if ($data['file'] !== null) {
+            $campaign->setPathFiles($data['file']);
+            unset($data['file']);
+        }
         $campaign = Campaign::create($data);
-        $file = $request->validated('file') ?? null;
-        $campaign->setPathFiles($file?->store('campaigns', 'modules'));
 
         return redirect()->route('campaign.show', ['campaign' => $campaign]);
     }
@@ -73,11 +76,13 @@ class CampaignController extends Controller
     {
         $this->authorize('update', $campaign);
 
-        $data = $request->validated();
-        $data['image'] = $request->file('image')?->store('campaigns', 'modules');
+        $data = self::extractData($request, $campaign, ['image', 'file'], 'campaigns');
+        if ($data['file'] !== null) {
+            $campaign->setPathFiles($data['file']);
+            unset($data['file']);
+        }
+
         $campaign->update($data);
-        $file = $request->validated('file') ?? null;
-        $campaign->setPathFiles($file?->store('campaigns', 'modules'));
 
         return redirect()->route('campaign.show', ['campaign' => $campaign]);
     }
@@ -95,6 +100,21 @@ class CampaignController extends Controller
     {
         $this->authorize('forceDelete', $campaign);
 
+        $campaign->panoplies()->detach();
+        $campaign->users()->detach();
+        $campaign->consumables()->detach();
+        $campaign->ressources()->detach();
+        $campaign->items()->detach();
+        $campaign->shops()->detach();
+        $campaign->spells()->detach();
+        $campaign->npcs()->detach();
+        $campaign->mobs()->detach();
+        $campaign->scenarios()->detach();
+        $campaign->pages()->detach();
+        self::deleteFile($campaign, 'image');
+        foreach ($campaign->getPathFiles() as $file) {
+            Storage::disk('modules')->delete($file);
+        }
         $campaign->forceDelete();
 
         return redirect()->route('campaign.index');

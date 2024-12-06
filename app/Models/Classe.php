@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin IdeHelperClasse
@@ -34,5 +35,14 @@ class Classe extends Model
     public function npcs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Npc::class);
+    }
+
+    public function imagePath(): string
+    {
+        return Storage::disk('modules')->url($this->image);
+    }
+    public function iconPath(): string
+    {
+        return Storage::disk('modules')->url($this->icon);
     }
 }

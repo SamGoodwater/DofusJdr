@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Storage;
 
 /**
  * @mixin IdeHelperSpecialization
@@ -29,5 +30,10 @@ class Specialization extends Model
     public function page(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Page::class);
+    }
+
+    public function imagePath(): string
+    {
+        return Storage::disk('modules')->url($this->image);
     }
 }

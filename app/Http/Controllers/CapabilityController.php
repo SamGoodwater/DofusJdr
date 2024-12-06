@@ -50,7 +50,10 @@ class CapabilityController extends Controller
 
         $data = $request->validated();
         $data['created_by'] = Auth::user()?->id ?? "-1";
-        $data['image'] = $request->file('image')?->store('items', 'modules');
+        $image = $request->validated('image');
+        if ($image !== null && !$image->getError()) {
+            $data['image'] = $image->store('capabilities', 'modules');
+        }
         $item = Capability::create($data);
 
         return redirect()->route('item.show', ['item' => $item]);
@@ -72,7 +75,10 @@ class CapabilityController extends Controller
         $this->authorize('update', $item);
 
         $data = $request->validated();
-        $data['image'] = $request->file('image')?->store('items', 'modules');
+        $image = $request->validated('image');
+        if ($image !== null && !$image->getError()) {
+            $data['image'] = $image->store('capabilites', 'modules');
+        }
         $item->update($data);
 
         return redirect()->route('item.show', ['item' => $item]);
@@ -91,6 +97,7 @@ class CapabilityController extends Controller
     {
         $this->authorize('forceDelete', $item);
 
+        self::deleteFile($item, 'image');
         $item->forceDelete();
 
         return redirect()->route('item.index');

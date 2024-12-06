@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin IdeHelperSection
@@ -43,5 +44,14 @@ class Section extends Model
         }, $files);
 
         \DB::table('file_section')->insert($data);
+    }
+
+    public function filesPath(): \Illuminate\Support\Collection
+    {
+        $files = $this->getPathFiles();
+        $files = $files->map(function ($file) {
+            return Storage::disk('modules')->url($file);
+        });
+        return $files;
     }
 }

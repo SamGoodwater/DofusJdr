@@ -9,8 +9,6 @@ use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
-
-
 class AttributeController extends Controller
 {
     use AuthorizesRequests;
@@ -50,9 +48,8 @@ class AttributeController extends Controller
     {
         $this->authorize('create', Attribute::class);
 
-        $data = $request->validated();
+        $data = self::extractData($request, new Attribute(), ['image'], 'attributes');
         $data['created_by'] = Auth::user()?->id ?? "-1";
-        $data['image'] = $request->file('image')?->store('attributes', 'modules');
         $attribute = Attribute::create($data);
 
         return redirect()->route('attribute.show', ['attribute' => $attribute]);
@@ -73,8 +70,7 @@ class AttributeController extends Controller
     {
         $this->authorize('update', $attribute);
 
-        $data = $request->validated();
-        $data['image'] = $request->file('image')?->store('attributes', 'modules');
+        $data = self::extractData($request, $attribute, ['image'], 'attributes');
         $attribute->update($data);
 
         return redirect()->route('attribute.show', ['attribute' => $attribute]);
@@ -93,6 +89,7 @@ class AttributeController extends Controller
     {
         $this->authorize('forceDelete', $attribute);
 
+        self::deleteFile($attribute, 'image');
         $attribute->forceDelete();
 
         return redirect()->route('attribute.index');

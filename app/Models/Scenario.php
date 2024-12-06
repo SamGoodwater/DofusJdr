@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin IdeHelperScenario
@@ -93,5 +94,19 @@ class Scenario extends Model
     public function panoplies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Panoply::class);
+    }
+
+    public function imagePath(): string
+    {
+        return Storage::disk('modules')->url($this->image);
+    }
+
+    public function filesPath(): \Illuminate\Support\Collection
+    {
+        $files = $this->getPathFiles();
+        $files = $files->map(function ($file) {
+            return Storage::disk('modules')->url($file);
+        });
+        return $files;
     }
 }
