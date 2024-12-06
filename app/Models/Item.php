@@ -13,8 +13,8 @@ class Item extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['official_id', 'dofusdb_id', 'uniqid', 'name', 'level', 'description', 'type', 'effect', 'bonus', 'recepe', 'actif', 'twohands', 'pa', 'po', 'price', 'rarity', 'usable', 'dofus_version'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
+    protected $fillable = ['official_id', 'dofusdb_id', 'uniqid', 'name', 'level', 'description', 'type', 'effect', 'bonus', 'recepe', 'actif', 'twohands', 'pa', 'po', 'price', 'rarity', 'usable', 'dofus_version', 'is_visible', 'created_by', 'image'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function ressources(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
@@ -38,6 +38,11 @@ class Item extends Model
             'price',
             'comment'
         );
+    }
+
+    public function panoply(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Panoply::class);
     }
 
     public function campaigns(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

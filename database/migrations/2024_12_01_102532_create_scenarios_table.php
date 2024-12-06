@@ -20,10 +20,19 @@ return new class extends Migration
             $table->string('keyword')->nullable();
             $table->boolean('is_public')->default(false);
             $table->tinyInteger('state')->default(0);
+            $table->boolean('is_visible')->default(false);
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
+        });
+
+        Schema::create('file_sscenario', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(\App\Models\Scenario::class)->constrained()->cascadeOnDelete();
+            $table->string('file');
+            $table->softDeletes();
         });
 
         Schema::create('scenario_page', function (Blueprint $table) {
@@ -97,6 +106,13 @@ return new class extends Migration
             $table->primary(['ressource_id', 'scenario_id']);
             $table->softDeletes();
         });
+
+        Schema::create('scenario_panoply', function (Blueprint $table) {
+            $table->foreignIdFor(\App\Models\Panoply::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Scenario::class)->constrained()->onDelete('cascade');
+            $table->primary(['panoply_id', 'scenario_id']);
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -118,5 +134,6 @@ return new class extends Migration
         Schema::dropIfExists('scenario_spell');
         Schema::dropIfExists('campaign_scenario');
         Schema::dropIfExists('ressource_scenario');
+        Schema::dropIfExists('scenario_panoply');
     }
 };

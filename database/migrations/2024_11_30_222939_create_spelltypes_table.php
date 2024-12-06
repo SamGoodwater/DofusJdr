@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('color')->default("zinc");
             $table->string('icon')->nullable();
+            $table->boolean('is_visible')->default(false);
             $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();

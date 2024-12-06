@@ -16,9 +16,11 @@ class Mobrace extends Model
     protected $fillable = [
         'name',
         'super_race',
-        'uniqid'
+        'uniqid',
+        'is_visible',
+        'created_by'
     ];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function mobs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

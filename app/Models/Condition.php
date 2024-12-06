@@ -13,8 +13,8 @@ class Condition extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'is_unbewitchable', 'is_malus', 'usable'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
+    protected $fillable = ['name', 'description', 'is_unbewitchable', 'is_malus', 'usable', 'is_visible', 'created_by', 'image'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     //
 }

@@ -3,62 +3,105 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Mobrace;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class MobraceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use AuthorizesRequests;
+
+    public function index(Request $request): \Inertia\Response
     {
-        //
+        $this->authorize('viewAny', Mobrace::class);
+
+        // Récupère la valeur de 'paginationMaxDisplay' depuis la requête, avec une valeur par défaut de 25
+        $paginationMaxDisplay = max(1, min(500, (int) $request->input('paginationMaxDisplay', 25)));
+
+        $mobraces = Mobrace::paginate($paginationMaxDisplay);
+
+        return Inertia::render('mobrace.index', [
+            'mobraces' => $mobraces,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show(Mobrace $mobrace, Request $request): \Inertia\Response
     {
-        //
+        $this->authorize('view', $mobrace);
+
+        return Inertia::render('Mobraces/Show', [
+            'ressources' => $mobrace->ressources,
+            'panoply' => $mobrace->panoply,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function create(): \Inertia\Response
     {
-        //
+        $this->authorize('create', Mobrace::class);
+
+        return Inertia::render('mobrace.create');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $this->authorize('create', Mobrace::class);
+
+        $data = $request->validated();
+        $data['created_by'] = Auth::user()?->id ?? "-1";
+        $data['image'] = $request->file('image')?->store('mobraces', 'modules');
+        $mobrace = Mobrace::create($data);
+
+        return redirect()->route('mobrace.show', ['mobrace' => $mobrace]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Mobrace $mobrace): \Inertia\Response
     {
-        //
+        $this->authorize('update', $mobrace);
+
+        return Inertia::render('mobrace.edit', [
+            'mobrace' => $mobrace,
+            'ressources' => $mobrace->ressources,
+            'panoply' => $mobrace->panoply,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Mobrace $mobrace, Request $request): RedirectResponse
     {
-        //
+        $this->authorize('update', $mobrace);
+
+        $data = $request->validated();
+        $data['image'] = $request->file('image')?->store('mobraces', 'modules');
+        $mobrace->update($data);
+
+        return redirect()->route('mobrace.show', ['mobrace' => $mobrace]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function delete(Mobrace $mobrace): RedirectResponse
     {
-        //
+        $this->authorize('delete', $mobrace);
+
+        $mobrace->delete();
+
+        return redirect()->route('mobrace.index');
+    }
+
+    public function forceDelete(Mobrace $mobrace): RedirectResponse
+    {
+        $this->authorize('forceDelete', $mobrace);
+
+        $mobrace->forceDelete();
+
+        return redirect()->route('mobrace.index');
+    }
+
+    public function restore(Mobrace $mobrace): RedirectResponse
+    {
+        $this->authorize('restore', $mobrace);
+
+        $mobrace->restore();
+
+        return redirect()->route('mobrace.index');
     }
 }

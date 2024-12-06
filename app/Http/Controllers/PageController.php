@@ -6,6 +6,7 @@ use App\Http\Requests\PageFilterRequest;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
@@ -16,16 +17,8 @@ class PageController extends Controller
         $this->authorize('viewAny', Page::class);
 
         // Récupère la valeur de 'paginationMaxDisplay' depuis la requête, avec une valeur par défaut de 25
-        $paginationMaxDisplay = (int) $request->input('paginationMaxDisplay', 25);
+        $paginationMaxDisplay = max(1, min(500, (int) $request->input('paginationMaxDisplay', 25)));
 
-        // Limite la valeur maximale à 500
-        if ($paginationMaxDisplay > 500) {
-            $paginationMaxDisplay = 500;
-        } else if ($paginationMaxDisplay < 1) {
-            $paginationMaxDisplay = 1;
-        } else {
-            $paginationMaxDisplay = (int) $paginationMaxDisplay;
-        }
 
         // Il faut orderBy les sections par order_num
         $pages = Page::with('page', 'sections')->orderBy('order_num')->paginate($paginationMaxDisplay);
@@ -41,7 +34,9 @@ class PageController extends Controller
 
         return inertia('Pages/Show', [
             'page' => $page,
-            "sections" => $page->sections()->orderBy("order_num")->get()
+            "sections" => $page->sections()->orderBy("order_num")->get(),
+            "campaigns" => $page->campaigns()->get(),
+            "scenarios" => $page->scenarios()->get(),
         ]);
     }
 
@@ -60,8 +55,14 @@ class PageController extends Controller
     {
         $this->authorize('create', Page::class);
 
-        $page = Page::create($request->validated());
-        $page->sections()->sync($request->validated('sections'));
+        $data = $request->validated();
+        $data['created_by'] = Auth::user()?->id ?? "-1";
+        $page = Page::create($data);
+        $page->sections()?->sync($request->validated('sections'));
+        $page->specialization()?->sync($request->validated('specialization'));
+        $page->campaigns()?->sync($request->validated('campaigns'));
+        $page->scenarios()?->sync($request->validated('scenarios'));
+
         return redirect()->route('pages.show', ['page' => $page])->with('success', 'La page a bien été créée');
     }
 
@@ -80,7 +81,11 @@ class PageController extends Controller
         $this->authorize('update', $page);
 
         $page->update($request->validated());
-        $page->sections()->sync($request->validated('sections'));
+        $page->sections()?->sync($request->validated('sections'));
+        $page->specialization()?->sync($request->validated('specialization'));
+        $page->campaigns()?->sync($request->validated('campaigns'));
+        $page->scenarios()?->sync($request->validated('scenarios'));
+
         return redirect()->route('pages.show', ['page' => $page])->with('success', 'La page a bien été modifiée');
     }
 

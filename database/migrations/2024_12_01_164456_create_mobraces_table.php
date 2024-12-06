@@ -18,6 +18,7 @@ return new class extends Migration
             $table->softDeletes();
             $table->string('name');
             $table->string('super_race')->nullable();
+            $table->boolean('is_visible')->default(false);
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });

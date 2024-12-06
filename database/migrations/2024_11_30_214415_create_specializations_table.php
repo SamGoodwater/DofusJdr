@@ -16,8 +16,12 @@ return new class extends Migration
             $table->string('uniqid', 20)->unique();
             $table->string('name')->unique();
             $table->string('description')->nullable();
+            $table->boolean('is_visible')->default(false);
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreignIdFor(\App\Models\Page::class)->nullable()->constrained()->cascadeOnDelete();
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
@@ -38,6 +42,9 @@ return new class extends Migration
         Schema::dropIfExists('specializations');
         Schema::table('specializations', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
+        Schema::table('specializations', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\Page::class);
         });
         Schema::dropIfExists('capabilitys_specializations');
     }

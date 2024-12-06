@@ -13,8 +13,8 @@ class Shop extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['uniqid', 'name', 'description', 'location', 'price', 'usable', 'npc_id'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
+    protected $fillable = ['uniqid', 'name', 'description', 'location', 'price', 'usable', 'npc_id', 'usable', 'is_visible', 'created_by', 'image'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function consumables(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

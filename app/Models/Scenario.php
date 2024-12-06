@@ -13,8 +13,32 @@ class Scenario extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'keyword', "slug", "state", 'is_public', 'uniqid'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', "created_by"];
+    protected $fillable = ['name', 'description', 'keyword', "slug", "state", 'is_public', 'uniqid', 'is_visible', 'created_by', 'image'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+
+    public function getPathFiles()
+    {
+        return \DB::table('file_scenario')
+            ->where('scenario_id', $this->id)
+            ->pluck('file');
+    }
+
+    public function setPathFiles(array|string|null $files): void
+    {
+        if (!$files) {
+            return;
+        }
+        $files = is_array($files) ? $files : [$files];
+
+        $data = array_map(function ($file) {
+            return [
+                'scenario_id' => $this->id,
+                'file' => $file
+            ];
+        }, $files);
+
+        \DB::table('file_scenario')->insert($data);
+    }
 
     public function pages(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
@@ -64,5 +88,10 @@ class Scenario extends Model
     public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function panoplies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Panoply::class);
     }
 }

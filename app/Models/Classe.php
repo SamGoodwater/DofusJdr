@@ -13,8 +13,8 @@ class Classe extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['official_id', 'dofusdb_id', 'uniqid', 'name', 'description_fast', 'description', 'life', 'life_dice', 'specificity', 'weapons_of_choice', 'usable', 'dofus_version'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
+    protected $fillable = ['official_id', 'dofusdb_id', 'uniqid', 'name', 'description_fast', 'description', 'life', 'life_dice', 'specificity', 'weapons_of_choice', 'usable', 'dofus_version', 'is_visible', 'created_by', 'image', "icon"];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function spells(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

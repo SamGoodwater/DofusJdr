@@ -2,24 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SectionFilterRequest;
 use App\Models\Section;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class SectionController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(): \Inertia\Response
+    public function index(Request $request): \Inertia\Response
     {
         $this->authorize('viewAny', Section::class);
 
-        $sections = Section::orderBy("order_num")->with('page')->get();
+        // Récupère la valeur de 'paginationMaxDisplay' depuis la requête, avec une valeur par défaut de 25
+        $paginationMaxDisplay = max(1, min(500, (int) $request->input('paginationMaxDisplay', 25)));
 
-        return Inertia::render('Sections/Index', [
-            'sections' => $sections
+        $sections = Section::orderBy("order_num")->with('page')->paginate($paginationMaxDisplay);
+
+        return Inertia::render('section.index', [
+            'section' => $sections,
         ]);
     }
 
@@ -28,7 +34,8 @@ class SectionController extends Controller
         $this->authorize('view', $section);
 
         return Inertia::render('Sections/Show', [
-            'section' => $section
+            'section' => $section,
+            'files' => $section->getPathFiles()
         ]);
     }
 
@@ -43,11 +50,15 @@ class SectionController extends Controller
         ]);
     }
 
-    public function store(): RedirectResponse
+    public function store(SectionFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Section::class);
 
-        $section = Section::create(request()->all());
+        $data = $request->validated();
+        $data['created_by'] = Auth::user()?->id ?? "-1";
+        $section = Section::create($data);
+        $file = $request->validated('file') ?? null;
+        $section->setPathFiles($file?->store('sections', 'modules'));
 
         return redirect()->route('sections.show', ['section' => $section])->with('success', 'La section a bien été créée');
     }
@@ -58,15 +69,18 @@ class SectionController extends Controller
 
         return Inertia::render('Sections/Edit', [
             'section' => $section,
-            'pages' => Page::pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",)
+            'pages' => Page::pluck("name", "is_editable", "is_public", "is_visible", "is_dropdown", "uniqid",),
+            'files' => $section->getPathFiles()
         ]);
     }
 
-    public function update(Section $section): RedirectResponse
+    public function update(Section $section, SectionFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $section);
 
-        $section->update(request()->all());
+        $section->update($request->validated());
+        $file = $request->validated('file') ?? null;
+        $section->setPathFiles($file?->store('sections', 'modules'));
 
         return redirect()->route('sections.show', ['section' => $section])->with('success', 'La section a bien été modifiée');
     }

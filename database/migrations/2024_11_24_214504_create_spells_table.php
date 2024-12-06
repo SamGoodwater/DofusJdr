@@ -35,6 +35,8 @@ return new class extends Migration
             $table->boolean('is_magic')->default(true);
             $table->integer('powerful')->default(2);
             $table->boolean('usable')->default(false);
+            $table->boolean('is_visible')->default(false);
+            $table->string('image')->nullable();
             $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();

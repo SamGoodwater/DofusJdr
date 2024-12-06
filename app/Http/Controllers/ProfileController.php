@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class ProfileController extends Controller
 {
+    use AuthorizesRequests;
 
     public function login(): Response
     {

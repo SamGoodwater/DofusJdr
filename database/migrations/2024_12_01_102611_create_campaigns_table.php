@@ -20,10 +20,19 @@ return new class extends Migration
             $table->string('keyword')->nullable();
             $table->boolean('is_public')->default(false);
             $table->tinyInteger('state')->default(0);
+            $table->boolean('is_visible')->default(false);
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
+        });
+
+        Schema::create('file_campaign', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(\App\Models\Campaign::class)->constrained()->cascadeOnDelete();
+            $table->string('file');
+            $table->softDeletes();
         });
 
         Schema::create('campaign_page', function (Blueprint $table) {
@@ -90,6 +99,13 @@ return new class extends Migration
             $table->primary(['ressource_id', 'campaign_id']);
             $table->softDeletes();
         });
+
+        Schema::create('campaign_panoply', function (Blueprint $table) {
+            $table->foreignIdFor(\App\Models\Panoply::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Campaign::class)->constrained()->onDelete('cascade');
+            $table->primary(['panoply_id', 'campaign_id']);
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -110,5 +126,6 @@ return new class extends Migration
         Schema::dropIfExists('campaign_shop');
         Schema::dropIfExists('campaign_spell');
         Schema::dropIfExists('ressource_campaign');
+        Schema::dropIfExists('campaign_panoply');
     }
 };

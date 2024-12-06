@@ -1,59 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue';
 import searchInput from '@/Components/layoutComponents/searchInput.vue';
-import { useFloating, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/vue";
-const referenceRef = ref(null);
-const floatingRef = ref(null);
-const arrowRef = ref(null);
-const isHidden = ref(true);
-
-
-async function calculatePosition() {
-    const { x, y, placement, middlewareData } = await useFloating(referenceRef, floatingRef, {
-        placement: "top-end",
-        whileElementsMounted: autoUpdate,
-        middleware: [
-            offset(8),
-            flip(),
-            shift({ padding: 5 }),
-            arrow({ element: arrowRef }),
-        ]
-    });
-
-    Object.assign(floatingRef.va1ue.styIe, {
-        left: `${X}px`,
-        top: `${Y}px`,
-    });
-
-    const { x: arrowX, y: arrowY } = middlewareData.arrow;
-
-    const opposedSide = {
-        top: "bottom",
-        bottom: "top",
-        left: "right",
-        right: "left",
-    }[placement].split("-")[0];
-
-    Object.assign(arrowRef.value.style, {
-        left: arrowX ? `${arrowX}px` : "",
-        top: arrowY ? `${arrowY}px` : "",
-        bottom: "",
-        right: "",
-        [opposedSide]: "-4px",
-    });
-}
-
-function hide() {
-    isHidden.value = true;
-}
-function show() {
-    isHidden.value = false;
-    calculatePosition();
-}
+import Tooltips from '@/Components/feedback/tooltips.vue';
+import { ref } from 'vue';
 
 const appName = ref(import.meta.env.VITE_APP_NAME);
 const appVersion = ref(import.meta.env.VITE_APP_VERSION);
 const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
+const appSlogan = ref(import.meta.env.VITE_APP_SLOGAN);
 </script>
 
 <template>
@@ -64,20 +17,19 @@ const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
             class="px-2 pt-4 fixed top-0 left-0 bottom-0 z-40 w-64 transition-transform -translate-x-full sm:translate-x-0 bg-base-200"
             aria-label="Sidenav">
 
-            <div id="header" ref="referenceRef" @mouseenter="show" @mouseleave="hide" @focus="show" @blur="hide">
-                <Link class="hover:scale-105 focus:scale-95" :href="route('home')">
-                <figure>
-                    <img class="w-auto px-8" src="storage/logos/logo.png" alt="Logo de {{ appName }}" />
-                </figure>
-                <h2 class="text-lg text-secondary/50 text-center">{{ appName }}</h2>
-                </Link>
-            </div>
-            <div ref="floatingRef" :style="floatingStyles"
-                :class="['w-max absolute z-50 left-0 top-0 rounded-lg bg-base-100/75 text-secondary', isHidden && 'hidden']">
-                Aller à
-                la page d'accueil
-                <div ref="arrowRef" class="absolute bg-base-100/75 w-2 h-2 rotate-45"></div>
-            </div>
+            <Tooltips placement="bottom-center">
+                <template #reference>
+                    <Link class="hover:scale-105 focus:scale-95" :href="route('home')">
+                    <figure>
+                        <img class="w-auto px-8" src="storage/logos/logo.png" alt="Logo de {{ appName }}" />
+                    </figure>
+                    <h2 class="text-sm text-secondary/50 text-center">{{ appSlogan }}</h2>
+                    </Link>
+                </template>
+                <template #content>
+                    Aller à la page d'accueil
+                </template>
+            </Tooltips>
 
             <div id="nav" class="my-10">
                 <ul>

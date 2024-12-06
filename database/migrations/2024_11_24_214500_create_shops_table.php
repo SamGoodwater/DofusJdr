@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->integer('price')->default(0);
             $table->boolean('usable')->default(true);
+            $table->boolean('is_visible')->default(false);
+            $table->string('image')->nullable();
             $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();

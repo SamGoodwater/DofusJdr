@@ -45,6 +45,13 @@ return new class extends Migration
             $table->foreignIdFor(Page::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
+
+        Schema::create('file_section', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(\App\Models\Section::class)->constrained()->cascadeOnDelete();
+            $table->string('file');
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -54,6 +61,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('pages');
         Schema::dropIfExists('sections');
+        Schema::dropIfExists('file_section');
         Schema::table('sections', function (Blueprint $table) {
             $table->dropForeignIdFor(Page::class);
         });

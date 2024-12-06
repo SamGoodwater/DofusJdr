@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use App\Rules\FileRules;
 
 class SectionFilterRequest extends FormRequest
 {
@@ -32,6 +33,7 @@ class SectionFilterRequest extends FormRequest
             "page_id" => ["integer", "exists:pages,uniqid", "nullable"],
             "uniqid" => ["string", "min:1", "max:255", "required", Rule::unique("sections", "uniqid")->ignore($this->route()->parameter('section'))],
             'created_by' => ["integer", "nullable", "exists:users,id"],
+            "file" => FileRules::rules([FileRules::TYPE_IMAGE, FileRules::TYPE_AUDIO, FileRules::TYPE_DOCUMENT, fileRules::TYPE_VIDEO]),
         ];
     }
 

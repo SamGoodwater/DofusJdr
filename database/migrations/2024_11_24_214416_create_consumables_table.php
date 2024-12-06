@@ -27,6 +27,8 @@ return new class extends Migration
             $table->integer('rarity')->default(5);
             $table->boolean('usable')->default(false);
             $table->string('dofus_version')->default('3');
+            $table->boolean('is_visible')->default(false);
+            $table->string('image')->nullable();
             $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();

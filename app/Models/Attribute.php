@@ -13,8 +13,8 @@ class Attribute extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['uniqid', 'name', 'description'];
-    protected $hidden = ["id", 'created_at', 'updated_at', 'deleted_at', 'created_by'];
+    protected $fillable = ['uniqid', 'name', 'description', 'is_visible', 'image', 'created_by'];
+    protected $hidden = ["id", 'created_at', 'updated_at', 'deleted_at'];
 
     public function classes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

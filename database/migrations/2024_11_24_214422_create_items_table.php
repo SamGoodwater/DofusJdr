@@ -32,6 +32,8 @@ return new class extends Migration
             $table->integer('rarity')->default(5);
             $table->boolean('usable')->default(false);
             $table->string('dofus_version')->default('3');
+            $table->boolean('is_visible')->default(false);
+            $table->string('image')->nullable();
             $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
@@ -44,6 +46,13 @@ return new class extends Migration
             $table->primary(['item_id', 'ressource_id']);
             $table->softDeletes();
         });
+
+        Schema::create('item_panoply', function (Blueprint $table) {
+            $table->foreignIdFor(\App\Models\Item::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Panoply::class)->constrained()->cascadeOnDelete();
+            $table->primary(['item_id', 'panoply_id']);
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -53,6 +62,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('items');
         Schema::dropIfExists('item_ressource');
+        Schema::dropIfExists('item_panoply');
         Schema::table('items', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
         });

@@ -103,15 +103,17 @@ class Creature extends Model
         'other_item',
         'other_consumable',
         'other_spell',
-        'usable'
+        'usable',
+        'is_visible',
+        'created_by',
+        'image'
     ];
 
     protected $hidden = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at',
-        'created_by'
+        'deleted_at'
     ];
 
     public function ressources(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

@@ -24,10 +24,12 @@ class Page extends Model
         "is_visible",
         'is_editable',
         "page_id",
-        "uniqid"
+        "uniqid",
+        'is_visible',
+        'created_by',
 
     ];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
 
     public function page(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -48,5 +50,10 @@ class Page extends Model
     public function scenarios(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Scenario::class);
+    }
+
+    public function specialization(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Specialization::class);
     }
 }

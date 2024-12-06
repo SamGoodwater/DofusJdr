@@ -13,8 +13,8 @@ class Ressource extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['official_id', 'dofusdb_id', 'uniqid', 'name', 'description', 'level', 'type', 'price', 'weight', 'rarity', 'usable', 'dofus_version'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
+    protected $fillable = ['official_id', 'dofusdb_id', 'uniqid', 'name', 'description', 'level', 'type', 'price', 'weight', 'rarity', 'usable', 'dofus_version', 'is_visible', 'created_by', 'image'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function mobs(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

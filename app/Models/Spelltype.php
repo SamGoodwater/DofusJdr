@@ -13,7 +13,7 @@ class Spelltype extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'description', "color", "icon"];
+    protected $fillable = ['name', 'description', "color", "icon", 'is_visible'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'created_by'];
 
     public function spells(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

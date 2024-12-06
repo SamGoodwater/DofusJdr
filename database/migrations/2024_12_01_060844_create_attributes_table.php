@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('uniqid', 20)->unique();
             $table->string('name');
             $table->string('description')->nullable();
+            $table->boolean('is_visible')->default(false);
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

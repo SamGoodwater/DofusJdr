@@ -13,8 +13,8 @@ class Capability extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'effect', 'level', 'pa', 'po', 'po_editable', 'time_before_use_again', 'casting_time', 'duration', 'element', 'is_magic', 'ritual_available', 'powerful', 'usable'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by'];
+    protected $fillable = ['name', 'description', 'effect', 'level', 'pa', 'po', 'po_editable', 'time_before_use_again', 'casting_time', 'duration', 'element', 'is_magic', 'ritual_available', 'powerful', 'usable', 'is_visible', 'created_by', 'image'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function specializations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

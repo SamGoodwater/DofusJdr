@@ -7,6 +7,7 @@ use App\Models\Item;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -17,36 +18,23 @@ class ItemController extends Controller
         $this->authorize('viewAny', Item::class);
 
         // Récupère la valeur de 'paginationMaxDisplay' depuis la requête, avec une valeur par défaut de 25
-        $paginationMaxDisplay = (int) $request->input('paginationMaxDisplay', 25);
-
-        // Limite la valeur maximale à 500
-        if ($paginationMaxDisplay > 500) {
-            $paginationMaxDisplay = 500;
-        } else if ($paginationMaxDisplay < 1) {
-            $paginationMaxDisplay = 1;
-        } else {
-            $paginationMaxDisplay = (int) $paginationMaxDisplay;
-        }
+        $paginationMaxDisplay = max(1, min(500, (int) $request->input('paginationMaxDisplay', 25)));
 
         $items = Item::paginate($paginationMaxDisplay);
 
         return Inertia::render('item.index', [
-            'items' => $items
+            'items' => $items,
         ]);
     }
 
-    public function show(Item $item, Request $request): Item | RedirectResponse | Inertia
+    public function show(Item $item, Request $request): \Inertia\Response
     {
         $this->authorize('view', $item);
 
-        $getView = (bool) $request->input('getView', false);
-
-        if ($getView) {
-            return Inertia::render('item.show', [
-                'item' => $item
-            ]);
-        }
-        return $item;
+        return Inertia::render('Items/Show', [
+            'ressources' => $item->ressources,
+            'panoply' => $item->panoply,
+        ]);
     }
 
     public function create(): \Inertia\Response
@@ -60,7 +48,10 @@ class ItemController extends Controller
     {
         $this->authorize('create', Item::class);
 
-        $item = Item::create($request->all());
+        $data = $request->validated();
+        $data['created_by'] = Auth::user()?->id ?? "-1";
+        $data['image'] = $request->file('image')?->store('items', 'modules');
+        $item = Item::create($data);
 
         return redirect()->route('item.show', ['item' => $item]);
     }
@@ -70,7 +61,9 @@ class ItemController extends Controller
         $this->authorize('update', $item);
 
         return Inertia::render('item.edit', [
-            'item' => $item
+            'item' => $item,
+            'ressources' => $item->ressources,
+            'panoply' => $item->panoply,
         ]);
     }
 
@@ -78,7 +71,9 @@ class ItemController extends Controller
     {
         $this->authorize('update', $item);
 
-        $item->update($request->all());
+        $data = $request->validated();
+        $data['image'] = $request->file('image')?->store('items', 'modules');
+        $item->update($data);
 
         return redirect()->route('item.show', ['item' => $item]);
     }
