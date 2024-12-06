@@ -1,5 +1,55 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import searchInput from '@/Components/layoutComponents/searchInput.vue';
+import { useFloating, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/vue";
+const referenceRef = ref(null);
+const floatingRef = ref(null);
+const arrowRef = ref(null);
+const isHidden = ref(true);
+
+
+async function calculatePosition() {
+    const { x, y, placement, middlewareData } = await useFloating(referenceRef, floatingRef, {
+        placement: "top-end",
+        whileElementsMounted: autoUpdate,
+        middleware: [
+            offset(8),
+            flip(),
+            shift({ padding: 5 }),
+            arrow({ element: arrowRef }),
+        ]
+    });
+
+    Object.assign(floatingRef.va1ue.styIe, {
+        left: `${X}px`,
+        top: `${Y}px`,
+    });
+
+    const { x: arrowX, y: arrowY } = middlewareData.arrow;
+
+    const opposedSide = {
+        top: "bottom",
+        bottom: "top",
+        left: "right",
+        right: "left",
+    }[placement].split("-")[0];
+
+    Object.assign(arrowRef.value.style, {
+        left: arrowX ? `${arrowX}px` : "",
+        top: arrowY ? `${arrowY}px` : "",
+        bottom: "",
+        right: "",
+        [opposedSide]: "-4px",
+    });
+}
+
+function hide() {
+    isHidden.value = true;
+}
+function show() {
+    isHidden.value = false;
+    calculatePosition();
+}
 
 const appName = ref(import.meta.env.VITE_APP_NAME);
 const appVersion = ref(import.meta.env.VITE_APP_VERSION);
@@ -10,24 +60,23 @@ const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
 
     <div>
 
-        <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar"
-            aria-controls="default-sidebar" type="button"
-            class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-            <span class="sr-only">Open sidebar</span>
-            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path clip-rule="evenodd" fill-rule="evenodd"
-                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
-                </path>
-            </svg>
-        </button>
-
         <aside id="default-sidebar"
             class="px-2 pt-4 fixed top-0 left-0 bottom-0 z-40 w-64 transition-transform -translate-x-full sm:translate-x-0 bg-base-200"
             aria-label="Sidenav">
 
-            <div id="header">
-                <h2 class="text-2xl text-secondary text-center">{{ appName }}</h2>
+            <div id="header" ref="referenceRef" @mouseenter="show" @mouseleave="hide" @focus="show" @blur="hide">
+                <Link class="hover:scale-105 focus:scale-95" :href="route('home')">
+                <figure>
+                    <img class="w-auto px-8" src="storage/logos/logo.png" alt="Logo de {{ appName }}" />
+                </figure>
+                <h2 class="text-lg text-secondary/50 text-center">{{ appName }}</h2>
+                </Link>
+            </div>
+            <div ref="floatingRef" :style="floatingStyles"
+                :class="['w-max absolute z-50 left-0 top-0 rounded-lg bg-base-100/75 text-secondary', isHidden && 'hidden']">
+                Aller à
+                la page d'accueil
+                <div ref="arrowRef" class="absolute bg-base-100/75 w-2 h-2 rotate-45"></div>
             </div>
 
             <div id="nav" class="my-10">
@@ -52,6 +101,8 @@ const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
             </div>
 
             <div id="footer">
+                <searchInput class="max-sm:block hidden" />
+
                 <div class="btm-nav bg-transparent border-t-2 border-base-300">
                     <button>
                         <label class="swap swap-rotate">

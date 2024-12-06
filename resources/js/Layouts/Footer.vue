@@ -16,7 +16,7 @@ const appStability = ref(convertStability[import.meta.env.VITE_APP_STABILITY]);
 
 
 <template>
-    <footer class="h-14 py-2 m-o mt-2 p-0 flex flex-auto justify-center fixed bottom-0 left-64 sm:left-0 right-0">
+    <footer class="h-14 flex justify-center">
 
         <!-- Si l'affichage est plus grand que sm : alors on affiche un footer classique -->
         <div class="block max-sm:hidden content-center">
@@ -60,6 +60,6 @@ const appStability = ref(convertStability[import.meta.env.VITE_APP_STABILITY]);
 <style scoped>
 footer {
     backdrop-filter: blur(3px);
-    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0));
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 1));
 }
 </style>

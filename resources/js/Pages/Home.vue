@@ -21,17 +21,9 @@ const appKeywords = ref(import.meta.env.VITE_APP_KEYWORDS);
         <meta head-key="description" name="description" :content="appDescription" />
         <meta head-key="keywords" name="keywords" :content="appKeywords + ', Accueil'" />
     </Head>
-    <section class=" prose prose-stone prose-a:text-secondary sm:prose-md lg:prose-lg">
-        <h1>Home</h1>
-        <p>
-            <Link :href="route('auth.login')">
-            Login
-            </Link>
-            <Link :href="route('auth.register')">
-            Register
-            </Link>
-        </p>
-        <button class="btn bg-primary hover:bg-base-300">
+    <section class=" prose prose-state prose-a:text-secondary max-md:prose-sm lg:prose-lg">
+
+        <button class="btn glass bg-main-800 hover:bg-main-600">
             Button
         </button>
 

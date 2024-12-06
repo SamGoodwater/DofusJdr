@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
                 'name' => 'Goodwater',
                 'email' => 'contact@jdr.iota21.fr',
                 'role' => User::ROLES['super_admin'],
-                'password' => Hash::make('0238962625'),
+                'password' => Hash::make('0000'),
                 'uniqid' => uniqid(),
             ]);
         }

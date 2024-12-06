@@ -25,24 +25,33 @@ const appKeywords = ref(import.meta.env.VITE_APP_KEYWORDS);
         <meta head-key="keywords" name="keywords" :content="appKeywords" />
     </Head>
 
-    <div>
-        <Header />
+    <div class="relative">
+
+        <Header class="z-10 fixed max-sm:ml-0 ml-64 top-0 w-fit-available" />
+
+        <Aside class="z-20" />
+
+        <main
+            class="relative max-sm:ml-0 ml-64 flex justify-center z-0 w-fit-available h-fit-available overflow-hidden">
+            <div class="pt-24 pb-24 lg:px-10 md:px-6 sm:px-6 max-sm:px-4">
+                <slot />
+            </div>
+            <div class="background fixed w-screen h-screen overflow-hidden"></div>
+        </main>
+
+        <Footer class="z-10 fixed max-sm:ml-0 ml-64 bottom-0 w-fit-available h-fit-available" />
+
     </div>
 
-    <nav>
-        <Aside />
-    </nav>
 
-    <main class="my-8 mx-6 pt-6 pb-20 sm:ml-64 flex justify-center">
-        <div class="">
-            <slot />
-        </div>
-    </main>
 
-    <div>
-        <Footer />
-    </div>
+
 
 </template>
 
-<style scoped></style>
+<style scoped>
+.background {
+    z-index: -1;
+    background-image: linear-gradient(195deg, #1e40af 0%, #1e3a8a 3%, #172554 10%, #1e293b 25%, #1e293b 40%, #0f172a 62%, #020617 81%, #020617 100%)
+}
+</style>

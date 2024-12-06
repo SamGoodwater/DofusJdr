@@ -2,40 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 @layer components {
-    @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
-    * {
-        font-family: "Lato", sans-serif;
-        font-weight: 400;
-    }
-    html,
-    body {
-        height: 100vh;
-        width: 100vw;
-    }
-    .lato {
-        font-family: "Lato", sans-serif;
-    }
-    .lato-thin,
-    .lato-100 {
-        font-weight: 100;
-    }
-    .lato-light,
-    .lato-300 {
-        font-weight: 300;
-    }
-    .lato-regular,
-    .lato-400 {
-        font-weight: 400;
-    }
-    .lato-bold,
-    .lato-700 {
-        font-weight: 700;
-    }
-    .lato-black,
-    .lato-900 {
-        font-weight: 900;
-    }
-    .prose {
-        max-width: 100ch;
-    }
+  @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+  * {
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+  }
+  html,
+  body {
+    height: 100vh;
+    width: 100vw;
+  }
+  .lato {
+    font-family: "Lato", sans-serif;
+  }
+  .lato-thin, .lato-100 {
+    font-weight: 100;
+  }
+  .lato-light, .lato-300 {
+    font-weight: 300;
+  }
+  .lato-regular, .lato-400 {
+    font-weight: 400;
+  }
+  .lato-bold, .lato-700 {
+    font-weight: 700;
+  }
+  .lato-black, .lato-900 {
+    font-weight: 900;
+  }
+  .prose {
+    max-width: 100ch;
+  }
+  .w-fit-available {
+    width: 100%;
+    width: -moz-available; /* WebKit-based browsers will ignore this. */
+    width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+    width: fill-available;
+  }
+  .h-fit-available {
+    height: 100%;
+    height: -moz-available; /* WebKit-based browsers will ignore this. */
+    height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+    height: fill-available;
+  }
 }
+
