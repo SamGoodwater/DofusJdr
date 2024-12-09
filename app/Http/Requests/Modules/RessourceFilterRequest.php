@@ -40,6 +40,7 @@ class RessourceFilterRequest extends FormRequest
             "uniqid" => ["string", "min:1", "max:255", "required", Rule::unique("ressources", "uniqid")->ignore($this->route()->parameter('ressource'))],
             'created_by' => ["integer", "nullable", "exists:users,id"],
             "image" => FileRules::rules([FileRules::TYPE_IMAGE]),
+            "auto_update" => ["boolean"],
         ];
     }
 
@@ -53,7 +54,8 @@ class RessourceFilterRequest extends FormRequest
             'level' => $this->input("level") ?: 1,
             'price' => $this->input("price") ?: 0,
             'rarity' => $this->input("rarity") ?: \App\Models\Modules\Item::RARITIES["Commun"],
-            'dofus_version' => $this->input("dofus_version") ?: "3"
+            'dofus_version' => $this->input("dofus_version") ?: "3",
+            'auto_update' => $this->input("auto_update") ?: true,
         ]);
     }
 }

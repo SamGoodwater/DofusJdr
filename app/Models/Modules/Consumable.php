@@ -30,7 +30,8 @@ class Consumable extends Model
         'is_visible',
         'created_by',
         'image',
-        'consumabletype_id'
+        'consumabletype_id',
+        'auto_update',
     ];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 

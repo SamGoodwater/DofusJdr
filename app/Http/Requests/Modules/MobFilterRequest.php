@@ -30,7 +30,8 @@ class MobFilterRequest extends CreatureFilterRequest
                 'official_id' => ["integer", "min:1", "max:255", "nullable"],
                 'dofusdb_id' => ["integer", "min:1", "max:255", "nullable"],
                 'size' => ["integer", Rule::in(Mob::SIZE), "nullable"],
-                'dofus_version' => ["string", "min:1", "max:10", "nullable"]
+                'dofus_version' => ["string", "min:1", "max:10", "nullable"],
+                'auto_update' => ["boolean"],
             ]
         );
     }
@@ -45,6 +46,7 @@ class MobFilterRequest extends CreatureFilterRequest
             'dofusdb_id' => $this->dofusdb_id ?? null,
             'size' => $this->size ?? Mob::SIZE["moyenne"],
             'dofus_version' => $this->dofus_version ?? "3",
+            'auto_update' => $this->auto_update ?? true,
         ]);
     }
 }

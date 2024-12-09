@@ -41,7 +41,8 @@ class Item extends Model
         'is_visible',
         'created_by',
         'image',
-        'itemtype_id'
+        'itemtype_id',
+        'auto_update',
     ];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 

@@ -49,6 +49,7 @@ class SpellFilterRequest extends FormRequest
             "uniqid" => ["string", "min:1", "max:255", "required", Rule::unique("spells", "uniqid")->ignore($this->route()->parameter('spell'))],
             'created_by' => ["integer", "nullable", "exists:users,id"],
             "image" => FileRules::rules([FileRules::TYPE_IMAGE]),
+            "auto_update" => ["boolean"],
         ];
     }
 
@@ -69,6 +70,7 @@ class SpellFilterRequest extends FormRequest
             'is_magic' => $this->input("is_magic") ?: false,
             'powerful' => $this->input("powerful") ?: 0,
             'po_editable' => $this->input("po_editable") ?: false,
+            'auto_update' => $this->input("auto_update") ?: true,
         ]);
     }
 }

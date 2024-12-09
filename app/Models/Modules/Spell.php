@@ -408,7 +408,8 @@ class Spell extends Model
         'usable',
         'is_visible',
         'created_by',
-        'image'
+        'image',
+        'auto_update',
     ];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 

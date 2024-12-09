@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('dofus_version')->default('3');
             $table->boolean('is_visible')->default(false);
             $table->string('image')->nullable();
+            $table->boolean('auto_update')->default(true);
             $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\Modules\Itemtype::class)->nullable()->constrained()->cascadeOnDelete();

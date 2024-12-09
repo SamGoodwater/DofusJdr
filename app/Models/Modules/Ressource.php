@@ -29,7 +29,8 @@ class Ressource extends Model
         'is_visible',
         'created_by',
         'image',
-        'ressourcetpe_id'
+        'ressourcetpe_id',
+        'auto_update',
     ];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 

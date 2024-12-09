@@ -37,6 +37,7 @@ return new class extends Migration
             $table->boolean('usable')->default(false);
             $table->boolean('is_visible')->default(false);
             $table->string('image')->nullable();
+            $table->boolean('auto_update')->default(true);
             $table->softDeletes();
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();

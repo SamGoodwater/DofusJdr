@@ -35,9 +35,7 @@ $slugRegex = '[A-Za-z0-9]+(?:(-|_).[A-Za-z0-9]+)*';
 Route::get('/', function () {
     return Inertia::render('Home', [
         'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'canRegister' => Route::has('register')
     ]);
 })->name('home');
 

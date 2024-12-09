@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/other/Dropdown.vue';
-import DropdownLink from '@/Components/other/DropdownLink.vue';
+import Dropdown from '@/Components/actions/Dropdown.vue';
+import DropdownLink from '@/Components/actions/DropdownLink.vue';
 import NavLink from '@/Components/other/NavLink.vue';
 import ResponsiveNavLink from '@/Components/other/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';

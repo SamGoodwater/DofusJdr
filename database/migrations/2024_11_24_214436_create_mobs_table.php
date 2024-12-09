@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('official_id')->nullable();
             $table->string('dofusdb_id')->nullable();
             $table->string('dofus_version')->default('3');
+            $table->boolean('auto_update')->default(true);
             $table->integer('size')->default(2);
 
             $table->foreignIdFor(\App\Models\Modules\MobRace::class)->nullable()->constrained()->cascadeOnDelete();

@@ -49,7 +49,6 @@ function showTooltips() {
     isHidden.value = false;
 }
 
-console.log(props.bgColor)
 </script>
 
 <template>

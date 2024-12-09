@@ -40,6 +40,7 @@ class ClasseFilterRequest extends FormRequest
             'created_by' => ["integer", "nullable", "exists:users,id"],
             "image" => FileRules::rules([FileRules::TYPE_IMAGE]),
             "icon" => FileRules::rules([FileRules::TYPE_IMAGE]),
+            "auto_update" => ["boolean"],
         ];
     }
 
@@ -53,6 +54,7 @@ class ClasseFilterRequest extends FormRequest
             'life' => $this->input("life") ?: 0,
             'life_dice' => $this->input("life_dice") ?: 8,
             'dofus_version' => $this->input("dofus_version") ?: "3",
+            'auto_update' => $this->input("auto_update") ?: true,
         ]);
     }
 }

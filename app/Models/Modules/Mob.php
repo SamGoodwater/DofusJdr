@@ -42,7 +42,8 @@ class Mob extends Creature
                 'official_id',
                 'dofusdb_id',
                 'size',
-                'dofus_version'
+                'dofus_version',
+                'auto_update',
             ]
         );
     }

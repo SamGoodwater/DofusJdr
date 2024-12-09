@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue';
+import { Head } from '@inertiajs/vue3';
+import Btn from '@/Components/actions/Btn.vue';
 
 const convertStability = {
     alpha: "α",
@@ -13,6 +15,10 @@ const appVersion = ref(import.meta.env.VITE_APP_VERSION);
 const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
 const appStability = ref(convertStability[import.meta.env.VITE_APP_STABILITY]);
 const appKeywords = ref(import.meta.env.VITE_APP_KEYWORDS);
+
+import { usePage } from '@inertiajs/vue3';
+const page = usePage();
+
 </script>
 
 <template>
@@ -23,9 +29,12 @@ const appKeywords = ref(import.meta.env.VITE_APP_KEYWORDS);
     </Head>
     <section class=" prose prose-state prose-a:text-secondary max-md:prose-sm lg:prose-lg">
 
-        <button class="btn glass bg-main-800 hover:bg-main-600">
-            Button
-        </button>
+        <Btn styled="glass" class="bg-main-800 hover:bg-main-600">
+            <template #label>
+                Button
+            </template>
+        </Btn>
+
 
         <h3 id="bienvenue-dans-krosmosjdr-l-aventure-pique-dans-l-univers-du-monde-des-douze-">Bienvenue dans
             <strong>KrosmosJDR</strong>, l’aventure épique dans l’univers du monde des Douze !
