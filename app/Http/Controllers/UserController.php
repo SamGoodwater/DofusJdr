@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UserFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -14,7 +15,7 @@ class UserController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(UserFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', User::class);
 
@@ -28,7 +29,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function show(User $user, Request $request): \Inertia\Response
+    public function show(User $user, UserFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $user);
 
@@ -45,7 +46,7 @@ class UserController extends Controller
         return Inertia::render('user.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(UserFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', User::class);
 
@@ -63,6 +64,10 @@ class UserController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $user = User::create($data);
+        $user->scenarios()->attach($request->input('scenarios'));
+        $user->campaigns()->attach($request->input('campaigns'));
+
+        event(new NotificationSuperAdminEvent('user', 'create',  $user));
 
         return redirect()->route('user.show', ['user' => $user]);
     }
@@ -78,9 +83,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(User $user, Request $request): RedirectResponse
+    public function update(User $user, UserFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $user);
+        $old_user = $user;
 
         $data = DataService::extractData($request, $user, [
             [
@@ -95,6 +101,10 @@ class UserController extends Controller
             return redirect()->back()->withInput();
         }
         $user->update($data);
+        $user->scenarios()->sync($request->input('scenarios'));
+        $user->campaigns()->sync($request->input('campaigns'));
+
+        event(new NotificationSuperAdminEvent('user', "update", $user, $old_user));
 
         return redirect()->route('user.show', ['user' => $user]);
     }
@@ -102,7 +112,7 @@ class UserController extends Controller
     public function delete(User $user): RedirectResponse
     {
         $this->authorize('delete', $user);
-
+        event(new NotificationSuperAdminEvent('user', "delete", $user));
         $user->delete();
 
         return redirect()->route('user.index');
@@ -112,7 +122,11 @@ class UserController extends Controller
     {
         $this->authorize('forceDelete', $user);
 
+        $user->scenarios()->detach();
+        $user->campaigns()->detach();
+
         DataService::deleteFile($user, 'image');
+        event(new NotificationSuperAdminEvent('user', "forced_delete", $user));
         $user->forceDelete();
 
         return redirect()->route('user.index');

@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\CapabilityFilterRequest;
 use App\Models\Modules\Capability;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use App\Services\DataService;
 use Inertia\Inertia;
+use App\Events\NotificationSuperAdminEvent;
 
 class CapabilityController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(CapabilityFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Capability::class);
 
@@ -30,7 +30,7 @@ class CapabilityController extends Controller
         ]);
     }
 
-    public function show(Capability $capability, Request $request): \Inertia\Response
+    public function show(Capability $capability, CapabilityFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $capability);
 
@@ -47,7 +47,7 @@ class CapabilityController extends Controller
         return Inertia::render('capability.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(CapabilityFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Capability::class);
 
@@ -67,6 +67,8 @@ class CapabilityController extends Controller
 
         $capability = Capability::create($data);
 
+        event(new NotificationSuperAdminEvent('capability', 'create',  $capability));
+
         return redirect()->route('capability.show', ['capability' => $capability]);
     }
 
@@ -81,9 +83,10 @@ class CapabilityController extends Controller
         ]);
     }
 
-    public function update(Capability $capability, Request $request): RedirectResponse
+    public function update(Capability $capability, CapabilityFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $capability);
+        $old_capability = $capability;
 
         $data = DataService::extractData($request, $capability, [
             [
@@ -98,6 +101,7 @@ class CapabilityController extends Controller
             return redirect()->back()->withInput();
         }
         $capability->update($data);
+        event(new NotificationSuperAdminEvent('capability', "update", $capability, $old_capability));
 
         return redirect()->route('capability.show', ['capability' => $capability]);
     }
@@ -105,7 +109,7 @@ class CapabilityController extends Controller
     public function delete(Capability $capability): RedirectResponse
     {
         $this->authorize('delete', $capability);
-
+        event(new NotificationSuperAdminEvent('capability', "delete", $capability));
         $capability->delete();
 
         return redirect()->route('capability.index');
@@ -116,6 +120,7 @@ class CapabilityController extends Controller
         $this->authorize('forceDelete', $capability);
 
         DataService::deleteFile($capability, 'image');
+        event(new NotificationSuperAdminEvent('capability', "forced_delete", $capability));
         $capability->forceDelete();
 
         return redirect()->route('capability.index');

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\Modules\ConsumabletypeFilterRequest;
 use App\Models\Modules\Consumabletype;
-use Illuminate\Http\Request;
+use App\Events\NotificationSuperAdminEvent;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -16,7 +16,7 @@ class ConsumabletypeController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(ConsumabletypeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Consumabletype::class);
 
@@ -30,7 +30,7 @@ class ConsumabletypeController extends Controller
         ]);
     }
 
-    public function show(Consumabletype $consumabletype, Request $request): \Inertia\Response
+    public function show(Consumabletype $consumabletype, ConsumabletypeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $consumabletype);
 
@@ -46,7 +46,7 @@ class ConsumabletypeController extends Controller
         return Inertia::render('consumabletype.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ConsumabletypeFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Consumabletype::class);
 
@@ -56,6 +56,8 @@ class ConsumabletypeController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $consumabletype = Consumabletype::create($data);
+
+        event(new NotificationSuperAdminEvent('consumabletype', 'create',  $consumabletype));
 
         return redirect()->route('consumabletype.show', ['consumabletype' => $consumabletype]);
     }
@@ -69,9 +71,10 @@ class ConsumabletypeController extends Controller
         ]);
     }
 
-    public function update(Consumabletype $consumabletype, Request $request): RedirectResponse
+    public function update(Consumabletype $consumabletype, ConsumabletypeFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $consumabletype);
+        $old_consumabletype = clone $consumabletype;
 
         $data = DataService::extractData($request, $consumabletype());
         if ($data === []) {
@@ -79,13 +82,15 @@ class ConsumabletypeController extends Controller
         }
         $consumabletype->update($data);
 
+        event(new NotificationSuperAdminEvent('consumabletype', "update", $consumabletype, $old_consumabletype));
+
         return redirect()->route('consumabletype.show', ['consumabletype' => $consumabletype]);
     }
 
     public function delete(Consumabletype $consumabletype): RedirectResponse
     {
         $this->authorize('delete', $consumabletype);
-
+        event(new NotificationSuperAdminEvent('consumabletype', "delete", $consumabletype));
         $consumabletype->delete();
 
         return redirect()->route('consumabletype.index');
@@ -94,7 +99,7 @@ class ConsumabletypeController extends Controller
     public function forceDelete(Consumabletype $consumabletype): RedirectResponse
     {
         $this->authorize('forceDelete', $consumabletype);
-
+        event(new NotificationSuperAdminEvent('consumabletype', "forced_delete", $consumabletype));
         $consumabletype->forceDelete();
 
         return redirect()->route('consumabletype.index');

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\ConditionFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Condition;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class ConditionController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(ConditionFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Condition::class);
 
@@ -30,7 +30,7 @@ class ConditionController extends Controller
         ]);
     }
 
-    public function show(Condition $condition, Request $request): \Inertia\Response
+    public function show(Condition $condition, ConditionFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $condition);
 
@@ -47,7 +47,7 @@ class ConditionController extends Controller
         return Inertia::render('condition.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ConditionFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Condition::class);
 
@@ -66,6 +66,8 @@ class ConditionController extends Controller
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $condition = Condition::create($data);
 
+        event(new NotificationSuperAdminEvent('condition', 'create',  $condition));
+
         return redirect()->route('condition.show', ['condition' => $condition]);
     }
 
@@ -80,9 +82,10 @@ class ConditionController extends Controller
         ]);
     }
 
-    public function update(Condition $condition, Request $request): RedirectResponse
+    public function update(Condition $condition, ConditionFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $condition);
+        $old_condition = $condition;
 
         $data = DataService::extractData($request, $condition(), [
             [
@@ -98,13 +101,15 @@ class ConditionController extends Controller
         }
         $condition->update($data);
 
+        event(new NotificationSuperAdminEvent('condition', "update", $condition, $old_condition));
+
         return redirect()->route('condition.show', ['condition' => $condition]);
     }
 
     public function delete(Condition $condition): RedirectResponse
     {
         $this->authorize('delete', $condition);
-
+        event(new NotificationSuperAdminEvent('condition', "delete", $condition));
         $condition->delete();
 
         return redirect()->route('condition.index');
@@ -115,6 +120,7 @@ class ConditionController extends Controller
         $this->authorize('forceDelete', $condition);
 
         DataService::deleteFile($condition, 'image');
+        event(new NotificationSuperAdminEvent('condition', "forced_delete", $condition));
         $condition->forceDelete();
 
         return redirect()->route('condition.index');

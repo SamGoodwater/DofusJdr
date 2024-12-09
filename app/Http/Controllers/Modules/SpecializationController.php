@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\SpecializationFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Specialization;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class SpecializationController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(SpecializationFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Specialization::class);
 
@@ -30,7 +30,7 @@ class SpecializationController extends Controller
         ]);
     }
 
-    public function show(Specialization $specialization, Request $request): \Inertia\Response
+    public function show(Specialization $specialization, SpecializationFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $specialization);
 
@@ -47,7 +47,7 @@ class SpecializationController extends Controller
         return Inertia::render('specialization.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(SpecializationFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Specialization::class);
 
@@ -65,6 +65,10 @@ class SpecializationController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $specialization = Specialization::create($data);
+        $specialization->capabilities()->sync($request->input('capabilities'));
+        $specialization->pages()->sync($request->input('pages'));
+
+        event(new NotificationSuperAdminEvent('specialization', 'create',  $specialization));
 
         return redirect()->route('specialization.show', ['specialization' => $specialization]);
     }
@@ -80,9 +84,10 @@ class SpecializationController extends Controller
         ]);
     }
 
-    public function update(Specialization $specialization, Request $request): RedirectResponse
+    public function update(Specialization $specialization, SpecializationFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $specialization);
+        $old_specialization = $specialization;
 
         $data = DataService::extractData($request, $specialization, [
             [
@@ -97,6 +102,10 @@ class SpecializationController extends Controller
             return redirect()->back()->withInput();
         }
         $specialization->update($data);
+        $specialization->capabilities()->sync($request->input('capabilities'));
+        $specialization->pages()->sync($request->input('pages'));
+
+        event(new NotificationSuperAdminEvent('specialization', "update", $specialization, $old_specialization));
 
         return redirect()->route('specialization.show', ['specialization' => $specialization]);
     }
@@ -104,7 +113,7 @@ class SpecializationController extends Controller
     public function delete(Specialization $specialization): RedirectResponse
     {
         $this->authorize('delete', $specialization);
-
+        event(new NotificationSuperAdminEvent('specialization', "delete", $specialization));
         $specialization->delete();
 
         return redirect()->route('specialization.index');
@@ -114,7 +123,11 @@ class SpecializationController extends Controller
     {
         $this->authorize('forceDelete', $specialization);
 
+        $specialization->capabilities()->detach();
+        $specialization->pages()->detach();
+
         DataService::deleteFile($specialization, 'image');
+        event(new NotificationSuperAdminEvent('specialization', "forced_delete", $specialization));
         $specialization->forceDelete();
 
         return redirect()->route('specialization.index');

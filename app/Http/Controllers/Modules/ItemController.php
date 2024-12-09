@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\ItemFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Item;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class ItemController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(ItemFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Item::class);
 
@@ -30,7 +30,7 @@ class ItemController extends Controller
         ]);
     }
 
-    public function show(Item $item, Request $request): \Inertia\Response
+    public function show(Item $item, ItemFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $item);
 
@@ -48,7 +48,7 @@ class ItemController extends Controller
         return Inertia::render('item.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ItemFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Item::class);
 
@@ -66,6 +66,9 @@ class ItemController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $item = Item::create($data);
+        $item->ressources()->sync($request->input('ressources', []));
+
+        event(new NotificationSuperAdminEvent('item', 'create',  $item));
 
         return redirect()->route('item.show', ['item' => $item]);
     }
@@ -82,9 +85,10 @@ class ItemController extends Controller
         ]);
     }
 
-    public function update(Item $item, Request $request): RedirectResponse
+    public function update(Item $item, ItemFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $item);
+        $old_item = $item;
 
         $data = DataService::extractData($request, $item, [
             [
@@ -99,6 +103,9 @@ class ItemController extends Controller
             return redirect()->back()->withInput();
         }
         $item->update($data);
+        $item->ressources()->sync($request->input('ressources', []));
+
+        event(new NotificationSuperAdminEvent('item', "update", $item, $old_item));
 
         return redirect()->route('item.show', ['item' => $item]);
     }
@@ -106,7 +113,7 @@ class ItemController extends Controller
     public function delete(Item $item): RedirectResponse
     {
         $this->authorize('delete', $item);
-
+        event(new NotificationSuperAdminEvent('item', "delete", $item));
         $item->delete();
 
         return redirect()->route('item.index');
@@ -116,6 +123,10 @@ class ItemController extends Controller
     {
         $this->authorize('forceDelete', $item);
 
+        $item->ressources()->detach();
+
+        DataService::deleteFile($item, 'image');
+        event(new NotificationSuperAdminEvent('item', "forced_delete", $item));
         $item->forceDelete();
 
         return redirect()->route('item.index');

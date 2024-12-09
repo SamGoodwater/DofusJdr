@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\ConsumableFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Consumable;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class ConsumableController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(ConsumableFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Consumable::class);
 
@@ -30,7 +30,7 @@ class ConsumableController extends Controller
         ]);
     }
 
-    public function show(Consumable $consumable, Request $request): \Inertia\Response
+    public function show(Consumable $consumable, ConsumableFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $consumable);
 
@@ -48,7 +48,7 @@ class ConsumableController extends Controller
         return Inertia::render('consumable.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ConsumableFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Consumable::class);
 
@@ -66,6 +66,9 @@ class ConsumableController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $consumable = Consumable::create($data);
+        $consumable->ressources()->sync($request->input('ressources'));
+
+        event(new NotificationSuperAdminEvent('consumable', 'create',  $consumable));
 
         return redirect()->route('consumable.show', ['consumable' => $consumable]);
     }
@@ -82,9 +85,10 @@ class ConsumableController extends Controller
         ]);
     }
 
-    public function update(Consumable $consumable, Request $request): RedirectResponse
+    public function update(Consumable $consumable, ConsumableFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $consumable);
+        $old_consumable = $consumable;
 
         $data = DataService::extractData($request, $consumable(), [
             [
@@ -99,6 +103,9 @@ class ConsumableController extends Controller
             return redirect()->back()->withInput();
         }
         $consumable->update($data);
+        $consumable->ressources()->sync($request->input('ressources'));
+
+        event(new NotificationSuperAdminEvent('consumable', "update", $consumable, $old_consumable));
 
         return redirect()->route('consumable.show', ['consumable' => $consumable]);
     }
@@ -106,7 +113,7 @@ class ConsumableController extends Controller
     public function delete(Consumable $consumable): RedirectResponse
     {
         $this->authorize('delete', $consumable);
-
+        event(new NotificationSuperAdminEvent('consumable', "delete", $consumable));
         $consumable->delete();
 
         return redirect()->route('consumable.index');
@@ -116,7 +123,10 @@ class ConsumableController extends Controller
     {
         $this->authorize('forceDelete', $consumable);
 
+        $consumable->ressources()->detach();
+
         DataService::deleteFile($consumable, 'image');
+        event(new NotificationSuperAdminEvent('consumable', "forced_delete", $consumable));
         $consumable->forceDelete();
 
         return redirect()->route('consumable.index');

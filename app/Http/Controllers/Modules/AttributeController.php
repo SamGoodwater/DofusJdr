@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Modules;
 
+use App\Events\NotificationSuperAdminEvent;
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\AttributeFilterRequest;
 use App\Models\Modules\Attribute;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -17,7 +17,7 @@ class AttributeController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(AttributeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Attribute::class);
 
@@ -31,7 +31,7 @@ class AttributeController extends Controller
         ]);
     }
 
-    public function show(Attribute $attribute, Request $request): \Inertia\Response
+    public function show(Attribute $attribute, AttributeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $attribute);
 
@@ -48,7 +48,7 @@ class AttributeController extends Controller
         return Inertia::render('attribute.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(AttributeFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Attribute::class);
 
@@ -66,6 +66,7 @@ class AttributeController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $attribute = Attribute::create($data);
+        event(new NotificationSuperAdminEvent('attribute', 'create',  $attribute));
 
         return redirect()->route('attribute.show', ['attribute' => $attribute]);
     }
@@ -81,9 +82,10 @@ class AttributeController extends Controller
         ]);
     }
 
-    public function update(Attribute $attribute, Request $request): RedirectResponse
+    public function update(Attribute $attribute, AttributeFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $attribute);
+        $old_attribute = $attribute;
 
         $data = DataService::extractData($request, $attribute, [
             [
@@ -98,6 +100,7 @@ class AttributeController extends Controller
             return redirect()->back()->withInput();
         }
         $attribute->update($data);
+        event(new NotificationSuperAdminEvent('attribute', "update", $attribute, $old_attribute));
 
         return redirect()->route('attribute.show', ['attribute' => $attribute]);
     }
@@ -106,6 +109,7 @@ class AttributeController extends Controller
     {
         $this->authorize('delete', $attribute);
 
+        event(new NotificationSuperAdminEvent('attribute', "delete", $attribute));
         $attribute->delete();
 
         return redirect()->route('attribute.index');
@@ -115,6 +119,7 @@ class AttributeController extends Controller
     {
         $this->authorize('forceDelete', $attribute);
         DataService::deleteFile($attribute, 'image');
+        event(new NotificationSuperAdminEvent('attribute', "forced_delete", $attribute));
         $attribute->forceDelete();
 
         return redirect()->route('attribute.index');

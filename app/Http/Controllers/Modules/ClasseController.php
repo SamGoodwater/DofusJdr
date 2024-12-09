@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\ClasseFilterRequest;
 use App\Models\Modules\Classe;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use App\Services\DataService;
+use App\Events\NotificationSuperAdminEvent;
 
 class ClasseController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(ClasseFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Classe::class);
 
@@ -30,7 +30,7 @@ class ClasseController extends Controller
         ]);
     }
 
-    public function show(Classe $classe, Request $request): \Inertia\Response
+    public function show(Classe $classe, ClasseFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $classe);
 
@@ -47,7 +47,7 @@ class ClasseController extends Controller
         return Inertia::render('classe.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ClasseFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Classe::class);
 
@@ -72,6 +72,11 @@ class ClasseController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $classe = Classe::create($data);
+        $classe->capabilities()->sync($request->validated('capabilities'));
+        $classe->spells()->sync($request->validated('spells'));
+        $classe->attributes()->sync($request->validated('attributes'));
+
+        event(new NotificationSuperAdminEvent('classe', 'create',  $classe));
 
         return redirect()->route('classe.show', ['classe' => $classe]);
     }
@@ -87,9 +92,10 @@ class ClasseController extends Controller
         ]);
     }
 
-    public function update(Classe $classe, Request $request): RedirectResponse
+    public function update(Classe $classe, ClasseFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $classe);
+        $old_classe = $classe;
 
         $data = DataService::extractData($request, $classe, [
             [
@@ -111,6 +117,11 @@ class ClasseController extends Controller
             return redirect()->back()->withInput();
         }
         $classe->update($data);
+        $classe->capabilities()->sync($request->validated('capabilities'));
+        $classe->spells()->sync($request->validated('spells'));
+        $classe->attributes()->sync($request->validated('attributes'));
+
+        event(new NotificationSuperAdminEvent('classe', "update", $classe, $old_classe));
 
         return redirect()->route('classe.show', ['classe' => $classe]);
     }
@@ -118,7 +129,7 @@ class ClasseController extends Controller
     public function delete(Classe $classe): RedirectResponse
     {
         $this->authorize('delete', $classe);
-
+        event(new NotificationSuperAdminEvent('classe', "delete", $classe));
         $classe->delete();
 
         return redirect()->route('classe.index');
@@ -128,8 +139,13 @@ class ClasseController extends Controller
     {
         $this->authorize('forceDelete', $classe);
 
+        $classe->capabilities()->detach();
+        $classe->spells()->detach();
+        $classe->attributes()->detach();
+
         DataService::deleteFile($classe, 'image');
         DataService::deleteFile($classe, 'icon');
+        event(new NotificationSuperAdminEvent('classe', "forced_delete", $classe));
         $classe->forceDelete();
 
         return redirect()->route('classe.index');

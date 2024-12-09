@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use App\Services\DataService;
+use App\Events\NotificationSuperAdminEvent;
 
 class PageController extends Controller
 {
@@ -63,9 +64,8 @@ class PageController extends Controller
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $page = Page::create($data);
         $page->sections()?->sync($request->validated('sections'));
-        $page->specialization()?->sync($request->validated('specialization'));
-        $page->campaigns()?->sync($request->validated('campaigns'));
-        $page->scenarios()?->sync($request->validated('scenarios'));
+
+        event(new NotificationSuperAdminEvent('page', 'create',  $page));
 
         return redirect()->route('pages.show', ['page' => $page])->with('success', 'La page a bien été créée');
     }
@@ -83,6 +83,7 @@ class PageController extends Controller
     public function update(Page $page, PageFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $page);
+        $old_page = clone $page;
 
         $data = DataService::extractData($request, $page);
         if ($data === []) {
@@ -90,9 +91,8 @@ class PageController extends Controller
         }
         $page->update($data);
         $page->sections()?->sync($request->validated('sections'));
-        $page->specialization()?->sync($request->validated('specialization'));
-        $page->campaigns()?->sync($request->validated('campaigns'));
-        $page->scenarios()?->sync($request->validated('scenarios'));
+
+        event(new NotificationSuperAdminEvent('page', "update", $page, $old_page));
 
         return redirect()->route('pages.show', ['page' => $page])->with('success', 'La page a bien été modifiée');
     }
@@ -100,7 +100,7 @@ class PageController extends Controller
     public function delete(Page $page): RedirectResponse
     {
         $this->authorize('delete', $page);
-
+        event(new NotificationSuperAdminEvent('page', "delete", $page));
         $page->delete();
 
         return redirect()->route('pages.index')->with('success', 'La page a bien été supprimée');
@@ -110,9 +110,8 @@ class PageController extends Controller
     {
         $this->authorize('forceDelete', $page);
 
-        if (!$page->trashed()) {
-            return redirect()->route('pages.index')->with('error', 'La page n\'est pas dans la corbeille');
-        }
+        $page->sections()->detach();
+        event(new NotificationSuperAdminEvent('page', "forced_delete", $page));
         $page->forceDelete();
 
         return redirect()->route('pages.index')->with('success', 'La page a bien été supprimée définitivement');

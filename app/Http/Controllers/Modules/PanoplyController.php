@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\PanoplyFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Panoply;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class PanoplyController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(PanoplyFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Panoply::class);
 
@@ -30,7 +30,7 @@ class PanoplyController extends Controller
         ]);
     }
 
-    public function show(Panoply $panoply, Request $request): \Inertia\Response
+    public function show(Panoply $panoply, PanoplyFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $panoply);
 
@@ -47,7 +47,7 @@ class PanoplyController extends Controller
         return Inertia::render('panoply.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(PanoplyFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Panoply::class);
 
@@ -65,6 +65,9 @@ class PanoplyController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $panoply = Panoply::create($data);
+        $panoply->items()->sync($request->input('items'));
+
+        event(new NotificationSuperAdminEvent('panoply', 'create',  $panoply));
 
         return redirect()->route('panoply.show', ['panoply' => $panoply]);
     }
@@ -80,9 +83,10 @@ class PanoplyController extends Controller
         ]);
     }
 
-    public function update(Panoply $panoply, Request $request): RedirectResponse
+    public function update(Panoply $panoply, PanoplyFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $panoply);
+        $old_panoply = $panoply;
 
         $data = DataService::extractData($request, new Panoply(), [
             [
@@ -97,6 +101,9 @@ class PanoplyController extends Controller
             return redirect()->back()->withInput();
         }
         $panoply->update($data);
+        $panoply->items()->sync($request->input('items'));
+
+        event(new NotificationSuperAdminEvent('panoply', "update", $panoply, $old_panoply));
 
         return redirect()->route('panoply.show', ['panoply' => $panoply]);
     }
@@ -104,7 +111,7 @@ class PanoplyController extends Controller
     public function delete(Panoply $panoply): RedirectResponse
     {
         $this->authorize('delete', $panoply);
-
+        event(new NotificationSuperAdminEvent('panoply', "delete", $panoply));
         $panoply->delete();
 
         return redirect()->route('panoply.index');
@@ -114,7 +121,10 @@ class PanoplyController extends Controller
     {
         $this->authorize('forceDelete', $panoply);
 
+        $panoply->items()->detach();
+
         DataService::deleteFile($panoply, 'image');
+        event(new NotificationSuperAdminEvent('panoply', "forced_delete", $panoply));
         $panoply->forceDelete();
 
         return redirect()->route('panoply.index');

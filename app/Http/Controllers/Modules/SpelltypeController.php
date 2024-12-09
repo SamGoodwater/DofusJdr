@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\SpelltypeFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Spelltype;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class SpelltypeController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(SpelltypeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Spelltype::class);
 
@@ -30,7 +30,7 @@ class SpelltypeController extends Controller
         ]);
     }
 
-    public function show(Spelltype $spelltype, Request $request): \Inertia\Response
+    public function show(Spelltype $spelltype, SpelltypeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $spelltype);
 
@@ -47,7 +47,7 @@ class SpelltypeController extends Controller
         return Inertia::render('spelltype.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(SpelltypeFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Spelltype::class);
 
@@ -57,6 +57,8 @@ class SpelltypeController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $spelltype = Spelltype::create($data);
+
+        event(new NotificationSuperAdminEvent('spelltype', 'create',  $spelltype));
 
         return redirect()->route('spelltype.show', ['spelltype' => $spelltype]);
     }
@@ -72,9 +74,10 @@ class SpelltypeController extends Controller
         ]);
     }
 
-    public function update(Spelltype $spelltype, Request $request): RedirectResponse
+    public function update(Spelltype $spelltype, SpelltypeFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $spelltype);
+        $old_spelltype = clone $spelltype;
 
         $data = DataService::extractData($request, $spelltype);
         if ($data === []) {
@@ -82,13 +85,15 @@ class SpelltypeController extends Controller
         }
         $spelltype->update($data);
 
+        event(new NotificationSuperAdminEvent('spelltype', "update", $spelltype, $old_spelltype));
+
         return redirect()->route('spelltype.show', ['spelltype' => $spelltype]);
     }
 
     public function delete(Spelltype $spelltype): RedirectResponse
     {
         $this->authorize('delete', $spelltype);
-
+        event(new NotificationSuperAdminEvent('spelltype', "delete", $spelltype));
         $spelltype->delete();
 
         return redirect()->route('spelltype.index');
@@ -97,7 +102,7 @@ class SpelltypeController extends Controller
     public function forceDelete(Spelltype $spelltype): RedirectResponse
     {
         $this->authorize('forceDelete', $spelltype);
-
+        event(new NotificationSuperAdminEvent('spelltype', "forced_delete", $spelltype));
         $spelltype->forceDelete();
 
         return redirect()->route('spelltype.index');

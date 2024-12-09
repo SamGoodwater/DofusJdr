@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\ShopFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Shop;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class ShopController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(ShopFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Shop::class);
 
@@ -30,7 +30,7 @@ class ShopController extends Controller
         ]);
     }
 
-    public function show(Shop $shop, Request $request): \Inertia\Response
+    public function show(Shop $shop, ShopFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $shop);
 
@@ -47,7 +47,7 @@ class ShopController extends Controller
         return Inertia::render('shop.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ShopFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Shop::class);
 
@@ -65,6 +65,11 @@ class ShopController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $shop = Shop::create($data);
+        $shop->items()->sync($request->input('items'));
+        $shop->ressources()->sync($request->input('ressources'));
+        $shop->consumables()->sync($request->input('consumables'));
+
+        event(new NotificationSuperAdminEvent('shop', 'create',  $shop));
 
         return redirect()->route('shop.show', ['shop' => $shop]);
     }
@@ -80,9 +85,10 @@ class ShopController extends Controller
         ]);
     }
 
-    public function update(Shop $shop, Request $request): RedirectResponse
+    public function update(Shop $shop, ShopFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $shop);
+        $old_shop = $shop;
 
         $data = DataService::extractData($request, $shop, [
             [
@@ -97,6 +103,11 @@ class ShopController extends Controller
             return redirect()->back()->withInput();
         }
         $shop->update($data);
+        $shop->items()->sync($request->input('items'));
+        $shop->ressources()->sync($request->input('ressources'));
+        $shop->consumables()->sync($request->input('consumables'));
+
+        event(new NotificationSuperAdminEvent('shop', "update", $shop, $old_shop));
 
         return redirect()->route('shop.show', ['shop' => $shop]);
     }
@@ -104,7 +115,7 @@ class ShopController extends Controller
     public function delete(Shop $shop): RedirectResponse
     {
         $this->authorize('delete', $shop);
-
+        event(new NotificationSuperAdminEvent('shop', "delete", $shop));
         $shop->delete();
 
         return redirect()->route('shop.index');
@@ -114,7 +125,12 @@ class ShopController extends Controller
     {
         $this->authorize('forceDelete', $shop);
 
+        $shop->items()->detach();
+        $shop->ressources()->detach();
+        $shop->consumables()->detach();
+
         DataService::deleteFile($shop, 'image');
+        event(new NotificationSuperAdminEvent('shop', "forced_delete", $shop));
         $shop->forceDelete();
 
         return redirect()->route('shop.index');

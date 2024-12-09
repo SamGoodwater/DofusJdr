@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\MobraceFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Mobrace;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class MobraceController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(MobraceFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Mobrace::class);
 
@@ -30,7 +30,7 @@ class MobraceController extends Controller
         ]);
     }
 
-    public function show(Mobrace $mobrace, Request $request): \Inertia\Response
+    public function show(Mobrace $mobrace, MobraceFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $mobrace);
 
@@ -47,7 +47,7 @@ class MobraceController extends Controller
         return Inertia::render('mobrace.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(MobraceFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Mobrace::class);
 
@@ -57,6 +57,8 @@ class MobraceController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $mobrace = Mobrace::create($data);
+
+        event(new NotificationSuperAdminEvent('mobrace', 'create',  $mobrace));
 
         return redirect()->route('mobrace.show', ['mobrace' => $mobrace]);
     }
@@ -72,9 +74,10 @@ class MobraceController extends Controller
         ]);
     }
 
-    public function update(Mobrace $mobrace, Request $request): RedirectResponse
+    public function update(Mobrace $mobrace, MobraceFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $mobrace);
+        $old_mobrace = clone $mobrace;
 
         $data = DataService::extractData($request, $mobrace());
         if ($data === []) {
@@ -82,13 +85,15 @@ class MobraceController extends Controller
         }
         $mobrace->update($data);
 
+        event(new NotificationSuperAdminEvent('mobrace', "update", $mobrace, $old_mobrace));
+
         return redirect()->route('mobrace.show', ['mobrace' => $mobrace]);
     }
 
     public function delete(Mobrace $mobrace): RedirectResponse
     {
         $this->authorize('delete', $mobrace);
-
+        event(new NotificationSuperAdminEvent('mobrace', "delete", $mobrace));
         $mobrace->delete();
 
         return redirect()->route('mobrace.index');
@@ -97,7 +102,7 @@ class MobraceController extends Controller
     public function forceDelete(Mobrace $mobrace): RedirectResponse
     {
         $this->authorize('forceDelete', $mobrace);
-
+        event(new NotificationSuperAdminEvent('mobrace', "forced_delete", $mobrace));
         $mobrace->forceDelete();
 
         return redirect()->route('mobrace.index');

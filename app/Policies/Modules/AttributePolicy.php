@@ -2,10 +2,11 @@
 
 namespace App\Policies\Modules;
 
-use App\Models\Modules\Panoply;
 use App\Models\User;
+use App\Models\Modules\attribute;
+use Illuminate\Auth\Access\Response;
 
-class PanoplyPolicy
+class AttributePolicy
 {
     public function before(User $user): ?bool
     {
@@ -24,7 +25,7 @@ class PanoplyPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Panoply $panoply): bool
+    public function view(User $user, Attribute $attribute): bool
     {
         return true;
     }
@@ -40,9 +41,9 @@ class PanoplyPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Panoply $panoply): bool
+    public function update(User $user, Attribute $attribute): bool
     {
-        if ($panoply->created_by === $user->id) {
+        if ($attribute->created_by === $user->id) {
             return $user->verifyRole(User::ROLES['game_master']);
         } else {
             return $user->verifyRole(User::ROLES['contributor']);
@@ -52,9 +53,9 @@ class PanoplyPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Panoply $panoply): bool
+    public function delete(User $user, Attribute $attribute): bool
     {
-        if ($panoply->created_by === $user->id) {
+        if ($attribute->created_by === $user->id) {
             return $user->verifyRole(User::ROLES['game_master']);
         } else {
             return $user->verifyRole(User::ROLES['contributor']);
@@ -64,16 +65,16 @@ class PanoplyPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Panoply $panoply): bool
+    public function restore(User $user, Attribute $attribute): bool
     {
-        return $user->verifyRole(User::ROLES['admin']);
+        return false;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Panoply $panoply): bool
+    public function forceDelete(User $user, Attribute $attribute): bool
     {
-        return $user->verifyRole(User::ROLES['admin']);
+        return false;
     }
 }

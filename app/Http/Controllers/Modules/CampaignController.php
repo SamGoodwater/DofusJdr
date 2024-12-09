@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\CampaignFilterRequest;
 use App\Models\Modules\Campaign;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -12,12 +11,13 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\DataService;
+use App\Events\NotificationSuperAdminEvent;
 
 class CampaignController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(CampaignFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Campaign::class);
 
@@ -31,7 +31,7 @@ class CampaignController extends Controller
         ]);
     }
 
-    public function show(Campaign $campaign, Request $request): \Inertia\Response
+    public function show(Campaign $campaign, CampaignFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $campaign);
 
@@ -48,7 +48,7 @@ class CampaignController extends Controller
         return Inertia::render('campaign.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(CampaignFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Campaign::class);
 
@@ -73,6 +73,16 @@ class CampaignController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $campaign = Campaign::create($data);
+        $campaign->spells()?->sync($request->validated('spells'));
+        $campaign->consumables()?->sync($request->validated('consumables'));
+        $campaign->mobs()?->sync($request->validated('mobs'));
+        $campaign->npcs()?->sync($request->validated('npcs'));
+        $campaign->items()?->sync($request->validated('items'));
+        $campaign->shops()?->sync($request->validated('shops'));
+        $campaign->ressources()?->sync($request->validated('ressources'));
+        $campaign->panoplies()?->sync($request->validated('panoplies'));
+
+        event(new NotificationSuperAdminEvent('campaign', 'create',  $campaign));
 
         return redirect()->route('campaign.show', ['campaign' => $campaign]);
     }
@@ -88,9 +98,10 @@ class CampaignController extends Controller
         ]);
     }
 
-    public function update(Campaign $campaign, Request $request): RedirectResponse
+    public function update(Campaign $campaign, CampaignFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $campaign);
+        $old_campaign = $campaign;
 
         $data = DataService::extractData($request, new Campaign(), [
             [
@@ -112,6 +123,16 @@ class CampaignController extends Controller
             return redirect()->back()->withInput();
         }
         $campaign->update($data);
+        $campaign->spells()->sync($request->validated('spells'));
+        $campaign->consumables()->sync($request->validated('consumables'));
+        $campaign->mobs()->sync($request->validated('mobs'));
+        $campaign->npcs()->sync($request->validated('npcs'));
+        $campaign->items()->sync($request->validated('items'));
+        $campaign->shops()->sync($request->validated('shops'));
+        $campaign->ressources()->sync($request->validated('ressources'));
+        $campaign->panoplies()->sync($request->validated('panoplies'));
+
+        event(new NotificationSuperAdminEvent('campaign', "update", $campaign, $old_campaign));
 
         return redirect()->route('campaign.show', ['campaign' => $campaign]);
     }
@@ -119,6 +140,8 @@ class CampaignController extends Controller
     public function delete(Campaign $campaign): RedirectResponse
     {
         $this->authorize('delete', $campaign);
+
+        event(new NotificationSuperAdminEvent('campaign', "delete", $campaign));
 
         $campaign->delete();
 
@@ -130,7 +153,6 @@ class CampaignController extends Controller
         $this->authorize('forceDelete', $campaign);
 
         $campaign->panoplies()->detach();
-        $campaign->users()->detach();
         $campaign->consumables()->detach();
         $campaign->ressources()->detach();
         $campaign->items()->detach();
@@ -142,6 +164,7 @@ class CampaignController extends Controller
         $campaign->pages()->detach();
         DataService::deleteFile($campaign, 'image', false);
         DataService::deleteFile($campaign, 'file', true);
+        event(new NotificationSuperAdminEvent('campaign', "forced_delete", $campaign));
         $campaign->forceDelete();
 
         return redirect()->route('campaign.index');

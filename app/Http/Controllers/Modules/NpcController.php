@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\NpcFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Npc;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class NpcController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(NpcFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Npc::class);
 
@@ -30,7 +30,7 @@ class NpcController extends Controller
         ]);
     }
 
-    public function show(Npc $npc, Request $request): \Inertia\Response
+    public function show(Npc $npc, NpcFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $npc);
 
@@ -47,7 +47,7 @@ class NpcController extends Controller
         return Inertia::render('npc.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(NpcFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Npc::class);
 
@@ -65,6 +65,14 @@ class NpcController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $npc = Npc::create($data);
+        $npc->spells()->sync($request->input('spells'));
+        $npc->ressources()->sync($request->input('ressources'));
+        $npc->attributes()->sync($request->input('attributes'));
+        $npc->items()->sync($request->input('items'));
+        $npc->capabilities()->sync($request->input('capabilities'));
+        $npc->consumables()->sync($request->input('consumables'));
+
+        event(new NotificationSuperAdminEvent('npc', 'create',  $npc));
 
         return redirect()->route('npc.show', ['npc' => $npc]);
     }
@@ -80,9 +88,10 @@ class NpcController extends Controller
         ]);
     }
 
-    public function update(Npc $npc, Request $request): RedirectResponse
+    public function update(Npc $npc, NpcFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $npc);
+        $old_npc = $npc;
 
         $data = DataService::extractData($request, new Npc(), [
             [
@@ -97,6 +106,14 @@ class NpcController extends Controller
             return redirect()->back()->withInput();
         }
         $npc->update($data);
+        $npc->spells()->sync($request->input('spells'));
+        $npc->ressources()->sync($request->input('ressources'));
+        $npc->attributes()->sync($request->input('attributes'));
+        $npc->items()->sync($request->input('items'));
+        $npc->capabilities()->sync($request->input('capabilities'));
+        $npc->consumables()->sync($request->input('consumables'));
+
+        event(new NotificationSuperAdminEvent('npc', "update", $npc, $old_npc));
 
         return redirect()->route('npc.show', ['npc' => $npc]);
     }
@@ -104,7 +121,7 @@ class NpcController extends Controller
     public function delete(Npc $npc): RedirectResponse
     {
         $this->authorize('delete', $npc);
-
+        event(new NotificationSuperAdminEvent('npc', "delete", $npc));
         $npc->delete();
 
         return redirect()->route('npc.index');
@@ -114,7 +131,15 @@ class NpcController extends Controller
     {
         $this->authorize('forceDelete', $npc);
 
+        $npc->spells()->detach();
+        $npc->ressources()->detach();
+        $npc->attributes()->detach();
+        $npc->items()->detach();
+        $npc->capabilities()->detach();
+        $npc->consumables()->detach();
+
         DataService::deleteFile($npc, 'image');
+        event(new NotificationSuperAdminEvent('npc', "forced_delete", $npc));
         $npc->forceDelete();
 
         return redirect()->route('npc.index');

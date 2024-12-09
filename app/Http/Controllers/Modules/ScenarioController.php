@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\ScenarioFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Scenario;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class ScenarioController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(ScenarioFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Scenario::class);
 
@@ -30,7 +30,7 @@ class ScenarioController extends Controller
         ]);
     }
 
-    public function show(Scenario $scenario, Request $request): \Inertia\Response
+    public function show(Scenario $scenario, ScenarioFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $scenario);
 
@@ -48,7 +48,7 @@ class ScenarioController extends Controller
         return Inertia::render('scenario.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ScenarioFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Scenario::class);
 
@@ -73,6 +73,17 @@ class ScenarioController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $scenario = Scenario::create($data);
+        $scenario->spells()->sync($request->validated('spells'));
+        $scenario->mobs()->sync($request->validated('mobs'));
+        $scenario->npcs()->sync($request->validated('npcs'));
+        $scenario->items()->sync($request->validated('items'));
+        $scenario->shops()->sync($request->validated('shops'));
+        $scenario->ressources()->sync($request->validated('ressources'));
+        $scenario->consumables()->sync($request->validated('consumables'));
+        $scenario->panoplies()->sync($request->validated('panoplies'));
+        $scenario->pages()->sync($request->validated('pages'));
+
+        event(new NotificationSuperAdminEvent('scenario', 'create',  $scenario));
 
         return redirect()->route('scenario.show', ['scenario' => $scenario]);
     }
@@ -88,9 +99,10 @@ class ScenarioController extends Controller
         ]);
     }
 
-    public function update(Scenario $scenario, Request $request): RedirectResponse
+    public function update(Scenario $scenario, ScenarioFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $scenario);
+        $old_scenario = $scenario;
 
         $data = DataService::extractData($request, $scenario, [
             [
@@ -112,6 +124,17 @@ class ScenarioController extends Controller
             return redirect()->back()->withInput();
         }
         $scenario->update($data);
+        $scenario->spells()->sync($request->validated('spells'));
+        $scenario->mobs()->sync($request->validated('mobs'));
+        $scenario->npcs()->sync($request->validated('npcs'));
+        $scenario->items()->sync($request->validated('items'));
+        $scenario->shops()->sync($request->validated('shops'));
+        $scenario->ressources()->sync($request->validated('ressources'));
+        $scenario->consumables()->sync($request->validated('consumables'));
+        $scenario->panoplies()->sync($request->validated('panoplies'));
+        $scenario->pages()->sync($request->validated('pages'));
+
+        event(new NotificationSuperAdminEvent('scenario', "update", $scenario, $old_scenario));
 
         return redirect()->route('scenario.show', ['scenario' => $scenario]);
     }
@@ -119,7 +142,7 @@ class ScenarioController extends Controller
     public function delete(Scenario $scenario): RedirectResponse
     {
         $this->authorize('delete', $scenario);
-
+        event(new NotificationSuperAdminEvent('scenario', "delete", $scenario));
         $scenario->delete();
 
         return redirect()->route('scenario.index');
@@ -129,8 +152,19 @@ class ScenarioController extends Controller
     {
         $this->authorize('forceDelete', $scenario);
 
+        $scenario->spells()->detach();
+        $scenario->mobs()->detach();
+        $scenario->npcs()->detach();
+        $scenario->items()->detach();
+        $scenario->shops()->detach();
+        $scenario->ressources()->detach();
+        $scenario->consumables()->detach();
+        $scenario->panoplies()->detach();
+        $scenario->pages()->detach();
+
         DataService::deleteFile($scenario, 'image');
         DataService::deleteFile($scenario, 'file');
+        event(new NotificationSuperAdminEvent('scenario', "forced_delete", $scenario));
         $scenario->forceDelete();
 
         return redirect()->route('scenario.index');

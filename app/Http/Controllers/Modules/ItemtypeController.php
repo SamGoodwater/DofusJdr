@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\Modules\ItemtypeFilterRequest;
 use App\Models\Modules\Itemtype;
-use Illuminate\Http\Request;
+use App\Events\NotificationSuperAdminEvent;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -16,7 +16,7 @@ class ItemtypeController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(ItemtypeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Itemtype::class);
 
@@ -30,7 +30,7 @@ class ItemtypeController extends Controller
         ]);
     }
 
-    public function show(Itemtype $itemtype, Request $request): \Inertia\Response
+    public function show(Itemtype $itemtype, ItemtypeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $itemtype);
 
@@ -46,7 +46,7 @@ class ItemtypeController extends Controller
         return Inertia::render('itemtype.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ItemtypeFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Itemtype::class);
 
@@ -56,6 +56,8 @@ class ItemtypeController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $itemtype = Itemtype::create($data);
+
+        event(new NotificationSuperAdminEvent('itemtype', 'create',  $itemtype));
 
         return redirect()->route('itemtype.show', ['itemtype' => $itemtype]);
     }
@@ -69,9 +71,11 @@ class ItemtypeController extends Controller
         ]);
     }
 
-    public function update(Itemtype $itemtype, Request $request): RedirectResponse
+    public function update(Itemtype $itemtype, ItemtypeFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $itemtype);
+
+        $old_itemtype = clone $itemtype;
 
         $data = DataService::extractData($request, $itemtype());
         if ($data === []) {
@@ -79,13 +83,15 @@ class ItemtypeController extends Controller
         }
         $itemtype->update($data);
 
+        event(new NotificationSuperAdminEvent('itemtype', "update", $itemtype, $old_itemtype));
+
         return redirect()->route('itemtype.show', ['itemtype' => $itemtype]);
     }
 
     public function delete(Itemtype $itemtype): RedirectResponse
     {
         $this->authorize('delete', $itemtype);
-
+        event(new NotificationSuperAdminEvent('itemtype', "delete", $itemtype));
         $itemtype->delete();
 
         return redirect()->route('itemtype.index');
@@ -94,7 +100,7 @@ class ItemtypeController extends Controller
     public function forceDelete(Itemtype $itemtype): RedirectResponse
     {
         $this->authorize('forceDelete', $itemtype);
-
+        event(new NotificationSuperAdminEvent('itemtype', "forced_delete", $itemtype));
         $itemtype->forceDelete();
 
         return redirect()->route('itemtype.index');

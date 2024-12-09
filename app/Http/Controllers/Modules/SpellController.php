@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\SpellFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Spell;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class SpellController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(SpellFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Spell::class);
 
@@ -30,7 +30,7 @@ class SpellController extends Controller
         ]);
     }
 
-    public function show(Spell $spell, Request $request): \Inertia\Response
+    public function show(Spell $spell, SpellFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $spell);
 
@@ -47,7 +47,7 @@ class SpellController extends Controller
         return Inertia::render('spell.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(SpellFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Spell::class);
 
@@ -66,6 +66,8 @@ class SpellController extends Controller
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $spell = Spell::create($data);
 
+        event(new NotificationSuperAdminEvent('spell', 'create',  $spell));
+
         return redirect()->route('spell.show', ['spell' => $spell]);
     }
 
@@ -80,9 +82,10 @@ class SpellController extends Controller
         ]);
     }
 
-    public function update(Spell $spell, Request $request): RedirectResponse
+    public function update(Spell $spell, SpellFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $spell);
+        $old_spell = $spell;
 
         $data = DataService::extractData($request, $spell, [
             [
@@ -98,13 +101,15 @@ class SpellController extends Controller
         }
         $spell->update($data);
 
+        event(new NotificationSuperAdminEvent('spell', "update", $spell, $old_spell));
+
         return redirect()->route('spell.show', ['spell' => $spell]);
     }
 
     public function delete(Spell $spell): RedirectResponse
     {
         $this->authorize('delete', $spell);
-
+        event(new NotificationSuperAdminEvent('spell', "delete", $spell));
         $spell->delete();
 
         return redirect()->route('spell.index');
@@ -115,6 +120,7 @@ class SpellController extends Controller
         $this->authorize('forceDelete', $spell);
 
         DataService::deleteFile($spell, 'image');
+        event(new NotificationSuperAdminEvent('spell', "forced_delete", $spell));
         $spell->forceDelete();
 
         return redirect()->route('spell.index');

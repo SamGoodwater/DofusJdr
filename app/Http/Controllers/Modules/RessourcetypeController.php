@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\Modules\RessourcetypeFilterRequest;
 use App\Models\Modules\Ressourcetype;
-use Illuminate\Http\Request;
+use App\Events\NotificationSuperAdminEvent;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -16,7 +16,7 @@ class RessourcetypeController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(RessourcetypeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Ressourcetype::class);
 
@@ -30,7 +30,7 @@ class RessourcetypeController extends Controller
         ]);
     }
 
-    public function show(Ressourcetype $ressourcetype, Request $request): \Inertia\Response
+    public function show(Ressourcetype $ressourcetype, RessourcetypeFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $ressourcetype);
 
@@ -46,7 +46,7 @@ class RessourcetypeController extends Controller
         return Inertia::render('ressourcetype.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(RessourcetypeFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Ressourcetype::class);
 
@@ -56,6 +56,8 @@ class RessourcetypeController extends Controller
         }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $ressourcetype = Ressourcetype::create($data);
+
+        event(new NotificationSuperAdminEvent('ressourcetype', 'create',  $ressourcetype));
 
         return redirect()->route('ressourcetype.show', ['ressourcetype' => $ressourcetype]);
     }
@@ -69,9 +71,10 @@ class RessourcetypeController extends Controller
         ]);
     }
 
-    public function update(Ressourcetype $ressourcetype, Request $request): RedirectResponse
+    public function update(Ressourcetype $ressourcetype, RessourcetypeFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $ressourcetype);
+        $old_ressourcetype = clone $ressourcetype;
 
         $data = DataService::extractData($request, $ressourcetype());
         if ($data === []) {
@@ -79,13 +82,15 @@ class RessourcetypeController extends Controller
         }
         $ressourcetype->update($data);
 
+        event(new NotificationSuperAdminEvent('ressourcetype', "update", $ressourcetype, $old_ressourcetype));
+
         return redirect()->route('ressourcetype.show', ['ressourcetype' => $ressourcetype]);
     }
 
     public function delete(Ressourcetype $ressourcetype): RedirectResponse
     {
         $this->authorize('delete', $ressourcetype);
-
+        event(new NotificationSuperAdminEvent('ressourcetype', "delete", $ressourcetype));
         $ressourcetype->delete();
 
         return redirect()->route('ressourcetype.index');
@@ -94,7 +99,7 @@ class RessourcetypeController extends Controller
     public function forceDelete(Ressourcetype $ressourcetype): RedirectResponse
     {
         $this->authorize('forceDelete', $ressourcetype);
-
+        event(new NotificationSuperAdminEvent('ressourcetype', "forced_delete", $ressourcetype));
         $ressourcetype->forceDelete();
 
         return redirect()->route('ressourcetype.index');

@@ -121,6 +121,11 @@ class DataService
 
     static private function compressAndConvertImage(string $path, string $disk = "modules", int $quality = 70): string
     {
+        $vectorFormats = ['svg', 'eps', 'pdf'];
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        if (in_array(strtolower($extension), $vectorFormats)) {
+            return "";
+        }
         $manager = new ImageManager($disk);
         $image = $manager->read($path);
         return $image->toWebp($quality);

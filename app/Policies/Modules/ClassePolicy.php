@@ -2,10 +2,11 @@
 
 namespace App\Policies\Modules;
 
-use App\Models\Modules\Panoply;
+use App\Models\Modules\Classe;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
-class PanoplyPolicy
+class ClassePolicy
 {
     public function before(User $user): ?bool
     {
@@ -24,7 +25,7 @@ class PanoplyPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Panoply $panoply): bool
+    public function view(User $user, Classe $classe): bool
     {
         return true;
     }
@@ -34,15 +35,15 @@ class PanoplyPolicy
      */
     public function create(User $user): bool
     {
-        return $user->verifyRole(User::ROLES['game_master']);
+        return $user->verifyRole(User::ROLES['moderator']);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Panoply $panoply): bool
+    public function update(User $user, Classe $classe): bool
     {
-        if ($panoply->created_by === $user->id) {
+        if ($classe->created_by === $user->id) {
             return $user->verifyRole(User::ROLES['game_master']);
         } else {
             return $user->verifyRole(User::ROLES['contributor']);
@@ -52,9 +53,9 @@ class PanoplyPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Panoply $panoply): bool
+    public function delete(User $user, Classe $classe): bool
     {
-        if ($panoply->created_by === $user->id) {
+        if ($classe->created_by === $user->id) {
             return $user->verifyRole(User::ROLES['game_master']);
         } else {
             return $user->verifyRole(User::ROLES['contributor']);
@@ -64,7 +65,7 @@ class PanoplyPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Panoply $panoply): bool
+    public function restore(User $user, Classe $classe): bool
     {
         return $user->verifyRole(User::ROLES['admin']);
     }
@@ -72,7 +73,7 @@ class PanoplyPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Panoply $panoply): bool
+    public function forceDelete(User $user, Classe $classe): bool
     {
         return $user->verifyRole(User::ROLES['admin']);
     }

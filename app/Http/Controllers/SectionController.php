@@ -9,14 +9,14 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use App\Events\NotificationSuperAdminEvent;
 use App\Services\DataService;
 
 class SectionController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(SectionFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Section::class);
 
@@ -70,6 +70,8 @@ class SectionController extends Controller
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $section = Section::create($data);
 
+        event(new NotificationSuperAdminEvent('section', 'create',  $section));
+
         return redirect()->route('sections.show', ['section' => $section])->with('success', 'La section a bien été créée');
     }
 
@@ -87,6 +89,7 @@ class SectionController extends Controller
     public function update(Section $section, SectionFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $section);
+        $old_section = $section;
 
         $data = DataService::extractData($request, $section, [
             [
@@ -102,13 +105,15 @@ class SectionController extends Controller
         }
         $section->update($data);
 
+        event(new NotificationSuperAdminEvent('section', "update", $section, $old_section));
+
         return redirect()->route('sections.show', ['section' => $section])->with('success', 'La section a bien été modifiée');
     }
 
-    public function destroy(Section $section): RedirectResponse
+    public function delete(Section $section): RedirectResponse
     {
         $this->authorize('delete', $section);
-
+        event(new NotificationSuperAdminEvent('section', "delete", $section));
         $section->delete();
 
         return redirect()->route('sections.index')->with('success', 'La section a bien été supprimée');
@@ -119,6 +124,7 @@ class SectionController extends Controller
         $this->authorize('forceDelete', $section);
 
         DataService::deleteFile($section, 'file');
+        event(new NotificationSuperAdminEvent('section', "forced_delete", $section));
         $section->forceDelete();
 
         return redirect()->route('sections.index')->with('success', 'La section a bien été supprimée définitivement');

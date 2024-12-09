@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Modules\RessourceFilterRequest;
+use App\Events\NotificationSuperAdminEvent;
 use App\Models\Modules\Ressource;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class RessourceController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): \Inertia\Response
+    public function index(RessourceFilterRequest $request): \Inertia\Response
     {
         $this->authorize('viewAny', Ressource::class);
 
@@ -30,7 +30,7 @@ class RessourceController extends Controller
         ]);
     }
 
-    public function show(Ressource $ressource, Request $request): \Inertia\Response
+    public function show(Ressource $ressource, RessourceFilterRequest $request): \Inertia\Response
     {
         $this->authorize('view', $ressource);
 
@@ -48,7 +48,7 @@ class RessourceController extends Controller
         return Inertia::render('ressource.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(RessourceFilterRequest $request): RedirectResponse
     {
         $this->authorize('create', Ressource::class);
 
@@ -67,6 +67,8 @@ class RessourceController extends Controller
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $ressource = Ressource::create($data);
 
+        event(new NotificationSuperAdminEvent('ressource', 'create',  $ressource));
+
         return redirect()->route('ressource.show', ['ressource' => $ressource]);
     }
 
@@ -82,9 +84,10 @@ class RessourceController extends Controller
         ]);
     }
 
-    public function update(Ressource $ressource, Request $request): RedirectResponse
+    public function update(Ressource $ressource, RessourceFilterRequest $request): RedirectResponse
     {
         $this->authorize('update', $ressource);
+        $old_ressource = $ressource;
 
         $data = DataService::extractData($request, new Ressource(), [
             [
@@ -100,13 +103,15 @@ class RessourceController extends Controller
         }
         $ressource->update($data);
 
+        event(new NotificationSuperAdminEvent('ressource', "update", $ressource, $old_ressource));
+
         return redirect()->route('ressource.show', ['ressource' => $ressource]);
     }
 
     public function delete(Ressource $ressource): RedirectResponse
     {
         $this->authorize('delete', $ressource);
-
+        event(new NotificationSuperAdminEvent('ressource', "delete", $ressource));
         $ressource->delete();
 
         return redirect()->route('ressource.index');
@@ -117,6 +122,7 @@ class RessourceController extends Controller
         $this->authorize('forceDelete', $ressource);
 
         DataService::deleteFile($ressource, 'image');
+        event(new NotificationSuperAdminEvent('ressource', "forced_delete", $ressource));
         $ressource->forceDelete();
 
         return redirect()->route('ressource.index');
