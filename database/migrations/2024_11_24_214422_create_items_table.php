@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('name');
             $table->integer('level')->default(1);
             $table->string('description')->nullable();
-            $table->integer('type')->default(1);
             $table->string('effect');
             $table->string('bonus')->nullable();
             $table->string('recepe')->nullable();
@@ -36,20 +35,21 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->softDeletes();
 
+            $table->foreignIdFor(\App\Models\Modules\Itemtype::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
 
         Schema::create('item_ressource', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Item::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Ressource::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Item::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Ressource::class)->constrained()->cascadeOnDelete();
             $table->string('quantity')->default('1');
             $table->primary(['item_id', 'ressource_id']);
             $table->softDeletes();
         });
 
         Schema::create('item_panoply', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Item::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Panoply::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Item::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Panoply::class)->constrained()->cascadeOnDelete();
             $table->primary(['item_id', 'panoply_id']);
             $table->softDeletes();
         });
@@ -65,6 +65,9 @@ return new class extends Migration
         Schema::dropIfExists('item_panoply');
         Schema::table('items', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
+        Schema::table('items', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\Modules\Itemtype::class);
         });
     }
 };

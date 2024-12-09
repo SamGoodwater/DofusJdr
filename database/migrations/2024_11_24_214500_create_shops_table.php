@@ -26,12 +26,12 @@ return new class extends Migration
 
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
 
-            $table->foreignIdFor(\App\Models\Npc::class)->nullable();
+            $table->foreignIdFor(\App\Models\Modules\Npc::class)->nullable();
         });
 
         Schema::create('consumable_shop', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Consumable::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Shop::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Consumable::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Shop::class)->constrained()->cascadeOnDelete();
             $table->primary(['consumable_id', 'shop_id']);
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
@@ -40,8 +40,8 @@ return new class extends Migration
         });
 
         Schema::create('item_shop', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Item::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Shop::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Item::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Shop::class)->constrained()->cascadeOnDelete();
             $table->primary(['item_id', 'shop_id']);
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
@@ -50,8 +50,8 @@ return new class extends Migration
         });
 
         Schema::create('ressource_shop', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Ressource::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Shop::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Ressource::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Shop::class)->constrained()->cascadeOnDelete();
             $table->primary(['ressource_id', 'shop_id']);
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
@@ -67,7 +67,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('shops');
         Schema::table('shops', function (Blueprint $table) {
-            $table->dropForeignIdFor(\App\Models\Npc::class);
+            $table->dropForeignIdFor(\App\Models\Modules\Npc::class);
         });
         Schema::table('shops', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\User::class, 'created_by');

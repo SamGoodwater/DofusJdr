@@ -14,7 +14,17 @@ class Section extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['uniqid', 'component', 'title', 'content', 'order_num', 'is_visible', 'page_id', 'is_visible',  'created_by'];
+    protected $fillable = [
+        'uniqid',
+        'component',
+        'title',
+        'content',
+        'order_num',
+        'is_visible',
+        'page_id',
+        'is_visible',
+        'created_by'
+    ];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function page(): \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mobs', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Creature::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Creature::class)->nullable()->constrained()->cascadeOnDelete();
             $table->primary(['creature_id']);
             $table->string('official_id')->nullable();
             $table->string('dofusdb_id')->nullable();
             $table->string('dofus_version')->default('3');
             $table->integer('size')->default(2);
 
-            $table->foreignIdFor(\App\Models\MobRace::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\MobRace::class)->nullable()->constrained()->cascadeOnDelete();
         });
     }
 
@@ -30,10 +30,10 @@ return new class extends Migration
     {
         Schema::dropIfExists('mobs');
         Schema::table('mobs', function (Blueprint $table) {
-            $table->dropForeignIdFor(\App\Models\Creature::class);
+            $table->dropForeignIdFor(\App\Models\Modules\Creature::class);
         });
         Schema::table('mobs', function (Blueprint $table) {
-            $table->dropForeignIdFor(\App\Models\MobRace::class);
+            $table->dropForeignIdFor(\App\Models\Modules\MobRace::class);
         });
     }
 };

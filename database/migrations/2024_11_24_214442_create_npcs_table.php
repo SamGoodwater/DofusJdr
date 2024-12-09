@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\Classe;
-use App\Models\Creature;
-use App\Models\Specialization;
+use App\Models\Modules\Classe;
+use App\Models\Modules\Creature;
+use App\Models\Modules\Specialization;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +16,7 @@ return new class extends Migration
     {
 
         Schema::create('npcs', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Creature::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Creature::class)->nullable()->constrained()->cascadeOnDelete();
             $table->primary(['creature_id']);
             $table->string('story')->nullable();
             $table->string('historical')->nullable();

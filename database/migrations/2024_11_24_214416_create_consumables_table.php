@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('dofusdb_id')->nullable();
             $table->string('uniqid', 20)->unique();
             $table->timestamps();
-            $table->integer('type')->default(1);
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('effect')->nullable();
@@ -31,12 +30,13 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->softDeletes();
 
+            $table->foreignIdFor(\App\Models\Modules\Consumabletype::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
 
         Schema::create('consumable_ressource', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Consumable::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Ressource::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Consumable::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Ressource::class)->constrained()->cascadeOnDelete();
             $table->string('quantity')->default('1');
             $table->primary(['consumable_id', 'ressource_id']);
             $table->softDeletes();
@@ -52,6 +52,9 @@ return new class extends Migration
         Schema::dropIfExists('consumable_ressource');
         Schema::table('consumables', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
+        Schema::table('consumables', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\Modules\Consumabletype::class);
         });
     }
 };

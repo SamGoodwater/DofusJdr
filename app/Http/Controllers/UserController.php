@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use App\Services\DataService;
 
 class UserController extends Controller
 {
@@ -48,9 +49,19 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        $data = $request->validated();
+        $data = DataService::extractData($request, new User, [
+            [
+                'disk' => 'modules',
+                'path_name' => 'users',
+                'name_bd' => 'image',
+                'is_multiple_files' => false,
+                'compress' => true
+            ]
+        ]);
+        if ($data === []) {
+            return redirect()->back()->withInput();
+        }
         $data['created_by'] = Auth::user()?->id ?? "-1";
-        $data['image'] = $request->file('image')?->store('users', 'modules');
         $user = User::create($data);
 
         return redirect()->route('user.show', ['user' => $user]);
@@ -71,8 +82,18 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        $data = $request->validated();
-        $data['image'] = $request->file('image')?->store('users', 'modules');
+        $data = DataService::extractData($request, $user, [
+            [
+                'disk' => 'modules',
+                'path_name' => 'users',
+                'name_bd' => 'image',
+                'is_multiple_files' => false,
+                'compress' => true
+            ]
+        ]);
+        if ($data === []) {
+            return redirect()->back()->withInput();
+        }
         $user->update($data);
 
         return redirect()->route('user.show', ['user' => $user]);
@@ -91,6 +112,7 @@ class UserController extends Controller
     {
         $this->authorize('forceDelete', $user);
 
+        DataService::deleteFile($user, 'image');
         $user->forceDelete();
 
         return redirect()->route('user.index');

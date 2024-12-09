@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Services\DataService;
 
 class SectionController extends Controller
 {
@@ -54,11 +55,20 @@ class SectionController extends Controller
     {
         $this->authorize('create', Section::class);
 
-        $data = $request->validated();
+        $data = DataService::extractData($request, new Section(), [
+            [
+                'disk' => 'modules',
+                'path_name' => 'sections',
+                'name_bd' => 'file',
+                'is_multiple_files' => true, // si true, alors le fichier est un tableau de fichiers
+                'compress' => false
+            ]
+        ]);
+        if ($data === []) {
+            return redirect()->back()->withInput();
+        }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $section = Section::create($data);
-        $file = $request->validated('file') ?? null;
-        $section->setPathFiles($file?->store('sections', 'modules'));
 
         return redirect()->route('sections.show', ['section' => $section])->with('success', 'La section a bien été créée');
     }
@@ -78,9 +88,19 @@ class SectionController extends Controller
     {
         $this->authorize('update', $section);
 
-        $section->update($request->validated());
-        $file = $request->validated('file') ?? null;
-        $section->setPathFiles($file?->store('sections', 'modules'));
+        $data = DataService::extractData($request, $section, [
+            [
+                'disk' => 'modules',
+                'path_name' => 'sections',
+                'name_bd' => 'file',
+                'is_multiple_files' => true, // si true, alors le fichier est un tableau de fichiers
+                'compress' => false
+            ]
+        ]);
+        if ($data === []) {
+            return redirect()->back()->withInput();
+        }
+        $section->update($data);
 
         return redirect()->route('sections.show', ['section' => $section])->with('success', 'La section a bien été modifiée');
     }
@@ -98,9 +118,7 @@ class SectionController extends Controller
     {
         $this->authorize('forceDelete', $section);
 
-        if (!$section->trashed()) {
-            return redirect()->route('sections.index')->with('error', 'La section n\'est pas dans la corbeille');
-        }
+        DataService::deleteFile($section, 'file');
         $section->forceDelete();
 
         return redirect()->route('sections.index')->with('success', 'La section a bien été supprimée définitivement');

@@ -7,6 +7,7 @@ use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use App\Services\DataService;
 
 class PageController extends Controller
 {
@@ -55,7 +56,10 @@ class PageController extends Controller
     {
         $this->authorize('create', Page::class);
 
-        $data = $request->validated();
+        $data = DataService::extractData($request, new Page());
+        if ($data === []) {
+            return redirect()->back()->withInput();
+        }
         $data['created_by'] = Auth::user()?->id ?? "-1";
         $page = Page::create($data);
         $page->sections()?->sync($request->validated('sections'));
@@ -80,7 +84,11 @@ class PageController extends Controller
     {
         $this->authorize('update', $page);
 
-        $page->update($request->validated());
+        $data = DataService::extractData($request, $page);
+        if ($data === []) {
+            return redirect()->back()->withInput();
+        }
+        $page->update($data);
         $page->sections()?->sync($request->validated('sections'));
         $page->specialization()?->sync($request->validated('specialization'));
         $page->campaigns()?->sync($request->validated('campaigns'));

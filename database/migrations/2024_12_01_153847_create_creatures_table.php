@@ -105,46 +105,46 @@ return new class extends Migration
         });
 
         Schema::create('capability_creature', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Creature::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Capability::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Creature::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Capability::class)->constrained()->cascadeOnDelete();
             $table->primary(['creature_id', 'capability_id']);
             $table->softDeletes();
         });
 
         Schema::create('consumable_creature', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Creature::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Consumable::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Creature::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Consumable::class)->constrained()->cascadeOnDelete();
             $table->string('quantity')->default(1);
             $table->primary(['creature_id', 'consumable_id']);
             $table->softDeletes();
         });
 
         Schema::create('creature_item', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Creature::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Item::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Creature::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Item::class)->constrained()->cascadeOnDelete();
             $table->string('quantity')->default(1);
             $table->primary(['creature_id', 'item_id']);
             $table->softDeletes();
         });
 
         Schema::create('creature_spell', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Creature::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Spell::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Creature::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Spell::class)->constrained()->cascadeOnDelete();
             $table->primary(['creature_id', 'spell_id']);
             $table->softDeletes();
         });
 
         Schema::create('creature_ressource', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Creature::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Ressource::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Creature::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Ressource::class)->constrained()->cascadeOnDelete();
             $table->string('quantity')->default('1');
             $table->primary(['creature_id', 'ressource_id']);
             $table->softDeletes();
         });
 
         Schema::create('attribute_creature', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Creature::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Attribute::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Creature::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Attribute::class)->constrained()->cascadeOnDelete();
             $table->primary(['creature_id', 'attribute_id']);
             $table->softDeletes();
         });

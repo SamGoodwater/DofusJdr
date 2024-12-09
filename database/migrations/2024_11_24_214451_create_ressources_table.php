@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->integer('level')->default(1);
-            $table->integer('type')->default(0);
             $table->string('price')->nullable();
             $table->string('weight')->nullable();
             $table->integer('rarity')->default(5);
@@ -30,6 +29,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->softDeletes();
 
+            $table->foreignIdFor(\App\Models\Modules\Ressourcetype::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\User::class, 'created_by')->nullable()->constrained()->cascadeOnDelete();
         });
     }
@@ -42,6 +42,9 @@ return new class extends Migration
         Schema::dropIfExists('ressources');
         Schema::table('ressources', function (Blueprint $table) {
             $table->dropForeignIdFor(\App\Models\User::class, 'created_by');
+        });
+        Schema::table('ressources', function (Blueprint $table) {
+            $table->dropForeignIdFor(\App\Models\Modules\Ressourcetype::class);
         });
     }
 };

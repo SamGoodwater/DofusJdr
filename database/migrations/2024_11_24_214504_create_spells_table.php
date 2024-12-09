@@ -43,15 +43,15 @@ return new class extends Migration
         });
 
         Schema::create('spell_invocation', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Spell::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Mob::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Spell::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Mob::class)->constrained()->cascadeOnDelete();
             $table->primary(['spell_id', 'mob_id']);
             $table->softDeletes();
         });
 
         Schema::create('spell_type', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Spell::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Spelltype::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Spell::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Modules\Spelltype::class)->constrained()->cascadeOnDelete();
             $table->primary(['spell_id', 'spelltype_id']);
             $table->softDeletes();
         });
