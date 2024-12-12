@@ -1,4 +1,4 @@
-<img src="https://krosmoz-jdr.fr/public/storage/logos/logo.webp" width="300px" alt='logo'>
+<img src="https://krosmoz-jdr.fr/storage/logos/logo.webp" width="300px" alt='logo'>
 
 <h1>Kromos JDR</h1>
         <h3 id="bienvenue-dans-krosmozjdr-l-aventure-pique-dans-l-univers-du-monde-des-douze-">Bienvenue dans
