@@ -29,15 +29,75 @@ const page = usePage();
     </Head>
     <section class=" prose prose-state prose-a:text-secondary max-md:prose-sm lg:prose-lg">
 
-        <Btn styled="glass" class="bg-main-800 hover:bg-main-600">
-            <template #label>
-                Button
-            </template>
-        </Btn>
+        <h1 class="text-amber-800">Site en construction</h1>
 
+        <!-- TESTS BUTTONS -->
+        <div>
+            <div class="flex gap-4 justify-content-around">
+                <Btn theme="main glass sm" label="Principale" />
+                <Btn theme="minor glass sm" label="Mineure" />
+                <Btn theme="validate glass sm" label="Valider" />
+                <Btn theme="cancel glass sm" label="Annuler" />
+                <Btn theme="simple glass sm" label="Simple" />
+            </div>
+            <div class="flex mt-4 gap-4 justify-content-around">
+                <Btn theme="outline sm main">
+                    <template #label>
+                        Principale
+                    </template>
+                </Btn>
+                <Btn theme="outline sm minor">
+                    <template #label>
+                        Mineure
+                    </template>
+                </Btn>
+                <Btn theme="outline sm validate">
+                    <template #label>
+                        Valider
+                    </template>
+                </Btn>
+                <Btn theme="outline sm cancel">
+                    <template #label>
+                        Annuler
+                    </template>
+                </Btn>
+                <Btn theme="outline sm simple">
+                    <template #label>
+                        Simple
+                    </template>
+                </Btn>
+            </div>
+            <div class="flex mt-4 gap-4 justify-content-around">
+                <Btn theme="link sm main">
+                    <template #label>
+                        Principale
+                    </template>
+                </Btn>
+                <Btn theme="link sm minor">
+                    <template #label>
+                        Mineure
+                    </template>
+                </Btn>
+                <Btn theme="link sm validate">
+                    <template #label>
+                        Valider
+                    </template>
+                </Btn>
+                <Btn theme="link sm cancel">
+                    <template #label>
+                        Annuler
+                    </template>
+                </Btn>
+                <Btn theme="link sm simple">
+                    <template #label>
+                        Simple
+                    </template>
+                </Btn>
+            </div>
+        </div>
 
-        <h3 id="bienvenue-dans-krosmosjdr-l-aventure-pique-dans-l-univers-du-monde-des-douze-">Bienvenue dans
-            <strong>KrosmosJDR</strong>, l’aventure épique dans l’univers du monde des Douze !
+        <h3 id="bienvenue-dans-krosmozjdr-l-aventure-pique-dans-l-univers-du-monde-des-douze-">Bienvenue dans
+            <strong>KrosmozJDR</strong>, l’aventure épique dans l’univers du monde des Douze !
         </h3>
         <p>Plongez dans le monde des Douze, un univers riche et vibrant issu de l’imaginaire de <em>Dofus</em>, où
             l’aventure, la stratégie et la magie s’entrelacent pour créer une expérience unique de jeu de rôle. Ici,

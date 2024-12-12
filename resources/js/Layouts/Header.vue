@@ -2,7 +2,7 @@
 import searchInput from '@/Components/layoutComponents/searchInput.vue';
 import LoginHeaderContainer from '@/Components/layoutComponents/LoginHeaderContainer.vue';
 
-let title = 'KrosmosJDR';
+let title = 'KrosmozJDR';
 
 // import { ref } from 'vue';
 // defineProps({

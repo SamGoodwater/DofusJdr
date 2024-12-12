@@ -1,66 +1,38 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<img src="https://krosmoz-jdr.fr/public/storage/logos/logo.webp" width="300px" alt='logo'>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<h1>Kromos JDR</h1>
+        <h3 id="bienvenue-dans-krosmozjdr-l-aventure-pique-dans-l-univers-du-monde-des-douze-">Bienvenue dans
+            <strong>KrosmozJDR</strong>, l’aventure épique dans l’univers du monde des Douze !
+        </h3>
+        <p>Plongez dans le monde des Douze, un univers riche et vibrant issu de l’imaginaire de <em>Dofus</em>, où
+            l’aventure, la stratégie et la magie s’entrelacent pour créer une expérience unique de jeu de rôle. Ici,
+            chaque partie est une porte ouverte vers des terres fascinantes, des créatures captivantes et des combats
+            épiques.</p>
+        <h4 id="explorez-des-lieux-mythiques">Explorez des lieux mythiques</h4>
+        <p>De la cité lumineuse de Bonta aux mystères d’Astrub, en passant par les plaines sauvages des Craqueleurs et
+            les secrets d’Amakna, découvrez un monde vaste et varié où chaque région est le théâtre d’histoires
+            légendaires. Préparez-vous à croiser la route des Wabbits malicieux, des Bouftous sauvages, des Chafeurs
+            redoutables, et à affronter les puissants maîtres des donjons comme Kardorim, Groloum ou encore le Comte
+            Harebourg.</p>
+        <h4 id="incarnez-une-classe-iconique">Incarnez une classe iconique</h4>
+        <p>Choisissez parmi une grande variété de classes emblématiques : serez-vous un Crâ précis et implacable, un Iop
+            téméraire et valeureux, un Osamodas lié aux créatures, ou encore un Eliotrope maître des portails ? Que vous
+            soyez un soigneur Eniripsa, un stratège Roublard ou un manipulateur du temps Xélor, chaque classe offre des
+            mécaniques uniques et des sorts adaptés à l’univers du jeu de rôle.</p>
+        <h4 id="d-veloppez-votre-personnage">Développez votre personnage</h4>
+        <p>Grâce à un système de compétences et d’aptitudes inspiré de D&amp;D, personnalisez votre héros pour qu’il
+            reflète votre style de jeu. Enrichissez vos stratégies avec des spécialisations uniques, inspirées des
+            subtilités des races de D&amp;D, et explorez des gameplays toujours plus variés et profonds.</p>
+        <h4 id="un-gameplay-enrichi-et-immersif">Un gameplay enrichi et immersif</h4>
+        <p>Notre jeu de rôle fusionne les règles classiques du JdR avec l’univers riche de Dofus, pour offrir une
+            expérience immersive et accessible à tous, débutants comme vétérans. Préparez-vous à vivre des quêtes
+            épiques, à forger des alliances mémorables, et à écrire votre légende dans un monde en perpétuelle
+            évolution.</p>
+        <hr>
+        <h3 id="-tes-vous-pr-t-rejoindre-l-aventure-">Êtes-vous prêt à rejoindre l’aventure ?</h3>
+        <p>Rassemblez vos compagnons, lancez vos dés et partez à la découverte du monde des Douze. Votre destin est
+            entre vos mains !</p>
 
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<p>Une version en ligne :  <a href="https://krosmoz-jdr.fr/" target="\_blank">https://krosmoz-jdr.fr/</a> (En cours de création)</p>
+<p>Pour contribuer : <a href="https://krosmoz-jdr.fr/#contribuer" target="\_blank">#contribuer</a> (En cours de création)</p>
+<p>Le discord du projet : <a href="https://discord.gg/XVu4VWFskj" target="\_blank">#XVu4VWFskj</a></p>

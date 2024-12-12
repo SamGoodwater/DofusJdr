@@ -100,6 +100,8 @@ export default {
                 main: colors.blue,
                 minor: colors.zinc,
                 body: colors.slate,
+                validate: colors.green,
+                cancel: colors.red,
                 brown: {
                     50: "#fdf8f6",
                     100: "#f2e8e5",

@@ -6,6 +6,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import DefaultLayout from "/resources/js/Layouts/main.vue";
+import { Icons } from "./Utils/Icons";
 
 const appName = import.meta.env.VITE_APP_NAME || "KrosmozJDR";
 const appDescription = import.meta.env.VITE_APP_DESCRIPTION;
@@ -53,3 +54,12 @@ createInertiaApp({
         showSpinner: false,
     },
 });
+
+// Charger les icônes au démarrage de l'application
+Icons.loadIcons()
+    .then(() => {
+        console.log("Icônes chargées avec succès");
+    })
+    .catch((error) => {
+        console.error("Erreur lors du chargement des icônes:", error);
+    });

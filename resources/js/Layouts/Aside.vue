@@ -21,9 +21,9 @@ const appSlogan = ref(import.meta.env.VITE_APP_SLOGAN);
                 <template #reference>
                     <Link class="hover:scale-105 focus:scale-95" :href="route('home')">
                     <figure>
-                        <img class="w-auto px-8" src="storage/logos/logo.png" alt="Logo de {{ appName }}" />
+                        <img class="w-auto px-14" src="storage/logos/logo.webp" alt="Logo de {{ appName }}" />
                     </figure>
-                    <h2 class="text-sm text-secondary/50 text-center">{{ appSlogan }}</h2>
+                    <h2 class="text-sm text-secondary/75 text-center">{{ appSlogan }}</h2>
                     </Link>
                 </template>
                 <template #content>

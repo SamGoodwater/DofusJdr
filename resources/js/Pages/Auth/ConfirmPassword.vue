@@ -2,7 +2,7 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/inputs/InputError.vue';
 import InputLabel from '@/Components/inputs/InputLabel.vue';
-import PrimaryButton from '@/Components/actions/PrimaryButton.vue';
+import Btn from '@/Components/actions/Btn.vue';
 import TextInput from '@/Components/inputs/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
@@ -36,9 +36,9 @@ const submit = () => {
             </div>
 
             <div class="mt-4 flex justify-end">
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <Btn class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Confirm
-                </PrimaryButton>
+                </Btn>
             </div>
         </form>
     </GuestLayout>

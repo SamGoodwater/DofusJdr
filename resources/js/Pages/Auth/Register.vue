@@ -2,7 +2,7 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/inputs/InputError.vue';
 import InputLabel from '@/Components/inputs/InputLabel.vue';
-import PrimaryButton from '@/Components/actions/PrimaryButton.vue';
+import Btn from '@/Components/actions/Btn.vue';
 import TextInput from '@/Components/inputs/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
@@ -68,9 +68,9 @@ const submit = () => {
                 Already registered?
                 </Link>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <Btn class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Register
-                </PrimaryButton>
+                </Btn>
             </div>
         </form>
     </GuestLayout>
