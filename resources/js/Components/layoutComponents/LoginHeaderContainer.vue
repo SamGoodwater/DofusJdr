@@ -1,6 +1,5 @@
 <script setup>
 import Btn from '@/Components/actions/Btn.vue';
-
 </script>
 
 <template>

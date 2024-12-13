@@ -1,7 +1,23 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import Btn from '@/Components/actions/Btn.vue';
+import { IconsGetter } from '../Utils/IconsGetter';
+import Icons from '@/Components/images/Icon.vue';
+
+const iconPA = ref('');
+const iconPM = ref('');
+const iconPO = ref('');
+const iconTacle = ref('');
+const iconRes_terre = ref('');
+
+onMounted(async () => {
+    iconPA.value = await IconsGetter.get('modules', 'pa');
+    iconPM.value = await IconsGetter.get('modules', 'pm');
+    iconPO.value = await IconsGetter.get('modules', 'po');
+    iconTacle.value = await IconsGetter.get('modules', 'tacle');
+    iconRes_terre.value = await IconsGetter.get('modules', 'res_terre');
+});
 
 const convertStability = {
     alpha: "α",
@@ -94,6 +110,17 @@ const page = usePage();
                     </template>
                 </Btn>
             </div>
+        </div>
+
+        <!-- Tests icones -->
+        <div>
+            <p>Au milieu d'un paragraphe
+                <Icons theme=" xs " :source="iconPA" /> XS,
+                <Icons theme=" sm " :source="iconPM" /> SM,
+                <Icons theme=" md " :source="iconPO" /> MD,
+                <Icons theme=" lg " :source="iconTacle" /> LG,
+                <Icons theme=" xl " :source="iconRes_terre" /> XL
+            </p>
         </div>
 
         <h3 id="bienvenue-dans-krosmozjdr-l-aventure-pique-dans-l-univers-du-monde-des-douze-">Bienvenue dans

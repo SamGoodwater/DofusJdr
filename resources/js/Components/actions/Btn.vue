@@ -49,52 +49,41 @@ const props = defineProps({
 
 const getClasses = computed(() => {
     let classes = ["btn"];
+    let match;
     if (props.theme) {
 
         // STYLE
-        if (props.theme.includes('outline')) {
-            classes.push(`btn-outline`);
-        } else if (props.theme.includes('ghost')) {
-            classes.push(`btn-ghost`);
-        } else if (props.theme.includes('link')) {
-            classes.push(`btn-link`);
-        } else if (props.theme.includes('glass')) {
-            classes.push(`btn-glass`);
+        const regexStyled = /(?:^|\s)(?<capture>|outline|ghost|link|glass)(?:\s|$)/;
+        match = regexStyled.exec(props.theme)
+        if (match && match?.groups?.capture) {
+            if (match.groups.capture === 'glass') {
+                classes.push('glass');
+            } else {
+                classes.push('btn-' + match.groups.capture);
+            }
         }
 
         //FACE
-        if (props.theme.includes('wide')) {
-            classes.push(`btn-wide')) {`);
-        } else if (props.theme.includes('block')) {
-            classes.push(`btn-block')) {`);
-        } else if (props.theme.includes('square')) {
-            classes.push(`btn-square')) {`);
-        } else if (props.theme.includes('circle')) {
-            classes.push(`btn-circle`);
+        const regexFace = /(?:^|\s)(?<capture>|wide|block|square|circle)(?:\s|$)/;
+        match = regexFace.exec(props.theme)
+        if (match && match?.groups?.capture) {
+            classes.push('btn-' + match.groups.capture);
         }
 
         // SiZE
-        if (props.theme.includes('xs')) {
-            classes.push(`btn-xs`);
-        } else if (props.theme.includes('sm')) {
-            classes.push(`btn-sm`);
-        } else if (props.theme.includes('lg')) {
-            classes.push(`btn-lg`);
+        const regexSize = /(?:^|\s)(?<capture>xs|sm|md|lg)(?:\s|$)/;
+        match = regexSize.exec(props.theme)
+        if (match && match?.groups?.capture) {
+            classes.push(`btn-${match.groups.capture}`);
         } else {
             classes.push(`btn-md`);
         }
 
         // COLOR
-        if (props.theme.includes('main')) {
-            classes.push(`btn-custom-main`);
-        } else if (props.theme.includes('minor')) {
-            classes.push(`btn-custom-minor`);
-        } else if (props.theme.includes('validate')) {
-            classes.push(`btn-custom-validate`);
-        } else if (props.theme.includes('cancel')) {
-            classes.push(`btn-custom-cancel`);
-        } else if (props.theme.includes('simple')) {
-            classes.push(`btn-custom-simple`);
+        const regexColor = /(?:^|\s)(?<capture>main|minor|validate|cancel|simple)(?:\s|$)/;
+        match = regexColor.exec(props.theme)
+        if (match && match?.groups?.capture) {
+            classes.push(`btn-custom-${match.groups.capture}`);
         }
     }
 

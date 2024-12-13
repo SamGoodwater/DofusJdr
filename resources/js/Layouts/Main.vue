@@ -39,7 +39,7 @@ const appKeywords = ref(import.meta.env.VITE_APP_KEYWORDS);
             <div class="background fixed w-screen h-screen overflow-hidden"></div>
         </main>
 
-        <Footer class="z-10 fixed max-sm:ml-0 ml-64 bottom-0 w-fit-available h-fit-available" />
+        <Footer class="z-10 absolute max-sm:ml-0 ml-64 bottom-0 w-fit-available h-fit-available" />
 
     </div>
 

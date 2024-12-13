@@ -2,6 +2,7 @@ import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
 import { capitalize } from "vue";
 import theme from "tailwindcss/defaultTheme";
+import daisyui from "daisyui";
 
 const colors = require("tailwindcss/colors");
 

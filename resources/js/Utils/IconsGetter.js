@@ -1,5 +1,6 @@
-export class Icons {
+export class IconsGetter {
     static icons = {};
+    static iconsLoaded = false;
 
     static async loadIcons() {
         try {
@@ -7,7 +8,8 @@ export class Icons {
             if (!response.ok) {
                 console.error("Failed to load icons");
             }
-            Icons.icons = await response.json();
+            IconsGetter.icons = await response.json();
+            IconsGetter.iconsLoaded = true;
         } catch (error) {
             console.error(
                 "There was a problem with the fetch operation:",
@@ -17,12 +19,12 @@ export class Icons {
     }
 
     static async get(dir, name) {
-        if (!Icons.iconsLoaded) {
-            await Icons.loadIcons();
+        if (!IconsGetter.iconsLoaded) {
+            await IconsGetter.loadIcons();
         }
-        if (!Icons.icons[dir] || !Icons.icons[dir][name]) {
+        if (!IconsGetter.icons[dir] || !IconsGetter.icons[dir][name]) {
             return "";
         }
-        return Icons.icons[dir][name];
+        return IconsGetter.icons[dir][name];
     }
 }
