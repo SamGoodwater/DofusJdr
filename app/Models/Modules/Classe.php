@@ -21,6 +21,7 @@ class Classe extends Model
         'name',
         'description_fast',
         'description',
+        'passif',
         'life',
         'life_dice',
         'specificity',

@@ -2,6 +2,7 @@ import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
 import { capitalize } from "vue";
 import theme from "tailwindcss/defaultTheme";
+import daisyui from "daisyui";
 
 const colors = require("tailwindcss/colors");
 
@@ -11,7 +12,7 @@ export default {
         "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
-        "./resources/js/**/*.vue",
+        "./resources/views/**/*.vue",
     ],
     plugins: [require("@tailwindcss/typography"), require("daisyui")],
 
@@ -100,6 +101,8 @@ export default {
                 main: colors.blue,
                 minor: colors.zinc,
                 body: colors.slate,
+                validate: colors.green,
+                cancel: colors.red,
                 brown: {
                     50: "#fdf8f6",
                     100: "#f2e8e5",

@@ -24,7 +24,7 @@ class UserController extends Controller
 
         $users = User::paginate($paginationMaxDisplay);
 
-        return Inertia::render('user.index', [
+        return Inertia::render('Users/', [
             'users' => $users,
         ]);
     }
@@ -43,7 +43,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        return Inertia::render('user.create');
+        return Inertia::render('Users/Create');
     }
 
     public function store(UserFilterRequest $request): RedirectResponse
@@ -76,7 +76,7 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        return Inertia::render('user.edit', [
+        return Inertia::render('Users/Edit', [
             'user' => $user,
             'ressources' => $user->ressources,
             'panoply' => $user->panoply,
@@ -109,16 +109,21 @@ class UserController extends Controller
         return redirect()->route('user.show', ['user' => $user]);
     }
 
-    public function delete(User $user): RedirectResponse
+    public function delete(UserFilterRequest $request, User $user): RedirectResponse
     {
         $this->authorize('delete', $user);
         event(new NotificationSuperAdminEvent('user', "delete", $user));
+
+        Auth::logout();
         $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect()->route('user.index');
     }
 
-    public function forceDelete(User $user): RedirectResponse
+    public function forceDelete(UserFilterRequest $request, User $user): RedirectResponse
     {
         $this->authorize('forceDelete', $user);
 
@@ -127,7 +132,12 @@ class UserController extends Controller
 
         DataService::deleteFile($user, 'image');
         event(new NotificationSuperAdminEvent('user', "forced_delete", $user));
+
+        Auth::logout();
         $user->forceDelete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect()->route('user.index');
     }

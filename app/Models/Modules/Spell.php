@@ -404,6 +404,7 @@ class Spell extends Model
         'element',
         'category',
         'is_magic',
+        'is_reaction',
         'powerful',
         'usable',
         'is_visible',

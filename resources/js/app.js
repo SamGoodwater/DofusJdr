@@ -5,7 +5,8 @@ import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
-import DefaultLayout from "/resources/js/Layouts/main.vue";
+import DefaultLayout from "/resources/views/Layouts/main.vue";
+import { IconsGetter } from "./Utils/IconsGetter";
 
 const appName = import.meta.env.VITE_APP_NAME || "KrosmozJDR";
 const appDescription = import.meta.env.VITE_APP_DESCRIPTION;
@@ -23,8 +24,8 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
         resolvePageComponent(
-            `./Pages/${name}.vue`,
-            import.meta.glob("./Pages/**/*.vue"),
+            `../views/Pages/${name}.vue`,
+            import.meta.glob("../views/**/*.vue"),
         ).then((module) => {
             const page = module.default;
             page.layout = page.layout || DefaultLayout;
@@ -53,3 +54,6 @@ createInertiaApp({
         showSpinner: false,
     },
 });
+
+// Charger les icônes au démarrage de l'application
+IconsGetter.loadIcons();

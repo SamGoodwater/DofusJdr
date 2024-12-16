@@ -7,20 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="keywords" content="@yield('keywords')" />
-
-    <link rel="icon" href="{{ asset('storage/logos/logo.ico') }}" type="image/x-icon">
-    <link rel="icon" href="{{ asset('storage/logos/logo.png') }}" type="image/png">
-    <link rel="shortcut icon" href="{{ asset('storage/logos/logo.ico') }}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{{ asset('storage/logos/logo.ico') }}" type="image/x-icon">
-    <link rel="apple-touch-icon-precomposed" href="{{ asset('storage/logos/logo.ico') }}" type="image/x-icon">
-    <link rel="apple-touch-startup-image" href="{{ asset('storage/logos/logo.ico') }}" type="image/x-icon">
-    <link rel="manifest" href="{{ asset('storage/logos/logo.ico') }}" type="image/x-icon">
-    <link rel="mask-icon" href="{{ asset('storage/logos/logo.ico') }}" type="image/x-icon">
-    <link rel="fluid-icon" href="{{ asset('storage/logos/logo.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('storage/logos/logo_mini.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('storage/logos/logo_mini.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ asset('storage/logos/logo_mini.webp') }}" type="image/webp">
+    <link rel="icon" href="{{ asset('storage/logos/logo_mini.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('storage/logos/logo_mini.ico') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ asset('storage/logos/logo_mini.png') }}">
 
     <!-- Scripts -->
     @routes
-    @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+    @vite(['resources/js/app.js', "resources/views/Pages/{$page['component']}.vue"])
     @inertiaHead
 </head>
 

@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer components {
+    @import "src/display.scss";
     @import "src/font.scss";
     @import "src/layout.scss";
     @import "src/effect.scss";

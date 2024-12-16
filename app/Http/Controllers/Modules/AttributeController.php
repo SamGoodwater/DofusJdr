@@ -19,6 +19,7 @@ class AttributeController extends Controller
 
     public function index(AttributeFilterRequest $request): \Inertia\Response
     {
+
         $this->authorize('viewAny', Attribute::class);
 
         // Récupère la valeur de 'paginationMaxDisplay' depuis la requête, avec une valeur par défaut de 25

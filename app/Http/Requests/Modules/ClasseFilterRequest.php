@@ -28,6 +28,7 @@ class ClasseFilterRequest extends FormRequest
             'official_id' => ["string", "min:1", "max:255", "nullable"],
             'dofusdb_id' => ["string", "min:1", "max:255", "nullable"],
             'description_fast' => ["string", "min:4", "max:1000", "nullable"],
+            'passif' => ["string", "max:1000", "nullable"],
             'life' => ["integer", "required"],
             'life_dice' => ["integer", "min:4", "max:12", "required"],
             'specificity' => ["string", "min:4", "max:1000", "nullable"],
