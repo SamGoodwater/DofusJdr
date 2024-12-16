@@ -1,11 +1,12 @@
 <script setup>
-import Checkbox from '@/Components/inputs/Checkbox.vue';
-import InputError from '@/Components/inputs/InputError.vue';
-import InputLabel from '@/Components/inputs/InputLabel.vue';
-import Btn from '@/Components/actions/Btn.vue';
-import Route from '@/Components/text/Route.vue';
-import TextInput from '@/Components/inputs/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import Checkbox from '../../Components/inputs/Checkbox.vue';
+import InputError from '../../Components/inputs/InputError.vue';
+import InputLabel from '../../Components/inputs/InputLabel.vue';
+import Btn from '../../Components/actions/Btn.vue';
+import Route from '../../Components/text/Route.vue';
+import TextInput from '../../Components/inputs/TextInput.vue';
+import { useForm } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
 const form = useForm({
     email: '',
@@ -18,11 +19,13 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+onMounted(() => {
+    document.title = 'Connexion';
+});
 </script>
 
 <template>
-
-    <Head title="Se connecter" />
 
     <form @submit.prevent="submit">
         <div>
@@ -39,7 +42,7 @@ const submit = () => {
         </div>
 
         <div class="mt-4 block">
-            <Checkbox theme="sm gray-600" class="ms-2" name="remember" v-model:checked="form.remember"
+            <Checkbox theme="sm gray-600" class="ms-2" name="remember" v-model="form.remember"
                 label="Se rappeler de mes identifiants">
             </Checkbox>
         </div>

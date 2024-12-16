@@ -1,10 +1,11 @@
 <script setup>
-import InputError from '@/Components/inputs/InputError.vue';
-import InputLabel from '@/Components/inputs/InputLabel.vue';
-import Btn from '@/Components/actions/Btn.vue';
-import Route from '@/Components/text/Route.vue';
-import TextInput from '@/Components/inputs/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import InputError from '../../Components/inputs/InputError.vue';
+import InputLabel from '../../Components/inputs/InputLabel.vue';
+import Btn from '../../Components/actions/Btn.vue';
+import Route from '../../Components/text/Route.vue';
+import TextInput from '../../Components/inputs/TextInput.vue';
+import { useForm } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
 const form = useForm({
     name: '',
@@ -18,11 +19,12 @@ const submit = () => {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
+onMounted(() => {
+    document.title = 'Inscription';
+});
 </script>
 
 <template>
-
-    <Head title="Inscription" />
 
     <form @submit.prevent="submit">
         <div>
@@ -66,9 +68,12 @@ const submit = () => {
                 <Btn theme="link md main-600" label="Déjà inscrit ?" />
             </Route>
 
-            <Btn class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                S'enregistrer
-            </Btn>
+            <Route route="register">
+                <Btn theme="main-600 glass" class="ms-4"
+                    :disabled="form.processing" label="S'enregistrer" />
+            </Route>
         </div>
+
     </form>
+
 </template>

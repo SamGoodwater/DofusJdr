@@ -8,7 +8,86 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 
 /**
+ * 
+ *
  * @mixin IdeHelperSpell
+ * @property int $id
+ * @property string|null $official_id
+ * @property string|null $dofusdb_id
+ * @property string $uniqid
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $name
+ * @property string $description
+ * @property string $effect
+ * @property string|null $effect_array
+ * @property int $area
+ * @property int $level
+ * @property string $po
+ * @property int $po_editable
+ * @property string $pa
+ * @property string $cast_per_turn
+ * @property int $cast_per_target
+ * @property int $sight_line
+ * @property string $number_between_two_cast
+ * @property int $element
+ * @property int $category
+ * @property int $is_magic
+ * @property int $powerful
+ * @property int $usable
+ * @property int $is_visible
+ * @property string|null $image
+ * @property int $auto_update
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $created_by
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Campaign> $campaigns
+ * @property-read int|null $campaigns_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Mob> $invocations
+ * @property-read int|null $invocations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Mob> $mobs
+ * @property-read int|null $mobs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Npc> $npcs
+ * @property-read int|null $npcs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Scenario> $scenarios
+ * @property-read int|null $scenarios_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Spelltype> $spelltypes
+ * @property-read int|null $spelltypes_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereAutoUpdate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereCastPerTarget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereCastPerTurn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereDofusdbId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereEffect($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereEffectArray($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereElement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereIsMagic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereNumberBetweenTwoCast($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereOfficialId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell wherePa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell wherePo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell wherePoEditable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell wherePowerful($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereSightLine($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereUniqid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereUsable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell withoutTrashed()
+ * @mixin \Eloquent
  */
 class Spell extends Model
 {

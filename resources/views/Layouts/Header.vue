@@ -4,11 +4,22 @@ import LoginHeaderContainer from '../Layouts/components/LoginHeaderContainer.vue
 import tooltips from '../Components/feedback/tooltips.vue';
 import { useSidebar } from '../../js/composables/useSidebar';
 import { useHeader } from '../../js/composables/useHeader';
+import Route from '../Components/text/Route.vue';
+import { ref, onMounted } from 'vue';
 
 const { toggleSidebar } = useSidebar();
 const { toggleHeader, isHeaderOpen } = useHeader();
 
-let title = 'KrosmozJDR';
+const title = ref(import.meta.env.VITE_APP_NAME);
+
+onMounted(() => {
+    updateTitle();
+});
+
+function updateTitle() {
+    const pageTitle = document.title;
+    title.value = pageTitle;
+}
 
 </script>
 
@@ -47,11 +58,11 @@ let title = 'KrosmozJDR';
 
 
             <div>
-                <Link :href="route('home')">
-                <h2 class="align-items-center text-secondary hover:text-secondary/75 text-2xl fw-semibold">
+                <Route v-if="title='home'" route='home'>
+                <h2 id="appTitle" class="align-items-center text-secondary hover:text-secondary/75 text-2xl fw-semibold">
                     {{ title }}
                 </h2>
-                </Link>
+                </Route>
             </div>
         </div>
 

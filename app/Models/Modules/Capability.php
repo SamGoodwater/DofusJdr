@@ -8,7 +8,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 
 /**
+ * 
+ *
  * @mixin IdeHelperCapability
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Classe> $classes
+ * @property-read int|null $classes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Mob> $mobs
+ * @property-read int|null $mobs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Npc> $npcs
+ * @property-read int|null $npcs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Specialization> $specializations
+ * @property-read int|null $specializations_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Capability newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Capability newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Capability onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Capability query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Capability withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Capability withoutTrashed()
+ * @mixin \Eloquent
  */
 class Capability extends Model
 {

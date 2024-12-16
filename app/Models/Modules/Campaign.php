@@ -10,7 +10,66 @@ use App\Models\Page;
 use App\Models\User;
 
 /**
+ * 
+ *
  * @mixin IdeHelperCampaign
+ * @property int $id
+ * @property string $uniqid
+ * @property string $name
+ * @property string|null $description
+ * @property string $slug
+ * @property string|null $keyword
+ * @property int $is_public
+ * @property int $state
+ * @property int $is_visible
+ * @property string|null $image
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $created_by
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Consumable> $consumables
+ * @property-read int|null $consumables_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Item> $items
+ * @property-read int|null $items_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Mob> $mobs
+ * @property-read int|null $mobs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Npc> $npcs
+ * @property-read int|null $npcs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Page> $pages
+ * @property-read int|null $pages_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Panoply> $panoplies
+ * @property-read int|null $panoplies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Ressource> $ressources
+ * @property-read int|null $ressources_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Scenario> $scenarios
+ * @property-read int|null $scenarios_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Shop> $shops
+ * @property-read int|null $shops_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Spell> $spells
+ * @property-read int|null $spells_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $users
+ * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereIsPublic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereKeyword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereUniqid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Campaign withoutTrashed()
+ * @mixin \Eloquent
  */
 class Campaign extends Model
 {

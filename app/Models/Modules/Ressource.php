@@ -8,7 +8,71 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 
 /**
+ * 
+ *
  * @mixin IdeHelperRessource
+ * @property int $id
+ * @property string|null $dofusdb_id
+ * @property int|null $official_id
+ * @property string $uniqid
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $name
+ * @property string|null $description
+ * @property int $level
+ * @property string|null $price
+ * @property string|null $weight
+ * @property int $rarity
+ * @property int $usable
+ * @property string $dofus_version
+ * @property int $is_visible
+ * @property string|null $image
+ * @property int $auto_update
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $ressourcetype_id
+ * @property int|null $created_by
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Campaign> $campaigns
+ * @property-read int|null $campaigns_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Consumable> $consumables
+ * @property-read int|null $consumables_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Item> $items
+ * @property-read int|null $items_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Mob> $mobs
+ * @property-read int|null $mobs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Npc> $npcs
+ * @property-read int|null $npcs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Scenario> $scenarios
+ * @property-read int|null $scenarios_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modules\Shop> $shops
+ * @property-read int|null $shops_count
+ * @property-read \App\Models\Modules\Ressourcetype|null $type
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereAutoUpdate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereDofusVersion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereDofusdbId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereOfficialId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereRarity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereRessourcetypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereUniqid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereUsable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource whereWeight($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ressource withoutTrashed()
+ * @mixin \Eloquent
  */
 class Ressource extends Model
 {

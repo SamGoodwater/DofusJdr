@@ -8,7 +8,41 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 
 /**
+ * 
+ *
  * @mixin IdeHelperSection
+ * @property int $id
+ * @property string $uniqid
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $component
+ * @property string|null $title
+ * @property string|null $content
+ * @property int $order_num
+ * @property int $is_visible
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $page_id
+ * @property int|null $created_by
+ * @property-read \App\Models\Page|null $page
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereComponent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereOrderNum($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section wherePageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereUniqid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section withoutTrashed()
+ * @mixin \Eloquent
  */
 class Section extends Model
 {
