@@ -4,13 +4,12 @@ import LoginHeaderContainer from '../Layouts/components/LoginHeaderContainer.vue
 import tooltips from '../Components/feedback/tooltips.vue';
 import { useSidebar } from '../../js/composables/useSidebar';
 import { useHeader } from '../../js/composables/useHeader';
-import Route from '../Components/text/Route.vue';
 import { ref, onMounted } from 'vue';
 
 const { toggleSidebar } = useSidebar();
-const { toggleHeader, isHeaderOpen } = useHeader();
+const { isHeaderOpen, toggleHeader } = useHeader();
 
-const title = ref(import.meta.env.VITE_APP_NAME);
+const appTitle = ref(import.meta.env.VITE_APP_NAME);
 
 onMounted(() => {
     updateTitle();
@@ -18,7 +17,7 @@ onMounted(() => {
 
 function updateTitle() {
     const pageTitle = document.title;
-    title.value = pageTitle;
+    appTitle.value = pageTitle;
 }
 
 </script>
@@ -26,12 +25,11 @@ function updateTitle() {
 <template>
     <header class="flex justify-between p-2 px-4 gap-2 align-items-center"
         :class="[isHeaderOpen ? 'header-on' : 'header-off hover:header-on']">
-        <div class="flex justify-content-between gap-3 align-items-center">
 
+        <div class="flex justify-content-between gap-3 align-items-center">
             <tooltips bgColor="bg-body-900/70" placement="bottom-start">
                 <template #reference>
                     <label id="toggleBtnsidebarMenu" @click="toggleSidebar" class="btn btn-circle swap swap-rotate">
-                        <!-- this hidden checkbox controls the state -->
                         <input type="checkbox" />
 
                         <svg class="swap-off fill-current hover:opacity-50 tooltip tooltip-bottom"
@@ -55,14 +53,10 @@ function updateTitle() {
                             + <kbd class="kbd kbd-sm">g</kbd></span></p>
                 </template>
             </tooltips>
-
-
             <div>
-                <Route v-if="title='home'" route='home'>
                 <h2 id="appTitle" class="align-items-center text-secondary hover:text-secondary/75 text-2xl fw-semibold">
-                    {{ title }}
+                    {{ appTitle }}
                 </h2>
-                </Route>
             </div>
         </div>
 

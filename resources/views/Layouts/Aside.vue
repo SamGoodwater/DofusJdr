@@ -1,9 +1,9 @@
 <script setup>
 import searchInput from '../Layouts/components/searchInput.vue';
 import Tooltips from '../Components/feedback/tooltips.vue';
-import { ref, computed } from 'vue';
-import { useSidebar } from '../../js/composables/useSidebar';
+import { ref } from 'vue';
 import Route from '../Components/text/Route.vue';
+import { useSidebar } from '../../js/composables/useSidebar';
 
 const { isSidebarOpen } = useSidebar();
 
@@ -35,18 +35,18 @@ const appSlogan = ref(import.meta.env.VITE_APP_SLOGAN);
                 <ul>
                     <li class="my-2">
                         <Route route='home' class="w-full p-2 ps-8 block rounded hover:bg-primary/25"
-                            :class="{ 'bg-primary/10': $page.component.includes('Home') }">
+                            :class="[ $page.component.includes('Home') ? 'bg-primary/10' : '' ]">
                             Accueil
                         </Route>
                     </li>
                     <li class="my-2">
                         <Route route='page.index' class="w-full p-2 ps-8 block rounded hover:bg-primary/25"
-                            :class="{ 'bg-primary/10': $page.component.startsWith('/page') }">Pages
+                            :class="[ $page.component.includes('/page') ? 'bg-primary/10' : '' ]">Pages
                         </Route>
                     </li>
                     <li class="my-2">
                         <Route route='page.create' class="w-full p-2 ps-8 block rounded hover:bg-primary/25"
-                            :class="{ 'bg-primary/10': $page.component.startsWith('/page/create') }">Créer
+                            :class="[ $page.component.includes('/page/create') ? 'bg-primary/10' : '' ]">Créer
                             une page</Route>
                     </li>
                 </ul>

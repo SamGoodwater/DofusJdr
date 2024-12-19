@@ -2,23 +2,10 @@
 import Header from '../Layouts/Header.vue';
 import Aside from '../Layouts/Aside.vue';
 import Footer from '../Layouts/Footer.vue';
-import { ref } from 'vue';
-
-const convertStability = {
-    alpha: "α",
-    beta: "β",
-    rc: "rc",
-    stable: ""
-};
-
-const appName = ref(import.meta.env.VITE_APP_NAME);
-const appVersion = ref(import.meta.env.VITE_APP_VERSION);
-const appDescription = ref(import.meta.env.VITE_APP_DESCRIPTION);
-const appStability = ref(convertStability[import.meta.env.VITE_APP_STABILITY]);
-const appKeywords = ref(import.meta.env.VITE_APP_KEYWORDS);
-import { useSidebar } from '@/composables/useSidebar';
+import { useSidebar } from '../../js/composables/useSidebar';
 
 const { isSidebarOpen } = useSidebar();
+
 </script>
 
 <template>
@@ -30,8 +17,8 @@ const { isSidebarOpen } = useSidebar();
         <Aside class="z-20" />
 
         <main :class="[isSidebarOpen ? 'ml-64' : 'ml-0']"
-            class="relative max-sm:ml-0 flex justify-center z-0 w-fit-available h-fit-available overflow-hidden">
-            <div class="pt-24 pb-24 lg:px-10 md:px-6 sm:px-6 max-sm:px-4">
+            class="relative max-sm:ml-0 flex flex-col align-items-center z-0 w-fit-available h-fit-available overflow-hidden">
+            <div class="mt-24 mb-24 lg:mx-10 md:mx-6 sm:mx-6 max-sm:mx-4 ">
                 <slot />
             </div>
             <div class="background fixed w-screen h-screen overflow-hidden"></div>

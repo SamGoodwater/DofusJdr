@@ -37,10 +37,10 @@ const page = usePage();
 
     <section class="prose prose-state prose-a:text-secondary max-md:prose-sm lg:prose-lg">
 
-        <h1 class="text-amber-800">Site en construction</h1>
+        <h1 class="text-amber-800 text-center">Site en construction</h1>
 
         <!-- TESTS BUTTONS -->
-        <div>
+        <div class="text-center">
             <div class="flex gap-4 justify-content-around">
                 <Btn theme="main glass sm" label="Principale" />
                 <Btn theme="minor glass sm" label="Mineure" />

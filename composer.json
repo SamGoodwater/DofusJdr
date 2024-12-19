@@ -7,12 +7,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "laravel/framework": "^11.34",
-        "laravel/tinker": "^2.9",
+        "calcinai/php-imagick": "*",
         "inertiajs/inertia-laravel": "^1.0",
-        "intervention/image": "^3.9",
         "laravel-lang/common": "^6.4",
+        "laravel/framework": "^11.34",
         "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.9",
         "tightenco/ziggy": "^2.4.1"
     },
     "require-dev": {

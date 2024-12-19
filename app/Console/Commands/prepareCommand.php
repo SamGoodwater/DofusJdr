@@ -32,16 +32,16 @@ class prepareCommand extends Command
         exec('composer update');
 
         $this->info('Génération des fichiers ide-helper:models');
-        $this->call('ide-helper:models -R');
+        $this->call('ide-helper:models');
 
         $this->info('Génération des fichiers ide-helper:generate');
-        $this->call('ide-helper:generate -R');
+        $this->call('ide-helper:generate');
 
         $this->info('Génération des fichiers ide-helper:eloquent');
-        $this->call('ide-helper:eloquent -R');
+        $this->call('ide-helper:eloquent');
 
         $this->info('Génération des fichiers ide-helper:meta');
-        $this->call('ide-helper:meta -R');
+        $this->call('ide-helper:meta');
 
         $this->info('Regénération de l\'autoloader de Composer');
         exec('composer dump-autoload');

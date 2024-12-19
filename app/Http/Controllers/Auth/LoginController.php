@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
     use AuthorizesRequests;
+
+    public function connexion(): \Inertia\Response
+    {
+        return inertia('Auth/Login');
+    }
 
     public function login(LoginFilterRequest $request): RedirectResponse
     {
@@ -37,32 +40,4 @@ class LoginController extends Controller
         return redirect()->route('login');
     }
 
-    public function register(LoginFilterRequest $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed',
-        ]);
-
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        Auth::attempt($request->only('email', 'password'));
-
-        return redirect()->route('home');
-    }
-
-    public function connexion(): \Inertia\Response
-    {
-        return inertia('Auth/Login');
-    }
-
-    public function inscription(): \Inertia\Response
-    {
-        return inertia('Auth/Register');
-    }
 }

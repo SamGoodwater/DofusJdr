@@ -25,7 +25,8 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PageController;
-
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -36,12 +37,40 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home');
 
-Route::prefix('auth')->name("auth.")->controller(LoginController::class)->middleware('guest')->group(function () {
+// Auth
+Route::prefix('login')->name("login.")->controller(LoginController::class)->middleware('guest')->group(function () {
     Route::get('/', 'connexion')->name('connexion');
-    Route::get('/inscription', 'inscription')->name('inscription');
     Route::post('/login', 'login')->name('login');
-    Route::post('/register', 'register')->name('register');
     Route::post('/logout', 'logout')->name('logout');
+});
+
+Route::prefix('register')->name("register.")->controller(RegisterController::class)->group(function () {
+    Route::get('/', 'inscription')->name('inscription');
+    Route::post('/register', 'register')->name('register');
+});
+
+Route::prefix('auth')->name("auth.")->controller(AuthController::class)->group(function () use ($uniqidRegex) {
+    Route::get('/confirm_password[user:uniqid]', 'confirm_password_show')->name('confirm_password_show')->where('user', $uniqidRegex);
+    Route::post('/confirm_password_request', 'confirm_password_request')->name('confirm_password_request');
+    Route::get('/forget_password[user:uniqid]', 'forget_password_show')->name('forget_password_show')->where('user', $uniqidRegex);
+    Route::post('/forget_password_request', 'forget_password_request')->name('forget_password_request');
+    Route::get('/reset_password[user:uniqid]', 'reset_password_show')->name('reset_password_show')->where('user', $uniqidRegex);
+    Route::post('/reset_password_request', 'reset_password_request')->name('reset_password_request');
+    Route::get('/verify_email[user:uniqid]', 'verify_email_show')->name('verify_email_show')->where('user', $uniqidRegex);
+    Route::post('/verify_email_request', 'verify_email_request')->name('verify_email_request');
+});
+
+// Users
+Route::prefix('user')->name("user.")->controller(UserController::class)->middleware(['auth', 'verified'])->group(function () use ($uniqidRegex) {
+    Route::inertia('/', 'index')->name('index');
+    Route::inertia('/{user:uniqid}', 'show')->name('show')->where('user', $uniqidRegex);
+    Route::inertia('/create', 'create')->name('create');
+    Route::post('/', 'store')->name('store');
+    Route::inertia('/{user:uniqid}/edit', 'edit')->name('edit')->where('user', $uniqidRegex);
+    Route::patch('/{user:uniqid}', 'update')->name('update')->where('user', $uniqidRegex);
+    Route::delete('/{user:uniqid}', 'delete')->name('delete')->where('user', $uniqidRegex);
+    Route::post('/{user:uniqid}', 'restore')->name('restore')->where('user', $uniqidRegex);
+    Route::delete('/{user:uniqid}', 'forcedDelete')->name('forcedDelete')->where('user', $uniqidRegex);
 });
 
 // Pages
@@ -329,20 +358,6 @@ Route::prefix('spelltype')->name("spelltype.")->controller(SpelltypeController::
     Route::post('/{spelltype:uniqid}', 'restore')->name('restore')->middleware(['auth', 'verified'])->where('spelltype', $uniqidRegex);
     Route::delete('/{spelltype:uniqid}', 'forcedDelete')->name('forcedDelete')->middleware(['auth', 'verified'])->where('spelltype', $uniqidRegex);
 });
-
-// Users
-Route::prefix('user')->name("user.")->controller(UserController::class)->middleware(['auth', 'verified'])->group(function () use ($uniqidRegex) {
-    Route::inertia('/', 'index')->name('index');
-    Route::inertia('/{user:uniqid}', 'show')->name('show')->where('user', $uniqidRegex);
-    Route::inertia('/create', 'create')->name('create');
-    Route::post('/', 'store')->name('store');
-    Route::inertia('/{user:uniqid}/edit', 'edit')->name('edit')->where('user', $uniqidRegex);
-    Route::patch('/{user:uniqid}', 'update')->name('update')->where('user', $uniqidRegex);
-    Route::delete('/{user:uniqid}', 'delete')->name('delete')->where('user', $uniqidRegex);
-    Route::post('/{user:uniqid}', 'restore')->name('restore')->where('user', $uniqidRegex);
-    Route::delete('/{user:uniqid}', 'forcedDelete')->name('forcedDelete')->where('user', $uniqidRegex);
-});
-
 
 // Système de gestion des images avec Glyde : https://grafikart.fr/tutoriels/image-resize-glide-php-1358
 // Impossible d'installer glyde

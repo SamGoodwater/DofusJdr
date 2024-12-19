@@ -15,6 +15,16 @@ export function useSidebar() {
         }
     };
 
+    const checkIfSidebarIsOpen = () => {
+        const sidebar = document.getElementById('menuSidebar');
+        if(sidebar.classList.contains('sidebar-on')){
+            isSidebarOpen.value = true;
+            return true
+        }
+        isSidebarOpen.value = false;
+        return false;
+    }
+
     const handleKeydown = (event) => {
         if (event.altKey && event.key === "g") {
             toggleSidebar();
@@ -32,5 +42,6 @@ export function useSidebar() {
     return {
         isSidebarOpen,
         toggleSidebar,
+        checkIfSidebarIsOpen
     };
 }
