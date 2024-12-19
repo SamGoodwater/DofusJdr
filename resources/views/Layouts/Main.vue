@@ -17,7 +17,7 @@ const { isSidebarOpen } = useSidebar();
         <Aside class="z-20" />
 
         <main :class="[isSidebarOpen ? 'ml-64' : 'ml-0']"
-            class="relative max-sm:ml-0 flex flex-col align-items-center z-0 w-fit-available h-fit-available overflow-hidden">
+            class="relative max-sm:ml-0 flex flex-col align-items-center z-0 w-fit-available h-fit-available overflow-x-hidden">
             <div class="mt-24 mb-24 lg:mx-10 md:mx-6 sm:mx-6 max-sm:mx-4 ">
                 <slot />
             </div>
@@ -25,7 +25,7 @@ const { isSidebarOpen } = useSidebar();
         </main>
 
         <Footer :class="[isSidebarOpen ? 'ml-64' : 'ml-0']"
-            class="z-10 absolute max-sm:ml-0 bottom-0 w-fit-available h-fit-available" />
+            class="z-10 absolute max-sm:fixed max-sm:ml-0 bottom-0 w-fit-available h-fit-available" />
 
     </div>
 

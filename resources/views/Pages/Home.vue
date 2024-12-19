@@ -35,20 +35,20 @@ const page = usePage();
 
 <template>
 
-    <section class="prose prose-state prose-a:text-secondary max-md:prose-sm lg:prose-lg">
+    <section class="prose prose-state prose-a:text-secondary max-sm:prose-sm lg:prose-lg">
 
         <h1 class="text-amber-800 text-center">Site en construction</h1>
 
         <!-- TESTS BUTTONS -->
         <div class="text-center">
-            <div class="flex gap-4 justify-content-around">
+            <div class="flex gap-4 justify-content-around flex-wrap">
                 <Btn theme="main glass sm" label="Principale" />
                 <Btn theme="minor glass sm" label="Mineure" />
                 <Btn theme="validate glass sm" label="Valider" />
                 <Btn theme="cancel glass sm" label="Annuler" />
                 <Btn theme="simple glass sm" label="Simple" />
             </div>
-            <div class="flex mt-4 gap-4 justify-content-around">
+            <div class="flex mt-4 gap-4 justify-content-around flex-wrap">
                 <Btn theme="outline sm main">
                     <template #label>
                         Principale
@@ -75,7 +75,7 @@ const page = usePage();
                     </template>
                 </Btn>
             </div>
-            <div class="flex mt-4 gap-4 justify-content-around">
+            <div class="flex mt-4 gap-4 justify-content-around flex-wrap">
                 <Btn theme="link sm main">
                     <template #label>
                         Principale
