@@ -168,6 +168,10 @@ Dans la recherche, l’infobulle du dé (Lancer) passe devant le champ et la cro
 
 Les bandeaux d’alerte ne sont plus un aplat de couleur. Le fond laisse voir la page derrière, avec un flou et une teinte selon le type (info, succès, attention, erreur). Le texte reste clair et lisible.
 
+## Octobre 2026 — Enregistrer une page longue sans tout perdre
+
+Sur une page de règles un peu longue, les chapitres plus bas mettent un moment à s’afficher. Enregistrer trop tôt n’efface plus leur texte : on attend qu’ils soient là, puis on peut modifier sans perdre le reste.
+
 ## Octobre 2026 — Journal du jeu
 
 La page **Journal** dit en peu de mots ce qui est déjà jouable, et une frise indique la suite : campagnes, scénarios et fiches en 1.4, puis des outils de combat en 1.5. Les textes restent des fichiers markdown. Un admin les modifie depuis la page.
@@ -207,10 +211,6 @@ Sur une fiche de classe ou de spécialisation, un visiteur ne voit plus les text
 ## Septembre 2026 — Tooltips et alertes plus lisibles
 
 Les bulles d’aide (lancer de dés dans la recherche, flèche pour replier l’en-tête) se placent correctement et se lisent mieux. Les bandeaux d’alerte reprennent le fond des petites fiches, avec un trait et une ombre de la couleur du message.
-
-## Septembre 2026 — Pages Règles : plus d’effacement du HTML différé
-
-Sur une page longue, seules les trois premières sections embarquent leur texte. Un enregistrement trop tôt (éditeur encore vide) n’écrase plus le chapitre en base : le placeholder de chargement est ignoré.
 
 ## Septembre 2026 — Droits d’accès : plus d’écrasement ni de raccourci MJ
 

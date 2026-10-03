@@ -7,7 +7,7 @@
   {
     "path": "100- Done/README.md",
     "title": "Ce qui a été fait",
-    "description": "Sur la fiche d’une classe, les sorts s’affichent en cartes de même largeur, avec le menu d’options (afficher, modifier) et l’ouverture au double-clic. Le passif de classe se distingue visuellement des sorts. Modifier une entité depuis une carte ou une fiche en modal ouvre l’éditeur dans une modal, sans quitter la page en cours ; depuis la page de l’entité, l’édition reste en page pleine."
+    "description": "Sur une page de règles un peu longue, les chapitres plus bas mettent un moment à s’afficher. Enregistrer trop tôt n’efface plus leur texte : on attend qu’ils soient là, puis on peut modifier sans perdre le reste."
   },
   {
     "path": "backend/_ai.md",
