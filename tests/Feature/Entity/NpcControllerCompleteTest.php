@@ -56,6 +56,10 @@ class NpcControllerCompleteTest extends TestCase
         $this->assertNull($npc->creature->pa);
         $this->assertNull($npc->creature->pm);
         $this->assertNull($npc->creature->ca);
+        $this->assertNull($npc->creature->res_fixe_neutre);
+        $this->assertNull($npc->creature->res_fixe_feu);
+        $this->assertFalse($npc->creature->hasExplicitTotal('res_fixe_neutre'));
+        $this->assertFalse($npc->creature->hasExplicitTotal('res_fixe_feu'));
         $this->assertSame(0, (int) $npc->creature->acrobatie_mastery);
         $this->assertSame(0, (int) $npc->creature->read_level);
         $this->assertSame(3, (int) $npc->creature->write_level);

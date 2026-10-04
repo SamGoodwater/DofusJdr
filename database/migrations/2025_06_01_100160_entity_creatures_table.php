@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('do_fixe_eau')->default('0');
             $table->string('do_sagesse')->default('0');
             $table->string('do_vitalite')->default('0');
-            // MySQL refuse DEFAULT sur TEXT/BLOB/JSON (SQLSTATE 1101). Défaut applicatif : Creature::$attributes.
+            // TEXT sans DEFAULT SQL (MySQL 8 / SQLSTATE 1101). Plus tard nullable : null = composition.
             $table->text('res_fixe_neutre');
             $table->text('res_fixe_terre');
             $table->text('res_fixe_feu');

@@ -48,11 +48,21 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $do_fixe_air
  * @property string $do_fixe_eau
  * @property string|null $do_fixe_multiple
+<<<<<<< HEAD
  * @property string $res_fixe_neutre
  * @property string $res_fixe_terre
  * @property string $res_fixe_feu
  * @property string $res_fixe_air
  * @property string $res_fixe_eau
+=======
+ * @property string $do_sagesse
+ * @property string $do_vitalite
+ * @property string|null $res_fixe_neutre
+ * @property string|null $res_fixe_terre
+ * @property string|null $res_fixe_feu
+ * @property string|null $res_fixe_air
+ * @property string|null $res_fixe_eau
+>>>>>>> 17efd2058 (fix: ne plus forcer les résistances fixes à 0 sur une fiche vide)
  * @property string $res_neutre
  * @property string $res_terre
  * @property string $res_feu
@@ -561,19 +571,6 @@ class Creature extends Model implements HasMedia
 
         return is_string($value) ? $value : (string) $value;
     }
-
-    /**
-     * Défauts applicatifs : MySQL 8 refuse DEFAULT SQL sur TEXT (SQLSTATE 1101).
-     *
-     * @var array<string, mixed>
-     */
-    protected $attributes = [
-        'res_fixe_neutre' => '0',
-        'res_fixe_terre' => '0',
-        'res_fixe_feu' => '0',
-        'res_fixe_air' => '0',
-        'res_fixe_eau' => '0',
-    ];
 
     /**
      * The conditions that should be cast.

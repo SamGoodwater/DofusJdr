@@ -37,6 +37,10 @@ class MonsterControllerStoreTest extends TestCase
         $this->assertNull($monster->creature->pa);
         $this->assertNull($monster->creature->pm);
         $this->assertNull($monster->creature->ca);
+        $this->assertNull($monster->creature->res_fixe_neutre);
+        $this->assertNull($monster->creature->res_fixe_feu);
+        $this->assertFalse($monster->creature->hasExplicitTotal('res_fixe_neutre'));
+        $this->assertFalse($monster->creature->hasExplicitTotal('res_fixe_feu'));
         $this->assertSame(0, (int) $monster->creature->acrobatie_mastery);
         $this->assertSame(0, (int) $monster->creature->read_level);
         $this->assertSame(3, (int) $monster->creature->write_level);

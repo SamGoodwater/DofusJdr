@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Octobre 2026 — Bonus d’équipement de nouveau dans les totaux runtime
 
 Les formules créature lisent `[strength_object]`, `[initiative_object]`, `[wakfu_recharge_object]`, etc. Après l’unification des formules (termes objet dans la formule, plus d’ajout arithmétique de repli), le runtime injectait encore `strength_creature_object`. Les placeholders manquants valaient 0 : l’équipement apparaissait dans la décomposition mais n’entrait plus dans le total. L’injection reprend les clés courtes d’agrégation.
@@ -133,6 +134,11 @@ Une sauvegarde produit désormais une seule archive ZIP horodatée (base, média
 ## Octobre 2026 — Nettoyage des caractéristiques
 
 Suppression des caractéristiques en trop (compétences Artisanat / Herbaliste / Connaissance des créatures, échec critique d’équipement, puissance et poussée de sort, dommages et résistances sagesse·vitalité). Les bornes numériques créature / objet / sort sont symétriques (`min = −max`), avec recalcul des plafonds monstre. Les libellés parlent de **dommage** fixe. Les règles et la doc technique suivent.
+=======
+## Octobre 2026 — Résistances d’une fiche neuve
+
+Créer un PNJ ou un monstre vide ne force plus les résistances fixes à zéro. Ces champs restent vides : l’équipement et les formules s’ajoutent comme pour les autres caractéristiques. Un zéro écrit à la main reste un total explicite.
+>>>>>>> 17efd2058 (fix: ne plus forcer les résistances fixes à 0 sur une fiche vide)
 
 ## Octobre 2026 — La base garde les modifications
 
