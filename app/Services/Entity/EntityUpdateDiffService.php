@@ -7,6 +7,7 @@ namespace App\Services\Entity;
 use App\Models\Entity\Creature;
 use App\Models\Entity\Spell;
 use App\Models\User;
+use App\Support\Entity\AccessLevelMutationGuard;
 use App\Support\EntityModelRegistry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -185,12 +186,12 @@ final class EntityUpdateDiffService
         }
 
         $before = is_array($payload['before'] ?? null) ? $payload['before'] : [];
-        $this->applyAttributes($entity, is_array($before['attributes'] ?? null) ? $before['attributes'] : []);
+        $this->applyAttributes($entity, is_array($before['attributes'] ?? null) ? $before['attributes'] : [], $actor);
         $entity->save();
 
         $creatureSnap = is_array($before['creature'] ?? null) ? $before['creature'] : null;
         if ($creatureSnap !== null) {
-            $this->restoreCreature($entity, $creatureSnap);
+            $this->restoreCreature($entity, $creatureSnap, $actor);
         }
 
         $createdSpellIds = $payload['created_spell_ids'] ?? [];
@@ -276,13 +277,13 @@ final class EntityUpdateDiffService
         }
 
         if ($attrSubset !== []) {
-            $this->applyAttributes($entity, $attrSubset);
+            $this->applyAttributes($entity, $attrSubset, $actor);
             $entity->save();
         }
 
         $creatureSnap = is_array($before['creature'] ?? null) ? $before['creature'] : null;
         if ($creatureSnap !== null && ($creatureKeys !== [] || $restoreSpells || $restoreItems)) {
-            $this->restoreCreaturePartial($entity, $creatureSnap, $creatureKeys, $restoreSpells, $restoreItems);
+            $this->restoreCreaturePartial($entity, $creatureSnap, $creatureKeys, $restoreSpells, $restoreItems, $actor);
         }
 
         if ($restoreSpells) {
@@ -444,10 +445,14 @@ final class EntityUpdateDiffService
     }
 
     /**
+     * Applique un sac d’attributs. `read_level` / `write_level` restent
+     * réservés aux admins (SEC-07), même via rétablissement d’instantané.
+     *
      * @param  array<string, mixed>  $attributes
      */
-    private function applyAttributes(Model $model, array $attributes): void
+    private function applyAttributes(Model $model, array $attributes, User $actor): void
     {
+        $attributes = AccessLevelMutationGuard::stripUnlessAdmin($actor, $attributes);
         foreach ($attributes as $key => $value) {
             if (! is_string($key) || in_array($key, self::SKIP_ATTRIBUTES, true)) {
                 continue;
@@ -459,7 +464,7 @@ final class EntityUpdateDiffService
     /**
      * @param  array<string, mixed>  $creatureSnap
      */
-    private function restoreCreature(Model $entity, array $creatureSnap): void
+    private function restoreCreature(Model $entity, array $creatureSnap, User $actor): void
     {
         $creatureId = (int) ($creatureSnap['id'] ?? 0);
         $creature = $this->creatureOf($entity);
@@ -470,7 +475,7 @@ final class EntityUpdateDiffService
             return;
         }
 
-        $this->applyAttributes($creature, is_array($creatureSnap['attributes'] ?? null) ? $creatureSnap['attributes'] : []);
+        $this->applyAttributes($creature, is_array($creatureSnap['attributes'] ?? null) ? $creatureSnap['attributes'] : [], $actor);
         $creature->save();
 
         $spellIds = array_values(array_filter(
@@ -503,6 +508,7 @@ final class EntityUpdateDiffService
         array $attributeKeys,
         bool $restoreSpells,
         bool $restoreItems,
+        User $actor,
     ): void {
         $creatureId = (int) ($creatureSnap['id'] ?? 0);
         $creature = $this->creatureOf($entity);
@@ -522,7 +528,7 @@ final class EntityUpdateDiffService
                 }
             }
             if ($subset !== []) {
-                $this->applyAttributes($creature, $subset);
+                $this->applyAttributes($creature, $subset, $actor);
                 $creature->save();
             }
         }

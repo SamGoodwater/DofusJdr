@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * Apply / restore d’instantané : pas d’IDOR entre comptes.
+ * Apply / restore d’instantané : pas d’IDOR entre comptes, SEC-07 sur les niveaux d’accès.
  */
 class EntityUpdateDiffControllerTest extends TestCase
 {
@@ -64,5 +64,105 @@ class EntityUpdateDiffControllerTest extends TestCase
         $item->refresh();
         $this->assertSame('Cape initiale', $item->name);
         $this->assertSame('avant', $item->description);
+    }
+
+    public function test_game_master_restore_does_not_revert_access_levels(): void
+    {
+        $gm = User::factory()->create(['role' => User::ROLE_GAME_MASTER]);
+        $item = Item::factory()->create([
+            'created_by' => $gm->id,
+            'name' => 'Cape initiale',
+            'description' => 'avant',
+            'state' => EntityState::Draft->value,
+            'read_level' => User::ROLE_GUEST,
+            'write_level' => User::ROLE_GAME_MASTER,
+        ]);
+
+        $svc = app(EntityUpdateDiffService::class);
+        $before = $svc->capture($item);
+        $item->update(['name' => 'Cape nouvelle']);
+        $diff = $svc->remember($gm, 'items', (int) $item->id, 'dofusdb', $before, $item->fresh());
+
+        $item->update([
+            'read_level' => User::ROLE_GAME_MASTER,
+            'write_level' => User::ROLE_ADMIN,
+        ]);
+
+        $this->actingAs($gm)
+            ->postJson("/api/entities/items/{$item->id}/update-diff/restore", [
+                'snapshot_id' => $diff['snapshot_id'],
+            ])
+            ->assertOk()
+            ->assertJsonPath('success', true);
+
+        $item->refresh();
+        $this->assertSame('Cape initiale', $item->name);
+        $this->assertSame(User::ROLE_GAME_MASTER, (int) $item->read_level);
+        $this->assertSame(User::ROLE_ADMIN, (int) $item->write_level);
+    }
+
+    public function test_game_master_apply_cannot_restore_access_level_keys(): void
+    {
+        $gm = User::factory()->create(['role' => User::ROLE_GAME_MASTER]);
+        $item = Item::factory()->create([
+            'created_by' => $gm->id,
+            'name' => 'Cape initiale',
+            'description' => 'avant',
+            'state' => EntityState::Draft->value,
+            'read_level' => User::ROLE_GUEST,
+            'write_level' => User::ROLE_GAME_MASTER,
+        ]);
+
+        $svc = app(EntityUpdateDiffService::class);
+        $before = $svc->capture($item);
+        $item->update(['name' => 'Cape nouvelle']);
+        $diff = $svc->remember($gm, 'items', (int) $item->id, 'dofusdb', $before, $item->fresh());
+
+        $item->update(['read_level' => User::ROLE_GAME_MASTER]);
+
+        $this->actingAs($gm)
+            ->postJson("/api/entities/items/{$item->id}/update-diff/apply", [
+                'snapshot_id' => $diff['snapshot_id'],
+                'restore_keys' => ['name', 'read_level'],
+            ])
+            ->assertOk()
+            ->assertJsonPath('success', true);
+
+        $item->refresh();
+        $this->assertSame('Cape initiale', $item->name);
+        $this->assertSame(User::ROLE_GAME_MASTER, (int) $item->read_level);
+    }
+
+    public function test_admin_restore_can_revert_access_levels(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        $item = Item::factory()->create([
+            'created_by' => $admin->id,
+            'name' => 'Cape initiale',
+            'description' => 'avant',
+            'state' => EntityState::Draft->value,
+            'read_level' => User::ROLE_GUEST,
+            'write_level' => User::ROLE_GAME_MASTER,
+        ]);
+
+        $svc = app(EntityUpdateDiffService::class);
+        $before = $svc->capture($item);
+        $item->update([
+            'name' => 'Cape nouvelle',
+            'read_level' => User::ROLE_GAME_MASTER,
+        ]);
+        $diff = $svc->remember($admin, 'items', (int) $item->id, 'dofusdb', $before, $item->fresh());
+
+        $this->actingAs($admin)
+            ->postJson("/api/entities/items/{$item->id}/update-diff/restore", [
+                'snapshot_id' => $diff['snapshot_id'],
+            ])
+            ->assertOk()
+            ->assertJsonPath('success', true);
+
+        $item->refresh();
+        $this->assertSame('Cape initiale', $item->name);
+        $this->assertSame(User::ROLE_GUEST, (int) $item->read_level);
+        $this->assertSame(User::ROLE_GAME_MASTER, (int) $item->write_level);
     }
 }

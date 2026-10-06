@@ -2,6 +2,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Octobre 2026 — Bonus d’équipement de nouveau dans les totaux runtime
 
 Les formules créature lisent `[strength_object]`, `[initiative_object]`, `[wakfu_recharge_object]`, etc. Après l’unification des formules (termes objet dans la formule, plus d’ajout arithmétique de repli), le runtime injectait encore `strength_creature_object`. Les placeholders manquants valaient 0 : l’équipement apparaissait dans la décomposition mais n’entrait plus dans le total. L’injection reprend les clés courtes d’agrégation.
@@ -119,6 +120,11 @@ L’édition d’un sort est regroupée en blocs (description, propriétés hors
 L’édition d’un sort ne passe plus par plusieurs « définitions d’effet ». On ajoute des **degrés** (niveaux) : chacun porte les propriétés de lancement (PA, portée, ligne de vue, zone, relance, limites et incantation) et des **effets** (frapper, soigner…). Un degré peut reprendre les effets du précédent pour éviter de tout ressaisir. Les effets proposent le bon outil selon l’action : élément, caractéristique recherchable, créature ou état, avec une durée propre. La portée se saisit simplement sous la forme `4` ou `2-8` et la zone retrouve son aperçu et son aide de notation. Le ciblage, la résolution et l’utilisation en réaction restent des propriétés globales du sort. À l’affichage, des onglets de niveau mettent à jour les propriétés visibles. L’éditeur montre aussi les monstres, PNJ et classes qui utilisent le sort.
 
 Supprimer le premier niveau (celui qui porte les effets) ne vide plus les onglets restants : les effets sont recopiés sur le degré suivant s’il héritait.
+=======
+## Octobre 2026 — Droits de lecture après une maj DofusDB
+
+Rétablir la version d’avant une actualisation DofusDB (ou une conversion IA) ne change plus les seuils de lecture et d’écriture d’une fiche, sauf pour un admin. Un MJ qui annule une maj ne rouvre plus accidentellement une fiche restreinte.
+>>>>>>> becf278ea (fix: empêcher un MJ de rétablir les niveaux d’accès via un instantané)
 
 ## Octobre 2026 — Sauvegardes ZIP fiabilisées
 

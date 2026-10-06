@@ -9,7 +9,8 @@ use App\Models\User;
 /**
  * Niveaux d’accès (`read_level` / `write_level`) : mutation réservée aux admins (SEC-07).
  *
- * Utilisé par les Form Requests et les PATCH bulk, qui n’ont pas de Form Request.
+ * Utilisé par les Form Requests, les PATCH bulk, et le rétablissement
+ * d’instantané DofusDB/IA (`EntityUpdateDiffService`).
  *
  * @example
  * $payload = AccessLevelMutationGuard::stripUnlessAdmin($request->user(), $validated);
