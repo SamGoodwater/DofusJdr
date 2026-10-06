@@ -85,6 +85,16 @@ export const ENTITY_ACTION_CONTEXT_PRESETS = Object.freeze({
     "refresh",
     "delete",
   ],
+  /** Page Modifier : Afficher remplace Éditer ; DofusDB reste en tête des outils. */
+  editPage: [
+    "view",
+    "view-dofusdb",
+    "refresh",
+    "state",
+    "favorite",
+    "copy-link",
+    "delete",
+  ],
   tableDropdown: [
     "state",
     "pin",
@@ -272,23 +282,13 @@ export const ENTITY_ACTIONS_COMMON = Object.freeze({
   },
   "view-dofusdb": {
     key: "view-dofusdb",
-    label: "DofusDB",
-    tooltip: "Ouvrir la fiche DofusDB (panneau de référence)",
+    label: "Ouvrir sur DofusDB",
+    tooltip: "Ouvrir la fiche du jeu sur DofusDB",
     icon: DOFUSDB_ACTION_ICON,
     permission: null,
     requiresEntity: true,
     group: "tools",
-    visibleIf: (context, entity) => {
-      // Pas en line (trop dense) ; ok en minimal déployé, modal et page.
-      if (context?.inLine || context?.viewMode === "line") return false;
-      const surfaceOk =
-        context?.inModal ||
-        context?.inPage ||
-        context?.inMinimal ||
-        context?.viewMode === "minimal";
-      if (!surfaceOk) return false;
-      return Boolean(getEntityDofusDbId(entity));
-    },
+    visibleIf: (_context, entity) => Boolean(getEntityDofusDbId(entity)),
   },
   refresh: {
     key: "refresh",

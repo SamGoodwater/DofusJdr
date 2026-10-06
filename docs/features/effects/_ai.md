@@ -44,7 +44,11 @@
 - `php artisan spells:sync-elements` — aligne `spells.element` sur les éléments des sous-effets
 - Affichage sorts : `spell_degrees` prioritaire ; `effects_definitions` legacy en repli
 - `Spell::visibleToUser` / `EntityDisplayVisibilityService::constrainQueryToViewer` (listes)
-- `GET /api/effects/definitions` — recherche defs legacy
+- `GET /api/effects/definitions` — recherche defs legacy / liaison sort (payload edit allégé)
+- `POST /api/effects/spell-effects` — crée une définition (degré 1, `initial_sub_effects` optionnels) et la lie au sort depuis la fiche (pas de redirection admin)
+- Fiche sort : `spellHolders` (monstres, PNJ, classes) + degrés natifs `spell_degrees`
+- Édition zone : `parseAreaNotationParts` / `buildAreaNotation` / `getAreaShapeEditorHelp` (`areaNotation.js`) + UI `AreaNotationEditor`
+- Select action sous-effet : `formatSubEffectSelectLabel` (`subEffectLabels.js`) — libellé FR, valeur = id
 - `GET /api/effects/effects?q=&per_page=` — index paginé
 - `GET /api/effects/for-entity` et `GET /api/effects/usages` : middleware `web` + `view` parent
 - `scrapping:effects:reapply-mappings` — reclasse les `autre` déjà mappés

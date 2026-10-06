@@ -1580,6 +1580,13 @@
     "file": "entity/shared/EntityEditContainer.vue"
   },
   {
+    "name": "EntityEditOptionsAnchor",
+    "description": "Ancre du menu Options sur une page Modifier.",
+    "props": [],
+    "slots": [],
+    "file": "entity/shared/EntityEditOptionsAnchor.vue"
+  },
+  {
     "name": "ScenarioViewText",
     "description": "ScenarioViewText — Vue Texte pour Scenario",
     "props": [

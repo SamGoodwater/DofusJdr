@@ -2203,7 +2203,7 @@
       {
         "name": "bgOn",
         "type": "String",
-        "desc": "- Couleur de fond ouvert (classe DaisyUI/Tailwind)"
+        "desc": "- Couleur de fond ouvert (classe DaisyUI/Tailwind, même surface que fermé)"
       },
       {
         "name": "forcedOpen",

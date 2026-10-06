@@ -41,8 +41,8 @@ describe('spell-adapter (version simplifiée)', () => {
             expect(result.rows[0].rowParams.entity).toBeInstanceOf(Spell);
             expect(result.rows[0].rowParams.entity.id).toBe(1);
             expect(result.rows[0].rowParams.entity.name).toBe('Spell 1');
-            expect(result.rows[0].rowParams.entity.level).toBe(10);
-            expect(result.rows[0].rowParams.entity.pa).toBe(3);
+            expect(result.rows[0].rowParams.entity.level).toBe('10');
+            expect(result.rows[0].rowParams.entity.pa).toBe('3');
             expect(result.rows[0].rowParams.entity.po).toBe(2);
         });
 
@@ -82,8 +82,8 @@ describe('spell-adapter (version simplifiée)', () => {
             expect(spell).toBeInstanceOf(Spell);
             expect(spell.id).toBe(1);
             expect(spell.name).toBe('Test');
-            expect(spell.level).toBe(15);
-            expect(spell.pa).toBe(4);
+            expect(spell.level).toBe('15');
+            expect(spell.pa).toBe('4');
             expect(spell.po).toBe(3);
             // Les champs personnalisés sont préservés dans _data
             expect(spell._data?.customField).toBe('custom');

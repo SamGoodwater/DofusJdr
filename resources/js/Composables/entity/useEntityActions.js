@@ -59,7 +59,8 @@ export function useEntityActions(entityType, entity = null, options = {}) {
       return { ...ctx, preset: ctx.preset || "modalDetail", inModal: true };
     }
     if (ctx.surface === "page" || ctx.inPage) {
-      return { ...ctx, preset: ctx.preset || "pageDetail", inPage: true };
+      const pagePreset = ctx.pageMode === "edit" ? "editPage" : "pageDetail";
+      return { ...ctx, preset: ctx.preset || pagePreset, inPage: true };
     }
     return { ...ctx, preset: ctx.preset || "tableDropdown" };
   });

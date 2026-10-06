@@ -371,10 +371,10 @@ class SpellTableController extends Controller
                 ->map(fn (SubEffect $s) => ['value' => $s->slug, 'label' => $s->slug])
                 ->values()->all(),
             'category' => [
-                ['value' => '0', 'label' => 'Sort de classe'],
-                ['value' => '1', 'label' => 'Sort de créature'],
-                ['value' => '2', 'label' => 'Sort apprenable'],
-                ['value' => '3', 'label' => 'Sort consommable'],
+                ['value' => '0', 'label' => 'Sort de classe', 'color' => 'sky-600'],
+                ['value' => '1', 'label' => 'Sort de créature', 'color' => 'amber-600'],
+                ['value' => '2', 'label' => 'Sort apprenable', 'color' => 'violet-600'],
+                ['value' => '3', 'label' => 'Sort consommable', 'color' => 'emerald-600'],
             ],
             'element' => ElementBitmask::allFilterOptions(),
             'is_magic' => [

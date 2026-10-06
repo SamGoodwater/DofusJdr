@@ -45,6 +45,7 @@ Route::prefix('effects')->group(function () {
         Route::post('usages', [EffectUsageController::class, 'store'])->name('effects.usages.store');
         Route::match(['put', 'patch'], 'usages/{effect_usage}', [EffectUsageController::class, 'update'])->name('effects.usages.update');
         Route::delete('usages/{effect_usage}', [EffectUsageController::class, 'destroy'])->name('effects.usages.destroy');
+        Route::post('spell-effects', [EffectSpellAttachmentController::class, 'createForSpell'])->name('effects.spell-effects.store');
         Route::post('spell-attachments', [EffectSpellAttachmentController::class, 'store'])->name('effects.spell-attachments.store');
         Route::delete('spell-attachments', [EffectSpellAttachmentController::class, 'destroy'])->name('effects.spell-attachments.destroy');
     });

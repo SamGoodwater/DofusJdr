@@ -81,6 +81,10 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    triggerLabel: {
+        type: String,
+        default: "Options",
+    },
 });
 
 const emit = defineEmits(["action"]);
@@ -167,7 +171,8 @@ const entityName = computed(() => getEntityName());
 <template>
     <div
         ref="rowRef"
-        class="relative ml-auto flex w-full min-w-8 items-center justify-end"
+        class="relative ml-auto flex min-w-8 items-center justify-end"
+        :class="showInlineShortcuts ? 'w-full' : 'w-max shrink-0'"
     >
         <div
             v-if="promotedActions.length"
@@ -198,7 +203,10 @@ const entityName = computed(() => getEntityName());
             </Btn>
         </div>
 
-        <div class="ml-auto flex min-w-0 items-center justify-end gap-0.5">
+        <div
+            class="ml-auto flex items-center justify-end gap-0.5"
+            :class="showInlineShortcuts ? 'min-w-0' : 'shrink-0'"
+        >
             <template v-for="action in visiblePromotedActions" :key="action.key">
                 <EntityStateAction
                     v-if="action.key === 'state'"
@@ -240,11 +248,12 @@ const entityName = computed(() => getEntityName());
                         :size="size"
                         :variant="triggerVariant"
                         :color="color"
-                        :class="iconOnlyTrigger ? 'btn-square shrink-0' : ''"
-                        :title="iconOnlyTrigger ? 'Autres actions' : null"
+                        :class="iconOnlyTrigger ? 'btn-square shrink-0' : 'shrink-0 gap-1.5'"
+                        :title="iconOnlyTrigger ? 'Autres actions' : triggerLabel"
+                        :aria-label="iconOnlyTrigger ? 'Autres actions' : triggerLabel"
                     >
                         <Icon source="fa-solid fa-ellipsis-vertical" :size="size" />
-                        <span v-if="!iconOnlyTrigger" class="ml-2">Actions</span>
+                        <span v-if="!iconOnlyTrigger">{{ triggerLabel }}</span>
                     </Btn>
                 </template>
                 <template #content>

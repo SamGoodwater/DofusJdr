@@ -69,6 +69,15 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  /** Affiche le libellé à côté du « ⋮ » (menu Options de la page Modifier). */
+  labeledTrigger: {
+    type: Boolean,
+    default: false,
+  },
+  triggerLabel: {
+    type: String,
+    default: "Options",
+  },
   contextPosition: {
     type: Object,
     default: null,
@@ -158,7 +167,8 @@ const contextMenuStyle = computed(() => {
     :size="size"
     :color="color"
     :placement="placement"
-    :icon-only-trigger="true"
+    :icon-only-trigger="!labeledTrigger"
+    :trigger-label="triggerLabel"
     :inline-action-keys="format === 'buttons' ? buttonInlineKeys : inlineActionKeys"
     :show-inline-shortcuts="format === 'buttons' ? true : showInlineShortcuts"
     :always-show-trigger="format === 'dropdown'"

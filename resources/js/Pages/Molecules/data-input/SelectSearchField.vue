@@ -603,7 +603,7 @@ defineExpose({ enableValidation, disableValidation, resetValidation, focus, vali
                                             :strong="Boolean(row.badge.strong)"
                                             :text-color="row.badge.textColor || ''"
                                             size="sm"
-                                            class="min-w-0 flex-1"
+                                            class="min-w-0 max-w-full"
                                         >
                                             {{ optionLabel(row.raw) }}
                                         </Badge>

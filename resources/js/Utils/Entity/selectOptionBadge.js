@@ -2,7 +2,7 @@
  * Props pour {@link Badge} sur les options de select (formulaires, filtres tableau).
  * Aligné sur la logique des filtres TanStack (`TableConfig` / `optionBadge`).
  *
- * @param {object} option - `{ value, label }`
+ * @param {object} option - `{ value, label, color?, badgeColor? }`
  * @param {object} cfg - configuration `optionBadge` (enabled, color, autoScheme, leadingDot, …)
  * @param {string} [uiColor='primary'] - repli si `cfg.color` absent
  * @returns {object|null} props pour Badge + `stateDotClass` si point d’état
@@ -13,6 +13,7 @@ import {
     getRarityFilterBadgeTailwindColor,
 } from '@/Utils/Entity/SharedConstants.js';
 import { isValidColor } from '@/Utils/color/Color.js';
+import { colorList } from '@/Pages/Atoms/atomMap.js';
 
 /** Couleurs badge (Tailwind `color-shade`) pour les stats créature / jets de sauvegarde. */
 const CREATURE_STAT_BADGE_COLORS = Object.freeze({
@@ -23,6 +24,21 @@ const CREATURE_STAT_BADGE_COLORS = Object.freeze({
     sagesse: 'sky-600',
     vitality: 'red-600',
 });
+
+/**
+ * Couleur nommée DaisyUI ou token Tailwind `color-shade`.
+ *
+ * @param {unknown} raw
+ * @returns {string|null}
+ */
+function resolveNamedBadgeColor(raw) {
+    if (typeof raw !== 'string') return null;
+    const color = raw.trim();
+    if (!color) return null;
+    if (colorList.includes(color)) return color;
+    if (/^[a-z]+-\d+$/.test(color)) return color;
+    return null;
+}
 
 export function buildSelectOptionBadgeProps(option, cfg, uiColor = 'primary') {
     if (!cfg || typeof cfg !== 'object' || !cfg.enabled) {
@@ -65,22 +81,35 @@ export function buildSelectOptionBadgeProps(option, cfg, uiColor = 'primary') {
             ? CREATURE_STAT_BADGE_COLORS[String(option.value)] || null
             : null;
 
-    const explicitHex =
-        typeof option?.badgeColor === 'string' && isValidColor(option.badgeColor) ? option.badgeColor : null;
+    const optionColorRaw =
+        typeof option?.badgeColor === 'string' && option.badgeColor.trim() !== ''
+            ? option.badgeColor
+            : typeof option?.color === 'string'
+              ? option.color
+              : null;
+    const explicitCss =
+        optionColorRaw && isValidColor(optionColorRaw) ? optionColorRaw : null;
+    const namedColor = !explicitCss ? resolveNamedBadgeColor(optionColorRaw) : null;
 
     const resolvedColor =
-        levelColor || rarityTailwind || creatureStatTailwind || explicitHex || cfg.color || uiColor;
+        levelColor ||
+        rarityTailwind ||
+        creatureStatTailwind ||
+        explicitCss ||
+        namedColor ||
+        cfg.color ||
+        uiColor;
+
+    const hasOptionOwnColor = Boolean(levelColor || rarityTailwind || creatureStatTailwind || explicitCss || namedColor);
 
     return {
         color: resolvedColor,
         autoLabel: label,
-        autoScheme: creatureStatTailwind || explicitHex ? undefined : cfg.autoScheme,
-        autoTone: cfg.autoTone,
-        variant: cfg.variant || 'soft',
+        autoScheme: hasOptionOwnColor ? undefined : cfg.autoScheme,
+        autoTone: hasOptionOwnColor ? undefined : cfg.autoTone,
+        variant: cfg.variant != null ? cfg.variant : 'soft',
         glassy: Boolean(cfg.glassy),
-        strong: Boolean(
-            (isLevelScheme && isLevelValue) || rarityTailwind || creatureStatTailwind || explicitHex,
-        ),
+        strong: Boolean(hasOptionOwnColor),
         textColor: isLevelScheme && isLevelValue ? '#ffffff' : '',
         stateDotClass,
     };

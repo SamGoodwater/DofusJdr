@@ -73,11 +73,11 @@ Presets (`ENTITY_ACTION_CONTEXT_PRESETS` dans `entity-actions-config.js`) :
 | `minimalLine` | state → pin → quick-view → view-dofusdb → refresh → favorite → copy-link → edit |
 | `modalDetail` | state → favorite → copy-link → view (agrandir) → view-dofusdb → edit → refresh → delete |
 | `pageDetail` | state → favorite → copy-link → view-dofusdb → edit → refresh → delete |
+| `editPage` | view (afficher) → view-dofusdb → refresh → state → favorite → copy-link → delete |
 
 ## Référence DofusDB
 
-L’action `view-dofusdb` (icône `/images/logos/dofus.png`) apparaît si l’entité a un
-`dofusdb_id` : en **minimal déployé**, **modal** et **page**. Le clic ouvre le store Pinia
+L’action `view-dofusdb` (libellé **Ouvrir sur DofusDB**, icône `/images/logos/dofus.png`) apparaît dans les options de **toutes** les vues (minimal, ligne, colonnes, modal, page) dès que l’entité a un `dofusdb_id`. Sur la page Modifier, le menu **Options** est dans la barre du haut (ancre `EntityEditOptionsAnchor`, téléporté par `EntityEditForm`) : Afficher, DofusDB, Sources, état, favoris, lien, suppression. Le clic ouvre le store Pinia
 `dofusDbReference` ; le panneau `DofusDbReferencePanel` (monté dans `Main`) affiche le deep-link
 et un bouton `window.open` (pas d’iframe).
 

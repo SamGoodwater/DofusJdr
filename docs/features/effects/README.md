@@ -39,6 +39,11 @@ Le système d'effets décrit les effets de sorts et d'objets : degrés, effets (
   legacy `spell_effects` / `spell_effect_types` sont droppées.
 - Liaison depuis la fiche sort : `GET /api/effects/definitions?q=&exclude_spell_id=` (pas de liste
   complète dans le payload d’édition).
+- Création depuis la fiche sort : `POST /api/effects/spell-effects` (MJ+, droit `update` sur le sort).
+  La définition, son premier degré et les sous-effets initiaux (`initial_sub_effects`) sont créés puis liés.
+  Affinage ensuite dans `EffectGroupEditorForm`, sans ouvrir l’admin des effets.
+- Porteurs du sort : la page Modifier expose `spellHolders` (monstres et PNJ via `creature_spell`,
+  classes via `breed_spell`), avec lien vers la fiche et l’édition.
 - Index API : `GET /api/effects/effects?q=&per_page=` (paginé).
 - Prévisualisation : `GET /api/effects/for-entity` et liste `GET /api/effects/usages` exigent
   `view` sur la fiche parente (sort, objet, consommable ou ressource). Un brouillon n’est

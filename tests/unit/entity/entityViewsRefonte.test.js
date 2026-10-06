@@ -43,6 +43,27 @@ describe("ENTITY_ACTION_CONTEXT_PRESETS", () => {
         expect(ENTITY_ACTION_CONTEXT_PRESETS.modalDetail).toContain("delete");
     });
 
+    it("garde DofusDB dans les options dès qu’un id est présent", () => {
+        const visible = ENTITY_ACTIONS_COMMON["view-dofusdb"].visibleIf;
+        const withId = { id: 1, dofusdb_id: "12977" };
+        expect(visible({ inLine: true, viewMode: "line" }, withId)).toBe(true);
+        expect(visible({ inPanel: false }, withId)).toBe(true);
+        expect(visible({ inMinimal: true, viewMode: "minimal" }, withId)).toBe(true);
+        expect(visible({ inPage: true, pageMode: "edit" }, withId)).toBe(true);
+        expect(visible({ inModal: true }, { id: 1 })).toBe(false);
+        expect(ENTITY_ACTION_CONTEXT_PRESETS.editPage).toEqual([
+            "view",
+            "view-dofusdb",
+            "refresh",
+            "state",
+            "favorite",
+            "copy-link",
+            "delete",
+        ]);
+        expect(ENTITY_ACTION_CONTEXT_PRESETS.tableDropdown).toContain("view-dofusdb");
+        expect(ENTITY_ACTION_CONTEXT_PRESETS.minimalLine).toContain("view-dofusdb");
+    });
+
     it("n’inclut pas view (agrandir) en page", () => {
         expect(ENTITY_ACTION_CONTEXT_PRESETS.pageDetail).not.toContain("view");
         expect(ENTITY_ACTION_CONTEXT_PRESETS.pageDetail).toEqual([

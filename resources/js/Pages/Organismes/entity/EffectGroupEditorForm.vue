@@ -11,12 +11,13 @@ import InputField from '@/Pages/Molecules/data-input/InputField.vue';
 import SelectField from '@/Pages/Molecules/data-input/SelectField.vue';
 import SelectSearchField from '@/Pages/Molecules/data-input/SelectSearchField.vue';
 import EntityPickerCore from '@/Pages/Organismes/entity/EntityPickerCore.vue';
-import AreaDisplay from '@/Pages/Molecules/entity/spell/AreaDisplay.vue';
+import AreaNotationEditor from '@/Pages/Molecules/entity/spell/AreaNotationEditor.vue';
 import Icon from '@/Pages/Atoms/data-display/Icon.vue';
 import Btn from '@/Pages/Atoms/action/Btn.vue';
 import EditActionDock from '@/Pages/Molecules/action/EditActionDock.vue';
 import { ACTION } from '@/Utils/atomic-design/actionLabels';
 import { AREA_NOTATION_HELP, isValidAreaNotation } from '@/Utils/Entity/areaNotation.js';
+import { formatSubEffectSelectLabel } from '@/Utils/Entity/subEffectLabels.js';
 import { METERS_PER_CASE, previewMetersFromCellsFormula } from '@/Utils/Entity/displacementFormat.js';
 
 /** Exposé au template (règle 1 case = 1,5 m). */
@@ -954,36 +955,16 @@ defineExpose({
                             />
                         </div>
                         <div class="space-y-2 max-w-3xl">
-                            <div class="flex max-w-xl items-start gap-3">
-                                <!-- Décalage ≈ hauteur du libellé (label top) pour aligner l’icône sur le champ -->
-                                <div class="flex min-h-12 shrink-0 items-center justify-center pt-7">
-                                    <AreaDisplay
-                                        :area="degreeForms[activeTab].area ?? ''"
-                                        icon-size="xl"
-                                        icon-only
-                                    />
-                                </div>
-                                <InputField
-                                    v-model="degreeForms[activeTab].area"
-                                    label="Zone (ce degré)"
-                                    :name="'area_d' + degreeForms[activeTab].degree"
-                                    class="min-w-0 flex-1"
-                                    :validation="activeAreaValidation"
-                                />
-                            </div>
-                            <p class="text-xs text-base-content/70 leading-relaxed">
-                                <strong>Notation</strong> <code class="text-[0.7rem]">forme[-paramètres]</code> :
-                                <code class="text-[0.7rem]">point</code> ;
-                                <code class="text-[0.7rem]">line-1xL</code> ;
-                                <code class="text-[0.7rem]">cross-a-b</code> / <code class="text-[0.7rem]">circle-a-b</code> (a≤b) ;
-                                <code class="text-[0.7rem]">rect-WxH</code> ;
-                                forme DofusDB non mappée : <code class="text-[0.7rem]">shape-ID</code> ou
-                                <code class="text-[0.7rem]">shape-ID-p1-p2</code>.
-                            </p>
+                            <p class="text-sm font-medium text-base-content">Zone (ce degré)</p>
+                            <AreaNotationEditor
+                                v-model="degreeForms[activeTab].area"
+                                :name="'area_d' + degreeForms[activeTab].degree"
+                                :validation="activeAreaValidation"
+                            />
                         </div>
                         <div
                             v-if="hasDegreeExtraSlot && degreeForms[activeTab]?.id"
-                            class="rounded-box border border-primary/20 bg-primary/5 p-4"
+                            class="rounded-box border border-base-300 bg-base-200/40 p-4"
                         >
                             <slot
                                 name="degree-extra"
@@ -1019,9 +1000,9 @@ defineExpose({
                                 <!-- Lien logique avec le bloc précédent (hors carte) -->
                                 <div
                                     v-if="index > 0"
-                                    class="rounded-lg border border-dashed border-primary/25 bg-base-200/50 px-3 py-2"
+                                    class="rounded-lg border border-dashed border-base-300 bg-base-200/50 px-3 py-2"
                                 >
-                                    <div class="text-xs font-semibold uppercase tracking-wide text-primary/80">
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-base-content/70">
                                         Lien avec le sous-effet précédent
                                     </div>
                                     <div class="mt-2 flex flex-wrap items-end gap-2">
@@ -1068,7 +1049,7 @@ defineExpose({
                                                     :key="s.id"
                                                     :value="s.id"
                                                 >
-                                                    {{ s.slug }}
+                                                    {{ formatSubEffectSelectLabel(s) }}
                                                 </option>
                                             </select>
                                         </div>
@@ -1134,7 +1115,7 @@ defineExpose({
                                                         class="flex items-center gap-2 text-left rounded-btn"
                                                         :class="
                                                             Number(row.params.condition_id) === Number(st.id)
-                                                                ? 'bg-primary text-primary-content'
+                                                                ? 'bg-base-300 font-medium'
                                                                 : ''
                                                         "
                                                         @click="selectCondition(row, st)"

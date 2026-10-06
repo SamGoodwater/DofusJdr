@@ -115,5 +115,16 @@ class UpdateSpellRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->stripAccessLevelsUnlessAdmin();
+
+        // Formules PA / niveau : accepter un entier JSON (ex. 3) comme chaîne « 3 ».
+        foreach (['level', 'pa', 'po_min', 'po_max', 'cast_per_turn', 'cast_per_target', 'number_between_two_cast', 'duration', 'casting_time'] as $key) {
+            if (! $this->exists($key)) {
+                continue;
+            }
+            $value = $this->input($key);
+            if (is_int($value) || is_float($value)) {
+                $this->merge([$key => (string) $value]);
+            }
+        }
     }
 }

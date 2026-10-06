@@ -17,10 +17,10 @@ export class CategoryFormatter extends BaseFormatter {
    * @type {Array<{value: number|string, label: string, color: string}>}
    */
   static options = [
-    { value: 0, label: 'Sort de classe', color: 'info' },
-    { value: 1, label: 'Sort de créature', color: 'warning' },
-    { value: 2, label: 'Sort apprenable', color: 'success' },
-    { value: 3, label: 'Sort consommable', color: 'secondary' },
+    { value: 0, label: 'Sort de classe', color: 'sky-600' },
+    { value: 1, label: 'Sort de créature', color: 'amber-600' },
+    { value: 2, label: 'Sort apprenable', color: 'violet-600' },
+    { value: 3, label: 'Sort consommable', color: 'emerald-600' },
   ];
 
   /**
@@ -61,10 +61,11 @@ export class CategoryFormatter extends BaseFormatter {
 
     const label = option?.label || `Catégorie ${numValue}`;
 
-    if (mode === 'badge' && option) {
-      return this.buildTypeBadgeCell(label, {
+                if (mode === 'badge' && option) {
+      return this.buildBadgeCell(label, option.color || 'neutral', {
         sortValue: numValue,
         filterValue: numValue,
+        strong: true,
       });
     }
 

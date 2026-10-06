@@ -199,7 +199,6 @@ function createColumnFromDescriptor(fieldKey, descriptor, ctx = {}) {
       fieldKey === "consumable_type" ||
       fieldKey === "monster_race" ||
       fieldKey === "element" ||
-      fieldKey === "category" ||
       fieldKey === "spell_types" ||
       f?.id === "resource_type_id" ||
       f?.id === "item_type_id" ||
@@ -215,6 +214,21 @@ function createColumnFromDescriptor(fieldKey, descriptor, ctx = {}) {
       if (!optionBadge.autoScheme) optionBadge.autoScheme = 'labelHash';
       if (!optionBadge.autoTone) optionBadge.autoTone = 'light';
       if (!optionBadge.variant) optionBadge.variant = 'soft';
+      ui.optionBadge = optionBadge;
+      f.ui = ui;
+    }
+
+    // Catégories de sort : couleurs DaisyUI portées par les options (pas de pastels labelHash).
+    const spellCategoryLike = fieldKey === 'category' || f?.id === 'category';
+    if (spellCategoryLike) {
+      const ui = (f.ui && typeof f.ui === 'object') ? { ...f.ui } : {};
+      const optionBadge = (ui.optionBadge && typeof ui.optionBadge === 'object') ? { ...ui.optionBadge } : {};
+      if (typeof optionBadge.enabled === 'undefined') optionBadge.enabled = true;
+      // Badge plein (fond coloré + texte *-content) pour le contraste thème sombre.
+      optionBadge.variant = '';
+      delete optionBadge.color;
+      delete optionBadge.autoScheme;
+      delete optionBadge.autoTone;
       ui.optionBadge = optionBadge;
       f.ui = ui;
     }

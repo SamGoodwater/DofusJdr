@@ -7,7 +7,7 @@
   {
     "path": "100- Done/README.md",
     "title": "Ce qui a été fait",
-    "description": "Sur une page de règles un peu longue, les chapitres plus bas mettent un moment à s’afficher. Enregistrer trop tôt n’efface plus leur texte : on attend qu’ils soient là, puis on peut modifier sans perdre le reste."
+    "description": "L’édition des effets d’un sort reste sur la page du sort : fond neutre, liste des monstres, PNJ et classes qui le possèdent, et création d’un effet (puis de ses sous-effets) sans passer par l’administration des effets."
   },
   {
     "path": "backend/_ai.md",

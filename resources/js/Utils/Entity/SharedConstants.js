@@ -532,14 +532,27 @@ export { ELEMENT_OPTIONS as SPELL_ELEMENT_OPTIONS, getElementOptions as getSpell
 
 /**
  * Options de catégorie de sort (fallback UX).
+ * `color` = token Tailwind `color-shade` (fond saturé + texte lisible via Badge).
  */
 export const SPELL_CATEGORY_OPTIONS = Object.freeze([
-  { value: 0, label: 'Sort de classe' },
-  { value: 1, label: 'Sort de créature' },
-  { value: 2, label: 'Sort apprenable' },
-  { value: 3, label: 'Sort consommable' },
+  { value: 0, label: 'Sort de classe', color: 'sky-600' },
+  { value: 1, label: 'Sort de créature', color: 'amber-600' },
+  { value: 2, label: 'Sort apprenable', color: 'violet-600' },
+  { value: 3, label: 'Sort consommable', color: 'emerald-600' },
 ]);
 
 export function getSpellCategoryOptions() {
-  return SPELL_CATEGORY_OPTIONS.map(({ value, label }) => ({ value, label }));
+  return SPELL_CATEGORY_OPTIONS.map(({ value, label, color }) => ({ value, label, color }));
+}
+
+/**
+ * Couleur badge d’une catégorie de sort (0–3).
+ *
+ * @param {number|string|null|undefined} value
+ * @returns {string}
+ */
+export function getSpellCategoryColor(value) {
+  const num = typeof value === 'string' ? parseInt(value, 10) : Number(value);
+  const option = SPELL_CATEGORY_OPTIONS.find((opt) => opt.value === num);
+  return option?.color || 'neutral';
 }

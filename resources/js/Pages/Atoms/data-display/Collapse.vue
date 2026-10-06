@@ -15,7 +15,7 @@
  * @version DaisyUI v5.x
  *
  * @example
- * <Collapse arrow bgOff="bg-base-100" bgOn="bg-primary" :defaultOpen="true">
+ * <Collapse arrow bgOff="bg-base-100" bgOn="bg-base-100" :defaultOpen="true">
  *   <template #title>Mon titre</template>
  *   <template #content>Contenu du collapse</template>
  * </Collapse>
@@ -23,7 +23,7 @@
  * @props {Boolean} arrow - Affiche la flèche (collapse-arrow)
  * @props {Boolean} plus - Affiche le plus/moins (collapse-plus)
  * @props {String} bgOff - Couleur de fond fermé (classe DaisyUI/Tailwind)
- * @props {String} bgOn - Couleur de fond ouvert (classe DaisyUI/Tailwind)
+ * @props {String} bgOn - Couleur de fond ouvert (classe DaisyUI/Tailwind, même surface que fermé)
  * @props {Boolean} forcedOpen - Force l'ouverture (ajoute collapse-open)
  * @props {Boolean} defaultOpen - Commence ouvert (checkbox checked par défaut)
  * @props {String} shadow, backdrop, opacity - utilitaires custom
@@ -42,7 +42,7 @@ const props = defineProps({
     arrow: { type: Boolean, default: false },
     plus: { type: Boolean, default: false },
     bgOff: { type: String, default: 'bg-base-100' },
-    bgOn: { type: String, default: 'bg-primary' },
+    bgOn: { type: String, default: 'bg-base-100' },
     forcedOpen: { type: Boolean, default: false },
     defaultOpen: { type: Boolean, default: false },
 });

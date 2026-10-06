@@ -4,11 +4,15 @@ namespace Tests\Feature\Entity;
 
 use App\Http\Middleware\CheckRole;
 use App\Models\Entity\Breed;
+use App\Models\Entity\Creature;
+use App\Models\Entity\Monster;
+use App\Models\Entity\Npc;
 use App\Models\Entity\Spell;
 use App\Models\Type\SpellType;
 use App\Models\User;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 /**
@@ -674,11 +678,44 @@ class SpellControllerTest extends TestCase
             'effectEntityType',
             'effectFormOptions',
             'spellEffectGroups',
+            'spellHolders' => ['monsters', 'npcs', 'breeds'],
         ]);
         $response->assertJsonPath('effectEntityType', 'spell');
         // Payload allégé : pas de dump massif des définitions (recherche API dédiée).
         $this->assertSame([], $response->json('availableEffects'));
         $this->assertArrayNotHasKey('spellEffects', $response->json('spell'));
+    }
+
+    /**
+     * La fiche d’édition liste les monstres, PNJ et classes qui possèdent le sort.
+     */
+    public function test_edit_payload_lists_monsters_npcs_and_breeds_that_own_the_spell(): void
+    {
+        $user = User::factory()->create(['role' => User::ROLE_GAME_MASTER]);
+        $spell = Spell::factory()->create(['created_by' => $user->id]);
+
+        $monsterCreature = $this->creatureNamed('Bouftou du test');
+        $monster = Monster::factory()->create(['creature_id' => $monsterCreature->id]);
+        $npcCreature = $this->creatureNamed('Ganymède du test');
+        $npc = Npc::factory()->create(['creature_id' => $npcCreature->id]);
+        $orphan = $this->creatureNamed('Créature orpheline');
+        $spell->creatures()->attach([$monsterCreature->id, $npcCreature->id, $orphan->id]);
+
+        $breed = Breed::factory()->create(['name' => 'Iop du test']);
+        $spell->breeds()->attach($breed->id);
+
+        $response = $this->actingAs($user)
+            ->getJson(route('entities.spells.edit-payload', $spell));
+
+        $response->assertOk();
+        $response->assertJsonPath('spellHolders.monsters.0.id', $monster->id);
+        $response->assertJsonPath('spellHolders.monsters.0.name', 'Bouftou du test');
+        $response->assertJsonPath('spellHolders.npcs.0.id', $npc->id);
+        $response->assertJsonPath('spellHolders.npcs.0.name', 'Ganymède du test');
+        $response->assertJsonPath('spellHolders.breeds.0.id', $breed->id);
+        $response->assertJsonPath('spellHolders.breeds.0.name', 'Iop du test');
+        $this->assertCount(1, $response->json('spellHolders.monsters'));
+        $this->assertCount(1, $response->json('spellHolders.npcs'));
     }
 
     /**
@@ -784,5 +821,16 @@ class SpellControllerTest extends TestCase
         foreach ($spellTypes as $spellType) {
             $this->assertTrue($spell->fresh()->spellTypes->contains($spellType));
         }
+    }
+
+    /**
+     * Créature minimale : la factory embarque encore des colonnes retirées du schéma.
+     */
+    private function creatureNamed(string $name): Creature
+    {
+        $columns = array_flip(Schema::getColumnListing('creatures'));
+        $attributes = array_intersect_key(Creature::factory()->raw(['name' => $name]), $columns);
+
+        return Creature::query()->create($attributes);
     }
 }

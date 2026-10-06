@@ -1,5 +1,13 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Effets de sort, sur la fiche
+
+L’édition des effets d’un sort reste sur la page du sort : fond neutre, liste des monstres, PNJ et classes qui le possèdent, et création d’un effet avec ses sous-effets dès le formulaire d’ajout, sans passer par l’administration des effets.
+
+## Octobre 2026 — Lien DofusDB dans les options
+
+Le raccourci vers la fiche du jeu (DofusDB) est de nouveau dans le menu d’options de chaque vue : cartes, lignes, colonnes, fiche et fenêtre. Sur la page Modifier, le menu **Options** est dans la barre du haut, à côté de Liste et Fiche — c’est là qu’on ouvre la source Dofus pendant qu’on édite.
+
 ## Octobre 2026 — L’auteur d’un sort peut enregistrer ses degrés
 
 Un auteur (même simple utilisateur) qui a le droit de modifier sa fiche peut aussi enregistrer les degrés et effets. Avant, l’API exigeait le rôle MJ : l’éditeur s’ouvrait, mais le bouton Enregistrer échouait dès qu’un degré était modifié.

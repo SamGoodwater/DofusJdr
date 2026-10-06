@@ -1,5 +1,5 @@
 /**
- * Libellés français des actions d’effet (select d’édition).
+ * Libellés français des actions de sous-effet (select d’édition).
  *
  * @example
  * getSubEffectActionLabel('frapper') // → 'Frapper'
@@ -32,11 +32,13 @@ export function getSubEffectActionLabel(slug) {
 }
 
 /**
+ * Option de select : libellé français, repli sur le slug.
+ *
  * @param {{ id: number|string, slug?: string }} sub
  * @returns {string}
  */
 export function formatSubEffectSelectLabel(sub) {
     const slug = sub?.slug != null ? String(sub.slug) : '';
     const label = getSubEffectActionLabel(slug);
-    return label || `Effet #${sub?.id ?? '?'}`;
+    return label || `Sous-effet #${sub?.id ?? '?'}`;
 }
