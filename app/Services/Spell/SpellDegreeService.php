@@ -209,9 +209,37 @@ final class SpellDegreeService
     {
         DB::transaction(function () use ($degree): void {
             $spellId = $degree->spell_id;
+            $this->preserveInheritedEffectsBeforeDelete($degree);
             $degree->delete();
             $this->renumberPositions($spellId);
         });
+    }
+
+    /**
+     * Si le degré supprimé porte les effets, les copies sur le suivant qui en héritait.
+     * Sans ça, les degrés restants `inherits_effects` n’ont plus de source et affichent une fiche vide.
+     */
+    private function preserveInheritedEffectsBeforeDelete(SpellDegree $degree): void
+    {
+        if ($degree->inherits_effects) {
+            return;
+        }
+
+        $spell = Spell::query()->with('degrees')->find($degree->spell_id);
+        if ($spell === null) {
+            return;
+        }
+
+        $ordered = $spell->degrees->sortBy('position')->values();
+        $idx = $ordered->search(fn (SpellDegree $candidate): bool => $candidate->id === $degree->id);
+        if ($idx === false) {
+            return;
+        }
+
+        $next = $ordered->get((int) $idx + 1);
+        if ($next instanceof SpellDegree && $next->inherits_effects) {
+            $this->materializeEffects($next);
+        }
     }
 
     public function renumberPositions(int $spellId): void
