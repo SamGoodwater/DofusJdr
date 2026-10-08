@@ -135,6 +135,33 @@ function retagSources(properties, tag) {
 }
 
 /**
+ * Entier nullable pour le round-trip bulk (`value_min`, dés…).
+ * Chaîne vide / NaN → null (pas 0), pour ne pas inventer une magnitude.
+ *
+ * @param {unknown} value
+ * @returns {number|null}
+ */
+export function nullableInt(value) {
+    if (value === null || value === undefined || value === '') {
+        return null;
+    }
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+}
+
+/**
+ * @param {unknown} value
+ * @returns {string|null}
+ */
+function nullableLogicGroup(value) {
+    if (typeof value === 'string') {
+        const trimmed = value.trim();
+        return trimmed === '' ? null : trimmed;
+    }
+    return value == null ? null : String(value);
+}
+
+/**
  * @param {object} row
  * @param {number} index
  * @returns {object}
@@ -144,7 +171,12 @@ export function serializeEffectRowForApi(row, index) {
         sub_effect_id: Number(row.sub_effect_id),
         order: index,
         scope: row.scope || 'general',
+        value_min: nullableInt(row.value_min),
+        value_max: nullableInt(row.value_max),
+        dice_num: nullableInt(row.dice_num),
+        dice_side: nullableInt(row.dice_side),
         duration_formula: row.duration_formula || null,
+        logic_group: nullableLogicGroup(row.logic_group),
         logic_operator: index > 0 ? row.logic_operator || 'AND' : null,
         logic_condition: row.logic_condition || null,
         crit_only: Boolean(row.crit_only),

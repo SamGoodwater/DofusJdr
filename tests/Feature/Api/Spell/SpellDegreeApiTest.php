@@ -146,6 +146,7 @@ final class SpellDegreeApiTest extends TestCase
         $this->assertSame('3d6', $bulk->json('data.degrees.0.rows.0.params.value_formula_crit'));
     }
 
+<<<<<<< HEAD
     /**
      * SpellPolicy::update autorise l’auteur (rôle user) : l’API degrés doit suivre,
      * sinon l’enregistrement unique de l’éditeur échoue en 403.
@@ -156,12 +157,21 @@ final class SpellDegreeApiTest extends TestCase
         $spell = Spell::factory()->create(['created_by' => $author->id, 'write_level' => 0, 'pa' => '3']);
         $sub = SubEffect::query()->create([
             'slug' => 'frapper-author-'.uniqid(),
+=======
+    public function test_bulk_sync_preserves_numeric_effect_fields_when_round_tripped(): void
+    {
+        $gm = User::factory()->create(['role' => User::ROLE_GAME_MASTER]);
+        $spell = Spell::factory()->create(['created_by' => $gm->id, 'write_level' => 0]);
+        $sub = SubEffect::query()->create([
+            'slug' => 'frapper-numeric-'.uniqid(),
+>>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
             'type_slug' => 'frapper',
             'template_text' => 'Dégâts [value].',
             'variables_allowed' => ['value'],
             'param_schema' => [],
         ]);
 
+<<<<<<< HEAD
         $create = $this->actingAs($author)->postJson("/api/spells/{$spell->id}/degrees", [
             'required_level' => 1,
             'inherits_effects' => false,
@@ -176,17 +186,93 @@ final class SpellDegreeApiTest extends TestCase
         $degreeId = (int) $create->json('degree_id');
 
         $bulk = $this->actingAs($author)->putJson("/api/spells/{$spell->id}/degrees", [
+=======
+        $first = $this->actingAs($gm)->postJson("/api/spells/{$spell->id}/degrees", [
+            'required_level' => 1,
+            'inherits_effects' => false,
+            'effects' => [[
+                'sub_effect_id' => $sub->id,
+                'value_min' => 12,
+                'value_max' => 18,
+                'dice_num' => 2,
+                'dice_side' => 6,
+                'logic_group' => 'A',
+                'params' => [],
+            ]],
+        ]);
+        $first->assertCreated();
+        $degreeId = (int) $first->json('degree_id');
+
+        $bulk = $this->actingAs($gm)->putJson("/api/spells/{$spell->id}/degrees", [
+            'degrees' => [[
+                'id' => $degreeId,
+                'required_level' => 1,
+                'inherits_effects' => false,
+                'effects' => [[
+                    'sub_effect_id' => $sub->id,
+                    'value_min' => 12,
+                    'value_max' => 18,
+                    'dice_num' => 2,
+                    'dice_side' => 6,
+                    'logic_group' => 'A',
+                    'params' => [],
+                ]],
+            ]],
+        ]);
+        $bulk->assertOk();
+        $row = $bulk->json('data.degrees.0.rows.0');
+        $this->assertSame(12, $row['value_min']);
+        $this->assertSame(18, $row['value_max']);
+        $this->assertSame(2, $row['dice_num']);
+        $this->assertSame(6, $row['dice_side']);
+        $this->assertSame('A', $row['logic_group']);
+    }
+
+    public function test_bulk_sync_without_numeric_effect_fields_clears_them(): void
+    {
+        $gm = User::factory()->create(['role' => User::ROLE_GAME_MASTER]);
+        $spell = Spell::factory()->create(['created_by' => $gm->id, 'write_level' => 0]);
+        $sub = SubEffect::query()->create([
+            'slug' => 'frapper-wipe-'.uniqid(),
+            'type_slug' => 'frapper',
+            'template_text' => 'Dégâts [value].',
+            'variables_allowed' => ['value'],
+            'param_schema' => [],
+        ]);
+
+        $first = $this->actingAs($gm)->postJson("/api/spells/{$spell->id}/degrees", [
+            'required_level' => 1,
+            'inherits_effects' => false,
+            'effects' => [[
+                'sub_effect_id' => $sub->id,
+                'dice_num' => 3,
+                'dice_side' => 8,
+                'value_min' => 5,
+                'logic_group' => 'B',
+                'params' => [],
+            ]],
+        ]);
+        $first->assertCreated();
+        $degreeId = (int) $first->json('degree_id');
+
+        $bulk = $this->actingAs($gm)->putJson("/api/spells/{$spell->id}/degrees", [
+>>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
             'degrees' => [[
                 'id' => $degreeId,
                 'required_level' => 2,
                 'inherits_effects' => false,
                 'effects' => [[
                     'sub_effect_id' => $sub->id,
+<<<<<<< HEAD
                     'params' => ['value_formula' => '2d6'],
+=======
+                    'params' => [],
+>>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
                 ]],
             ]],
         ]);
         $bulk->assertOk();
+<<<<<<< HEAD
         $this->assertSame(2, $bulk->json('data.degrees.0.required_level'));
         $this->assertSame('2d6', $bulk->json('data.degrees.0.rows.0.params.value_formula'));
     }
@@ -201,5 +287,12 @@ final class SpellDegreeApiTest extends TestCase
             'required_level' => 1,
             'pa' => '3',
         ])->assertForbidden();
+=======
+        $row = $bulk->json('data.degrees.0.rows.0');
+        $this->assertNull($row['dice_num']);
+        $this->assertNull($row['dice_side']);
+        $this->assertNull($row['value_min']);
+        $this->assertNull($row['logic_group']);
+>>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
     }
 }

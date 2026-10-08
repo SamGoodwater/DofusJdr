@@ -16,6 +16,9 @@
     d’effets par défaut).
   - UI édition : `SpellEditFormContent` + `SpellDegreesEditor` + `SpellCastPropertiesGrid` +
     `AreaShapePicker` + `SpellEffectEditorRow` ; enregistrement unique (bulk degrés puis sort).
+    `serializeEffectRowForApi` round-trippe aussi `value_min` / `value_max` / `dice_num` /
+    `dice_side` / `logic_group` : `syncEffects` recrée les lignes, omettre ces clés les
+    nullifie (dégâts migrés / legacy).
     Conteneurs partagés : `EntityEditGrid` / `EntityEditContainer`. Porteurs enrichis +
     `SpellHoldersPanel`. Affichage lecture : `SpellEffectsJournal.vue`.
   - Portée UI compacte `x` / `x-y` (`po_min` + `po_max` en stockage) ; propriétés effectives du

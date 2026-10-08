@@ -1,6 +1,7 @@
 # Ce qui a été fait
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Octobre 2026 — Bonus d’équipement de nouveau dans les totaux runtime
 
 Les formules créature lisent `[strength_object]`, `[initiative_object]`, `[wakfu_recharge_object]`, etc. Après l’unification des formules (termes objet dans la formule, plus d’ajout arithmétique de repli), le runtime injectait encore `strength_creature_object`. Les placeholders manquants valaient 0 : l’équipement apparaissait dans la décomposition mais n’entrait plus dans le total. L’injection reprend les clés courtes d’agrégation.
@@ -87,6 +88,11 @@ Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de 
 
 Un auteur (même simple utilisateur) qui a le droit de modifier sa fiche peut aussi enregistrer les degrés et effets. Avant, l’API exigeait le rôle MJ : l’éditeur s’ouvrait, mais le bouton Enregistrer échouait dès qu’un degré était modifié.
 >>>>>>> b725ded3f (fix: aligner l’API degrés sur SpellPolicy::update)
+=======
+## Octobre 2026 — Enregistrement d’un sort ne perd plus les dégâts chiffrés
+
+Sur les sorts venus de l’ancien modèle, certains effets stockent encore les dégâts en dés ou en min–max plutôt qu’en formule. Un enregistrement (même pour changer seulement le coût PA ou le niveau d’un degré) renvoyait les effets sans ces chiffres : ils disparaissaient de la fiche. L’enregistrement renvoie maintenant ces valeurs telles quelles.
+>>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
 
 ## Octobre 2026 — Suppression de sort sans « Page introuvable »
 
