@@ -1,5 +1,6 @@
 # Ce qui a été fait
 
+<<<<<<< HEAD
 ## Octobre 2026 — Bonus d’équipement de nouveau dans les totaux runtime
 
 Les formules créature lisent `[strength_object]`, `[initiative_object]`, `[wakfu_recharge_object]`, etc. Après l’unification des formules (termes objet dans la formule, plus d’ajout arithmétique de repli), le runtime injectait encore `strength_creature_object`. Les placeholders manquants valaient 0 : l’équipement apparaissait dans la décomposition mais n’entrait plus dans le total. L’injection reprend les clés courtes d’agrégation.
@@ -81,6 +82,11 @@ Les barèmes (dégâts, soin, bouclier, PV temporaires, vol de vie, retraits PA/
 ## Octobre 2026 — Barèmes de sorts et conversion en dés
 
 Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de vie restent des repères (dés, budget tour) intégrés à l’outil générique **Barèmes** (menu Outils et sections CMS). Ce sont des repères, pas une loi absolue.
+=======
+## Octobre 2026 — L’auteur d’un sort peut enregistrer ses degrés
+
+Un auteur (même simple utilisateur) qui a le droit de modifier sa fiche peut aussi enregistrer les degrés et effets. Avant, l’API exigeait le rôle MJ : l’éditeur s’ouvrait, mais le bouton Enregistrer échouait dès qu’un degré était modifié.
+>>>>>>> b725ded3f (fix: aligner l’API degrés sur SpellPolicy::update)
 
 ## Octobre 2026 — Suppression de sort sans « Page introuvable »
 

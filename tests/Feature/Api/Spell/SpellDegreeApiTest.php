@@ -145,4 +145,61 @@ final class SpellDegreeApiTest extends TestCase
         $this->assertSame('2d6', $bulk->json('data.degrees.0.rows.0.params.value_formula'));
         $this->assertSame('3d6', $bulk->json('data.degrees.0.rows.0.params.value_formula_crit'));
     }
+
+    /**
+     * SpellPolicy::update autorise l’auteur (rôle user) : l’API degrés doit suivre,
+     * sinon l’enregistrement unique de l’éditeur échoue en 403.
+     */
+    public function test_author_user_can_create_and_sync_degrees(): void
+    {
+        $author = User::factory()->create(['role' => User::ROLE_USER]);
+        $spell = Spell::factory()->create(['created_by' => $author->id, 'write_level' => 0, 'pa' => '3']);
+        $sub = SubEffect::query()->create([
+            'slug' => 'frapper-author-'.uniqid(),
+            'type_slug' => 'frapper',
+            'template_text' => 'Dégâts [value].',
+            'variables_allowed' => ['value'],
+            'param_schema' => [],
+        ]);
+
+        $create = $this->actingAs($author)->postJson("/api/spells/{$spell->id}/degrees", [
+            'required_level' => 1,
+            'inherits_effects' => false,
+            'pa' => '3',
+            'area' => 'point',
+            'effects' => [[
+                'sub_effect_id' => $sub->id,
+                'params' => ['value_formula' => '1d6'],
+            ]],
+        ]);
+        $create->assertCreated();
+        $degreeId = (int) $create->json('degree_id');
+
+        $bulk = $this->actingAs($author)->putJson("/api/spells/{$spell->id}/degrees", [
+            'degrees' => [[
+                'id' => $degreeId,
+                'required_level' => 2,
+                'inherits_effects' => false,
+                'effects' => [[
+                    'sub_effect_id' => $sub->id,
+                    'params' => ['value_formula' => '2d6'],
+                ]],
+            ]],
+        ]);
+        $bulk->assertOk();
+        $this->assertSame(2, $bulk->json('data.degrees.0.required_level'));
+        $this->assertSame('2d6', $bulk->json('data.degrees.0.rows.0.params.value_formula'));
+    }
+
+    public function test_non_author_user_cannot_mutate_degrees(): void
+    {
+        $owner = User::factory()->create(['role' => User::ROLE_USER]);
+        $other = User::factory()->create(['role' => User::ROLE_USER]);
+        $spell = Spell::factory()->create(['created_by' => $owner->id, 'write_level' => 0, 'pa' => '3']);
+
+        $this->actingAs($other)->postJson("/api/spells/{$spell->id}/degrees", [
+            'required_level' => 1,
+            'pa' => '3',
+        ])->assertForbidden();
+    }
 }

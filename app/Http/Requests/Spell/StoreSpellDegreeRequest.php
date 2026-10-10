@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Spell;
 
+use App\Http\Requests\Spell\Concerns\AuthorizesSpellDegreeMutation;
 use App\Models\SpellDegree;
 use App\Rules\ValidAreaNotation;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -15,10 +16,7 @@ use Illuminate\Validation\Rule;
  */
 class StoreSpellDegreeRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return $this->user()?->verifyRole('game_master') ?? false;
-    }
+    use AuthorizesSpellDegreeMutation;
 
     /**
      * @return array<string, ValidationRule|array<mixed>|string>

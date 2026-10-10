@@ -9,7 +9,8 @@
   - `app/Services/Spell/SpellDegreeResolver.php`, `SpellDegreeService.php`, `SpellDegreesSerializer.php`
   - `php artisan spells:migrate-degrees` (+ `--dry-run`, `--spell=`) : legacy `effect_spell` → `spell_degrees`
   - API : `GET/POST /api/spells/{spell}/degrees`, `PUT` bulk (`sync-bulk`), PATCH/DELETE degré,
-    `materialize-effects`, sync effets
+    `materialize-effects`, sync effets. Mutations : `auth` + `SpellPolicy::update` (auteur|admin),
+    pas un rôle MJ global — aligné sur le PATCH Inertia du sort.
   - `properties_source` sur `spell_degrees` : `own` | `previous` | `spell` (résolu par
     `SpellDegreeResolver`). Création de degré = copie matérialisée (props + effets, pas d’héritage
     d’effets par défaut).

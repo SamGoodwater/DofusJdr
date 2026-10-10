@@ -16,7 +16,7 @@ Route::prefix('spells')->group(function () {
             ->name('spells.degrees.index');
     });
 
-    Route::middleware(['web', 'auth', 'role:game_master'])->group(function () {
+    Route::middleware(['web', 'auth'])->group(function () {
         Route::post('{spell}/degrees', [SpellDegreeController::class, 'store'])
             ->name('spells.degrees.store');
         Route::put('{spell}/degrees', [SpellDegreeController::class, 'syncBulk'])
