@@ -145,6 +145,7 @@
                     3
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Intervalle de relance en tours : 0 sans délai, jusqu’à 10 tours pour les effets exceptionnels.",
             "norms_help_section_id": null,

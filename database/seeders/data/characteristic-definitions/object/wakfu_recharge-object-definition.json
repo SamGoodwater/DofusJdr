@@ -145,6 +145,7 @@
                     3
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Recharge Wakfu d'équipement. Rare.",
             "norms_help_section_id": null,

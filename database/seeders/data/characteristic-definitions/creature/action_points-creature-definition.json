@@ -196,6 +196,7 @@
                     12
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Points d'action par tour. Progression par paliers de 5 niveaux. Base 6, max ~12.",
             "norms_help_section_id": null,
@@ -378,6 +379,7 @@
                     12
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Points d'action des monstres : 3 à 14, valeur Dofus conservée puis limitée.",
             "norms_help_section_id": null,

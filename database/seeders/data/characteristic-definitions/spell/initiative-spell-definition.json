@@ -157,6 +157,7 @@
                     15
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus temporaire d’initiative conservé directement, sans plafond artificiel.",
             "norms_help_section_id": null,

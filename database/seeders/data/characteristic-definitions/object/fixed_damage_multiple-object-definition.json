@@ -159,6 +159,7 @@
                     3
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Dommage fixe multiples d'équipement. Plus rare.",
             "norms_help_section_id": null,

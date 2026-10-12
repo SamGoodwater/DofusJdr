@@ -196,6 +196,7 @@
                     6
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Portée naturelle. Paliers de 5 niveaux.",
             "norms_help_section_id": null,
@@ -378,6 +379,7 @@
                     6
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus de portée des monstres : 0 à 10, valeur Dofus conservée puis limitée.",
             "norms_help_section_id": null,

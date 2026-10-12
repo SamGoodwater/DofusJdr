@@ -196,6 +196,7 @@
                     192
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": [
                 {
                     "characteristic_key": "vitality_creature",

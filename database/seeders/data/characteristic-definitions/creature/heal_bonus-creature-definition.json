@@ -145,6 +145,7 @@
                     6
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus de soin. Progression linéaire modérée.",
             "norms_help_section_id": null,
@@ -288,6 +289,7 @@
                     6
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus de soin. Progression linéaire modérée.",
             "norms_help_section_id": null,

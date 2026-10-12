@@ -182,6 +182,7 @@
                     10
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Dés de vie : progression indicative selon le niveau.",
             "norms_help_section_id": null,

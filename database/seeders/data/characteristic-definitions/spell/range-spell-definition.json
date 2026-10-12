@@ -156,6 +156,7 @@
                     4
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Variation temporaire de portée, plafonnée à 6 comme le bonus de PO d’une créature.",
             "norms_help_section_id": null,

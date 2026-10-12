@@ -164,6 +164,7 @@
                     2
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus de compétence passive sur chapeau (2.2.2.4).",
             "norms_help_section_id": null,

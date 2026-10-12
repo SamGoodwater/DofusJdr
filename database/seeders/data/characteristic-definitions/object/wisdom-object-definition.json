@@ -159,6 +159,7 @@
                     4
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus sagesse d'équipement. Règle 2.6.1 / 2.2.3 : +4 par objet, forgemagie +2. Les malus Dofus sont conservés symétriquement jusqu’à -4.",
             "norms_help_section_id": null,

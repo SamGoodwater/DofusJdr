@@ -145,6 +145,7 @@
                     5
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus compétence active (chapeau ou cape). Aligné sur les stats primaires (5.2.4, 2.2.2).",
             "norms_help_section_id": null,

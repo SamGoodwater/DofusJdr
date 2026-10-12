@@ -156,6 +156,7 @@
                     3
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Portée minimale en cases, bornée à 20 pour rester jouable sur une carte Krosmoz.",
             "norms_help_section_id": null,

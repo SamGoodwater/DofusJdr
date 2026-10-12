@@ -196,6 +196,7 @@
                     6
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Points de mouvement par tour. Stable, +1 aux niveaux intermédiaires et hauts.",
             "norms_help_section_id": null,
@@ -378,6 +379,7 @@
                     6
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Points de mouvement des monstres : 2 à 10, valeur Dofus conservée puis limitée.",
             "norms_help_section_id": null,

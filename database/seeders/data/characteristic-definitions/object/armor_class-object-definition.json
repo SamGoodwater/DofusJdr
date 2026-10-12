@@ -145,6 +145,7 @@
                     5
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus CA d'équipement. Progression par paliers (règle 5.2.4).",
             "norms_help_section_id": null,

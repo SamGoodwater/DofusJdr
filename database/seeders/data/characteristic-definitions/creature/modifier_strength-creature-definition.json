@@ -189,6 +189,7 @@
                     7
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Modificateur de Force : bonus ou malus issu du score sur la fiche, avec un plafond lié au niveau (ordre de grandeur habituel : −2 à +7).",
             "norms_help_section_id": null,
@@ -357,6 +358,7 @@
                     10
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Modificateur de strength des monstres : de -2 à +10, dérivé du score 6–30.",
             "norms_help_section_id": null,

@@ -34,6 +34,7 @@
             "conversion_krosmoz_sample": null,
             "conversion_sample_rows": null,
             "norms_grid": null,
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Grille 5×20 non utilisée : formule libre.",
             "norms_help_section_id": null,

@@ -85,6 +85,7 @@
                 }
             ],
             "norms_grid": null,
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Niveau Krosmoz 1–20, obtenu depuis le niveau minimal Dofus par division par 10 puis bornage.",
             "norms_help_section_id": null,

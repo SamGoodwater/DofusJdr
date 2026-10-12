@@ -5,7 +5,7 @@
         "name": "Coût en PA",
         "short_name": "PA",
         "helper": "Coût en PA pour lancer ce sort (colonne `spells.pa`). Ce n'est pas le retrait de PA infligé à une cible par un effet Dofus.",
-        "descriptions": "Coût en PA pour lancer le sort (3.3.2.1). Base créature 6, max 12. Sorts standards 3–4 PA, puissants\/zone 5 PA, réactions 2–3 PA. **Important** : l’identifiant DofusDB `1` (« actionPoints ») dans les **effets** désigne une variation de PA sur une cible ; il est résolu via les alias de conversion d’effets, distinct du coût PA affiché sur la fiche sort (`pa`).",
+        "descriptions": "Coût en PA pour lancer le sort (3.3.2.1). Base créature 6, max 12. Sorts standards 3–4 PA, puissants/zone 5 PA, réactions 2–3 PA. **Important** : l’identifiant DofusDB `1` (« actionPoints ») dans les **effets** désigne une variation de PA sur une cible ; il est résolu via les alias de conversion d’effets, distinct du coût PA affiché sur la fiche sort (`pa`).",
         "icon": "actionPoints.webp",
         "icon_false": null,
         "color": "blue",
@@ -180,11 +180,11 @@
                     5
                 ]
             },
+            "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(0,2+[power]-1)\",\"7\":\"max(0,3+[power]-1)\",\"13\":\"max(0,4+[power]-1)\"}",
             "norms_conditions": null,
             "norms_description": "Retrait PA (1er rôle Excel + ajustement [power]−1). Invocations = normes monstre.",
             "norms_help_section_id": null,
-            "value_available": null,
-            "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(0,2+[power]-1)\",\"7\":\"max(0,3+[power]-1)\",\"13\":\"max(0,4+[power]-1)\"}"
+            "value_available": null
         }
     },
     "relations": null

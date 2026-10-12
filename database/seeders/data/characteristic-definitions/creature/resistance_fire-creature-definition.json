@@ -145,6 +145,7 @@
                     48
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Résistance % feu. Progression linéaire.",
             "norms_help_section_id": null,
@@ -283,6 +284,7 @@
                     100
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Résistance relative des monstres, limitée aux paliers -100, -50, 0, 50 et 100 %.",
             "norms_help_section_id": null,

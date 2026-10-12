@@ -188,6 +188,7 @@
                     19
                 ]
             },
+            "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(1,round(0.147436*[life_points_creature]*3/[action_points_creature]))\",\"2\":\"max(1,round(0.188172*[life_points_creature]*3/[action_points_creature]))\",\"3\":\"max(1,round(0.217593*[life_points_creature]*3/[action_points_creature]))\",\"4\":\"max(1,round(0.239837*[life_points_creature]*3/[action_points_creature]))\",\"5\":\"max(1,round(0.257246*[life_points_creature]*3/[action_points_creature]))\",\"6\":\"max(1,round(0.271242*[life_points_creature]*3/[action_points_creature]))\",\"7\":\"max(1,round(0.282738*[life_points_creature]*3/[action_points_creature]))\",\"8\":\"max(1,round(0.29235*[life_points_creature]*3/[action_points_creature]))\",\"9\":\"max(1,round(0.300505*[life_points_creature]*3/[action_points_creature]))\",\"10\":\"max(1,round(0.307512*[life_points_creature]*3/[action_points_creature]))\",\"11\":\"max(1,round(0.313596*[life_points_creature]*3/[action_points_creature]))\",\"12\":\"max(1,round(0.31893*[life_points_creature]*3/[action_points_creature]))\",\"13\":\"max(1,round(0.33*[life_points_creature]*3/[action_points_creature]))\",\"14\":\"max(1,round(0.34*[life_points_creature]*3/[action_points_creature]))\",\"15\":\"max(1,round(0.35*[life_points_creature]*3/[action_points_creature]))\",\"16\":\"max(1,round(0.35*[life_points_creature]*3/[action_points_creature]))\",\"17\":\"max(1,round(0.36*[life_points_creature]*3/[action_points_creature]))\",\"18\":\"max(1,round(0.37*[life_points_creature]*3/[action_points_creature]))\",\"19\":\"max(1,round(0.38*[life_points_creature]*3/[action_points_creature]))\",\"20\":\"max(1,round(0.4*[life_points_creature]*3/[action_points_creature]))\"}",
             "norms_conditions": [
                 {
                     "characteristic_key": "action_points_spell",
@@ -219,7 +220,7 @@
                     "value": 2,
                     "target": "level",
                     "modifier": -2,
-                    "comment": "Zone \/ multicible (−2 niveaux)"
+                    "comment": "Zone / multicible (−2 niveaux)"
                 },
                 {
                     "characteristic_key": "spell_range_max_spell",
@@ -259,7 +260,7 @@
                     "value": 1,
                     "target": "level",
                     "modifier": 1,
-                    "comment": "1×\/tour (+1 niveau)"
+                    "comment": "1×/tour (+1 niveau)"
                 },
                 {
                     "characteristic_key": "cast_per_turn_spell",
@@ -267,7 +268,7 @@
                     "value": 3,
                     "target": "level",
                     "modifier": -2,
-                    "comment": "≥3×\/tour (−2 niveaux)"
+                    "comment": "≥3×/tour (−2 niveaux)"
                 },
                 {
                     "characteristic_key": "number_between_two_cast_spell",
@@ -318,10 +319,9 @@
                     "comment": "Coût en Wakfu (+1 niveau)"
                 }
             ],
-            "norms_description": "Budget par lancement 3 PA. Dégâts\/tour = coef(niveau)×PV(même palier) ; cast = round(coef×PV×3\/PA). Coefs Excel (moy). 1er rôle≈strong, 2ème≈neutral, 3ème≈weak.",
+            "norms_description": "Budget par lancement 3 PA. Dégâts/tour = coef(niveau)×PV(même palier) ; cast = round(coef×PV×3/PA). Coefs Excel (moy). 1er rôle≈strong, 2ème≈neutral, 3ème≈weak.",
             "norms_help_section_id": null,
-            "value_available": null,
-            "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(1,round(0.147436*[life_points_creature]*3\/[action_points_creature]))\",\"2\":\"max(1,round(0.188172*[life_points_creature]*3\/[action_points_creature]))\",\"3\":\"max(1,round(0.217593*[life_points_creature]*3\/[action_points_creature]))\",\"4\":\"max(1,round(0.239837*[life_points_creature]*3\/[action_points_creature]))\",\"5\":\"max(1,round(0.257246*[life_points_creature]*3\/[action_points_creature]))\",\"6\":\"max(1,round(0.271242*[life_points_creature]*3\/[action_points_creature]))\",\"7\":\"max(1,round(0.282738*[life_points_creature]*3\/[action_points_creature]))\",\"8\":\"max(1,round(0.29235*[life_points_creature]*3\/[action_points_creature]))\",\"9\":\"max(1,round(0.300505*[life_points_creature]*3\/[action_points_creature]))\",\"10\":\"max(1,round(0.307512*[life_points_creature]*3\/[action_points_creature]))\",\"11\":\"max(1,round(0.313596*[life_points_creature]*3\/[action_points_creature]))\",\"12\":\"max(1,round(0.31893*[life_points_creature]*3\/[action_points_creature]))\",\"13\":\"max(1,round(0.33*[life_points_creature]*3\/[action_points_creature]))\",\"14\":\"max(1,round(0.34*[life_points_creature]*3\/[action_points_creature]))\",\"15\":\"max(1,round(0.35*[life_points_creature]*3\/[action_points_creature]))\",\"16\":\"max(1,round(0.35*[life_points_creature]*3\/[action_points_creature]))\",\"17\":\"max(1,round(0.36*[life_points_creature]*3\/[action_points_creature]))\",\"18\":\"max(1,round(0.37*[life_points_creature]*3\/[action_points_creature]))\",\"19\":\"max(1,round(0.38*[life_points_creature]*3\/[action_points_creature]))\",\"20\":\"max(1,round(0.4*[life_points_creature]*3\/[action_points_creature]))\"}"
+            "value_available": null
         }
     },
     "relations": null

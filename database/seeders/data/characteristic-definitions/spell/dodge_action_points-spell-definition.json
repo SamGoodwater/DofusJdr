@@ -180,6 +180,7 @@
                     4
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": [
                 {
                     "characteristic_key": "action_points_spell",

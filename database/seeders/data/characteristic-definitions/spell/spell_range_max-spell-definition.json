@@ -156,6 +156,7 @@
                     16
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Portée maximale en cases, bornée à 20 ; le bonus de PO du lanceur ne s’ajoute que si la portée est modifiable.",
             "norms_help_section_id": null,

@@ -157,6 +157,7 @@
                     7
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus de soin : progression linéaire de 5–40 Dofus vers 0–7 Krosmoz.",
             "norms_help_section_id": null,

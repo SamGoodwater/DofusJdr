@@ -145,6 +145,7 @@
                     15
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus aux points de vie maximum ; la forgemagie peut encore l’augmenter selon les règles (2.2.2).",
             "norms_help_section_id": null,

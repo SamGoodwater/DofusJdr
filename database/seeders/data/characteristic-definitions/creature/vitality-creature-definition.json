@@ -196,6 +196,7 @@
                     24
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Vitalité. Progression linéaire 10→16 neutre (min 6, max 24).",
             "norms_help_section_id": null,
@@ -378,6 +379,7 @@
                     24
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Vitality des monstres : score de 6 à 30, converti par une courbe non linéaire.",
             "norms_help_section_id": null,

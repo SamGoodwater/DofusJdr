@@ -145,6 +145,7 @@
                     8
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Fuite d'équipement.",
             "norms_help_section_id": null,

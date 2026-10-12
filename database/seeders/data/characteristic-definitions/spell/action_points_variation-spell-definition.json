@@ -180,6 +180,7 @@
                     3
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Variation PA sur cible. Bonus très rare et retrait fortement contrôlé : retirer 1 PA est déjà impactant, 2–3 PA doit rester exceptionnel.",
             "norms_help_section_id": null,

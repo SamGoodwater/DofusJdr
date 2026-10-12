@@ -155,6 +155,7 @@
                     10
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus tacle via sort (buff temporaire).",
             "norms_help_section_id": null,

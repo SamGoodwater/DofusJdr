@@ -5,7 +5,7 @@
         "name": "Distance de déplacement",
         "short_name": "Dépl.",
         "helper": "Déplacement forcé ou libre en cases.",
-        "descriptions": "Distance de déplacement en cases. Sert de repli lorsque le type précis (saut\/téléportation\/attirance\/repousse) n’est pas connu. 1 case = 1,5 m.",
+        "descriptions": "Distance de déplacement en cases. Sert de repli lorsque le type précis (saut/téléportation/attirance/repousse) n’est pas connu. 1 case = 1,5 m.",
         "icon": "movementPoints.webp",
         "icon_false": null,
         "color": "green",
@@ -188,11 +188,11 @@
                     7
                 ]
             },
+            "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(0,2+[power]-1)\",\"5\":\"max(0,3+[power]-1)\",\"10\":\"max(0,4+[power]-1)\",\"14\":\"max(0,5+[power]-1)\",\"18\":\"max(0,6+[power]-1)\"}",
             "norms_conditions": null,
-            "norms_description": "Poussée \/ déplacement forcé (feuille Placement Excel, 1er rôle + [power]).",
+            "norms_description": "Poussée / déplacement forcé (feuille Placement Excel, 1er rôle + [power]).",
             "norms_help_section_id": null,
-            "value_available": null,
-            "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(0,2+[power]-1)\",\"5\":\"max(0,3+[power]-1)\",\"10\":\"max(0,4+[power]-1)\",\"14\":\"max(0,5+[power]-1)\",\"18\":\"max(0,6+[power]-1)\"}"
+            "value_available": null
         }
     },
     "relations": null

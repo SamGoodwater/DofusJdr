@@ -102,6 +102,7 @@
                 }
             ],
             "norms_grid": null,
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": null,
             "norms_help_section_id": null,

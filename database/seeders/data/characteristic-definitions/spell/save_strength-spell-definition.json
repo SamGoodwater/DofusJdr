@@ -188,6 +188,7 @@
                     8
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Sauvegarde Force via sort (bonus temporaire). Les malus/retraits sont convertis à puissance réduite par le service de conversion afin de préserver la bounded accuracy.",
             "norms_help_section_id": null,

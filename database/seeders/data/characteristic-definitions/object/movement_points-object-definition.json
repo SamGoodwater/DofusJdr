@@ -159,6 +159,7 @@
                     2
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus de points de mouvement porté par l’équipement ; reste en pratique modeste (2.2.2).",
             "norms_help_section_id": null,

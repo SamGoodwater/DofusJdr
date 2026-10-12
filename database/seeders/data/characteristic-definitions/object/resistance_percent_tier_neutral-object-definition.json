@@ -170,6 +170,7 @@
                     2
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Palier de résistance en pourcentage pour le neutre ; plusieurs degrés selon la fiche.",
             "norms_help_section_id": null,
@@ -325,6 +326,7 @@
                     2
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus de panoplie uniquement : vulnérabilité < -50 %, faiblesse -50 à -20 %, résistance 8 à 12 %, invulnérabilité dès 13 %.",
             "norms_help_section_id": null,

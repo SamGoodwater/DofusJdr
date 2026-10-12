@@ -145,6 +145,7 @@
                     2
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus ou malus temporaire au seuil critique, de −3 à +3 ; 0 conserve le critique sur 20 naturel.",
             "norms_help_section_id": null,

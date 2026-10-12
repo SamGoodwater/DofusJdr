@@ -145,6 +145,7 @@
                     14
                 ]
             },
+            "norms_formula": "max(1,[bouclier_spell])",
             "norms_conditions": null,
             "norms_description": "Consommable bouclier = 1 lancement bouclier_spell.",
             "norms_help_section_id": null,
@@ -153,8 +154,7 @@
             "rune_price_per_unit": null,
             "value_available": null,
             "item_type_dofus_ids": null,
-            "item_type_ids": null,
-            "norms_formula": "max(1,[bouclier_spell])"
+            "item_type_ids": null
         }
     },
     "relations": null

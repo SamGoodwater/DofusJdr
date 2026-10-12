@@ -188,6 +188,7 @@
                     14
                 ]
             },
+            "norms_formula": "max(1,round(0.6*[dommages_spell]+(5+[modifier_vitality_creature])*3/[action_points_creature]))",
             "norms_conditions": [
                 {
                     "characteristic_key": "action_points_spell",
@@ -219,7 +220,7 @@
                     "value": 2,
                     "target": "level",
                     "modifier": -2,
-                    "comment": "Zone \/ multicible (−2 niveaux)"
+                    "comment": "Zone / multicible (−2 niveaux)"
                 },
                 {
                     "characteristic_key": "spell_range_max_spell",
@@ -259,7 +260,7 @@
                     "value": 1,
                     "target": "level",
                     "modifier": 1,
-                    "comment": "1×\/tour (+1 niveau)"
+                    "comment": "1×/tour (+1 niveau)"
                 },
                 {
                     "characteristic_key": "cast_per_turn_spell",
@@ -267,7 +268,7 @@
                     "value": 3,
                     "target": "level",
                     "modifier": -2,
-                    "comment": "≥3×\/tour (−2 niveaux)"
+                    "comment": "≥3×/tour (−2 niveaux)"
                 },
                 {
                     "characteristic_key": "number_between_two_cast_spell",
@@ -318,10 +319,9 @@
                     "comment": "Coût en Wakfu (+1 niveau)"
                 }
             ],
-            "norms_description": "Bouclier \/ lancement 3 PA = 0,60×dégâts + (5+mod)×3\/PA.",
+            "norms_description": "Bouclier / lancement 3 PA = 0,60×dégâts + (5+mod)×3/PA.",
             "norms_help_section_id": null,
-            "value_available": null,
-            "norms_formula": "max(1,round(0.6*[dommages_spell]+(5+[modifier_vitality_creature])*3\/[action_points_creature]))"
+            "value_available": null
         }
     },
     "relations": null

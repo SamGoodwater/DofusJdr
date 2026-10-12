@@ -170,6 +170,7 @@
                     3
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus de critique. Progression lente par paliers (max 3).",
             "norms_help_section_id": null,
@@ -313,6 +314,7 @@
                     3
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus de critique. Progression lente par paliers (max 3).",
             "norms_help_section_id": null,

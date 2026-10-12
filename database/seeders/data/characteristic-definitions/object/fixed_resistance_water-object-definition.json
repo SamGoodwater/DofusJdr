@@ -152,6 +152,7 @@
                     7
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Résistance fixe portée par un bouclier : ±7 au maximum hors forgemagie ; ±3 supplémentaires par forgemagie (2.6.1).",
             "norms_help_section_id": null,

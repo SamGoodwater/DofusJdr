@@ -196,6 +196,7 @@
                     8
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Résistance fixe feu. Progression linéaire.",
             "norms_help_section_id": null,
@@ -364,6 +365,7 @@
                     8
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Résistance fixe des monstres de 0 à 10, sans conversion Dofus automatique.",
             "norms_help_section_id": null,

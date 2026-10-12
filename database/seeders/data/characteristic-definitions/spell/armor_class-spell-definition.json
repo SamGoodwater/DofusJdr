@@ -164,6 +164,7 @@
                     5
                 ]
             },
+            "norms_formula": null,
             "norms_conditions": null,
             "norms_description": "Bonus CA via sort. Faible pour éviter le stacking.",
             "norms_help_section_id": null,
