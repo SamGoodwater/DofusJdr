@@ -57,6 +57,13 @@ const navItems = computed(() => {
             show: canAccess("contentManagement"),
         },
         {
+            title: "Équilibrage",
+            href: "admin.content.balance.index",
+            path: "/admin/content/balance",
+            icon: "fa-scale-balanced",
+            show: canAccess("contentManagement"),
+        },
+        {
             title: "Mappings champs",
             href: "admin.scrapping-mappings.index",
             path: "/admin/content/scrapping-mappings",

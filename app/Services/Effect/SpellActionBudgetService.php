@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\Services\Effect;
 
-use App\Services\Characteristic\Getter\CharacteristicGetterService;
+use App\Contracts\Characteristic\CharacteristicDefinitionLookup;
 use App\Support\Effect\SpellReferenceScaleDefaults;
 
 /**
  * Budgets d'action de sorts issus des normes `characteristic_spell`.
  *
  * Les grilles expriment un lancement de référence à 3 PA (mod inclus).
- * Le total par tour = cast × PA_max(niveau) ÷ 3.
- * Le coût en PA d'un lancement décale le niveau effectif (pas un prorata)
- * pour éviter de compter deux fois le coût déjà encodé dans les conditions.
+ * Le total par tour = cast × PA_max(niveau, palier) ÷ 3, avec PA lu dans
+ * `action_points_creature.norms_grid`.
  *
  * @example
- * $budget = (new SpellActionBudgetService)->budgetForCast('damage', 10, 3);
+ * $budget = app(SpellActionBudgetService::class)->budgetForCast('damage', 10, 3);
  */
 final class SpellActionBudgetService
 {
@@ -33,7 +32,7 @@ final class SpellActionBudgetService
     public const POWER_LEVELS = SpellReferenceScaleDefaults::POWER_LEVELS;
 
     public function __construct(
-        private readonly ?CharacteristicGetterService $getter = null,
+        private readonly ?CharacteristicDefinitionLookup $getter = null,
     ) {}
 
     /**
@@ -43,7 +42,7 @@ final class SpellActionBudgetService
     {
         $cast = $this->budgetForCast($action, $level, 3, $powerIndex);
 
-        return max(1, (int) round($cast * $this->maxActionPoints($level) / 3));
+        return max(1, (int) round($cast * $this->maxActionPoints($level, $powerIndex) / 3));
     }
 
     /**
@@ -64,7 +63,7 @@ final class SpellActionBudgetService
         $index = $this->levelIndex($effectiveLevel);
         $value = $row[$index] ?? null;
 
-        return max(1, (int) ($value ?? 1));
+        return max(1, (int) round((float) ($value ?? 1)));
     }
 
     /**
@@ -115,9 +114,20 @@ final class SpellActionBudgetService
         return array_values($values);
     }
 
-    public function maxActionPoints(int $level): int
+    public function maxActionPoints(int $level, int $powerIndex = 2): int
     {
-        return SpellReferenceScaleDefaults::MAX_ACTION_POINTS[$this->levelIndex($level)];
+        $grid = $this->resolveCreatureGrid('action_points_creature');
+        $powerKey = self::POWER_LEVELS[$this->powerIndex($powerIndex)];
+        $row = $grid[$powerKey] ?? $grid['neutral'] ?? [];
+        $value = $row[$this->levelIndex($level)] ?? null;
+        if ($value !== null && is_numeric($value)) {
+            return max(1, (int) round((float) $value));
+        }
+
+        // Repli neutre Excel si la base est vide (tests hors seed).
+        $fallback = [6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12];
+
+        return $fallback[$this->levelIndex($level)];
     }
 
     private function levelWithActionPointOffset(int $level, int $actionPointCost): int
@@ -136,7 +146,7 @@ final class SpellActionBudgetService
     }
 
     /**
-     * @return array<string, list<int|float>>
+     * @return array<string, list<int|float|null>>
      */
     private function resolveGrid(string $action): array
     {
@@ -149,7 +159,23 @@ final class SpellActionBudgetService
             }
         }
 
-        return SpellReferenceScaleDefaults::grid($action);
+        return [];
+    }
+
+    /**
+     * @return array<string, list<int|float|null>>
+     */
+    private function resolveCreatureGrid(string $key): array
+    {
+        if ($this->getter !== null) {
+            $definition = $this->getter->getDefinition($key, '*');
+            $grid = is_array($definition['norms_grid'] ?? null) ? $definition['norms_grid'] : null;
+            if ($grid !== null && $grid !== []) {
+                return $grid;
+            }
+        }
+
+        return [];
     }
 
     private function levelIndex(int $level): int

@@ -176,6 +176,11 @@ const MODULATION_TEXT_RULES = [
                                 <td class="font-medium whitespace-nowrap">
                                     {{ row.label }}
                                     <span class="block text-[10px] font-normal text-base-content/50">par sort (3 PA)</span>
+                                    <span
+                                        v-if="row.formula"
+                                        class="block text-[10px] font-mono font-normal text-base-content/40 max-w-[14rem] truncate"
+                                        :title="row.formula"
+                                    >{{ row.formula }}</span>
                                 </td>
                                 <td
                                     v-for="band in row.bands"

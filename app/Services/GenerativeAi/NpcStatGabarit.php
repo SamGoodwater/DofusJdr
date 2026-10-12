@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace App\Services\GenerativeAi;
 
+use App\Contracts\Characteristic\CharacteristicDefinitionLookup;
+use App\Services\Characteristic\Getter\CharacteristicGetterService;
+use App\Services\Characteristic\Norms\NormsResolver;
 use App\Support\ElementBitmask;
 use App\Support\Npc\NpcRole;
 
 /**
- * Gabarit 5.1.2 (PV, CA, dés) selon le niveau et le rôle du PNJ.
+ * Gabarit PNJ / monstre selon le niveau et le rôle, lu depuis les normes caractéristiques.
  *
  * @example
- * $stats = (new NpcStatGabarit)->forLevelAndRole(4, NpcRole::SOCIAL);
+ * $stats = app(NpcStatGabarit::class)->forLevelAndRole(4, NpcRole::SOCIAL);
  */
 final class NpcStatGabarit
 {
+    public function __construct(
+        private readonly ?CharacteristicDefinitionLookup $getter = null,
+        private readonly ?NormsResolver $norms = null,
+    ) {}
+
     /**
      * @return array{
      *     life: string,
@@ -37,22 +45,28 @@ final class NpcStatGabarit
     public function forLevelAndRole(int $level, string $role): array
     {
         $level = max(1, min(20, $level));
-        $band = $this->band($level);
-        $weight = $this->roleWeight($role);
-        $span = max(1, $band['to'] - $band['from']);
-        $progress = ($level - $band['from']) / $span;
-        $lifeSpan = $band['max_life'] - $band['min_life'];
-        $life = (int) round($band['min_life'] + $lifeSpan * (0.35 * $progress + 0.65 * $weight));
+        $powerIndex = $this->powerIndexForRole($role);
+        $resolver = $this->norms ?? new NormsResolver;
+
+        $life = $this->normValue('life_points_creature', $level, $powerIndex, $resolver) ?? 10;
+        $pa = $this->normValue('action_points_creature', $level, $powerIndex, $resolver) ?? 6;
+        $pm = $this->normValue('movement_points_creature', $level, $powerIndex, $resolver) ?? 3;
+        $ca = $this->normValue('armor_class_creature', $level, $powerIndex, $resolver) ?? 10;
+        $hitDice = $this->normValue('hit_dice_creature', $level, $powerIndex, $resolver) ?? 1;
+        $modVit = $this->normValue('modifier_vitality_creature', $level, $powerIndex, $resolver) ?? 0;
 
         $social = in_array($role, [NpcRole::SOCIAL, NpcRole::MERCHANT], true);
-        $vitality = $social ? 8 : ($role === NpcRole::GUARD ? 12 : 10);
-        $ca = $social ? 11 : ($role === NpcRole::GUARD ? 13 : 12);
-        $dice = $weight < 0.35 ? $band['dice'][0] : $band['dice'][1];
+        $vitalityScore = 10 + (int) round((float) $modVit) * 2;
+        if ($social) {
+            $vitalityScore = max(8, $vitalityScore - 2);
+        } elseif ($role === NpcRole::GUARD) {
+            $vitalityScore = min(14, $vitalityScore + 2);
+        }
 
         $base = 8;
         $primary = $social ? 12 : 14;
         $stats = [
-            'vitality' => (string) $vitality,
+            'vitality' => (string) $vitalityScore,
             'sagesse' => (string) $base,
             'strong' => (string) $base,
             'intel' => (string) $base,
@@ -67,21 +81,23 @@ final class NpcStatGabarit
             default => $stats['strong'] = (string) 10,
         };
 
+        $diceCount = max(1, (int) round((float) $hitDice));
+
         return array_merge($stats, [
-            'life' => (string) $life,
-            'pa' => $social ? '4' : '6',
-            'pm' => '3',
+            'life' => (string) max(1, (int) round((float) $life)),
+            'pa' => (string) max(1, (int) round((float) $pa)),
+            'pm' => (string) max(1, (int) round((float) $pm)),
             'po' => '1',
-            'ca' => (string) $ca,
-            'ini' => (string) $ca,
-            'touch' => (string) $ca,
-            'damage_dice' => $dice,
-            'band' => $band['key'],
+            'ca' => (string) max(1, (int) round((float) $ca)),
+            'ini' => (string) max(1, (int) round((float) $ca)),
+            'touch' => (string) max(1, (int) round((float) $ca)),
+            'damage_dice' => $diceCount.'d6',
+            'band' => NormsResolver::POWER_LEVELS[$powerIndex],
         ]);
     }
 
     /**
-     * Écarts d’un jet de stats par rapport au palier 5.1.2 (PV dans la bande, PA ±1).
+     * Écarts d’un jet de stats par rapport aux normes (PV ±25 %, PA ±1).
      *
      * @param  array<string, mixed>  $proposed
      * @return list<string>
@@ -90,12 +106,14 @@ final class NpcStatGabarit
     {
         $errors = [];
         $expected = $this->forLevelAndRole($level, $role);
-        $band = $this->band(max(1, min(20, $level)));
+        $wantLife = (int) $expected['life'];
+        $minLife = (int) max(1, floor($wantLife * 0.75));
+        $maxLife = (int) ceil($wantLife * 1.25);
 
         if (array_key_exists('life', $proposed) && is_numeric($proposed['life'])) {
             $life = (int) $proposed['life'];
-            if ($life < $band['min_life'] || $life > $band['max_life']) {
-                $errors[] = "PV hors gabarit {$band['key']} ({$band['min_life']}–{$band['max_life']}, reçu {$life}).";
+            if ($life < $minLife || $life > $maxLife) {
+                $errors[] = "PV hors gabarit {$expected['band']} ({$minLife}–{$maxLife}, reçu {$life}).";
             }
         }
 
@@ -151,13 +169,9 @@ final class NpcStatGabarit
     /**
      * Si le LLM omet la carac de voie, la pose à la valeur haute du gabarit.
      *
-     * Ne rejette pas une carac déjà fournie. Ne durcit pas la validation.
-     *
      * @param  array<string, string>  $expected
      * @param  array<string, mixed>  $proposed
      * @return array<string, string>
-     *
-     * @example $stats = $gabarit->fillOmittedPrimaryFromElement($expected, [], 'strong');
      */
     public function fillOmittedPrimaryFromElement(array $expected, array $proposed, ?string $primaryKey): array
     {
@@ -184,8 +198,6 @@ final class NpcStatGabarit
     }
 
     /**
-     * Clés de créature à poser si le LLM les omet.
-     *
      * @return list<string>
      */
     public function creatureStatKeys(): array
@@ -193,55 +205,26 @@ final class NpcStatGabarit
         return ['life', 'pa', 'pm', 'po', 'ca', 'ini', 'touch', 'vitality', 'sagesse', 'strong', 'intel', 'agi', 'chance'];
     }
 
-    /**
-     * @return array{key: string, from: int, to: int, min_life: int, max_life: int, dice: list<string>}
-     */
-    private function band(int $level): array
+    private function powerIndexForRole(string $role): int
     {
-        return match (true) {
-            $level <= 5 => [
-                'key' => '1-5',
-                'from' => 1,
-                'to' => 5,
-                'min_life' => 20,
-                'max_life' => 50,
-                'dice' => ['1d6', '2d6'],
-            ],
-            $level <= 10 => [
-                'key' => '6-10',
-                'from' => 6,
-                'to' => 10,
-                'min_life' => 50,
-                'max_life' => 100,
-                'dice' => ['2d6', '3d6'],
-            ],
-            $level <= 15 => [
-                'key' => '11-15',
-                'from' => 11,
-                'to' => 15,
-                'min_life' => 100,
-                'max_life' => 200,
-                'dice' => ['3d6', '4d6'],
-            ],
-            default => [
-                'key' => '16-20',
-                'from' => 16,
-                'to' => 20,
-                'min_life' => 200,
-                'max_life' => 400,
-                'dice' => ['4d6', '5d6'],
-            ],
+        return match ($role) {
+            NpcRole::SOCIAL, NpcRole::MERCHANT => 1, // weak
+            NpcRole::ALLY => 2, // neutral
+            NpcRole::GUARD => 3, // strong
+            NpcRole::ENEMY => 4, // very_strong
+            default => 2,
         };
     }
 
-    private function roleWeight(string $role): float
+    private function normValue(string $key, int $level, int $powerIndex, NormsResolver $resolver): int|float|null
     {
-        return match ($role) {
-            NpcRole::SOCIAL, NpcRole::MERCHANT => 0.15,
-            NpcRole::ALLY => 0.4,
-            NpcRole::GUARD => 0.55,
-            NpcRole::ENEMY => 0.7,
-            default => 0.4,
-        };
+        $getter = $this->getter ?? (app()->bound(CharacteristicGetterService::class) ? app(CharacteristicGetterService::class) : null);
+        if ($getter === null) {
+            return null;
+        }
+        $definition = $getter->getDefinition($key, '*');
+        $grid = is_array($definition['norms_grid'] ?? null) ? $definition['norms_grid'] : null;
+
+        return $resolver->resolve($grid, $level, $powerIndex);
     }
 }

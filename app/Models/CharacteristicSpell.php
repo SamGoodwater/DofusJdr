@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property array|null $conversion_dofus_sample Niveau → valeur Dofus (ex. {"1":1,"200":200})
  * @property array|null $conversion_krosmoz_sample Niveau → valeur Krosmoz (ex. {"1":1,"20":20})
  * @property array|null $norms_grid Grille 5×20 : {power_level: [val_lvl1..val_lvl20]}
+ * @property string|null $norms_formula Formule générant norms_grid ([level], [power], [clé])
  * @property array|null $norms_conditions Conditions de lecture
  * @property string|null $norms_description Description libre de la norme
  * @property int|null $norms_help_section_id Section CMS (texte) affichée sous la charte
@@ -35,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Characteristic $characteristic
  * @property-read Section|null $normsHelpSection
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicSpell newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicSpell newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicSpell query()
@@ -60,6 +62,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicSpell whereNormsHelpSectionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicSpell whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicSpell whereValueAvailable($value)
+ *
  * @mixin \Eloquent
  */
 class CharacteristicSpell extends Model
@@ -91,6 +94,7 @@ class CharacteristicSpell extends Model
         'conversion_krosmoz_sample',
         'conversion_sample_rows',
         'norms_grid',
+        'norms_formula',
         'norms_conditions',
         'norms_description',
         'norms_help_section_id',

@@ -359,6 +359,7 @@ function buildFormData(selected, entitiesByGroup = null) {
             conversion_krosmoz_sample: e.conversion_krosmoz_sample ?? null,
             conversion_sample_rows: (e.conversion_sample_rows && e.conversion_sample_rows.length) ? e.conversion_sample_rows : getDefaultConversionSampleRows(),
             norms_grid: e.norms_grid || null,
+            norms_formula: e.norms_formula || null,
             norms_conditions: e.norms_conditions || [],
             norms_description: e.norms_description || '',
             norms_help_section_id: e.norms_help_section_id ?? null,
@@ -466,6 +467,7 @@ function addEntityOverride(entityKey) {
             conversion_krosmoz_sample: null,
             conversion_sample_rows: getDefaultConversionSampleRows(),
             norms_grid: null,
+            norms_formula: null,
             norms_conditions: [],
             norms_description: '',
             norms_help_section_id: null,
@@ -555,6 +557,7 @@ watch(
                         ? e.conversion_sample_rows
                         : getDefaultConversionSampleRows(),
                     norms_grid: e.norms_grid || null,
+                    norms_formula: e.norms_formula || null,
                     norms_conditions: e.norms_conditions || [],
                     norms_description: e.norms_description || '',
                     norms_help_section_id: e.norms_help_section_id ?? null,
@@ -589,6 +592,7 @@ watch(
                                 ? defaultRow.conversion_sample_rows
                                 : getDefaultConversionSampleRows(),
                             norms_grid: defaultRow.norms_grid ?? null,
+                            norms_formula: defaultRow.norms_formula ?? null,
                             norms_conditions: defaultRow.norms_conditions || [],
                             norms_description: defaultRow.norms_description || '',
                             norms_help_section_id: defaultRow.norms_help_section_id ?? null,
@@ -1969,6 +1973,7 @@ function submitConvertToLinked() {
                                     <NormsPanel
                                         :model-value="generalEntityRow()"
                                         :characteristics-list="allCharacteristicsFlat"
+                                        :characteristic-key="form.key || selected?.key || ''"
                                         @update:model-value="Object.assign(generalEntityRow(), $event)"
                                     />
                                 </div>
@@ -2230,6 +2235,7 @@ function submitConvertToLinked() {
                                     <NormsPanel
                                         :model-value="entityRow(entityKey)"
                                         :characteristics-list="allCharacteristicsFlat"
+                                        :characteristic-key="form.key || selected?.key || ''"
                                         @update:model-value="Object.assign(entityRow(entityKey), $event)"
                                     />
                                 </div>

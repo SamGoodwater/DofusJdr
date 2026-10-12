@@ -50,6 +50,7 @@ class DatabaseSeeder extends Seeder
             ObjectCharacteristicSeeder::class,
             DofusdbCharacteristicIdSeeder::class,
             SpellCharacteristicSeeder::class,
+            RegenerateCharacteristicNormsSeeder::class,
             ScrappingEntityMappingSeeder::class,
             ScrappingEntityMappingCharacteristicSeeder::class,
             CreationPagesSeeder::class,

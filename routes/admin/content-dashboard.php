@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Admin\ContentBalanceController;
 use App\Http\Controllers\Admin\ContentDofusdbWorkshopController;
 use App\Http\Controllers\Admin\ContentManagementDashboardController;
 use App\Http\Controllers\Admin\ContentTypeRegistryController;
@@ -17,6 +18,7 @@ Route::prefix('admin/content')
     ->middleware(['auth', 'content.area', 'password.confirm'])
     ->group(function () {
         Route::get('/', ContentManagementDashboardController::class)->name('dashboard.index');
+        Route::get('/balance', [ContentBalanceController::class, 'index'])->name('balance.index');
         Route::get('/types', [ContentTypeRegistryController::class, 'index'])->name('types.index');
         Route::get('/types/{kind}', [ContentTypeRegistryController::class, 'show'])
             ->whereIn('kind', ContentTypeRegistryController::KINDS)

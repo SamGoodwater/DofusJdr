@@ -3,8 +3,8 @@
  *
  * @description
  * Récupère les grilles `dommages_spell`, `soin_spell`, `bouclier_spell`,
- * `pv_temporaires_spell`, `vol_vie_spell`, applique les conditions cochées
- * (décalage niveau / palier) et dérive le budget par tour.
+ * `pv_temporaires_spell`, `vol_vie_spell` et les PA créature, applique les
+ * conditions cochées et dérive le budget par tour. Invocations = normes monstre.
  *
  * @example
  * const { families, level, resolvedRows } = useSpellReferenceScales();
@@ -14,12 +14,6 @@ import axios from 'axios';
 import { POWER_LEVELS, NEUTRAL_INDEX, MAX_LEVEL } from '@/Utils/Characteristic/normsConstants';
 import { formatDiceSummary, suggestDice, typicalModifier } from '@/Utils/dice/diceEquivalents.js';
 
-/** PA max par tour (index 0 = niveau 1), aligné sur SpellReferenceScaleDefaults. */
-export const MAX_ACTION_POINTS = [
-    6, 6, 6, 7, 7, 7, 8, 8, 8, 9,
-    9, 9, 10, 10, 10, 11, 11, 11, 12, 12,
-];
-
 export const SPELL_SCALE_FAMILIES = [
     { key: 'dommages_spell', action: 'damage', label: 'Dégâts', short: 'Dmg' },
     { key: 'soin_spell', action: 'heal', label: 'Soins', short: 'Soin' },
@@ -28,17 +22,24 @@ export const SPELL_SCALE_FAMILIES = [
     { key: 'vol_vie_spell', action: 'life_steal', label: 'Vol de vie', short: 'Vol vie' },
 ];
 
-/** Bandes affichées : basse / moyenne / haute = weak / neutral / strong. */
+/** Bandes affichées : basse / moyenne / haute = 3ème / 2ème / 1er rôle. */
 export const DISPLAY_BANDS = [
-    { power: 'weak', label: 'Basse', short: 'Bas' },
-    { power: 'neutral', label: 'Moyenne', short: 'Moy' },
-    { power: 'strong', label: 'Haute', short: 'Haut' },
+    { power: 'weak', label: 'Basse (3ème rôle)', short: 'Bas' },
+    { power: 'neutral', label: 'Moyenne (2ème rôle)', short: 'Moy' },
+    { power: 'strong', label: 'Haute (1er rôle)', short: 'Haut' },
+];
+
+/** Repli PA si la norme créature n’est pas encore chargée. */
+const FALLBACK_ACTION_POINTS = [
+    6, 6, 6, 7, 7, 7, 8, 8, 8, 9,
+    9, 9, 10, 10, 10, 11, 11, 11, 12, 12,
 ];
 
 export function useSpellReferenceScales() {
     const loading = ref(false);
     const error = ref(null);
     const normsByKey = ref({});
+    const actionPointsGrid = ref(null);
     const level = ref(1);
     const activeConditionIndices = ref(new Set());
     const convertValue = ref('');
@@ -47,23 +48,33 @@ export function useSpellReferenceScales() {
         loading.value = true;
         error.value = null;
         try {
-            const results = await Promise.all(
-                SPELL_SCALE_FAMILIES.map(async (family) => {
+            const results = await Promise.all([
+                ...SPELL_SCALE_FAMILIES.map(async (family) => {
                     const { data } = await axios.get(
                         `/api/characteristics/${encodeURIComponent(family.key)}/norms/*`,
                         { params: { group: 'spell' } },
                     );
-                    return [family.key, data];
+                    return ['spell', family.key, data];
                 }),
-            );
+                axios
+                    .get('/api/characteristics/action_points_creature/norms/*', {
+                        params: { group: 'creature' },
+                    })
+                    .then(({ data }) => ['creature', 'action_points_creature', data]),
+            ]);
             const map = {};
-            for (const [key, data] of results) {
-                map[key] = data;
+            for (const [group, key, data] of results) {
+                if (group === 'creature') {
+                    actionPointsGrid.value = data?.norms?.grid || null;
+                } else {
+                    map[key] = data;
+                }
             }
             normsByKey.value = map;
         } catch (e) {
             error.value = e?.response?.data?.error || 'Impossible de charger les barèmes.';
             normsByKey.value = {};
+            actionPointsGrid.value = null;
         } finally {
             loading.value = false;
         }
@@ -71,7 +82,6 @@ export function useSpellReferenceScales() {
 
     onMounted(fetchAll);
 
-    /** Conditions : on prend celles de dommages (identiques sur les 5). */
     const conditions = computed(() => {
         const first = normsByKey.value.dommages_spell?.norms?.conditions;
         return Array.isArray(first) ? first : [];
@@ -123,6 +133,19 @@ export function useSpellReferenceScales() {
         return POWER_LEVELS[idx];
     }
 
+    function actionPointsAt(atLevel, powerKey = 'neutral') {
+        const grid = actionPointsGrid.value;
+        const row = grid?.[powerKey] || grid?.neutral;
+        if (Array.isArray(row) && row[atLevel - 1] != null) {
+            return Number(row[atLevel - 1]);
+        }
+        return FALLBACK_ACTION_POINTS[atLevel - 1] ?? 6;
+    }
+
+    const MAX_ACTION_POINTS = computed(() => {
+        return Array.from({ length: MAX_LEVEL }, (_, i) => actionPointsAt(i + 1, 'neutral'));
+    });
+
     function castValue(familyKey, powerKey, atLevel) {
         const grid = normsByKey.value[familyKey]?.norms?.grid;
         if (!grid) {
@@ -135,11 +158,11 @@ export function useSpellReferenceScales() {
         return row[atLevel - 1] ?? null;
     }
 
-    function turnFromCast(cast, atLevel) {
+    function turnFromCast(cast, atLevel, powerKey = 'neutral') {
         if (cast === null || cast === undefined) {
             return null;
         }
-        const pa = MAX_ACTION_POINTS[atLevel - 1] ?? 6;
+        const pa = actionPointsAt(atLevel, powerKey);
         return Math.max(1, Math.round(Number(cast) * pa / 3));
     }
 
@@ -148,10 +171,13 @@ export function useSpellReferenceScales() {
     const resolvedRows = computed(() => {
         const atLevel = effectiveLevel.value;
         return SPELL_SCALE_FAMILIES.map((family) => {
+            const formula = normsByKey.value[family.key]?.norms?.formula
+                || normsByKey.value[family.key]?.norms_formula
+                || '';
             const bands = DISPLAY_BANDS.map((band) => {
                 const powerKey = bandPowerKey(band.power);
                 const cast = castValue(family.key, powerKey, atLevel);
-                const turn = turnFromCast(cast, atLevel);
+                const turn = turnFromCast(cast, atLevel, powerKey);
                 return {
                     ...band,
                     powerKey,
@@ -161,7 +187,7 @@ export function useSpellReferenceScales() {
                     diceTurn: turn !== null ? formatDiceSummary(turn, { mod: mod.value }) : '—',
                 };
             });
-            return { ...family, bands };
+            return { ...family, bands, formula };
         });
     });
 
@@ -209,5 +235,6 @@ export function useSpellReferenceScales() {
         castValue,
         turnFromCast,
         normsByKey,
+        actionPointsAt,
     };
 }

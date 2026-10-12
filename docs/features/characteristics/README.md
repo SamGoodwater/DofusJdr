@@ -20,6 +20,14 @@ Pour le modèle **base + objets + contexte**, les formules saisies et le sélect
 
 Les définitions JSON dans `database/seeders/data/characteristic-definitions/` sont la copie versionnée des tables (grilles de normes 5 puissances × 20 niveaux, `norms_grid`). L'audit 2026-07 ne laisse aucun `norms_grid` manquant sur les vraies définitions `creature`, `object` et `spell`; seuls les fichiers `_templates` restent volontairement vides.
 
+### Normes générées par formule (`norms_formula`)
+
+Colonne nullable sur `characteristic_creature` / `characteristic_object` / `characteristic_spell`. Syntaxe identique aux formules runtime (expression ou table JSON `{"characteristic":"level",…}`).
+
+Variables de génération : `[level]` (1–20), `[power]` (−2…+2), `[clé]` = norme de cette caractéristique au même niveau et même palier.
+
+Service : `NormsGridGenerator` (ordre topologique, rejet des cycles). Commande : `php artisan characteristics:regenerate-norms`. Après seed des pivots, `RegenerateCharacteristicNormsSeeder` régénère les grilles. Admin : champ formule + aperçu dans `NormsPanel` ; hub **Équilibrage** (`/admin/content/balance`).
+
 Pour les objets, les caractéristiques dont l'aide cible un type d'équipement portent aussi `item_type_dofus_ids` :
 - amulettes : `[1]`
 - anneaux : `[9]`, ceintures : `[10]`, bottes : `[11]`
@@ -104,19 +112,17 @@ le type de cible, le cumul maximal et le délai global disposent désormais de d
 ### Budgets dégâts et soins (normes de sort)
 
 Les `norms_grid` de `dommages_spell`, `soin_spell`, `bouclier_spell`, `pv_temporaires_spell` et
-`vol_vie_spell` sont la **source de vérité** (admin → Caractéristiques → Normes). Elles expriment un
-lancement de référence à **3 PA**, valeurs **mod inclus**, alignées sur les règles 5.3.1 / kit 5.2.3
-(≈ 8 dégâts/tour au niveau 1, ≈ 48 au niveau 20 en palier neutre).
+`vol_vie_spell` sont la **source de vérité runtime** (générées depuis `norms_formula` Excel : coef × PV,
+soin/bouclier/PV temp dérivés, vol de vie = 0,3 × dégâts). Lancement de référence à **3 PA**.
 
-- **Par tour** = cast × PA_max(niveau) ÷ 3 (`SpellActionBudgetService`, PA 6→12).
-- **Paliers** : `weak` / `neutral` / `strong` = basse / moyenne / haute (plus `very_weak` / `very_strong`).
+- **Par tour** = cast × PA(niveau, palier) ÷ 3 — PA lus dans `action_points_creature` (`SpellActionBudgetService`).
+- **Paliers** : `weak` / `neutral` / `strong` = 3ème / 2ème / 1er rôle.
 - **Conditions** (`norms_conditions`) : décalent niveau ou palier (PA, zone, portée, LoS, fréquence, etc.).
-- Soin / bouclier / PV temporaires ≈ 80 % des dégâts ; vol de vie ≈ 50 %.
-- Outil UI : menu **Outils → Barèmes de sorts** + template de section `spell_reference_scales` (page 5.3).
-- Conversion dés (front) : `resources/js/Utils/dice/diceEquivalents.js` (d2–d12 ; critique = dés ×2).
-
-`SpellActionBudgetService` lit les grilles en base (repli : `SpellReferenceScaleDefaults`). Le coût en PA
-d’un lancement décale le **niveau effectif** (pas un prorata), pour ne pas double-compter les conditions PA.
+- **Invocations** : mêmes normes que les monstres (pas de clé PV d’invocation dédiée).
+- Consommables objet (`life_points_restore`, `shield_points`, `temporary_life_points`) = 1 lancement équivalent.
+- Outil UI : **Outils → Barèmes de sorts** + template `spell_reference_scales` ; hub admin **Équilibrage**.
+- Conversion dés : `resources/js/Utils/dice/diceEquivalents.js`.
+- IA PNJ : `NpcStatGabarit` lit les mêmes normes (PV/PA/PM/CA).
 
 Les compétences actives (18 clés `*_spell`, ex. `acrobatics_spell`) sont utilisables dans les sous-effets
 `booster` / `retirer` / `voler-caracteristiques` via la catégorie `skill` de `config/effect_sub_effects.php`.

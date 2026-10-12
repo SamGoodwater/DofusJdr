@@ -1,8 +1,12 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Équilibrage Excel via formules de normes
+
+Les barèmes (dégâts, soin, bouclier, PV temporaires, vol de vie, retraits PA/PM, placement, consommables) sont générés par des formules dans le système de caractéristiques (`norms_formula` → grille). Les dégâts suivent coef × PV du palier ; le vol de vie vaut 30 % des dégâts ; les invocations reprennent les normes monstre. Un hub **Équilibrage** dans la gestion du contenu pointe vers chaque fiche. Conversion classique et IA (`NpcStatGabarit`) lisent la même source. Remise à zéro : seed overwrite puis `characteristics:regenerate-norms`.
+
 ## Octobre 2026 — Barèmes de sorts et conversion en dés
 
-Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de vie suivent maintenant une courbe claire (environ 8 dégâts par tour au niveau 1, environ 48 au niveau 20), avec une proposition basse, moyenne et haute. Elles sont modifiables dans l’admin (normes des caractéristiques de sort). Un outil **Barèmes de sorts** est disponible partout via le menu Outils, et aussi sur la page des tables de référence : tu choisis un niveau, coches les particularités du sort (zone, PA, portée…), et tu convertis n’importe quelle valeur en dés classiques (y compris la version critique). Les règles rappellent que ce sont des repères, pas une loi absolue.
+Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de vie sont consultables dans l’outil **Barèmes de sorts** (menu Outils et page 5.3) : niveau, particularités du sort, conversion en dés (y compris critique). Ce sont des repères, pas une loi absolue.
 
 ## Octobre 2026 — Suppression de sort sans « Page introuvable »
 

@@ -1,9 +1,10 @@
 <script setup>
 /**
  * Panneau d'édition des normes (chartes) pour une caractéristique.
- * Grille 5 puissances × 20 niveaux + conditions de lecture + description + section d’aide CMS.
+ * Grille 5 puissances × 20 niveaux + formule de génération + conditions + description.
  */
 import { computed, ref, watch } from 'vue';
+import axios from 'axios';
 import Btn from '@/Pages/Atoms/action/Btn.vue';
 import SelectSearchField from '@/Pages/Molecules/data-input/SelectSearchField.vue';
 import {
@@ -18,6 +19,7 @@ import {
 const props = defineProps({
     modelValue: { type: Object, required: true },
     characteristicsList: { type: Array, default: () => [] },
+    characteristicKey: { type: String, default: '' },
 });
 const emit = defineEmits(['update:modelValue']);
 
@@ -26,10 +28,53 @@ const grid = computed({
     set: (v) => emit('update:modelValue', { ...props.modelValue, norms_grid: v }),
 });
 
+const localFormula = ref('');
+watch(
+    () => props.modelValue.norms_formula,
+    (val) => { localFormula.value = val || ''; },
+    { immediate: true }
+);
+const hasFormula = computed(() => (localFormula.value || '').trim() !== '');
+const previewError = ref('');
+const previewLoading = ref(false);
+
+function emitFormula() {
+    emit('update:modelValue', {
+        ...props.modelValue,
+        norms_formula: localFormula.value.trim() === '' ? null : localFormula.value,
+    });
+}
+
+function clearFormula() {
+    if (!confirm('Repasser en grille manuelle (supprimer la formule) ?')) return;
+    localFormula.value = '';
+    emitFormula();
+}
+
+async function previewFormula() {
+    previewError.value = '';
+    if (!hasFormula.value || !props.characteristicKey) {
+        previewError.value = 'Formule ou clé manquante.';
+        return;
+    }
+    previewLoading.value = true;
+    try {
+        const { data } = await axios.post(
+            route('admin.characteristics.norms-preview', props.characteristicKey),
+            { norms_formula: localFormula.value, entity: props.modelValue.entity || '*' }
+        );
+        if (data?.grid) {
+            grid.value = data.grid;
+        }
+    } catch (e) {
+        previewError.value = e?.response?.data?.message || e?.message || 'Aperçu impossible';
+    } finally {
+        previewLoading.value = false;
+    }
+}
+
 /**
  * Copie locale des conditions, synchronisée avec les props.
- * On travaille sur cette copie pour éviter les re-renders destructeurs
- * quand on tape dans les inputs (le v-for ne recrée pas les éléments).
  */
 const localConditions = ref([]);
 watch(
@@ -84,6 +129,7 @@ function emptyGrid() {
 }
 
 function updateCell(powerLevel, levelIndex, value) {
+    if (hasFormula.value) return;
     const newGrid = { ...grid.value };
     newGrid[powerLevel] = [...(newGrid[powerLevel] || Array(MAX_LEVEL).fill(null))];
     newGrid[powerLevel][levelIndex] = value !== '' && value !== null ? Number(value) : null;
@@ -91,11 +137,13 @@ function updateCell(powerLevel, levelIndex, value) {
 }
 
 function clearGrid() {
+    if (hasFormula.value) return;
     if (!confirm('Vider toute la grille ?')) return;
     grid.value = emptyGrid();
 }
 
 function fillLinear(powerLevel) {
+    if (hasFormula.value) return;
     const row = grid.value[powerLevel] || [];
     const first = row[0] ?? 0;
     const last = row[MAX_LEVEL - 1] ?? 0;
@@ -154,12 +202,11 @@ const characteristicsOptions = computed(() =>
     <div class="space-y-4">
         <div class="flex items-center justify-between">
             <h4 class="text-sm font-semibold text-title">Normes (Charte)</h4>
-            <Btn v-if="hasGrid" size="xs" color="error" variant="ghost" @click="clearGrid">
+            <Btn v-if="hasGrid && !hasFormula" size="xs" color="error" variant="ghost" @click="clearGrid">
                 Vider la grille
             </Btn>
         </div>
 
-        <!-- Description -->
         <div>
             <label class="label text-xs">Description</label>
             <textarea
@@ -186,7 +233,41 @@ const characteristicsOptions = computed(() =>
             </p>
         </div>
 
-        <!-- Grille 5×20 -->
+        <div class="space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <label class="label text-xs py-0">Formule de génération</label>
+                <div class="flex gap-1">
+                    <Btn
+                        size="xs"
+                        color="primary"
+                        variant="ghost"
+                        :disabled="!hasFormula || previewLoading"
+                        @click="previewFormula"
+                    >
+                        {{ previewLoading ? 'Calcul…' : 'Aperçu' }}
+                    </Btn>
+                    <Btn v-if="hasFormula" size="xs" color="warning" variant="ghost" @click="clearFormula">
+                        Manuel
+                    </Btn>
+                </div>
+            </div>
+            <textarea
+                v-model="localFormula"
+                class="textarea textarea-bordered textarea-sm w-full font-mono text-xs"
+                rows="3"
+                placeholder='Ex. round(0.35*[dommages_spell]) ou {"characteristic":"level","1":"…"}'
+                @change="emitFormula"
+            />
+            <p class="text-xs text-content/50">
+                Variables : <code>[level]</code>, <code>[power]</code> (−2…+2), <code>[clé]</code> (norme au même niveau/palier).
+                Si renseignée, la grille est calculée à l’enregistrement.
+            </p>
+            <p v-if="previewError" class="text-xs text-error">{{ previewError }}</p>
+            <p v-if="hasFormula" class="text-xs text-warning">
+                Grille en lecture seule (générée par formule).
+            </p>
+        </div>
+
         <div class="overflow-x-auto">
             <table class="table table-xs table-pin-rows">
                 <thead>
@@ -213,13 +294,21 @@ const characteristicsOptions = computed(() =>
                             <input
                                 type="number"
                                 class="input input-xs input-bordered w-full text-center p-0.5"
+                                :class="{ 'bg-base-200': hasFormula }"
                                 :value="grid[pl]?.[idx] ?? ''"
+                                :readonly="hasFormula"
                                 @input="updateCell(pl, idx, $event.target.value)"
                                 step="any"
                             />
                         </td>
                         <td>
-                            <Btn size="xs" variant="ghost" @click="fillLinear(pl)" title="Interpoler linéairement entre level 1 et 20">
+                            <Btn
+                                v-if="!hasFormula"
+                                size="xs"
+                                variant="ghost"
+                                @click="fillLinear(pl)"
+                                title="Interpoler linéairement entre level 1 et 20"
+                            >
                                 <i class="fa-solid fa-chart-line text-xs" />
                             </Btn>
                         </td>
@@ -228,7 +317,6 @@ const characteristicsOptions = computed(() =>
             </table>
         </div>
 
-        <!-- Conditions -->
         <div class="space-y-2">
             <div class="flex items-center justify-between">
                 <h5 class="text-xs font-semibold text-title">Conditions de lecture</h5>
@@ -242,7 +330,6 @@ const characteristicsOptions = computed(() =>
                 :key="'cond-' + idx"
                 class="flex flex-wrap items-center gap-2 p-2 rounded-lg bg-base-200/50 border border-base-300"
             >
-                <!-- Sélecteur de caractéristique via SelectSearchField -->
                 <div class="flex-1 min-w-[140px]">
                     <SelectSearchField
                         size="xs"

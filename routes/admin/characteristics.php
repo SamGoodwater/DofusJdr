@@ -25,6 +25,7 @@ Route::prefix('admin/content/characteristics')
         Route::post('/', [CharacteristicController::class, 'store'])->name('store');
         Route::post('/suggest-conversion-formula', [CharacteristicController::class, 'suggestConversionFormula'])->name('suggest-conversion-formula');
         Route::post('/upload-icon', [CharacteristicController::class, 'uploadIcon'])->name('upload-icon');
+        Route::post('/{characteristic_key}/norms/preview', [CharacteristicController::class, 'normsPreview'])->name('norms-preview')->where('characteristic_key', '[a-z0-9_]+');
         Route::patch('/{characteristic_key}', [CharacteristicController::class, 'update'])->name('update')->where('characteristic_key', '[a-z0-9_]+');
         Route::delete('/{characteristic_key}', [CharacteristicController::class, 'destroy'])->name('destroy')->where('characteristic_key', '[a-z0-9_]+');
 

@@ -12,7 +12,6 @@ use App\Models\CharacteristicSpell;
 use App\Models\Scrapping\ScrappingEntityMapping;
 use App\Models\Scrapping\ScrappingEntityMappingTarget;
 use App\Models\Type\ItemType;
-use App\Models\User;
 use App\Services\Characteristic\Admin\CharacteristicShowPayloadBuilder;
 use App\Services\Characteristic\CharacteristicColorCssGenerator;
 use App\Services\Characteristic\Conversion\ConversionFormulaGenerator;
@@ -20,6 +19,7 @@ use App\Services\Characteristic\Conversion\ConversionFunctionRegistry;
 use App\Services\Characteristic\Formula\CharacteristicFormulaService;
 use App\Services\Characteristic\Formula\FormulaConfigDecoder;
 use App\Services\Characteristic\Getter\CharacteristicGetterService;
+use App\Services\Characteristic\Norms\NormsGridGenerator;
 use App\Services\Media\EntityImageMediaService;
 use App\Services\Scrapping\Core\Config\ConfigLoader;
 use App\Services\Scrapping\Core\Config\ScrappingMappingService;
@@ -121,7 +121,8 @@ class CharacteristicController extends Controller
         private readonly CharacteristicColorCssGenerator $colorCssGenerator,
         private readonly CharacteristicShowPayloadBuilder $showPayloadBuilder,
         private readonly ScrappingMappingService $scrappingMappingService,
-        private readonly ConfigLoader $configLoader
+        private readonly ConfigLoader $configLoader,
+        private readonly NormsGridGenerator $normsGridGenerator,
     ) {}
 
     /**
@@ -925,6 +926,7 @@ class CharacteristicController extends Controller
             'entities.*.norms_grid.neutral' => 'nullable|array|size:20',
             'entities.*.norms_grid.strong' => 'nullable|array|size:20',
             'entities.*.norms_grid.very_strong' => 'nullable|array|size:20',
+            'entities.*.norms_formula' => 'nullable|string',
             'entities.*.norms_conditions' => 'nullable|array',
             'entities.*.norms_conditions.*.characteristic_key' => 'required|string|max:128',
             'entities.*.norms_conditions.*.operator' => 'required|in:>,>=,=,<=,<',
@@ -998,6 +1000,17 @@ class CharacteristicController extends Controller
                 fn (array $ent): bool => ($ent['entity'] ?? '') === '*' || in_array($ent['entity'] ?? '', $overrideKeys, true)
             );
         }
+        foreach ($entitiesToProcess as $ent) {
+            $formula = trim((string) ($ent['norms_formula'] ?? ''));
+            if ($formula === '') {
+                continue;
+            }
+            $errors = $this->normsGridGenerator->validateNormsFormula($formula);
+            if ($errors !== []) {
+                return redirect()->back()->withErrors(['entities' => implode(' ; ', $errors)])->withInput();
+            }
+        }
+
         $sentEntities = array_column($entitiesToProcess, 'entity');
         foreach ($entitiesToProcess as $ent) {
             $entity = $ent['entity'];
@@ -1010,6 +1023,8 @@ class CharacteristicController extends Controller
         }
 
         $this->deleteOrphanGroupRows($characteristic->id, $group);
+
+        $this->normsGridGenerator->regenerateKey($characteristic->key);
 
         $this->getter->clearCache();
         $this->colorCssGenerator->generate();
@@ -1291,6 +1306,7 @@ class CharacteristicController extends Controller
             'conversion_krosmoz_sample' => $this->deriveSampleFromRows($sampleRows, 'krosmoz') ?? $this->normalizeSampleForSave($data['conversion_krosmoz_sample'] ?? null),
             'conversion_sample_rows' => $sampleRows,
             'norms_grid' => $this->parseNormsGrid($data['norms_grid'] ?? null),
+            'norms_formula' => $this->parseNormsFormula($data['norms_formula'] ?? null),
             'norms_conditions' => ! empty($data['norms_conditions']) ? array_values($data['norms_conditions']) : null,
             'norms_description' => ($data['norms_description'] ?? null) !== '' ? ($data['norms_description'] ?? null) : null,
             'norms_help_section_id' => $this->parseNormsHelpSectionId($data['norms_help_section_id'] ?? null),
@@ -1394,6 +1410,49 @@ class CharacteristicController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * Formule de génération des normes (nullable).
+     */
+    private function parseNormsFormula(mixed $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+        if (! is_string($value)) {
+            return null;
+        }
+        $trimmed = trim($value);
+
+        return $trimmed === '' ? null : $trimmed;
+    }
+
+    /**
+     * Aperçu JSON d'une grille générée depuis norms_formula (sans écriture).
+     */
+    public function normsPreview(Request $request, string $characteristic_key): JsonResponse
+    {
+        $validated = $request->validate([
+            'norms_formula' => 'required|string',
+            'entity' => 'nullable|string|max:32',
+        ]);
+        $formula = $validated['norms_formula'];
+        $errors = $this->normsGridGenerator->validateNormsFormula($formula);
+        if ($errors !== []) {
+            return response()->json(['message' => implode(' ; ', $errors)], 422);
+        }
+
+        try {
+            $grid = $this->normsGridGenerator->preview($formula, [], true);
+        } catch (\Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
+
+        return response()->json([
+            'key' => $characteristic_key,
+            'grid' => $grid,
+        ]);
     }
 
     /**

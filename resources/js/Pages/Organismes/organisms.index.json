@@ -39,6 +39,32 @@
     "file": "type-management/TypeManagerTable.vue"
   },
   {
+    "name": "SpellReferenceScalesModal",
+    "description": "SpellReferenceScalesModal Organism",
+    "props": [
+      {
+        "name": "open",
+        "type": "Boolean",
+        "desc": "- Contrôle l'ouverture du modal"
+      }
+    ],
+    "slots": [],
+    "file": "tools/SpellReferenceScalesModal.vue"
+  },
+  {
+    "name": "SpellReferenceScales",
+    "description": "SpellReferenceScales Organism",
+    "props": [
+      {
+        "name": "compact",
+        "type": "Boolean",
+        "desc": "- Densité réduite (section page)"
+      }
+    ],
+    "slots": [],
+    "file": "tools/SpellReferenceScales.vue"
+  },
+  {
     "name": "DiceRollerModal",
     "description": "DiceRollerModal Organism",
     "props": [
@@ -50,32 +76,6 @@
     ],
     "slots": [],
     "file": "tools/DiceRollerModal.vue"
-  },
-  {
-    "name": "SpellReferenceScales",
-    "description": "Barèmes de sorts (dégâts/soin/bouclier/PV temp./vol de vie) + conversion dés + ajusteur",
-    "props": [
-      {
-        "name": "compact",
-        "type": "Boolean",
-        "desc": "Densité réduite (section page)"
-      }
-    ],
-    "slots": [],
-    "file": "tools/SpellReferenceScales.vue"
-  },
-  {
-    "name": "SpellReferenceScalesModal",
-    "description": "Modal Outils pour les barèmes de sorts",
-    "props": [
-      {
-        "name": "open",
-        "type": "Boolean",
-        "desc": "Contrôle l'ouverture du modal"
-      }
-    ],
-    "slots": [],
-    "file": "tools/SpellReferenceScalesModal.vue"
   },
   {
     "name": "TanStackTable",
@@ -290,6 +290,20 @@
     ],
     "slots": [],
     "file": "section/templates/text/SectionTextEdit.vue"
+  },
+  {
+    "name": "SectionSpellReferenceScalesRead",
+    "description": "Lecture publique d’une section Barèmes de sorts.",
+    "props": [],
+    "slots": [],
+    "file": "section/templates/spell_reference_scales/SectionSpellReferenceScalesRead.vue"
+  },
+  {
+    "name": "SectionSpellReferenceScalesEdit",
+    "description": "Édition du template Barèmes de sorts : contenu dynamique (normes en base), seul le mode compact est configurable ici.",
+    "props": [],
+    "slots": [],
+    "file": "section/templates/spell_reference_scales/SectionSpellReferenceScalesEdit.vue"
   },
   {
     "name": "SectionLegalMarkdownRead",

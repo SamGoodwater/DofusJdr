@@ -10,6 +10,7 @@ use Database\Seeders\CreatureCharacteristicSeeder;
 use Database\Seeders\DofusdbCharacteristicIdSeeder;
 use Database\Seeders\DofusdbEffectMappingSeeder;
 use Database\Seeders\ObjectCharacteristicSeeder;
+use Database\Seeders\RegenerateCharacteristicNormsSeeder;
 use Database\Seeders\ScrappingEntityMappingCharacteristicSeeder;
 use Database\Seeders\ScrappingEntityMappingSeeder;
 use Database\Seeders\SpellCharacteristicSeeder;
@@ -44,6 +45,7 @@ class ScrappingSetupCommand extends Command
         ObjectCharacteristicSeeder::class,
         DofusdbCharacteristicIdSeeder::class,
         SpellCharacteristicSeeder::class,
+        RegenerateCharacteristicNormsSeeder::class,
         SpellEffectTypeSeeder::class,
         DofusdbEffectMappingSeeder::class,
         ScrappingEntityMappingSeeder::class,

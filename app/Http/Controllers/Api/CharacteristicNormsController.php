@@ -79,6 +79,7 @@ class CharacteristicNormsController extends Controller
             'characteristic' => $this->formatCharacteristic($effective),
             'norms' => [
                 'grid' => $row->norms_grid,
+                'formula' => $row->norms_formula,
                 'conditions' => $row->norms_conditions ?? [],
                 'description' => $row->norms_description,
                 'limits' => [

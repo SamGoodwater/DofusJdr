@@ -32,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property float|null $base_price_per_unit
  * @property float|null $rune_price_per_unit
  * @property array|null $norms_grid Grille 5×20 : {power_level: [val_lvl1..val_lvl20]}
+ * @property string|null $norms_formula Formule générant norms_grid ([level], [power], [clé])
  * @property array|null $norms_conditions Conditions de lecture
  * @property string|null $norms_description Description libre de la norme
  * @property int|null $norms_help_section_id Section CMS (texte) affichée sous la charte
@@ -43,6 +44,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $allowed_item_types_count
  * @property-read Characteristic $characteristic
  * @property-read Section|null $normsHelpSection
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicObject newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicObject newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicObject query()
@@ -72,6 +74,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicObject whereRunePricePerUnit($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicObject whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicObject whereValueAvailable($value)
+ *
  * @mixin \Eloquent
  */
 class CharacteristicObject extends Model
@@ -114,6 +117,7 @@ class CharacteristicObject extends Model
         'conversion_krosmoz_sample',
         'conversion_sample_rows',
         'norms_grid',
+        'norms_formula',
         'norms_conditions',
         'norms_description',
         'norms_help_section_id',
