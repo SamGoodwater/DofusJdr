@@ -4,86 +4,52 @@ declare(strict_types=1);
 
 namespace App\Services\Effect;
 
+use App\Services\Characteristic\Getter\CharacteristicGetterService;
+use App\Support\Effect\SpellReferenceScaleDefaults;
+
 /**
- * Répartit les budgets d'action de sorts issus de « Creation sort ».
+ * Budgets d'action de sorts issus des normes `characteristic_spell`.
  *
- * Les tables sources expriment un total par tour proportionnel aux PV moyens.
- * Ce service transforme ce total en budget par lancement selon le coût en PA.
+ * Les grilles expriment un lancement de référence à 3 PA (mod inclus).
+ * Le total par tour = cast × PA_max(niveau) ÷ 3.
+ * Le coût en PA d'un lancement décale le niveau effectif (pas un prorata)
+ * pour éviter de compter deux fois le coût déjà encodé dans les conditions.
  *
  * @example
  * $budget = (new SpellActionBudgetService)->budgetForCast('damage', 10, 3);
  */
 final class SpellActionBudgetService
 {
-    public const ACTION_DAMAGE = 'damage';
+    public const ACTION_DAMAGE = SpellReferenceScaleDefaults::ACTION_DAMAGE;
 
-    public const ACTION_HEAL = 'heal';
+    public const ACTION_HEAL = SpellReferenceScaleDefaults::ACTION_HEAL;
 
-    public const ACTION_SHIELD = 'shield';
+    public const ACTION_SHIELD = SpellReferenceScaleDefaults::ACTION_SHIELD;
 
-    /** Alias budget soins / boucliers pour les PV temporaires (même enveloppe survie). */
-    public const ACTION_TEMP_HP = 'temp_hp';
+    public const ACTION_TEMP_HP = SpellReferenceScaleDefaults::ACTION_TEMP_HP;
 
-    public const ACTION_LIFE_STEAL = 'life_steal';
+    public const ACTION_LIFE_STEAL = SpellReferenceScaleDefaults::ACTION_LIFE_STEAL;
 
-    public const POWER_LEVELS = [
-        'very_weak',
-        'weak',
-        'neutral',
-        'strong',
-        'very_strong',
-    ];
+    public const POWER_LEVELS = SpellReferenceScaleDefaults::POWER_LEVELS;
 
-    /** PA disponibles par tour selon le niveau. */
-    private const MAX_ACTION_POINTS = [
-        6, 6, 6, 7, 7, 7, 8, 8, 8, 9,
-        9, 9, 10, 10, 10, 11, 11, 11, 12, 12,
-    ];
-
-    /**
-     * Budgets de dégâts totaux par tour.
-     *
-     * Paliers : sans rôle minimum, second rôle minimum/moyen, premier rôle moyen/maximum.
-     */
-    private const DAMAGE_TURN_BUDGETS = [
-        'very_weak' => [1, 2, 3, 4, 5, 7, 10, 11, 13, 17, 19, 21, 27, 30, 33, 40, 44, 48, 58, 65],
-        'weak' => [1, 2, 3, 5, 7, 8, 12, 14, 16, 20, 22, 25, 31, 35, 38, 46, 50, 54, 65, 73],
-        'neutral' => [2, 3, 4, 7, 8, 10, 14, 16, 19, 24, 27, 29, 37, 41, 45, 53, 58, 63, 75, 83],
-        'strong' => [2, 4, 5, 8, 10, 12, 17, 19, 22, 28, 31, 34, 42, 46, 51, 60, 65, 70, 83, 92],
-        'very_strong' => [3, 5, 7, 10, 12, 15, 20, 23, 26, 32, 36, 39, 48, 53, 58, 68, 74, 80, 94, 104],
-    ];
-
-    /**
-     * Budgets de soins totaux par tour.
-     *
-     * Ils correspondent au référentiel « dégâts max × 0,35 + 2 + mod. Vitalité ».
-     */
-    private const HEAL_TURN_BUDGETS = [
-        'very_weak' => [1, 2, 3, 3, 4, 4, 5, 6, 6, 8, 9, 9, 12, 13, 14, 16, 17, 19, 22, 25],
-        'weak' => [1, 2, 3, 4, 4, 5, 6, 7, 7, 9, 10, 11, 13, 14, 15, 18, 19, 21, 25, 27],
-        'neutral' => [4, 4, 5, 6, 7, 8, 10, 11, 12, 14, 15, 16, 20, 21, 23, 27, 28, 30, 35, 38],
-        'strong' => [4, 4, 5, 7, 8, 8, 11, 12, 13, 16, 17, 18, 22, 23, 25, 29, 31, 33, 38, 41],
-        'very_strong' => [6, 7, 8, 9, 10, 12, 14, 16, 17, 20, 21, 24, 27, 30, 31, 36, 38, 41, 46, 50],
-    ];
+    public function __construct(
+        private readonly ?CharacteristicGetterService $getter = null,
+    ) {}
 
     /**
      * Retourne le budget total par tour pour une action, un niveau et un palier.
      */
     public function turnBudget(string $action, int $level, int $powerIndex = 2): int
     {
-        $levelIndex = $this->levelIndex($level);
-        $powerKey = self::POWER_LEVELS[$this->powerIndex($powerIndex)];
-        $budget = match ($action) {
-            self::ACTION_HEAL, self::ACTION_SHIELD, self::ACTION_TEMP_HP => self::HEAL_TURN_BUDGETS[$powerKey][$levelIndex],
-            self::ACTION_LIFE_STEAL => (int) round(self::DAMAGE_TURN_BUDGETS[$powerKey][$levelIndex] / 2),
-            default => self::DAMAGE_TURN_BUDGETS[$powerKey][$levelIndex],
-        };
+        $cast = $this->budgetForCast($action, $level, 3, $powerIndex);
 
-        return max(1, $budget);
+        return max(1, (int) round($cast * $this->maxActionPoints($level) / 3));
     }
 
     /**
-     * Répartit le budget total selon la part de PA consommée par un lancement.
+     * Budget par lancement : lit la grille au niveau effectif selon le coût en PA.
+     *
+     * Référence = 3 PA (pas de décalage). ≤2 PA → −3 niveaux ; 4 PA → +1 ; ≥5 PA → +3.
      */
     public function budgetForCast(
         string $action,
@@ -91,12 +57,14 @@ final class SpellActionBudgetService
         int $actionPointCost,
         int $powerIndex = 2
     ): int {
-        $maxActionPoints = $this->maxActionPoints($level);
-        $cost = max(1, min($maxActionPoints, $actionPointCost));
+        $effectiveLevel = $this->levelWithActionPointOffset($level, $actionPointCost);
+        $grid = $this->resolveGrid($action);
+        $powerKey = self::POWER_LEVELS[$this->powerIndex($powerIndex)];
+        $row = $grid[$powerKey] ?? $grid['neutral'] ?? [];
+        $index = $this->levelIndex($effectiveLevel);
+        $value = $row[$index] ?? null;
 
-        return max(1, (int) round(
-            $this->turnBudget($action, $level, $powerIndex) * $cost / $maxActionPoints
-        ));
+        return max(1, (int) ($value ?? 1));
     }
 
     /**
@@ -149,7 +117,39 @@ final class SpellActionBudgetService
 
     public function maxActionPoints(int $level): int
     {
-        return self::MAX_ACTION_POINTS[$this->levelIndex($level)];
+        return SpellReferenceScaleDefaults::MAX_ACTION_POINTS[$this->levelIndex($level)];
+    }
+
+    private function levelWithActionPointOffset(int $level, int $actionPointCost): int
+    {
+        $cost = max(1, $actionPointCost);
+        $offset = 0;
+        if ($cost <= 2) {
+            $offset = -3;
+        } elseif ($cost === 4) {
+            $offset = 1;
+        } elseif ($cost >= 5) {
+            $offset = 3;
+        }
+
+        return max(1, min(20, $level + $offset));
+    }
+
+    /**
+     * @return array<string, list<int|float>>
+     */
+    private function resolveGrid(string $action): array
+    {
+        if ($this->getter !== null) {
+            $key = SpellReferenceScaleDefaults::characteristicKey($action);
+            $definition = $this->getter->getDefinition($key, 'spell');
+            $grid = is_array($definition['norms_grid'] ?? null) ? $definition['norms_grid'] : null;
+            if ($grid !== null && $grid !== []) {
+                return $grid;
+            }
+        }
+
+        return SpellReferenceScaleDefaults::grid($action);
     }
 
     private function levelIndex(int $level): int

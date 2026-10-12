@@ -101,24 +101,22 @@ Une entrée nulle reste nulle pour toutes les formules numériques. Les zones, l
 durée sont des notations textuelles, pas des quantités numériques. Les restrictions de ligne et diagonale,
 le type de cible, le cumul maximal et le délai global disposent désormais de définitions dédiées.
 
-### Budgets dégâts et soins proportionnels aux PV
-
-Le référentiel `private/game/resources/Creation sort.pdf` exprime les dégâts et soins comme un budget
-total par tour, proportionnel aux PV moyens d'une créature équivalente :
-
-- dégâts moyens : environ 15 % des PV au niveau 1 jusqu'à 40 % au niveau 20 ;
-- soin maximal : `dégâts max × 0,35 + 2 + modificateur de Vitalité` ;
-- vol de vie : moitié du budget de dégâts, car il combine dégâts et récupération.
-
-Ce total n'est pas appliqué directement à chaque sous-effet. Il est réparti selon la part de PA consommée
-par le lancement, puis entre les différentes lignes de dégâts ou de soin. La mêlée monte d'un palier de
-puissance ; la longue portée et la zone descendent chacune d'un palier. Un sort hybride dégâts + soin
-partage son budget entre ses deux familles d'action.
+### Budgets dégâts et soins (normes de sort)
 
 Les `norms_grid` de `dommages_spell`, `soin_spell`, `bouclier_spell`, `pv_temporaires_spell` et
-`vol_vie_spell` représentent désormais un lancement de référence à 3 PA. Les boucliers et PV temporaires
-réutilisent le budget de soins. Les données `action_budget` conservées sur le sous-effet expliquent le
-niveau, les PA, le palier et les budgets par tour et par lancement utilisés.
+`vol_vie_spell` sont la **source de vérité** (admin → Caractéristiques → Normes). Elles expriment un
+lancement de référence à **3 PA**, valeurs **mod inclus**, alignées sur les règles 5.3.1 / kit 5.2.3
+(≈ 8 dégâts/tour au niveau 1, ≈ 48 au niveau 20 en palier neutre).
+
+- **Par tour** = cast × PA_max(niveau) ÷ 3 (`SpellActionBudgetService`, PA 6→12).
+- **Paliers** : `weak` / `neutral` / `strong` = basse / moyenne / haute (plus `very_weak` / `very_strong`).
+- **Conditions** (`norms_conditions`) : décalent niveau ou palier (PA, zone, portée, LoS, fréquence, etc.).
+- Soin / bouclier / PV temporaires ≈ 80 % des dégâts ; vol de vie ≈ 50 %.
+- Outil UI : menu **Outils → Barèmes de sorts** + template de section `spell_reference_scales` (page 5.3).
+- Conversion dés (front) : `resources/js/Utils/dice/diceEquivalents.js` (d2–d12 ; critique = dés ×2).
+
+`SpellActionBudgetService` lit les grilles en base (repli : `SpellReferenceScaleDefaults`). Le coût en PA
+d’un lancement décale le **niveau effectif** (pas un prorata), pour ne pas double-compter les conditions PA.
 
 Les compétences actives (18 clés `*_spell`, ex. `acrobatics_spell`) sont utilisables dans les sous-effets
 `booster` / `retirer` / `voler-caracteristiques` via la catégorie `skill` de `config/effect_sub_effects.php`.

@@ -18,6 +18,7 @@ import Dropdown from '@/Pages/Atoms/action/Dropdown.vue';
 import Icon from '@/Pages/Atoms/data-display/Icon.vue';
 import Tooltip from '@/Pages/Atoms/feedback/Tooltip.vue';
 import DiceRollerModal from '@/Pages/Organismes/tools/DiceRollerModal.vue';
+import SpellReferenceScalesModal from '@/Pages/Organismes/tools/SpellReferenceScalesModal.vue';
 
 const props = defineProps({
     icon: { type: String, default: 'fa-dice' },
@@ -27,6 +28,7 @@ const props = defineProps({
 });
 
 const diceModalOpen = ref(false);
+const scalesModalOpen = ref(false);
 
 function openDiceModal() {
     diceModalOpen.value = true;
@@ -36,6 +38,14 @@ function closeDiceModal() {
     diceModalOpen.value = false;
 }
 
+function openScalesModal() {
+    scalesModalOpen.value = true;
+}
+
+function closeScalesModal() {
+    scalesModalOpen.value = false;
+}
+
 const tools = [
     {
         id: 'dice',
@@ -43,6 +53,13 @@ const tools = [
         icon: 'fa-dice-d20',
         pack: 'solid',
         action: openDiceModal,
+    },
+    {
+        id: 'spell-scales',
+        label: 'Barèmes de sorts',
+        icon: 'fa-table',
+        pack: 'solid',
+        action: openScalesModal,
     },
 ];
 </script>
@@ -105,6 +122,10 @@ const tools = [
         <DiceRollerModal
             :open="diceModalOpen"
             @close="closeDiceModal"
+        />
+        <SpellReferenceScalesModal
+            :open="scalesModalOpen"
+            @close="closeScalesModal"
         />
     </li>
 </template>

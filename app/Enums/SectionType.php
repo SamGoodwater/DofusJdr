@@ -33,6 +33,8 @@ enum SectionType: string
     case FORGEMAGIE_RUNE_TABLE = 'forgemagie_rune_table';
     /** Catalogue de fichiers téléchargeables (livre, fiches, logo). */
     case DOWNLOAD_CATALOG = 'download_catalog';
+    /** Barèmes de sorts (dégâts / soin / bouclier…) + conversion en dés. */
+    case SPELL_REFERENCE_SCALES = 'spell_reference_scales';
 
     /**
      * Retourne le label traduit du type.
@@ -52,6 +54,7 @@ enum SectionType: string
             self::EQUIPMENT_BONUS_TABLE => 'Tableau des bonus d’équipement',
             self::FORGEMAGIE_RUNE_TABLE => 'Tableau des runes de forgemagie',
             self::DOWNLOAD_CATALOG => 'Catalogue de téléchargements',
+            self::SPELL_REFERENCE_SCALES => 'Barèmes de sorts',
         };
     }
 
@@ -73,6 +76,7 @@ enum SectionType: string
             self::EQUIPMENT_BONUS_TABLE => 'fa-table',
             self::FORGEMAGIE_RUNE_TABLE => 'fa-hammer',
             self::DOWNLOAD_CATALOG => 'fa-download',
+            self::SPELL_REFERENCE_SCALES => 'fa-table',
         };
     }
 
@@ -143,6 +147,9 @@ enum SectionType: string
             ],
             self::DOWNLOAD_CATALOG => [
                 'groups' => 'array (optional: clés de groupes du catalogue)',
+            ],
+            self::SPELL_REFERENCE_SCALES => [
+                'compact' => 'boolean (optional, default: false)',
             ],
         };
     }

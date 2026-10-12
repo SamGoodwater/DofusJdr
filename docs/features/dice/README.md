@@ -30,6 +30,7 @@ Miroir JS : `resources/js/Utils/dice/diceParser.js` (`parseDiceFormula`, `rollDi
 
 - Recherche globale : bande `DiceFormulaStrip` sous le champ si un dé, une tranche **ou un opérateur** est reconnu (`50-17`, `1+4*7`). Un nombre seul (`12`) reste une recherche.
 - Outil footer : `DiceRollerModal` — raccourcis ndX, texte d’aide, même bande.
+- Conversion valeur → dés (barèmes de sorts) : `diceEquivalents.js` + outil **Barèmes de sorts** (`SpellReferenceScalesModal`).
 - Lancer : libellé **Valeur :** + résultat + icône ghost (sans contour, ombre au survol, tooltip « Lancer »). Pas de pastille autour du cluster. Historique en mémoire seulement (`formule = valeur`, une opération après l’autre) ; fermer la recherche ou le modal l’efface.
 
 ## Tests

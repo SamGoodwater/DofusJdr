@@ -52,6 +52,32 @@
     "file": "tools/DiceRollerModal.vue"
   },
   {
+    "name": "SpellReferenceScales",
+    "description": "Barèmes de sorts (dégâts/soin/bouclier/PV temp./vol de vie) + conversion dés + ajusteur",
+    "props": [
+      {
+        "name": "compact",
+        "type": "Boolean",
+        "desc": "Densité réduite (section page)"
+      }
+    ],
+    "slots": [],
+    "file": "tools/SpellReferenceScales.vue"
+  },
+  {
+    "name": "SpellReferenceScalesModal",
+    "description": "Modal Outils pour les barèmes de sorts",
+    "props": [
+      {
+        "name": "open",
+        "type": "Boolean",
+        "desc": "Contrôle l'ouverture du modal"
+      }
+    ],
+    "slots": [],
+    "file": "tools/SpellReferenceScalesModal.vue"
+  },
+  {
     "name": "TanStackTable",
     "description": "TanStackTable Organism",
     "props": [],
@@ -845,7 +871,7 @@
   },
   {
     "name": "CapabilityEditFormContent",
-    "description": "Corps de la fiche d’édition d’une capacité (toolbar + formulaire unique).",
+    "description": "Corps de la fiche d’édition d’une capacité (header compact + formulaire unique).",
     "props": [],
     "slots": [],
     "file": "entity/CapabilityEditFormContent.vue"

@@ -328,9 +328,15 @@ class PagesImportRulesTocCommand extends Command
             return;
         }
 
+        // Ne purger que les sections texte orphelines : les templates outils
+        // (barèmes, chartes, catalogues…) doivent survivre à la réimportation.
         Section::query()
             ->where('page_id', $pageId)
             ->whereNotIn('slug', $expectedSlugs)
+            ->where(function ($query): void {
+                $query->where('template', SectionType::TEXT->value)
+                    ->orWhere('type', SectionType::TEXT->value);
+            })
             ->each(fn (Section $section) => $section->delete());
     }
 

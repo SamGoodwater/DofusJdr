@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Barèmes de sorts et conversion en dés
+
+Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de vie suivent maintenant une courbe claire (environ 8 dégâts par tour au niveau 1, environ 48 au niveau 20), avec une proposition basse, moyenne et haute. Elles sont modifiables dans l’admin (normes des caractéristiques de sort). Un outil **Barèmes de sorts** est disponible partout via le menu Outils, et aussi sur la page des tables de référence : tu choisis un niveau, coches les particularités du sort (zone, PA, portée…), et tu convertis n’importe quelle valeur en dés classiques (y compris la version critique). Les règles rappellent que ce sont des repères, pas une loi absolue.
+
 ## Octobre 2026 — Suppression de sort sans « Page introuvable »
 
 Après suppression depuis l’édition, le bouton Précédent du navigateur ne rouvre plus la fiche déjà mise en corbeille (404). Les liens des notifications pointent vers les bonnes URLs `/entities/…`, et après suppression vers la liste plutôt que la fiche disparue. Depuis une modal d’édition, la suppression reste sur la liste.
