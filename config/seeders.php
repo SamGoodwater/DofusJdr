@@ -9,8 +9,10 @@ declare(strict_types=1);
  * la base est la source de vérité. Les fichiers sous database/seeders/data/ sont
  * une copie versionnée, réécrite hors production lors de project:backup.
  *
- * SEED_OVERWRITE=true ou SeedMode::forceOverwrite(true) (ex. project:seed --overwrite)
- * réapplique le comportement historique updateOrCreate / purge d’orphelins.
+ * DANGER — SEED_OVERWRITE=true ou `project:seed --overwrite` réécrit les lignes
+ * existantes (updateOrCreate). Les commandes projet demandent une confirmation
+ * interactive ; en CI : `project:seed --overwrite -y`. Toujours exporter la base
+ * vers les JSON avant un overwrite (`scrapping:seeders:export --characteristics`).
  */
 return [
 

@@ -30,7 +30,7 @@ class ProjectRefreshCommand extends Command
     protected $signature = 'project:refresh
         {--hard : Exécuter setup --refresh (vendor + node_modules) avant le pipeline d’init}
         {--without-seed : Transmet --skip-seeders à project:init}
-        {--overwrite : Transmet --overwrite à project:init (réécrit les lignes seedées)}
+        {--overwrite : DANGER — transmet --overwrite à project:init (réécrit les lignes seedées ; confirmation + CI : -y)}
         {--skip-scrapping : Transmet à project:init}
         {--fast : --skip-scrapping et --skip-types (données locales sans DofusDB)}
         {--noimage : Transmet à project:init}

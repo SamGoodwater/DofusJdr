@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Console\Commands\Project;
 
 use App\Console\ArtisanExitCode;
+use App\Console\Concerns\AcceptsYesNoFlags;
 use App\Console\Concerns\GuardsProductionEnvironment;
+use App\Console\YesNoFlags;
 use Illuminate\Console\Command;
 
 /**
@@ -14,24 +16,29 @@ use Illuminate\Console\Command;
  * Délègue à {@see ProjectInitCommand} avec `--skip-scrapping` et `--skip-types` :
  * migrations, seeders Krosmoz, import règles, capacités legacy, sync pages bibliothèque.
  *
+ * Par défaut : création seule (ne touche pas une ligne déjà en base).
+ * `--overwrite` réécrit depuis les fichiers — confirmation obligatoire (CI : `-y`).
+ *
  * @example php artisan project:seed
  * @example php artisan project:seed --fresh
- * @example php artisan project:seed --skip-capabilities --skip-specializations
+ * @example php artisan project:seed --overwrite -y
  */
 class ProjectSeedCommand extends Command
 {
+    use AcceptsYesNoFlags;
     use GuardsProductionEnvironment;
 
     protected $signature = 'project:seed
         {--fresh : migrate:fresh --force avant les seeders}
         {--skip-migrate : Ne pas lancer les migrations}
-        {--overwrite : Réappliquer les fichiers de seed sur les lignes déjà en base}
+        {--overwrite : DANGER — réécrit les lignes déjà en base depuis les JSON/PHP (confirmation via project:init ; CI : -y)}
         {--skip-capabilities : Ne pas importer capabilities:import-legacy}
         {--skip-specializations : Ne pas exécuter SpecializationSeeder (HTML legacy + brouillons)}
         {--init-scheduler : Afficher la ligne cron scheduler (comme project:init)}
         {--skip-notify : Ne pas notifier les admin à la fin}
         {--skip-super-admin-prompt : Ne pas demander la création du super_admin (CI / scripts)}
-        {--skip-downloads : Ne pas compiler le livre de règles (PDF / ODT)}';
+        {--skip-downloads : Ne pas compiler le livre de règles (PDF / ODT)}
+        '.YesNoFlags::SIGNATURE;
 
     protected $description = 'Seeders et données locales (sans types ni scrapping DofusDB) — délègue à project:init';
 
@@ -43,8 +50,16 @@ class ProjectSeedCommand extends Command
             return ArtisanExitCode::FAILURE;
         }
 
+        if ($this->abortIfConflictingYesNoFlags()) {
+            return ArtisanExitCode::FAILURE;
+        }
+
         $this->info('=== project:seed (données locales, sans DofusDB) ===');
         $this->line('  → project:init --skip-scrapping --skip-types');
+        if ((bool) $this->option('overwrite')) {
+            $this->warn('  → --overwrite : écrasement des lignes existantes (confirmation demandée)');
+            $this->line('  Avant d’écraser : php artisan scrapping:seeders:export --characteristics');
+        }
         $this->newLine();
 
         return $this->call('project:init', $this->buildProjectInitArguments());
@@ -76,6 +91,6 @@ class ProjectSeedCommand extends Command
             }
         }
 
-        return $arguments;
+        return array_merge($arguments, $this->yesNoCallOptions());
     }
 }

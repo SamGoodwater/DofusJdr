@@ -159,7 +159,7 @@ ui: false
 cron: false
 ```
 
-Données locales sans DofusDB : `project:init --skip-scrapping --skip-types`. Par défaut, création seule (ne touche pas une ligne déjà présente). `--overwrite` réapplique les JSON / PHP de seed.
+Données locales sans DofusDB : `project:init --skip-scrapping --skip-types`. Par défaut, création seule (ne touche pas une ligne déjà présente). `--overwrite` **réécrit** les lignes existantes depuis les JSON/PHP : confirmation obligatoire ; en CI ajouter `-y`. Avant un overwrite : `scrapping:seeders:export --characteristics`.
 
 ```bash
 php artisan project:seed

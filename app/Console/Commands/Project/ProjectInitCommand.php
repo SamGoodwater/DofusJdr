@@ -6,6 +6,7 @@ namespace App\Console\Commands\Project;
 
 use App\Console\ArtisanExitCode;
 use App\Console\Concerns\AcceptsYesNoFlags;
+use App\Console\Concerns\ConfirmsSeedOverwrite;
 use App\Console\Concerns\GuardsProductionEnvironment;
 use App\Console\Concerns\NormalizesProjectSyncEntities;
 use App\Console\Concerns\PromptsPrimarySuperAdmin;
@@ -63,6 +64,7 @@ use Throwable;
 class ProjectInitCommand extends Command
 {
     use AcceptsYesNoFlags;
+    use ConfirmsSeedOverwrite;
     use GuardsProductionEnvironment;
     use NormalizesProjectSyncEntities;
     use PromptsPrimarySuperAdmin;
@@ -73,7 +75,7 @@ class ProjectInitCommand extends Command
         {--fresh : migrate:fresh --force avant tout}
         {--skip-migrate : Ne pas lancer les migrations}
         {--skip-seeders : Ne pas exécuter les seeders (socle déjà fait)}
-        {--overwrite : Réappliquer les fichiers de seed sur les lignes déjà en base (updateOrCreate)}
+        {--overwrite : DANGER — réécrit les lignes déjà en base depuis les JSON/PHP (demande confirmation ; CI : -y)}
         {--skip-scrapping : Ne pas scraper}
         {--skip-capabilities : Ne pas importer les capabilities}
         {--skip-specializations : Ne pas exécuter le seeder des spécialisations (HTML legacy + brouillons)}
@@ -123,9 +125,8 @@ class ProjectInitCommand extends Command
             return ArtisanExitCode::FAILURE;
         }
 
-        if ((bool) $this->option('overwrite')) {
-            SeedMode::forceOverwrite(true);
-            $this->info('Mode seed : overwrite (fichiers → base sur lignes existantes).');
+        if (($overwriteAbort = $this->confirmSeedOverwriteOrAbort()) !== null) {
+            return $overwriteAbort;
         }
 
         set_time_limit(0);
