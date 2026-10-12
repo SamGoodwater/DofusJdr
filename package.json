@@ -38,9 +38,9 @@
         "secrets:scan:pre-push": "node scripts/scan-secrets.mjs --mode=pre-push"
     },
     "devDependencies": {
-        "@cursor/sdk": "^1.0.36",
+        "@cursor/sdk": "^1.0.37",
         "@eslint/js": "^10.0.1",
-        "@inertiajs/vue3": "^3.8.0",
+        "@inertiajs/vue3": "^3.9.0",
         "@tailwindcss/forms": "^0.5.11",
         "@tailwindcss/oxide": "4.3.3",
         "@tailwindcss/typography": "^0.5.20",
@@ -51,7 +51,7 @@
         "@vue/test-utils": "^2.5.1",
         "autoprefixer": "^10.6.1",
         "axios": "^1.20.0",
-        "concurrently": "^10.0.5",
+        "concurrently": "^10.0.6",
         "csso-cli": "^4.0.2",
         "daisyui": "^5.7.47",
         "eslint": "^10.12.0",
@@ -73,11 +73,11 @@
         "@csstools/postcss-oklab-function": "^5.0.15",
         "@floating-ui/dom": "^1.8.0",
         "@floating-ui/vue": "^2.0.1",
-        "@playwright/test": "^1.63.0",
+        "@playwright/test": "^1.64.0",
         "@tailwindcss/postcss": "^4.3.3",
-        "@tanstack/table-core": "^9.2.6",
-        "@tanstack/vue-table": "^9.2.6",
-        "@tanstack/vue-virtual": "^3.13.39",
+        "@tanstack/table-core": "^9.2.8",
+        "@tanstack/vue-table": "^9.2.8",
+        "@tanstack/vue-virtual": "^3.13.40",
         "@tiptap/core": "^3.31.4",
         "@tiptap/extension-color": "^3.31.4",
         "@tiptap/extension-highlight": "^3.31.4",
@@ -105,7 +105,7 @@
         "mysql2": "^3.24.5",
         "photoswipe": "^5.4.4",
         "pinia": "^4.0.3",
-        "playwright": "^1.63.0"
+        "playwright": "^1.64.0"
     },
     "optionalDependencies": {
         "@tailwindcss/oxide-darwin-arm64": "4.3.3",
