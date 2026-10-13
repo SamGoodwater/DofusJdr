@@ -6,8 +6,10 @@ namespace App\Services\Characteristic\Getter;
 
 use App\Contracts\Characteristic\CharacteristicDefinitionLookup;
 use App\Models\Characteristic;
+use App\Models\CharacteristicConsumable;
 use App\Models\CharacteristicCreature;
 use App\Models\CharacteristicObject;
+use App\Models\CharacteristicProfile;
 use App\Models\CharacteristicSpell;
 use App\Services\Characteristic\Formula\FormulaResolutionService;
 use Illuminate\Support\Facades\Cache;
@@ -32,11 +34,17 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
     /** Entités du groupe creature */
     private const GROUP_CREATURE = ['monster', 'class', 'npc'];
 
-    /** Entités du groupe object */
-    private const GROUP_OBJECT = ['item', 'consumable', 'resource', 'panoply'];
+    /** Entités du groupe object (équipements + panoplies) */
+    private const GROUP_OBJECT = ['item', 'panoply'];
 
     /** Entités du groupe spell */
     private const GROUP_SPELL = ['spell'];
+
+    /** Entités du groupe consumable */
+    private const GROUP_CONSUMABLE = ['consumable'];
+
+    /** Entités du groupe profile */
+    private const GROUP_PROFILE = ['breed', 'specialization', 'monster'];
 
     /**
      * Résultats mémoïsés de getDefinition (évite requêtes répétées dans une même requête HTTP / worker).
@@ -50,6 +58,9 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
         ...self::GROUP_CREATURE,
         ...self::GROUP_OBJECT,
         ...self::GROUP_SPELL,
+        ...self::GROUP_CONSUMABLE,
+        'breed',
+        'specialization',
     ];
 
     /**
@@ -164,6 +175,12 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
         if (in_array($entity, self::GROUP_SPELL, true)) {
             return 'spell';
         }
+        if (in_array($entity, self::GROUP_CONSUMABLE, true)) {
+            return 'consumable';
+        }
+        if (in_array($entity, self::GROUP_PROFILE, true)) {
+            return 'profile';
+        }
 
         return 'object';
     }
@@ -239,6 +256,22 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
                     ->get()
             );
         }
+        if (in_array($entity, self::GROUP_CONSUMABLE, true)) {
+            return $this->accumulateFieldAliases(
+                CharacteristicConsumable::query()
+                    ->whereIn('entity', [$entity, self::ENTITY_ALL], 'and', false)
+                    ->with(['characteristic'])
+                    ->get()
+            );
+        }
+        if (in_array($entity, self::GROUP_PROFILE, true)) {
+            return $this->accumulateFieldAliases(
+                CharacteristicProfile::query()
+                    ->whereIn('entity', [$entity, self::ENTITY_ALL], 'and', false)
+                    ->with(['characteristic'])
+                    ->get()
+            );
+        }
 
         return [];
     }
@@ -279,6 +312,12 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
         }
         if (in_array($entity, self::GROUP_SPELL, true)) {
             return '_spell';
+        }
+        if (in_array($entity, self::GROUP_CONSUMABLE, true)) {
+            return '_consumable';
+        }
+        if (in_array($entity, self::GROUP_PROFILE, true)) {
+            return '_profile';
         }
 
         return null;
@@ -331,6 +370,12 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
                 'spell' => CharacteristicSpell::query()
                     ->whereNotNull('dofusdb_characteristic_id', 'and')
                     ->with(['characteristic']),
+                'consumable' => CharacteristicConsumable::query()
+                    ->whereNotNull('dofusdb_characteristic_id', 'and')
+                    ->with(['characteristic']),
+                'profile' => CharacteristicProfile::query()
+                    ->whereNotNull('dofusdb_characteristic_id', 'and')
+                    ->with(['characteristic']),
                 default => null,
             };
             if ($query === null) {
@@ -366,7 +411,7 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
     /** Invalide les caches du getter (dofusdb_id → key par groupe). À appeler après mise à jour des tables de groupe. */
     public function clearCache(): void
     {
-        foreach (['object', 'creature', 'spell'] as $group) {
+        foreach (['object', 'creature', 'spell', 'consumable', 'profile'] as $group) {
             Cache::forget('characteristic.dofusdb_to_key.'.$group);
         }
         foreach (self::FIELD_MAP_ENTITIES as $ent) {
@@ -383,50 +428,51 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
      */
     private function findGroupRows(int $characteristicId, string $entity): array
     {
-        if (in_array($entity, self::GROUP_CREATURE, true)) {
-            $rows = CharacteristicCreature::query()
-                ->where('characteristic_id', '=', $characteristicId)
-                ->whereIn('entity', [$entity, self::ENTITY_ALL], 'and', false)
-                ->get();
+        $group = $entity === self::ENTITY_ALL
+            ? (string) (Characteristic::query()->whereKey($characteristicId)->value('group') ?? 'creature')
+            : $this->getGroupForEntity($entity);
 
-            return [
-                $rows->firstWhere('entity', self::ENTITY_ALL),
-                $rows->firstWhere('entity', $entity),
-            ];
-        }
-        if (in_array($entity, self::GROUP_OBJECT, true)) {
-            $rows = CharacteristicObject::query()
+        $entityFilter = $entity === self::ENTITY_ALL
+            ? [self::ENTITY_ALL]
+            : [$entity, self::ENTITY_ALL];
+
+        $rows = match ($group) {
+            'creature' => CharacteristicCreature::query()
                 ->where('characteristic_id', '=', $characteristicId)
-                ->whereIn('entity', [$entity, self::ENTITY_ALL], 'and', false)
+                ->whereIn('entity', $entityFilter)
+                ->get(),
+            'object' => CharacteristicObject::query()
+                ->where('characteristic_id', '=', $characteristicId)
+                ->whereIn('entity', $entityFilter)
                 ->with(['allowedItemTypes'])
-                ->get();
-
-            return [
-                $rows->firstWhere('entity', self::ENTITY_ALL),
-                $rows->firstWhere('entity', $entity),
-            ];
-        }
-        if (in_array($entity, self::GROUP_SPELL, true)) {
-            $rows = CharacteristicSpell::query()
+                ->get(),
+            'spell' => CharacteristicSpell::query()
                 ->where('characteristic_id', '=', $characteristicId)
-                ->whereIn('entity', [$entity, self::ENTITY_ALL], 'and', false)
-                ->get();
+                ->whereIn('entity', $entityFilter)
+                ->get(),
+            'consumable' => CharacteristicConsumable::query()
+                ->where('characteristic_id', '=', $characteristicId)
+                ->whereIn('entity', $entityFilter)
+                ->get(),
+            'profile' => CharacteristicProfile::query()
+                ->where('characteristic_id', '=', $characteristicId)
+                ->whereIn('entity', $entityFilter)
+                ->get(),
+            default => collect(),
+        };
 
-            return [
-                $rows->firstWhere('entity', self::ENTITY_ALL),
-                $rows->firstWhere('entity', $entity),
-            ];
-        }
+        $base = $rows->firstWhere('entity', self::ENTITY_ALL);
+        $overlay = $entity === self::ENTITY_ALL ? null : $rows->firstWhere('entity', $entity);
 
-        return [null, null];
+        return [$base, $overlay];
     }
 
     /**
      * Fusionne base et overlay : pour chaque propriété du groupe, la valeur non nulle de l'overlay l'emporte.
      */
     private function pickGroupValue(
-        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|null $base,
-        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|null $overlay,
+        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile|null $base,
+        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile|null $overlay,
         string $attribute
     ): mixed {
         $overlayVal = $overlay !== null ? $overlay->getAttribute($attribute) : null;
@@ -467,17 +513,18 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
      * Fusionne la caractéristique générale et les lignes de groupe (base + surcharge entité) en un seul tableau.
      * Les propriétés non généralistes (min, max, formula, etc.) sont prises sur la surcharge si non vides, sinon sur la base.
      *
-     * @param  CharacteristicCreature|CharacteristicObject|CharacteristicSpell|null  $base  Ligne entity='*'
-     * @param  CharacteristicCreature|CharacteristicObject|CharacteristicSpell|null  $overlay  Ligne entity précise (ex. monster)
+     * @param  CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile|null  $base  Ligne entity='*'
+     * @param  CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile|null  $overlay  Ligne entity précise (ex. monster)
      * @return array<string, mixed>
      */
     private function mergeDefinition(
         Characteristic $characteristic,
-        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|null $base,
-        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|null $overlay,
+        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile|null $base,
+        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile|null $overlay,
         string $entity
     ): array {
         $row = $overlay ?? $base;
+        $nature = $characteristic->natureEnum();
         $out = [
             'id' => $characteristic->id,
             'key' => $characteristic->key,
@@ -489,6 +536,8 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
             'color' => $characteristic->color,
             'unit' => $characteristic->unit,
             'type' => $characteristic->type,
+            'nature' => $nature?->value,
+            'intrinsic_characteristic_id' => $characteristic->intrinsic_characteristic_id,
             'hide_when_empty' => (bool) ($characteristic->hide_when_empty ?? false),
             'hide_when_false' => Schema::hasColumn('characteristics', 'hide_when_false')
                 ? (bool) ($characteristic->hide_when_false ?? false)
@@ -529,7 +578,9 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
             $out['labels'] = $this->pickGroupValue($base, $overlay, 'labels') ?? $row->labels;
             $out['validation'] = $this->pickGroupValue($base, $overlay, 'validation') ?? $row->validation;
         }
-        if ($row instanceof CharacteristicSpell) {
+        if ($row instanceof CharacteristicSpell
+            || $row instanceof CharacteristicConsumable
+            || $row instanceof CharacteristicProfile) {
             $out['value_available'] = $this->pickGroupValue($base, $overlay, 'value_available') ?? $row->value_available;
         }
 
@@ -546,52 +597,36 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
      * Retourne la ligne de base (entity='*' ou équivalent) pour une caractéristique maître,
      * en cherchant dans les trois tables de groupe. Utilisé pour les caractéristiques liées.
      */
-    private function findMasterBaseRow(Characteristic $characteristic): CharacteristicCreature|CharacteristicObject|CharacteristicSpell|null
+    private function findMasterBaseRow(Characteristic $characteristic): CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile|null
     {
         $id = $characteristic->id;
+        $models = [
+            CharacteristicCreature::class,
+            CharacteristicObject::class,
+            CharacteristicSpell::class,
+            CharacteristicConsumable::class,
+            CharacteristicProfile::class,
+        ];
 
-        // On privilégie la ligne avec entity='*' si elle existe.
-        $row = CharacteristicCreature::query()
-            ->where('characteristic_id', '=', $id)
-            ->where('entity', '=', self::ENTITY_ALL)
-            ->first();
-        if ($row !== null) {
-            return $row;
+        foreach ($models as $modelClass) {
+            $row = $modelClass::query()
+                ->where('characteristic_id', '=', $id)
+                ->where('entity', '=', self::ENTITY_ALL)
+                ->first();
+            if ($row !== null) {
+                return $row;
+            }
         }
 
-        $row = CharacteristicObject::query()
-            ->where('characteristic_id', '=', $id)
-            ->where('entity', '=', self::ENTITY_ALL)
-            ->first();
-        if ($row !== null) {
-            return $row;
+        foreach ($models as $modelClass) {
+            $row = $modelClass::query()
+                ->where('characteristic_id', '=', $id)
+                ->first();
+            if ($row !== null) {
+                return $row;
+            }
         }
 
-        $row = CharacteristicSpell::query()
-            ->where('characteristic_id', '=', $id)
-            ->where('entity', '=', self::ENTITY_ALL)
-            ->first();
-        if ($row !== null) {
-            return $row;
-        }
-
-        // Fallback : première ligne trouvée dans l'une des tables.
-        $row = CharacteristicCreature::query()
-            ->where('characteristic_id', '=', $id)
-            ->first();
-        if ($row !== null) {
-            return $row;
-        }
-
-        $row = CharacteristicObject::query()
-            ->where('characteristic_id', '=', $id)
-            ->first();
-        if ($row !== null) {
-            return $row;
-        }
-
-        return CharacteristicSpell::query()
-            ->where('characteristic_id', '=', $id)
-            ->first();
+        return null;
     }
 }

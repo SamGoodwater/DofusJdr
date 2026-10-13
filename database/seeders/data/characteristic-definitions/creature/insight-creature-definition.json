@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 11,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": null,
             "min": "-24",
             "max": "24",
-            "formula": "[modifier_wisdom_creature]+[mastery_bonus_creature]*[perspicacite_mastery]+[perspicacite_bonus]",
-            "formula_display": "modifier_wisdom_creature + mastery_bonus_creature × perspicacite_mastery + perspicacite_bonus",
+            "formula": "[modifier_wisdom_creature]+[mastery_bonus_creature]*[insight_mastery_profile]+[insight_object]",
+            "formula_display": "[modifier_wisdom_creature]+[mastery_bonus_creature]*[insight_mastery_profile]+[insight_object]",
             "default_value": "0",
             "conversion_formula": null,
             "conversion_function": null,

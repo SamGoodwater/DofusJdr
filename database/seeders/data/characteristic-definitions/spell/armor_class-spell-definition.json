@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 41,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "armor_class_creature"
     },
     "entities": {
         "*": {
@@ -28,7 +30,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(5,max(0,0.45*pow(max(0,abs([d])),0.78))))",
+            "conversion_formula": "(([d] / max(abs([d]), 1)) * (round(0.45*pow(abs([d]),0.78))))",
             "conversion_function": null,
             "conversion_dofus_sample": {
                 "5": 1,

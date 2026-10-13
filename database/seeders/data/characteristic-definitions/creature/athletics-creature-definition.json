@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 11,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": null,
             "min": "-24",
             "max": "24",
-            "formula": "[modifier_strength_creature]+[mastery_bonus_creature]*[athletisme_mastery]+[athletisme_bonus]",
-            "formula_display": "modifier_strength_creature + mastery_bonus_creature × athletisme_mastery + athletisme_bonus",
+            "formula": "[modifier_strength_creature]+[mastery_bonus_creature]*[athletics_mastery_profile]+[athletics_object]",
+            "formula_display": "[modifier_strength_creature]+[mastery_bonus_creature]*[athletics_mastery_profile]+[athletics_object]",
             "default_value": "0",
             "conversion_formula": null,
             "conversion_function": null,

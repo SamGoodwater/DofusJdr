@@ -48,7 +48,8 @@
         "status": "validee",
         "sort_order": 3,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {

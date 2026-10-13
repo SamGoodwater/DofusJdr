@@ -26,6 +26,9 @@ final class SpellEffectConversionFormulaResolver
         'jump' => 'jump_distance_spell',
         'teleport' => 'teleport_distance_spell',
         'pull' => 'pull_distance_spell',
+        'push' => 'push_distance_spell',
+        'pousser' => 'push_distance_spell',
+        'repousser' => 'push_distance_spell',
     ];
 
     /** Vol de vie : sous-effet unique « frapper » + params.life_steal_formula (conversion Dofus sur la même base « d »). */
@@ -42,20 +45,39 @@ final class SpellEffectConversionFormulaResolver
     public const ENTITY_SPELL = 'spell';
 
     /** Clés courtes désactivées (caractéristiques retirées du groupe spell). */
+    /**
+     * Effets Dofus exclus du JDR (critiques avancés, poussée, pièges).
+     * Liste conservée ici en attendant migration complète vers une table en base.
+     *
+     * @var list<string>
+     */
     private const IGNORED_KEYS = [
         'echec_critique',
         'prospection',
         'power',
         'powerful',
-        'push',
-        'poussée',
-        'poussee',
         'do_sagesse',
         'do_vitalite',
         'res_sagesse',
         'res_vitalite',
         'fixed_damage_sagesse',
         'fixed_damage_vitalite',
+        // Critiques avancés / poussée / pièges — hors périmètre Krosmoz
+        'critiques',
+        'critical_damage',
+        'critical_damage_bonus',
+        'critical_damage_reduction',
+        'critical_resistance',
+        'push_damage',
+        'pushback_damage',
+        'push_resistance',
+        'pushback_resistance',
+        'dommages_poussee',
+        'dommages_de_poussee',
+        'resistance_poussee',
+        'trap_damage',
+        'dommages_piege',
+        'dommages_pieges',
     ];
 
     /**
@@ -143,8 +165,8 @@ final class SpellEffectConversionFormulaResolver
         'do_fixe_multiple' => 'do_fixe_multiple_spell',
         'esquive_pa' => 'dodge_action_points_spell',
         'esquive_pm' => 'dodge_movement_points_spell',
-        'critiques' => 'critical_damage_reduction_spell',
         'res_fixe_terre' => 'fixed_resistance_terre_spell',
+        'hostility' => 'hostility_spell',
         'res_fixe_feu' => 'fixed_resistance_feu_spell',
         'res_fixe_eau' => 'fixed_resistance_eau_spell',
         'res_fixe_air' => 'fixed_resistance_air_spell',

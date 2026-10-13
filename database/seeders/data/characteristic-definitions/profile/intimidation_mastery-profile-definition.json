@@ -1,0 +1,61 @@
+{
+    "_schema_version": "1",
+    "characteristic": {
+        "key": "intimidation_mastery_profile",
+        "name": "Intimidation (maîtrise profil)",
+        "short_name": null,
+        "helper": null,
+        "descriptions": null,
+        "icon": "skillStrength.webp",
+        "icon_false": null,
+        "color": "brown",
+        "value_overrides": [
+            {
+                "value": 0,
+                "subtitle": "Non formé — palier 0 : pas de bonus de maîtrise."
+            },
+            {
+                "value": 1,
+                "subtitle": "Maîtrise — palier 1."
+            },
+            {
+                "value": 2,
+                "subtitle": "Expertise — palier 2."
+            }
+        ],
+        "hide_when_empty": false,
+        "hide_when_false": false,
+        "unit": null,
+        "type": "int",
+        "status": "validee",
+        "sort_order": 300,
+        "group": "profile",
+        "linked_to_key": null,
+        "nature": "bonus_malus",
+        "intrinsic_key": "intimidation_creature"
+    },
+    "entities": {
+        "*": {
+            "dofusdb_characteristic_id": null,
+            "db_column": "intimidation_mastery",
+            "min": "0",
+            "max": "2",
+            "formula": null,
+            "formula_display": null,
+            "default_value": "0",
+            "conversion_formula": null,
+            "conversion_function": null,
+            "conversion_dofus_sample": null,
+            "conversion_krosmoz_sample": null,
+            "conversion_sample_rows": null,
+            "norms_grid": null,
+            "norms_formula": null,
+            "norms_conditions": null,
+            "norms_description": null,
+            "norms_help_section_id": null,
+            "labels": null,
+            "validation": null
+        }
+    },
+    "relations": null
+}

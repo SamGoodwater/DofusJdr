@@ -5,6 +5,7 @@ namespace App\Models\Entity;
 use App\Models\Concerns\VisibleToViewer;
 use App\Models\Type\MonsterRace;
 use App\Support\Creature\CreatureSize;
+use App\Support\Profile\ProfileMasteryColumns;
 use Database\Factories\MonsterFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -100,6 +101,7 @@ class Monster extends Model
         'state',
         'read_level',
         'write_level',
+        ...ProfileMasteryColumns::all(),
     ];
 
     /**
@@ -112,6 +114,7 @@ class Monster extends Model
         'auto_update' => 'boolean',
         'read_level' => 'integer',
         'write_level' => 'integer',
+        ...array_fill_keys(ProfileMasteryColumns::all(), 'integer'),
     ];
 
     /**

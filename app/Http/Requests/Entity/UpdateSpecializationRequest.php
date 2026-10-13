@@ -5,6 +5,7 @@ namespace App\Http\Requests\Entity;
 use App\Http\Requests\Concerns\RestrictsAccessLevelMutation;
 use App\Enums\EntityState;
 use App\Http\Requests\Concerns\GuardsPlayableState;
+use App\Http\Requests\Concerns\ValidatesProfileMasteryFields;
 use App\Models\Entity\Specialization;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -19,6 +20,7 @@ class UpdateSpecializationRequest extends FormRequest
     use RestrictsAccessLevelMutation;
 
     use GuardsPlayableState;
+    use ValidatesProfileMasteryFields;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -45,6 +47,7 @@ class UpdateSpecializationRequest extends FormRequest
             'read_level' => ['nullable', 'integer', 'min:0', 'max:5'],
             'write_level' => ['nullable', 'integer', 'min:0', 'max:5', 'gte:read_level'],
             'image' => ['nullable', 'string', 'max:255'],
+            ...$this->profileMasteryFieldRules(),
         ];
     }
 

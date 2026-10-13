@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 2,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "ca",
             "min": "-22",
             "max": "22",
-            "formula": "10+[modifier_vitality_creature]",
-            "formula_display": "10 + modificateur de Vitalité",
+            "formula": "10+[modifier_vitality_creature]+[armor_class_object]",
+            "formula_display": "10+[modifier_vitality_creature]+[armor_class_object]",
             "default_value": "10",
             "conversion_formula": "10+floor(([d]-10)/2)",
             "conversion_function": null,

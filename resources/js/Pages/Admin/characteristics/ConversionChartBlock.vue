@@ -24,6 +24,7 @@ const points = ref([]);
 const axisBounds = ref(null);
 const loading = ref(false);
 const showOptions = ref(false);
+/** Chaînes pour éviter NaN avec v-model.number sur champ vide. */
 const overrideAxis = ref({ xMin: '', xMax: '', yMin: '', yMax: '' });
 /** Options d'apparence du graphique (affichage uniquement, non enregistrées). */
 const chartAppearance = ref({
@@ -33,6 +34,19 @@ const chartAppearance = ref({
     borderWidth: 2,
 });
 let debounceTimer = null;
+
+/**
+ * Parse une borne d'affichage (vide → null).
+ * @param {unknown} value
+ * @returns {number|null}
+ */
+function parseBound(value) {
+    if (value === '' || value === null || value === undefined) {
+        return null;
+    }
+    const n = typeof value === 'number' ? value : Number(value);
+    return Number.isFinite(n) ? n : null;
+}
 
 function fetchPreview() {
     if (!props.characteristicKey || !props.entityKey) return;
@@ -87,16 +101,20 @@ watch(
 
 const hasPoints = computed(() => Array.isArray(points.value) && points.value.length > 1);
 
+/**
+ * Surcharge partielle des bornes : un seul champ suffit (ex. X max = 20).
+ * Les axes non renseignés restent en auto (géré dans FormulaChart).
+ */
 const axisBoundsOverride = computed(() => {
     const o = overrideAxis.value;
-    const xMin = o.xMin !== '' && o.xMin != null ? Number(o.xMin) : null;
-    const xMax = o.xMax !== '' && o.xMax != null ? Number(o.xMax) : null;
-    const yMin = o.yMin !== '' && o.yMin != null ? Number(o.yMin) : null;
-    const yMax = o.yMax !== '' && o.yMax != null ? Number(o.yMax) : null;
-    if (Number.isFinite(xMin) && Number.isFinite(xMax) && Number.isFinite(yMin) && Number.isFinite(yMax)) {
-        return { xMin, xMax, yMin, yMax };
+    const xMin = parseBound(o.xMin);
+    const xMax = parseBound(o.xMax);
+    const yMin = parseBound(o.yMin);
+    const yMax = parseBound(o.yMax);
+    if (xMin === null && xMax === null && yMin === null && yMax === null) {
+        return null;
     }
-    return null;
+    return { xMin, xMax, yMin, yMax };
 });
 
 function onRefresh() {
@@ -151,22 +169,24 @@ function onRefresh() {
             <div class="grid grid-cols-2 gap-2 text-xs lg:grid-cols-1">
                 <label class="flex items-center gap-1">
                     <span class="w-8 shrink-0">X min</span>
-                    <input v-model.number="overrideAxis.xMin" type="number" class="input input-bordered input-sm w-full" placeholder="auto" />
+                    <input v-model="overrideAxis.xMin" type="number" class="input input-bordered input-sm w-full" placeholder="auto" />
                 </label>
                 <label class="flex items-center gap-1">
                     <span class="w-8 shrink-0">X max</span>
-                    <input v-model.number="overrideAxis.xMax" type="number" class="input input-bordered input-sm w-full" placeholder="auto" />
+                    <input v-model="overrideAxis.xMax" type="number" class="input input-bordered input-sm w-full" placeholder="auto" />
                 </label>
                 <label class="flex items-center gap-1">
                     <span class="w-8 shrink-0">Y min</span>
-                    <input v-model.number="overrideAxis.yMin" type="number" class="input input-bordered input-sm w-full" placeholder="auto" />
+                    <input v-model="overrideAxis.yMin" type="number" class="input input-bordered input-sm w-full" placeholder="auto" />
                 </label>
                 <label class="flex items-center gap-1">
                     <span class="w-8 shrink-0">Y max</span>
-                    <input v-model.number="overrideAxis.yMax" type="number" class="input input-bordered input-sm w-full" placeholder="auto" />
+                    <input v-model="overrideAxis.yMax" type="number" class="input input-bordered input-sm w-full" placeholder="auto" />
                 </label>
             </div>
-            <p class="text-xs text-base-content/50">Vide = automatique (samples + 10 %).</p>
+            <p class="text-xs text-base-content/50">
+                Vide = automatique (échantillons + marge). Un seul champ suffit (ex. X max = 20).
+            </p>
 
             <span class="text-xs font-medium text-base-content/70 pt-1 border-t border-base-300 mt-2">Apparence (non enregistrée)</span>
             <div class="flex flex-col gap-2 text-xs">

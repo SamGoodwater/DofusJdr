@@ -5,6 +5,7 @@ namespace App\Http\Requests\Entity;
 use App\Http\Requests\Concerns\RestrictsAccessLevelMutation;
 use App\Enums\EntityState;
 use App\Http\Requests\Concerns\GuardsPlayableState;
+use App\Http\Requests\Concerns\ValidatesProfileMasteryFields;
 use App\Models\Entity\Breed;
 use App\Models\Entity\BreedElementOrientation;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -19,6 +20,7 @@ class UpdateBreedRequest extends FormRequest
     use RestrictsAccessLevelMutation;
 
     use GuardsPlayableState;
+    use ValidatesProfileMasteryFields;
 
     public function authorize(): bool
     {
@@ -51,7 +53,7 @@ class UpdateBreedRequest extends FormRequest
             'auto_update' => ['nullable', 'boolean'],
             'official_id' => ['nullable', 'string', 'max:255'],
             'dofusdb_id' => ['nullable', 'string', 'max:255'],
-        ], $this->elementOrientationRules());
+        ], $this->elementOrientationRules(), $this->profileMasteryFieldRules());
     }
 
     /**

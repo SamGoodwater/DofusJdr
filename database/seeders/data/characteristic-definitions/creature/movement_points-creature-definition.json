@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 1,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "pm",
             "min": "-6",
             "max": "6",
-            "formula": null,
-            "formula_display": null,
+            "formula": "[base]+[movement_points_object]",
+            "formula_display": "[base]+[movement_points_object]",
             "default_value": "3",
             "conversion_formula": "[d]",
             "conversion_function": null,

@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 12,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": null,
             "min": "-34",
             "max": "34",
-            "formula": "[modifier_intelligence_creature]+[mastery_bonus_creature]*[histoire_mastery]+[histoire_bonus]+10",
-            "formula_display": "modifier_intelligence_creature + mastery_bonus_creature × histoire_mastery + histoire_bonus",
+            "formula": "10+[history_creature]+[history_passive_object]",
+            "formula_display": "10+[history_creature]+[history_passive_object]",
             "default_value": "10",
             "conversion_formula": null,
             "conversion_function": null,

@@ -42,7 +42,9 @@
         "status": "validee",
         "sort_order": 26,
         "group": "object",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "bonus_malus",
+        "intrinsic_key": "resistance_earth_creature"
     },
     "entities": {
         "*": {

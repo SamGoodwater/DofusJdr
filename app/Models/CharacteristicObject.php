@@ -86,17 +86,18 @@ class CharacteristicObject extends Model
 
     public const ENTITY_ITEM = 'item';
 
+    /** @deprecated Utiliser le groupe CharacteristicConsumable */
     public const ENTITY_CONSUMABLE = 'consumable';
 
+    /** @deprecated Les ressources ne font plus partie du système de caractéristiques */
     public const ENTITY_RESOURCE = 'resource';
 
     public const ENTITY_PANOPLY = 'panoply';
 
+    /** Entités du groupe objet (équipements + panoplies). */
     /** @var list<string> */
     public const ENTITIES = [
         self::ENTITY_ITEM,
-        self::ENTITY_CONSUMABLE,
-        self::ENTITY_RESOURCE,
         self::ENTITY_PANOPLY,
     ];
 

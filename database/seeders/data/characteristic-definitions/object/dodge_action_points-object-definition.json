@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 22,
         "group": "object",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "bonus_malus",
+        "intrinsic_key": "dodge_action_points_creature"
     },
     "entities": {
         "*": {
@@ -28,7 +30,7 @@
             "formula": "{\"1\":\"0\",\"3\":\"1\",\"5\":\"2\",\"7\":\"3\",\"11\":\"3\",\"15\":\"3\",\"characteristic\":\"level_object\"}",
             "formula_display": "level_object",
             "default_value": "0",
-            "conversion_formula": "([d] / max(abs([d]), 1)) * (round(3 * min(1, abs([d]) / 25)))",
+            "conversion_formula": "([d] / max(abs([d]), 1)) * (round(3 * abs([d]) / 25))",
             "conversion_function": null,
             "conversion_dofus_sample": null,
             "conversion_krosmoz_sample": {

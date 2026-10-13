@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 1,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "invocation",
             "min": "-6",
             "max": "6",
-            "formula": null,
-            "formula_display": null,
+            "formula": "[base]+[summoning_object]",
+            "formula_display": "[base]+[summoning_object]",
             "default_value": "1",
             "conversion_formula": "[d]",
             "conversion_function": null,

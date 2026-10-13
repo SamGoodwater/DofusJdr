@@ -44,10 +44,14 @@ const formulaHelpContent = {
 
 const props = defineProps({
     /** Caractéristiques regroupées par groupe : { creature: [{ id, name, ... }], object: [...], spell: [...] } */
-    characteristicsByGroup: { type: Object, default: () => ({ creature: [], object: [], spell: [] }) },
+    characteristicsByGroup: { type: Object, default: () => ({ creature: [], object: [], spell: [], consumable: [], profile: [] }) },
     selected: { type: Object, default: null },
     createMode: { type: Boolean, default: false },
-    groups: { type: Array, default: () => ['creature', 'object', 'spell'] },
+    groups: { type: Array, default: () => ['creature', 'object', 'spell', 'consumable', 'profile'] },
+    /** Options de nature (enum) pour les selects admin. */
+    natures: { type: Array, default: () => [] },
+    /** Caractéristiques créature intrinsèques (lien bonus_malus / buff_debuff). */
+    intrinsicCharacteristicOptions: { type: Array, default: () => [] },
     entitiesByGroup: { type: Object, default: () => ({}) },
     entitiesTemplate: { type: Object, default: () => ({}) },
     /** Liste des caractéristiques non liées pour "Lier à" / "Copier depuis" (mode création). */
@@ -309,6 +313,8 @@ function buildFormData(selected, entitiesByGroup = null) {
             status: 'a_valider',
             unit: '',
             sort_order: 0,
+            nature: '',
+            intrinsic_characteristic_id: '',
             hide_when_empty: false,
             hide_when_false: false,
             value_overrides: [],
@@ -339,6 +345,8 @@ function buildFormData(selected, entitiesByGroup = null) {
         status: selected.status ?? 'a_valider',
         unit: selected.unit ?? '',
         sort_order: selected.sort_order ?? 0,
+        nature: selected.nature ?? '',
+        intrinsic_characteristic_id: selected.intrinsic_characteristic_id ?? '',
         hide_when_empty: selected.hide_when_empty ?? false,
         hide_when_false: selected.hide_when_false ?? false,
         value_overrides: Array.isArray(selected.value_overrides) ? selected.value_overrides.map((o) => ({ ...o })) : [],
@@ -391,6 +399,8 @@ function characteristicEditSnapshot() {
         status: form.status ?? '',
         unit: form.unit ?? '',
         sort_order: form.sort_order ?? 0,
+        nature: form.nature ?? '',
+        intrinsic_characteristic_id: form.intrinsic_characteristic_id ?? '',
         hide_when_empty: !!form.hide_when_empty,
         hide_when_false: !!form.hide_when_false,
         value_overrides: form.value_overrides ?? [],
@@ -426,6 +436,8 @@ watch(
         form.status = data.status;
         form.unit = data.unit;
         form.sort_order = data.sort_order;
+        form.nature = data.nature ?? '';
+        form.intrinsic_characteristic_id = data.intrinsic_characteristic_id ?? '';
         form.hide_when_empty = data.hide_when_empty;
         form.hide_when_false = data.hide_when_false;
         form.value_overrides = data.value_overrides;
@@ -497,6 +509,8 @@ async function removeEntityOverride(entityKey) {
         status: form.status,
         unit: form.unit,
         sort_order: form.sort_order,
+        nature: form.nature || null,
+        intrinsic_characteristic_id: form.intrinsic_characteristic_id ? Number(form.intrinsic_characteristic_id) : null,
         hide_when_empty: form.hide_when_empty,
         hide_when_false: form.hide_when_false,
         entities: entitiesFiltered,
@@ -536,7 +550,9 @@ watch(
             form.hide_when_empty = src.hide_when_empty ?? false;
             form.hide_when_false = src.hide_when_false ?? false;
             form.value_overrides = Array.isArray(src.value_overrides) ? src.value_overrides.map((o) => ({ ...o })) : [];
-            form.key = (src.key ?? '').replace(/_creature$|_object$|_spell$/, '') || '';
+            form.nature = src.nature ?? '';
+            form.intrinsic_characteristic_id = src.intrinsic_characteristic_id ?? '';
+            form.key = (src.key ?? '').replace(/_creature$|_object$|_spell$|_consumable$|_profile$/, '') || '';
             if (Array.isArray(src.entities) && src.entities.length) {
                 form.entities = src.entities.map((e) => ({
                     entity: e.entity ?? '*',
@@ -646,14 +662,39 @@ const entityLabels = {
     resource: 'Ressource',
     panoply: 'Panoplie',
     spell: 'Sort',
+    specialization: 'Spécialisation',
 };
 
 /** Groupes avec libellés. */
 const groupLabels = {
     creature: 'Créature (monstre, classe, PNJ)',
-    object: 'Objet (équipement, consommable, ressource, panoplie)',
+    object: 'Objet (équipement, panoplie)',
     spell: 'Sort',
+    consumable: 'Consommable',
+    profile: 'Profil',
 };
+
+const natureFilter = ref('');
+
+const natureSelectOptions = computed(() => props.natures ?? props.selected?.natures ?? []);
+
+const natureRequiresIntrinsicLink = computed(() => {
+    const n = form.nature ?? props.selected?.nature ?? '';
+    return n === 'bonus_malus' || n === 'buff_debuff';
+});
+
+const characteristicsByGroupFiltered = computed(() => {
+    const raw = props.characteristicsByGroup ?? {};
+    const filter = (natureFilter.value ?? '').trim();
+    if (!filter) {
+        return raw;
+    }
+    const out = {};
+    for (const [group, list] of Object.entries(raw)) {
+        out[group] = (list ?? []).filter((c) => (c?.nature ?? '') === filter);
+    }
+    return out;
+});
 
 /** Liste plate de toutes les caractéristiques (pour le select des conditions de normes). */
 const allCharacteristicsFlat = computed(() => {
@@ -704,7 +745,7 @@ const reservedFormulaVariableSuggestions = [
 ];
 
 const allCharacteristicKeySuggestions = computed(() => {
-    const groups = ['creature', 'object', 'spell'];
+    const groups = ['creature', 'object', 'spell', 'consumable', 'profile'];
     const seen = new Set();
     const out = [];
     for (const r of reservedFormulaVariableSuggestions) {
@@ -838,6 +879,7 @@ const entityBgClasses = {
     monster: 'bg-color-monster-100',
     class: 'bg-color-breed-100',
     breed: 'bg-color-breed-100',
+    specialization: 'bg-color-breed-100',
     npc: 'bg-color-npc-100',
     item: 'bg-color-item-100',
     consumable: 'bg-color-item-100',
@@ -876,6 +918,8 @@ function submit() {
         status: form.status,
         unit: form.unit,
         sort_order: form.sort_order,
+        nature: form.nature || null,
+        intrinsic_characteristic_id: form.intrinsic_characteristic_id ? Number(form.intrinsic_characteristic_id) : null,
         hide_when_empty: form.hide_when_empty,
         hide_when_false: form.hide_when_false,
         value_overrides: (form.value_overrides ?? []).filter((o) => o.value !== '' && o.value !== undefined),
@@ -941,7 +985,7 @@ function submitConvertToLinked() {
         <SidebarNav
             title="Caractéristiques"
             description="Définitions, formules et bornes min/max par type d'entité (monstre, classe, objet). Cliquez pour éditer."
-            :items-by-group="characteristicsByGroup"
+            :items-by-group="characteristicsByGroupFiltered"
             :group-labels="groupLabels"
             groups-mode="collapse"
             searchable
@@ -962,7 +1006,19 @@ function submitConvertToLinked() {
             :get-item-label-secondary="(c) => (c.id ? `[${c.id}]` : null)"
             icon-base-path="/storage/images/icons/caracteristics"
         >
+            <template #nav-before>
+                <label class="form-control w-full px-2 pb-2">
+                    <span class="label-text text-xs">Filtrer par nature</span>
+                    <select v-model="natureFilter" class="select select-bordered select-xs w-full">
+                        <option value="">Toutes les natures</option>
+                        <option v-for="opt in natureSelectOptions" :key="opt.value" :value="opt.value">
+                            {{ opt.label }}
+                        </option>
+                    </select>
+                </label>
+            </template>
             <template #item-suffix="{ item }">
+                <span v-if="item?.nature_label" class="badge badge-ghost badge-xs mr-1">{{ item.nature_label }}</span>
                 <Tooltip
                     :content="characteristicStatusDotMap[item?.status]?.label ?? 'À valider'"
                     placement="left"
@@ -1170,6 +1226,28 @@ function submitConvertToLinked() {
                                 </div>
                                 <InputField v-model="form.unit" label="Unité" name="unit" />
                                 <InputField v-model="form.sort_order" label="Ordre" name="sort_order" type="number" />
+                                <div>
+                                    <label class="label"><span class="label-text">Nature</span></label>
+                                    <select v-model="form.nature" class="select select-bordered w-full">
+                                        <option value="">—</option>
+                                        <option v-for="opt in natureSelectOptions" :key="opt.value" :value="opt.value">
+                                            {{ opt.label }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div v-if="natureRequiresIntrinsicLink">
+                                    <label class="label"><span class="label-text">Correspond à (créature)</span></label>
+                                    <select v-model="form.intrinsic_characteristic_id" class="select select-bordered w-full">
+                                        <option value="">Choisir…</option>
+                                        <option
+                                            v-for="opt in intrinsicCharacteristicOptions"
+                                            :key="opt.id"
+                                            :value="opt.id"
+                                        >
+                                            {{ opt.name }} [{{ opt.key }}]
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1488,6 +1566,28 @@ function submitConvertToLinked() {
                                     type="number"
                                     helper="Ordre d’affichage dans les listes (plus petit = plus haut)."
                                 />
+                                <div>
+                                    <label class="label"><span class="label-text">Nature</span></label>
+                                    <select v-model="form.nature" class="select select-bordered w-full">
+                                        <option value="">—</option>
+                                        <option v-for="opt in natureSelectOptions" :key="opt.value" :value="opt.value">
+                                            {{ opt.label }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div v-if="natureRequiresIntrinsicLink">
+                                    <label class="label"><span class="label-text">Correspond à (créature)</span></label>
+                                    <select v-model="form.intrinsic_characteristic_id" class="select select-bordered w-full">
+                                        <option value="">Choisir…</option>
+                                        <option
+                                            v-for="opt in intrinsicCharacteristicOptions"
+                                            :key="opt.id"
+                                            :value="opt.id"
+                                        >
+                                            {{ opt.name }} [{{ opt.key }}]
+                                        </option>
+                                    </select>
+                                </div>
                                 <div class="sm:col-span-2 flex flex-wrap items-center gap-3 rounded-box border border-base-300 bg-base-200/40 px-4 py-3">
                                     <input
                                         id="hide_when_empty"
@@ -1761,8 +1861,10 @@ function submitConvertToLinked() {
                     </section>
 
                     <!-- Panneau 2 — Conversion (formule DofusDB → Krosmoz, graphe, échantillonnage) -->
-                    <section v-if="generalEntityRow()" class="space-y-4">
-                        <h2 class="text-xl font-semibold text-base-content border-b border-base-300 pb-2">Panneau 2 — Conversion</h2>
+                    <section v-if="generalEntityRow()" class="collapse collapse-arrow rounded-box border border-base-300 bg-base-100">
+                        <input type="checkbox" class="peer" />
+                        <h2 class="collapse-title text-xl font-semibold text-base-content">Panneau 2 — Conversion</h2>
+                        <div class="collapse-content space-y-4 pb-4">
                     <div class="card shadow border-glass-sm relative overflow-hidden">
                         <div class="card-body bg-base-100 rounded-box bg-color-neutral-100">
                             <h3 class="card-title text-lg">Formule de conversion</h3>
@@ -1961,13 +2063,14 @@ function submitConvertToLinked() {
                             </div>
                         </div>
                     </div>
+                        </div>
                     </section>
 
                     <!-- Panneau Normes (Général / *) -->
                     <section v-if="generalEntityRow()" class="card shadow border border-base-200 mt-4 border-glass-sm">
                         <div class="card-body bg-base-100 rounded-box">
                             <div class="collapse collapse-arrow bg-base-200/30">
-                                <input type="checkbox" />
+                                <input type="checkbox" checked />
                                 <div class="collapse-title text-sm font-semibold">Normes (Charte) — Général</div>
                                 <div class="collapse-content">
                                     <NormsPanel
@@ -1982,12 +2085,18 @@ function submitConvertToLinked() {
                     </section>
 
                     <!-- Panneau 3 — Mapping (lien DofusDB ↔ Krosmoz, unique par entité) -->
-                    <MappingPanel
-                        :scrapping-mappings-using-this="scrappingMappingsUsingThis ?? []"
-                        :characteristic-key="selected?.id ?? ''"
-                        :mapping-entities="selected?.scrappingMappingEntities ?? []"
-                        :entity-labels="entityLabels"
-                    />
+                    <section class="collapse collapse-arrow rounded-box border border-base-300 bg-base-100 mt-4">
+                        <input type="checkbox" class="peer" />
+                        <h2 class="collapse-title text-xl font-semibold text-base-content">Panneau 3 — Mapping</h2>
+                        <div class="collapse-content pb-4">
+                            <MappingPanel
+                                :scrapping-mappings-using-this="scrappingMappingsUsingThis ?? []"
+                                :characteristic-key="selected?.id ?? ''"
+                                :mapping-entities="selected?.scrappingMappingEntities ?? []"
+                                :entity-labels="entityLabels"
+                            />
+                        </div>
+                    </section>
 
                     <!-- Panneaux entité spécifique (sous Conversion) -->
                     <div v-for="entityKey in selectedEntityOverrides" :key="entityKey" class="card shadow border border-base-200 mt-4 border-glass-sm relative overflow-hidden" :class="entityBgClasses[entityKey]">

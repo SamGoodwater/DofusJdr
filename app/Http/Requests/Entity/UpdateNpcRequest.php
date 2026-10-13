@@ -4,7 +4,6 @@ namespace App\Http\Requests\Entity;
 
 use App\Http\Requests\Concerns\RestrictsAccessLevelMutation;
 use App\Http\Requests\Concerns\ValidatesCreatureComposableCharacteristics;
-use App\Http\Requests\Concerns\ValidatesCreatureSkillMasteries;
 use App\Enums\EntityState;
 use App\Http\Requests\Concerns\GuardsPlayableState;
 use App\Models\Entity\Npc;
@@ -23,7 +22,6 @@ class UpdateNpcRequest extends FormRequest
 
     use GuardsPlayableState;
     use ValidatesCreatureComposableCharacteristics;
-    use ValidatesCreatureSkillMasteries;
 
     public function authorize(): bool
     {
@@ -54,7 +52,7 @@ class UpdateNpcRequest extends FormRequest
             'state' => ['nullable', 'string', EntityState::rule()],
             'read_level' => ['nullable', 'integer', 'min:0', 'max:4'],
             'write_level' => ['nullable', 'integer', 'min:0', 'max:4'],
-        ], $this->creatureComposableFieldRules(), $this->creatureSkillMasteryFieldRules());
+        ], $this->creatureComposableFieldRules());
     }
 
     public function withValidator(Validator $validator): void
@@ -68,7 +66,6 @@ class UpdateNpcRequest extends FormRequest
         $validator->after(function (Validator $validator): void {
             $this->validateCreatureLevelField($validator);
             $this->validateCreatureComposableFields($validator);
-            $this->validateCreatureSkillMasteries($validator);
         });
     }
 

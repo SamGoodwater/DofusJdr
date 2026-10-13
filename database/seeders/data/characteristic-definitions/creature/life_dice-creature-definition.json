@@ -38,7 +38,8 @@
         "status": "validee",
         "sort_order": 5,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "class": {
@@ -48,6 +49,27 @@
             "max": null,
             "formula": null,
             "formula_display": null,
+            "default_value": null,
+            "conversion_formula": null,
+            "conversion_function": null,
+            "conversion_dofus_sample": null,
+            "conversion_krosmoz_sample": null,
+            "conversion_sample_rows": null,
+            "norms_grid": null,
+            "norms_formula": null,
+            "norms_conditions": null,
+            "norms_description": null,
+            "norms_help_section_id": null,
+            "labels": null,
+            "validation": null
+        },
+        "*": {
+            "dofusdb_characteristic_id": null,
+            "db_column": "life_dice",
+            "min": "1",
+            "max": "10",
+            "formula": "floor([level_creature]/2)",
+            "formula_display": "floor([level_creature]/2)",
             "default_value": null,
             "conversion_formula": null,
             "conversion_function": null,

@@ -7,6 +7,7 @@ use App\Models\Concerns\HasLeveledSections;
 use App\Models\Concerns\VisibleToViewer;
 use App\Models\Section;
 use App\Models\User;
+use App\Support\Profile\ProfileMasteryColumns;
 use Database\Factories\Entity\SpecializationFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -119,6 +120,7 @@ class Specialization extends Model implements HasMedia
         'write_level',
         'image',
         'created_by',
+        ...ProfileMasteryColumns::all(),
     ];
 
     /**
@@ -129,6 +131,7 @@ class Specialization extends Model implements HasMedia
     protected $casts = [
         'read_level' => 'integer',
         'write_level' => 'integer',
+        ...array_fill_keys(ProfileMasteryColumns::all(), 'integer'),
     ];
 
     /**

@@ -2,7 +2,7 @@
     "_schema_version": "1",
     "characteristic": {
         "key": "arcana_spell",
-        "name": "Bonus temporaire d'Arcanes",
+        "name": "Arcanes",
         "short_name": "Arc.",
         "helper": "Bonus temporaire à la compétence via sous-effet booster/retirer de sort (3.5, 2.2.2).",
         "descriptions": "Bonus temporaire d'Arcanes accordé par un effet de sort (booster / retirer / vol). S’ajoute à la compétence créature pendant la durée de l’effet ; plafond ±5 (aligné équipement, sans forgemagie). Distinct du bonus d’équipement (`arcana_object`).",
@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 202,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "arcana_creature"
     },
     "entities": {
         "*": {
@@ -28,7 +30,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(5,max(0,[d])))",
+            "conversion_formula": "round([d])",
             "conversion_function": null,
             "conversion_dofus_sample": null,
             "conversion_krosmoz_sample": null,

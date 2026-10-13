@@ -31,7 +31,8 @@ final class CreatureRuntimeStatsService
         private readonly CreatureVariableMapBuilder $variableMapBuilder,
         private readonly CreatureItemBonusAggregator $itemBonusAggregator,
         private readonly CreatureAggregatedItemBonusLimiter $itemBonusLimiter,
-        private readonly CreatureObjectBonusToCreatureVariables $objectBonusMerger
+        private readonly CreatureObjectBonusToCreatureVariables $objectBonusMerger,
+        private readonly ProfileMasteryResolver $profileMasteryResolver,
     ) {}
 
     /**
@@ -142,6 +143,10 @@ final class CreatureRuntimeStatsService
             $variables[$key.'_object'] = (float) $amount;
         }
 
+        foreach ($this->profileMasteryResolver->resolveForCreature($creature) as $profileKey => $tier) {
+            $variables[$profileKey] = (float) $tier;
+        }
+
         $characteristics = [];
         $resolvedKeys = [];
 
@@ -225,11 +230,15 @@ final class CreatureRuntimeStatsService
                 }
 
                 $baseValue = $base ?? 0.0;
-                $total = $baseValue + $object + $context;
+                // Si la formule inclut déjà les clés *_object, ne pas recompter la couche objets.
+                $objectAlreadyInFormula = $hasFormula && str_contains((string) $def['formula'], '_object]');
+                $total = $objectAlreadyInFormula
+                    ? $baseValue + $context
+                    : $baseValue + $object + $context;
                 $characteristics[$key] = $this->buildCharacteristicRow(
                     $key,
                     $entity,
-                    $baseValue,
+                    $objectAlreadyInFormula ? ($baseValue - $object) : $baseValue,
                     $object,
                     $context,
                     $total,
@@ -261,11 +270,13 @@ final class CreatureRuntimeStatsService
             $context = $this->evaluateContext($contextRaw, $variables);
             $base = $this->evaluateBaseFormula($key, $entity, $variables) ?? 0.0;
             $object = (float) $amount;
-            $total = $base + $object + $context;
+            $formula = is_string($def['formula'] ?? null) ? (string) $def['formula'] : '';
+            $objectAlreadyInFormula = $formula !== '' && str_contains($formula, '_object]');
+            $total = $objectAlreadyInFormula ? $base + $context : $base + $object + $context;
             $characteristics[$key] = $this->buildCharacteristicRow(
                 $key,
                 $entity,
-                $base,
+                $objectAlreadyInFormula ? ($base - $object) : $base,
                 $object,
                 $context,
                 $total,

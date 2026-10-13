@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 8,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": null,
             "min": "-16",
             "max": "16",
-            "formula": "[modifier_agility_creature]+[mastery_bonus_creature]*[save_agility_mastery]+[save_agility_bonus]",
-            "formula_display": "modifier_agility_creature + mastery_bonus_creature × save_agility_mastery + save_agility_bonus",
+            "formula": "[modifier_agility_creature]+[mastery_bonus_creature]*[save_agility_mastery_profile]+[save_agility_object]",
+            "formula_display": "[modifier_agility_creature]+[mastery_bonus_creature]*[save_agility_mastery_profile]+[save_agility_object]",
             "default_value": "0",
             "conversion_formula": "[d]",
             "conversion_function": null,

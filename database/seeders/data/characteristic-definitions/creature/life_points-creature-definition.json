@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 1,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "life",
             "min": "[hit_dice_creature]",
             "max": "∞",
-            "formula": "[hit_dice_creature] + [modifier_vitality_creature]*[level_creature] + ([level_creature]-1)*(round([hit_dice_creature]/2))",
-            "formula_display": "[hit_dice_creature] + [modifier_vitality_creature]×[level_creature] + ([level_creature]-1)×(round([hit_dice_creature]/2)) + life_points_max_object",
+            "formula": "[hit_dice_creature] + [modifier_vitality_creature]*[level_creature] + ([level_creature]-1)*(round([hit_dice_creature]/2))+[life_points_max_object]",
+            "formula_display": "[hit_dice_creature] + [modifier_vitality_creature]×[level_creature] + ([level_creature]-1)×(round([hit_dice_creature]/2)) + [life_points_max_object]",
             "default_value": "[hit_dice_creature]",
             "conversion_formula": "floor([d]/200)+[level]*5",
             "conversion_function": null,

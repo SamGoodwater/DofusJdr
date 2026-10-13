@@ -48,6 +48,8 @@ class DatabaseSeeder extends Seeder
             CharacteristicSeeder::class,
             CreatureCharacteristicSeeder::class,
             ObjectCharacteristicSeeder::class,
+            ConsumableCharacteristicSeeder::class,
+            ProfileCharacteristicSeeder::class,
             DofusdbCharacteristicIdSeeder::class,
             SpellCharacteristicSeeder::class,
             RegenerateCharacteristicNormsSeeder::class,

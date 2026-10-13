@@ -1,0 +1,46 @@
+{
+    "_schema_version": "1",
+    "characteristic": {
+        "key": "duration_consumable",
+        "name": "Durée",
+        "short_name": "Durée",
+        "helper": "Durée pendant laquelle le sort ou la capacité reste actif ou produit son effet.",
+        "descriptions": "Durée de l'effet. Valeur texte : « 3 tours », « 24h », « concentration », « permanent ».",
+        "icon": "duration.webp",
+        "icon_false": null,
+        "color": "cyan",
+        "value_overrides": null,
+        "hide_when_empty": false,
+        "hide_when_false": false,
+        "unit": null,
+        "type": "string",
+        "status": "validee",
+        "sort_order": 23,
+        "group": "consumable",
+        "linked_to_key": null,
+        "nature": "intrinsic"
+    },
+    "entities": {
+        "*": {
+            "dofusdb_characteristic_id": null,
+            "db_column": "duration",
+            "min": null,
+            "max": null,
+            "formula": null,
+            "formula_display": null,
+            "default_value": null,
+            "conversion_formula": null,
+            "conversion_function": null,
+            "conversion_dofus_sample": null,
+            "conversion_krosmoz_sample": null,
+            "conversion_sample_rows": null,
+            "norms_grid": null,
+            "norms_formula": null,
+            "norms_conditions": null,
+            "norms_description": "Durée textuelle : instantané, nombre de tours, concentration, minutes, heures ou permanent.",
+            "norms_help_section_id": null,
+            "value_available": null
+        }
+    },
+    "relations": null
+}

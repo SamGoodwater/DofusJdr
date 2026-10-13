@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 2,
         "group": "spell",
-        "linked_to_key": "level_creature"
+        "linked_to_key": "level_creature",
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {

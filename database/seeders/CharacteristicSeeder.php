@@ -55,7 +55,7 @@ class CharacteristicSeeder extends Seeder
         if ($rows === []) {
             throw new \RuntimeException(
                 'Aucune définition caractéristique JSON. Attendu : des fichiers *-definition.json sous '
-                .CharacteristicDefinitionNaming::RELATIVE_ROOT.'/{creature,object,spell}/'
+                .CharacteristicDefinitionNaming::RELATIVE_ROOT.'/{creature,object,spell,consumable,profile}/'
             );
         }
         // Dédoublonnage par clé pour éviter les violations de contrainte unique (ex. exécution parallèle de tests).
@@ -109,7 +109,11 @@ class CharacteristicSeeder extends Seeder
                 'group' => $row['group'] ?? null,
                 // Les liens sont gérés dans un second passage pour garantir que toutes les maîtres existent.
                 'linked_to_characteristic_id' => null,
+                'intrinsic_characteristic_id' => null,
             ];
+            if (Schema::hasColumn('characteristics', 'nature')) {
+                $payload['nature'] = $row['nature'] ?? null;
+            }
             if ($hasStatus) {
                 $payload['status'] = $row['status'] ?? Characteristic::STATUS_A_VALIDER;
             }
@@ -130,39 +134,57 @@ class CharacteristicSeeder extends Seeder
             );
         }
 
-        // 2) Deuxième passage : rattacher les caractéristiques liées à leur maître via linked_to_key
+        // 2) Deuxième passage : rattacher linked_to_key et intrinsic_key
         $idsByKey = Characteristic::query()->pluck('id', 'key')->all();
         $overwrite = SeedMode::overwrite();
+        $hasIntrinsic = Schema::hasColumn('characteristics', 'intrinsic_characteristic_id');
         foreach ($rows as $row) {
-            if (empty($row['linked_to_key'])) {
-                continue;
-            }
-
-            $masterId = $idsByKey[$row['linked_to_key']] ?? null;
-            if ($masterId === null) {
-                if ($this->command) {
-                    $this->command->warn(sprintf(
-                        'CharacteristicSeeder : caractéristique maître introuvable pour %s (linked_to_key=%s).',
-                        $row['key'],
-                        $row['linked_to_key']
-                    ));
-                }
-
-                continue;
-            }
-
             $childId = $idsByKey[$row['key']] ?? null;
             if ($childId === null) {
                 continue;
             }
 
-            $query = Characteristic::whereKey($childId);
-            if (! $overwrite) {
-                $query->whereNull('linked_to_characteristic_id');
+            if (! empty($row['linked_to_key'])) {
+                $masterId = $idsByKey[$row['linked_to_key']] ?? null;
+                if ($masterId === null) {
+                    if ($this->command) {
+                        $this->command->warn(sprintf(
+                            'CharacteristicSeeder : caractéristique maître introuvable pour %s (linked_to_key=%s).',
+                            $row['key'],
+                            $row['linked_to_key']
+                        ));
+                    }
+                } else {
+                    $query = Characteristic::whereKey($childId);
+                    if (! $overwrite) {
+                        $query->whereNull('linked_to_characteristic_id');
+                    }
+                    $query->update([
+                        'linked_to_characteristic_id' => $masterId,
+                    ]);
+                }
             }
-            $query->update([
-                'linked_to_characteristic_id' => $masterId,
-            ]);
+
+            if ($hasIntrinsic && ! empty($row['intrinsic_key'])) {
+                $intrinsicId = $idsByKey[$row['intrinsic_key']] ?? null;
+                if ($intrinsicId === null) {
+                    if ($this->command) {
+                        $this->command->warn(sprintf(
+                            'CharacteristicSeeder : intrinsèque introuvable pour %s (intrinsic_key=%s).',
+                            $row['key'],
+                            $row['intrinsic_key']
+                        ));
+                    }
+                } else {
+                    $query = Characteristic::whereKey($childId);
+                    if (! $overwrite) {
+                        $query->whereNull('intrinsic_characteristic_id');
+                    }
+                    $query->update([
+                        'intrinsic_characteristic_id' => $intrinsicId,
+                    ]);
+                }
+            }
         }
 
         if ($this->command) {

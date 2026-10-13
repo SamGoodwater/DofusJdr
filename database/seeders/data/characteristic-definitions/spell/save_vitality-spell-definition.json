@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 83,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "save_vitality_creature"
     },
     "entities": {
         "*": {
@@ -28,7 +30,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(8,max(0,0.55*pow(max(0,[d]),0.42))))",
+            "conversion_formula": "(([d] / max(abs([d]), 1)) * (round(0.55*pow(abs([d]),0.42))))",
             "conversion_function": null,
             "conversion_dofus_sample": {
                 "10": 10,

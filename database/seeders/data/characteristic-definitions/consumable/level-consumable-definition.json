@@ -1,0 +1,102 @@
+{
+    "_schema_version": "1",
+    "characteristic": {
+        "key": "level_consumable",
+        "name": "Niveau",
+        "short_name": "Niv.",
+        "helper": "Niveau de l'objet (équipements et ressources).",
+        "descriptions": "Niveau de l’objet sur l’échelle Krosmoz 1–20 (barèmes d’équipement, prix, etc.).",
+        "icon": "level.webp",
+        "icon_false": null,
+        "color": "gray",
+        "value_overrides": null,
+        "hide_when_empty": false,
+        "hide_when_false": false,
+        "unit": null,
+        "type": "string",
+        "status": "validee",
+        "sort_order": 20,
+        "group": "consumable",
+        "linked_to_key": null,
+        "nature": "intrinsic"
+    },
+    "entities": {
+        "*": {
+            "dofusdb_characteristic_id": 5,
+            "db_column": "level",
+            "min": "1",
+            "max": "20",
+            "formula": null,
+            "formula_display": null,
+            "default_value": "1",
+            "conversion_formula": "floor([d]/10)",
+            "conversion_function": null,
+            "conversion_dofus_sample": {
+                "1": 3,
+                "40": 43,
+                "80": 83,
+                "120": 125,
+                "160": 164,
+                "200": 200
+            },
+            "conversion_krosmoz_sample": {
+                "1": 1,
+                "4": 4,
+                "8": 8,
+                "12": 12,
+                "16": 16,
+                "20": 20
+            },
+            "conversion_sample_rows": [
+                {
+                    "dofus_level": 1,
+                    "dofus_value": 3,
+                    "krosmoz_level": 1,
+                    "krosmoz_value": 1
+                },
+                {
+                    "dofus_level": 40,
+                    "dofus_value": 43,
+                    "krosmoz_level": 4,
+                    "krosmoz_value": 4
+                },
+                {
+                    "dofus_level": 80,
+                    "dofus_value": 83,
+                    "krosmoz_level": 8,
+                    "krosmoz_value": 8
+                },
+                {
+                    "dofus_level": 120,
+                    "dofus_value": 125,
+                    "krosmoz_level": 12,
+                    "krosmoz_value": 12
+                },
+                {
+                    "dofus_level": 160,
+                    "dofus_value": 164,
+                    "krosmoz_level": 16,
+                    "krosmoz_value": 16
+                },
+                {
+                    "dofus_level": 200,
+                    "dofus_value": 200,
+                    "krosmoz_level": 20,
+                    "krosmoz_value": 20
+                }
+            ],
+            "norms_grid": null,
+            "norms_formula": null,
+            "norms_conditions": null,
+            "norms_description": null,
+            "norms_help_section_id": null,
+            "forgemagie_max": 0,
+            "base_price_per_unit": null,
+            "rune_price_per_unit": null,
+            "value_available": null,
+            "item_type_dofus_ids": null,
+            "item_type_ids": null
+        }
+    },
+    "relations": null
+}

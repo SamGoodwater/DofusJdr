@@ -1,5 +1,13 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Nature des caractéristiques, Profil et Consommable
+
+Chaque caractéristique a une **nature** (descriptif, intrinsèque, bonus/malus, buff/débuff/vol, valeur d'action), indépendante de son groupe. Les bonus et buffs pointent l'intrinsèque créature qu'ils modifient. Deux nouveaux groupes : **Profil** (maîtrises de compétences et de sauvegardes pour classe, spécialisation et monstre) et **Consommable** (effets temporaires). Les ressources sortent du système ; équipements et panoplies restent ensemble. Les formules créature affichent explicitement le bonus d'équipement. L'admin replie par défaut les panneaux Conversion et Mapping.
+
+## Octobre 2026 — Formules de conversion sans bornes internes (buff / débuff)
+
+Les formules de conversion ne portent plus les plafonds : ce sont les `min`/`max` du pivot qui bornent. Elles sont **signées** (`+` buff, `−` débuff) pour les sorts (dégâts fixes, résistances, caracs, etc.). Plafond dégâts sort **±80**. Aperçu graphique admin : bornes d’affichage corrigées.
+
 ## Octobre 2026 — Équilibrage Excel via formules de normes
 
 Les barèmes (dégâts, soin, bouclier, PV temporaires, vol de vie, retraits PA/PM, placement, consommables) sont générés par des formules dans le système de caractéristiques (`norms_formula` → grille). Les dégâts suivent coef × PV du palier ; le vol de vie vaut 30 % des dégâts ; les invocations reprennent les normes monstre. Un hub **Équilibrage** dans la gestion du contenu pointe vers chaque fiche. Conversion classique et IA (`NpcStatGabarit`) lisent la même source. Remise à zéro : seed overwrite puis `characteristics:regenerate-norms`.

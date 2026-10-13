@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\CharacteristicNature;
 use App\Models\Concerns\HasMediaCustomNaming;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -38,11 +39,16 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $status
  * @property int $sort_order
  * @property string|null $group
+ * @property string|null $nature
  * @property int|null $linked_to_characteristic_id
+ * @property int|null $intrinsic_characteristic_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<int, CharacteristicConsumable> $consumableRows
+ * @property-read int|null $consumable_rows_count
  * @property-read Collection<int, CharacteristicCreature> $creatureRows
  * @property-read int|null $creature_rows_count
+ * @property-read Characteristic|null $intrinsicCharacteristic
  * @property-read Collection<int, Characteristic> $linkedCharacteristics
  * @property-read int|null $linked_characteristics_count
  * @property-read Characteristic|null $masterCharacteristic
@@ -50,6 +56,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read int|null $media_count
  * @property-read Collection<int, CharacteristicObject> $objectRows
  * @property-read int|null $object_rows_count
+ * @property-read Collection<int, CharacteristicProfile> $profileRows
+ * @property-read int|null $profile_rows_count
  * @property-read Collection<int, CharacteristicSpell> $spellRows
  * @property-read int|null $spell_rows_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Characteristic newModelQuery()
@@ -120,7 +128,9 @@ class Characteristic extends Model implements HasMedia
         'status',
         'sort_order',
         'group',
+        'nature',
         'linked_to_characteristic_id',
+        'intrinsic_characteristic_id',
     ];
 
     /** @var array<string, string> */
@@ -129,6 +139,7 @@ class Characteristic extends Model implements HasMedia
         'value_overrides' => 'array',
         'hide_when_empty' => 'boolean',
         'hide_when_false' => 'boolean',
+        'nature' => CharacteristicNature::class,
     ];
 
     /**
@@ -171,6 +182,14 @@ class Characteristic extends Model implements HasMedia
         return $master ?? $this;
     }
 
+    /**
+     * Intrinsèque créature modifiée par ce bonus/malus ou buff/débuff.
+     */
+    public function intrinsicCharacteristic(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'intrinsic_characteristic_id');
+    }
+
     public function creatureRows(): HasMany
     {
         return $this->hasMany(CharacteristicCreature::class, 'characteristic_id');
@@ -184,6 +203,25 @@ class Characteristic extends Model implements HasMedia
     public function spellRows(): HasMany
     {
         return $this->hasMany(CharacteristicSpell::class, 'characteristic_id');
+    }
+
+    public function consumableRows(): HasMany
+    {
+        return $this->hasMany(CharacteristicConsumable::class, 'characteristic_id');
+    }
+
+    public function profileRows(): HasMany
+    {
+        return $this->hasMany(CharacteristicProfile::class, 'characteristic_id');
+    }
+
+    public function natureEnum(): ?CharacteristicNature
+    {
+        if ($this->nature instanceof CharacteristicNature) {
+            return $this->nature;
+        }
+
+        return $this->nature !== null ? CharacteristicNature::tryFrom((string) $this->nature) : null;
     }
 
     public function registerMediaCollections(): void

@@ -1,5 +1,4 @@
 {
-    "_schema_version": "1",
     "characteristic": {
         "key": "mastery_bonus_creature",
         "name": "Bonus de maîtrise",
@@ -17,7 +16,8 @@
         "status": "validee",
         "sort_order": 10,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -28,18 +28,62 @@
             "formula": "min(6, 1+floor([level_creature]/4))",
             "formula_display": "level_creature",
             "default_value": "1",
-            "conversion_formula": "[d]",
+            "conversion_formula": "round([d])",
             "conversion_function": null,
-            "conversion_dofus_sample": null,
+            "conversion_dofus_sample": {
+                "1": 1,
+                "2": 2,
+                "3": 3,
+                "4": 4,
+                "5": 5,
+                "6": 6
+            },
             "conversion_krosmoz_sample": {
                 "1": 1,
-                "4": 2,
-                "8": 3,
-                "12": 4,
-                "16": 5,
-                "20": 6
+                "2": 2,
+                "3": 3,
+                "4": 4,
+                "5": 5,
+                "6": 6
             },
-            "conversion_sample_rows": null,
+            "conversion_sample_rows": [
+                {
+                    "dofus_level": 1,
+                    "dofus_value": 1,
+                    "krosmoz_level": 1,
+                    "krosmoz_value": 1
+                },
+                {
+                    "dofus_level": 2,
+                    "dofus_value": 2,
+                    "krosmoz_level": 2,
+                    "krosmoz_value": 2
+                },
+                {
+                    "dofus_level": 3,
+                    "dofus_value": 3,
+                    "krosmoz_level": 3,
+                    "krosmoz_value": 3
+                },
+                {
+                    "dofus_level": 4,
+                    "dofus_value": 4,
+                    "krosmoz_level": 4,
+                    "krosmoz_value": 4
+                },
+                {
+                    "dofus_level": 5,
+                    "dofus_value": 5,
+                    "krosmoz_level": 5,
+                    "krosmoz_value": 5
+                },
+                {
+                    "dofus_level": 6,
+                    "dofus_value": 6,
+                    "krosmoz_level": 6,
+                    "krosmoz_value": 6
+                }
+            ],
             "norms_grid": {
                 "very_weak": [
                     1,
@@ -53,15 +97,15 @@
                     1,
                     1,
                     1,
-                    1,
                     2,
                     2,
                     2,
                     2,
-                    2,
-                    2,
-                    2,
-                    2
+                    3,
+                    3,
+                    3,
+                    3,
+                    4
                 ],
                 "weak": [
                     1,
@@ -69,11 +113,8 @@
                     1,
                     1,
                     1,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
+                    1,
+                    1,
                     2,
                     2,
                     2,
@@ -82,11 +123,16 @@
                     3,
                     3,
                     3,
-                    3,
-                    3
+                    4,
+                    4,
+                    4,
+                    4,
+                    5
                 ],
                 "neutral": [
-                    2,
+                    1,
+                    1,
+                    1,
                     2,
                     2,
                     2,
@@ -95,8 +141,6 @@
                     3,
                     3,
                     3,
-                    3,
-                    4,
                     4,
                     4,
                     4,
@@ -104,11 +148,13 @@
                     5,
                     5,
                     5,
-                    6,
+                    5,
                     6
                 ],
                 "strong": [
-                    3,
+                    2,
+                    2,
+                    2,
                     3,
                     3,
                     3,
@@ -117,8 +163,6 @@
                     4,
                     4,
                     4,
-                    4,
-                    5,
                     5,
                     5,
                     5,
@@ -127,7 +171,7 @@
                     6,
                     6,
                     6,
-                    6
+                    7
                 ],
                 "very_strong": [
                     3,
@@ -136,6 +180,7 @@
                     4,
                     4,
                     4,
+                    4,
                     5,
                     5,
                     5,
@@ -144,15 +189,14 @@
                     6,
                     6,
                     6,
-                    6,
-                    6,
-                    6,
-                    6,
-                    6,
-                    6
+                    7,
+                    7,
+                    7,
+                    7,
+                    8
                 ]
             },
-            "norms_formula": null,
+            "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(1,1+[power])\",\"4\":\"max(1,2+[power])\",\"8\":\"max(1,3+[power])\",\"12\":\"max(1,4+[power])\",\"16\":\"max(1,5+[power])\",\"20\":\"max(1,6+[power])\"}",
             "norms_conditions": null,
             "norms_description": "Bonus de compétence (mastery). Paliers +2/+3/+4/+6 neutre.",
             "norms_help_section_id": null,
@@ -167,11 +211,54 @@
             "formula": null,
             "formula_display": null,
             "default_value": null,
-            "conversion_formula": null,
+            "conversion_formula": "round([d])",
             "conversion_function": null,
-            "conversion_dofus_sample": null,
-            "conversion_krosmoz_sample": null,
-            "conversion_sample_rows": null,
+            "conversion_dofus_sample": {
+                "1": 1,
+                "3": 3,
+                "6": 6,
+                "9": 9,
+                "12": 12
+            },
+            "conversion_krosmoz_sample": {
+                "1": 1,
+                "3": 3,
+                "6": 6,
+                "9": 9,
+                "12": 12
+            },
+            "conversion_sample_rows": [
+                {
+                    "dofus_level": 1,
+                    "dofus_value": 1,
+                    "krosmoz_level": 1,
+                    "krosmoz_value": 1
+                },
+                {
+                    "dofus_level": 3,
+                    "dofus_value": 3,
+                    "krosmoz_level": 3,
+                    "krosmoz_value": 3
+                },
+                {
+                    "dofus_level": 6,
+                    "dofus_value": 6,
+                    "krosmoz_level": 6,
+                    "krosmoz_value": 6
+                },
+                {
+                    "dofus_level": 9,
+                    "dofus_value": 9,
+                    "krosmoz_level": 9,
+                    "krosmoz_value": 9
+                },
+                {
+                    "dofus_level": 12,
+                    "dofus_value": 12,
+                    "krosmoz_level": 12,
+                    "krosmoz_value": 12
+                }
+            ],
             "norms_grid": null,
             "norms_formula": null,
             "norms_conditions": null,

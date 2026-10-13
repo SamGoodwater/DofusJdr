@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Effect;
 
-use App\Models\Characteristic;
 use App\Models\Effect;
 use App\Models\EffectDegree;
 use App\Models\EffectSubEffect;
@@ -17,43 +16,34 @@ use Illuminate\Support\Collection;
  */
 final class EffectGroupEditorDataService
 {
-    /** @var list<string> */
-    private const EXCLUDED_OBJECT_CHARACTERISTIC_KEYS = [
-        'name_object',
-        'level_object',
-        'price_object',
-        'weight_object',
-        'rarity_object',
-    ];
+    public function __construct(
+        private readonly SpellEffectCharacteristicOptionsBuilder $spellCharacteristicOptionsBuilder,
+    ) {}
 
     /**
-     * Caractéristiques du groupe « object » (BDD) pour booster / retirer / voler-caractéristiques.
+     * @deprecated Alias vers {@see characteristicsSpellBuffForEffectEditor()}.
      *
      * @return list<array{key: string, label: string, category: string, helper: string|null, descriptions: mixed}>
      */
     public function characteristicsObjectForEffectEditor(): array
     {
-        return Characteristic::query()
-            ->where('group', 'object')
-            ->whereNotIn('key', self::EXCLUDED_OBJECT_CHARACTERISTIC_KEYS)
-            ->orderBy('sort_order')
-            ->orderBy('key')
-            ->get()
-            ->map(function (Characteristic $c): array {
-                $eff = $c->effectiveCharacteristic();
+        return $this->characteristicsSpellBuffForEffectEditor();
+    }
 
-                return [
-                    // La clé objet est celle attendue par les formules d’effet, même
-                    // lorsque son libellé provient d’une caractéristique liée.
-                    'key' => $c->key,
-                    'label' => $eff->name ?? $eff->short_name ?? $eff->key,
-                    'category' => 'object',
-                    'helper' => $eff->helper,
-                    'descriptions' => $eff->descriptions,
-                ];
-            })
-            ->values()
-            ->all();
+    /**
+     * @return list<array{key: string, label: string, category: string, helper: string|null, descriptions: mixed}>
+     */
+    public function characteristicsSpellBuffForEffectEditor(): array
+    {
+        return $this->spellCharacteristicOptionsBuilder->buffDebuffOptions();
+    }
+
+    /**
+     * @return list<array{key: string, label: string, category: string, sub_effect_slugs: list<string>, helper: string|null, descriptions: mixed}>
+     */
+    public function characteristicsSpellActionForEffectEditor(): array
+    {
+        return $this->spellCharacteristicOptionsBuilder->actionValueOptions();
     }
 
     /**
@@ -81,6 +71,8 @@ final class EffectGroupEditorDataService
             ])->values()->all(),
             'characteristics' => config('effect_sub_effects.characteristics', []),
             'characteristics_object' => $this->characteristicsObjectForEffectEditor(),
+            'characteristics_spell_buff' => $this->characteristicsSpellBuffForEffectEditor(),
+            'characteristics_spell_action' => $this->characteristicsSpellActionForEffectEditor(),
             'monsters' => [],
             'conditions' => [],
             'scopes' => [

@@ -150,23 +150,35 @@ function normalizeLegacyCharacteristicKeyForSubEffect(subEffectId, params) {
         return;
     }
     const ch = params?.characteristic;
-    if (typeof ch !== 'string' || ch === '' || ch.endsWith('_object')) {
+    if (typeof ch !== 'string' || ch === '' || ch.endsWith('_spell')) {
         return;
     }
     const mapped = LEGACY_CHAR_TO_OBJECT_KEY[ch];
     if (mapped) {
-        params.characteristic = mapped;
+        params.characteristic = mapped.replace(/_object$/, '_spell');
     }
 }
 
 function characteristicsForRow(row) {
     const slug = subEffectSlugForRow(row);
     if (slug === 'booster' || slug === 'retirer' || slug === 'voler-caracteristiques') {
-        return props.options.characteristics_object ?? [];
+        return (
+            props.options.characteristics_spell_buff ??
+            props.options.characteristics_object ??
+            []
+        );
     }
     const schema = getParamSchemaForRow(row);
     const param = schema?.params?.find((p) => p.key === 'characteristic');
     const categories = param?.categories;
+    const actionList = props.options.characteristics_spell_action ?? [];
+    const actionFiltered = actionList.filter((c) => (c.sub_effect_slugs ?? []).includes(slug));
+    if (actionFiltered.length) {
+        if (categories?.length) {
+            return actionFiltered.filter((c) => categories.includes(c.category));
+        }
+        return actionFiltered;
+    }
     if (!categories?.length) return props.options.characteristics ?? [];
     return (props.options.characteristics ?? []).filter((c) => categories.includes(c.category));
 }

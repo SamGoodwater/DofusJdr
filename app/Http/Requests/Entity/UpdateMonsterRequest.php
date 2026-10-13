@@ -6,7 +6,7 @@ use App\Enums\EntityState;
 use App\Http\Requests\Concerns\GuardsPlayableState;
 use App\Http\Requests\Concerns\RestrictsAccessLevelMutation;
 use App\Http\Requests\Concerns\ValidatesCreatureComposableCharacteristics;
-use App\Http\Requests\Concerns\ValidatesCreatureSkillMasteries;
+use App\Http\Requests\Concerns\ValidatesProfileMasteryFields;
 use App\Models\Entity\Monster;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,7 +17,7 @@ class UpdateMonsterRequest extends FormRequest
     use GuardsPlayableState;
     use RestrictsAccessLevelMutation;
     use ValidatesCreatureComposableCharacteristics;
-    use ValidatesCreatureSkillMasteries;
+    use ValidatesProfileMasteryFields;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -47,7 +47,7 @@ class UpdateMonsterRequest extends FormRequest
             'read_level' => ['sometimes', 'integer', 'min:0', 'max:4'],
             'write_level' => ['sometimes', 'integer', 'min:0', 'max:4'],
             'level' => ['sometimes', 'nullable', 'string'],
-        ], $this->creatureComposableFieldRules(), $this->creatureSkillMasteryFieldRules());
+        ], $this->creatureComposableFieldRules(), $this->profileMasteryFieldRules());
     }
 
     public function withValidator(Validator $validator): void
@@ -61,7 +61,6 @@ class UpdateMonsterRequest extends FormRequest
         $validator->after(function (Validator $validator): void {
             $this->validateCreatureLevelField($validator);
             $this->validateCreatureComposableFields($validator);
-            $this->validateCreatureSkillMasteries($validator);
         });
     }
 

@@ -17,18 +17,19 @@
         "status": "validee",
         "sort_order": 84,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "action_value"
     },
     "entities": {
         "*": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-8",
+            "min": "0",
             "max": "8",
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(8,max(0,[d])))",
+            "conversion_formula": "round([d])",
             "conversion_function": null,
             "conversion_dofus_sample": {
                 "1": 1,

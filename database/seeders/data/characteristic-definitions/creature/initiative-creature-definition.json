@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 1,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "ini",
             "min": "-2",
             "max": null,
-            "formula": "[modifier_intelligence_creature]",
-            "formula_display": "modifier_intelligence_creature",
+            "formula": "[modifier_intelligence_creature]+[initiative_object]",
+            "formula_display": "[modifier_intelligence_creature]+[initiative_object]",
             "default_value": "0",
             "conversion_formula": "[d]",
             "conversion_function": null,

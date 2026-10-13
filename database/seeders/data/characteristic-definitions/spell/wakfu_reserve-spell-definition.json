@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 89,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "wakfu_reserve_creature"
     },
     "entities": {
         "*": {

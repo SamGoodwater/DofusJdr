@@ -6,6 +6,7 @@ namespace App\Services\Characteristic;
 
 use App\Models\Characteristic;
 use App\Models\CharacteristicCreature;
+use App\Models\CharacteristicConsumable;
 use App\Models\CharacteristicObject;
 use App\Models\CharacteristicSpell;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Log;
 final class CharacteristicMetaByDbColumnService
 {
     /** Clé de cache pour le share Inertia `characteristics` (invalidée à la sauvegarde des pivots / masters). */
-    public const FRONTEND_CACHE_KEY = 'characteristics:frontend:v5';
+    public const FRONTEND_CACHE_KEY = 'characteristics:frontend:v6';
 
     /**
      * Mapping db_column → définition pour PJ / PNJ (entity `*` uniquement).
@@ -244,6 +245,105 @@ final class CharacteristicMetaByDbColumnService
     }
 
     /**
+     * Mapping db_column → définition pour le groupe consommable.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function buildConsumableByDbColumn(): array
+    {
+        $out = [];
+        try {
+            $charRows = CharacteristicConsumable::query()
+                ->whereIn('entity', [CharacteristicConsumable::ENTITY_ALL, CharacteristicConsumable::ENTITY_CONSUMABLE])
+                ->whereNotNull('db_column')
+                ->with(['characteristic.masterCharacteristic', 'characteristic.intrinsicCharacteristic'])
+                ->get();
+
+            $sorted = $this->sortPivotRowsEntityOverlayLast($charRows);
+
+            foreach ($sorted as $row) {
+                $entry = $this->rowToDefinition($row->db_column, $row->characteristic, array_merge(
+                    $this->pivotLimitExtra($row),
+                    ['value_available' => $row->value_available],
+                ));
+                if ($entry !== null) {
+                    $out[$entry['db_column']] = $entry;
+                }
+            }
+        } catch (\Throwable $e) {
+            $this->reportMetaBuildFailure('buildConsumableByDbColumn', $e);
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    public function buildConsumableByCharacteristicKey(): array
+    {
+        $out = [];
+        try {
+            $charRows = CharacteristicConsumable::query()
+                ->whereIn('entity', [CharacteristicConsumable::ENTITY_ALL, CharacteristicConsumable::ENTITY_CONSUMABLE])
+                ->with(['characteristic.masterCharacteristic', 'characteristic.intrinsicCharacteristic'])
+                ->get();
+
+            $sorted = $this->sortPivotRowsEntityOverlayLast($charRows);
+
+            foreach ($sorted as $row) {
+                if ($row->characteristic === null) {
+                    continue;
+                }
+                $entry = $this->rowToDefinitionFromCharacteristic($row->characteristic, ['value_available' => $row->value_available]);
+                if ($entry !== null) {
+                    $key = $entry['key'];
+                    $out[$key] = $entry;
+                    if (str_ends_with($key, '_consumable')) {
+                        $shortKey = substr($key, 0, -11);
+                        if ($shortKey !== '') {
+                            $out[$shortKey] = $entry;
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            $this->reportMetaBuildFailure('buildConsumableByCharacteristicKey', $e);
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    public function buildConsumableByDofusdbId(): array
+    {
+        $out = [];
+        try {
+            $charRows = CharacteristicConsumable::query()
+                ->whereIn('entity', [CharacteristicConsumable::ENTITY_ALL, CharacteristicConsumable::ENTITY_CONSUMABLE])
+                ->whereNotNull('dofusdb_characteristic_id')
+                ->with(['characteristic.masterCharacteristic', 'characteristic.intrinsicCharacteristic'])
+                ->get();
+
+            $sorted = $this->sortPivotRowsEntityOverlayLast($charRows);
+
+            foreach ($sorted as $row) {
+                $idKey = (string) $row->dofusdb_characteristic_id;
+                $entry = $this->rowToDefinition($row->db_column ?? $idKey, $row->characteristic, $this->pivotLimitExtra($row));
+                if ($entry !== null && $idKey !== '') {
+                    $out[$idKey] = $entry;
+                }
+            }
+        } catch (\Throwable $e) {
+            $this->reportMetaBuildFailure('buildConsumableByDofusdbId', $e);
+        }
+
+        return $out;
+    }
+
+    /**
      * Mapping db_column → définition pour l'entité spell.
      *
      * @return array<string, array{key: string, db_column: string, name: string, short_name: string|null, helper: string|null, descriptions: array|null, icon: string|null, color: string|null, unit: string|null, type: string|null}>
@@ -255,7 +355,7 @@ final class CharacteristicMetaByDbColumnService
             $charRows = CharacteristicSpell::query()
                 ->whereIn('entity', [CharacteristicSpell::ENTITY_ALL, CharacteristicSpell::ENTITY_SPELL])
                 ->whereNotNull('db_column')
-                ->with(['characteristic.masterCharacteristic'])
+                ->with(['characteristic.masterCharacteristic', 'characteristic.intrinsicCharacteristic'])
                 ->get();
 
             $sorted = $this->sortPivotRowsEntityOverlayLast($charRows);
@@ -348,14 +448,14 @@ final class CharacteristicMetaByDbColumnService
                     'byDofusdbId' => $this->buildObjectByDofusdbId(CharacteristicObject::ENTITY_ITEM),
                 ],
                 'consumable' => [
-                    'byDbColumn' => $this->buildObjectByDbColumn(CharacteristicObject::ENTITY_CONSUMABLE),
-                    'byCharacteristicKey' => $this->buildObjectByCharacteristicKey(CharacteristicObject::ENTITY_CONSUMABLE),
-                    'byDofusdbId' => $this->buildObjectByDofusdbId(CharacteristicObject::ENTITY_CONSUMABLE),
+                    'byDbColumn' => $this->buildConsumableByDbColumn(),
+                    'byCharacteristicKey' => $this->buildConsumableByCharacteristicKey(),
+                    'byDofusdbId' => $this->buildConsumableByDofusdbId(),
                 ],
                 'resource' => [
-                    'byDbColumn' => $this->buildObjectByDbColumn(CharacteristicObject::ENTITY_RESOURCE),
-                    'byCharacteristicKey' => $this->buildObjectByCharacteristicKey(CharacteristicObject::ENTITY_RESOURCE),
-                    'byDofusdbId' => $this->buildObjectByDofusdbId(CharacteristicObject::ENTITY_RESOURCE),
+                    'byDbColumn' => [],
+                    'byCharacteristicKey' => [],
+                    'byDofusdbId' => [],
                 ],
                 'panoply' => [
                     'byDbColumn' => $this->buildObjectByDbColumn(CharacteristicObject::ENTITY_PANOPLY),
@@ -440,6 +540,7 @@ final class CharacteristicMetaByDbColumnService
      */
     private function rowToDefinitionFromCharacteristic(Characteristic $characteristic, array $extra = []): ?array
     {
+        $characteristic->loadMissing(['intrinsicCharacteristic', 'masterCharacteristic']);
         $c = $characteristic->effectiveCharacteristic();
         $key = $c->key ?? '';
         if ($key === '') {
@@ -463,7 +564,29 @@ final class CharacteristicMetaByDbColumnService
             'type' => $c->type,
             'hide_when_empty' => (bool) ($c->hide_when_empty ?? false),
             'hide_when_false' => (bool) ($c->hide_when_false ?? false),
-        ], array_filter($extra, fn ($v) => $v !== null));
+        ], $this->characteristicNatureExtra($characteristic), array_filter($extra, fn ($v) => $v !== null));
+    }
+
+    /**
+     * @return array{nature?: string, intrinsic_characteristic_id?: int, intrinsic_key?: string}
+     */
+    private function characteristicNatureExtra(Characteristic $characteristic): array
+    {
+        $characteristic->loadMissing(['intrinsicCharacteristic', 'masterCharacteristic']);
+        $c = $characteristic->effectiveCharacteristic();
+        $extra = [];
+        if (is_string($c->nature) && $c->nature !== '') {
+            $extra['nature'] = $c->nature;
+        }
+        if ($characteristic->intrinsic_characteristic_id !== null) {
+            $extra['intrinsic_characteristic_id'] = (int) $characteristic->intrinsic_characteristic_id;
+        }
+        $intrinsicKey = $characteristic->intrinsicCharacteristic?->key;
+        if (is_string($intrinsicKey) && $intrinsicKey !== '') {
+            $extra['intrinsic_key'] = $intrinsicKey;
+        }
+
+        return $extra;
     }
 
     /**
@@ -479,6 +602,7 @@ final class CharacteristicMetaByDbColumnService
         if ($characteristic === null) {
             return null;
         }
+        $characteristic->loadMissing(['intrinsicCharacteristic', 'masterCharacteristic']);
         $c = $characteristic->effectiveCharacteristic();
 
         $icons = $this->resolveCharacteristicIconPaths($c);
@@ -499,7 +623,7 @@ final class CharacteristicMetaByDbColumnService
             'type' => $c->type,
             'hide_when_empty' => (bool) ($c->hide_when_empty ?? false),
             'hide_when_false' => (bool) ($c->hide_when_false ?? false),
-        ], array_filter($extra, fn ($v) => $v !== null));
+        ], $this->characteristicNatureExtra($characteristic), array_filter($extra, fn ($v) => $v !== null));
     }
 
     /**

@@ -17,13 +17,15 @@
         "status": "validee",
         "sort_order": 66,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "initiative_creature"
     },
     "entities": {
         "*": {
             "dofusdb_characteristic_id": 44,
             "db_column": "ini",
-            "min": "0",
+            "min": "-20",
             "max": "∞",
             "formula": null,
             "formula_display": null,

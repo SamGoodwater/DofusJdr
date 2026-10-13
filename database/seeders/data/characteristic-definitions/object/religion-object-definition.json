@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 25,
         "group": "object",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "bonus_malus",
+        "intrinsic_key": "religion_creature"
     },
     "entities": {
         "*": {

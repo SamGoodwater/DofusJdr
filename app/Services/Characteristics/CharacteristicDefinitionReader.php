@@ -18,11 +18,7 @@ final class CharacteristicDefinitionReader
     public static function allDefinitionAbsolutePaths(): array
     {
         $paths = [];
-        foreach ([
-            CharacteristicDefinitionNaming::GROUP_CREATURE,
-            CharacteristicDefinitionNaming::GROUP_OBJECT,
-            CharacteristicDefinitionNaming::GROUP_SPELL,
-        ] as $group) {
+        foreach (CharacteristicDefinitionNaming::groups() as $group) {
             $dir = base_path(CharacteristicDefinitionNaming::RELATIVE_ROOT.'/'.$group);
             if (! is_dir($dir)) {
                 continue;

@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 63,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "movement_points_creature"
     },
     "entities": {
         "*": {
@@ -28,7 +30,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(4,max(0,[d])))",
+            "conversion_formula": "round([d])",
             "conversion_function": null,
             "conversion_dofus_sample": {
                 "1": 1,

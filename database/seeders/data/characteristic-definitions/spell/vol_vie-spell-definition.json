@@ -17,18 +17,19 @@
         "status": "validee",
         "sort_order": 34,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "action_value"
     },
     "entities": {
         "*": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-24",
+            "min": "0",
             "max": "24",
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(24, max(0, 0.75 * pow(max(0,[d]), 0.475))))",
+            "conversion_formula": "round(2 * pow(max(1, [d]), 0.5))",
             "conversion_function": "convertToDice",
             "conversion_dofus_sample": {
                 "10": 10,
@@ -39,10 +40,10 @@
             },
             "conversion_krosmoz_sample": {
                 "10": 2,
-                "50": 5,
-                "100": 7,
-                "300": 11,
-                "1000": 20
+                "50": 4,
+                "100": 6,
+                "300": 10,
+                "1000": 19
             },
             "conversion_sample_rows": [
                 {
@@ -55,25 +56,25 @@
                     "dofus_level": 50,
                     "dofus_value": 50,
                     "krosmoz_level": 50,
-                    "krosmoz_value": 5
+                    "krosmoz_value": 4
                 },
                 {
                     "dofus_level": 100,
                     "dofus_value": 100,
                     "krosmoz_level": 100,
-                    "krosmoz_value": 7
+                    "krosmoz_value": 6
                 },
                 {
                     "dofus_level": 300,
                     "dofus_value": 300,
                     "krosmoz_level": 300,
-                    "krosmoz_value": 11
+                    "krosmoz_value": 10
                 },
                 {
                     "dofus_level": 1000,
                     "dofus_value": 1000,
                     "krosmoz_level": 1000,
-                    "krosmoz_value": 20
+                    "krosmoz_value": 19
                 }
             ],
             "norms_grid": {

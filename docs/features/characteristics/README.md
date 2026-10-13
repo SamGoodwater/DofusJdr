@@ -1,19 +1,37 @@
 # Caractéristiques
 
-Les caractéristiques décrivent les valeurs numériques et règles de lecture des créatures, objets et sorts : niveaux, dégâts, PA/PM/PO, limites, formules et normes.
+Les caractéristiques décrivent les valeurs numériques et règles de lecture des créatures, objets, sorts, consommables et profils : niveaux, dégâts, PA/PM/PO, limites, formules et normes.
 
 Pour le modèle **base + objets + contexte**, les formules saisies et le sélecteur de niveau, voir
 [COMPUTED_VALUES.md](./COMPUTED_VALUES.md).
+
+## Nature (rôle)
+
+Chaque ligne `characteristics` porte une **nature** indépendante du groupe :
+
+| Nature | Rôle |
+| --- | --- |
+| `descriptif` | Information sans formule ni lien (nom, prix, zone de sort…) |
+| `intrinsic` | Propriété de base d'une créature, d'un sort ou d'un consommable |
+| `bonus_malus` | Bonus permanent (équipement, panoplie, profil) |
+| `buff_debuff` | Bonus temporaire (sort, consommable) — UI « Buff / Débuff / Vol » |
+| `action_value` | Valeur d'action (dégâts, soin, distances…) — `min` ≥ 0 |
+
+Les natures `bonus_malus` et `buff_debuff` pointent l'intrinsèque créature via `intrinsic_characteristic_id` (clé JSON `intrinsic_key`).
+
+## Groupes
+
+`creature`, `object` (équipements + panoplies), `spell`, **`consumable`**, **`profile`** (maîtrises classe / spécialisation / monstre). Les ressources ne font plus partie du système.
 
 ## Backend
 
 - Définitions et lecture : `app/Services/Characteristics/`, `app/Support/Characteristics/`.
 - Limites : `app/Services/Characteristic/Limit/CharacteristicLimitService.php`.
 - Formules : services sous `app/Services/Characteristic/` (`FormulaExpressionParser`, `LevelDomainResolver`).
-- Runtime créature : `app/Services/Creature/Runtime/CreatureRuntimeStatsService.php`.
-- Seeders : `CharacteristicSeeder`, `CreatureCharacteristicSeeder`, `ObjectCharacteristicSeeder`, `SpellCharacteristicSeeder`. La base est la source ; les seeders ne créent que les lignes absentes (réécriture : `project:seed --overwrite`). Export base → JSON : `scrapping:seeders:export --characteristics` (aussi via `project:backup` hors prod).
-- Métadonnées front (share Inertia `characteristics`) : `CharacteristicMetaByDbColumnService` — `helper`, descriptions, et `limit_min` / `limit_max` si le pivot a un min/max numérique figé.
-- Qualité des définitions : `app/Services/Characteristics/CharacteristicDefinitionQualityService.php` vérifie notamment les `norms_grid`, formules de conversion et restrictions d'équipement.
+- Runtime créature : `CreatureRuntimeStatsService` + `ProfileMasteryResolver` (variables `*_mastery_profile`).
+- Seeders : `CharacteristicSeeder`, `CreatureCharacteristicSeeder`, `ObjectCharacteristicSeeder`, `SpellCharacteristicSeeder`, `ConsumableCharacteristicSeeder`, `ProfileCharacteristicSeeder`. La base est la source ; réécriture : `project:seed --overwrite`. Export : `scrapping:seeders:export --characteristics`.
+- Métadonnées front : `CharacteristicMetaByDbColumnService` (cache `v6`) — `helper`, descriptions, `nature`, `limit_min` / `limit_max`.
+- Qualité : `CharacteristicDefinitionQualityService`, `CharacteristicNatureQualityService`.
 - Reprise des totaux existants : `php artisan creatures:derive-context-bonuses`.
 
 ## Normes
@@ -114,6 +132,14 @@ le type de cible, le cumul maximal et le délai global disposent désormais de d
 Les `norms_grid` de `dommages_spell`, `soin_spell`, `bouclier_spell`, `pv_temporaires_spell` et
 `vol_vie_spell` sont la **source de vérité runtime** (générées depuis `norms_formula` Excel : coef × PV,
 soin/bouclier/PV temp dérivés, vol de vie = 0,3 × dégâts). Lancement de référence à **3 PA**.
+
+### Conversion Dofus → Krosmoz
+
+- Les bornes **`min` / `max`** du pivot clampent après formule : **pas de `min(N,…)` / `max(0,…)` de résultat** dans `conversion_formula`.
+- Valeurs **signées** (buff `+` / débuff `−`) : `([d]/max(abs([d]),1)) * f(abs([d]))` (ou table JSON déjà signée, ex. résistances %).
+- **`dommages_spell`** : `([d]/max(abs([d]),1))*(round(2*pow(abs([d]),0.5)))` puis `convertToDice` ; bornes ±80.
+- **Éléments sort** (tous présents, signés) : `fixed_damage_{air,earth,fire,water,neutral}` + `do_fixe_multiple` ; `fixed_resistance_*` ; `res_*` (paliers −100…100).
+- **Dommages fixes créature / monstre** : compression équipement, bornes ±10 / ±20.
 
 - **Par tour** = cast × PA(niveau, palier) ÷ 3 — PA lus dans `action_points_creature` (`SpellActionBudgetService`).
 - **Paliers** : `weak` / `neutral` / `strong` = 3ème / 2ème / 1er rôle.

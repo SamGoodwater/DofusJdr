@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 9,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "heal_bonus",
             "min": "-7",
             "max": "7",
-            "formula": null,
-            "formula_display": null,
+            "formula": "[base]+[heal_bonus_object]",
+            "formula_display": "[base]+[heal_bonus_object]",
             "default_value": "0",
             "conversion_formula": "[d]",
             "conversion_function": null,

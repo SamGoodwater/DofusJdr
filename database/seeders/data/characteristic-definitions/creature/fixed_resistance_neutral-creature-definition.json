@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 7,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "res_fixe_neutre",
             "min": "-10",
             "max": "10",
-            "formula": null,
-            "formula_display": null,
+            "formula": "[base]+[fixed_resistance_neutral_object]",
+            "formula_display": "[base]+[fixed_resistance_neutral_object]",
             "default_value": "0",
             "conversion_formula": "[d]",
             "conversion_function": null,

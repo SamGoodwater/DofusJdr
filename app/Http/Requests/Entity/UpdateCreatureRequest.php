@@ -6,7 +6,6 @@ namespace App\Http\Requests\Entity;
 
 use App\Http\Requests\Concerns\HasCharacteristicValidation;
 use App\Http\Requests\Concerns\ValidatesCreatureComposableCharacteristics;
-use App\Http\Requests\Concerns\ValidatesCreatureSkillMasteries;
 use App\Models\Entity\Creature;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -16,12 +15,12 @@ use Illuminate\Validation\Validator;
  * FormRequest pour la mise à jour d'une Creature.
  *
  * Valide identité, niveau (domaines autorisés) et caractéristiques composables (total + contexte).
+ * Les maîtrises sont gérées sur le groupe Profil (classe / spécialisation / monstre).
  */
 class UpdateCreatureRequest extends FormRequest
 {
     use HasCharacteristicValidation;
     use ValidatesCreatureComposableCharacteristics;
-    use ValidatesCreatureSkillMasteries;
 
     public function authorize(): bool
     {
@@ -43,7 +42,7 @@ class UpdateCreatureRequest extends FormRequest
             'level' => ['nullable', 'string'],
             'other_info' => ['nullable', 'string'],
             'kamas' => ['nullable', 'string', 'max:255'],
-            'critical_hit' => ['nullable', 'integer', 'min:0', 'max:3'],
+            'critical_hit' => ['nullable', 'integer', 'min:-3', 'max:3'],
             'heal_bonus' => ['nullable', 'integer', 'min:0', 'max:7'],
             'save_vitality_bonus' => ['nullable', 'integer', 'min:0', 'max:3'],
             'save_wisdom_bonus' => ['nullable', 'integer', 'min:0', 'max:3'],
@@ -51,13 +50,7 @@ class UpdateCreatureRequest extends FormRequest
             'save_intelligence_bonus' => ['nullable', 'integer', 'min:0', 'max:3'],
             'save_chance_bonus' => ['nullable', 'integer', 'min:0', 'max:3'],
             'save_agility_bonus' => ['nullable', 'integer', 'min:0', 'max:3'],
-            'save_vitality_mastery' => ['nullable', 'integer', 'min:0', 'max:1'],
-            'save_wisdom_mastery' => ['nullable', 'integer', 'min:0', 'max:1'],
-            'save_strength_mastery' => ['nullable', 'integer', 'min:0', 'max:1'],
-            'save_intelligence_mastery' => ['nullable', 'integer', 'min:0', 'max:1'],
-            'save_chance_mastery' => ['nullable', 'integer', 'min:0', 'max:1'],
-            'save_agility_mastery' => ['nullable', 'integer', 'min:0', 'max:1'],
-        ], $this->creatureComposableFieldRules(), $this->creatureSkillMasteryFieldRules());
+        ], $this->creatureComposableFieldRules());
     }
 
     public function withValidator(Validator $validator): void
@@ -65,7 +58,6 @@ class UpdateCreatureRequest extends FormRequest
         $validator->after(function (Validator $validator): void {
             $this->validateCreatureLevelField($validator);
             $this->validateCreatureComposableFields($validator);
-            $this->validateCreatureSkillMasteries($validator);
         });
     }
 

@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 3,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "intel",
             "min": "-24",
             "max": "24",
-            "formula": null,
-            "formula_display": null,
+            "formula": "[base]+[intelligence_object]",
+            "formula_display": "[base]+[intelligence_object]",
             "default_value": "8",
             "conversion_formula": "[d]",
             "conversion_function": null,

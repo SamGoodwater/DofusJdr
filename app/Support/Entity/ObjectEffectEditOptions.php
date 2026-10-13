@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Support\Entity;
 
+use App\Enums\CharacteristicNature;
 use App\Http\Resources\ObjectEffectResource;
 use App\Models\Characteristic;
+use App\Models\Entity\Consumable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -20,12 +22,21 @@ final class ObjectEffectEditOptions
     /**
      * @return array{objectEffectCharacteristics: Collection<int, Characteristic>, objectEffectMonsters: array<int, never>}
      */
-    public static function toArray(): array
+    public static function toArray(?Model $parent = null): array
     {
-        $characteristics = Characteristic::query()
-            ->where('group', 'object')
-            ->orderBy('name')
-            ->get(['id', 'key', 'name', 'short_name']);
+        $query = Characteristic::query()->orderBy('name');
+
+        if ($parent instanceof Consumable) {
+            $query->where('group', 'consumable')
+                ->whereIn('nature', [
+                    CharacteristicNature::BuffDebuff->value,
+                    CharacteristicNature::ActionValue->value,
+                ]);
+        } else {
+            $query->where('group', 'object');
+        }
+
+        $characteristics = $query->get(['id', 'key', 'name', 'short_name', 'nature']);
 
         return [
             'objectEffectCharacteristics' => $characteristics,
@@ -42,7 +53,7 @@ final class ObjectEffectEditOptions
     {
         $req = $request ?? request();
 
-        return array_merge(self::toArray(), [
+        return array_merge(self::toArray($parent), [
             'objectEffects' => ObjectEffectResource::collection(
                 $parent->objectEffects()->with(['characteristic', 'monster.creature'])->orderBy('id')->get()
             )->toArray($req),

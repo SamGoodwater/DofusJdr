@@ -1,0 +1,202 @@
+{
+    "_schema_version": "1",
+    "characteristic": {
+        "key": "dodge_movement_points_consumable",
+        "name": "Esquive PM",
+        "short_name": "Esq PM",
+        "helper": "Esquive PM conférée par un effet de consommable.",
+        "descriptions": "Esquive PM temporaire (2.2.2). Base : 8 + mod Sagesse. Évite retrait PM. Équipement +3, forgemagie +2.",
+        "icon": "dodgeMovementPoints.webp",
+        "icon_false": null,
+        "color": "neutral",
+        "value_overrides": null,
+        "hide_when_empty": false,
+        "hide_when_false": false,
+        "unit": null,
+        "type": "int",
+        "status": "validee",
+        "sort_order": 68,
+        "group": "consumable",
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "dodge_movement_points_creature"
+    },
+    "entities": {
+        "*": {
+            "dofusdb_characteristic_id": 28,
+            "db_column": "esquive_pm",
+            "min": "-20",
+            "max": "20",
+            "formula": null,
+            "formula_display": null,
+            "default_value": "0",
+            "conversion_formula": "(([d] / max(abs([d]), 1)) * (round(0.65*pow(abs([d]),0.48))))",
+            "conversion_function": null,
+            "conversion_dofus_sample": {
+                "5": 2,
+                "20": 5,
+                "50": 8,
+                "100": 12
+            },
+            "conversion_krosmoz_sample": {
+                "5": 1,
+                "20": 1,
+                "50": 2,
+                "100": 2
+            },
+            "conversion_sample_rows": [
+                {
+                    "dofus_level": 5,
+                    "dofus_value": 5,
+                    "krosmoz_level": 5,
+                    "krosmoz_value": 1
+                },
+                {
+                    "dofus_level": 20,
+                    "dofus_value": 20,
+                    "krosmoz_level": 20,
+                    "krosmoz_value": 3
+                },
+                {
+                    "dofus_level": 50,
+                    "dofus_value": 50,
+                    "krosmoz_level": 50,
+                    "krosmoz_value": 4
+                },
+                {
+                    "dofus_level": 100,
+                    "dofus_value": 100,
+                    "krosmoz_level": 100,
+                    "krosmoz_value": 6
+                }
+            ],
+            "norms_grid": {
+                "very_weak": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "weak": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    1
+                ],
+                "neutral": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    2,
+                    2
+                ],
+                "strong": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    3,
+                    3
+                ],
+                "very_strong": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    3,
+                    3,
+                    3,
+                    4,
+                    4
+                ]
+            },
+            "norms_formula": null,
+            "norms_conditions": [
+                {
+                    "characteristic_key": "action_points_spell",
+                    "operator": ">=",
+                    "value": 5,
+                    "target": "power",
+                    "modifier": 1,
+                    "comment": "Sort coûteux → esquive supérieure"
+                }
+            ],
+            "norms_description": "Bonus esquive PM via sort (buff temporaire).",
+            "norms_help_section_id": null,
+            "value_available": null
+        }
+    },
+    "relations": null
+}

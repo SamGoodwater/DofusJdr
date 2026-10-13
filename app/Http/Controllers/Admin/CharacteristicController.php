@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CharacteristicNature;
 use App\Http\Controllers\Controller;
 use App\Models\Characteristic;
+use App\Models\CharacteristicConsumable;
 use App\Models\CharacteristicCreature;
 use App\Models\CharacteristicObject;
+use App\Models\CharacteristicProfile;
 use App\Models\CharacteristicSpell;
 use App\Models\Scrapping\ScrappingEntityMapping;
 use App\Models\Scrapping\ScrappingEntityMappingTarget;
@@ -97,13 +100,15 @@ class CharacteristicController extends Controller
     }
 
     /** Entités possibles + '*' = toutes les entités du groupe (défaut). */
-    private const ENTITIES = ['*', 'monster', 'class', 'npc', 'item', 'consumable', 'resource', 'panoply', 'spell'];
+    private const ENTITIES = ['*', 'monster', 'class', 'npc', 'item', 'panoply', 'spell', 'consumable', 'breed', 'specialization'];
 
     /** Entités par groupe (pour la création). */
     private const ENTITIES_BY_GROUP = [
         'creature' => ['*', 'monster', 'class', 'npc'],
-        'object' => ['*', 'item', 'consumable', 'resource', 'panoply'],
+        'object' => ['*', 'item', 'panoply'],
         'spell' => ['*', 'spell'],
+        'consumable' => ['*', 'consumable'],
+        'profile' => ['*', 'breed', 'specialization', 'monster'],
     ];
 
     /** Entités DofusDB proposées dans la modal mapping par groupe (objet → chemins). */
@@ -111,6 +116,8 @@ class CharacteristicController extends Controller
         'creature' => ['monster', 'breed'],
         'object' => ['item', 'panoply'],
         'spell' => ['spell'],
+        'consumable' => ['consumable'],
+        'profile' => [],
     ];
 
     public function __construct(
@@ -145,13 +152,58 @@ class CharacteristicController extends Controller
 
     public function index(): InertiaResponse
     {
-        return Inertia::render('Admin/characteristics/Index', [
-            'characteristicsByGroup' => $this->buildCharacteristicsByGroup(),
-            'selected' => null,
+        return Inertia::render('Admin/characteristics/Index', array_merge(
+            $this->adminCharacteristicFormProps(),
+            [
+                'characteristicsByGroup' => $this->buildCharacteristicsByGroup(),
+                'selected' => null,
+                'itemTypes' => [],
+            ]
+        ));
+    }
+
+    /**
+     * Options communes admin (natures, intrinsèques créature, entités par groupe).
+     *
+     * @return array<string, mixed>
+     */
+    private function adminCharacteristicFormProps(): array
+    {
+        return [
             'entitiesByGroup' => self::ENTITIES_BY_GROUP,
-            // Types d’équipement : utiles à l’édition / création, pas à l’écran d’accueil.
-            'itemTypes' => [],
-        ]);
+            'groups' => array_keys(self::ENTITIES_BY_GROUP),
+            'natures' => array_map(
+                static fn (CharacteristicNature $n): array => ['value' => $n->value, 'label' => $n->label()],
+                CharacteristicNature::cases()
+            ),
+            'intrinsicCharacteristicOptions' => $this->intrinsicCharacteristicOptionsForAdmin(),
+        ];
+    }
+
+    /**
+     * Caractéristiques créature intrinsèques (lien bonus_malus / buff_debuff).
+     *
+     * @return list<array{id: int, key: string, name: string}>
+     */
+    private function intrinsicCharacteristicOptionsForAdmin(): array
+    {
+        if (! Schema::hasColumn('characteristics', 'nature')) {
+            return [];
+        }
+
+        return Characteristic::query()
+            ->where('group', 'creature')
+            ->where('nature', CharacteristicNature::Intrinsic->value)
+            ->whereNull('linked_to_characteristic_id')
+            ->orderBy('sort_order')
+            ->orderBy('key')
+            ->get(['id', 'key', 'name'])
+            ->map(fn (Characteristic $c): array => [
+                'id' => (int) $c->id,
+                'key' => $c->key,
+                'name' => $c->name ?? $c->key,
+            ])
+            ->all();
     }
 
     /**
@@ -212,18 +264,19 @@ class CharacteristicController extends Controller
             }
         }
 
-        return Inertia::render('Admin/characteristics/Index', [
-            'characteristicsByGroup' => $characteristicsByGroup,
-            'selected' => null,
-            'createMode' => true,
-            'groups' => array_keys(self::ENTITIES_BY_GROUP),
-            'entitiesByGroup' => self::ENTITIES_BY_GROUP,
-            'entitiesTemplate' => $entitiesTemplate,
-            'characteristicsForLinkOrCopy' => $characteristicsForLinkOrCopy,
-            'copyFromCharacteristic' => $copyFromCharacteristic,
-            'conversionFunctionOptions' => $this->conversionFunctionRegistry->options(),
-            'itemTypes' => $this->itemTypesForAdminSelect(),
-        ]);
+        return Inertia::render('Admin/characteristics/Index', array_merge(
+            $this->adminCharacteristicFormProps(),
+            [
+                'characteristicsByGroup' => $characteristicsByGroup,
+                'selected' => null,
+                'createMode' => true,
+                'entitiesTemplate' => $entitiesTemplate,
+                'characteristicsForLinkOrCopy' => $characteristicsForLinkOrCopy,
+                'copyFromCharacteristic' => $copyFromCharacteristic,
+                'conversionFunctionOptions' => $this->conversionFunctionRegistry->options(),
+                'itemTypes' => $this->itemTypesForAdminSelect(),
+            ]
+        ));
     }
 
     /**
@@ -245,7 +298,16 @@ class CharacteristicController extends Controller
         foreach (CharacteristicSpell::where('characteristic_id', $characteristic->id)->orderBy('entity')->get() as $row) {
             $entities[] = $this->groupRowToEntity($row, $characteristic);
         }
+        foreach (CharacteristicConsumable::where('characteristic_id', $characteristic->id)->orderBy('entity')->get() as $row) {
+            $entities[] = $this->groupRowToEntity($row, $characteristic);
+        }
+        foreach (CharacteristicProfile::where('characteristic_id', $characteristic->id)->orderBy('entity')->get() as $row) {
+            $entities[] = $this->groupRowToEntity($row, $characteristic);
+        }
         $entities = array_values(array_filter($entities, fn (array $ent): bool => in_array($ent['entity'] ?? '', $entitiesForGroup, true)));
+
+        $characteristic->loadMissing('intrinsicCharacteristic');
+        $nature = $characteristic->natureEnum();
 
         return [
             'key' => $characteristic->key,
@@ -262,6 +324,8 @@ class CharacteristicController extends Controller
             'unit' => $characteristic->unit,
             'sort_order' => $characteristic->sort_order,
             'group' => $group,
+            'nature' => $nature?->value,
+            'intrinsic_characteristic_id' => $characteristic->intrinsic_characteristic_id,
             'entities' => $entities,
         ];
     }
@@ -299,7 +363,9 @@ class CharacteristicController extends Controller
             'status' => ['nullable', 'string', Rule::in(Characteristic::STATUSES)],
             'unit' => 'nullable|string|max:64',
             'sort_order' => 'nullable|integer',
-            'group' => 'required|in:creature,object,spell',
+            'group' => 'required|in:creature,object,spell,consumable,profile',
+            'nature' => ['nullable', 'string', Rule::in(CharacteristicNature::values())],
+            'intrinsic_characteristic_id' => 'nullable|integer|exists:characteristics,id',
             'value_overrides' => 'nullable|array',
             'value_overrides.*.value' => 'required',
             'value_overrides.*.icon' => 'nullable|string|max:64',
@@ -368,11 +434,15 @@ class CharacteristicController extends Controller
         if ($this->characteristicsTableHasHideWhenFalseColumn()) {
             $createPayload['hide_when_false'] = (bool) ($data['hide_when_false'] ?? false);
         }
+        if (Schema::hasColumn('characteristics', 'nature')) {
+            $createPayload['nature'] = $data['nature'] ?? null;
+            $createPayload['intrinsic_characteristic_id'] = $data['intrinsic_characteristic_id'] ?? null;
+        }
 
         $characteristic = Characteristic::create($createPayload);
 
         foreach ($entities as $ent) {
-            $this->updateGroupRow($characteristic->id, $ent['entity'], $ent);
+            $this->updateGroupRow($characteristic->id, $data['group'], $ent['entity'], $ent);
         }
 
         $this->getter->clearCache();
@@ -390,7 +460,7 @@ class CharacteristicController extends Controller
     {
         $data = $request->validate([
             'linked_to_characteristic_id' => ['required', 'integer', 'exists:characteristics,id'],
-            'group' => 'required|in:creature,object,spell',
+            'group' => 'required|in:creature,object,spell,consumable,profile',
             'key' => ['nullable', 'string', 'max:64', 'regex:/^[a-z0-9_]+$/'],
         ]);
 
@@ -441,7 +511,7 @@ class CharacteristicController extends Controller
     private function deriveLinkedKey(string $masterKey, string $group): string
     {
         $suffix = '_'.$group;
-        foreach (['_creature', '_object', '_spell'] as $s) {
+        foreach (['_creature', '_object', '_spell', '_consumable', '_profile'] as $s) {
             if (str_ends_with($masterKey, $s)) {
                 return substr($masterKey, 0, -strlen($s)).$suffix;
             }
@@ -456,25 +526,29 @@ class CharacteristicController extends Controller
         if ($characteristic === null) {
             session()->flash('error', 'Caractéristique introuvable.');
 
-            return Inertia::render('Admin/characteristics/Index', [
-                'characteristicsByGroup' => $this->buildCharacteristicsByGroup(),
-                'selected' => null,
-                'entitiesByGroup' => self::ENTITIES_BY_GROUP,
-                'itemTypes' => $this->itemTypesForAdminSelect(),
-            ])->with('error', 'Caractéristique introuvable.');
+            return Inertia::render('Admin/characteristics/Index', array_merge(
+                $this->adminCharacteristicFormProps(),
+                [
+                    'characteristicsByGroup' => $this->buildCharacteristicsByGroup(),
+                    'selected' => null,
+                    'itemTypes' => $this->itemTypesForAdminSelect(),
+                ]
+            ))->with('error', 'Caractéristique introuvable.');
         }
 
         $payload = $this->showPayloadBuilder->build($characteristic);
 
-        return Inertia::render('Admin/characteristics/Index', [
-            'characteristicsByGroup' => $this->buildCharacteristicsByGroup(),
-            'selected' => $payload['selected'],
-            'entitiesByGroup' => self::ENTITIES_BY_GROUP,
-            'characteristicsForConvertToLinked' => $payload['characteristicsForConvertToLinked'],
-            'scrappingMappingsUsingThis' => $payload['scrappingMappingsUsingThis'],
-            'conversionFunctionOptions' => $this->conversionFunctionRegistry->options(),
-            'itemTypes' => $this->itemTypesForAdminSelect(),
-        ]);
+        return Inertia::render('Admin/characteristics/Index', array_merge(
+            $this->adminCharacteristicFormProps(),
+            [
+                'characteristicsByGroup' => $this->buildCharacteristicsByGroup(),
+                'selected' => $payload['selected'],
+                'characteristicsForConvertToLinked' => $payload['characteristicsForConvertToLinked'],
+                'scrappingMappingsUsingThis' => $payload['scrappingMappingsUsingThis'],
+                'conversionFunctionOptions' => $this->conversionFunctionRegistry->options(),
+                'itemTypes' => $this->itemTypesForAdminSelect(),
+            ]
+        ));
     }
 
     /**
@@ -660,6 +734,10 @@ class CharacteristicController extends Controller
      */
     private function inferPrimaryGroup(Characteristic $characteristic): string
     {
+        if (is_string($characteristic->group) && $characteristic->group !== ''
+            && in_array($characteristic->group, array_keys(self::ENTITIES_BY_GROUP), true)) {
+            return $characteristic->group;
+        }
         if (CharacteristicCreature::where('characteristic_id', $characteristic->id)->exists()) {
             return 'creature';
         }
@@ -668,6 +746,12 @@ class CharacteristicController extends Controller
         }
         if (CharacteristicSpell::where('characteristic_id', $characteristic->id)->exists()) {
             return 'spell';
+        }
+        if (CharacteristicConsumable::where('characteristic_id', $characteristic->id)->exists()) {
+            return 'consumable';
+        }
+        if (CharacteristicProfile::where('characteristic_id', $characteristic->id)->exists()) {
+            return 'profile';
         }
 
         return 'creature';
@@ -898,6 +982,8 @@ class CharacteristicController extends Controller
             'status' => ['nullable', 'string', Rule::in(Characteristic::STATUSES)],
             'unit' => 'nullable|string|max:64',
             'sort_order' => 'nullable|integer',
+            'nature' => ['nullable', 'string', Rule::in(CharacteristicNature::values())],
+            'intrinsic_characteristic_id' => 'nullable|integer|exists:characteristics,id',
             'entities' => 'array',
             'entities.*.entity' => 'required|in:'.implode(',', self::ENTITIES),
             'entities.*.db_column' => 'nullable|string|max:64',
@@ -979,6 +1065,10 @@ class CharacteristicController extends Controller
         if ($this->characteristicsTableHasHideWhenFalseColumn()) {
             $updatePayload['hide_when_false'] = (bool) ($data['hide_when_false'] ?? false);
         }
+        if (Schema::hasColumn('characteristics', 'nature')) {
+            $updatePayload['nature'] = $data['nature'] ?? null;
+            $updatePayload['intrinsic_characteristic_id'] = $data['intrinsic_characteristic_id'] ?? null;
+        }
 
         $characteristic->update($updatePayload);
 
@@ -1014,7 +1104,7 @@ class CharacteristicController extends Controller
         $sentEntities = array_column($entitiesToProcess, 'entity');
         foreach ($entitiesToProcess as $ent) {
             $entity = $ent['entity'];
-            $this->updateGroupRow($characteristic->id, $entity, $ent);
+            $this->updateGroupRow($characteristic->id, $group, $entity, $ent);
         }
 
         $toRemove = array_filter($allowedForGroup, fn (string $e): bool => $e !== '*' && ! in_array($e, $sentEntities, true));
@@ -1058,6 +1148,8 @@ class CharacteristicController extends Controller
         CharacteristicCreature::where('characteristic_id', $characteristic->id)->delete();
         CharacteristicObject::where('characteristic_id', $characteristic->id)->delete();
         CharacteristicSpell::where('characteristic_id', $characteristic->id)->delete();
+        CharacteristicConsumable::where('characteristic_id', $characteristic->id)->delete();
+        CharacteristicProfile::where('characteristic_id', $characteristic->id)->delete();
 
         $this->getter->clearCache();
         $this->colorCssGenerator->generate();
@@ -1107,17 +1199,15 @@ class CharacteristicController extends Controller
      */
     private function buildCharacteristicsByGroup(): array
     {
-        $byGroup = [
-            'creature' => [],
-            'object' => [],
-            'spell' => [],
-        ];
+        $byGroup = array_fill_keys(array_keys(self::ENTITIES_BY_GROUP), []);
         $characteristics = Characteristic::with('masterCharacteristic')->orderBy('sort_order')->orderBy('key')->get();
         foreach ($characteristics as $c) {
-            $group = $c->group !== null && in_array($c->group, ['creature', 'object', 'spell'], true)
-                ? $c->group
-                : $this->inferPrimaryGroup($c);
+            $group = $this->inferPrimaryGroup($c);
+            if (! array_key_exists($group, $byGroup)) {
+                continue;
+            }
             $effective = $c->effectiveCharacteristic();
+            $nature = $effective->natureEnum();
             $byGroup[$group][] = [
                 'id' => $c->key,
                 'name' => $effective->name,
@@ -1125,6 +1215,8 @@ class CharacteristicController extends Controller
                 'icon' => $effective->icon,
                 'color' => $effective->color,
                 'status' => $this->characteristicsTableHasStatusColumn() ? ($c->status ?? Characteristic::STATUS_A_VALIDER) : Characteristic::STATUS_A_VALIDER,
+                'nature' => $nature?->value,
+                'nature_label' => $nature?->label(),
             ];
         }
 
@@ -1152,6 +1244,12 @@ class CharacteristicController extends Controller
         foreach (CharacteristicSpell::select('characteristic_id', 'entity')->distinct()->get() as $row) {
             $ids[$row->entity][] = $row->characteristic_id;
         }
+        foreach (CharacteristicConsumable::select('characteristic_id', 'entity')->distinct()->get() as $row) {
+            $ids[$row->entity][] = $row->characteristic_id;
+        }
+        foreach (CharacteristicProfile::select('characteristic_id', 'entity')->distinct()->get() as $row) {
+            $ids[$row->entity][] = $row->characteristic_id;
+        }
         foreach ($ids as $entity => $characteristicIds) {
             $characteristicIds = array_unique($characteristicIds);
             $chars = Characteristic::whereIn('id', $characteristicIds)->orderBy('sort_order')->orderBy('key')->get();
@@ -1164,8 +1262,10 @@ class CharacteristicController extends Controller
     /**
      * @return array<string, mixed>
      */
-    private function groupRowToEntity(CharacteristicCreature|CharacteristicObject|CharacteristicSpell $row, Characteristic $characteristic): array
-    {
+    private function groupRowToEntity(
+        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile $row,
+        Characteristic $characteristic
+    ): array {
         $out = [
             'entity' => $row->entity,
             'db_column' => $row->db_column,
@@ -1290,7 +1390,7 @@ class CharacteristicController extends Controller
         return $key.$suffix;
     }
 
-    private function updateGroupRow(int $characteristicId, string $entity, array $data): void
+    private function updateGroupRow(int $characteristicId, string $group, string $entity, array $data): void
     {
         $sampleRows = $this->normalizeSampleRowsForSave($data['conversion_sample_rows'] ?? null);
         $common = [
@@ -1312,13 +1412,15 @@ class CharacteristicController extends Controller
             'norms_help_section_id' => $this->parseNormsHelpSectionId($data['norms_help_section_id'] ?? null),
         ];
 
-        if (in_array($entity, ['*', 'monster', 'class', 'npc'], true)) {
+        if ($group === 'creature' && in_array($entity, self::ENTITIES_BY_GROUP['creature'], true)) {
             CharacteristicCreature::updateOrCreate(
                 ['characteristic_id' => $characteristicId, 'entity' => $entity],
                 $common
             );
+
+            return;
         }
-        if (in_array($entity, ['*', 'item', 'consumable', 'resource', 'panoply'], true)) {
+        if ($group === 'object' && in_array($entity, self::ENTITIES_BY_GROUP['object'], true)) {
             $basePrice = $data['base_price_per_unit'] ?? null;
             $runePrice = $data['rune_price_per_unit'] ?? null;
             $charObj = CharacteristicObject::updateOrCreate(
@@ -1333,9 +1435,27 @@ class CharacteristicController extends Controller
                 $ids = array_values(array_unique(array_filter(array_map('intval', $data['item_type_ids']))));
                 $charObj->allowedItemTypes()->sync($ids);
             }
+
+            return;
         }
-        if ($entity === 'spell' || $entity === '*') {
+        if ($group === 'spell' && in_array($entity, self::ENTITIES_BY_GROUP['spell'], true)) {
             CharacteristicSpell::updateOrCreate(
+                ['characteristic_id' => $characteristicId, 'entity' => $entity],
+                $common
+            );
+
+            return;
+        }
+        if ($group === 'consumable' && in_array($entity, self::ENTITIES_BY_GROUP['consumable'], true)) {
+            CharacteristicConsumable::updateOrCreate(
+                ['characteristic_id' => $characteristicId, 'entity' => $entity],
+                $common
+            );
+
+            return;
+        }
+        if ($group === 'profile' && in_array($entity, self::ENTITIES_BY_GROUP['profile'], true)) {
+            CharacteristicProfile::updateOrCreate(
                 ['characteristic_id' => $characteristicId, 'entity' => $entity],
                 $common
             );
@@ -1350,11 +1470,17 @@ class CharacteristicController extends Controller
         if ($group === 'creature' && in_array($entity, ['monster', 'class', 'npc'], true)) {
             CharacteristicCreature::where('characteristic_id', $characteristicId)->where('entity', $entity)->delete();
         }
-        if ($group === 'object' && in_array($entity, ['item', 'consumable', 'resource', 'panoply'], true)) {
+        if ($group === 'object' && in_array($entity, ['item', 'panoply'], true)) {
             CharacteristicObject::where('characteristic_id', $characteristicId)->where('entity', $entity)->delete();
         }
         if ($group === 'spell' && $entity === 'spell') {
             CharacteristicSpell::where('characteristic_id', $characteristicId)->where('entity', $entity)->delete();
+        }
+        if ($group === 'consumable' && $entity === 'consumable') {
+            CharacteristicConsumable::where('characteristic_id', $characteristicId)->where('entity', $entity)->delete();
+        }
+        if ($group === 'profile' && in_array($entity, ['breed', 'specialization', 'monster'], true)) {
+            CharacteristicProfile::where('characteristic_id', $characteristicId)->where('entity', $entity)->delete();
         }
     }
 
@@ -1371,6 +1497,12 @@ class CharacteristicController extends Controller
         }
         if ($currentGroup !== 'spell') {
             CharacteristicSpell::where('characteristic_id', $characteristicId)->delete();
+        }
+        if ($currentGroup !== 'consumable') {
+            CharacteristicConsumable::where('characteristic_id', $characteristicId)->delete();
+        }
+        if ($currentGroup !== 'profile') {
+            CharacteristicProfile::where('characteristic_id', $characteristicId)->delete();
         }
     }
 

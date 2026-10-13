@@ -172,7 +172,10 @@ final class DofusConversionService
         if ($entityType === 'spell') {
             return 'level_spell';
         }
-        if (in_array($entityType, ['item', 'consumable', 'resource', 'panoply'], true)) {
+        if ($entityType === 'consumable') {
+            return 'level_consumable';
+        }
+        if (in_array($entityType, ['item', 'resource', 'panoply'], true)) {
             return 'level_object';
         }
         if (in_array($entityType, ['monster', 'class', 'npc'], true)) {

@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 27,
         "group": "object",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "bonus_malus",
+        "intrinsic_key": "heal_bonus_creature"
     },
     "entities": {
         "*": {
@@ -28,7 +30,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "([d] / max(abs([d]), 1)) * (round(min(5, abs([d]) / 5)))",
+            "conversion_formula": "([d] / max(abs([d]), 1)) * (round(abs([d]) / 5))",
             "conversion_function": null,
             "conversion_dofus_sample": {
                 "1": 0,

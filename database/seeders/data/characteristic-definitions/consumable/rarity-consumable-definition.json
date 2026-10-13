@@ -1,0 +1,83 @@
+{
+    "_schema_version": "1",
+    "characteristic": {
+        "key": "rarity_consumable",
+        "name": "Rareté",
+        "short_name": "Rar.",
+        "helper": "Commun, rare, mythique, épique ou légendaire.",
+        "descriptions": "Commun, peu commun, rare, très rare, légendaire, unique",
+        "icon": "rarity.webp",
+        "icon_false": null,
+        "color": "stone",
+        "value_overrides": [
+            {
+                "value": 0,
+                "color": "neutral",
+                "subtitle": "Commun"
+            },
+            {
+                "value": 1,
+                "color": "stone",
+                "subtitle": "Peu commun"
+            },
+            {
+                "value": 2,
+                "color": "blue",
+                "subtitle": "Rare"
+            },
+            {
+                "value": 3,
+                "color": "sky",
+                "subtitle": "Très rare"
+            },
+            {
+                "value": 4,
+                "color": "violet",
+                "subtitle": "Légendaire"
+            },
+            {
+                "value": 5,
+                "color": "indigo",
+                "subtitle": "Unique"
+            }
+        ],
+        "hide_when_empty": false,
+        "hide_when_false": false,
+        "unit": null,
+        "type": "int",
+        "status": "validee",
+        "sort_order": 21,
+        "group": "consumable",
+        "linked_to_key": null,
+        "nature": "descriptif",
+        "intrinsic_key": null
+    },
+    "entities": {
+        "*": {
+            "dofusdb_characteristic_id": null,
+            "db_column": "rarity",
+            "min": "-5",
+            "max": "5",
+            "formula": null,
+            "formula_display": null,
+            "default_value": "0",
+            "conversion_formula": "{\"0\":\"0\",\"2\":\"0\",\"7\":\"1\",\"15\":\"2\",\"20\":\"3\",\"characteristic\":\"level\"}",
+            "conversion_function": null,
+            "conversion_dofus_sample": null,
+            "conversion_krosmoz_sample": null,
+            "conversion_sample_rows": null,
+            "norms_grid": null,
+            "norms_formula": null,
+            "norms_conditions": null,
+            "norms_description": null,
+            "norms_help_section_id": null,
+            "forgemagie_max": 0,
+            "base_price_per_unit": null,
+            "rune_price_per_unit": null,
+            "value_available": null,
+            "item_type_dofus_ids": null,
+            "item_type_ids": null
+        }
+    },
+    "relations": null
+}

@@ -2,7 +2,7 @@
     "_schema_version": "1",
     "characteristic": {
         "key": "dommages_spell",
-        "name": "Dommages",
+        "name": "Dégâts",
         "short_name": "Dmg",
         "helper": "Montant de dommages infligés par un sous-effet frapper. Conversion Dofus → Krosmoz.",
         "descriptions": "Dégâts supplémentaires de type neutre appliqués par l’effet du sort (2.2.2).",
@@ -17,18 +17,19 @@
         "status": "validee",
         "sort_order": 32,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "action_value"
     },
     "entities": {
         "*": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-45",
-            "max": "45",
+            "min": "0",
+            "max": "80",
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(45, max(0, 1.12 * pow(max(0,[d]), 0.475))))",
+            "conversion_formula": "round(2 * pow(max(1, [d]), 0.5))",
             "conversion_function": "convertToDice",
             "conversion_dofus_sample": {
                 "10": 10,
@@ -38,42 +39,42 @@
                 "1000": 1000
             },
             "conversion_krosmoz_sample": {
-                "10": 3,
-                "50": 7,
-                "100": 10,
-                "300": 17,
-                "1000": 30
+                "10": 6,
+                "50": 14,
+                "100": 20,
+                "300": 35,
+                "1000": 63
             },
             "conversion_sample_rows": [
                 {
                     "dofus_level": 10,
                     "dofus_value": 10,
                     "krosmoz_level": 10,
-                    "krosmoz_value": 3
+                    "krosmoz_value": 6
                 },
                 {
                     "dofus_level": 50,
                     "dofus_value": 50,
                     "krosmoz_level": 50,
-                    "krosmoz_value": 7
+                    "krosmoz_value": 14
                 },
                 {
                     "dofus_level": 100,
                     "dofus_value": 100,
                     "krosmoz_level": 100,
-                    "krosmoz_value": 10
+                    "krosmoz_value": 20
                 },
                 {
                     "dofus_level": 300,
                     "dofus_value": 300,
                     "krosmoz_level": 300,
-                    "krosmoz_value": 17
+                    "krosmoz_value": 35
                 },
                 {
                     "dofus_level": 1000,
                     "dofus_value": 1000,
                     "krosmoz_level": 1000,
-                    "krosmoz_value": 30
+                    "krosmoz_value": 63
                 }
             ],
             "norms_grid": {

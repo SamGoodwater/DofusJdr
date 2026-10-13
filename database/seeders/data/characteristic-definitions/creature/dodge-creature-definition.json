@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 5,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "fuite",
             "min": "-17",
             "max": "17",
-            "formula": null,
-            "formula_display": null,
+            "formula": "[base]+[dodge_object]",
+            "formula_display": "[base]+[dodge_object]",
             "default_value": "0",
             "conversion_formula": "[d]",
             "conversion_function": null,

@@ -17,18 +17,19 @@
         "status": "validee",
         "sort_order": 36,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "action_value"
     },
     "entities": {
         "*": {
             "dofusdb_characteristic_id": 95,
             "db_column": null,
-            "min": "-32",
-            "max": "32",
+            "min": "0",
+            "max": "55",
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(32, max(0, 1.00 * pow(max(0,[d]), 0.475))))",
+            "conversion_formula": "round(2 * pow(max(1, [d]), 0.5))",
             "conversion_function": "convertToDice",
             "conversion_dofus_sample": {
                 "10": 10,
@@ -38,42 +39,42 @@
                 "1000": 1000
             },
             "conversion_krosmoz_sample": {
-                "10": 3,
-                "50": 6,
-                "100": 9,
-                "300": 15,
-                "1000": 27
+                "10": 5,
+                "50": 10,
+                "100": 15,
+                "300": 25,
+                "1000": 45
             },
             "conversion_sample_rows": [
                 {
                     "dofus_level": 10,
                     "dofus_value": 10,
                     "krosmoz_level": 10,
-                    "krosmoz_value": 3
+                    "krosmoz_value": 5
                 },
                 {
                     "dofus_level": 50,
                     "dofus_value": 50,
                     "krosmoz_level": 50,
-                    "krosmoz_value": 6
+                    "krosmoz_value": 10
                 },
                 {
                     "dofus_level": 100,
                     "dofus_value": 100,
                     "krosmoz_level": 100,
-                    "krosmoz_value": 9
+                    "krosmoz_value": 15
                 },
                 {
                     "dofus_level": 300,
                     "dofus_value": 300,
                     "krosmoz_level": 300,
-                    "krosmoz_value": 15
+                    "krosmoz_value": 25
                 },
                 {
                     "dofus_level": 1000,
                     "dofus_value": 1000,
                     "krosmoz_level": 1000,
-                    "krosmoz_value": 27
+                    "krosmoz_value": 45
                 }
             ],
             "norms_grid": {

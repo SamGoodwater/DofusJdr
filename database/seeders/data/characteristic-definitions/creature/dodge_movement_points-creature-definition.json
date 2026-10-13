@@ -17,7 +17,8 @@
         "status": "validee",
         "sort_order": 5,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -25,8 +26,8 @@
             "db_column": "dodge_pm",
             "min": "-20",
             "max": "20",
-            "formula": "8+[modifier_wisdom_creature]",
-            "formula_display": "modifier_wisdom_creature",
+            "formula": "8+[modifier_wisdom_creature]+[dodge_movement_points_object]",
+            "formula_display": "8+[modifier_wisdom_creature]+[dodge_movement_points_object]",
             "default_value": "8",
             "conversion_formula": "[d]",
             "conversion_function": null,

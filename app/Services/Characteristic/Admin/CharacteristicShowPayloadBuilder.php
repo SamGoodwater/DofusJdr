@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\Characteristic\Admin;
 
+use App\Enums\CharacteristicNature;
 use App\Models\Characteristic;
+use App\Models\CharacteristicConsumable;
 use App\Models\CharacteristicCreature;
 use App\Models\CharacteristicObject;
+use App\Models\CharacteristicProfile;
 use App\Models\CharacteristicSpell;
 use App\Services\Characteristic\Conversion\ConversionFunctionRegistry;
 use App\Services\Characteristic\Getter\CharacteristicGetterService;
@@ -23,8 +26,10 @@ final class CharacteristicShowPayloadBuilder
 {
     private const ENTITIES_BY_GROUP = [
         'creature' => ['*', 'monster', 'class', 'npc'],
-        'object' => ['*', 'item', 'consumable', 'resource', 'panoply'],
+        'object' => ['*', 'item', 'panoply'],
         'spell' => ['*', 'spell'],
+        'consumable' => ['*', 'consumable'],
+        'profile' => ['*', 'breed', 'specialization', 'monster'],
     ];
 
     /** Entités DofusDB pour le panneau Mapping (une ligne par entité, modal « Lier »). */
@@ -32,6 +37,8 @@ final class CharacteristicShowPayloadBuilder
         'creature' => ['monster', 'breed'],
         'object' => ['item', 'panoply'],
         'spell' => ['spell'],
+        'consumable' => ['consumable'],
+        'profile' => [],
     ];
 
     public function __construct(
@@ -47,7 +54,7 @@ final class CharacteristicShowPayloadBuilder
      */
     public function build(Characteristic $characteristic): array
     {
-        $characteristic->loadMissing('masterCharacteristic');
+        $characteristic->loadMissing(['masterCharacteristic', 'intrinsicCharacteristic']);
         $effective = $characteristic->effectiveCharacteristic();
         $group = $this->inferPrimaryGroup($characteristic);
         $entitiesForGroup = self::ENTITIES_BY_GROUP[$group] ?? ['*'];
@@ -61,6 +68,7 @@ final class CharacteristicShowPayloadBuilder
         $hasValueOverrides = Schema::hasColumn('characteristics', 'value_overrides');
         $hasHideWhenEmpty = Schema::hasColumn('characteristics', 'hide_when_empty');
         $hasHideWhenFalse = Schema::hasColumn('characteristics', 'hide_when_false');
+        $nature = $effective->natureEnum();
 
         $selected = [
             'id' => $characteristic->key,
@@ -83,6 +91,14 @@ final class CharacteristicShowPayloadBuilder
             'conversion_formulas' => $conversionFormulas,
             'conversionFunctionOptions' => $this->conversionFunctionRegistry->options(),
             'group' => $group,
+            'nature' => $nature?->value,
+            'nature_label' => $nature?->label(),
+            'intrinsic_key' => $characteristic->intrinsicCharacteristic?->key,
+            'intrinsic_characteristic_id' => $characteristic->intrinsic_characteristic_id,
+            'natures' => array_map(
+                static fn (CharacteristicNature $n): array => ['value' => $n->value, 'label' => $n->label()],
+                CharacteristicNature::cases()
+            ),
             'entitiesByGroup' => self::ENTITIES_BY_GROUP,
             'scrappingMappingEntities' => self::SCRAPPING_MAPPING_ENTITIES_BY_GROUP[$group] ?? [],
             'is_linked' => $characteristic->isLinked(),
@@ -139,6 +155,14 @@ final class CharacteristicShowPayloadBuilder
                 $byEntity[$ent['entity'] ?? ''] = $ent;
             }
             foreach (CharacteristicSpell::where('characteristic_id', $characteristic->id)->orderBy('entity')->get() as $row) {
+                $ent = $this->groupRowToEntity($row, $characteristic);
+                $byEntity[$ent['entity'] ?? ''] = $ent;
+            }
+            foreach (CharacteristicConsumable::where('characteristic_id', $characteristic->id)->orderBy('entity')->get() as $row) {
+                $ent = $this->groupRowToEntity($row, $characteristic);
+                $byEntity[$ent['entity'] ?? ''] = $ent;
+            }
+            foreach (CharacteristicProfile::where('characteristic_id', $characteristic->id)->orderBy('entity')->get() as $row) {
                 $ent = $this->groupRowToEntity($row, $characteristic);
                 $byEntity[$ent['entity'] ?? ''] = $ent;
             }
@@ -221,6 +245,9 @@ final class CharacteristicShowPayloadBuilder
 
     private function inferPrimaryGroup(Characteristic $characteristic): string
     {
+        if (is_string($characteristic->group) && $characteristic->group !== '') {
+            return $characteristic->group;
+        }
         if (CharacteristicCreature::where('characteristic_id', $characteristic->id)->exists()) {
             return 'creature';
         }
@@ -229,6 +256,12 @@ final class CharacteristicShowPayloadBuilder
         }
         if (CharacteristicSpell::where('characteristic_id', $characteristic->id)->exists()) {
             return 'spell';
+        }
+        if (CharacteristicConsumable::where('characteristic_id', $characteristic->id)->exists()) {
+            return 'consumable';
+        }
+        if (CharacteristicProfile::where('characteristic_id', $characteristic->id)->exists()) {
+            return 'profile';
         }
 
         return 'creature';
@@ -283,8 +316,10 @@ final class CharacteristicShowPayloadBuilder
     /**
      * @return array<string, mixed>
      */
-    private function groupRowToEntity(CharacteristicCreature|CharacteristicObject|CharacteristicSpell $row, Characteristic $characteristic): array
-    {
+    private function groupRowToEntity(
+        CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile $row,
+        Characteristic $characteristic
+    ): array {
         $out = [
             'entity' => $row->entity,
             'db_column' => $row->db_column,

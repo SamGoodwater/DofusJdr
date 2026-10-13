@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\Characteristics;
 
+use App\Enums\CharacteristicNature;
 use App\Models\Characteristic;
+use App\Models\CharacteristicConsumable;
 use App\Models\CharacteristicCreature;
 use App\Models\CharacteristicObject;
+use App\Models\CharacteristicProfile;
 use App\Models\CharacteristicSpell;
 use App\Support\Characteristics\CharacteristicDefinitionJson;
 use App\Support\Characteristics\CharacteristicDefinitionNaming;
@@ -26,7 +29,7 @@ final class CharacteristicDefinitionsExportFromDatabaseService
     {
         $written = 0;
         $chars = Characteristic::query()
-            ->with('masterCharacteristic')
+            ->with(['masterCharacteristic', 'intrinsicCharacteristic'])
             ->orderBy('sort_order')
             ->orderBy('key')
             ->get();
@@ -85,7 +88,11 @@ final class CharacteristicDefinitionsExportFromDatabaseService
             'status' => $c->status ?? Characteristic::STATUS_A_VALIDER,
             'sort_order' => $c->sort_order,
             'group' => $c->group,
+            'nature' => $c->nature instanceof CharacteristicNature
+                ? $c->nature->value
+                : ($c->nature !== null ? (string) $c->nature : null),
             'linked_to_key' => $c->masterCharacteristic?->key,
+            'intrinsic_key' => $c->intrinsicCharacteristic?->key,
         ];
     }
 
@@ -110,9 +117,51 @@ final class CharacteristicDefinitionsExportFromDatabaseService
             foreach ($rows as $r) {
                 $entities[$r->entity] = $this->filterSpellEntity($r);
             }
+        } elseif ($group === CharacteristicDefinitionNaming::GROUP_CONSUMABLE) {
+            $rows = CharacteristicConsumable::query()->where('characteristic_id', $char->id)->orderBy('entity')->get();
+            foreach ($rows as $r) {
+                $entities[$r->entity] = $this->filterSimpleGroupEntity($r);
+            }
+        } elseif ($group === CharacteristicDefinitionNaming::GROUP_PROFILE) {
+            $rows = CharacteristicProfile::query()->where('characteristic_id', $char->id)->orderBy('entity')->get();
+            foreach ($rows as $r) {
+                $entities[$r->entity] = $this->filterSimpleGroupEntity($r);
+            }
         }
 
         return $entities;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function filterSimpleGroupEntity(CharacteristicConsumable|CharacteristicProfile $r): array
+    {
+        $conversionFunction = $r->conversion_function;
+        if ($conversionFunction === '') {
+            $conversionFunction = null;
+        }
+
+        return [
+            'dofusdb_characteristic_id' => $r->dofusdb_characteristic_id,
+            'db_column' => $r->db_column,
+            'min' => $r->min,
+            'max' => $r->max,
+            'formula' => $r->formula,
+            'formula_display' => $r->formula_display,
+            'default_value' => $r->default_value,
+            'conversion_formula' => $r->conversion_formula,
+            'conversion_function' => $conversionFunction,
+            'conversion_dofus_sample' => $r->conversion_dofus_sample,
+            'conversion_krosmoz_sample' => $r->conversion_krosmoz_sample,
+            'conversion_sample_rows' => $r->conversion_sample_rows,
+            'norms_grid' => $r->norms_grid,
+            'norms_formula' => $r->norms_formula,
+            'norms_conditions' => $r->norms_conditions,
+            'norms_description' => $r->norms_description,
+            'norms_help_section_id' => $r->norms_help_section_id,
+            'value_available' => $r->value_available,
+        ];
     }
 
     /**

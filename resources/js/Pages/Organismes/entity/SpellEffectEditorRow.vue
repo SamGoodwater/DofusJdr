@@ -96,11 +96,26 @@ const hasLifeSteal = computed(() => schemaHas('life_steal_formula') || isFrapper
 
 function characteristicsList() {
     if (isBuffChar.value) {
-        return props.options.characteristics_object ?? [];
+        return (
+            props.options.characteristics_spell_buff ??
+            props.options.characteristics_object ??
+            []
+        );
     }
     const schema = getParamSchema();
     const param = schema?.params?.find((p) => p.key === 'characteristic');
     const categories = param?.categories;
+    const actionList = props.options.characteristics_spell_action ?? [];
+    const slugVal = slug.value;
+    const actionFiltered = actionList.filter((c) =>
+        (c.sub_effect_slugs ?? []).includes(slugVal),
+    );
+    if (actionFiltered.length) {
+        if (categories?.length) {
+            return actionFiltered.filter((c) => categories.includes(c.category));
+        }
+        return actionFiltered;
+    }
     const all = props.options.characteristics ?? [];
     if (!categories?.length) {
         if (isFrapper.value || slug.value === 'soigner') {
@@ -208,9 +223,11 @@ function resetIncompatibleParams(previousSlug) {
     if (!hasLifeSteal.value) {
         next.life_steal_formula = '';
     }
-    if (nextBuff && next.characteristic && !String(next.characteristic).endsWith('_object')) {
+    if (nextBuff && next.characteristic && !String(next.characteristic).endsWith('_spell')) {
         const mapped = LEGACY_CHAR_TO_OBJECT_KEY[next.characteristic];
-        if (mapped) next.characteristic = mapped;
+        if (mapped) {
+            next.characteristic = mapped.replace(/_object$/, '_spell');
+        }
     }
     props.row.params = next;
     props.row.sub_effect = subEffectForRow();

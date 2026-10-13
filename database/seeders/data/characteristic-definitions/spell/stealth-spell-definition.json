@@ -2,7 +2,7 @@
     "_schema_version": "1",
     "characteristic": {
         "key": "stealth_spell",
-        "name": "Bonus temporaire de Discrétion",
+        "name": "Discrétion",
         "short_name": "Discr.",
         "helper": "Bonus temporaire à la compétence via sous-effet booster/retirer de sort (3.5, 2.2.2).",
         "descriptions": "Bonus temporaire de Discrétion accordé par un effet de sort (booster / retirer / vol). S’ajoute à la compétence créature pendant la durée de l’effet ; plafond ±5 (aligné équipement, sans forgemagie). Distinct du bonus d’équipement (`stealth_object`).",
@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 216,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "stealth_creature"
     },
     "entities": {
         "*": {
@@ -28,7 +30,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(5,max(0,[d])))",
+            "conversion_formula": "round([d])",
             "conversion_function": null,
             "conversion_dofus_sample": null,
             "conversion_krosmoz_sample": null,

@@ -54,10 +54,11 @@ const options = {
         { key: 'earth', label: 'Terre', category: 'element' },
         { key: 'agi', label: 'Agilité', category: 'stat' },
     ],
-    characteristics_object: [
-        { key: 'action_points_object', label: 'PA', category: 'object' },
-        { key: 'vitality_object', label: 'Vitalité', category: 'object' },
+    characteristics_spell_buff: [
+        { key: 'action_points_spell', label: 'PA', category: 'resource' },
+        { key: 'vitality_spell', label: 'Vitalité', category: 'stat' },
     ],
+    characteristics_object: [],
     scopes: [{ value: 'general', label: 'Général' }],
 };
 
@@ -123,10 +124,10 @@ describe('SpellDegreeEffectRow', () => {
         expect(wrapper.text()).not.toContain('Avancé');
     });
 
-    it('utilise characteristics_object pour booster', () => {
-        const wrapper = mountRow(makeRow(2, { characteristic: 'vitality_object' }));
+    it('utilise characteristics_spell_buff pour booster', () => {
+        const wrapper = mountRow(makeRow(2, { characteristic: 'vitality_spell' }));
         expect(wrapper.find('[data-cy="char-select"]').text()).toContain('Caractéristique');
-        expect(wrapper.find('[data-cy="char-select"]').text()).toContain('action_points_object');
+        expect(wrapper.find('[data-cy="char-select"]').text()).toContain('action_points_spell');
         expect(wrapper.find('[data-cy="char-select"]').text()).not.toContain('fire');
     });
 

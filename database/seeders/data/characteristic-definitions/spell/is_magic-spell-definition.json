@@ -30,7 +30,8 @@
         "status": "validee",
         "sort_order": 30,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -41,7 +42,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "1",
-            "conversion_formula": "min(1,max(0,round([d])))",
+            "conversion_formula": "round([d])",
             "conversion_function": null,
             "conversion_dofus_sample": null,
             "conversion_krosmoz_sample": null,

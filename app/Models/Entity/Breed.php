@@ -8,6 +8,7 @@ use App\Models\Concerns\VisibleToViewer;
 use App\Models\Pivots\BreedSpellPivot;
 use App\Models\Section;
 use App\Models\User;
+use App\Support\Profile\ProfileMasteryColumns;
 use Database\Factories\Entity\BreedFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -171,6 +172,7 @@ class Breed extends Model implements HasMedia
         'image_full_female',
         'auto_update',
         'created_by',
+        ...ProfileMasteryColumns::all(),
     ];
 
     /**
@@ -182,6 +184,7 @@ class Breed extends Model implements HasMedia
         'read_level' => 'integer',
         'write_level' => 'integer',
         'auto_update' => 'boolean',
+        ...array_fill_keys(ProfileMasteryColumns::all(), 'integer'),
     ];
 
     /**

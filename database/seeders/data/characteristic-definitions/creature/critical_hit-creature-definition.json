@@ -42,7 +42,8 @@
         "status": "validee",
         "sort_order": 9,
         "group": "creature",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -50,8 +51,8 @@
             "db_column": "critical_hit",
             "min": "-3",
             "max": "3",
-            "formula": null,
-            "formula_display": null,
+            "formula": "[critical_hit_object]",
+            "formula_display": "[critical_hit_object]",
             "default_value": "0",
             "conversion_formula": "[d]",
             "conversion_function": null,

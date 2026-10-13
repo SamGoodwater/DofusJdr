@@ -2,7 +2,7 @@
     "_schema_version": "1",
     "characteristic": {
         "key": "spell_range_max_spell",
-        "name": "Portée max",
+        "name": "Portée du sort (max)",
         "short_name": "PO max",
         "helper": "Portée maximale du sort en cases.",
         "descriptions": "Portée maximale en cases (3.3.2.2). DofusDB levels.0.range. 0 = auto-cible. Si portée modifiable, PO s'ajoute.",
@@ -28,7 +28,8 @@
         "status": "validee",
         "sort_order": 15,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "intrinsic"
     },
     "entities": {
         "*": {
@@ -39,7 +40,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(20,max(0,[d])))",
+            "conversion_formula": "round([d])",
             "conversion_function": null,
             "conversion_dofus_sample": null,
             "conversion_krosmoz_sample": null,

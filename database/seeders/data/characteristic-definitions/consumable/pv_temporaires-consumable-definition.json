@@ -1,0 +1,329 @@
+{
+    "_schema_version": "1",
+    "characteristic": {
+        "key": "pv_temporaires_consumable",
+        "name": "PV temporaires",
+        "short_name": "PV temp.",
+        "helper": "Réserve de PV temporaires d’un sous-effet donner-pv-temporaires. Conversion Dofus → Krosmoz.",
+        "descriptions": "PV temporaires (sous-effet donner-pv-temporaires, 3.2.4.2). Absorbent après les boucliers et avant les PV (ou en premier pour chute / poussée) ; non dissipables, non soignables, non cumulables. Même enveloppe de budget que les soins / boucliers.",
+        "icon": "lifeTemp.webp",
+        "icon_false": null,
+        "color": "emerald",
+        "value_overrides": null,
+        "hide_when_empty": false,
+        "hide_when_false": false,
+        "unit": null,
+        "type": "int",
+        "status": "validee",
+        "sort_order": 36,
+        "group": "consumable",
+        "linked_to_key": null,
+        "nature": "action_value"
+    },
+    "entities": {
+        "*": {
+            "dofusdb_characteristic_id": 95,
+            "db_column": null,
+            "min": "0",
+            "max": "55",
+            "formula": null,
+            "formula_display": null,
+            "default_value": "0",
+            "conversion_formula": "round(2 * pow(max(1, [d]), 0.5))",
+            "conversion_function": "convertToDice",
+            "conversion_dofus_sample": {
+                "10": 10,
+                "50": 50,
+                "100": 100,
+                "300": 300,
+                "1000": 1000
+            },
+            "conversion_krosmoz_sample": {
+                "10": 5,
+                "50": 10,
+                "100": 15,
+                "300": 25,
+                "1000": 45
+            },
+            "conversion_sample_rows": [
+                {
+                    "dofus_level": 10,
+                    "dofus_value": 10,
+                    "krosmoz_level": 10,
+                    "krosmoz_value": 5
+                },
+                {
+                    "dofus_level": 50,
+                    "dofus_value": 50,
+                    "krosmoz_level": 50,
+                    "krosmoz_value": 10
+                },
+                {
+                    "dofus_level": 100,
+                    "dofus_value": 100,
+                    "krosmoz_level": 100,
+                    "krosmoz_value": 15
+                },
+                {
+                    "dofus_level": 300,
+                    "dofus_value": 300,
+                    "krosmoz_level": 300,
+                    "krosmoz_value": 25
+                },
+                {
+                    "dofus_level": 1000,
+                    "dofus_value": 1000,
+                    "krosmoz_level": 1000,
+                    "krosmoz_value": 45
+                }
+            ],
+            "norms_grid": {
+                "very_weak": [
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    3,
+                    3,
+                    3,
+                    4,
+                    4,
+                    3,
+                    4,
+                    4,
+                    4,
+                    5,
+                    5,
+                    5,
+                    6,
+                    6,
+                    7
+                ],
+                "weak": [
+                    2,
+                    2,
+                    2,
+                    3,
+                    3,
+                    3,
+                    4,
+                    4,
+                    4,
+                    5,
+                    4,
+                    5,
+                    5,
+                    6,
+                    6,
+                    7,
+                    7,
+                    8,
+                    8,
+                    9
+                ],
+                "neutral": [
+                    2,
+                    2,
+                    3,
+                    3,
+                    3,
+                    3,
+                    4,
+                    4,
+                    4,
+                    5,
+                    4,
+                    5,
+                    5,
+                    6,
+                    7,
+                    6,
+                    7,
+                    8,
+                    8,
+                    9
+                ],
+                "strong": [
+                    3,
+                    3,
+                    3,
+                    3,
+                    4,
+                    3,
+                    4,
+                    4,
+                    5,
+                    5,
+                    5,
+                    6,
+                    6,
+                    7,
+                    8,
+                    8,
+                    8,
+                    9,
+                    9,
+                    10
+                ],
+                "very_strong": [
+                    3,
+                    3,
+                    3,
+                    3,
+                    4,
+                    4,
+                    4,
+                    4,
+                    5,
+                    6,
+                    6,
+                    6,
+                    7,
+                    8,
+                    8,
+                    8,
+                    9,
+                    10,
+                    10,
+                    10
+                ]
+            },
+            "norms_formula": "max(1,round(0.4*[dommages_spell]+(4+[modifier_vitality_creature])*3/[action_points_creature]))",
+            "norms_conditions": [
+                {
+                    "characteristic_key": "action_points_spell",
+                    "operator": "<=",
+                    "value": 2,
+                    "target": "level",
+                    "modifier": -3,
+                    "comment": "≤2 PA (−3 niveaux)"
+                },
+                {
+                    "characteristic_key": "action_points_spell",
+                    "operator": "=",
+                    "value": 4,
+                    "target": "level",
+                    "modifier": 1,
+                    "comment": "4 PA (+1 niveau)"
+                },
+                {
+                    "characteristic_key": "action_points_spell",
+                    "operator": ">=",
+                    "value": 5,
+                    "target": "level",
+                    "modifier": 3,
+                    "comment": "5 PA (+3 niveaux)"
+                },
+                {
+                    "characteristic_key": "area_spell",
+                    "operator": ">=",
+                    "value": 2,
+                    "target": "level",
+                    "modifier": -2,
+                    "comment": "Zone / multicible (−2 niveaux)"
+                },
+                {
+                    "characteristic_key": "spell_range_max_spell",
+                    "operator": "<=",
+                    "value": 1,
+                    "target": "power",
+                    "modifier": 1,
+                    "comment": "Mêlée PO≤1 (+1 palier)"
+                },
+                {
+                    "characteristic_key": "spell_range_max_spell",
+                    "operator": ">=",
+                    "value": 7,
+                    "target": "power",
+                    "modifier": -1,
+                    "comment": "Longue portée PO≥7 (−1 palier)"
+                },
+                {
+                    "characteristic_key": "range_editable_spell",
+                    "operator": "=",
+                    "value": 1,
+                    "target": "power",
+                    "modifier": -1,
+                    "comment": "Portée modifiable (−1 palier)"
+                },
+                {
+                    "characteristic_key": "sight_line_spell",
+                    "operator": "=",
+                    "value": 0,
+                    "target": "level",
+                    "modifier": -2,
+                    "comment": "Sans ligne de vue (−2 niveaux)"
+                },
+                {
+                    "characteristic_key": "cast_per_turn_spell",
+                    "operator": "=",
+                    "value": 1,
+                    "target": "level",
+                    "modifier": 1,
+                    "comment": "1×/tour (+1 niveau)"
+                },
+                {
+                    "characteristic_key": "cast_per_turn_spell",
+                    "operator": ">=",
+                    "value": 3,
+                    "target": "level",
+                    "modifier": -2,
+                    "comment": "≥3×/tour (−2 niveaux)"
+                },
+                {
+                    "characteristic_key": "number_between_two_cast_spell",
+                    "operator": "=",
+                    "value": 2,
+                    "target": "level",
+                    "modifier": 1,
+                    "comment": "Recharge 2–3 tours (+1 niveau)"
+                },
+                {
+                    "characteristic_key": "number_between_two_cast_spell",
+                    "operator": ">=",
+                    "value": 4,
+                    "target": "level",
+                    "modifier": 3,
+                    "comment": "Recharge ≥4 tours (+3 niveaux)"
+                },
+                {
+                    "characteristic_key": "global_cooldown_spell",
+                    "operator": "=",
+                    "value": 2,
+                    "target": "level",
+                    "modifier": 1,
+                    "comment": "Délai global 2–3 (+1 niveau)"
+                },
+                {
+                    "characteristic_key": "global_cooldown_spell",
+                    "operator": ">=",
+                    "value": 4,
+                    "target": "level",
+                    "modifier": 3,
+                    "comment": "Délai global ≥4 (+3 niveaux)"
+                },
+                {
+                    "characteristic_key": "resolution_mode_spell",
+                    "operator": "=",
+                    "value": "auto_success",
+                    "target": "power",
+                    "modifier": -1,
+                    "comment": "Touche automatique (−1 palier)"
+                },
+                {
+                    "characteristic_key": "wakfu_reserve_spell",
+                    "operator": ">=",
+                    "value": 1,
+                    "target": "level",
+                    "modifier": 1,
+                    "comment": "Coût en Wakfu (+1 niveau)"
+                }
+            ],
+            "norms_description": "PV temporaires / lancement 3 PA = 0,40×dégâts + (4+mod)×3/PA.",
+            "norms_help_section_id": null,
+            "value_available": null
+        }
+    },
+    "relations": null
+}

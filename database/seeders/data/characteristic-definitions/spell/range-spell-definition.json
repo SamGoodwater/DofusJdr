@@ -2,7 +2,7 @@
     "_schema_version": "1",
     "characteristic": {
         "key": "range_spell",
-        "name": "Portée",
+        "name": "Portée (bonus de PO)",
         "short_name": "PO",
         "helper": "Variation de portée appliquée par les sous-effets de sort.",
         "descriptions": "Variation PO via sous-effet (1.2.2, 2.2.2). Base créature 0, max 6 (équip +6). S'ajoute aux sorts à portée modifiable. Max 8.",
@@ -28,7 +28,9 @@
         "status": "validee",
         "sort_order": 64,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "range_creature"
     },
     "entities": {
         "*": {
@@ -39,7 +41,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(6,max(0,[d])))",
+            "conversion_formula": "round([d])",
             "conversion_function": null,
             "conversion_dofus_sample": null,
             "conversion_krosmoz_sample": null,

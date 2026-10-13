@@ -17,7 +17,9 @@
         "status": "validee",
         "sort_order": 38,
         "group": "spell",
-        "linked_to_key": null
+        "linked_to_key": null,
+        "nature": "buff_debuff",
+        "intrinsic_key": "heal_bonus_creature"
     },
     "entities": {
         "*": {
@@ -28,7 +30,7 @@
             "formula": null,
             "formula_display": null,
             "default_value": "0",
-            "conversion_formula": "round(min(7,max(0,([d]-5)/5)))",
+            "conversion_formula": "round(([d]-5)/5)",
             "conversion_function": null,
             "conversion_dofus_sample": {
                 "20": 6,
