@@ -106,6 +106,30 @@ erDiagram
     auto_update : tinyint(1)
     deleted_at : timestamp
     created_by : bigint(20) unsigned
+    acrobatics_mastery : tinyint(3) unsigned
+    animal_handling_mastery : tinyint(3) unsigned
+    arcana_mastery : tinyint(3) unsigned
+    athletics_mastery : tinyint(3) unsigned
+    deception_mastery : tinyint(3) unsigned
+    history_mastery : tinyint(3) unsigned
+    insight_mastery : tinyint(3) unsigned
+    intimidation_mastery : tinyint(3) unsigned
+    investigation_mastery : tinyint(3) unsigned
+    medicine_mastery : tinyint(3) unsigned
+    nature_mastery : tinyint(3) unsigned
+    perception_mastery : tinyint(3) unsigned
+    performance_mastery : tinyint(3) unsigned
+    persuasion_mastery : tinyint(3) unsigned
+    religion_mastery : tinyint(3) unsigned
+    sleight_of_hand_mastery : tinyint(3) unsigned
+    stealth_mastery : tinyint(3) unsigned
+    survival_mastery : tinyint(3) unsigned
+    save_strength_mastery : tinyint(3) unsigned
+    save_intelligence_mastery : tinyint(3) unsigned
+    save_agility_mastery : tinyint(3) unsigned
+    save_chance_mastery : tinyint(3) unsigned
+    save_vitality_mastery : tinyint(3) unsigned
+    save_wisdom_mastery : tinyint(3) unsigned
   }
   CACHE {
     key : varchar(255)
@@ -195,7 +219,7 @@ erDiagram
     created_at : timestamp
     updated_at : timestamp
   }
-  CHARACTERISTIC_CREATURE {
+  CHARACTERISTIC_CONSUMABLE {
     id : bigint(20) unsigned
     characteristic_id : bigint(20) unsigned
     dofusdb_characteristic_id : int(10) unsigned
@@ -212,6 +236,33 @@ erDiagram
     conversion_krosmoz_sample : longtext
     conversion_sample_rows : longtext
     norms_grid : longtext
+    norms_formula : text
+    norms_conditions : longtext
+    norms_description : text
+    norms_help_section_id : bigint(20) unsigned
+    value_available : longtext
+    created_at : timestamp
+    updated_at : timestamp
+  }
+  CHARACTERISTIC_CREATURE {
+    id : bigint(20) unsigned
+    characteristic_id : bigint(20) unsigned
+    dofusdb_characteristic_id : int(10) unsigned
+    entity : varchar(32)
+    db_column : varchar(64)
+    min : varchar(512)
+    max : varchar(512)
+    limit_absolute : tinyint(1)
+    formula : text
+    formula_display : text
+    default_value : varchar(512)
+    conversion_formula : text
+    conversion_function : varchar(64)
+    conversion_dofus_sample : longtext
+    conversion_krosmoz_sample : longtext
+    conversion_sample_rows : longtext
+    norms_grid : longtext
+    norms_formula : text
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -237,6 +288,7 @@ erDiagram
     conversion_krosmoz_sample : longtext
     conversion_sample_rows : longtext
     norms_grid : longtext
+    norms_formula : text
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -251,6 +303,31 @@ erDiagram
     id : bigint(20) unsigned
     characteristic_object_id : bigint(20) unsigned
     item_type_id : bigint(20) unsigned
+    created_at : timestamp
+    updated_at : timestamp
+  }
+  CHARACTERISTIC_PROFILE {
+    id : bigint(20) unsigned
+    characteristic_id : bigint(20) unsigned
+    dofusdb_characteristic_id : int(10) unsigned
+    entity : varchar(32)
+    db_column : varchar(64)
+    min : varchar(512)
+    max : varchar(512)
+    formula : text
+    formula_display : text
+    default_value : varchar(512)
+    conversion_formula : text
+    conversion_function : varchar(64)
+    conversion_dofus_sample : longtext
+    conversion_krosmoz_sample : longtext
+    conversion_sample_rows : longtext
+    norms_grid : longtext
+    norms_formula : text
+    norms_conditions : longtext
+    norms_description : text
+    norms_help_section_id : bigint(20) unsigned
+    value_available : longtext
     created_at : timestamp
     updated_at : timestamp
   }
@@ -271,6 +348,7 @@ erDiagram
     conversion_krosmoz_sample : longtext
     conversion_sample_rows : longtext
     norms_grid : longtext
+    norms_formula : text
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -294,9 +372,11 @@ erDiagram
     status : varchar(32)
     sort_order : smallint(5) unsigned
     group : varchar(16)
+    nature : varchar(32)
     hide_when_empty : tinyint(1)
     hide_when_false : tinyint(1)
     linked_to_characteristic_id : bigint(20) unsigned
+    intrinsic_characteristic_id : bigint(20) unsigned
     created_at : timestamp
     updated_at : timestamp
   }
@@ -531,37 +611,13 @@ erDiagram
     persuasion_bonus : text
     representation_bonus : text
     supercherie_bonus : text
-    acrobatie_mastery : tinyint(4)
-    discretion_mastery : tinyint(4)
-    escamotage_mastery : tinyint(4)
-    athletisme_mastery : tinyint(4)
-    intimidation_mastery : tinyint(4)
     intimidation_ability : varchar(16)
-    arcane_mastery : tinyint(4)
-    histoire_mastery : tinyint(4)
-    investigation_mastery : tinyint(4)
-    nature_mastery : tinyint(4)
-    religion_mastery : tinyint(4)
-    dressage_mastery : tinyint(4)
-    medecine_mastery : tinyint(4)
-    perception_mastery : tinyint(4)
-    perspicacite_mastery : tinyint(4)
-    survie_mastery : tinyint(4)
-    persuasion_mastery : tinyint(4)
-    representation_mastery : tinyint(4)
-    supercherie_mastery : tinyint(4)
     save_vitality_bonus : text
     save_wisdom_bonus : text
     save_strength_bonus : text
     save_intelligence_bonus : text
     save_chance_bonus : text
     save_agility_bonus : text
-    save_vitality_mastery : tinyint(3) unsigned
-    save_wisdom_mastery : tinyint(3) unsigned
-    save_strength_mastery : tinyint(3) unsigned
-    save_intelligence_mastery : tinyint(3) unsigned
-    save_chance_mastery : tinyint(3) unsigned
-    save_agility_mastery : tinyint(3) unsigned
     kamas : varchar(255)
     drop_ : varchar(255)
     other_item : varchar(255)
@@ -964,6 +1020,30 @@ erDiagram
     created_at : timestamp
     updated_at : timestamp
     deleted_at : timestamp
+    acrobatics_mastery : tinyint(3) unsigned
+    animal_handling_mastery : tinyint(3) unsigned
+    arcana_mastery : tinyint(3) unsigned
+    athletics_mastery : tinyint(3) unsigned
+    deception_mastery : tinyint(3) unsigned
+    history_mastery : tinyint(3) unsigned
+    insight_mastery : tinyint(3) unsigned
+    intimidation_mastery : tinyint(3) unsigned
+    investigation_mastery : tinyint(3) unsigned
+    medicine_mastery : tinyint(3) unsigned
+    nature_mastery : tinyint(3) unsigned
+    perception_mastery : tinyint(3) unsigned
+    performance_mastery : tinyint(3) unsigned
+    persuasion_mastery : tinyint(3) unsigned
+    religion_mastery : tinyint(3) unsigned
+    sleight_of_hand_mastery : tinyint(3) unsigned
+    stealth_mastery : tinyint(3) unsigned
+    survival_mastery : tinyint(3) unsigned
+    save_strength_mastery : tinyint(3) unsigned
+    save_intelligence_mastery : tinyint(3) unsigned
+    save_agility_mastery : tinyint(3) unsigned
+    save_chance_mastery : tinyint(3) unsigned
+    save_vitality_mastery : tinyint(3) unsigned
+    save_wisdom_mastery : tinyint(3) unsigned
   }
   NOTIFICATION_DIGEST_QUEUE {
     id : bigint(20) unsigned
@@ -1398,6 +1478,30 @@ erDiagram
     updated_at : timestamp
     deleted_at : timestamp
     created_by : bigint(20) unsigned
+    acrobatics_mastery : tinyint(3) unsigned
+    animal_handling_mastery : tinyint(3) unsigned
+    arcana_mastery : tinyint(3) unsigned
+    athletics_mastery : tinyint(3) unsigned
+    deception_mastery : tinyint(3) unsigned
+    history_mastery : tinyint(3) unsigned
+    insight_mastery : tinyint(3) unsigned
+    intimidation_mastery : tinyint(3) unsigned
+    investigation_mastery : tinyint(3) unsigned
+    medicine_mastery : tinyint(3) unsigned
+    nature_mastery : tinyint(3) unsigned
+    perception_mastery : tinyint(3) unsigned
+    performance_mastery : tinyint(3) unsigned
+    persuasion_mastery : tinyint(3) unsigned
+    religion_mastery : tinyint(3) unsigned
+    sleight_of_hand_mastery : tinyint(3) unsigned
+    stealth_mastery : tinyint(3) unsigned
+    survival_mastery : tinyint(3) unsigned
+    save_strength_mastery : tinyint(3) unsigned
+    save_intelligence_mastery : tinyint(3) unsigned
+    save_agility_mastery : tinyint(3) unsigned
+    save_chance_mastery : tinyint(3) unsigned
+    save_vitality_mastery : tinyint(3) unsigned
+    save_wisdom_mastery : tinyint(3) unsigned
   }
   SPELL_DEGREE_EFFECTS {
     id : bigint(20) unsigned
@@ -1602,14 +1706,19 @@ erDiagram
   CAPABILITY_CREATURE }o--|| CREATURES : "FK creature_id"
   CAPABILITY_SPECIALIZATION }o--|| CAPABILITIES : "FK capability_id"
   CAPABILITY_SPECIALIZATION }o--|| SPECIALIZATIONS : "FK specialization_id"
+  CHARACTERISTIC_CONSUMABLE }o--|| CHARACTERISTICS : "FK characteristic_id"
+  CHARACTERISTIC_CONSUMABLE }o--|| SECTIONS : "FK norms_help_section_id"
   CHARACTERISTIC_CREATURE }o--|| CHARACTERISTICS : "FK characteristic_id"
   CHARACTERISTIC_CREATURE }o--|| SECTIONS : "FK norms_help_section_id"
   CHARACTERISTIC_OBJECT }o--|| CHARACTERISTICS : "FK characteristic_id"
   CHARACTERISTIC_OBJECT }o--|| SECTIONS : "FK norms_help_section_id"
   CHARACTERISTIC_OBJECT_ITEM_TYPE }o--|| CHARACTERISTIC_OBJECT : "FK characteristic_object_id"
   CHARACTERISTIC_OBJECT_ITEM_TYPE }o--|| ITEM_TYPES : "FK item_type_id"
+  CHARACTERISTIC_PROFILE }o--|| CHARACTERISTICS : "FK characteristic_id"
+  CHARACTERISTIC_PROFILE }o--|| SECTIONS : "FK norms_help_section_id"
   CHARACTERISTIC_SPELL }o--|| CHARACTERISTICS : "FK characteristic_id"
   CHARACTERISTIC_SPELL }o--|| SECTIONS : "FK norms_help_section_id"
+  CHARACTERISTICS }o--|| CHARACTERISTICS : "FK intrinsic_characteristic_id"
   CHARACTERISTICS }o--|| CHARACTERISTICS : "FK linked_to_characteristic_id"
   CONDITION_CAPABILITY }o--|| CAPABILITIES : "FK capability_id"
   CONDITION_CAPABILITY }o--|| CONDITIONS : "FK condition_id"

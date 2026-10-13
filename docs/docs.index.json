@@ -7,7 +7,7 @@
   {
     "path": "100- Done/README.md",
     "title": "Ce qui a été fait",
-    "description": "L’enregistrement d’un sort ne plante plus si l’on ouvre le site en 127.0.0.1 au lieu de localhost. Props globales hors degrés, grille 2 colonnes, header compact (porteurs, titre, aide, état, enregistrer)."
+    "description": "Les formules créature listent désormais tous leurs termes : caractéristique de base, équipement, consommable et sort. Les bonus de consommable et de sort sont **éphémères** : nuls hors combat, ils s'ajoutent sans jamais être plafonnés, ce qui prépare un futur outil de combat. Certaines caractéristiques ont une **limite absolue** sur leur partie permanente : modificateurs (max +7, +10 pour les monstres), compétences et sauvegardes (±15, ±20 pour les monstres), bonus de maîtrise (max 6). Les autres restent souples. Les formules affichées dans les infobulles sont réécrites en texte court (« mod. Int + équip. »), et la décomposition indique les effets temporaires et le plafonnement."
   },
   {
     "path": "backend/_ai.md",
@@ -87,7 +87,7 @@
   {
     "path": "features/characteristics/README.md",
     "title": "Caractéristiques",
-    "description": "Les caractéristiques décrivent les valeurs numériques et règles de lecture des créatures, objets et sorts : niveaux, dégâts, PA/PM/PO, limites, formules et normes."
+    "description": "Les caractéristiques décrivent les valeurs numériques et règles de lecture des créatures, objets, sorts, consommables et profils : niveaux, dégâts, PA/PM/PO, limites, formules et normes."
   },
   {
     "path": "features/cms/_ai.md",

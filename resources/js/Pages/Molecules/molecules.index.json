@@ -1559,6 +1559,13 @@
     "file": "entity/shared/EntityFieldTooltip.vue"
   },
   {
+    "name": "EntityEditHeader",
+    "description": "Header compact d’édition d’entité (retour, titre, état, options, annuler, supprimer, enregistrer).",
+    "props": [],
+    "slots": [],
+    "file": "entity/shared/EntityEditHeader.vue"
+  },
+  {
     "name": "EntityEditGrid",
     "description": "Grille responsive pour les containers d’édition d’entité.",
     "props": [],
@@ -1571,13 +1578,6 @@
     "props": [],
     "slots": [],
     "file": "entity/shared/EntityEditContainer.vue"
-  },
-  {
-    "name": "EntityEditHeader",
-    "description": "Header sticky d’édition d’entité (retour, titre, état, options, annuler, supprimer, enregistrer).",
-    "props": [],
-    "slots": [],
-    "file": "entity/shared/EntityEditHeader.vue"
   },
   {
     "name": "ScenarioViewText",
@@ -2995,7 +2995,7 @@
       {
         "name": "model",
         "type": "Object",
-        "desc": "— viewModel enrichi (base, object, context, total, placeholders…)"
+        "desc": "— viewModel enrichi (base, object, context, ephemeral, capped, total, placeholders…)"
       }
     ],
     "slots": [],
