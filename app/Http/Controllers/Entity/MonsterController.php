@@ -22,6 +22,7 @@ use App\Models\User;
 use App\Services\Creature\CreatureComposableCharacteristicsPersister;
 use App\Services\Entity\EntityDeletionService;
 use App\Services\PdfService;
+use App\Support\Profile\ProfileMasteryColumns;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -217,6 +218,7 @@ class MonsterController extends Controller
         $monsterPayload = array_intersect_key($validated, array_flip([
             'size', 'is_boss', 'boss_pa', 'monster_race_id', 'dofus_version', 'auto_update',
             'state', 'read_level', 'write_level',
+            ...ProfileMasteryColumns::all(),
         ]));
         if ($monsterPayload !== []) {
             $monster->update($monsterPayload);
@@ -228,7 +230,6 @@ class MonsterController extends Controller
             if (array_key_exists('level', $validated)) {
                 $creaturePayload['level'] = $validated['level'];
             }
-            $creaturePayload = array_merge($creaturePayload, $request->validatedSkillMasteryPayload($validated));
             $composablePersister->apply($creature, $composablePersister->extractPayload($validated));
             if ($creaturePayload !== []) {
                 $creature->update($creaturePayload);

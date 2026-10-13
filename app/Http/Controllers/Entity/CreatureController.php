@@ -165,8 +165,6 @@ class CreatureController extends Controller
         $validated = $request->validated();
         $composableKeys = array_flip(CreatureComposableCharacteristicsPersister::storableKeys());
         $identityPayload = array_diff_key($validated, $composableKeys);
-        $masteryPayload = $request->validatedSkillMasteryPayload($validated);
-        $identityPayload = array_merge($identityPayload, $masteryPayload);
         if ($identityPayload !== []) {
             $creature->update($identityPayload);
         }

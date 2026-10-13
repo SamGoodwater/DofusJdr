@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Enregistrement des fiches créature / monstre / PNJ
+
+Après le déplacement des maîtrises vers le groupe Profil, l’enregistrement d’une fiche monstre ou PNJ plantait : les contrôleurs appelaient encore une méthode de validation retirée. L’identité et les totaux s’enregistrent à nouveau ; les maîtrises d’un monstre sont écrites sur la fiche monstre.
+
 ## Octobre 2026 — Nature des caractéristiques, Profil et Consommable
 
 Chaque caractéristique a une **nature** (descriptif, intrinsèque, bonus/malus, buff/débuff/vol, valeur d'action), indépendante de son groupe. Les bonus et buffs pointent l'intrinsèque créature qu'ils modifient. Deux nouveaux groupes : **Profil** (maîtrises de compétences et de sauvegardes pour classe, spécialisation et monstre) et **Consommable** (effets temporaires). Les ressources sortent du système ; équipements et panoplies restent ensemble. Les formules créature affichent explicitement le bonus d'équipement. L'admin replie par défaut les panneaux Conversion et Mapping.

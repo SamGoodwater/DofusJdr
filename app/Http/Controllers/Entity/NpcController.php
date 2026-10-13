@@ -293,7 +293,6 @@ class NpcController extends Controller
             if (array_key_exists('state', $data) && $data['state'] !== null) {
                 $creaturePayload['state'] = $data['state'];
             }
-            $creaturePayload = array_merge($creaturePayload, $request->validatedSkillMasteryPayload($data));
             $composablePersister->apply($creature, $composablePersister->extractPayload($data));
             if ($creaturePayload !== []) {
                 $creature->update($creaturePayload);

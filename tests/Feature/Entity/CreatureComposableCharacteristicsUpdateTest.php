@@ -68,6 +68,28 @@ final class CreatureComposableCharacteristicsUpdateTest extends TestCase
             ->assertSessionHasErrors(['ini']);
     }
 
+    public function test_monster_update_persists_profile_masteries(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        $monster = Monster::factory()->create([
+            'acrobatics_mastery' => 0,
+            'save_vitality_mastery' => 0,
+        ]);
+
+        $this->actingAs($admin)
+            ->from(route('entities.monsters.edit', $monster))
+            ->patch(route('entities.monsters.update', $monster), [
+                'acrobatics_mastery' => 2,
+                'save_vitality_mastery' => 1,
+            ])
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
+
+        $monster->refresh();
+        $this->assertSame(2, (int) $monster->acrobatics_mastery);
+        $this->assertSame(1, (int) $monster->save_vitality_mastery);
+    }
+
     public function test_explicit_total_priority_at_runtime_when_column_set(): void
     {
         $creature = Monster::factory()->create()->creature;
