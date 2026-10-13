@@ -34,7 +34,7 @@
 - **Consommables** : groupe dédié (`*_consumable`) ; buff/débuff + valeurs d'action (`soin_consumable`, `bouclier_consumable`, `pv_temporaires_consumable`) + `duration_consumable`. `ObjectEffect` remappé depuis les anciennes clés objet.
 - **Wakfu** : formule créature `[mastery_bonus_creature]+min([wakfu_recharge_object],3)`. Lien `intrinsic_characteristic_id` remplace les alias en dur objet→créature.
 - **Invocations** : base 1, total plafonné par `mastery_bonus_creature`.
-- **Édition** : totaux + `*_context` via `CreatureComposableCharacteristicsPersister` / `CharacteristicFormulaField` (monstre/PNJ).
+- **Édition** : totaux + `*_context` via `CreatureComposableCharacteristicsPersister` / `CharacteristicFormulaField` (monstre/PNJ). Maîtrises profil persistées sur `monsters` / `breeds` / `specializations` (`ProfileMasteryColumns`) ; plus d’écriture `*_mastery` sur `creatures`.
 
 ## Fichiers pivots
 
