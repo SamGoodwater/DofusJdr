@@ -774,6 +774,45 @@ const allCharacteristicKeySuggestions = computed(() => {
     return out;
 });
 
+/** Clés de nature buff_debuff (termes éphémères) indexées pour l’aide formule. */
+const ephemeralCharacteristicKeySet = computed(() => {
+    const set = new Set();
+    for (const g of ['creature', 'object', 'spell', 'consumable', 'profile']) {
+        for (const c of props.characteristicsByGroup?.[g] ?? []) {
+            if ((c?.nature ?? '') === 'buff_debuff' && c.id) {
+                set.add(String(c.id));
+            }
+        }
+    }
+    return set;
+});
+
+/**
+ * Termes éphémères (`buff_debuff`) présents dans une formule `[clé]`.
+ *
+ * @param {unknown} formula
+ * @returns {string[]}
+ */
+function ephemeralTermsInFormula(formula) {
+    if (typeof formula !== 'string' || formula.trim() === '') {
+        return [];
+    }
+    const keys = ephemeralCharacteristicKeySet.value;
+    const seen = new Set();
+    const out = [];
+    for (const match of formula.matchAll(/\[([a-zA-Z_][a-zA-Z0-9_]*)\]/g)) {
+        const id = match[1];
+        if (seen.has(id)) {
+            continue;
+        }
+        if (keys.has(id) || /_(consumable|spell)$/.test(id)) {
+            seen.add(id);
+            out.push(id);
+        }
+    }
+    return out;
+}
+
 /** Clé finale en création : ajoute le suffixe du groupe si absent (ex. life_dice → life_dice_creature). */
 const normalizedCreateKey = computed(() => {
     const key = (form.key ?? '').trim();
@@ -1316,6 +1355,14 @@ function submitConvertToLinked() {
                                             <p v-if="isCreatureCharacteristicGroup" class="mt-1 text-xs text-base-content/70">
                                                 Formule complète : intrinsèques + équipement (*_object) + consommable (*_consumable) + sort (*_spell). Consommable et sort sont éphémères (hors limite absolue).
                                             </p>
+                                            <p
+                                                v-if="isCreatureCharacteristicGroup && ephemeralTermsInFormula(ent.formula).length"
+                                                class="mt-1 text-xs text-warning"
+                                            >
+                                                Termes éphémères détectés :
+                                                {{ ephemeralTermsInFormula(ent.formula).join(', ') }}
+                                                (0 hors combat, hors limite absolue).
+                                            </p>
                                     <label v-if="isCreatureCharacteristicGroup" class="label cursor-pointer justify-start gap-2">
                                         <input
                                             type="checkbox"
@@ -1806,6 +1853,14 @@ function submitConvertToLinked() {
                                     <p v-if="isCreatureCharacteristicGroup" class="mt-1 text-xs text-base-content/70">
                                         Formule complète : intrinsèques + équipement (*_object) + consommable (*_consumable) + sort (*_spell). Consommable et sort sont éphémères (hors limite absolue).
                                     </p>
+                                    <p
+                                        v-if="isCreatureCharacteristicGroup && ephemeralTermsInFormula(ent.formula).length"
+                                        class="mt-1 text-xs text-warning"
+                                    >
+                                        Termes éphémères détectés :
+                                        {{ ephemeralTermsInFormula(ent.formula).join(', ') }}
+                                        (0 hors combat, hors limite absolue).
+                                    </p>
                                     <label v-if="isCreatureCharacteristicGroup" class="label cursor-pointer justify-start gap-2">
                                         <input
                                             type="checkbox"
@@ -2178,6 +2233,14 @@ function submitConvertToLinked() {
                                     <p class="mt-1 text-xs text-base-content/70">Syntaxe : [id], floor(), ceil(), round(), sqrt(), pow(), min(), max(), etc. + - * /</p>
                                     <p v-if="isCreatureCharacteristicGroup" class="mt-1 text-xs text-base-content/70">
                                         Formule complète : intrinsèques + équipement (*_object) + consommable (*_consumable) + sort (*_spell). Consommable et sort sont éphémères (hors limite absolue).
+                                    </p>
+                                    <p
+                                        v-if="isCreatureCharacteristicGroup && ephemeralTermsInFormula(entityRow(entityKey).formula).length"
+                                        class="mt-1 text-xs text-warning"
+                                    >
+                                        Termes éphémères détectés :
+                                        {{ ephemeralTermsInFormula(entityRow(entityKey).formula).join(', ') }}
+                                        (0 hors combat, hors limite absolue).
                                     </p>
                                     <label v-if="isCreatureCharacteristicGroup" class="label cursor-pointer justify-start gap-2">
                                         <input

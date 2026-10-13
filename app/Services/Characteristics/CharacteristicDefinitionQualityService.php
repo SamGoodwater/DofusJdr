@@ -105,7 +105,40 @@ final class CharacteristicDefinitionQualityService
             $issues[] = $displayIssue;
         }
 
+        if ($entityKey === '*' && $group === 'creature') {
+            $objectIssue = self::creatureFormulaMissingObjectTerm($stem, $row['formula'] ?? null);
+            if ($objectIssue !== null) {
+                $issues[] = $objectIssue;
+            }
+        }
+
         return $issues;
+    }
+
+    /**
+     * Formule créature avec un bonus objet existant mais sans terme `*_object` :
+     * le runtime retombe sur le repli « couche objets ».
+     *
+     * @example creatureFormulaMissingObjectTerm('initiative', '[modifier_intelligence_creature]') // message
+     * @example creatureFormulaMissingObjectTerm('modifier_agility', 'floor(([agility_creature]-10)/2)') // null
+     */
+    public static function creatureFormulaMissingObjectTerm(string $stem, mixed $formula): ?string
+    {
+        if (! is_string($formula) || trim($formula) === '' || str_starts_with(trim($formula), '{')) {
+            return null;
+        }
+        if (str_contains($formula, '_object]')) {
+            return null;
+        }
+
+        $objectPath = database_path(
+            'seeders/data/characteristic-definitions/object/'.$stem.'-object-definition.json'
+        );
+        if (! is_file($objectPath)) {
+            return null;
+        }
+
+        return 'formule créature : terme *_object manquant (repli runtime objets)';
     }
 
     /**

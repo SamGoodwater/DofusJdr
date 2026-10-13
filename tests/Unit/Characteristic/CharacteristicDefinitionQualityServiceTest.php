@@ -86,6 +86,22 @@ class CharacteristicDefinitionQualityServiceTest extends TestCase
         );
     }
 
+    public function test_creature_formula_missing_object_term_when_object_definition_exists(): void
+    {
+        $this->assertNotNull(CharacteristicDefinitionQualityService::creatureFormulaMissingObjectTerm(
+            'initiative',
+            '[modifier_intelligence_creature]+[initiative_consumable]'
+        ));
+        $this->assertNull(CharacteristicDefinitionQualityService::creatureFormulaMissingObjectTerm(
+            'initiative',
+            '[modifier_intelligence_creature]+[initiative_object]+[initiative_consumable]'
+        ));
+        $this->assertNull(CharacteristicDefinitionQualityService::creatureFormulaMissingObjectTerm(
+            'modifier_agility',
+            'floor(([agility_creature]-10)/2)'
+        ));
+    }
+
     public function test_object_definitions_use_existing_dofusdb_type_ids_and_match_helpers(): void
     {
         $root = dirname(__DIR__, 3);

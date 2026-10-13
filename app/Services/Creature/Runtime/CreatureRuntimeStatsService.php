@@ -353,7 +353,7 @@ final class CreatureRuntimeStatsService
             }
         }
 
-        $this->applyRuntimeTotalCaps($characteristics, $variables);
+        $this->applyRuntimeTotalCaps($characteristics, $variables, $entity);
 
         return [
             'characteristics' => $characteristics,
@@ -380,11 +380,11 @@ final class CreatureRuntimeStatsService
         }
         $bounded = max((float) $limits['min'], min((float) $limits['max'], $value));
 
-        return [$bounded, $bounded !== $value];
+        return [$bounded, abs($bounded - $value) > 1e-9];
     }
 
     /**
-     * Retire les termes éphémères additifs (`+[clé_buff]`) d'une formule, pour l'affichage hors combat.
+     * Retire les termes éphémères additifs ou soustractifs (`±[clé_buff]`) d'une formule, hors combat.
      */
     private function stripEphemeralTerms(?string $formula): ?string
     {
@@ -395,7 +395,8 @@ final class CreatureRuntimeStatsService
         if ($keys === []) {
             return $formula;
         }
-        $pattern = '/\\s*\\+\\s*\\[(?:'.implode('|', array_map(static fn (string $k): string => preg_quote($k, '/'), $keys)).')\\]/';
+        $alts = implode('|', array_map(static fn (string $k): string => preg_quote($k, '/'), $keys));
+        $pattern = '/\\s*[+\\-]\\s*\\[(?:'.$alts.')\\]/';
 
         return (string) preg_replace($pattern, '', $formula);
     }
@@ -421,28 +422,38 @@ final class CreatureRuntimeStatsService
     }
 
     /**
-     * Plafonds métier après composition base + objet + contexte.
+     * Plafonds métier après composition : bornes lues depuis min/max (Wakfu 1–9),
+     * plus plafond dynamique des invocations par le bonus de maîtrise.
      *
      * @param  array<string, array<string, mixed>>  $characteristics
      * @param  array<string, float|int>  $variables
      */
-    private function applyRuntimeTotalCaps(array &$characteristics, array &$variables): void
+    private function applyRuntimeTotalCaps(array &$characteristics, array &$variables, string $entity): void
     {
         if (isset($characteristics['wakfu_reserve_creature'])) {
-            $row = &$characteristics['wakfu_reserve_creature'];
-            $total = max(1.0, min(9.0, (float) ($row['total'] ?? 0)));
-            $row['total'] = $total;
-            $variables['wakfu_reserve_creature'] = $total;
+            $limits = $this->getter->getLimits('wakfu_reserve_creature', $entity, $variables);
+            if ($limits !== null) {
+                $row = &$characteristics['wakfu_reserve_creature'];
+                $total = max((float) $limits['min'], min((float) $limits['max'], (float) ($row['total'] ?? 0)));
+                $row['total'] = $total;
+                $variables['wakfu_reserve_creature'] = $total;
+            }
         }
 
         if (isset($characteristics['summoning_creature'])) {
+            $row = &$characteristics['summoning_creature'];
+            $total = (float) ($row['total'] ?? 0);
+            $limits = $this->getter->getLimits('summoning_creature', $entity, $variables);
+            if ($limits !== null) {
+                $total = max((float) $limits['min'], min((float) $limits['max'], $total));
+            }
+            // Plafond dynamique métier : ne jamais dépasser le bonus de maîtrise actif.
             $mastery = (float) ($variables['mastery_bonus_creature'] ?? 0);
             if ($mastery > 0) {
-                $row = &$characteristics['summoning_creature'];
-                $total = min((float) ($row['total'] ?? 0), $mastery);
-                $row['total'] = $total;
-                $variables['summoning_creature'] = $total;
+                $total = min($total, $mastery);
             }
+            $row['total'] = $total;
+            $variables['summoning_creature'] = $total;
         }
     }
 

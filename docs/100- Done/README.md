@@ -6,6 +6,8 @@ Les formules créature listent désormais tous leurs termes : caractéristique d
 
 Correctifs liés : le panneau de décomposition (clic sur une caractéristique d'une fiche monstre ou PNJ) s'affichait vide, il montre de nouveau le calcul, avec des libellés courts pour les termes (« Acr. (maîtrise) », « Acr. (équip.) »). L'enregistrement d'un monstre, d'un PNJ ou d'une créature plantait depuis le passage des maîtrises au groupe Profil ; les maîtrises du monstre sont de nouveau enregistrées.
 
+Polish : l'admin liste les termes éphémères détectés dans la formule ; une règle qualité signale une formule créature sans `*_object` quand un bonus objet existe ; la réserve Wakfu lit ses bornes 1–9 depuis `min`/`max` plutôt qu'en dur.
+
 ## Octobre 2026 — Nature des caractéristiques, Profil et Consommable
 
 Chaque caractéristique a une **nature** (descriptif, intrinsèque, bonus/malus, buff/débuff/vol, valeur d'action), indépendante de son groupe. Les bonus et buffs pointent l'intrinsèque créature qu'ils modifient. Deux nouveaux groupes : **Profil** (maîtrises de compétences et de sauvegardes pour classe, spécialisation et monstre) et **Consommable** (effets temporaires). Les ressources sortent du système ; équipements et panoplies restent ensemble. Les formules créature affichent explicitement le bonus d'équipement. L'admin replie par défaut les panneaux Conversion et Mapping.

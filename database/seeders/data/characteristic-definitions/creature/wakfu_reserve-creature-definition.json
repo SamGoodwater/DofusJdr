@@ -24,7 +24,7 @@
         "*": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-9",
+            "min": "1",
             "max": "9",
             "formula": "[mastery_bonus_creature]+min([wakfu_recharge_object],3)+[wakfu_reserve_consumable]+[wakfu_reserve_spell]",
             "formula_display": "bonus maîtrise + recharge équip. (max 3)",
