@@ -120,19 +120,30 @@ class Specialization extends Model implements HasMedia
         'write_level',
         'image',
         'created_by',
-        ...ProfileMasteryColumns::all(),
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
+     * @return list<string>
      */
-    protected $casts = [
-        'read_level' => 'integer',
-        'write_level' => 'integer',
-        ...array_fill_keys(ProfileMasteryColumns::all(), 'integer'),
-    ];
+    public function getFillable(): array
+    {
+        return array_values(array_unique([
+            ...$this->fillable,
+            ...ProfileMasteryColumns::all(),
+        ]));
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'read_level' => 'integer',
+            'write_level' => 'integer',
+            ...array_fill_keys(ProfileMasteryColumns::all(), 'integer'),
+        ];
+    }
 
     /**
      * Get the user that created the specialization.

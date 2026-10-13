@@ -101,21 +101,32 @@ class Monster extends Model
         'state',
         'read_level',
         'write_level',
-        ...ProfileMasteryColumns::all(),
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
+     * @return list<string>
      */
-    protected $casts = [
-        'size' => 'integer',
-        'auto_update' => 'boolean',
-        'read_level' => 'integer',
-        'write_level' => 'integer',
-        ...array_fill_keys(ProfileMasteryColumns::all(), 'integer'),
-    ];
+    public function getFillable(): array
+    {
+        return array_values(array_unique([
+            ...$this->fillable,
+            ...ProfileMasteryColumns::all(),
+        ]));
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'size' => 'integer',
+            'auto_update' => 'boolean',
+            'read_level' => 'integer',
+            'write_level' => 'integer',
+            ...array_fill_keys(ProfileMasteryColumns::all(), 'integer'),
+        ];
+    }
 
     /**
      * Get the creature associated with the monster.

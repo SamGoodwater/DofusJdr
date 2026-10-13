@@ -172,20 +172,31 @@ class Breed extends Model implements HasMedia
         'image_full_female',
         'auto_update',
         'created_by',
-        ...ProfileMasteryColumns::all(),
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
+     * @return list<string>
      */
-    protected $casts = [
-        'read_level' => 'integer',
-        'write_level' => 'integer',
-        'auto_update' => 'boolean',
-        ...array_fill_keys(ProfileMasteryColumns::all(), 'integer'),
-    ];
+    public function getFillable(): array
+    {
+        return array_values(array_unique([
+            ...$this->fillable,
+            ...ProfileMasteryColumns::all(),
+        ]));
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'read_level' => 'integer',
+            'write_level' => 'integer',
+            'auto_update' => 'boolean',
+            ...array_fill_keys(ProfileMasteryColumns::all(), 'integer'),
+        ];
+    }
 
     /**
      * Filtre les classes visibles pour l'utilisateur (index Inertia, API tableau).
