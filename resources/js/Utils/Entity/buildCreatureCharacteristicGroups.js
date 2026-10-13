@@ -12,6 +12,7 @@ import {
     CREATURE_RESISTANCE_PERCENT_FULL_LABELS,
     CREATURE_RESISTANCE_PERCENT_LABELS,
 } from "@/Utils/Entity/creatureCharacteristicGroups.manifest";
+import { SKILL_ABSOLUTE_LIMIT } from "@/Utils/Entity/buildCreatureCompetenceGroups";
 
 /**
  * Construit les groupes de caractéristiques pour CharacteristicsCard à partir d'une créature.
@@ -275,7 +276,7 @@ function fallbackDbValue(creature, dbColumn, runtime) {
  */
 function computeStatModifier(creature, stat) {
     const level = parseInt(creature.level, 10) || 1;
-    // Aligné sur le plafond de score 14+⌊niv/2⌋ → mod max = ⌊niv/4⌋+2, absolu +7.
+    // Repli sans runtime : limite absolue du mod (min −2, max ⌊niv/4⌋+2 plafonné à +7).
     const modMax = Math.min(Math.floor(level / 4) + 2, 7);
     const statVal = parseInt(creature[stat], 10) || 10;
     const rawMod = Math.floor((statVal - 10) / 2);
@@ -341,7 +342,8 @@ function buildAbilityStackItems(creature, getDef, getCompDef, byDb, runtime) {
             const modN = Number(mod);
             const bonus = parseInt(creature[saveBonusColumn], 10) || 0;
             const mastery = parseInt(creature[saveMasteryColumn], 10) || 0;
-            const saveTotal = (Number.isFinite(modN) ? modN : 0) + masteryBonus * mastery + bonus;
+            const rawSave = (Number.isFinite(modN) ? modN : 0) + masteryBonus * mastery + bonus;
+            const saveTotal = Math.max(-SKILL_ABSOLUTE_LIMIT, Math.min(SKILL_ABSOLUTE_LIMIT, rawSave));
             saveDisplay = String(saveTotal);
         }
 

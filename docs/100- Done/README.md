@@ -1,5 +1,11 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Bonus éphémères et limites absolues
+
+Les formules créature listent désormais tous leurs termes : caractéristique de base, équipement, consommable et sort. Les bonus de consommable et de sort sont **éphémères** : nuls hors combat, ils s'ajoutent sans jamais être plafonnés, ce qui prépare un futur outil de combat. Certaines caractéristiques ont une **limite absolue** sur leur partie permanente : modificateurs (max +7, +10 pour les monstres), compétences et sauvegardes (±15, ±20 pour les monstres), bonus de maîtrise (max 6). Les autres restent souples. Les formules affichées dans les infobulles sont réécrites en texte court (« mod. Int + équip. »), et la décomposition indique les effets temporaires et le plafonnement.
+
+Correctifs liés : le panneau de décomposition (clic sur une caractéristique d'une fiche monstre ou PNJ) s'affichait vide, il montre de nouveau le calcul, avec des libellés courts pour les termes (« Acr. (maîtrise) », « Acr. (équip.) »). L'enregistrement d'un monstre, d'un PNJ ou d'une créature plantait depuis le passage des maîtrises au groupe Profil ; les maîtrises du monstre sont de nouveau enregistrées.
+
 ## Octobre 2026 — Nature des caractéristiques, Profil et Consommable
 
 Chaque caractéristique a une **nature** (descriptif, intrinsèque, bonus/malus, buff/débuff/vol, valeur d'action), indépendante de son groupe. Les bonus et buffs pointent l'intrinsèque créature qu'ils modifient. Deux nouveaux groupes : **Profil** (maîtrises de compétences et de sauvegardes pour classe, spécialisation et monstre) et **Consommable** (effets temporaires). Les ressources sortent du système ; équipements et panoplies restent ensemble. Les formules créature affichent explicitement le bonus d'équipement. L'admin replie par défaut les panneaux Conversion et Mapping.

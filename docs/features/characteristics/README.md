@@ -2,7 +2,7 @@
 
 Les caractéristiques décrivent les valeurs numériques et règles de lecture des créatures, objets, sorts, consommables et profils : niveaux, dégâts, PA/PM/PO, limites, formules et normes.
 
-Pour le modèle **base + objets + contexte**, les formules saisies et le sélecteur de niveau, voir
+Pour le modèle **formule complète + contexte**, les bonus éphémères, les limites absolues, les formules saisies et le sélecteur de niveau, voir
 [COMPUTED_VALUES.md](./COMPUTED_VALUES.md).
 
 ## Nature (rôle)
@@ -17,7 +17,15 @@ Chaque ligne `characteristics` porte une **nature** indépendante du groupe :
 | `buff_debuff` | Bonus temporaire (sort, consommable) — UI « Buff / Débuff / Vol » |
 | `action_value` | Valeur d'action (dégâts, soin, distances…) — `min` ≥ 0 |
 
-Les natures `bonus_malus` et `buff_debuff` pointent l'intrinsèque créature via `intrinsic_characteristic_id` (clé JSON `intrinsic_key`).
+Les natures `bonus_malus` et `buff_debuff` pointent l'intrinsèque créature via `intrinsic_characteristic_id` (clé JSON `intrinsic_key`, libellé admin « Bonus de »). Ce lien est une métadonnée (« je suis le bonus de X ») : il est interdit sur une intrinsèque, mais **toute formule peut référencer n'importe quelle clé**.
+
+Les termes `buff_debuff` d'une formule créature sont **éphémères** : ils valent 0 hors combat et ne sont jamais bornés par une limite absolue.
+
+## Règles de formule et de limite (créature)
+
+- Formule **complète** : intrinsèques + `*_object` + `*_consumable` + `*_spell` (script `scripts/apply_characteristic_absolute_limits.py`, idempotent).
+- **Limite absolue** (`limit_absolute`) : mods (−2 / ⌊niv/4⌋+2, max 7 ; monstre 10), compétences et sauvegardes ±15 (monstre ±20), bonus de maîtrise 0–6. Les autres limites sont souples.
+- `formula_display` : texte joueur abrégé, sans consommable ni sort ni clé brute.
 
 ## Groupes
 
@@ -30,7 +38,7 @@ Les natures `bonus_malus` et `buff_debuff` pointent l'intrinsèque créature via
 - Formules : services sous `app/Services/Characteristic/` (`FormulaExpressionParser`, `LevelDomainResolver`).
 - Runtime créature : `CreatureRuntimeStatsService` + `ProfileMasteryResolver` (variables `*_mastery_profile`).
 - Seeders : `CharacteristicSeeder`, `CreatureCharacteristicSeeder`, `ObjectCharacteristicSeeder`, `SpellCharacteristicSeeder`, `ConsumableCharacteristicSeeder`, `ProfileCharacteristicSeeder`. La base est la source ; réécriture : `project:seed --overwrite`. Export : `scrapping:seeders:export --characteristics`.
-- Métadonnées front : `CharacteristicMetaByDbColumnService` (cache `v6`) — `helper`, descriptions, `nature`, `limit_min` / `limit_max`.
+- Métadonnées front : `CharacteristicMetaByDbColumnService` (cache `v7`) — `helper`, descriptions, `nature`, `limit_min` / `limit_max` (bornes larges si dépendantes du niveau), `limit_absolute`.
 - Qualité : `CharacteristicDefinitionQualityService`, `CharacteristicNatureQualityService`.
 - Reprise des totaux existants : `php artisan creatures:derive-context-bonuses`.
 

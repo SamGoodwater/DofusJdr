@@ -23,10 +23,10 @@
         "*": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-6",
+            "min": "0",
             "max": "6",
-            "formula": "min(6, 1+floor([level_creature]/4))",
-            "formula_display": "level_creature",
+            "formula": "1+floor([level_creature]/4)+[mastery_bonus_consumable]+[mastery_bonus_spell]",
+            "formula_display": "1 + ⌊niv. / 4⌋ (max 6)",
             "default_value": "1",
             "conversion_formula": "round([d])",
             "conversion_function": null,
@@ -201,7 +201,8 @@
             "norms_description": "Bonus de compétence (mastery). Paliers +2/+3/+4/+6 neutre.",
             "norms_help_section_id": null,
             "labels": null,
-            "validation": null
+            "validation": null,
+            "limit_absolute": true
         },
         "monster": {
             "dofusdb_characteristic_id": null,

@@ -46,6 +46,23 @@ export function humanizeCharacteristicPlaceholder(id, group = "creature") {
     if (short && String(short).trim()) return String(short).trim();
     if (name && String(name).trim()) return String(name).trim();
 
+    const layered = key.match(/^(.+?)_(mastery_profile|object|consumable|spell)$/);
+    if (layered) {
+        const [, stem, layer] = layered;
+        const stemDef =
+            getByComputedKey(group, `${stem}_creature`) || getByCharacteristicKey(group, `${stem}_creature`);
+        const stemLabel =
+            String(stemDef?.short_name || stemDef?.shortName || stemDef?.name || "").trim()
+            || stem.replace(/_/g, " ");
+        const layerLabel = {
+            mastery_profile: "maîtrise",
+            object: "équip.",
+            consumable: "conso.",
+            spell: "sort",
+        }[layer];
+        return `${stemLabel} (${layerLabel})`;
+    }
+
     // Colonnes maîtrise / bonus FR
     if (key.endsWith("_mastery")) {
         const stem = key.replace(/_mastery$/, "").replace(/_/g, " ");

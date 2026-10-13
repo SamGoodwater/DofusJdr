@@ -32,12 +32,14 @@ const props = defineProps({
 const emit = defineEmits(["open", "close"]);
 const slots = useSlots();
 
-const hasContentSlot = computed(() => Boolean(slots.content));
+const overlayContent = computed(() =>
+    slots.content ? { component: { render: () => slots.content() } } : props.content,
+);
 </script>
 
 <template>
     <OverlayTrigger
-        :content="content"
+        :content="overlayContent"
         trigger="click"
         :placement="placement"
         :max-width="maxWidth"
@@ -49,8 +51,5 @@ const hasContentSlot = computed(() => Boolean(slots.content));
         @close="emit('close')"
     >
         <slot />
-        <template v-if="hasContentSlot" #content="slotProps">
-            <slot name="content" v-bind="slotProps" />
-        </template>
     </OverlayTrigger>
 </template>

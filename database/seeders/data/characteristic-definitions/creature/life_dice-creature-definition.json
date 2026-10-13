@@ -69,7 +69,7 @@
             "min": "1",
             "max": "10",
             "formula": "floor([level_creature]/2)",
-            "formula_display": "floor([level_creature]/2)",
+            "formula_display": "⌊niv. / 2⌋",
             "default_value": null,
             "conversion_formula": null,
             "conversion_function": null,

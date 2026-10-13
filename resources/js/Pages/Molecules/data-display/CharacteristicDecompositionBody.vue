@@ -2,7 +2,7 @@
 /**
  * Corps de décomposition d'une caractéristique (popover Full) — ton fiche de jeu.
  *
- * @props {Object} model — viewModel enrichi (base, object, context, total, placeholders…)
+ * @props {Object} model — viewModel enrichi (base, object, context, ephemeral, capped, total, placeholders…)
  */
 import { computed } from "vue";
 import Icon from "@/Pages/Atoms/data-display/Icon.vue";
@@ -42,6 +42,19 @@ const friendlyResolution = computed(() =>
 );
 
 const termRows = computed(() => mapPlaceholdersForPlayer(props.model?.placeholders));
+
+const hasEphemeral = computed(() => {
+    const n = Number(props.model?.ephemeral);
+    return Number.isFinite(n) && n !== 0;
+});
+
+const capLabel = computed(() => {
+    if (!props.model?.capped) return "";
+    const min = props.model?.limitMin;
+    const max = props.model?.limitMax;
+    if (min != null && max != null) return `Plafonné (entre ${min} et ${max})`;
+    return "Plafonné";
+});
 
 const hasLayers =
     computed(() =>
@@ -87,9 +100,14 @@ const hasLayers =
                 {{ fmt(model.context) }}
                 <span v-if="model.contextRaw" class="ml-1 opacity-60">({{ model.contextRaw }})</span>
             </dd>
+            <template v-if="hasEphemeral">
+                <dt class="opacity-70">Effets temporaires</dt>
+                <dd class="text-right tabular-nums">{{ fmt(model.ephemeral) }}</dd>
+            </template>
             <dt class="font-medium">Total</dt>
             <dd class="text-right font-medium tabular-nums">{{ fmt(model.total ?? model.displayValue) }}</dd>
         </dl>
+        <p v-if="capLabel" class="badge badge-warning badge-sm">{{ capLabel }}</p>
 
         <div
             v-if="formulaTable || friendlyFormula || friendlyResolution || termRows.length"

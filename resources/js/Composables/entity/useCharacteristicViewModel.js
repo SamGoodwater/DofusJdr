@@ -187,6 +187,9 @@ export function mergeRuntimeIntoViewModel(vm, rc) {
     if (rc.base != null) next.base = rc.base;
     if (rc.object != null) next.object = rc.object;
     if (rc.context != null) next.context = rc.context;
+    if (rc.ephemeral != null) next.ephemeral = rc.ephemeral;
+    if (rc.permanent != null) next.permanent = rc.permanent;
+    if (rc.capped != null) next.capped = Boolean(rc.capped);
     if (rc.source != null) next.source = rc.source;
     if (rc.context_raw != null) next.contextRaw = rc.context_raw;
     if (Array.isArray(rc.levelTable)) next.levelTable = rc.levelTable;

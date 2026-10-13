@@ -27,7 +27,7 @@
             "min": "-34",
             "max": "34",
             "formula": "10+[stealth_creature]+[stealth_passive_object]",
-            "formula_display": "10+[stealth_creature]+[stealth_passive_object]",
+            "formula_display": "10 + Discr. + équip.",
             "default_value": "10",
             "conversion_formula": null,
             "conversion_function": null,

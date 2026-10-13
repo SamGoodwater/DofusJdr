@@ -37,9 +37,9 @@ const formulaHelpContent = {
     funcs1: 'Fonctions à 1 argument : floor, ceil, round, sqrt, abs, cos, sin, tan, asin, acos, atan.',
     funcs2: 'Fonctions à 2 arguments : pow(base, exp), min(a, b), max(a, b).',
     examples:
-        'Exemples : [modifier_intelligence_creature], 10+[modifier_vitality_creature], [level_creature]*2, floor([d]/10), min(10,[level]*2). Formule d’affichage (site) : clés nues reliées par +.',
+        'Exemples : [modifier_intelligence_creature], 10+[modifier_vitality_creature], [level_creature]*2, floor([d]/10), min(10,[level]*2). Formule affichée : texte joueur abrégé (ex. mod. Int + équip.), sans consommable ni sort.',
     equipment:
-        'Groupe créature : n’ajoutez pas les bonus d’équipement (*_object) dans la formule. Ils sont ajoutés automatiquement au runtime (total = base + objets + contexte). Les coller ici les compterait deux fois.',
+        'Groupe créature : listez tous les termes — intrinsèques, équipement (*_object), consommable (*_consumable), sort (*_spell). Les termes consommable et sort (nature Buff / Débuff) sont éphémères : ils valent 0 hors combat et ne sont jamais bornés par une limite absolue.',
 };
 
 const props = defineProps({
@@ -90,7 +90,7 @@ const conversionFunctionSelectOptions = computed(() =>
 
 /** Groupe « object » : édition ou création (form.group). */
 const isObjectCharacteristicGroup = computed(() => (props.selected?.group ?? form.group) === 'object');
-/** Groupe « creature » : la formule est la couche base seulement (équipement = couche runtime). */
+/** Groupe « creature » : formule complète (équipement explicite, buffs éphémères) et limite absolue. */
 const isCreatureCharacteristicGroup = computed(() => (props.selected?.group ?? form.group) === 'creature');
 
 /**
@@ -355,6 +355,7 @@ function buildFormData(selected, entitiesByGroup = null) {
             db_column: e.db_column ?? '',
             min: e.min ?? '',
             max: e.max ?? '',
+            limit_absolute: e.limit_absolute ?? null,
             formula: e.formula ?? '',
             formula_display: e.formula_display ?? '',
             default_value: e.default_value ?? '',
@@ -467,6 +468,7 @@ function addEntityOverride(entityKey) {
             db_column: '',
             min: '',
             max: '',
+            limit_absolute: null,
             formula: '',
             formula_display: '',
             default_value: '',
@@ -559,6 +561,7 @@ watch(
                     db_column: e.db_column ?? '',
                     min: e.min ?? '',
                     max: e.max ?? '',
+                    limit_absolute: e.limit_absolute ?? null,
                     formula: e.formula ?? '',
                     formula_display: e.formula_display ?? '',
                     default_value: e.default_value ?? '',
@@ -594,6 +597,7 @@ watch(
                             db_column: defaultRow.db_column ?? '',
                             min: defaultRow.min ?? '',
                             max: defaultRow.max ?? '',
+                            limit_absolute: defaultRow.limit_absolute ?? null,
                             formula: defaultRow.formula ?? '',
                             formula_display: defaultRow.formula_display ?? '',
                             default_value: defaultRow.default_value ?? '',
@@ -1236,7 +1240,7 @@ function submitConvertToLinked() {
                                     </select>
                                 </div>
                                 <div v-if="natureRequiresIntrinsicLink">
-                                    <label class="label"><span class="label-text">Correspond à (créature)</span></label>
+                                    <label class="label"><span class="label-text">Bonus de (caractéristique créature)</span></label>
                                     <select v-model="form.intrinsic_characteristic_id" class="select select-bordered w-full">
                                         <option value="">Choisir…</option>
                                         <option
@@ -1310,8 +1314,17 @@ function submitConvertToLinked() {
                                                 placeholder="ex: [level]*2 ou table par niveau"
                                             />
                                             <p v-if="isCreatureCharacteristicGroup" class="mt-1 text-xs text-base-content/70">
-                                                Couche base uniquement : ne pas y mettre les bonus d’équipement (*_object) — ils s’ajoutent au runtime (base + objets + contexte).
+                                                Formule complète : intrinsèques + équipement (*_object) + consommable (*_consumable) + sort (*_spell). Consommable et sort sont éphémères (hors limite absolue).
                                             </p>
+                                    <label v-if="isCreatureCharacteristicGroup" class="label cursor-pointer justify-start gap-2">
+                                        <input
+                                            type="checkbox"
+                                            class="checkbox checkbox-sm"
+                                            :checked="Boolean(ent.limit_absolute)"
+                                            @change="(e) => (ent.limit_absolute = e.target.checked)"
+                                        />
+                                        <span class="label-text">Limite absolue : min/max bornent le total permanent (base + équipement + maîtrise + contexte)</span>
+                                    </label>
                                             <p v-if="ent.formula" class="mt-2 text-xs text-base-content/60">Le graphique sera disponible après enregistrement.</p>
                                         </div>
                                         <div class="sm:col-span-2">
@@ -1320,11 +1333,11 @@ function submitConvertToLinked() {
                                                 :model-value="ent.formula_display"
                                                 :suggestions="allCharacteristicKeySuggestions"
                                                 :use-brackets="false"
-                                                placeholder="ex: vitality_creature + hit_dice_creature"
+                                                placeholder="ex: mod. Int + équip."
                                                 input-class="input input-bordered w-full font-mono text-sm"
                                                 @update:model-value="(v) => (ent.formula_display = v)"
                                             />
-                                            <p class="mt-1 text-xs text-base-content/70">Clés nues pour l’affichage enrichi (site).</p>
+                                            <p class="mt-1 text-xs text-base-content/70">Texte joueur abrégé (ex. mod. Int + équip.), sans consommable ni sort ; vide = formule brute humanisée.</p>
                                         </div>
                                         <div class="sm:col-span-2">
                                             <label class="label"><span class="label-text">Valeur par défaut</span></label>
@@ -1576,7 +1589,7 @@ function submitConvertToLinked() {
                                     </select>
                                 </div>
                                 <div v-if="natureRequiresIntrinsicLink">
-                                    <label class="label"><span class="label-text">Correspond à (créature)</span></label>
+                                    <label class="label"><span class="label-text">Bonus de (caractéristique créature)</span></label>
                                     <select v-model="form.intrinsic_characteristic_id" class="select select-bordered w-full">
                                         <option value="">Choisir…</option>
                                         <option
@@ -1791,8 +1804,17 @@ function submitConvertToLinked() {
                                     />
                                     <p class="mt-1 text-xs text-base-content/70">Syntaxe : [id], floor(), ceil(), round(), sqrt(), pow(), min(), max(), cos/sin/tan, etc. + - * /</p>
                                     <p v-if="isCreatureCharacteristicGroup" class="mt-1 text-xs text-base-content/70">
-                                        Couche base uniquement : ne pas y mettre les bonus d’équipement (*_object) — ils s’ajoutent au runtime (base + objets + contexte).
+                                        Formule complète : intrinsèques + équipement (*_object) + consommable (*_consumable) + sort (*_spell). Consommable et sort sont éphémères (hors limite absolue).
                                     </p>
+                                    <label v-if="isCreatureCharacteristicGroup" class="label cursor-pointer justify-start gap-2">
+                                        <input
+                                            type="checkbox"
+                                            class="checkbox checkbox-sm"
+                                            :checked="Boolean(ent.limit_absolute)"
+                                            @change="(e) => (ent.limit_absolute = e.target.checked)"
+                                        />
+                                        <span class="label-text">Limite absolue : min/max bornent le total permanent (base + équipement + maîtrise + contexte)</span>
+                                    </label>
                                 </div>
                                 <div class="sm:col-span-2">
                                     <label class="label"><span class="label-text">Formule (affichage)</span></label>
@@ -1800,11 +1822,11 @@ function submitConvertToLinked() {
                                         :model-value="ent.formula_display"
                                         :suggestions="allCharacteristicKeySuggestions"
                                         :use-brackets="false"
-                                        placeholder="ex: vitality_creature + hit_dice_creature"
+                                        placeholder="ex: mod. Int + équip."
                                         input-class="input input-bordered w-full font-mono text-sm"
                                         @update:model-value="(v) => (ent.formula_display = v)"
                                     />
-                                    <p class="mt-1 text-xs text-base-content/70">Clés nues pour l’affichage enrichi (site).</p>
+                                    <p class="mt-1 text-xs text-base-content/70">Texte joueur abrégé (ex. mod. Int + équip.), sans consommable ni sort ; vide = formule brute humanisée.</p>
                                 </div>
                                 <div class="sm:col-span-2">
                                     <label class="label"><span class="label-text">Valeur par défaut</span></label>
@@ -1923,11 +1945,11 @@ function submitConvertToLinked() {
                                         :model-value="generalEntityRow().formula_display"
                                         :suggestions="allCharacteristicKeySuggestions"
                                         :use-brackets="false"
-                                        placeholder="ex: vitality_creature + hit_dice_creature"
+                                        placeholder="ex: mod. Int + équip."
                                         input-class="input input-bordered w-full font-mono text-sm"
                                         @update:model-value="(v) => (generalEntityRow().formula_display = v)"
                                     />
-                                    <p class="mt-1 text-xs text-base-content/70">Clés nues pour l’affichage enrichi (site).</p>
+                                    <p class="mt-1 text-xs text-base-content/70">Texte joueur abrégé (ex. mod. Int + équip.), sans consommable ni sort ; vide = formule brute humanisée.</p>
                                 </div>
 
                                 <!-- Graphique en grand sous la formule -->
@@ -2155,8 +2177,17 @@ function submitConvertToLinked() {
                                     />
                                     <p class="mt-1 text-xs text-base-content/70">Syntaxe : [id], floor(), ceil(), round(), sqrt(), pow(), min(), max(), etc. + - * /</p>
                                     <p v-if="isCreatureCharacteristicGroup" class="mt-1 text-xs text-base-content/70">
-                                        Couche base uniquement : ne pas y mettre les bonus d’équipement (*_object) — ils s’ajoutent au runtime (base + objets + contexte).
+                                        Formule complète : intrinsèques + équipement (*_object) + consommable (*_consumable) + sort (*_spell). Consommable et sort sont éphémères (hors limite absolue).
                                     </p>
+                                    <label v-if="isCreatureCharacteristicGroup" class="label cursor-pointer justify-start gap-2">
+                                        <input
+                                            type="checkbox"
+                                            class="checkbox checkbox-sm"
+                                            :checked="Boolean(entityRow(entityKey).limit_absolute)"
+                                            @change="(e) => (entityRow(entityKey).limit_absolute = e.target.checked)"
+                                        />
+                                        <span class="label-text">Limite absolue : min/max bornent le total permanent (base + équipement + maîtrise + contexte)</span>
+                                    </label>
                                 </div>
                                 <div class="sm:col-span-2">
                                     <label class="label"><span class="label-text">Formule (affichage)</span></label>
@@ -2164,7 +2195,7 @@ function submitConvertToLinked() {
                                         :model-value="entityRow(entityKey).formula_display"
                                         :suggestions="allCharacteristicKeySuggestions"
                                         :use-brackets="false"
-                                        placeholder="ex: vitality_creature + hit_dice_creature"
+                                        placeholder="ex: mod. Int + équip."
                                         input-class="input input-bordered w-full font-mono text-sm"
                                         @update:model-value="(v) => (entityRow(entityKey).formula_display = v)"
                                     />
@@ -2236,11 +2267,11 @@ function submitConvertToLinked() {
                                         :model-value="entityRow(entityKey).formula_display"
                                         :suggestions="allCharacteristicKeySuggestions"
                                         :use-brackets="false"
-                                        placeholder="ex: vitality_creature + hit_dice_creature"
+                                        placeholder="ex: mod. Int + équip."
                                         input-class="input input-bordered w-full font-mono text-sm"
                                         @update:model-value="(v) => (entityRow(entityKey).formula_display = v)"
                                     />
-                                    <p class="mt-1 text-xs text-base-content/70">Clés nues pour l’affichage enrichi (site).</p>
+                                    <p class="mt-1 text-xs text-base-content/70">Texte joueur abrégé (ex. mod. Int + équip.), sans consommable ni sort ; vide = formule brute humanisée.</p>
                                 </div>
 
                                 <!-- Graphique en grand sous la formule -->

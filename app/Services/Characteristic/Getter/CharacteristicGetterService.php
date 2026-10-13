@@ -108,14 +108,20 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
         return $this->definitionMemo[$memoKey] = $this->mergeDefinition($characteristic, $base, $overlay, $entity);
     }
 
+    /** Plage de niveaux JDR utilisée pour les bornes larges hors contexte. */
+    private const LIMIT_LEVEL_RANGE = [1, 20];
+
     /**
      * Retourne les limites min/max pour une caractéristique et une entité.
      * Min/max peuvent être une valeur fixe, une formule ([level]*2) ou une table par caractéristique ;
-     * ils sont évalués avec les variables fournies (ex. level, vitality). Sans variables, formules/tables
-     * sont évaluées avec 0 pour les variables manquantes.
+     * ils sont évalués avec les variables fournies (ex. level, vitality). Sans niveau dans les variables,
+     * une borne dépendant du niveau renvoie l'intervalle le plus large sur les niveaux 1 à 20.
      *
      * @param  array<string, int|float>  $variables  Contexte pour l'évaluation (ex. ['level' => 5, 'vitality' => 10])
      * @return array{min: int, max: int}|null
+     *
+     * @example getLimits('modifier_strength_creature', 'npc', ['level' => 4]) // ['min' => -2, 'max' => 3]
+     * @example getLimits('modifier_strength_creature', 'npc') // ['min' => -2, 'max' => 7]
      */
     public function getLimits(string $characteristicKey, string $entity, array $variables = []): ?array
     {
@@ -123,8 +129,8 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
         if ($def === null) {
             return null;
         }
-        $minVal = $this->resolveLimitValue($def['min'] ?? null, $variables);
-        $maxVal = $this->resolveLimitValue($def['max'] ?? null, $variables);
+        $minVal = $this->resolveLimitBound($def['min'] ?? null, $variables, false);
+        $maxVal = $this->resolveLimitBound($def['max'] ?? null, $variables, true);
         if ($minVal === null || $maxVal === null) {
             return null;
         }
@@ -484,6 +490,35 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
     }
 
     /**
+     * Résout une borne ; sans niveau connu, une borne dépendant du niveau prend sa valeur la plus large.
+     *
+     * @param  array<string, int|float>  $variables
+     */
+    private function resolveLimitBound(mixed $value, array $variables, bool $isMax): ?int
+    {
+        $s = is_scalar($value) ? trim((string) $value) : '';
+        $level = $variables['level_creature'] ?? $variables['level'] ?? null;
+        if ($level !== null) {
+            $variables += ['level' => $level, 'level_creature' => $level];
+        }
+        if ($level !== null || $s === '' || is_numeric($s) || ! str_contains($s, 'level')) {
+            return $this->resolveLimitValue($value, $variables);
+        }
+
+        $best = null;
+        [$from, $to] = self::LIMIT_LEVEL_RANGE;
+        for ($level = $from; $level <= $to; $level++) {
+            $v = $this->resolveLimitValue($value, $variables + ['level' => $level, 'level_creature' => $level]);
+            if ($v === null) {
+                continue;
+            }
+            $best = $best === null ? $v : ($isMax ? max($best, $v) : min($best, $v));
+        }
+
+        return $best;
+    }
+
+    /**
      * Résout une limite (min ou max) : valeur fixe, formule ou table → entier.
      *
      * @param  mixed  $value  Valeur en BDD (string numérique, formule ou JSON table)
@@ -575,6 +610,7 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
             $out['allowed_item_type_ids'] = $restricted ? $effectiveItemTypes->pluck('id')->values()->all() : [];
         }
         if ($row instanceof CharacteristicCreature) {
+            $out['limit_absolute'] = (bool) ($this->pickGroupValue($base, $overlay, 'limit_absolute') ?? false);
             $out['labels'] = $this->pickGroupValue($base, $overlay, 'labels') ?? $row->labels;
             $out['validation'] = $this->pickGroupValue($base, $overlay, 'validation') ?? $row->validation;
         }

@@ -192,6 +192,7 @@ final class CharacteristicDefinitionsExportFromDatabaseService
             'norms_conditions' => $r->norms_conditions,
             'norms_description' => $r->norms_description,
             'norms_help_section_id' => $r->norms_help_section_id,
+            'limit_absolute' => $r->limit_absolute,
             'labels' => $r->labels,
             'validation' => $r->validation,
         ];

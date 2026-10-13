@@ -3,19 +3,33 @@
 Une caractéristique d’entité (créature, plus tard équipement) peut être un **total explicite**
 ou une **composition** de trois couches, pilotée par des formules qui dépendent du niveau.
 
-## Les trois couches
+## Les couches
 
-`total = base + objets + contexte`.
-
-Les champs pivot `min` / `max` **numériques** sont des **plafonds absolus** (métadonnée UI, validation à l’édition, clamp au scrapping). Ils **ne reclament pas** automatiquement le résultat d’une formule au runtime créature : si une formule doit respecter un plafond progressif *et* un plafond absolu, elle les embarque (`min(..., N)`). Un `max` pivot plus bas qu’une formule mal écrite ne « corrige » donc pas l’affichage résolu — il faut aligner la formule.
+```text
+permanent = borne_absolue(formule(éphémères = 0) + contexte)
+éphémère  = formule(buffs actifs) − formule(éphémères = 0)
+total     = permanent + éphémère
+```
 
 | Couche | Source | Rôle |
 | --- | --- | --- |
-| **Base** | `characteristic_creature.formula` | Formule système (ex. CA = 10 + mod. Vitalité). **Ne pas** y coller les `*_object` : l’équipement est la couche suivante. |
-| **Objets** | Somme de `items.effect` (fallback `items.bonus` plat) des équipements portés | Agrégée par `CreatureItemBonusAggregator` via `KrosmozItemBonusDecoder` |
-| **Contexte** | Colonne `<db_column>_context` sur `creatures` | Nombre ou formule saisie pour ce monstre / PNJ |
+| **Formule** | `characteristic_creature.formula` | Formule **complète** : intrinsèques (mods, maîtrise…), équipement (`*_object`), consommable (`*_consumable`), sort (`*_spell`). Ex. initiative : `[modifier_intelligence_creature]+[initiative_object]+[initiative_consumable]+[initiative_spell]`. |
+| **Objets** | Somme de `items.effect` (fallback `items.bonus` plat) des équipements portés | Injectée dans les variables `*_object` (agrégée par `CreatureItemBonusAggregator`). Si une formule n'a pas de `*_object`, la couche est ajoutée en repli. |
+| **Contexte** | Colonne `<db_column>_context` sur `creatures` | Nombre ou formule saisie pour ce monstre / PNJ (permanent) |
+| **Éphémère** | Termes de nature `buff_debuff` | Buffs de sort / consommable : 0 hors combat ; `resolve($creature, $entity, ['initiative_spell' => 2])` les injecte. |
 
-L’admin caractéristiques rappelle ce point sous le champ Formule (groupe créature) et dans l’aide « ? ».
+### Limites absolues et limites souples
+
+- **Limite absolue** (`characteristic_creature.limit_absolute`) : `min` / `max` bornent la partie **permanente** au runtime, même si score + équipement montent plus haut. Les éphémères s'ajoutent ensuite, sans borne. Valeurs : modificateurs `-2` / `min(floor([level_creature]/4)+2, 7)` (monstre `-2` / `10`), compétences et sauvegardes `±15` (monstre `±20`), bonus de maîtrise `0` / `6`.
+- **Limite souple** : toutes les autres. `min` / `max` larges servent à la validation, au clamp de conversion / scrapping et à l'UI ; elles sont tenues indirectement par les limites absolues dont elles dépendent.
+- Une borne peut dépendre du niveau. Sans niveau connu (scrapping, formulaires, partage front), `getLimits` renvoie l'intervalle le plus large sur les niveaux 1 à 20.
+- Les plafonds **d'un seul terme** restent dans la formule (ex. `min([wakfu_recharge_object],3)`).
+- Le runtime tient deux jeux de variables : une compétence évalue sa partie permanente avec le modificateur permanent déjà borné ; un buff du modificateur passe dans la part éphémère de la compétence.
+- Chaque ligne résolue expose `ephemeral`, `permanent` et `capped` ; la décomposition (popover) affiche « Effets temporaires » et un badge « Plafonné ».
+
+### Formule affichée
+
+`formula_display` est un **texte joueur abrégé** saisi à la main (`mod. Int + équip.`, `mod. Agi + bonus maîtrise × maîtrise + équip.`), **sans** consommable ni sort et sans clé brute. Règle vérifiée par `CharacteristicDefinitionQualityService::formulaDisplayIssue` et le test d'intégrité. Le détail « Avec tes valeurs » retire les termes éphémères nuls.
 
 ### Priorité du total explicite
 
@@ -92,7 +106,7 @@ Résumé Minimal (`mode: summary`) :
 
 Le groupe **Caractéristiques** empile par colonne : score → modificateur → sauvegarde
 (`AbilityScoreStack.vue`). Les valeurs DB nulles sont résolues via le runtime
-(`base + objets + contexte`) ; la CA utilise `10+[modifier_vitality_creature]`.
+(formule complète + contexte) ; la CA utilise `10+[modifier_vitality_creature]+[armor_class_object]+…`.
 
 Résistances : fixe + code relatif entre parenthèses seulement si ≠ 0 %
 (`V` Vulnérable / `F` Faiblesse / `R` Résistant / `I` Invulnérable).
@@ -102,7 +116,8 @@ caractéristiques sur toute la largeur (`spread`). Les dommages fixe Sagesse /
 Vitalité ne sont plus affichés (hors usage JDR).
 
 Compétences (UI) : total = mod. caractéristique + `mastery_bonus × palier(0|1|2)`
-+ bonus BDD + bonus objets (couche runtime). Affichage `+N`, `+N (M)`, `+N (E)`.
++ bonus BDD + bonus objets, partie permanente bornée à ±15 (monstre ±20, limite absolue).
+Sans runtime, le repli front applique ±15 (`SKILL_ABSOLUTE_LIMIT`). Affichage `+N`, `+N (M)`, `+N (E)`.
 
 ## Édition
 

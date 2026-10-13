@@ -27,7 +27,7 @@
             "min": "-34",
             "max": "34",
             "formula": "10+[acrobatics_creature]+[acrobatics_passive_object]",
-            "formula_display": "10+[acrobatics_creature]+[acrobatics_passive_object]",
+            "formula_display": "10 + Acr. + équip.",
             "default_value": "10",
             "conversion_formula": null,
             "conversion_function": null,

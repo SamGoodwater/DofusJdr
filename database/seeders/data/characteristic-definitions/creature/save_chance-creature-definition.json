@@ -24,10 +24,10 @@
         "*": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-16",
-            "max": "16",
-            "formula": "[modifier_chance_creature]+[mastery_bonus_creature]*[save_chance_mastery_profile]+[save_chance_object]",
-            "formula_display": "[modifier_chance_creature]+[mastery_bonus_creature]*[save_chance_mastery_profile]+[save_chance_object]",
+            "min": "-15",
+            "max": "15",
+            "formula": "[modifier_chance_creature]+[mastery_bonus_creature]*[save_chance_mastery_profile]+[save_chance_object]+[save_chance_consumable]+[save_chance_spell]",
+            "formula_display": "mod. Cha + bonus maîtrise × maîtrise + équip.",
             "default_value": "0",
             "conversion_formula": "[d]",
             "conversion_function": null,
@@ -195,13 +195,14 @@
             "norms_description": "Sauvegarde chance. Progression linéaire neutre 0→8.",
             "norms_help_section_id": null,
             "labels": null,
-            "validation": null
+            "validation": null,
+            "limit_absolute": true
         },
         "monster": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-32",
-            "max": "32",
+            "min": "-20",
+            "max": "20",
             "formula": null,
             "formula_display": null,
             "default_value": null,

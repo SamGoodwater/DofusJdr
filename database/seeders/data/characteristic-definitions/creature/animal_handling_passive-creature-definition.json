@@ -27,7 +27,7 @@
             "min": "-34",
             "max": "34",
             "formula": "10+[animal_handling_creature]+[animal_handling_passive_object]",
-            "formula_display": "10+[animal_handling_creature]+[animal_handling_passive_object]",
+            "formula_display": "10 + Dress. + équip.",
             "default_value": "10",
             "conversion_formula": null,
             "conversion_function": null,

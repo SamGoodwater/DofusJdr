@@ -24,10 +24,10 @@
         "*": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-16",
-            "max": "16",
-            "formula": "[modifier_strength_creature]+[mastery_bonus_creature]*[save_strength_mastery_profile]+[save_strength_object]",
-            "formula_display": "[modifier_strength_creature]+[mastery_bonus_creature]*[save_strength_mastery_profile]+[save_strength_object]",
+            "min": "-15",
+            "max": "15",
+            "formula": "[modifier_strength_creature]+[mastery_bonus_creature]*[save_strength_mastery_profile]+[save_strength_object]+[save_strength_consumable]+[save_strength_spell]",
+            "formula_display": "mod. For + bonus maîtrise × maîtrise + équip.",
             "default_value": "0",
             "conversion_formula": "[d]",
             "conversion_function": null,
@@ -158,13 +158,14 @@
             "norms_description": "Sauvegarde force. Progression linéaire neutre 0→8.",
             "norms_help_section_id": null,
             "labels": null,
-            "validation": null
+            "validation": null,
+            "limit_absolute": true
         },
         "monster": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-32",
-            "max": "32",
+            "min": "-20",
+            "max": "20",
             "formula": null,
             "formula_display": null,
             "default_value": null,

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Services\Characteristic;
 
 use App\Models\Characteristic;
-use App\Models\CharacteristicCreature;
 use App\Models\CharacteristicConsumable;
+use App\Models\CharacteristicCreature;
 use App\Models\CharacteristicObject;
 use App\Models\CharacteristicSpell;
+use App\Services\Characteristic\Formula\FormulaResolutionService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Log;
 final class CharacteristicMetaByDbColumnService
 {
     /** Clé de cache pour le share Inertia `characteristics` (invalidée à la sauvegarde des pivots / masters). */
-    public const FRONTEND_CACHE_KEY = 'characteristics:frontend:v6';
+    public const FRONTEND_CACHE_KEY = 'characteristics:frontend:v7';
 
     /**
      * Mapping db_column → définition pour PJ / PNJ (entity `*` uniquement).
@@ -500,26 +501,29 @@ final class CharacteristicMetaByDbColumnService
     }
 
     /**
-     * Limites numériques figées du pivot (`min` / `max`), ignorées si formule.
+     * Limites du pivot (`min` / `max`) ; une borne dépendant du niveau prend sa valeur la plus large (niveaux 1 à 20).
      *
-     * @return array{limit_min?: string, limit_max?: string}
+     * @return array{limit_min?: string, limit_max?: string, limit_absolute?: bool}
      */
     private function pivotLimitExtra(object $row): array
     {
         $extra = [];
-        $min = $this->staticLimitLabel($row->min ?? null);
-        $max = $this->staticLimitLabel($row->max ?? null);
+        $min = $this->limitLabel($row->min ?? null, false);
+        $max = $this->limitLabel($row->max ?? null, true);
         if ($min !== null) {
             $extra['limit_min'] = $min;
         }
         if ($max !== null) {
             $extra['limit_max'] = $max;
         }
+        if (! empty($row->limit_absolute ?? null)) {
+            $extra['limit_absolute'] = true;
+        }
 
         return $extra;
     }
 
-    private function staticLimitLabel(mixed $raw): ?string
+    private function limitLabel(mixed $raw, bool $isMax): ?string
     {
         if ($raw === null || $raw === '') {
             return null;
@@ -528,8 +532,25 @@ final class CharacteristicMetaByDbColumnService
             return (string) (int) $raw;
         }
         $s = trim((string) $raw);
+        if (preg_match('/^-?\d+$/', $s) === 1) {
+            return $s;
+        }
+        if (! str_contains($s, 'level')) {
+            return null;
+        }
 
-        return preg_match('/^-?\d+$/', $s) === 1 ? $s : null;
+        $formulas = app(FormulaResolutionService::class);
+        $best = null;
+        for ($level = 1; $level <= 20; $level++) {
+            $v = $formulas->evaluate($s, ['level' => $level, 'level_creature' => $level]);
+            if ($v === null) {
+                continue;
+            }
+            $v = (int) round($v);
+            $best = $best === null ? $v : ($isMax ? max($best, $v) : min($best, $v));
+        }
+
+        return $best === null ? null : (string) $best;
     }
 
     /**

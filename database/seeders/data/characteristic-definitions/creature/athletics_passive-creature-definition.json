@@ -27,7 +27,7 @@
             "min": "-34",
             "max": "34",
             "formula": "10+[athletics_creature]+[athletics_passive_object]",
-            "formula_display": "10+[athletics_creature]+[athletics_passive_object]",
+            "formula_display": "10 + Athl. + équip.",
             "default_value": "10",
             "conversion_formula": null,
             "conversion_function": null,

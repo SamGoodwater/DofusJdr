@@ -378,6 +378,7 @@ class CharacteristicController extends Controller
             'entities.*.db_column' => 'nullable|string|max:64',
             'entities.*.min' => 'nullable|string|max:512',
             'entities.*.max' => 'nullable|string|max:512',
+            'entities.*.limit_absolute' => 'nullable|boolean',
             'entities.*.formula' => 'nullable|string',
             'entities.*.formula_display' => 'nullable|string',
             'entities.*.default_value' => 'nullable|string|max:512',
@@ -989,6 +990,7 @@ class CharacteristicController extends Controller
             'entities.*.db_column' => 'nullable|string|max:64',
             'entities.*.min' => 'nullable|string|max:512',
             'entities.*.max' => 'nullable|string|max:512',
+            'entities.*.limit_absolute' => 'nullable|boolean',
             'entities.*.formula' => 'nullable|string',
             'entities.*.formula_display' => 'nullable|string',
             'entities.*.default_value' => 'nullable|string|max:512',
@@ -1286,6 +1288,7 @@ class CharacteristicController extends Controller
             'norms_conditions' => $row->norms_conditions,
             'norms_description' => $row->norms_description,
             'norms_help_section_id' => $row->norms_help_section_id,
+            'limit_absolute' => $row instanceof CharacteristicCreature ? $row->limit_absolute : null,
         ];
         if ($row instanceof CharacteristicObject) {
             $out['forgemagie_max'] = $row->forgemagie_max;
@@ -1415,7 +1418,11 @@ class CharacteristicController extends Controller
         if ($group === 'creature' && in_array($entity, self::ENTITIES_BY_GROUP['creature'], true)) {
             CharacteristicCreature::updateOrCreate(
                 ['characteristic_id' => $characteristicId, 'entity' => $entity],
-                $common
+                array_key_exists('limit_absolute', $data)
+                    ? array_merge($common, [
+                        'limit_absolute' => $data['limit_absolute'] === null ? null : (bool) $data['limit_absolute'],
+                    ])
+                    : $common
             );
 
             return;

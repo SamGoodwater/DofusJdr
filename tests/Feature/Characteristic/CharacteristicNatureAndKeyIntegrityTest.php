@@ -11,6 +11,7 @@ use App\Models\CharacteristicCreature;
 use App\Models\CharacteristicObject;
 use App\Models\CharacteristicProfile;
 use App\Models\CharacteristicSpell;
+use App\Services\Characteristics\CharacteristicDefinitionQualityService;
 use App\Services\Characteristics\CharacteristicNatureQualityService;
 use Database\Seeders\CharacteristicSeeder;
 use Database\Seeders\ConsumableCharacteristicSeeder;
@@ -121,6 +122,21 @@ final class CharacteristicNatureAndKeyIntegrityTest extends TestCase
         }
 
         $this->assertSame([], $failures, implode("\n", array_slice($failures, 0, 50)));
+    }
+
+    public function test_formula_display_is_player_text_without_ephemeral_terms(): void
+    {
+        $failures = [];
+        foreach ([CharacteristicCreature::class, CharacteristicObject::class, CharacteristicSpell::class, CharacteristicConsumable::class, CharacteristicProfile::class] as $modelClass) {
+            $modelClass::query()->whereNotNull('formula_display')->each(function ($row) use (&$failures): void {
+                $issue = CharacteristicDefinitionQualityService::formulaDisplayIssue($row->formula_display);
+                if ($issue !== null) {
+                    $failures[] = ($row->characteristic->key ?? '#'.$row->id).' ('.$row->entity.') : '.$row->formula_display;
+                }
+            });
+        }
+
+        $this->assertSame([], $failures, implode("\n", array_slice($failures, 0, 40)));
     }
 
     public function test_no_mastery_characteristics_in_object_group(): void

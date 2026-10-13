@@ -27,7 +27,7 @@
             "min": "-34",
             "max": "34",
             "formula": "10+[arcana_creature]+[arcana_passive_object]",
-            "formula_display": "10+[arcana_creature]+[arcana_passive_object]",
+            "formula_display": "10 + Arc. + équip.",
             "default_value": "10",
             "conversion_formula": null,
             "conversion_function": null,

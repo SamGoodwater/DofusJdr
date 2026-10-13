@@ -24,10 +24,10 @@
         "*": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-24",
-            "max": "24",
-            "formula": "[modifier_wisdom_creature]+[mastery_bonus_creature]*[insight_mastery_profile]+[insight_object]",
-            "formula_display": "[modifier_wisdom_creature]+[mastery_bonus_creature]*[insight_mastery_profile]+[insight_object]",
+            "min": "-15",
+            "max": "15",
+            "formula": "[modifier_wisdom_creature]+[mastery_bonus_creature]*[insight_mastery_profile]+[insight_object]+[insight_consumable]+[insight_spell]",
+            "formula_display": "mod. Sag + bonus maîtrise × maîtrise + équip.",
             "default_value": "0",
             "conversion_formula": null,
             "conversion_function": null,
@@ -40,13 +40,14 @@
             "norms_description": null,
             "norms_help_section_id": null,
             "labels": null,
-            "validation": null
+            "validation": null,
+            "limit_absolute": true
         },
         "monster": {
             "dofusdb_characteristic_id": null,
             "db_column": null,
-            "min": "-48",
-            "max": "48",
+            "min": "-20",
+            "max": "20",
             "formula": null,
             "formula_display": null,
             "default_value": null,

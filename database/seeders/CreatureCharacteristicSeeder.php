@@ -31,6 +31,7 @@ class CreatureCharacteristicSeeder extends CharacteristicGroupSeeder
     protected function mapRowToAttributes(array $row): array
     {
         return array_merge($this->commonAttributes($row), [
+            'limit_absolute' => isset($row['limit_absolute']) ? (bool) $row['limit_absolute'] : null,
             'labels' => $row['labels'] ?? null,
             'validation' => $row['validation'] ?? null,
         ]);

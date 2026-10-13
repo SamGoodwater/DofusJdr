@@ -8,6 +8,8 @@ namespace App\Support\Characteristics;
  * Élargit les bornes numériques des caractéristiques créature pour les monstres uniquement.
  *
  * Chaque côté de l’intervalle PJ (`*`) gagne 50 % de l’amplitude ; le min peut devenir négatif.
+ * Ne pas l'appliquer aux limites absolues (`limit_absolute`) : leurs valeurs monstre sont fixées à la main
+ * (mods 10, compétences et sauvegardes ±20).
  */
 final class MonsterCharacteristicLimitExpander
 {

@@ -52,7 +52,7 @@ class CharacteristicMetaCreatureByDbColumnAliasTest extends TestCase
         $this->assertSame('20', $byDb['strong']['limit_max']);
     }
 
-    public function test_creature_meta_omits_formula_limits(): void
+    public function test_creature_meta_resolves_level_limits_to_widest_bound(): void
     {
         $characteristic = Characteristic::create([
             'key' => 'vitality_creature',
@@ -74,7 +74,7 @@ class CharacteristicMetaCreatureByDbColumnAliasTest extends TestCase
 
         $byDb = (new CharacteristicMetaByDbColumnService)->buildCreatureByDbColumn();
 
-        $this->assertArrayNotHasKey('limit_min', $byDb['vit']);
+        $this->assertSame('2', $byDb['vit']['limit_min']);
         $this->assertSame('99', $byDb['vit']['limit_max']);
     }
 

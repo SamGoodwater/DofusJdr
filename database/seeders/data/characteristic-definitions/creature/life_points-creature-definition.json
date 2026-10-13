@@ -27,7 +27,7 @@
             "min": "[hit_dice_creature]",
             "max": "∞",
             "formula": "[hit_dice_creature] + [modifier_vitality_creature]*[level_creature] + ([level_creature]-1)*(round([hit_dice_creature]/2))+[life_points_max_object]",
-            "formula_display": "[hit_dice_creature] + [modifier_vitality_creature]×[level_creature] + ([level_creature]-1)×(round([hit_dice_creature]/2)) + [life_points_max_object]",
+            "formula_display": "dé de vie + mod. Vit × niv. + (niv. − 1) × ½ dé de vie + équip.",
             "default_value": "[hit_dice_creature]",
             "conversion_formula": "floor([d]/200)+[level]*5",
             "conversion_function": null,

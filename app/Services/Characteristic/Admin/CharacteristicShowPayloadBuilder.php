@@ -206,6 +206,7 @@ final class CharacteristicShowPayloadBuilder
             'norms_conditions' => null,
             'norms_description' => null,
             'norms_help_section_id' => null,
+            'limit_absolute' => null,
             'item_type_ids' => [],
         ];
     }
@@ -294,6 +295,7 @@ final class CharacteristicShowPayloadBuilder
             'norms_conditions' => $def['norms_conditions'] ?? null,
             'norms_description' => $def['norms_description'] ?? null,
             'norms_help_section_id' => $def['norms_help_section_id'] ?? null,
+            'limit_absolute' => $def['limit_absolute'] ?? null,
         ];
         if (isset($def['forgemagie_max'])) {
             $out['forgemagie_max'] = (int) $def['forgemagie_max'];
@@ -341,6 +343,7 @@ final class CharacteristicShowPayloadBuilder
             'norms_conditions' => $row->norms_conditions,
             'norms_description' => $row->norms_description,
             'norms_help_section_id' => $row->norms_help_section_id,
+            'limit_absolute' => $row instanceof CharacteristicCreature ? $row->limit_absolute : null,
         ];
         if ($row instanceof CharacteristicObject) {
             $out['forgemagie_max'] = $row->forgemagie_max;

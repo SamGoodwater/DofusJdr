@@ -100,7 +100,30 @@ final class CharacteristicDefinitionQualityService
             }
         }
 
+        $displayIssue = self::formulaDisplayIssue($row['formula_display'] ?? null);
+        if ($displayIssue !== null) {
+            $issues[] = $displayIssue;
+        }
+
         return $issues;
+    }
+
+    /**
+     * Formule affichée : texte joueur abrégé, sans clé brute ni terme consommable / sort.
+     *
+     * @example formulaDisplayIssue('mod. Int + équip.') // null
+     * @example formulaDisplayIssue('[initiative_spell]') // 'formula_display : clé brute ou terme éphémère'
+     */
+    public static function formulaDisplayIssue(mixed $display): ?string
+    {
+        if (! is_string($display) || trim($display) === '' || str_starts_with(trim($display), '{')) {
+            return null;
+        }
+        if (preg_match('/\[|_(creature|object|spell|consumable|profile)\b/', $display) === 1) {
+            return 'formula_display : clé brute ou terme éphémère';
+        }
+
+        return null;
     }
 
     /**

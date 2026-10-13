@@ -34,4 +34,11 @@ describe("characteristicTooltipLabels", () => {
     it("fallback libellé pour *_mastery", () => {
         expect(humanizeCharacteristicPlaceholder("save_chance_mastery")).toMatch(/Maîtrise/i);
     });
+
+    it("libellés courts pour les couches maîtrise / équipement / conso / sort", () => {
+        expect(humanizeCharacteristicPlaceholder("acrobatics_mastery_profile")).toBe("acrobatics (maîtrise)");
+        expect(humanizeCharacteristicPlaceholder("initiative_object")).toBe("initiative (équip.)");
+        expect(humanizeCharacteristicPlaceholder("initiative_consumable")).toBe("initiative (conso.)");
+        expect(humanizeCharacteristicPlaceholder("initiative_spell")).toBe("initiative (sort)");
+    });
 });

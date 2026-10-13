@@ -177,10 +177,19 @@ class DofusConversionServiceTest extends TestCase
             10.0,
             $formulas->evaluate($monster['formula'] ?? null, ['strength_creature' => 30, 'level_creature' => 30])
         );
-        $this->assertSame('7', $character['max'] ?? null);
+        $this->assertSame('min(floor([level_creature]/4)+2, 7)', $character['max'] ?? null);
+        $this->assertTrue($character['limit_absolute'] ?? false);
         $this->assertSame(
-            7.0,
+            10.0,
             $formulas->evaluate($character['formula'] ?? null, ['strength_creature' => 30, 'level_creature' => 20])
+        );
+        $this->assertSame(
+            ['min' => -2, 'max' => 7],
+            $getter->getLimits('modifier_strength_creature', 'class', ['level_creature' => 20])
+        );
+        $this->assertSame(
+            ['min' => -2, 'max' => 3],
+            $getter->getLimits('modifier_strength_creature', 'class', ['level_creature' => 4])
         );
     }
 

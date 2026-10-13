@@ -206,6 +206,11 @@ function runtimeDisplayValue(runtime, key) {
 }
 
 /**
+ * Limite absolue PJ/PNJ des compétences et sauvegardes (hors buffs). Le runtime applique ±20 aux monstres.
+ */
+export const SKILL_ABSOLUTE_LIMIT = 15;
+
+/**
  * Bonus de maîtrise (1 + ⌊niv/4⌋, max 6) — aligné `mastery_bonus_creature`.
  *
  * @param {Object} creature
@@ -229,7 +234,7 @@ export function resolveMasteryBonus(creature, runtime = null) {
  */
 function computeStatModifier(creature, stat) {
     const level = parseInt(creature.level, 10) || 1;
-    // Aligné sur le plafond de score 14+⌊niv/2⌋ → mod max = ⌊niv/4⌋+2, absolu +7.
+    // Repli sans runtime : limite absolue du mod (min −2, max ⌊niv/4⌋+2 plafonné à +7).
     const modMax = Math.min(Math.floor(level / 4) + 2, 7);
     const statVal = parseInt(creature[stat], 10) || 10;
     const rawMod = Math.floor((statVal - 10) / 2);
@@ -285,8 +290,9 @@ export function resolveCreatureSkillTotal(creature, masteryColumn, runtime = nul
     const bonusCol = MASTERY_DB_COLUMN_TO_BONUS_COLUMN[masteryColumn];
     const dbBonus = bonusCol ? parseInt(creature?.[bonusCol], 10) || 0 : 0;
 
+    const raw = mod + masteryBonus * safeTier + dbBonus;
     return {
-        total: mod + masteryBonus * safeTier + dbBonus,
+        total: Math.max(-SKILL_ABSOLUTE_LIMIT, Math.min(SKILL_ABSOLUTE_LIMIT, raw)),
         tier: safeTier,
         tag,
     };

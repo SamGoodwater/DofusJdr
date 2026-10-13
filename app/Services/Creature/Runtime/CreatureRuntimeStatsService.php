@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Creature\Runtime;
 
+use App\Enums\CharacteristicNature;
 use App\Models\Characteristic;
 use App\Models\CharacteristicCreature;
 use App\Models\Entity\Creature;
@@ -18,6 +19,12 @@ use App\Support\Creature\CreatureComposableColumns;
 /**
  * Calcule les caractéristiques d'une créature niveau par niveau : base + objets + contexte,
  * avec priorité au total explicite stocké en colonne.
+ *
+ * Les termes de nature `buff_debuff` (`*_consumable`, `*_spell`) sont éphémères : la partie permanente
+ * est évaluée avec ces termes à 0, bornée si la caractéristique a une limite absolue, puis la part
+ * éphémère s'ajoute sans borne.
+ *
+ * @example $stats->resolve($npc, 'npc', ['initiative_spell' => 2])['levels'][0]['characteristics']['initiative_creature']['ephemeral'] // 2.0
  *
  * @see docs/features/characteristics/COMPUTED_VALUES.md
  */
@@ -35,7 +42,11 @@ final class CreatureRuntimeStatsService
         private readonly ProfileMasteryResolver $profileMasteryResolver,
     ) {}
 
+    /** @var list<string>|null */
+    private ?array $ephemeralKeysMemo = null;
+
     /**
+     * @param  array<string, int|float>  $ephemeralValues  Valeurs des buffs actifs (clé buff_debuff => valeur), vide hors combat
      * @return array{
      *   entity: string,
      *   default_level: int,
@@ -46,7 +57,7 @@ final class CreatureRuntimeStatsService
      *   items: array{aggregated: array<string, int>, lines: list<array{item_id: int, name: string, quantity: int, bonuses: array<string, int>}>}
      * }
      */
-    public function resolve(Creature $creature, string $entity = 'monster'): array
+    public function resolve(Creature $creature, string $entity = 'monster', array $ephemeralValues = []): array
     {
         if (! in_array($entity, ['monster', 'class', 'npc'], true)) {
             $entity = 'monster';
@@ -60,6 +71,8 @@ final class CreatureRuntimeStatsService
         );
         $objectByKey = $this->objectBonusMerger->mapToCharacteristicKeys($entity, $itemTotals);
         $dbColumnByKey = $this->mapCharacteristicKeysToDbColumns($entity);
+        $ephemeralKeys = $this->ephemeralCharacteristicKeys();
+        $ephemeralValues = array_intersect_key($ephemeralValues, array_fill_keys($ephemeralKeys, true));
 
         $levelsPayload = [];
         $lastUnresolved = [];
@@ -70,7 +83,8 @@ final class CreatureRuntimeStatsService
                 $entity,
                 $level,
                 $objectByKey,
-                $dbColumnByKey
+                $dbColumnByKey,
+                $ephemeralValues
             );
             $levelsPayload[] = [
                 'level' => $level,
@@ -94,6 +108,9 @@ final class CreatureRuntimeStatsService
                 'base' => $row['base'],
                 'object' => $row['object'],
                 'context' => $row['context'],
+                'ephemeral' => $row['ephemeral'],
+                'permanent' => $row['permanent'],
+                'capped' => $row['capped'],
                 'source' => $row['source'],
                 'formula' => $row['formula'],
                 'formula_display' => $row['formula_display'],
@@ -120,6 +137,7 @@ final class CreatureRuntimeStatsService
     /**
      * @param  array<string, int>  $objectByKey
      * @param  array<string, string>  $dbColumnByKey
+     * @param  array<string, int|float>  $ephemeralValues
      * @return array{
      *   characteristics: array<string, array<string, mixed>>,
      *   variables: array<string, float|int>,
@@ -131,7 +149,8 @@ final class CreatureRuntimeStatsService
         string $entity,
         int $level,
         array $objectByKey,
-        array $dbColumnByKey
+        array $dbColumnByKey,
+        array $ephemeralValues = []
     ): array {
         $variables = $this->variableMapBuilder->buildBaseMap($creature, $entity);
         $variables = $this->stripContextColumnsFromVariables($variables);
@@ -147,6 +166,14 @@ final class CreatureRuntimeStatsService
             $variables[$profileKey] = (float) $tier;
         }
 
+        // Deux jeux : permanent (éphémères à 0, bornes absolues) et complet (buffs actifs inclus).
+        $permanentVars = $variables;
+        foreach ($ephemeralValues as $ephemeralKey => $value) {
+            $variables[$ephemeralKey] = (float) $value;
+            $permanentVars[$ephemeralKey] = 0.0;
+        }
+        $hasEphemeral = $ephemeralValues !== [];
+
         $characteristics = [];
         $resolvedKeys = [];
 
@@ -158,26 +185,36 @@ final class CreatureRuntimeStatsService
             if (! $creature->hasExplicitTotal($column)) {
                 continue;
             }
-            $total = $this->parseNumeric($creature->getAttribute($column));
+            $explicit = $this->parseNumeric($creature->getAttribute($column));
             $object = (float) ($objectByKey[$key] ?? 0);
             $contextRaw = $creature->contextBonusRaw($column);
-            $context = $this->evaluateContext($contextRaw, $variables);
-            $base = $this->evaluateBaseFormula($key, $entity, $variables) ?? 0.0;
+            $context = $this->evaluateContext($contextRaw, $permanentVars);
+            $basePermanent = $this->evaluateBaseFormula($key, $entity, $permanentVars) ?? 0.0;
+            $ephemeral = $hasEphemeral
+                ? ($this->evaluateBaseFormula($key, $entity, $variables) ?? 0.0) - $basePermanent
+                : 0.0;
+            [$permanent, $capped] = $this->applyAbsoluteLimit($key, $entity, $explicit, $permanentVars);
+            $total = $permanent + $ephemeral;
             $characteristics[$key] = $this->buildCharacteristicRow(
                 $key,
                 $entity,
-                $base,
+                $basePermanent,
                 $object,
                 $context,
+                $ephemeral,
+                $permanent,
+                $capped,
                 $total,
                 'total_column',
                 $contextRaw,
                 $variables
             );
             $variables[$key] = $total;
+            $permanentVars[$key] = $permanent;
             $resolvedKeys[$key] = true;
         }
         $variables = FormulaVariableResolver::withShortNames('creature', $variables);
+        $permanentVars = FormulaVariableResolver::withShortNames('creature', $permanentVars);
 
         // 2) Caractéristiques calculées / composées (passes itératives).
         $computedKeys = $this->listComposableAndComputedKeys($entity, $dbColumnByKey);
@@ -185,7 +222,9 @@ final class CreatureRuntimeStatsService
         $maxPasses = max(32, count($computedKeys) + 5);
         for ($pass = 0; $pass < $maxPasses; $pass++) {
             $this->injectIntimidationAbilityModifier($creature, $variables);
+            $this->injectIntimidationAbilityModifier($creature, $permanentVars);
             $variables = FormulaVariableResolver::withShortNames('creature', $variables);
+            $permanentVars = FormulaVariableResolver::withShortNames('creature', $permanentVars);
             $progress = false;
             foreach ($computedKeys as $key) {
                 if (isset($resolvedKeys[$key])) {
@@ -210,8 +249,8 @@ final class CreatureRuntimeStatsService
                 $column = $dbColumnByKey[$key] ?? null;
                 $object = (float) ($objectByKey[$key] ?? 0);
                 $contextRaw = is_string($column) ? $creature->contextBonusRaw($column) : null;
-                $context = $this->evaluateContext($contextRaw, $variables);
-                $base = $this->evaluateBaseFormula($key, $entity, $variables);
+                $context = $this->evaluateContext($contextRaw, $permanentVars);
+                $base = $this->evaluateBaseFormula($key, $entity, $permanentVars);
 
                 // Si pas de formule de base et pas de contexte/objet, ignorer (sauf si formule pure sans colonne).
                 if ($base === null && ! $hasFormula && $object === 0.0 && ($contextRaw === null || $context === 0.0)) {
@@ -230,24 +269,34 @@ final class CreatureRuntimeStatsService
                 }
 
                 $baseValue = $base ?? 0.0;
+                $ephemeral = ($hasEphemeral && $hasFormula)
+                    ? ($this->evaluateBaseFormula($key, $entity, $variables) ?? $baseValue) - $baseValue
+                    : 0.0;
                 // Si la formule inclut déjà les clés *_object, ne pas recompter la couche objets.
                 $objectAlreadyInFormula = $hasFormula && str_contains((string) $def['formula'], '_object]');
-                $total = $objectAlreadyInFormula
+                $rawPermanent = $objectAlreadyInFormula
                     ? $baseValue + $context
                     : $baseValue + $object + $context;
+                [$permanent, $capped] = $this->applyAbsoluteLimit($key, $entity, $rawPermanent, $permanentVars);
+                $total = $permanent + $ephemeral;
                 $characteristics[$key] = $this->buildCharacteristicRow(
                     $key,
                     $entity,
                     $objectAlreadyInFormula ? ($baseValue - $object) : $baseValue,
                     $object,
                     $context,
+                    $ephemeral,
+                    $permanent,
+                    $capped,
                     $total,
                     'composed',
                     $contextRaw,
                     $variables
                 );
                 $variables[$key] = $total;
+                $permanentVars[$key] = $permanent;
                 $variables = FormulaVariableResolver::withShortNames('creature', $variables);
+                $permanentVars = FormulaVariableResolver::withShortNames('creature', $permanentVars);
                 $resolvedKeys[$key] = true;
                 $progress = true;
             }
@@ -267,24 +316,29 @@ final class CreatureRuntimeStatsService
             }
             $column = $dbColumnByKey[$key] ?? null;
             $contextRaw = is_string($column) ? $creature->contextBonusRaw($column) : null;
-            $context = $this->evaluateContext($contextRaw, $variables);
-            $base = $this->evaluateBaseFormula($key, $entity, $variables) ?? 0.0;
+            $context = $this->evaluateContext($contextRaw, $permanentVars);
+            $base = $this->evaluateBaseFormula($key, $entity, $permanentVars) ?? 0.0;
             $object = (float) $amount;
             $formula = is_string($def['formula'] ?? null) ? (string) $def['formula'] : '';
             $objectAlreadyInFormula = $formula !== '' && str_contains($formula, '_object]');
-            $total = $objectAlreadyInFormula ? $base + $context : $base + $object + $context;
+            $rawPermanent = $objectAlreadyInFormula ? $base + $context : $base + $object + $context;
+            [$permanent, $capped] = $this->applyAbsoluteLimit($key, $entity, $rawPermanent, $permanentVars);
             $characteristics[$key] = $this->buildCharacteristicRow(
                 $key,
                 $entity,
                 $objectAlreadyInFormula ? ($base - $object) : $base,
                 $object,
                 $context,
-                $total,
+                0.0,
+                $permanent,
+                $capped,
+                $permanent,
                 'composed',
                 $contextRaw,
                 $variables
             );
-            $variables[$key] = $total;
+            $variables[$key] = $permanent;
+            $permanentVars[$key] = $permanent;
             $resolvedKeys[$key] = true;
         }
         $variables = FormulaVariableResolver::withShortNames('creature', $variables);
@@ -306,6 +360,64 @@ final class CreatureRuntimeStatsService
             'variables' => $this->normalizeNumericMap($variables),
             'unresolved_computed_keys' => $unresolved,
         ];
+    }
+
+    /**
+     * Borne la partie permanente si la caractéristique porte une limite absolue.
+     *
+     * @param  array<string, float|int>  $permanentVars
+     * @return array{0: float, 1: bool} [valeur bornée, plafonnée ?]
+     */
+    private function applyAbsoluteLimit(string $key, string $entity, float $value, array $permanentVars): array
+    {
+        $def = $this->getter->getDefinition($key, $entity);
+        if ($def === null || empty($def['limit_absolute'])) {
+            return [$value, false];
+        }
+        $limits = $this->getter->getLimits($key, $entity, $permanentVars);
+        if ($limits === null) {
+            return [$value, false];
+        }
+        $bounded = max((float) $limits['min'], min((float) $limits['max'], $value));
+
+        return [$bounded, $bounded !== $value];
+    }
+
+    /**
+     * Retire les termes éphémères additifs (`+[clé_buff]`) d'une formule, pour l'affichage hors combat.
+     */
+    private function stripEphemeralTerms(?string $formula): ?string
+    {
+        if ($formula === null || $formula === '') {
+            return $formula;
+        }
+        $keys = $this->ephemeralCharacteristicKeys();
+        if ($keys === []) {
+            return $formula;
+        }
+        $pattern = '/\\s*\\+\\s*\\[(?:'.implode('|', array_map(static fn (string $k): string => preg_quote($k, '/'), $keys)).')\\]/';
+
+        return (string) preg_replace($pattern, '', $formula);
+    }
+
+    /**
+     * Clés de nature buff_debuff (termes éphémères des formules).
+     *
+     * @return list<string>
+     */
+    private function ephemeralCharacteristicKeys(): array
+    {
+        if ($this->ephemeralKeysMemo !== null) {
+            return $this->ephemeralKeysMemo;
+        }
+
+        /** @var list<string> $keys */
+        $keys = Characteristic::query()
+            ->where('nature', CharacteristicNature::BuffDebuff->value)
+            ->pluck('key')
+            ->all();
+
+        return $this->ephemeralKeysMemo = $keys;
     }
 
     /**
@@ -344,6 +456,9 @@ final class CreatureRuntimeStatsService
         float $base,
         float $object,
         float $context,
+        float $ephemeral,
+        float $permanent,
+        bool $capped,
         float $total,
         string $source,
         ?string $contextRaw,
@@ -351,7 +466,8 @@ final class CreatureRuntimeStatsService
     ): array {
         $def = $this->getter->getDefinition($key, $entity);
         $formula = is_string($def['formula'] ?? null) ? $def['formula'] : null;
-        $ids = $this->formulas->extractVariablePlaceholders($formula);
+        $shownFormula = $ephemeral === 0.0 ? $this->stripEphemeralTerms($formula) : $formula;
+        $ids = $this->formulas->extractVariablePlaceholders($shownFormula);
         $placeholders = [];
         foreach ($ids as $id) {
             $placeholders[] = [
@@ -365,6 +481,9 @@ final class CreatureRuntimeStatsService
             'base' => $base,
             'object' => $object,
             'context' => $context,
+            'ephemeral' => $ephemeral,
+            'permanent' => $permanent,
+            'capped' => $capped,
             'total' => $total,
             'source' => $source,
             'context_raw' => $contextRaw,
@@ -372,7 +491,7 @@ final class CreatureRuntimeStatsService
             'formula_display' => isset($def['formula_display']) && is_string($def['formula_display'])
                 ? $def['formula_display']
                 : null,
-            'substituted' => $this->formulas->substitutePlaceholdersForDisplay($formula, $variables),
+            'substituted' => $this->formulas->substitutePlaceholdersForDisplay($shownFormula, $variables),
             'placeholders' => $placeholders,
         ];
     }

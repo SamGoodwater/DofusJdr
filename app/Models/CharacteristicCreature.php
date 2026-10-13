@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $db_column
  * @property string|null $min Valeur fixe, formule ou table JSON
  * @property string|null $max Valeur fixe, formule ou table JSON
+ * @property bool|null $limit_absolute Min/max bornent le total permanent au runtime (null = hérite de `*`)
  * @property string|null $formula
  * @property string|null $formula_display
  * @property string|null $default_value
@@ -91,6 +92,7 @@ class CharacteristicCreature extends Model
         'db_column',
         'min',
         'max',
+        'limit_absolute',
         'formula',
         'formula_display',
         'default_value',
@@ -111,6 +113,7 @@ class CharacteristicCreature extends Model
     /** @var array<string, string> */
     protected $casts = [
         'dofusdb_characteristic_id' => 'integer',
+        'limit_absolute' => 'boolean',
         'conversion_dofus_sample' => 'array',
         'conversion_krosmoz_sample' => 'array',
         'conversion_sample_rows' => 'array',

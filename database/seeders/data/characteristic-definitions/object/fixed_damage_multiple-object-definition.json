@@ -28,7 +28,7 @@
             "min": "-5",
             "max": "5",
             "formula": "{\"1\":\"0\",\"9\":\"1\",\"11\":\"2\",\"15\":\"3\",\"characteristic\":\"level\"}",
-            "formula_display": "level_object",
+            "formula_display": null,
             "default_value": "0",
             "conversion_formula": "([d] / max(abs([d]), 1)) * (round(1.78 * pow(abs([d]) / 4, 0.7)))",
             "conversion_function": null,
