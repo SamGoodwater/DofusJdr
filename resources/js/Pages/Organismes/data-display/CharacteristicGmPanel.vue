@@ -3,7 +3,8 @@
  * Panneau MJ d'une caractéristique : barème, calcul, conversion, propriétés.
  * Réservé à l'édition, aux aides à la création et à l'outil Barème.
  */
-import { computed, ref, watch } from "vue";
+import { computed, inject, ref, toValue, watch } from "vue";
+import { usePage } from "@inertiajs/vue3";
 import axios from "axios";
 import NormsViewer from "@/Pages/Organismes/data-display/NormsViewer.vue";
 import CharacteristicFormulaRichText from "@/Pages/Molecules/data-display/CharacteristicFormulaRichText.vue";
@@ -11,6 +12,12 @@ import CharacteristicDecompositionBody from "@/Pages/Molecules/data-display/Char
 import FormulaChart from "@/Pages/Admin/characteristics/FormulaChart.vue";
 import { loadCharacteristicCard } from "@/Composables/characteristic/useCharacteristicCard";
 import { buildFormulaTableView } from "@/Utils/characteristic/formulaConfig";
+import { CHARACTERISTIC_RUNTIME_INJECT_KEY } from "@/Composables/entity/characteristicRuntimeContext";
+import { useCreatureResolvedStats } from "@/Composables/entity/useCreatureResolvedStats";
+import {
+    resolveCreatureContextFromPageProps,
+    resolveRuntimeModelForKey,
+} from "@/Composables/characteristic/resolveRuntimeModelForKey";
 
 const props = defineProps({
     characteristicKey: { type: String, required: true },
@@ -20,6 +27,8 @@ const props = defineProps({
     entity: { type: String, default: "*" },
     /** ViewModel runtime (créature en édition) pour l'onglet Calcul. */
     runtimeModel: { type: Object, default: null },
+    /** Payload resolved-stats complet (prioritaire sur inject / page). */
+    runtime: { type: Object, default: null },
     /** Valeur saisie à positionner dans le barème (optionnel). */
     highlightValue: { type: [Number, String, null], default: null },
     /** Onglets à afficher (défaut : tous disponibles). */
@@ -29,11 +38,62 @@ const props = defineProps({
     },
 });
 
+const page = usePage();
+const injectedRuntime = inject(CHARACTERISTIC_RUNTIME_INJECT_KEY, null);
+const pageCreatureContext = computed(() => resolveCreatureContextFromPageProps(page.props));
+
+const fetchCreatureId = computed(() => {
+    if (props.runtimeModel || props.runtime) return null;
+    const injected = toValue(injectedRuntime);
+    if (injected && typeof injected === "object") return null;
+    if (pageCreatureContext.value?.runtime) return null;
+    return pageCreatureContext.value?.creatureId ?? null;
+});
+
+const fetchEntityQuery = computed(
+    () => pageCreatureContext.value?.entityQuery || "monster",
+);
+
+const { runtime: fetchedRuntime, loading: runtimeLoading } = useCreatureResolvedStats(
+    fetchCreatureId,
+    fetchEntityQuery,
+);
+
 const loading = ref(false);
 const error = ref("");
 const normsData = ref(null);
 const card = ref(null);
 const activeTab = ref("bareme");
+
+const resolvedRuntimePayload = computed(() => {
+    if (props.runtime && typeof props.runtime === "object") return props.runtime;
+    const injected = toValue(injectedRuntime);
+    if (injected && typeof injected === "object") return injected;
+    if (pageCreatureContext.value?.runtime) return pageCreatureContext.value.runtime;
+    return fetchedRuntime.value;
+});
+
+const effectiveRuntimeModel = computed(() => {
+    if (props.runtimeModel && typeof props.runtimeModel === "object") {
+        return props.runtimeModel;
+    }
+    const key = String(props.characteristicKey || "").trim();
+    const baseFromCard = card.value
+        ? {
+              key,
+              name: card.value.name || key,
+              icon: card.value.icon || "",
+              color: card.value.color || "",
+              formulaDisplay: card.value.formula_display || "",
+              formulaBdd: card.value.formula || "",
+              helper: card.value.helper || "",
+              descriptions: card.value.descriptions || "",
+              limitMin: card.value.limit_min ?? null,
+              limitMax: card.value.limit_max ?? null,
+          }
+        : null;
+    return resolveRuntimeModelForKey(resolvedRuntimePayload.value, key, baseFromCard);
+});
 
 const availableTabs = computed(() => {
     const wanted = props.tabs;
@@ -223,15 +283,19 @@ defineExpose({ reload: load });
                         Affichage joueur · {{ card.formula_display }}
                     </p>
                 </div>
+                <div v-if="runtimeLoading" class="flex items-center gap-2 text-sm text-base-content/60">
+                    <span class="loading loading-spinner loading-sm" />
+                    Chargement de la décomposition…
+                </div>
                 <CharacteristicDecompositionBody
-                    v-if="runtimeModel"
-                    :model="runtimeModel"
+                    v-else-if="effectiveRuntimeModel"
+                    :model="effectiveRuntimeModel"
                 />
                 <div v-else class="alert alert-info text-sm">
                     <i class="fa-solid fa-info-circle" />
                     <span>
-                        La décomposition base / équipement / contexte apparaît ici quand une créature
-                        est en cours d'édition.
+                        Ouvre la fiche ou l’édition d’un monstre / PNJ pour afficher la décomposition
+                        base / équipement / contexte / temporaire de cette caractéristique.
                     </span>
                 </div>
             </div>

@@ -303,3 +303,43 @@ export function formatDiceSummary(value, options = {}) {
     }
     return parts.join(' · ') || '—';
 }
+
+/**
+ * Texte multiligne pour tooltip au survol d’une valeur moyenne (barème).
+ * Propose variance haute (−), moyenne (=), basse (+) et optionnellement un fixe.
+ *
+ * @param {number|string|null|undefined} value — moyenne cible
+ * @param {{ mod?: number }} [options]
+ * @returns {string}
+ *
+ * @example
+ * formatDiceHoverTooltip(6)
+ * // "Moyenne 6 ≈ 1d12 (−) · 2d6 (=) · 3d4 (+)"
+ */
+export function formatDiceHoverTooltip(value, options = {}) {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n <= 0) {
+        return '';
+    }
+    const s = suggestDice(n, options);
+    const lines = [];
+    if (s.high?.formula) {
+        lines.push(`${s.high.formula} (−)`);
+    }
+    if (s.mid?.formula) {
+        lines.push(`${s.mid.formula} (=)`);
+    }
+    if (s.low?.formula) {
+        lines.push(`${s.low.formula} (+)`);
+    }
+    if (s.withFixed?.formula) {
+        const already = lines.some((line) => line.startsWith(s.withFixed.formula));
+        if (!already) {
+            lines.push(`${s.withFixed.formula} (fixe)`);
+        }
+    }
+    if (!lines.length) {
+        return '';
+    }
+    return `Moyenne ${n} ≈ ${lines.join(' · ')}`;
+}

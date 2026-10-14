@@ -1,11 +1,25 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
+import { ref, shallowRef } from 'vue';
 import CharacteristicGmPanel from '@/Pages/Organismes/data-display/CharacteristicGmPanel.vue';
 
 vi.mock('axios', () => ({
     default: {
         get: vi.fn(),
     },
+}));
+
+vi.mock('@inertiajs/vue3', () => ({
+    usePage: () => ({ props: {} }),
+}));
+
+vi.mock('@/Composables/entity/useCreatureResolvedStats', () => ({
+    useCreatureResolvedStats: () => ({
+        runtime: shallowRef(null),
+        loading: ref(false),
+        error: ref(null),
+        refresh: vi.fn(),
+    }),
 }));
 
 vi.mock('@/Composables/characteristic/useCharacteristicCard', () => ({
@@ -106,11 +120,29 @@ describe('CharacteristicGmPanel', () => {
         });
         await flushPromises();
 
-        const calculBtn = wrapper.findAll('button').find((b) => b.text().includes('Calcul'));
-        if (calculBtn) {
-            await calculBtn.trigger('click');
-            await flushPromises();
-        }
+        expect(wrapper.find('[data-test="decomp"]').exists()).toBe(true);
+    });
+
+    it('construit la décomposition depuis un payload runtime', async () => {
+        const wrapper = mount(CharacteristicGmPanel, {
+            props: {
+                characteristicKey: 'initiative_creature',
+                group: 'creature',
+                tabs: ['calcul'],
+                runtime: {
+                    computed: {
+                        initiative_creature: {
+                            total: 10,
+                            base: 7,
+                            object: 2,
+                            context: 1,
+                        },
+                    },
+                },
+            },
+        });
+        await flushPromises();
+
         expect(wrapper.find('[data-test="decomp"]').exists()).toBe(true);
     });
 });

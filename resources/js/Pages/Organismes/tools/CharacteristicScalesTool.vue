@@ -11,6 +11,8 @@ import { SPELL_SCALE_FAMILIES } from "@/Composables/tools/useSpellReferenceScale
 
 const props = defineProps({
     compact: { type: Boolean, default: false },
+    /** Étire la liste gauche jusqu’en bas (modal wide). */
+    fillHeight: { type: Boolean, default: false },
     initialGroup: { type: String, default: "all" },
     initialKey: { type: String, default: "" },
 });
@@ -100,15 +102,21 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="characteristic-scales-tool space-y-4" :class="{ 'text-sm': compact }">
-        <div class="alert alert-warning py-2 text-sm leading-snug" role="note">
+    <div
+        class="characteristic-scales-tool flex min-h-0 flex-col gap-3"
+        :class="{
+            'text-sm': compact,
+            'h-full min-h-[70vh]': fillHeight,
+        }"
+    >
+        <div class="alert alert-warning shrink-0 py-2 text-sm leading-snug" role="note">
             <i class="fa-solid fa-triangle-exclamation" aria-hidden="true" />
             <span>
                 Ces valeurs sont des <strong>repères indicatifs</strong>, pas une règle absolue.
             </span>
         </div>
 
-        <div class="flex flex-wrap items-end gap-3">
+        <div class="flex shrink-0 flex-wrap items-end gap-3">
             <label class="form-control w-40">
                 <span class="label-text text-xs">Groupe</span>
                 <select v-model="group" class="select select-bordered select-sm">
@@ -134,8 +142,15 @@ onMounted(() => {
             <i class="fa-solid fa-circle-exclamation" />
             <span>{{ catalogError }}</span>
         </div>
-        <div v-else class="grid gap-4 lg:grid-cols-[16rem_minmax(0,1fr)]">
-            <div class="max-h-[28rem] overflow-y-auto rounded-box border border-base-content/15">
+        <div
+            v-else
+            class="grid min-h-0 flex-1 gap-4 lg:grid-cols-[16rem_minmax(0,1fr)]"
+            :class="{ 'lg:items-stretch': fillHeight }"
+        >
+            <div
+                class="min-h-0 overflow-y-auto rounded-box border border-base-content/15"
+                :class="fillHeight ? 'h-full max-h-none' : 'max-h-[28rem]'"
+            >
                 <button
                     v-for="item in filteredItems"
                     :key="`${item.group}|${item.key}`"
@@ -152,7 +167,7 @@ onMounted(() => {
                 </p>
             </div>
 
-            <div class="min-w-0 space-y-4">
+            <div class="min-h-0 min-w-0 space-y-4 overflow-y-auto">
                 <CharacteristicGmPanel
                     v-if="selectedKey"
                     :characteristic-key="selectedKey"

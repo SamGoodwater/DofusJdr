@@ -61,7 +61,7 @@ const props = defineProps({
     size: {
         type: String,
         default: 'auto',
-        validator: v => ['xs', 'sm', 'md', 'lg', 'xl', 'full', 'auto'].includes(v),
+        validator: v => ['xs', 'sm', 'md', 'lg', 'xl', 'wide', 'full', 'auto'].includes(v),
     },
     closeOnOutsideClick: {
         type: Boolean,
@@ -198,6 +198,7 @@ const sizeClassMap = {
     md: 'modal-size-md',
     lg: 'modal-size-lg',
     xl: 'modal-size-xl',
+    wide: 'modal-size-wide',
     full: 'w-full h-full max-w-full max-h-full',
     auto: '', // Pas de contrainte de taille
 };
@@ -693,6 +694,27 @@ dialog.modal {
         width: 54rem; /* 864px - 50% plus grand que xl actuel (36rem * 1.5) */
         max-width: 54rem;
         max-height: calc(100vh - 4rem);
+    }
+
+    &.modal-size-wide {
+        width: min(96rem, calc(100vw - 2rem));
+        max-width: min(96rem, calc(100vw - 2rem));
+        max-height: calc(100vh - 2rem);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    &.modal-size-wide > .cursor-default {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    &.modal-size-wide > .modal-action {
+        flex-shrink: 0;
+        margin-top: 0.75rem;
     }
 }
 </style>

@@ -1,9 +1,10 @@
 <script setup>
 /**
  * Tableau interactif de normes : 5 lignes puissance × 20 colonnes niveaux.
- * La ligne active (puissance effective) et la colonne active (level sélectionné) sont mises en avant.
+ * Clic sur en-tête ou cellule → sélectionne le niveau. Survol → tooltip dés (moyenne).
  */
 import { computed } from 'vue';
+import Tooltip from '@/Pages/Atoms/feedback/Tooltip.vue';
 import {
     POWER_LEVELS,
     POWER_LABELS,
@@ -13,6 +14,7 @@ import {
     NEUTRAL_INDEX,
 } from '@/Utils/Characteristic/normsConstants';
 import { levelColor } from '@/Utils/Characteristic/levelColorScale';
+import { formatDiceHoverTooltip } from '@/Utils/dice/diceEquivalents.js';
 
 const props = defineProps({
     grid: { type: Object, required: true },
@@ -21,6 +23,8 @@ const props = defineProps({
     effectiveLevelIndex: { type: Number, default: null },
     minNumeric: { type: Number, default: null },
     maxNumeric: { type: Number, default: null },
+    /** Affiche les équivalents dés au survol (valeurs = moyennes). */
+    diceTooltips: { type: Boolean, default: true },
 });
 
 const emit = defineEmits(['select-level']);
@@ -48,6 +52,15 @@ function isOutOfBounds(value) {
     if (props.maxNumeric !== null && num > props.maxNumeric) return true;
     return false;
 }
+
+function diceTooltipFor(value) {
+    if (!props.diceTooltips) return '';
+    return formatDiceHoverTooltip(value);
+}
+
+function onSelectLevel(lvl) {
+    emit('select-level', lvl);
+}
 </script>
 
 <template>
@@ -59,7 +72,7 @@ function isOutOfBounds(value) {
                     <th
                         v-for="lvl in levels"
                         :key="lvl"
-                        class="text-center cursor-pointer select-none transition-colors text-xs min-w-[40px]"
+                        class="text-center cursor-pointer select-none transition-colors text-xs min-w-[2.25rem] hover:bg-primary/10"
                         :class="{
                             'font-bold': selectedLevel === lvl,
                         }"
@@ -67,7 +80,8 @@ function isOutOfBounds(value) {
                             color: levelColor(lvl),
                             backgroundColor: activeColIndex === lvl - 1 ? 'rgba(99, 102, 241, 0.12)' : undefined,
                         }"
-                        @click="emit('select-level', lvl)"
+                        :title="`Sélectionner le niveau ${lvl}`"
+                        @click="onSelectLevel(lvl)"
                     >
                         {{ lvl }}
                     </th>
@@ -95,7 +109,7 @@ function isOutOfBounds(value) {
                     <td
                         v-for="(lvl, lvlIdx) in levels"
                         :key="lvlIdx"
-                        class="text-center text-xs transition-all duration-200"
+                        class="p-0 text-center text-xs transition-all duration-200"
                         :class="{
                             'font-bold ring-2 ring-primary rounded': isResolvedCell(pl, lvlIdx),
                             'bg-error/10 text-error': isOutOfBounds(cellValue(pl, lvlIdx)),
@@ -106,10 +120,31 @@ function isOutOfBounds(value) {
                                 : undefined,
                         }"
                     >
-                        <template v-if="cellValue(pl, lvlIdx) !== null && cellValue(pl, lvlIdx) !== undefined">
+                        <Tooltip
+                            v-if="cellValue(pl, lvlIdx) !== null && cellValue(pl, lvlIdx) !== undefined && diceTooltipFor(cellValue(pl, lvlIdx))"
+                            :content="diceTooltipFor(cellValue(pl, lvlIdx))"
+                            placement="top"
+                            class="block h-full w-full"
+                        >
+                            <button
+                                type="button"
+                                class="btn btn-ghost btn-xs h-7 min-h-0 w-full rounded-none px-0 font-inherit tabular-nums hover:bg-primary/15"
+                                :aria-label="`Niveau ${lvl}, ${POWER_LABELS[pl]} : ${cellValue(pl, lvlIdx)}`"
+                                @click="onSelectLevel(lvl)"
+                            >
+                                {{ cellValue(pl, lvlIdx) }}
+                            </button>
+                        </Tooltip>
+                        <button
+                            v-else-if="cellValue(pl, lvlIdx) !== null && cellValue(pl, lvlIdx) !== undefined"
+                            type="button"
+                            class="btn btn-ghost btn-xs h-7 min-h-0 w-full rounded-none px-0 font-inherit tabular-nums hover:bg-primary/15"
+                            :aria-label="`Niveau ${lvl}, ${POWER_LABELS[pl]} : ${cellValue(pl, lvlIdx)}`"
+                            @click="onSelectLevel(lvl)"
+                        >
                             {{ cellValue(pl, lvlIdx) }}
-                        </template>
-                        <span v-else class="text-base-content/20">—</span>
+                        </button>
+                        <span v-else class="inline-flex h-7 w-full items-center justify-center text-base-content/20">—</span>
                     </td>
                 </tr>
             </tbody>

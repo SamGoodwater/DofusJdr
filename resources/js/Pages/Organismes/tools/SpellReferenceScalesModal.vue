@@ -26,7 +26,7 @@ function closeModal() {
 <template>
     <Modal
         :open="open"
-        size="xl"
+        size="wide"
         variant="glass"
         placement="middle-center"
         close-on-esc
@@ -41,6 +41,7 @@ function closeModal() {
 
         <CharacteristicScalesTool
             v-if="open"
+            fill-height
             :initial-group="initialGroup"
             :initial-key="initialKey"
         />

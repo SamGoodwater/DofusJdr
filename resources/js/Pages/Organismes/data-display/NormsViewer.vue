@@ -119,7 +119,8 @@ const resolvedCharacteristicColor = computed(() => resolveCharacteristicUiColor(
         >
             <p>Le tableau indique les valeurs recommandées par <strong>niveau</strong> (colonnes) et par <strong>puissance</strong> (lignes).</p>
             <ul class="list-disc list-inside space-y-1">
-                <li>Cliquez sur un <strong>numéro de niveau</strong> (en-tête) pour mettre en évidence la colonne correspondante.</li>
+                <li>Cliquez sur un <strong>numéro de niveau</strong> (en-tête) ou sur une <strong>cellule</strong> pour sélectionner la colonne correspondante.</li>
+                <li>Survolez une cellule pour voir des <strong>équivalents en dés</strong> (la valeur est une moyenne).</li>
                 <li>La ligne « <strong>Neutre</strong> » est sélectionnée par défaut. Activez des <strong>conditions</strong> (chips ci-dessous) pour décaler la lecture vers une ligne plus forte ou plus faible.</li>
                 <li>Certaines conditions décalent le <strong>niveau</strong> (colonne) au lieu de la puissance.</li>
                 <li>La cellule à l'intersection de la ligne et de la colonne actives est la <strong>valeur de référence</strong>.</li>

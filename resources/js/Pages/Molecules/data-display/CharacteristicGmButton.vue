@@ -83,22 +83,27 @@ function close() {
     </Btn>
 
     <dialog class="modal" :class="{ 'modal-open': open }" @close="close">
-        <div class="modal-box max-w-5xl w-[min(100vw-2rem,64rem)]" @click.stop>
-            <div class="mb-2 flex justify-end">
+        <div
+            class="modal-box flex max-h-[calc(100vh-2rem)] w-[min(100vw-2rem,96rem)] max-w-[96rem] flex-col overflow-hidden"
+            @click.stop
+        >
+            <div class="mb-2 flex shrink-0 justify-end">
                 <form method="dialog">
                     <button type="submit" class="btn btn-sm btn-circle btn-ghost" aria-label="Fermer" @click="close">
                         <i class="fa-solid fa-xmark" />
                     </button>
                 </form>
             </div>
-            <CharacteristicGmPanel
-                v-if="open"
-                :characteristic-key="characteristicKey"
-                :group="resolvedGroupForPanel"
-                :entity="resolvedEntity"
-                :runtime-model="runtimeModel"
-                :highlight-value="highlightValue"
-            />
+            <div class="min-h-0 flex-1 overflow-y-auto">
+                <CharacteristicGmPanel
+                    v-if="open"
+                    :characteristic-key="characteristicKey"
+                    :group="resolvedGroupForPanel"
+                    :entity="resolvedEntity"
+                    :runtime-model="runtimeModel"
+                    :highlight-value="highlightValue"
+                />
+            </div>
         </div>
         <form method="dialog" class="modal-backdrop">
             <button type="submit" @click="close">Fermer</button>

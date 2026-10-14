@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import {
+    formatDiceHoverTooltip,
     formatDiceSummary,
     suggestDice,
     toCriticalFormula,
@@ -52,5 +53,14 @@ describe('suggestDice', () => {
         expect(formatDiceSummary(6)).toContain('1d12');
         expect(formatDiceSummary(6)).toContain('2d6');
         expect(formatDiceSummary(6)).toContain('3d4');
+    });
+
+    it('formatte un tooltip de survol avec variance et option fixe', () => {
+        const tip = formatDiceHoverTooltip(6);
+        expect(tip).toContain('Moyenne 6');
+        expect(tip).toContain('1d12 (−)');
+        expect(tip).toContain('2d6 (=)');
+        expect(tip).toContain('3d4 (+)');
+        expect(formatDiceHoverTooltip(0)).toBe('');
     });
 });
