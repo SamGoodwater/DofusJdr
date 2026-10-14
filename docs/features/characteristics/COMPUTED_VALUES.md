@@ -1,6 +1,6 @@
 # Valeurs calculées des caractéristiques
 
-Une caractéristique d’entité (créature, plus tard équipement) peut être un **total explicite**
+Une caractéristique d’entité peut être un **total explicite**
 ou une **composition** de trois couches, pilotée par des formules qui dépendent du niveau.
 
 ## Les couches
@@ -30,7 +30,7 @@ total     = permanent + éphémère
 
 ### Formule affichée
 
-`formula_display` est un **texte joueur abrégé** saisi à la main (`mod. Int + équip.`, `mod. Agi + bonus maîtrise × maîtrise + équip.`), **sans** consommable ni sort et sans clé brute. Règle vérifiée par `CharacteristicDefinitionQualityService::formulaDisplayIssue` et le test d'intégrité. Le détail « Avec tes valeurs » retire les termes éphémères nuls.
+`formula_display` accompagne toute formule non vide. Pour une créature, c'est un **texte joueur abrégé** (`mod. Int + équip.`, `mod. Agi + bonus maîtrise × maîtrise + équip.`), **sans** consommable ni sort et sans clé brute. Pour les tables d'objet, il conserve la table réelle afin que le futur rendu riche affiche les mêmes paliers. Cette couverture est vérifiée par `CharacteristicDefinitionQualityService::formulaDisplayCoverageIssue`; le contenu créature l'est par `formulaDisplayIssue`.
 
 ### Priorité du total explicite
 
@@ -116,9 +116,7 @@ Les groupes **Résistances**, **Dommages** et **Contrôle** répartissent leurs
 caractéristiques sur toute la largeur (`spread`). Les dommages fixe Sagesse /
 Vitalité ne sont plus affichés (hors usage JDR).
 
-Compétences (UI) : total = mod. caractéristique + `mastery_bonus × palier(0|1|2)`
-+ bonus BDD + bonus objets, partie permanente bornée à ±15 (monstre ±20, limite absolue).
-Sans runtime, le repli front applique ±15 (`SKILL_ABSOLUTE_LIMIT`). Affichage `+N`, `+N (M)`, `+N (E)`.
+Compétences (UI) : le total, sa maîtrise et sa limite permanente viennent uniquement du runtime serveur. Le front ne recalcule ni compétence, ni sauvegarde, ni statistique dérivée ; tant que le runtime n'est pas chargé, il affiche `—`. Affichage résolu : `+N`, `+N (M)`, `+N (E)`.
 
 ## Édition
 

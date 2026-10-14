@@ -70,7 +70,7 @@
 | `mastery_bonus_spell` | B | Bonus de maîtrise. |
 | `bouclier_spell` | B | Points de bouclier (buffer dissipable). |
 | `pv_temporaires_spell` | B | PV temporaires (après bouclier, avant PV ; non dissipables, non cumulables). |
-| `acrobatics_spell`, `athletics_spell`, `stealth_spell`, … (×18 actives) | B | Bonus temporaire de compétence active via `booster` / `retirer` / `voler-caracteristiques` (miroir object, max 5). |
+| `acrobatics_spell`, `athletics_spell`, `stealth_spell`, … (×18 actives) | B | Bonus temporaire de compétence active via `booster` / `retirer` / `voler-caracteristiques`. Couche éphémère, hors limite permanente ±15/±20. |
 | `wakfu_reserve_spell` | B | Réserve de Wakfu. |
 | `push_damage_reduction_spell` | B | Réduction « dégâts de poussée » (mitigation, ≠ distance de poussée). |
 | `critical_damage_reduction_spell` | B | Réduction dégâts critiques subis. |
@@ -100,7 +100,7 @@ Cette règle est appliquée dans `SpellEffectsConversionService` via `params.eff
 - Les dégâts restent dans une enveloppe comparable à D&D : neutre ≈ `1d6` à `5d6`, très fort jusqu’à environ `8d10` au niveau 20.
 - Les soins et boucliers sont inférieurs ou égaux aux pics de dégâts, car ils prolongent la survie.
 - Le vol de vie est plus bas que dégâts / soins purs, car il combine deux effets.
-- Les boosts de stats et sauvegardes sont bornés bas (`+8` maximum en valeur très forte) pour préserver la bounded accuracy ; les malus effectifs sont réduits par conversion.
+- Les grilles de conversion gardent des ordres de grandeur bas (jusqu’à `+8` pour une valeur très forte), mais ce nombre est un **barème de conversion**, pas une limite absolue en jeu. Les effets de sort sont éphémères et s’ajoutent après les limites permanentes.
 - Les mouvements ont des grilles séparées : téléportation > déplacement/saut > attirance/repousse, car ils ne contournent pas les mêmes contraintes de terrain et de tacle.
 
 ---

@@ -25,7 +25,7 @@ La fiche et le projet sont **alignés** : aucune incohérence à corriger.
 | Tacle [Chance + equip.] | `tackle_creature` = mod. Chance | ✓ |
 | Modificateur [(Base+Equip.–10)/2] | `modifier_*_creature` | ✓ |
 | Sauvegarde [Mod. + Bonus maîtrise + equip] | `save_*_creature` = Mod. (+ maîtrise) | ✓ |
-| Val max mod [Niveau/2+1]+ | Formule modificateur avec plafond | ✓ |
+| Val max mod ⌊niveau/4⌋+2 (max +7) | Formule et limite absolue du modificateur | ✓ |
 | Bonus de maîtrise [1+niveau/4] | `mastery_bonus_creature` | ✓ |
 | Réserve Wakfu [Bonus maîtrise + equip.] | `wakfu_reserve_creature` | ✓ |
 

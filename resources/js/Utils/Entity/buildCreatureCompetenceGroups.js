@@ -87,31 +87,6 @@ export const MASTERY_ALTERNATE_STAT_CONFIG = Object.freeze({
     },
 });
 
-/**
- * Colonne maîtrise → colonne bonus BDD (`*_bonus`).
- * @type {Readonly<Record<string, string>>}
- */
-export const MASTERY_DB_COLUMN_TO_BONUS_COLUMN = Object.freeze({
-    acrobatie_mastery: "acrobatie_bonus",
-    discretion_mastery: "discretion_bonus",
-    escamotage_mastery: "escamotage_bonus",
-    athletisme_mastery: "athletisme_bonus",
-    intimidation_mastery: "intimidation_bonus",
-    dressage_mastery: "dressage_bonus",
-    medecine_mastery: "medecine_bonus",
-    nature_mastery: "nature_bonus",
-    perception_mastery: "perception_bonus",
-    perspicacite_mastery: "perspicacite_bonus",
-    survie_mastery: "survie_bonus",
-    arcane_mastery: "arcane_bonus",
-    histoire_mastery: "histoire_bonus",
-    investigation_mastery: "investigation_bonus",
-    religion_mastery: "religion_bonus",
-    supercherie_mastery: "supercherie_bonus",
-    representation_mastery: "representation_bonus",
-    persuasion_mastery: "persuasion_bonus",
-});
-
 /** Ordre des sous-groupes « par stat » (titres FR). */
 const PRIMARY_STAT_ORDER = ["strong", "agi", "intel", "sagesse", "chance"];
 
@@ -206,48 +181,12 @@ function runtimeDisplayValue(runtime, key) {
 }
 
 /**
- * Limite absolue PJ/PNJ des compétences et sauvegardes (hors buffs). Le runtime applique ±20 aux monstres.
- */
-export const SKILL_ABSOLUTE_LIMIT = 15;
-
-/**
- * Bonus de maîtrise (1 + ⌊niv/4⌋, max 6) — aligné `mastery_bonus_creature`.
- *
- * @param {Object} creature
- * @param {Object|null} runtime
- * @returns {number}
- */
-export function resolveMasteryBonus(creature, runtime = null) {
-    const fromRuntime = runtimeDisplayValue(runtime, "mastery_bonus_creature");
-    if (fromRuntime != null) {
-        const n = Number(fromRuntime);
-        if (Number.isFinite(n)) return n;
-    }
-    const level = parseInt(creature?.level, 10) || 1;
-    return Math.min(1 + Math.floor(level / 4), 6);
-}
-
-/**
- * @param {Object} creature
- * @param {string} stat
- * @returns {number}
- */
-function computeStatModifier(creature, stat) {
-    const level = parseInt(creature.level, 10) || 1;
-    // Repli sans runtime : limite absolue du mod (min −2, max ⌊niv/4⌋+2 plafonné à +7).
-    const modMax = Math.min(Math.floor(level / 4) + 2, 7);
-    const statVal = parseInt(creature[stat], 10) || 10;
-    const rawMod = Math.floor((statVal - 10) / 2);
-    return Math.max(Math.min(rawMod, modMax), -2);
-}
-
-/**
- * Total compétence : mod + bonusMaîtrise×palier + bonus BDD (+ objet via runtime).
+ * Total compétence résolu exclusivement par le runtime serveur.
  *
  * @param {Object} creature
  * @param {string} masteryColumn
  * @param {Object|null} [runtime]
- * @returns {{ total: number, tier: number, tag: ''|'M'|'E' }}
+ * @returns {{ total: number|null, tier: number, tag: ''|'M'|'E' }}
  */
 export function resolveCreatureSkillTotal(creature, masteryColumn, runtime = null) {
     const skillKey = MASTERY_DB_COLUMN_TO_SKILL_KEY[masteryColumn];
@@ -268,42 +207,18 @@ export function resolveCreatureSkillTotal(creature, masteryColumn, runtime = nul
         }
     }
 
-    const primary = resolvePrimaryStatForMastery(creature, masteryColumn);
-    if (!primary) {
-        return { total: 0, tier: safeTier, tag };
-    }
-    const modKeyByStat = {
-        strong: "modifier_strength_creature",
-        agi: "modifier_agility_creature",
-        intel: "modifier_intelligence_creature",
-        sagesse: "modifier_wisdom_creature",
-        chance: "modifier_chance_creature",
-    };
-    const modKey = modKeyByStat[primary];
-    const fromRuntimeMod = modKey ? runtimeDisplayValue(runtime, modKey) : null;
-    const mod =
-        fromRuntimeMod != null && Number.isFinite(Number(fromRuntimeMod))
-            ? Number(fromRuntimeMod)
-            : computeStatModifier(creature, primary);
-
-    const masteryBonus = resolveMasteryBonus(creature, runtime);
-    const bonusCol = MASTERY_DB_COLUMN_TO_BONUS_COLUMN[masteryColumn];
-    const dbBonus = bonusCol ? parseInt(creature?.[bonusCol], 10) || 0 : 0;
-
-    const raw = mod + masteryBonus * safeTier + dbBonus;
-    return {
-        total: Math.max(-SKILL_ABSOLUTE_LIMIT, Math.min(SKILL_ABSOLUTE_LIMIT, raw)),
-        tier: safeTier,
-        tag,
-    };
+    return { total: null, tier: safeTier, tag };
 }
 
 /**
- * @param {number} total
+ * @param {number|null} total
  * @param {''|'M'|'E'} tag
  * @returns {string}
  */
 export function formatCreatureSkillDisplay(total, tag) {
+    if (total === null || total === undefined || total === "") {
+        return tag === "M" || tag === "E" ? `— (${tag})` : "—";
+    }
     const n = Number(total);
     const signed = Number.isFinite(n) ? (n >= 0 ? `+${n}` : String(n)) : String(total ?? "");
     if (tag === "M" || tag === "E") {

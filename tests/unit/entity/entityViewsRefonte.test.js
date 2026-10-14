@@ -145,7 +145,11 @@ describe("buildCreatureCharacteristicGroups", () => {
         ].map((k) => [
             k,
             {
-                key: k === "do_fixe_multiple" ? "fixed_damage_multiple_creature" : `${k}_creature`,
+                key: {
+                    ca: "armor_class_creature",
+                    ini: "initiative_creature",
+                    do_fixe_multiple: "fixed_damage_multiple_creature",
+                }[k] || `${k}_creature`,
                 name: k,
                 short_name: k === "do_fixe_multiple" ? "DO mult." : k,
                 db_column: k,
@@ -154,6 +158,28 @@ describe("buildCreatureCharacteristicGroups", () => {
             },
         ]),
     );
+    const runtime = {
+        levels: [
+            {
+                characteristics: {
+                    modifier_strength_creature: { total: 2 },
+                    modifier_intelligence_creature: { total: 0 },
+                    modifier_agility_creature: { total: 1 },
+                    modifier_chance_creature: { total: 0 },
+                    modifier_vitality_creature: { total: 1 },
+                    modifier_wisdom_creature: { total: 0 },
+                    save_strength_creature: { total: 2 },
+                    save_intelligence_creature: { total: 0 },
+                    save_agility_creature: { total: 1 },
+                    save_chance_creature: { total: 0 },
+                    save_vitality_creature: { total: 1 },
+                    save_wisdom_creature: { total: 0 },
+                    armor_class_creature: { total: 11 },
+                    wakfu_reserve_creature: { total: 3 },
+                },
+            },
+        ],
+    };
 
     it("mode summary = mods + combat (dont CA calculée)", () => {
         const groups = buildCreatureCharacteristicGroups(creature, {
@@ -167,6 +193,7 @@ describe("buildCreatureCharacteristicGroups", () => {
                 modifier_vitality_creature: { key: "modifier_vitality_creature", short_name: "Vit" },
                 modifier_wisdom_creature: { key: "modifier_wisdom_creature", short_name: "Sag" },
             },
+            runtime,
         });
         expect(groups.length).toBeGreaterThanOrEqual(2);
         expect(groups[0].kind).toBe("modifiers");
@@ -194,6 +221,7 @@ describe("buildCreatureCharacteristicGroups", () => {
                     short_name: "Réserve Wakfu",
                 },
             },
+            runtime,
         });
         const combat = groups.find((g) => g.title === "Combat");
         expect(combat).toBeTruthy();
@@ -203,7 +231,7 @@ describe("buildCreatureCharacteristicGroups", () => {
     });
 
     it("mode full expose Combat puis Caractéristiques (abilityStack)", () => {
-        const groups = buildCreatureCharacteristicGroups(creature, { mode: "full", byDbColumn });
+        const groups = buildCreatureCharacteristicGroups(creature, { mode: "full", byDbColumn, runtime });
         expect(groups[0].title).toBe("Combat");
         expect(groups[1].title).toBe("Caractéristiques");
         expect(groups[1].kind).toBe("abilityStack");
@@ -286,17 +314,27 @@ describe("buildCreatureCompetenceGroupsByPrimary", () => {
             acrobatie_bonus: 0,
             agi: 10,
         };
-        const athletics = resolveCreatureSkillTotal(creature, "athletisme_mastery");
+        const runtime = {
+            levels: [
+                {
+                    characteristics: {
+                        athletics_creature: { total: 9 },
+                        acrobatics_creature: { total: 3 },
+                    },
+                },
+            ],
+        };
+        const athletics = resolveCreatureSkillTotal(creature, "athletisme_mastery", runtime);
         // mod 2 + 3*2 + 1 = 9, expertise
         expect(athletics).toEqual({ total: 9, tier: 2, tag: "E" });
         expect(formatCreatureSkillDisplay(9, "E")).toBe("+9 (E)");
 
-        const acrobatics = resolveCreatureSkillTotal(creature, "acrobatie_mastery");
+        const acrobatics = resolveCreatureSkillTotal(creature, "acrobatie_mastery", runtime);
         // mod 0 + 3*1 + 0 = 3, maîtrise
         expect(acrobatics.tag).toBe("M");
         expect(formatCreatureSkillDisplay(acrobatics.total, "M")).toBe("+3 (M)");
 
-        const groups = buildCreatureCompetenceGroupsByPrimary(creature, { includeZero: false });
+        const groups = buildCreatureCompetenceGroupsByPrimary(creature, { includeZero: false, runtime });
         const force = groups.find((g) => g.title === "Force");
         expect(force?.characteristics[0]?.lockSkillDisplay).toBe(true);
         expect(force?.characteristics[0]?.skillName).toBe("Athlétisme");

@@ -28,7 +28,7 @@
             "min": "-4",
             "max": "4",
             "formula": "{\"1\":\"0\",\"3\":\"1\",\"5\":\"1\",\"7\":\"2\",\"9\":\"2\",\"11\":\"3\",\"13\":\"3\",\"15\":\"4\",\"17\":\"4\",\"20\":\"4\",\"characteristic\":\"level_object\"}",
-            "formula_display": null,
+            "formula_display": "{\"1\":\"0\",\"3\":\"1\",\"5\":\"1\",\"7\":\"2\",\"9\":\"2\",\"11\":\"3\",\"13\":\"3\",\"15\":\"4\",\"17\":\"4\",\"20\":\"4\",\"characteristic\":\"level_object\"}",
             "default_value": "0",
             "conversion_formula": "([d] / max(abs([d]), 1)) * (round(0.0408 * pow(abs([d]), 0.9412)))",
             "conversion_function": null,

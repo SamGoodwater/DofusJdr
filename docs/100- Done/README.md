@@ -8,6 +8,8 @@ Correctifs liés : le panneau de décomposition (clic sur une caractéristique d
 
 Polish : l'admin liste les termes éphémères détectés dans la formule ; une règle qualité signale une formule créature sans `*_object` quand un bonus objet existe ; la réserve Wakfu lit ses bornes 1–9 depuis `min`/`max` plutôt qu'en dur.
 
+Nettoyage : les fiches Vue ne recalculent plus les statistiques, compétences ou limites et utilisent uniquement le runtime serveur. Les caractéristiques calculées sont découvertes depuis les définitions, sans liste parallèle. Toutes les formules renseignées ont maintenant une formule d'affichage ; celles des créatures restent courtes et masquent les effets éphémères. Les gabarits IA prennent l'initiative, la touche et la CA dans leurs barèmes respectifs.
+
 ## Octobre 2026 — Nature des caractéristiques, Profil et Consommable
 
 Chaque caractéristique a une **nature** (descriptif, intrinsèque, bonus/malus, buff/débuff/vol, valeur d'action), indépendante de son groupe. Les bonus et buffs pointent l'intrinsèque créature qu'ils modifient. Deux nouveaux groupes : **Profil** (maîtrises de compétences et de sauvegardes pour classe, spécialisation et monstre) et **Consommable** (effets temporaires). Les ressources sortent du système ; équipements et panoplies restent ensemble. Les formules créature affichent explicitement le bonus d'équipement. L'admin replie par défaut les panneaux Conversion et Mapping.

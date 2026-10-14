@@ -15,6 +15,7 @@ Ce document compare les valeurs min/max, formules et limites des caractéristiqu
 | **PO (créature)** | Base 0, max 6, équip. +6, forgemagie +1 | `range_creature` min 0, max 6, formula_display idem | OK |
 | **Scores caractéristiques** | Personnages 6–24 ; monstres 6–30 | `*_creature` : max 24 (`*`), max 30 (`monster`) | OK |
 | **Modificateurs** | ⌊(Score − 10) / 2⌋ | `modifier_*_creature` : max +7 (`*`), max +10 (`monster`) | OK |
+| **Compétences / sauvegardes** | Permanent ±15 (PJ/PNJ), ±20 (monstre) ; effets temporaires après la borne | `*_creature.limit_absolute`, overlays monstre | OK |
 | **PV (créature)** | Le livre donne aussi des ordres de grandeur (ex. §5.1.2 création PNJ) ; **formule officielle seed** | `life_points_creature` : `hit_dice_creature + modifier_vitality_creature×level + (level−1)×round(hit_dice/2) + life_points_max_object` | Recaler les textes de règles si une seule formule « canon » est publiée |
 | **CA (créature)** | 10 + mod. Vitalité + bouclier (selon règles) | `armor_class_creature` **max 22** en seed (`db_column` `ca`) | Vérifier plafond **22 vs 26** selon version des règles |
 | **Initiative** | Au jet : 1d20 + mod. Intelligence + … (règles combat) | Seed : formule calculée **`[modifier_intelligence_creature]`** sur la fiche (le d20 est côté jet, pas dans cette carac) | OK si la carac = bonus fixe avant dé |
@@ -75,7 +76,7 @@ Les zones et durées restent des notations textuelles structurées : elles ne do
 ## 5. Formules et références
 
 - **Modificateur** : `floor((score−10)/2)` — identique règles (2.2.1.2) et seeders (`formula_display` modifier_*_creature).
-- **Plafond modificateur de base** : `⌊Niveau/2⌋ + 1` (règles 2.2.1) — présent uniquement dans les règles (tableau par niveau) ; pas de formule équivalente dans les seeders (normal, c’est une règle de création/perso).
+- **Plafond modificateur** : `min(⌊(score−10)/2⌋, ⌊niveau/4⌋+2, 7)` pour PJ/PNJ ; plafond +10 pour les monstres. La formule et ses bornes sont portées par `modifier_*_creature`.
 - **PV** : Vitalité×10 n’est **plus** la formule jouable. Canon fiche : `hit_dice + mod. Vita × niveau + (niveau−1)×round(hit_dice/2) + équipement` (`life_points_creature`). Les textes 2.2.2 / 3.2.4 / Essentiel sont alignés. `hit_dice-creature-definition.json` (helper) peut encore citer l’ancienne phrase — hors livre.
 
 ---

@@ -100,7 +100,10 @@ final class CharacteristicDefinitionQualityService
             }
         }
 
-        $displayIssue = self::formulaDisplayIssue($row['formula_display'] ?? null);
+        $displayIssue = self::formulaDisplayCoverageIssue(
+            $row['formula'] ?? null,
+            $row['formula_display'] ?? null
+        ) ?? self::formulaDisplayIssue($row['formula_display'] ?? null);
         if ($displayIssue !== null) {
             $issues[] = $displayIssue;
         }
@@ -139,6 +142,24 @@ final class CharacteristicDefinitionQualityService
         }
 
         return 'formule créature : terme *_object manquant (repli runtime objets)';
+    }
+
+    /**
+     * Toute formule calculée doit fournir une représentation destinée à l'affichage.
+     *
+     * @example formulaDisplayCoverageIssue('[level]', null) // 'formula_display manquant'
+     * @example formulaDisplayCoverageIssue(null, null) // null
+     */
+    public static function formulaDisplayCoverageIssue(mixed $formula, mixed $display): ?string
+    {
+        if (! is_string($formula) || trim($formula) === '') {
+            return null;
+        }
+        if (! is_string($display) || trim($display) === '') {
+            return 'formula_display manquant';
+        }
+
+        return null;
     }
 
     /**

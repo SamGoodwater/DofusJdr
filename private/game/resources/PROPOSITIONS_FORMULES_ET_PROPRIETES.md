@@ -1,5 +1,7 @@
 # Propositions de modifications — Formules et propriétés
 
+> **Statut : historique.** Les formules et limites jouées sont celles du système de caractéristiques en base et des chapitres 2.2 / 4.2. Les anciennes propositions ci-dessous ne constituent plus une seconde source de vérité.
+
 Ce document propose des modifications pour aligner les seeders et les caractéristiques sur les règles du jeu (docs 400) et les références PDF : **Equipements et forgemagie.pdf** et **CaractéristiquesAvecLien avec Dofus.pdf**.
 
 Pour le **groupe sort**, la classification A/B/C (cadre / modificateur cible / effet d’action) et le lien vers les règles de sorts : [MATRICE_ROLES_CARACTERISTIQUES_SPELL.md](./MATRICE_ROLES_CARACTERISTIQUES_SPELL.md). Les **normes** 5×20 côté produit : [CAHIER_DES_CHARGES_NORMES_ENTITES.md](../../50-Fonctionnalités/Characteristics-DB/CAHIER_DES_CHARGES_NORMES_ENTITES.md).
@@ -123,11 +125,11 @@ Comparaison PDF Équipements vs seeder :
 **PDF Caractéristiques** :
 - Formule : `[(Carac - 10) / 2]` (arrondi à l’inférieur)
 - Limite basse (niv. 1–3) : minimum -1 ou -2
-- Limite haute : max `floor(niveau/2) + 1`
+- Limite haute : `min(floor(niveau/4) + 2, 7)` (monstre : 10)
 
 **Formule exploitable** :
 ```php
-min(max(floor(([vitality_creature]-10)/2), -2), floor([level_creature]/2)+1)
+min(max(floor(([vitality_creature]-10)/2), -2), floor([level_creature]/4)+2, 7)
 ```
 
 Même logique pour Sagesse, Force, Intelligence, Chance, Agilité (remplacer `vitality_creature` par la caractéristique correspondante).
@@ -171,7 +173,7 @@ PDF Caractéristiques : 0 %, 50 %, 100 % ; équipement peut donner 50 % ou 100 %
 | **Haute** | Clarifier dés de vie : formule floor(level/2), max 10, et sens du `8` (type de dé) | `characteristic_creature`, doc règles |
 | **Moyenne** | Canon **+4** par objet (2.6.1), seeders alignés | COHERENCE_SEEDER_REGLES.md |
 | **Moyenne** | Vérifier tous les prix base/rune vs PDF | `characteristic_object` |
-| **Basse** | Ajouter validation plafond modificateur floor(Niveau/2)+1 | Logique création perso / monstres |
+| **Résolu** | Limite absolue du modificateur `floor(niveau/4)+2`, max 7 (monstre 10) | Système de caractéristiques |
 
 ---
 
@@ -204,12 +206,12 @@ La clé `characteristic` indique la variable utilisée (ici `level` = niveau de 
 Le PDF définit : **Modificateur = (carac − 10) / 2** (arrondi à l’inférieur), avec limites :
 
 - **Basse** : minimum −2 pour niveaux 1–3 (« Soit −1 (ou −2) »)
-- **Haute** : max = floor(niveau/2) + 1
+- **Haute** : max = `min(floor(niveau/4) + 2, 7)` (monstre : 10)
 
 **Formule proposée :**
 
 ```
-min(max(floor(([vitality_creature]-10)/2), -2), floor([level_creature]/2)+1)
+min(max(floor(([vitality_creature]-10)/2), -2), floor([level_creature]/4)+2, 7)
 ```
 
 Même logique pour chaque modificateur (vitality, wisdom, strength, intelligence, chance, agility).
@@ -235,9 +237,7 @@ PDF : **1d20 + mod. carac.** ou **1d20 + mod. carac. + bonus maîtrise** si maî
 - **Sans maîtrise** : `[modifier_vitality_creature]`
 - **Avec maîtrise** : `[modifier_vitality_creature] + [mastery_bonus_creature]`
 
-Comme la maîtrise est conditionnelle (par sauvegarde), la formule seeder = **base** = modificateur seul. Le bonus de maîtrise est ajouté au moment du jet si la créature maîtrise cette sauvegarde.
-
-**Formule proposée :** `[modifier_vitality_creature]` (et idem pour wisdom, strength, intelligence, chance, agility).
+La formule actuelle inclut le modificateur, le bonus de maîtrise multiplié par le palier profil, l’équipement, puis les couches éphémères sort et consommable. La partie permanente est bornée à ±15 (monstre ±20).
 
 ---
 

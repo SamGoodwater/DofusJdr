@@ -25,7 +25,7 @@ Les termes `buff_debuff` d'une formule créature sont **éphémères** : ils val
 
 - Formule **complète** : intrinsèques + `*_object` + `*_consumable` + `*_spell` (script `scripts/apply_characteristic_absolute_limits.py`, idempotent).
 - **Limite absolue** (`limit_absolute`) : mods (−2 / ⌊niv/4⌋+2, max 7 ; monstre 10), compétences et sauvegardes ±15 (monstre ±20), bonus de maîtrise 0–6. Les autres limites sont souples.
-- `formula_display` : texte joueur abrégé, sans consommable ni sort ni clé brute.
+- `formula_display` : obligatoire dès qu'une formule est renseignée. Côté créature, texte joueur abrégé, sans consommable ni sort ni clé brute ; côté objet, même table que la formule réelle.
 
 ## Groupes
 
@@ -38,9 +38,11 @@ Les termes `buff_debuff` d'une formule créature sont **éphémères** : ils val
 - Formules : services sous `app/Services/Characteristic/` (`FormulaExpressionParser`, `LevelDomainResolver`).
 - Runtime créature : `CreatureRuntimeStatsService` + `ProfileMasteryResolver` (variables `*_mastery_profile`).
 - Seeders : `CharacteristicSeeder`, `CreatureCharacteristicSeeder`, `ObjectCharacteristicSeeder`, `SpellCharacteristicSeeder`, `ConsumableCharacteristicSeeder`, `ProfileCharacteristicSeeder`. La base est la source ; réécriture : `project:seed --overwrite`. Export : `scrapping:seeders:export --characteristics`.
-- Métadonnées front : `CharacteristicMetaByDbColumnService` (cache `v7`) — `helper`, descriptions, `nature`, `limit_min` / `limit_max` (bornes larges si dépendantes du niveau), `limit_absolute`.
+- Métadonnées front : `CharacteristicMetaByDbColumnService` (cache `v7`) — `helper`, descriptions, `nature`, `limit_min` / `limit_max` (bornes larges si dépendantes du niveau), `limit_absolute`. Les caractéristiques créature calculées (`db_column = null`) sont découvertes depuis les définitions, sans liste PHP parallèle.
 - Qualité : `CharacteristicDefinitionQualityService`, `CharacteristicNatureQualityService`.
 - Reprise des totaux existants : `php artisan creatures:derive-context-bonuses`.
+
+Les vues Vue lisent les valeurs calculées dans `CreatureRuntimeStatsService` : elles ne réimplémentent plus les formules, limites ou bonus de compétence. `NpcStatGabarit` lit de son côté les normes `initiative_creature` et `hit_bonus_creature`, indépendamment de la classe d'armure.
 
 ## Normes
 

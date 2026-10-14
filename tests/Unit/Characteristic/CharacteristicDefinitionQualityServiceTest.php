@@ -102,6 +102,20 @@ class CharacteristicDefinitionQualityServiceTest extends TestCase
         ));
     }
 
+    public function test_every_non_empty_formula_requires_a_display_formula(): void
+    {
+        $this->assertSame(
+            'formula_display manquant',
+            CharacteristicDefinitionQualityService::formulaDisplayCoverageIssue('[level_object]', null)
+        );
+        $this->assertNull(
+            CharacteristicDefinitionQualityService::formulaDisplayCoverageIssue('[level_object]', '[level_object]')
+        );
+        $this->assertNull(
+            CharacteristicDefinitionQualityService::formulaDisplayCoverageIssue(null, null)
+        );
+    }
+
     public function test_object_definitions_use_existing_dofusdb_type_ids_and_match_helpers(): void
     {
         $root = dirname(__DIR__, 3);

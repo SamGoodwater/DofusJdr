@@ -195,22 +195,16 @@ final class CreatureRuntimeStatsService
                 : 0.0;
             [$permanent, $capped] = $this->applyAbsoluteLimit($key, $entity, $explicit, $permanentVars);
             $total = $permanent + $ephemeral;
-            $characteristics[$key] = $this->buildCharacteristicRow(
+            $this->storeResolvedCharacteristic(
+                $characteristics,
+                $variables,
+                $permanentVars,
                 $key,
                 $entity,
-                $basePermanent,
-                $object,
-                $context,
-                $ephemeral,
-                $permanent,
-                $capped,
-                $total,
+                compact('basePermanent', 'object', 'context', 'ephemeral', 'permanent', 'capped', 'total'),
                 'total_column',
-                $contextRaw,
-                $variables
+                $contextRaw
             );
-            $variables[$key] = $total;
-            $permanentVars[$key] = $permanent;
             $resolvedKeys[$key] = true;
         }
         $variables = FormulaVariableResolver::withShortNames('creature', $variables);
@@ -279,22 +273,24 @@ final class CreatureRuntimeStatsService
                     : $baseValue + $object + $context;
                 [$permanent, $capped] = $this->applyAbsoluteLimit($key, $entity, $rawPermanent, $permanentVars);
                 $total = $permanent + $ephemeral;
-                $characteristics[$key] = $this->buildCharacteristicRow(
+                $this->storeResolvedCharacteristic(
+                    $characteristics,
+                    $variables,
+                    $permanentVars,
                     $key,
                     $entity,
-                    $objectAlreadyInFormula ? ($baseValue - $object) : $baseValue,
-                    $object,
-                    $context,
-                    $ephemeral,
-                    $permanent,
-                    $capped,
-                    $total,
+                    [
+                        'basePermanent' => $objectAlreadyInFormula ? ($baseValue - $object) : $baseValue,
+                        'object' => $object,
+                        'context' => $context,
+                        'ephemeral' => $ephemeral,
+                        'permanent' => $permanent,
+                        'capped' => $capped,
+                        'total' => $total,
+                    ],
                     'composed',
-                    $contextRaw,
-                    $variables
+                    $contextRaw
                 );
-                $variables[$key] = $total;
-                $permanentVars[$key] = $permanent;
                 $variables = FormulaVariableResolver::withShortNames('creature', $variables);
                 $permanentVars = FormulaVariableResolver::withShortNames('creature', $permanentVars);
                 $resolvedKeys[$key] = true;
@@ -323,22 +319,24 @@ final class CreatureRuntimeStatsService
             $objectAlreadyInFormula = $formula !== '' && str_contains($formula, '_object]');
             $rawPermanent = $objectAlreadyInFormula ? $base + $context : $base + $object + $context;
             [$permanent, $capped] = $this->applyAbsoluteLimit($key, $entity, $rawPermanent, $permanentVars);
-            $characteristics[$key] = $this->buildCharacteristicRow(
+            $this->storeResolvedCharacteristic(
+                $characteristics,
+                $variables,
+                $permanentVars,
                 $key,
                 $entity,
-                $objectAlreadyInFormula ? ($base - $object) : $base,
-                $object,
-                $context,
-                0.0,
-                $permanent,
-                $capped,
-                $permanent,
+                [
+                    'basePermanent' => $objectAlreadyInFormula ? ($base - $object) : $base,
+                    'object' => $object,
+                    'context' => $context,
+                    'ephemeral' => 0.0,
+                    'permanent' => $permanent,
+                    'capped' => $capped,
+                    'total' => $permanent,
+                ],
                 'composed',
-                $contextRaw,
-                $variables
+                $contextRaw
             );
-            $variables[$key] = $permanent;
-            $permanentVars[$key] = $permanent;
             $resolvedKeys[$key] = true;
         }
         $variables = FormulaVariableResolver::withShortNames('creature', $variables);
@@ -381,6 +379,50 @@ final class CreatureRuntimeStatsService
         $bounded = max((float) $limits['min'], min((float) $limits['max'], $value));
 
         return [$bounded, abs($bounded - $value) > 1e-9];
+    }
+
+    /**
+     * Construit une ligne runtime puis propage le total et sa partie permanente.
+     *
+     * @param  array<string, array<string, mixed>>  $characteristics
+     * @param  array<string, float|int>  $variables
+     * @param  array<string, float|int>  $permanentVars
+     * @param  array{
+     *   basePermanent: float,
+     *   object: float,
+     *   context: float,
+     *   ephemeral: float,
+     *   permanent: float,
+     *   capped: bool,
+     *   total: float
+     * }  $layers
+     */
+    private function storeResolvedCharacteristic(
+        array &$characteristics,
+        array &$variables,
+        array &$permanentVars,
+        string $key,
+        string $entity,
+        array $layers,
+        string $source,
+        ?string $contextRaw
+    ): void {
+        $characteristics[$key] = $this->buildCharacteristicRow(
+            $key,
+            $entity,
+            $layers['basePermanent'],
+            $layers['object'],
+            $layers['context'],
+            $layers['ephemeral'],
+            $layers['permanent'],
+            $layers['capped'],
+            $layers['total'],
+            $source,
+            $contextRaw,
+            $variables
+        );
+        $variables[$key] = $layers['total'];
+        $permanentVars[$key] = $layers['permanent'];
     }
 
     /**

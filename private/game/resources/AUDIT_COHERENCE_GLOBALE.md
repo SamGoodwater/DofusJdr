@@ -27,8 +27,8 @@ Ce document vérifie la cohérence entre :
 | Règle | BDD | Statut |
 |-------|-----|--------|
 | Modificateur = ⌊(Score−10)/2⌋ | `modifier_*_creature` formula | ✓ |
-| Plafond mod = ⌊Niveau/2⌋+1 | Intégré dans formule modifier | ✓ |
-| Scores 6–31 | `*_creature` min 6, max 31 | ✓ |
+| Plafond mod = min(⌊niveau/4⌋+2, 7) (monstre 10) | `modifier_*_creature` min/max + `limit_absolute` | ✓ |
+| Scores 6–24 (PJ/PNJ), jusqu'à 30 (monstre) | `*_creature` base + overlay monstre | ✓ |
 | Équipements +4 max (2.6.1) | Voir section 4 | À trancher |
 
 ### 2.2 Caractéristiques secondaires (2.2.2)
@@ -38,7 +38,7 @@ Ce document vérifie la cohérence entre :
 | PA base 6, max 12 | `action_points_creature` | ✓ |
 | PM base 3, max 6 | `movement_points_creature` | ✓ |
 | PO base 0, max 6 | `range_creature` | ✓ |
-| PV = Vitalité×10 + dés de vie | `life_points_creature` | ✓ |
+| PV = dé de vie + mod. Vitalité × niveau + progression du dé + équipement | `life_points_creature` | ✓ |
 | CA = 10 + mod. Vitalité + bouclier | `armor_class_creature` | ✓ |
 | Initiative = 1d20 + mod. Intel | `initiative_creature` | ✓ |
 | Esquive PA/PM = 8 + mod. Sagesse | `dodge_action_points_creature`, `dodge_movement_points_creature` | ✓ |
@@ -46,7 +46,7 @@ Ce document vérifie la cohérence entre :
 | Tacle = 1d20 + mod. Chance | `tackle_creature` | ✓ |
 | Dés de vie = floor(niveau/2), max 10 | `hit_dice_creature` | ✓ |
 | Bonus maîtrise = 1+floor(niveau/4), max 6 | `mastery_bonus_creature` | ✓ |
-| Sauvegardes = mod. + bonus maîtrise (si maîtrisé) | `save_*_creature` | ✓ |
+| Compétences / sauvegardes permanentes ±15 (monstre ±20) | `*_creature.limit_absolute` | ✓ |
 | Réserve Wakfu = bonus maîtrise + équip. | `wakfu_reserve_creature` | ✓ |
 
 ### 2.3 Équipements (2.6.1)

@@ -12,7 +12,6 @@ import {
     CREATURE_RESISTANCE_PERCENT_FULL_LABELS,
     CREATURE_RESISTANCE_PERCENT_LABELS,
 } from "@/Utils/Entity/creatureCharacteristicGroups.manifest";
-import { SKILL_ABSOLUTE_LIMIT } from "@/Utils/Entity/buildCreatureCompetenceGroups";
 
 /**
  * Construit les groupes de caractéristiques pour CharacteristicsCard à partir d'une créature.
@@ -163,7 +162,7 @@ export function buildCreatureCharacteristicGroups(creature, options = {}) {
 }
 
 /**
- * Résout une valeur colonne : total explicite créature, sinon total runtime, sinon fallback formule.
+ * Résout une valeur colonne : total explicite créature, sinon total calculé par le runtime serveur.
  *
  * @param {Object} creature
  * @param {string} dbColumn
@@ -179,17 +178,7 @@ export function resolveCreatureDbValue(creature, dbColumn, def, runtime) {
 
     const key = def?.key || `${dbColumn}_creature`;
     const fromRuntime = runtimeDisplayValue(runtime, key) ?? runtimeDisplayValue(runtime, `${dbColumn}_creature`);
-    // Runtime peut renvoyer 0 tant que la formule CA n’est pas en BDD (avant reseed).
-    if (fromRuntime != null) {
-        const n = Number(fromRuntime);
-        if (dbColumn === "ca" && Number.isFinite(n) && n === 0) {
-            const fb = fallbackDbValue(creature, dbColumn, runtime);
-            if (fb != null) return fb;
-        }
-        return fromRuntime;
-    }
-
-    return fallbackDbValue(creature, dbColumn, runtime);
+    return fromRuntime;
 }
 
 /**
@@ -216,14 +205,6 @@ function runtimeDisplayValue(runtime, key) {
 }
 
 /**
- * Fallback local si runtime absent (aligné sur les formules seed).
- *
- * @param {Object} creature
- * @param {string} dbColumn
- * @param {Object|null} runtime
- * @returns {string|number|null}
- */
-/**
  * Valeur d’une caractéristique calculée (clé métier, ex. wakfu_reserve_creature).
  *
  * @param {Object} creature
@@ -231,56 +212,12 @@ function runtimeDisplayValue(runtime, key) {
  * @param {Object|null} runtime
  * @returns {string|number|null}
  */
-export function resolveComputedCharacteristicValue(creature, computedKey, runtime) {
+export function resolveComputedCharacteristicValue(_creature, computedKey, runtime) {
     const fromRuntime = runtimeDisplayValue(runtime, computedKey);
     if (fromRuntime != null && fromRuntime !== "") {
         return fromRuntime;
     }
-    if (computedKey === "wakfu_reserve_creature") {
-        const level = parseInt(creature?.level, 10) || 1;
-        const masteryBonus = Math.min(1 + Math.floor(level / 4), 6);
-        return masteryBonus;
-    }
     return null;
-}
-
-function fallbackDbValue(creature, dbColumn, runtime) {
-    if (dbColumn === "ca") {
-        const modVit =
-            runtimeDisplayValue(runtime, "modifier_vitality_creature") ?? computeStatModifier(creature, "vitality");
-        const n = Number(modVit);
-        return 10 + (Number.isFinite(n) ? n : 0);
-    }
-    if (dbColumn === "ini") {
-        const modInt =
-            runtimeDisplayValue(runtime, "modifier_intelligence_creature") ?? computeStatModifier(creature, "intel");
-        const n = Number(modInt);
-        return Number.isFinite(n) ? n : 0;
-    }
-    if (dbColumn === "invocation") {
-        return 1;
-    }
-    if (dbColumn === "po") {
-        return 0;
-    }
-    if (dbColumn === "do_fixe_multiple") {
-        return 0;
-    }
-    return null;
-}
-
-/**
- * @param {Object} creature
- * @param {string} stat
- * @returns {number}
- */
-function computeStatModifier(creature, stat) {
-    const level = parseInt(creature.level, 10) || 1;
-    // Repli sans runtime : limite absolue du mod (min −2, max ⌊niv/4⌋+2 plafonné à +7).
-    const modMax = Math.min(Math.floor(level / 4) + 2, 7);
-    const statVal = parseInt(creature[stat], 10) || 10;
-    const rawMod = Math.floor((statVal - 10) / 2);
-    return Math.max(Math.min(rawMod, modMax), -2);
 }
 
 /**
@@ -288,17 +225,17 @@ function computeStatModifier(creature, stat) {
  * @returns {string}
  */
 function formatSignedModifier(mod) {
+    if (mod === null || mod === undefined || mod === "") return "—";
     const n = Number(mod);
-    if (!Number.isFinite(n)) return String(mod ?? "");
+    if (!Number.isFinite(n)) return String(mod);
     return n >= 0 ? `+${n}` : String(n);
 }
 
-function buildModifierItems(creature, getCompDef, runtime) {
+function buildModifierItems(_creature, getCompDef, runtime) {
     const modifierItems = [];
-    for (const { stat, modKey } of CREATURE_ABILITY_STAT_DEFS) {
+    for (const { modKey } of CREATURE_ABILITY_STAT_DEFS) {
         const def = getCompDef(modKey);
-        const fromRuntime = runtimeDisplayValue(runtime, modKey);
-        const mod = fromRuntime != null ? fromRuntime : computeStatModifier(creature, stat);
+        const mod = runtimeDisplayValue(runtime, modKey);
         modifierItems.push({
             type: "formula",
             def: { ...def, key: def.key || modKey, hide_when_empty: false },
@@ -316,36 +253,23 @@ function buildModifierItems(creature, getCompDef, runtime) {
  * @returns {Array<{ type: 'abilityColumn', stat: string, score: Object, modifier: Object, save: Object }>}
  */
 function buildAbilityStackItems(creature, getDef, getCompDef, byDb, runtime) {
-    const levelForSave = parseInt(creature.level, 10) || 1;
-    const masteryBonus = Math.min(1 + Math.floor(levelForSave / 4), 6);
     const items = [];
 
     for (const defRow of CREATURE_ABILITY_STAT_DEFS) {
-        const { stat, modKey, saveKey, saveBonusColumn, saveMasteryColumn, saveLabel } = defRow;
+        const { stat, modKey, saveKey, saveBonusColumn, saveLabel } = defRow;
         const scoreDef = getDef(stat);
         const scoreRaw = resolveCreatureDbValue(creature, stat, scoreDef, runtime);
-        const scoreVal = scoreRaw !== null && scoreRaw !== undefined && scoreRaw !== "" ? scoreRaw : 10;
+        const scoreVal = scoreRaw !== null && scoreRaw !== undefined && scoreRaw !== "" ? scoreRaw : "—";
 
         const modDef = getCompDef(modKey);
-        const fromRuntimeMod = runtimeDisplayValue(runtime, modKey);
-        const mod = fromRuntimeMod != null ? fromRuntimeMod : computeStatModifier(creature, stat);
+        const mod = runtimeDisplayValue(runtime, modKey);
 
         const saveDef =
             byDb[saveBonusColumn] ||
             getCompDef(saveKey) ||
             { key: saveKey, name: `Sauv. ${saveLabel}`, short_name: saveLabel };
         const fromRuntimeSave = runtimeDisplayValue(runtime, saveKey);
-        let saveDisplay;
-        if (fromRuntimeSave != null) {
-            saveDisplay = String(fromRuntimeSave);
-        } else {
-            const modN = Number(mod);
-            const bonus = parseInt(creature[saveBonusColumn], 10) || 0;
-            const mastery = parseInt(creature[saveMasteryColumn], 10) || 0;
-            const rawSave = (Number.isFinite(modN) ? modN : 0) + masteryBonus * mastery + bonus;
-            const saveTotal = Math.max(-SKILL_ABSOLUTE_LIMIT, Math.min(SKILL_ABSOLUTE_LIMIT, rawSave));
-            saveDisplay = String(saveTotal);
-        }
+        const saveDisplay = fromRuntimeSave != null ? String(fromRuntimeSave) : "—";
 
         items.push({
             type: "abilityColumn",
@@ -403,10 +327,11 @@ function buildResistanceItems(creature, getDef, runtime) {
         const label = resistancePercentLabel(percent);
         if (!hasFixed && !label) continue;
 
-        let display = "";
-        if (hasFixed && label) display = `${fixed} (${label})`;
-        else if (hasFixed) display = String(fixed);
-        else display = `(${label})`;
+        const display = hasFixed && label
+            ? `${fixed} (${label})`
+            : hasFixed
+                ? String(fixed)
+                : `(${label})`;
 
         const def = fixedDef || percentDef;
         const full =

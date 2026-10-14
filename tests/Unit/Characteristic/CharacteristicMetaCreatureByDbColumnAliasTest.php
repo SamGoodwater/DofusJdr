@@ -114,4 +114,30 @@ class CharacteristicMetaCreatureByDbColumnAliasTest extends TestCase
         $this->assertSame('-3', $monsterByDb['agi']['limit_min']);
         $this->assertSame('33', $monsterByDb['agi']['limit_max']);
     }
+
+    public function test_computed_meta_discovers_new_definition_without_hardcoded_whitelist(): void
+    {
+        $characteristic = Characteristic::create([
+            'key' => 'future_computed_creature',
+            'name' => 'Calcul futur',
+            'short_name' => 'Futur',
+            'type' => 'int',
+            'status' => Characteristic::STATUS_VALIDEE,
+            'sort_order' => 999,
+            'group' => 'creature',
+        ]);
+
+        CharacteristicCreature::create([
+            'characteristic_id' => $characteristic->id,
+            'entity' => CharacteristicCreature::ENTITY_ALL,
+            'db_column' => null,
+            'formula' => '[level_creature]',
+            'formula_display' => 'niv.',
+        ]);
+
+        $computed = (new CharacteristicMetaByDbColumnService)->buildCreatureComputedByKey();
+
+        $this->assertArrayHasKey('future_computed_creature', $computed);
+        $this->assertSame('Calcul futur', $computed['future_computed_creature']['name']);
+    }
 }

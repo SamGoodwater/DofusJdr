@@ -28,7 +28,7 @@
             "min": "-5",
             "max": "5",
             "formula": "{\"1\":\"0\",\"3\":\"1\",\"5\":\"2\",\"8\":\"3\",\"12\":\"4\",\"15\":\"5\",\"characteristic\":\"level_object\"}",
-            "formula_display": null,
+            "formula_display": "{\"1\":\"0\",\"3\":\"1\",\"5\":\"2\",\"8\":\"3\",\"12\":\"4\",\"15\":\"5\",\"characteristic\":\"level_object\"}",
             "default_value": "0",
             "conversion_formula": "[d]",
             "conversion_function": null,

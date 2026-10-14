@@ -1,6 +1,8 @@
 # Inventaire des modifications — Caractéristiques principales
 
-Document de référence listant toutes les modifications à appliquer suite à la refonte des caractéristiques principales (fiches Caractéristiques, fiche personnage, Equipements et forgemagie).
+> **Statut : historique, refonte appliquée.** La base et les chapitres 2.2 / 4.2 sont la source de vérité active.
+
+Document d'inventaire de la refonte des caractéristiques principales.
 
 ---
 
@@ -13,7 +15,7 @@ Document de référence listant toutes les modifications à appliquer suite à l
 | **Budget total** | 10 initiaux + 8 progression = 18 | **10 initiaux + 6 progression = 16** |
 | **Équipement max par carac** | +4 (règles 2.6.1) | **+4** (forgemagie +2) |
 | **Forgemagie max par carac** | +2 | **+2** |
-| **Modificateur max** | floor(Niveau/2)+1 (jusqu'à 11 à niv. 20) | **min(floor(Niveau/2)+1, 7)** — progression limitée puis plafond 7 |
+| **Modificateur max** | floor(Niveau/2)+1 (jusqu'à 11 à niv. 20) | **min(floor(Niveau/4)+2, 7)** — progression limitée puis plafond 7 |
 
 ---
 
@@ -21,18 +23,18 @@ Document de référence listant toutes les modifications à appliquer suite à l
 
 **Formule inchangée** : `floor((Score − 10) / 2)`
 
-**Plafond** : Le modificateur ne peut pas dépasser `min(floor(Niveau/2)+1, 7)` — limite de progression pour éviter de monter trop vite, avec plafond absolu à 7.
+**Plafond** : Le modificateur ne peut pas dépasser `min(floor(Niveau/4)+2, 7)` — limite de progression pour éviter de monter trop vite, avec plafond absolu à 7.
 
 | Niveaux | Mod max |
 |---------|---------|
-| 1-2 | +2 |
-| 3-4 | +3 |
-| 5-6 | +4 |
-| 7-8 | +5 |
-| 9-10 | +6 |
-| 11-20 | +7 |
+| 1-3 | +2 |
+| 4-7 | +3 |
+| 8-11 | +4 |
+| 12-15 | +5 |
+| 16-19 | +6 |
+| 20 | +7 |
 
-**Formule complète** : `min(max(floor(([carac]_creature-10)/2), -2), min(floor([level_creature]/2)+1, 7))`
+**Formule complète** : `min(max(floor(([carac]_creature-10)/2), -2), floor([level_creature]/4)+2, 7)`
 
 ---
 

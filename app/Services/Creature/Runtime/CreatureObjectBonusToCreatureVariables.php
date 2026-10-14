@@ -12,13 +12,13 @@ use App\Contracts\Characteristic\CharacteristicDefinitionLookup;
  *
  * Les totaux restent séparés pour permettre la décomposition base / objets / contexte.
  *
-     * @example
-     *   $map = $merger->mapToCharacteristicKeys($entity, ['strength' => 2, 'athletics' => 1]);
-     *   // ['strength_creature' => 2, 'athletics_creature' => 1]
-     *
-     * Les bonus compétences objet se rattachent à la clé stable `*_creature` (couche object
-     * du runtime), tandis que la formule conserve `[…_bonus]` pour le bonus BDD créature.
-     */
+ * @example
+ *   $map = $merger->mapToCharacteristicKeys($entity, ['strength' => 2, 'athletics' => 1]);
+ *   // ['strength_creature' => 2, 'athletics_creature' => 1]
+ *
+ * Les bonus compétences objet se rattachent à la clé stable `*_creature` (couche object
+ * du runtime), tandis que la formule conserve `[…_bonus]` pour le bonus BDD créature.
+ */
 final class CreatureObjectBonusToCreatureVariables
 {
     /**
@@ -116,24 +116,6 @@ final class CreatureObjectBonusToCreatureVariables
         }
 
         return $mapped;
-    }
-
-    /**
-     * @deprecated Utiliser mapToCharacteristicKeys() — ne plus fusionner dans la base.
-     *
-     * @param  array<string, int|float>  $variables
-     * @param  array<string, int>  $itemTotals
-     * @return array<string, int>
-     */
-    public function mergeInto(array &$variables, string $entity, array $itemTotals): array
-    {
-        $mapped = $this->mapToCharacteristicKeys($entity, $itemTotals);
-        foreach ($mapped as $target => $amount) {
-            $objectKey = $target.'_object';
-            $variables[$objectKey] = (float) $amount;
-        }
-
-        return $itemTotals;
     }
 
     private function resolveTargetVariable(string $objectShortKey, string $entity): ?string

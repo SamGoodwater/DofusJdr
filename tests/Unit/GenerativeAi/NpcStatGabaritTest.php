@@ -33,12 +33,16 @@ final class NpcStatGabaritTest extends TestCase
         $ca = ['weak' => array_fill(0, 20, 10), 'neutral' => array_fill(0, 20, 12), 'strong' => array_fill(0, 20, 14), 'very_strong' => array_fill(0, 20, 15)];
         $hit = ['weak' => array_fill(0, 20, 1), 'neutral' => array_fill(0, 20, 2), 'strong' => array_fill(0, 20, 3), 'very_strong' => array_fill(0, 20, 4)];
         $mod = ['weak' => array_fill(0, 20, 0), 'neutral' => array_fill(0, 20, 1), 'strong' => array_fill(0, 20, 2), 'very_strong' => array_fill(0, 20, 3)];
+        $initiative = ['weak' => array_fill(0, 20, 1), 'neutral' => array_fill(0, 20, 2), 'strong' => array_fill(0, 20, 3), 'very_strong' => array_fill(0, 20, 4)];
+        $hitBonus = ['weak' => array_fill(0, 20, 2), 'neutral' => array_fill(0, 20, 3), 'strong' => array_fill(0, 20, 4), 'very_strong' => array_fill(0, 20, 5)];
 
         $grids = [
             'life_points_creature' => $life,
             'action_points_creature' => $pa,
             'movement_points_creature' => $pm,
             'armor_class_creature' => $ca,
+            'initiative_creature' => $initiative,
+            'hit_bonus_creature' => $hitBonus,
             'hit_dice_creature' => $hit,
             'modifier_vitality_creature' => $mod,
         ];
@@ -76,6 +80,9 @@ final class NpcStatGabaritTest extends TestCase
         $this->assertSame('strong', $guard['band']);
         $this->assertSame('weak', $merchant['band']);
         $this->assertSame('14', $guard['strong']);
+        $this->assertSame('3', $guard['ini']);
+        $this->assertSame('4', $guard['touch']);
+        $this->assertNotSame($guard['ca'], $guard['ini']);
     }
 
     public function test_validate_stats_rejects_life_outside_band(): void

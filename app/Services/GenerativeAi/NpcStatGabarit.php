@@ -52,6 +52,8 @@ final class NpcStatGabarit
         $pa = $this->normValue('action_points_creature', $level, $powerIndex, $resolver) ?? 6;
         $pm = $this->normValue('movement_points_creature', $level, $powerIndex, $resolver) ?? 3;
         $ca = $this->normValue('armor_class_creature', $level, $powerIndex, $resolver) ?? 10;
+        $initiative = $this->normValue('initiative_creature', $level, $powerIndex, $resolver) ?? 0;
+        $hitBonus = $this->normValue('hit_bonus_creature', $level, $powerIndex, $resolver) ?? 0;
         $hitDice = $this->normValue('hit_dice_creature', $level, $powerIndex, $resolver) ?? 1;
         $modVit = $this->normValue('modifier_vitality_creature', $level, $powerIndex, $resolver) ?? 0;
 
@@ -89,8 +91,8 @@ final class NpcStatGabarit
             'pm' => (string) max(1, (int) round((float) $pm)),
             'po' => '1',
             'ca' => (string) max(1, (int) round((float) $ca)),
-            'ini' => (string) max(1, (int) round((float) $ca)),
-            'touch' => (string) max(1, (int) round((float) $ca)),
+            'ini' => (string) round((float) $initiative),
+            'touch' => (string) round((float) $hitBonus),
             'damage_dice' => $diceCount.'d6',
             'band' => NormsResolver::POWER_LEVELS[$powerIndex],
         ]);
