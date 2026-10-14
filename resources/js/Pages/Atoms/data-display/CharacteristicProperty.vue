@@ -36,8 +36,7 @@ import Image from "@/Pages/Atoms/data-display/Image.vue";
 import Badge from "@/Pages/Atoms/data-display/Badge.vue";
 import Tooltip from "@/Pages/Atoms/feedback/Tooltip.vue";
 import Popover from "@/Pages/Atoms/feedback/Popover.vue";
-import CharacteristicPropertyTooltip from "@/Pages/Molecules/data-display/CharacteristicPropertyTooltip.vue";
-import CharacteristicDecompositionBody from "@/Pages/Molecules/data-display/CharacteristicDecompositionBody.vue";
+import CharacteristicInfoPanel from "@/Pages/Molecules/data-display/CharacteristicInfoPanel.vue";
 import { colorList } from "@/Pages/Atoms/atomMap";
 import { useCharacteristicViewModel } from "@/Composables/entity/useCharacteristicViewModel";
 import {
@@ -250,11 +249,8 @@ const badgeVariant = computed(() =>
     props.badge === CHARACTERISTIC_PROPERTY_BADGE.outline ? "outline" : "soft",
 );
 
-const useDecompositionPopover = computed(() => {
-    if (!props.preferDecompositionPopover) return false;
-    const m = model.value;
-    return m != null && (m.source != null || m.base != null || m.context != null || m.object != null);
-});
+/** Popover au clic (densités labeled/spacious) ; sinon Tooltip au survol (densité icon). */
+const usePinnedPopover = computed(() => Boolean(props.preferDecompositionPopover));
 
 /** Classes valeur : truncate par défaut ; wrap pour textes longs (description…). */
 const valueOverflowClass = computed(() =>
@@ -265,17 +261,19 @@ const valueOverflowClass = computed(() =>
 <template>
     <template v-if="!hiddenWhenEmpty">
     <component
-        :is="useDecompositionPopover ? Popover : Tooltip"
-        :placement="useDecompositionPopover ? 'bottom-start' : 'top'"
+        :is="usePinnedPopover ? Popover : Tooltip"
+        :placement="usePinnedPopover ? 'bottom-start' : 'top'"
         class="inline-flex max-w-full min-w-0"
         :class="wrapValue && 'w-full'"
-        :color="useDecompositionPopover ? undefined : characteristicTooltipColor"
-        :accent-class="useDecompositionPopover ? undefined : characteristicTooltipAccentClass"
-        :accent-style="useDecompositionPopover ? undefined : characteristicTooltipAccentStyle"
+        :color="usePinnedPopover ? undefined : characteristicTooltipColor"
+        :accent-class="usePinnedPopover ? undefined : characteristicTooltipAccentClass"
+        :accent-style="usePinnedPopover ? undefined : characteristicTooltipAccentStyle"
     >
         <template #content>
-            <CharacteristicDecompositionBody v-if="useDecompositionPopover" :model="model" />
-            <CharacteristicPropertyTooltip v-else :model="model" />
+            <CharacteristicInfoPanel
+                :model="model"
+                :tone="usePinnedPopover ? 'light' : 'dark'"
+            />
         </template>
 
         <!-- Badge -->

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CharacteristicCardController;
 use App\Http\Controllers\Api\CharacteristicController;
 use App\Http\Controllers\Api\CharacteristicNormsCatalogController;
 use App\Http\Controllers\Api\CharacteristicNormsController;
@@ -23,6 +24,9 @@ Route::middleware(['web'])->get('/characteristics', [CharacteristicController::c
 Route::middleware(['web'])->get('/characteristics/norms-catalog/{group}/{entity?}', [CharacteristicNormsCatalogController::class, 'show'])
     ->where('entity', '.*')
     ->name('api.characteristics.norms-catalog');
+
+Route::middleware(['web'])->get('/characteristics/{key}/card', [CharacteristicCardController::class, 'show'])
+    ->name('api.characteristics.card');
 
 Route::middleware(['web'])->get('/characteristics/{key}/norms/{entity?}', [CharacteristicNormsController::class, 'show'])
     ->name('api.characteristics.norms');

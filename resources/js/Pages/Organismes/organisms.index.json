@@ -53,7 +53,7 @@
   },
   {
     "name": "SpellReferenceScales",
-    "description": "SpellReferenceScales Organism",
+    "description": "Compatibilité : wrap CharacteristicScalesTool (groupe sort)",
     "props": [
       {
         "name": "compact",
@@ -63,6 +63,29 @@
     ],
     "slots": [],
     "file": "tools/SpellReferenceScales.vue"
+  },
+  {
+    "name": "CharacteristicScalesTool",
+    "description": "Outil Barème générique multi-groupes + extras sort",
+    "props": [
+      {
+        "name": "compact",
+        "type": "Boolean",
+        "desc": "- Densité réduite"
+      },
+      {
+        "name": "initialGroup",
+        "type": "String",
+        "desc": "- Groupe initial (all|creature|object|spell|consumable|profile)"
+      },
+      {
+        "name": "initialKey",
+        "type": "String",
+        "desc": "- Clé caractéristique initiale"
+      }
+    ],
+    "slots": [],
+    "file": "tools/CharacteristicScalesTool.vue"
   },
   {
     "name": "DiceRollerModal",

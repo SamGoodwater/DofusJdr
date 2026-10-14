@@ -12,8 +12,6 @@ import { BaseModel } from '../BaseModel';
 import CharacteristicsCard from '@/Pages/Organismes/data-display/CharacteristicsCard.vue';
 import { buildCreatureCharacteristicGroups } from '@/Utils/Entity/buildCreatureCharacteristicGroups';
 import { getByDbColumnMap, getMonsterFieldMeta } from '@/Composables/store/useCharacteristicsStore';
-import { formatCharacteristicPropertyTooltip } from '@/Utils/Entity/entity-view-ui';
-
 export class Monster extends BaseModel {
     // ============================================
     // PROPRIÉTÉS DE BASE
@@ -330,7 +328,7 @@ export class Monster extends BaseModel {
                     sortValue: Number(raw),
                     searchValue: displayRaw,
                     filterValue: String(raw),
-                    tooltip: formatCharacteristicPropertyTooltip(def, displayRaw) || displayRaw,
+                    tooltip: String(def?.helper || def?.name || displayRaw),
                 },
             };
         }
@@ -616,7 +614,7 @@ export class Monster extends BaseModel {
         const tooltip =
             raceName === '-'
                 ? ''
-                : formatCharacteristicPropertyTooltip(def, raceName) || raceName;
+                : String(def?.helper || def?.name || raceName);
 
         return {
             type: 'badge',
@@ -687,7 +685,7 @@ export class Monster extends BaseModel {
         }
 
         const tooltip =
-            formatCharacteristicPropertyTooltip(def, label) || (sizeValue !== null ? `Taille : ${label}` : '');
+            String(def?.helper || def?.name || '') || (sizeValue !== null ? `Taille : ${label}` : '');
 
         return {
             type: 'text',

@@ -61,30 +61,6 @@ export function formatCharacteristicLimitLine(def) {
 }
 
 /**
- * Tooltip d’une propriété à partir du service caractéristiques (helper + descriptions).
- *
- * @param {object|null} def - Entrée `characteristics` (helper, descriptions, name…)
- * @param {string} [valueDisplay] - Valeur affichée (ex. « Moyen », « Neutre »)
- * @returns {string}
- */
-export function formatCharacteristicPropertyTooltip(def, valueDisplay = "") {
-  if (!def || typeof def !== "object") return String(valueDisplay || "");
-  const helper = typeof def.helper === "string" ? def.helper.trim() : "";
-  const descRaw = def.descriptions;
-  const desc = Array.isArray(descRaw)
-    ? descRaw.map((p) => String(p).trim()).filter(Boolean).join(" ")
-    : String(descRaw || "").trim();
-  const core = [helper, desc].filter(Boolean).join(" ").trim();
-  const title = String(def.short_name || def.name || "").trim();
-  const val = String(valueDisplay || "").trim();
-  if (val && title) {
-    return core ? `${title} : ${val}. ${core}` : `${title} : ${val}.`;
-  }
-  if (core) return core;
-  return val || title;
-}
-
-/**
  * Retourne un libellé "court" pour l'affichage compact/minimal.
  *
  * @param {string} fieldKey

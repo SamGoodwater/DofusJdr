@@ -4,6 +4,7 @@
  */
 import { computed } from "vue";
 import CharacteristicFormulaField from "@/Pages/Molecules/data-input/CharacteristicFormulaField.vue";
+import CharacteristicGmButton from "@/Pages/Molecules/data-display/CharacteristicGmButton.vue";
 import { contextColumnForComposable } from "@/Support/Creature/creatureComposableColumns";
 import { getByDbColumn } from "@/Composables/store/useCharacteristicsStore";
 
@@ -13,10 +14,13 @@ const props = defineProps({
     previewVariables: { type: Object, default: () => ({}) },
     suggestions: { type: Array, default: () => [] },
     errors: { type: Object, default: () => ({}) },
+    /** Entité pivot pour le panneau MJ (`*` ou `monster`). */
+    entity: { type: String, default: "*" },
 });
 
 const def = computed(() => getByDbColumn("creature", props.dbColumn) || {});
 const label = computed(() => def.value.short_name || def.value.name || props.dbColumn);
+const characteristicKey = computed(() => def.value.key || "");
 const contextKey = computed(() => contextColumnForComposable(props.dbColumn));
 
 const totalHint =
@@ -30,7 +34,17 @@ const contextHint =
         class="rounded-lg border border-base-300/70 bg-base-100/40 p-3 space-y-3"
         :data-composable-column="dbColumn"
     >
-        <p class="text-sm font-semibold text-base-content">{{ label }}</p>
+        <div class="flex items-center justify-between gap-2">
+            <p class="text-sm font-semibold text-base-content">{{ label }}</p>
+            <CharacteristicGmButton
+                v-if="characteristicKey"
+                :characteristic-key="characteristicKey"
+                group="creature"
+                :entity="entity"
+                :label="label"
+                :highlight-value="form[dbColumn]"
+            />
+        </div>
         <div class="grid gap-3 md:grid-cols-2">
             <CharacteristicFormulaField
                 v-model="form[dbColumn]"

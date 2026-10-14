@@ -13,6 +13,7 @@
 import { computed } from "vue";
 import Icon from "@/Pages/Atoms/data-display/Icon.vue";
 import Tooltip from "@/Pages/Atoms/feedback/Tooltip.vue";
+import CharacteristicInfoPanel from "@/Pages/Molecules/data-display/CharacteristicInfoPanel.vue";
 import {
     getCharacteristicColorStyle,
     getCharacteristicContainerStyle,
@@ -43,6 +44,18 @@ const resolvedColor = computed(() => {
     if (ov?.color) return ov.color;
     return props.def?.color;
 });
+const infoModel = computed(() => ({
+    key: props.def?.key || "",
+    name: props.def?.name || props.def?.short_name || props.def?.key || "",
+    shortName: props.def?.short_name || props.def?.name || "",
+    icon: iconSource.value || props.def?.icon || "",
+    color: resolvedColor.value || "",
+    helper: props.def?.helper || "",
+    descriptions: props.def?.descriptions || tooltipText.value || "",
+    displayValue: props.value ? "Oui" : "Non",
+    hideDisplayValueInTooltip: false,
+}));
+const useInfoPanel = computed(() => Boolean(props.def?.key));
 const alt = computed(() => props.def?.name || props.def?.key || "—");
 
 const iconStyle = computed(() =>
@@ -59,7 +72,11 @@ const containerStyle = computed(() =>
         :class="compact ? 'items-center rounded px-1 py-0.5' : 'flex-col items-center rounded-box border border-base-content/15 px-2 py-1.5 text-base-content backdrop-blur-sm'"
         :style="compact ? {} : containerStyle"
     >
-        <Tooltip v-if="tooltipText && compact" :content="tooltipText" placement="top">
+        <Tooltip v-if="(useInfoPanel || tooltipText) && compact" placement="top">
+            <template #content>
+                <CharacteristicInfoPanel v-if="useInfoPanel" :model="infoModel" tone="dark" />
+                <span v-else class="text-xs text-white/90">{{ tooltipText }}</span>
+            </template>
             <span
                 class="flex items-center"
                 :class="value ? '' : 'opacity-50'"

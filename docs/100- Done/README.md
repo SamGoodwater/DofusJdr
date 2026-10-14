@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — UI caractéristiques unifiée (fiche joueur + panneau MJ + Barèmes)
+
+Une seule source de données pour l’aide caractéristique : l’API **card** complète descriptions, défaut et formule affichée. Côté joueur, `CharacteristicInfoPanel` remplace les anciens tooltips / panels dispersés (propriétés, kref CMS, effets, booléens). Côté MJ, `CharacteristicGmPanel` regroupe barème, calcul (avec couches), conversion et propriétés ; le bouton d’aide sépare correctement groupe et entité. L’outil **Barèmes** (menu Outils) couvre les cinq groupes, avec extras sort (dés, budget tour) quand la caractéristique s’y prête.
+
 ## Octobre 2026 — Bonus éphémères et limites absolues
 
 Les formules créature listent désormais tous leurs termes : caractéristique de base, équipement, consommable et sort. Les bonus de consommable et de sort sont **éphémères** : nuls hors combat, ils s'ajoutent sans jamais être plafonnés, ce qui prépare un futur outil de combat. Certaines caractéristiques ont une **limite absolue** sur leur partie permanente : modificateurs (max +7, +10 pour les monstres), compétences et sauvegardes (±15, ±20 pour les monstres), bonus de maîtrise (max 6). Les autres restent souples. Les formules affichées dans les infobulles sont réécrites en texte court (« mod. Int + équip. »), et la décomposition indique les effets temporaires et le plafonnement.
@@ -24,7 +28,7 @@ Les barèmes (dégâts, soin, bouclier, PV temporaires, vol de vie, retraits PA/
 
 ## Octobre 2026 — Barèmes de sorts et conversion en dés
 
-Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de vie sont consultables dans l’outil **Barèmes de sorts** (menu Outils et page 5.3) : niveau, particularités du sort, conversion en dés (y compris critique). Ce sont des repères, pas une loi absolue.
+Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de vie restent des repères (dés, budget tour) intégrés à l’outil générique **Barèmes** (menu Outils et sections CMS). Ce sont des repères, pas une loi absolue.
 
 ## Octobre 2026 — Suppression de sort sans « Page introuvable »
 

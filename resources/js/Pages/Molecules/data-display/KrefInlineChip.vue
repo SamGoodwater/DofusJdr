@@ -6,34 +6,20 @@
  * @example
  * <KrefInlineChip kref-type="characteristic" kref-payload='{"key":"action_points_creature"}' label="PA" />
  */
-import { computed, markRaw, ref, watch } from "vue";
+import { computed, markRaw } from "vue";
 import { parseKrefPayload, normalizeKrefType } from "@/Composables/richText/krefCodec";
 import { getReferencePresentation } from "@/Composables/richText/referenceRenderService";
 import Icon from "@/Pages/Atoms/data-display/Icon.vue";
 import Tooltip from "@/Pages/Atoms/feedback/Tooltip.vue";
 import OverlayTrigger from "@/Pages/Molecules/overlay/OverlayTrigger.vue";
 import KrefEntityTooltipBody from "@/Pages/Molecules/data-display/KrefEntityTooltipBody.vue";
+import CharacteristicInfoPanel from "@/Pages/Molecules/data-display/CharacteristicInfoPanel.vue";
 import { loadKrefEntityMinimalOverlay } from "@/Composables/richText/krefEntityMinimalOverlay";
 import { OVERLAY_TRIGGER } from "@/Composables/overlay/overlayConstants";
-import { loadKrefCharacteristicReferenceMeta } from "@/Composables/richText/krefCharacteristicReferenceCache";
-import { parseCharacteristicFormulaRichText } from "@/Composables/characteristic/useCharacteristicFormulaRichText";
-import CharacteristicFormulaRichText from "@/Pages/Molecules/data-display/CharacteristicFormulaRichText.vue";
-import { buildFormulaTableView } from "@/Utils/characteristic/formulaConfig";
-import { buildCharacteristicKrefScopes } from "@/Utils/characteristic/characteristicScopeSummary";
 import {
     resolveDef,
     getCharacteristicColorStyle,
 } from "@/Composables/entity/useCharacteristicDisplay";
-
-const FORMULA_SOURCE_GROUPS = [
-    "creature",
-    "item",
-    "resource",
-    "spell",
-    "capability",
-    "consumable",
-    "panoply",
-];
 
 const props = defineProps({
     krefType: { type: String, default: "" },
@@ -58,18 +44,19 @@ const presentation = computed(() =>
     }),
 );
 
+const characteristicKey = computed(() => {
+    if (krefType.value !== "characteristic") return "";
+    return typeof payload.value?.key === "string" ? payload.value.key.trim() : "";
+});
+
 const charDef = computed(() => {
-    if (krefType.value !== "characteristic") return null;
-    const key = typeof payload.value?.key === "string" ? payload.value.key.trim() : "";
-    if (!key) return null;
-    return resolveDef(key, undefined, {
+    if (!characteristicKey.value) return null;
+    return resolveDef(characteristicKey.value, undefined, {
         sourceGroups: ["creature", "item", "resource", "spell", "capability", "consumable", "panoply"],
     });
 });
 
 const charIcon = computed(() => charDef.value?._resolvedIcon ?? charDef.value?.icon ?? null);
-const charReferenceMeta = ref(null);
-let charReferenceLoadSeq = 0;
 
 /**
  * @param {unknown} raw
@@ -94,92 +81,23 @@ const charLabel = computed(() => {
     return visibleLabel(d.name) || visibleLabel(d.short_name) || "Caractéristique";
 });
 
+const charInfoModel = computed(() => ({
+    key: characteristicKey.value,
+    name: charLabel.value,
+    shortName: charDef.value?.short_name || charLabel.value,
+    icon: charIcon.value || "",
+    color: charDef.value?._resolvedColor ?? charDef.value?.color ?? "",
+    helper: charDef.value?.helper || "",
+    descriptions: charDef.value?.descriptions || "",
+    hideDisplayValueInTooltip: true,
+    displayValue: "",
+}));
+
 const showCharacteristicResolvedChip = computed(
-    () => krefType.value === "characteristic" && charDef.value != null,
+    () => krefType.value === "characteristic" && characteristicKey.value !== "",
 );
 const charTextStyle = computed(() =>
     getCharacteristicColorStyle(charDef.value?._resolvedColor ?? charDef.value?.color) || {},
-);
-
-function stripToPlainText(s) {
-    if (s == null || s === "") return "";
-    const d = document.createElement("div");
-    d.innerHTML = String(s);
-    return (d.textContent || "").replace(/\s+/g, " ").trim();
-}
-
-function formatDescriptions(raw) {
-    if (raw == null) return "";
-    if (typeof raw === "string") return stripToPlainText(raw);
-    if (Array.isArray(raw)) {
-        return raw
-            .map((entry) => {
-                if (typeof entry === "string") return stripToPlainText(entry);
-                if (entry && typeof entry === "object" && entry.text) return stripToPlainText(entry.text);
-                return "";
-            })
-            .filter(Boolean)
-            .join("\n\n");
-    }
-    return "";
-}
-
-const charTooltipText = computed(() => {
-    const d = charDef.value;
-    if (!d) return "";
-    const desc = formatDescriptions(d.descriptions);
-    const helper = stripToPlainText(d.helper || "");
-    const parts = [desc, helper].filter(Boolean);
-    return parts.join("\n\n");
-});
-
-function segmentStyle(segment) {
-    return getCharacteristicColorStyle(segment?.color) || {};
-}
-
-const charTooltipScopes = computed(() =>
-    buildCharacteristicKrefScopes(charReferenceMeta.value?.rows).map((scope) => {
-        const isTable = scope.formula !== "" && buildFormulaTableView(scope.formula) != null;
-        return {
-            ...scope,
-            isTable,
-            segments: scope.formula !== "" && !isTable
-                ? parseCharacteristicFormulaRichText(scope.formula, {
-                    sourceGroups: FORMULA_SOURCE_GROUPS,
-                    tooltipOrder: "descriptions_first",
-                })
-                : [],
-        };
-    }),
-);
-
-async function ensureCharReferenceMeta() {
-    if (krefType.value !== "characteristic") {
-        return;
-    }
-    const key = typeof payload.value?.key === "string" ? payload.value.key.trim() : "";
-    if (!key) {
-        charReferenceMeta.value = null;
-        return;
-    }
-    if (charReferenceMeta.value !== null) {
-        return;
-    }
-
-    const seq = ++charReferenceLoadSeq;
-    const meta = await loadKrefCharacteristicReferenceMeta(key);
-    if (seq !== charReferenceLoadSeq) {
-        return;
-    }
-    charReferenceMeta.value = meta;
-}
-
-watch(
-    () => [krefType.value, payload.value?.key],
-    () => {
-        charReferenceMeta.value = null;
-        charReferenceLoadSeq += 1;
-    },
 );
 
 const entityId = computed(() => {
@@ -196,9 +114,7 @@ const entityTypeStr = computed(() => {
 });
 
 const wrapCharacteristicTooltip = computed(
-    () =>
-        krefType.value === "characteristic" &&
-        (charTooltipText.value.trim() !== "" || charTooltipScopes.value.length > 0),
+    () => krefType.value === "characteristic" && characteristicKey.value !== "",
 );
 
 const wrapEntityTooltip = computed(
@@ -241,49 +157,9 @@ const rootClass = computed(() => (props.asRoot ? presentation.value.wrapperClass
             glass
             color="neutral"
             class="inline-flex max-w-full min-w-0 align-baseline"
-            @open="ensureCharReferenceMeta"
         >
             <template #content>
-                <div class="kref-rich-preview-panel max-h-[min(70vh,28rem)] max-w-sm overflow-y-auto text-sm leading-snug text-base-content">
-                    <p v-if="charTooltipText" class="whitespace-pre-wrap">{{ charTooltipText }}</p>
-                    <div v-if="charTooltipScopes.length" class="mt-2 space-y-2.5 border-t border-base-content/10 pt-2">
-                        <section v-for="scope in charTooltipScopes" :key="scope.id" class="text-xs">
-                            <p class="font-semibold text-base-content">{{ scope.label }}</p>
-                            <p v-if="scope.detail" class="text-base-content/80">{{ scope.detail }}</p>
-                            <CharacteristicFormulaRichText
-                                v-if="scope.isTable"
-                                class="mt-1"
-                                :formula="scope.formula"
-                                :source-groups="FORMULA_SOURCE_GROUPS"
-                                tooltip-order="descriptions_first"
-                            />
-                            <p
-                                v-else-if="scope.segments.length"
-                                class="mt-0.5 inline-flex flex-wrap items-center gap-1 text-base-content/80"
-                            >
-                                <template v-for="(segment, idx) in scope.segments" :key="`${scope.id}-seg-${idx}`">
-                                    <span v-if="segment.type === 'text'" class="whitespace-pre-wrap">
-                                        {{ segment.text }}
-                                    </span>
-                                    <Tooltip v-else :content="segment.tooltip" placement="top">
-                                        <span class="inline-flex items-center gap-1 rounded px-1 py-0.5 bg-base-200/40">
-                                            <Icon
-                                                v-if="segment.icon"
-                                                :source="segment.icon"
-                                                :alt="segment.label"
-                                                size="xs"
-                                                :style="segmentStyle(segment)"
-                                            />
-                                            <span class="font-semibold" :style="segmentStyle(segment)">
-                                                {{ segment.label }}
-                                            </span>
-                                        </span>
-                                    </Tooltip>
-                                </template>
-                            </p>
-                        </section>
-                    </div>
-                </div>
+                <CharacteristicInfoPanel :model="charInfoModel" tone="dark" />
             </template>
             <span class="inline-flex max-w-full min-w-0 items-center gap-0.5 align-baseline">
                 <Icon v-if="charIcon" :source="charIcon" class="kref__iconimg" :alt="charLabel" size="xs" />

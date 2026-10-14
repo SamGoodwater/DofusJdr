@@ -13,8 +13,6 @@ import { BaseModel } from '../BaseModel';
 import CharacteristicsCard from '@/Pages/Organismes/data-display/CharacteristicsCard.vue';
 import { buildCreatureCharacteristicGroups } from '@/Utils/Entity/buildCreatureCharacteristicGroups';
 import { getByDbColumnMap } from '@/Composables/store/useCharacteristicsStore';
-import { formatCharacteristicPropertyTooltip } from '@/Utils/Entity/entity-view-ui';
-
 export class Npc extends BaseModel {
     // ============================================
     // PROPRIÉTÉS DE BASE
@@ -311,7 +309,7 @@ export class Npc extends BaseModel {
                     sortValue: Number(raw),
                     searchValue: displayRaw,
                     filterValue: String(raw),
-                    tooltip: formatCharacteristicPropertyTooltip(def, displayRaw) || displayRaw,
+                    tooltip: String(def?.helper || def?.name || displayRaw),
                 },
             };
         }

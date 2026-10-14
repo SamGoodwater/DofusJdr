@@ -2881,21 +2881,31 @@
     "file": "data-display/DiceFormulaStrip.vue"
   },
   {
-    "name": "CharacteristicPropertyTooltip",
-    "description": "Tooltip caractéristique — présentation « fiche de jeu » (peu technique). Affiche : icône, nom, valeur, description, formule lisible, résolution, et la liste des termes (libellés joueur, pas les clés BDD).",
+    "name": "CharacteristicInfoPanel",
+    "description": "Fiche joueur unifiée d’une caractéristique (tooltip / popover) : description, limites, formula_display, valeurs runtime.",
     "props": [
       {
         "name": "model",
         "type": "Object",
-        "desc": "— viewModel (useCharacteristicViewModel / formula group)"
+        "desc": "— viewModel (useCharacteristicViewModel / runtime)"
+      },
+      {
+        "name": "group",
+        "type": "String",
+        "desc": "- Groupe API (creature|object|spell|consumable|profile)"
+      },
+      {
+        "name": "tone",
+        "type": "String",
+        "desc": "- dark | light"
       }
     ],
     "slots": [],
-    "file": "data-display/CharacteristicPropertyTooltip.vue"
+    "file": "data-display/CharacteristicInfoPanel.vue"
   },
   {
-    "name": "CharacteristicNormsHelpButton",
-    "description": "Bouton d’aide : ouvre les normes (grille + graphique) d’une caractéristique via l’API publique.",
+    "name": "CharacteristicGmButton",
+    "description": "Bouton d’aide MJ : ouvre CharacteristicGmPanel (group et entity séparés).",
     "props": [
       {
         "name": "characteristicKey",
@@ -2903,18 +2913,18 @@
         "desc": "- Clé BDD (ex. `vitality_creature`)"
       },
       {
-        "name": "entity",
+        "name": "group",
         "type": "string",
-        "desc": "- Contexte entité (`creature`, `object`, `spell`, `*`)"
+        "desc": "- Groupe API (creature|object|spell|consumable|profile)"
       },
       {
-        "name": "label",
+        "name": "entity",
         "type": "string",
-        "desc": "- Libellé du bouton (accessibilité)"
+        "desc": "- Pivot entité (`*`, `monster`, `item`…)"
       }
     ],
     "slots": [],
-    "file": "data-display/CharacteristicNormsHelpButton.vue"
+    "file": "data-display/CharacteristicGmButton.vue"
   },
   {
     "name": "CharacteristicInlineGroup",

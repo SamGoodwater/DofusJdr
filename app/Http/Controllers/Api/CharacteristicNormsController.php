@@ -7,11 +7,14 @@ namespace App\Http\Controllers\Api;
 use App\Enums\SectionType;
 use App\Http\Controllers\Controller;
 use App\Models\Characteristic;
+use App\Models\CharacteristicConsumable;
 use App\Models\CharacteristicCreature;
 use App\Models\CharacteristicObject;
+use App\Models\CharacteristicProfile;
 use App\Models\CharacteristicSpell;
 use App\Models\Section;
 use App\Models\User;
+use App\Support\Characteristics\CharacteristicGroupRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -21,9 +24,6 @@ use Illuminate\Http\Request;
  */
 class CharacteristicNormsController extends Controller
 {
-    /** @var list<string> */
-    private const GROUPS = ['creature', 'object', 'spell'];
-
     private const POWER_LEVELS = [
         'very_weak' => 'Très faible',
         'weak' => 'Faible',
@@ -40,8 +40,10 @@ class CharacteristicNormsController extends Controller
         }
 
         $group = $request->query('group');
-        if (is_string($group) && $group !== '' && ! in_array($group, self::GROUPS, true)) {
-            return response()->json(['error' => 'Groupe invalide. Utiliser creature, object ou spell.'], 422);
+        if (is_string($group) && $group !== '' && ! CharacteristicGroupRegistry::isValid($group)) {
+            return response()->json([
+                'error' => 'Groupe invalide. Utiliser creature, object, spell, consumable ou profile.',
+            ], 422);
         }
 
         $effective = $characteristic->effectiveCharacteristic();
@@ -91,6 +93,9 @@ class CharacteristicNormsController extends Controller
             'power_levels' => self::POWER_LEVELS,
             'max_level' => 20,
             'available_characteristics' => $availableCharacteristics,
+            'group' => is_string($group) && $group !== ''
+                ? $group
+                : CharacteristicGroupRegistry::findFirstPivot($characteristic->id, $entity)[0] ?? null,
         ]);
     }
 
@@ -132,48 +137,21 @@ class CharacteristicNormsController extends Controller
         ];
     }
 
+    /**
+     * @return CharacteristicCreature|CharacteristicObject|CharacteristicSpell|CharacteristicConsumable|CharacteristicProfile|null
+     */
     private function findGroupRow(
         int $characteristicId,
         string $entity,
         ?string $group
-    ): CharacteristicCreature|CharacteristicObject|CharacteristicSpell|null {
+    ): mixed {
         if ($group !== null && $group !== '') {
-            return $this->findRowByExplicitGroup($characteristicId, $entity, $group);
+            return CharacteristicGroupRegistry::findPivotRow($characteristicId, $group, $entity);
         }
 
-        $row = CharacteristicCreature::where('characteristic_id', $characteristicId)
-            ->where('entity', $entity)->first();
-        if ($row !== null) {
-            return $row;
-        }
+        $found = CharacteristicGroupRegistry::findFirstPivot($characteristicId, $entity);
 
-        $row = CharacteristicObject::where('characteristic_id', $characteristicId)
-            ->where('entity', $entity)->first();
-        if ($row !== null) {
-            return $row;
-        }
-
-        return CharacteristicSpell::where('characteristic_id', $characteristicId)
-            ->where('entity', $entity)->first();
-    }
-
-    private function findRowByExplicitGroup(
-        int $characteristicId,
-        string $entity,
-        string $group
-    ): CharacteristicCreature|CharacteristicObject|CharacteristicSpell|null {
-        return match ($group) {
-            'creature' => CharacteristicCreature::where('characteristic_id', $characteristicId)
-                ->where('entity', $entity)
-                ->first(),
-            'object' => CharacteristicObject::where('characteristic_id', $characteristicId)
-                ->where('entity', $entity)
-                ->first(),
-            'spell' => CharacteristicSpell::where('characteristic_id', $characteristicId)
-                ->where('entity', $entity)
-                ->first(),
-            default => null,
-        };
+        return $found[1] ?? null;
     }
 
     /**

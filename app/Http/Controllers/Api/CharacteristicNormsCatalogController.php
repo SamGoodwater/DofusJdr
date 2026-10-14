@@ -5,48 +5,58 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\CharacteristicCreature;
-use App\Models\CharacteristicObject;
-use App\Models\CharacteristicSpell;
+use App\Support\Characteristics\CharacteristicGroupRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 /**
- * Liste les caractéristiques d’un groupe ayant une grille de normes définie.
- * Sert au template de section « characteristic_norms_catalog » (accordéon public).
+ * Liste les caractéristiques d’un groupe (ou de tous) ayant une grille de normes définie.
+ * Sert au template de section « characteristic_norms_catalog » et à l’outil Barème.
  */
 class CharacteristicNormsCatalogController extends Controller
 {
-    /** @var list<string> */
-    private const ALLOWED_GROUPS = ['creature', 'object', 'spell'];
-
     public function show(Request $request, string $group, string $entity = '*'): JsonResponse
     {
-        if (! in_array($group, self::ALLOWED_GROUPS, true)) {
-            return response()->json(['error' => 'Groupe invalide. Utiliser creature, object ou spell.'], 404);
+        $groups = $this->resolveGroups($group);
+        if ($groups === null) {
+            return response()->json([
+                'error' => 'Groupe invalide. Utiliser all, creature, object, spell, consumable ou profile.',
+            ], 404);
         }
 
         $entity = $entity === '' ? '*' : $entity;
 
-        $rows = $this->queryPivotRows($group, $entity);
+        $items = collect();
+        foreach ($groups as $resolvedGroup) {
+            $rows = $this->queryPivotRows($resolvedGroup, $entity);
+            if ($rows->isEmpty() && $entity !== '*') {
+                $rows = $this->queryPivotRows($resolvedGroup, '*');
+            }
 
-        if ($rows->isEmpty() && $entity !== '*') {
-            $rows = $this->queryPivotRows($group, '*');
+            $items = $items->merge(
+                $rows
+                    ->filter(fn ($row) => $row->characteristic !== null && is_array($row->norms_grid))
+                    ->map(function ($row) use ($resolvedGroup) {
+                        $effective = $row->characteristic->effectiveCharacteristic();
+
+                        return [
+                            'key' => $effective->key,
+                            'name' => $effective->name ?? $effective->key,
+                            'group' => $resolvedGroup,
+                            'icon' => $effective->icon,
+                            'color' => $effective->color,
+                        ];
+                    })
+            );
         }
 
-        $items = $rows
-            ->filter(fn ($row) => $row->characteristic !== null && is_array($row->norms_grid))
-            ->map(function ($row) {
-                $effective = $row->characteristic->effectiveCharacteristic();
-
-                return [
-                    'key' => $effective->key,
-                    'name' => $effective->name ?? $effective->key,
-                ];
-            })
-            ->unique('key')
-            ->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE)
+        $items = $items
+            ->unique(fn (array $item) => $item['group'].'|'.$item['key'])
+            ->sortBy([
+                ['group', 'asc'],
+                ['name', 'asc'],
+            ], SORT_NATURAL | SORT_FLAG_CASE)
             ->values()
             ->all();
 
@@ -64,17 +74,26 @@ class CharacteristicNormsCatalogController extends Controller
     }
 
     /**
-     * @return Collection<int, CharacteristicCreature|CharacteristicObject|CharacteristicSpell>
+     * @return list<string>|null
      */
-    private function queryPivotRows(string $group, string $entity)
+    private function resolveGroups(string $group): ?array
     {
-        $query = match ($group) {
-            'creature' => CharacteristicCreature::query(),
-            'object' => CharacteristicObject::query(),
-            'spell' => CharacteristicSpell::query(),
-        };
+        if ($group === 'all') {
+            return CharacteristicGroupRegistry::groups();
+        }
+        if (! CharacteristicGroupRegistry::isValid($group)) {
+            return null;
+        }
 
-        return $query
+        return [$group];
+    }
+
+    /**
+     * @return Collection<int, mixed>
+     */
+    private function queryPivotRows(string $group, string $entity): Collection
+    {
+        return CharacteristicGroupRegistry::query($group)
             ->where('entity', $entity)
             ->whereNotNull('norms_grid')
             ->with(['characteristic'])

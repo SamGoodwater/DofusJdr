@@ -56,7 +56,7 @@ const tools = [
     },
     {
         id: 'spell-scales',
-        label: 'Barèmes de sorts',
+        label: 'Barèmes',
         icon: 'fa-table',
         pack: 'solid',
         action: openScalesModal,

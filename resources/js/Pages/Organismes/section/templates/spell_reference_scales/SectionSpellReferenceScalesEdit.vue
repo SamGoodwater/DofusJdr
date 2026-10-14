@@ -26,6 +26,8 @@ let saveStateTimer = null;
 
 const localSettings = ref({
     compact: false,
+    group: 'spell',
+    characteristic_key: '',
 });
 
 function setSaveState(state) {
@@ -44,6 +46,8 @@ function setSaveState(state) {
 function normalizeForPersist() {
     return {
         compact: Boolean(localSettings.value.compact),
+        group: String(localSettings.value.group || 'spell'),
+        characteristic_key: String(localSettings.value.characteristic_key || ''),
     };
 }
 
@@ -96,6 +100,8 @@ watch(
         syncFromProps.value = true;
         localSettings.value = {
             compact: Boolean(s.compact ?? false),
+            group: String(s.group || 'spell'),
+            characteristic_key: String(s.characteristic_key || ''),
         };
         await nextTick();
         lastPersistSignature.value = safeStringify(normalizeForPersist());
@@ -113,8 +119,8 @@ watch(localSettings, () => persist(), { deep: true });
             <InlineSaveStatus :state="saveState" />
         </div>
         <p class="text-sm text-base-content/70 leading-snug">
-            Les valeurs viennent des normes des caractéristiques de sort
-            (admin → Caractéristiques → panneau Normes). Ici tu ne règles que l’affichage.
+            Les valeurs viennent des normes des caractéristiques
+            (admin → Caractéristiques). Ici tu règles l’affichage et la présélection.
         </p>
         <label class="label cursor-pointer justify-start gap-3">
             <input
@@ -123,6 +129,26 @@ watch(localSettings, () => persist(), { deep: true });
                 class="checkbox checkbox-sm"
             >
             <span class="label-text">Mode compact</span>
+        </label>
+        <label class="form-control max-w-xs">
+            <span class="label-text text-xs">Groupe initial</span>
+            <select v-model="localSettings.group" class="select select-bordered select-sm">
+                <option value="all">Tous</option>
+                <option value="creature">Créature</option>
+                <option value="object">Objet</option>
+                <option value="spell">Sort</option>
+                <option value="consumable">Consommable</option>
+                <option value="profile">Profil</option>
+            </select>
+        </label>
+        <label class="form-control max-w-xs">
+            <span class="label-text text-xs">Clé caractéristique (optionnel)</span>
+            <input
+                v-model="localSettings.characteristic_key"
+                type="text"
+                class="input input-bordered input-sm"
+                placeholder="ex. dommages_spell"
+            >
         </label>
     </div>
 </template>

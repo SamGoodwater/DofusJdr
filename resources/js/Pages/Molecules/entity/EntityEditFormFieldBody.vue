@@ -17,7 +17,7 @@ import RichTextEditorField from '@/Pages/Molecules/data-input/RichTextEditorFiel
 import Icon from '@/Pages/Atoms/data-display/Icon.vue';
 import Image from '@/Pages/Atoms/data-display/Image.vue';
 import { getByDbColumn, getMonsterFieldMeta } from '@/Composables/store/useCharacteristicsStore';
-import CharacteristicNormsHelpButton from '@/Pages/Molecules/data-display/CharacteristicNormsHelpButton.vue';
+import CharacteristicGmButton from '@/Pages/Molecules/data-display/CharacteristicGmButton.vue';
 import { getCharacteristicColorStyle, getCharacteristicContainerStyle } from '@/Utils/color/Color';
 import { resolveSpellUsageCharacteristicVisual } from '@/Utils/Entity/spellUsageCharacteristicVisual';
 import { formatPoRange, parsePoRange } from '@/Utils/Entity/poRange';
@@ -63,16 +63,27 @@ const charMeta = computed(() => {
     return getMonsterFieldMeta()[fieldKey] ?? null;
 });
 
-/** Clé caractéristique pour l’API normes (ex. `monster_size`). */
+/** Clé caractéristique pour le panneau MJ (ex. `monster_size`). */
 const characteristicNormsKey = computed(() => charMeta.value?.key ?? null);
 
-/** Contexte entité API (`creature`, `spell`, `monster`, …). */
-const characteristicNormsEntity = computed(() => {
+/** Groupe API (creature/object/spell…). */
+const characteristicGmGroup = computed(() => {
     if (!characteristicNormsKey.value) {
-        return null;
+        return '';
     }
     if (props.characteristicsGroup) {
         return props.characteristicsGroup;
+    }
+    if (getMonsterFieldMeta()[props.field?.key]) {
+        return 'creature';
+    }
+    return '';
+});
+
+/** Entité pivot (`*`, monster…). Distinct du groupe. */
+const characteristicGmEntity = computed(() => {
+    if (!characteristicNormsKey.value) {
+        return '*';
     }
     if (getMonsterFieldMeta()[props.field?.key]) {
         return 'monster';
@@ -302,10 +313,11 @@ const resolvedSelectOptions = computed(() => {
                         </p>
                     </div>
                     <div class="flex shrink-0 flex-wrap items-center gap-2">
-                        <CharacteristicNormsHelpButton
+                        <CharacteristicGmButton
                             v-if="characteristicNormsKey"
                             :characteristic-key="characteristicNormsKey"
-                            :entity="characteristicNormsEntity"
+                            :group="characteristicGmGroup"
+                            :entity="characteristicGmEntity"
                             :label="fieldLabelText"
                         />
                         <div class="join join-horizontal">
@@ -379,10 +391,11 @@ const resolvedSelectOptions = computed(() => {
                         {{ fieldLabelText }}
                     </div>
                     <div class="flex shrink-0 items-center gap-2 pt-0.5 sm:gap-2.5">
-                        <CharacteristicNormsHelpButton
+                        <CharacteristicGmButton
                             v-if="characteristicNormsKey"
                             :characteristic-key="characteristicNormsKey"
-                            :entity="characteristicNormsEntity"
+                            :group="characteristicGmGroup"
+                            :entity="characteristicGmEntity"
                             :label="fieldLabelText"
                         />
                         <ToggleCore
@@ -538,10 +551,11 @@ const resolvedSelectOptions = computed(() => {
                     v-if="characteristicNormsKey || (isMultiEdit && differentFields.includes(field.key) && fieldDirty?.[field.key])"
                     #overEnd
                 >
-                    <CharacteristicNormsHelpButton
+                    <CharacteristicGmButton
                         v-if="characteristicNormsKey"
                         :characteristic-key="characteristicNormsKey"
-                        :entity="characteristicNormsEntity"
+                        :group="characteristicGmGroup"
+                            :entity="characteristicGmEntity"
                         :label="fieldLabelText"
                     />
                     <Btn
@@ -663,10 +677,11 @@ const resolvedSelectOptions = computed(() => {
                     v-if="characteristicNormsKey || (isMultiEdit && differentFields.includes(field.key) && fieldDirty?.[field.key])"
                     #overEnd
                 >
-                    <CharacteristicNormsHelpButton
+                    <CharacteristicGmButton
                         v-if="characteristicNormsKey"
                         :characteristic-key="characteristicNormsKey"
-                        :entity="characteristicNormsEntity"
+                        :group="characteristicGmGroup"
+                            :entity="characteristicGmEntity"
                         :label="fieldLabelText"
                     />
                     <Btn
