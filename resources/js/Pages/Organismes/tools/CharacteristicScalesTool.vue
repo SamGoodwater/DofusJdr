@@ -2,12 +2,16 @@
 /**
  * Outil Barème générique : sélectionne une caractéristique de n'importe quel groupe
  * et affiche CharacteristicGmPanel. Extras sort (dés, budget tour) si pertinent.
+ *
+ * Mémorise filtre + caractéristique (localStorage) pour restaurer à la réouverture du modal.
  */
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import axios from "axios";
 import CharacteristicGmPanel from "@/Pages/Organismes/data-display/CharacteristicGmPanel.vue";
 import SpellScaleExtras from "@/Pages/Organismes/tools/SpellScaleExtras.vue";
 import { SPELL_SCALE_FAMILIES } from "@/Composables/tools/useSpellReferenceScales.js";
+
+const STORAGE_KEY = "krosmoz-characteristic-scales-selection";
 
 const props = defineProps({
     compact: { type: Boolean, default: false },
@@ -15,6 +19,8 @@ const props = defineProps({
     fillHeight: { type: Boolean, default: false },
     initialGroup: { type: String, default: "all" },
     initialKey: { type: String, default: "" },
+    /** Persiste la sélection (désactiver pour une présélection CMS figée). */
+    rememberSelection: { type: Boolean, default: true },
 });
 
 const GROUPS = [
@@ -26,13 +32,68 @@ const GROUPS = [
     { id: "profile", label: "Profil" },
 ];
 
-const group = ref(props.initialGroup || "all");
-const search = ref("");
+const VALID_FILTER_GROUPS = new Set(GROUPS.map((g) => g.id));
+
+/**
+ * @returns {{ filterGroup?: string, key?: string, itemGroup?: string, search?: string }|null}
+ */
+function readStoredSelection() {
+    if (!props.rememberSelection || typeof localStorage === "undefined") {
+        return null;
+    }
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === "object" ? parsed : null;
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * @param {{ filterGroup: string, key: string, itemGroup: string, search: string }} payload
+ */
+function writeStoredSelection(payload) {
+    if (!props.rememberSelection || typeof localStorage === "undefined") {
+        return;
+    }
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+        /* quota / private mode */
+    }
+}
+
+const stored = readStoredSelection();
+const hasExplicitKey = Boolean(String(props.initialKey || "").trim());
+/** Présélection CMS (groupe ≠ all) : ne pas écraser par le souvenir du modal Outils. */
+const hasForcedGroup = Boolean(props.initialGroup) && props.initialGroup !== "all";
+const restoreFromStorage =
+    props.rememberSelection && !hasExplicitKey && !hasForcedGroup && Boolean(stored);
+
+const group = ref(
+    restoreFromStorage && VALID_FILTER_GROUPS.has(stored.filterGroup)
+        ? stored.filterGroup
+        : props.initialGroup || "all",
+);
+const search = ref(
+    restoreFromStorage && typeof stored.search === "string" ? stored.search : "",
+);
 const items = ref([]);
 const loadingCatalog = ref(false);
 const catalogError = ref("");
-const selectedKey = ref(props.initialKey || "");
-const selectedGroup = ref("");
+const selectedKey = ref(
+    hasExplicitKey
+        ? String(props.initialKey).trim()
+        : restoreFromStorage
+          ? String(stored.key || "").trim()
+          : "",
+);
+const selectedGroup = ref(
+    restoreFromStorage ? String(stored.itemGroup || "").trim() : "",
+);
+const listEl = ref(null);
 
 const filteredItems = computed(() => {
     const q = search.value.trim().toLowerCase();
@@ -60,6 +121,23 @@ const showSpellExtras = computed(() =>
     SPELL_SCALE_FAMILIES.some((family) => family.key === selectedKey.value),
 );
 
+function persistSelection() {
+    writeStoredSelection({
+        filterGroup: group.value || "all",
+        key: selectedKey.value || "",
+        itemGroup: selectedGroup.value || "",
+        search: search.value || "",
+    });
+}
+
+async function scrollSelectedIntoView() {
+    await nextTick();
+    const root = listEl.value;
+    if (!root || !selectedKey.value) return;
+    const active = root.querySelector("[data-scales-selected='true']");
+    active?.scrollIntoView?.({ block: "nearest" });
+}
+
 async function loadCatalog() {
     loadingCatalog.value = true;
     catalogError.value = "";
@@ -71,7 +149,7 @@ async function loadCatalog() {
         const { data } = await axios.get(url);
         items.value = Array.isArray(data?.items) ? data.items : [];
         if (selectedKey.value && !items.value.some((i) => i.key === selectedKey.value)) {
-            // Conserve la sélection si elle existe encore dans un autre filtre.
+            // Conserve la sélection même si absente du filtre courant (ex. group=all → creature).
         } else if (!selectedKey.value && items.value.length) {
             selectedKey.value = items.value[0].key;
             selectedGroup.value = items.value[0].group || "";
@@ -79,6 +157,8 @@ async function loadCatalog() {
             const match = items.value.find((i) => i.key === selectedKey.value);
             if (match) selectedGroup.value = match.group || selectedGroup.value;
         }
+        persistSelection();
+        await scrollSelectedIntoView();
     } catch (e) {
         catalogError.value = e?.response?.data?.error || "Impossible de charger le catalogue.";
         items.value = [];
@@ -90,10 +170,15 @@ async function loadCatalog() {
 function selectItem(item) {
     selectedKey.value = item.key;
     selectedGroup.value = item.group || (group.value !== "all" ? group.value : "");
+    persistSelection();
 }
 
 watch(group, () => {
     void loadCatalog();
+});
+
+watch(search, () => {
+    persistSelection();
 });
 
 onMounted(() => {
@@ -148,6 +233,7 @@ onMounted(() => {
             :class="{ 'lg:items-stretch': fillHeight }"
         >
             <div
+                ref="listEl"
                 class="min-h-0 overflow-y-auto rounded-box border border-base-content/15"
                 :class="fillHeight ? 'h-full max-h-none' : 'max-h-[28rem]'"
             >
@@ -157,6 +243,7 @@ onMounted(() => {
                     type="button"
                     class="flex w-full items-center gap-2 border-b border-base-content/10 px-2.5 py-2 text-left text-sm hover:bg-base-200/60"
                     :class="{ 'bg-primary/10 font-semibold': item.key === selectedKey }"
+                    :data-scales-selected="item.key === selectedKey ? 'true' : undefined"
                     @click="selectItem(item)"
                 >
                     <span class="min-w-0 flex-1 truncate">{{ item.name }}</span>
