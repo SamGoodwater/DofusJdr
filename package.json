@@ -52,7 +52,7 @@
         "autoprefixer": "^10.6.1",
         "axios": "^1.20.0",
         "concurrently": "^10.0.6",
-        "csso-cli": "^4.0.2",
+        "csso": "^5.0.5",
         "daisyui": "^5.7.48",
         "eslint": "^10.12.0",
         "eslint-config-prettier": "^10.1.8",
@@ -126,11 +126,11 @@
             "@anthropic-ai/claude-code"
         ],
         "overrides": {
-            "undici": "6.28.0",
             "qs": "6.16.0",
             "brace-expansion@1": "1.1.18",
             "brace-expansion@2": "2.1.4",
-            "brace-expansion@5": "5.0.9"
+            "brace-expansion@5": "5.0.12",
+            "@tailwindcss/typography>postcss-selector-parser": "7.1.6"
         }
     }
 }

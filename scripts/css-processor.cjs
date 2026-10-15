@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { minify } = require('csso');
 
 // Chemins des fichiers
 const customCssPath = path.join(__dirname, '../resources/css/custom.css');
@@ -82,6 +83,17 @@ function waitForSassFiles(maxAttempts = 60, interval = 1000) {
     });
 }
 
+/**
+ * Minifie un fichier CSS avec l'API csso.
+ * @param {string} src - Chemin source
+ * @param {string} dest - Chemin du fichier minifié
+ * @example minifyFile('resources/css/app.css', 'resources/css/app.min.css');
+ */
+function minifyFile(src, dest) {
+    const { css } = minify(fs.readFileSync(src, 'utf8'));
+    fs.writeFileSync(dest, css);
+}
+
 function minifyCss() {
     if (!options.minify) return false;
     
@@ -91,7 +103,7 @@ function minifyCss() {
         // Minifier custom.css et remplacer l'original
         if (fs.existsSync(customCssPath)) {
             const customCssMinPath = customCssPath.replace('.css', '.min.css');
-            execSync(`npx csso ${customCssPath} -o ${customCssMinPath}`, { stdio: 'pipe' });
+            minifyFile(customCssPath, customCssMinPath);
             
             // Vérifier que le fichier minifié a été créé
             if (fs.existsSync(customCssMinPath)) {
@@ -108,7 +120,7 @@ function minifyCss() {
         // Minifier app.css et remplacer l'original (seulement s'il existe)
         if (fs.existsSync(appCssPath)) {
             const appCssMinPath = appCssPath.replace('.css', '.min.css');
-            execSync(`npx csso ${appCssPath} -o ${appCssMinPath}`, { stdio: 'pipe' });
+            minifyFile(appCssPath, appCssMinPath);
             
             // Vérifier que le fichier minifié a été créé
             if (fs.existsSync(appCssMinPath)) {

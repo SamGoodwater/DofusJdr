@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Alertes npm (Dependabot)
+
+Les 8 failles npm (undici, braces via csso-cli, brace-expansion, postcss-selector-parser) sont corrigées : plus d’override qui clouait undici 6.28.0, minification CSS via l’API `csso` à la place de `csso-cli`, et versions patchées pour les autres. `pnpm audit` ne remonte plus de vulnérabilité. Composer n’en avait aucune.
+
 ## Octobre 2026 — Audit des caractéristiques
 
 Vérification de toutes les caractéristiques (formules, chartes, coefficients, bornes). Corrections : une créature sans valeur saisie (PA, Agilité…) reprend sa valeur par défaut au lieu de 0 ; les chartes générées respectent désormais le min/max (bonus de maîtrise, bonus de touche, PM) ; la distance de saut peut monter jusqu'à 13 cases ; la réserve de Wakfu peut valoir 0 ; les conditions « touche automatique » des sorts de dégâts/soin/bouclier ne bloquent plus l'enregistrement.
