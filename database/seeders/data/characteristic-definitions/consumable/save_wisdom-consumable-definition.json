@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 82,
         "group": "consumable",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "save_wisdom_creature"
     },
     "entities": {
@@ -191,6 +191,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Sauvegarde Sagesse via sort (bonus temporaire). Les malus/retraits sont convertis à puissance réduite par le service de conversion afin de préserver la bounded accuracy.",
             "norms_help_section_id": null,

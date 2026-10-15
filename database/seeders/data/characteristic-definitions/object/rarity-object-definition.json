@@ -48,8 +48,8 @@
         "status": "validee",
         "sort_order": 21,
         "group": "object",
-        "linked_to_key": null,
         "nature": "descriptif",
+        "linked_to_key": null,
         "intrinsic_key": null
     },
     "entities": {
@@ -68,6 +68,7 @@
             "conversion_sample_rows": null,
             "norms_grid": null,
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": null,
             "norms_help_section_id": null,

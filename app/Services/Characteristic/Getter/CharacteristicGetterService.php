@@ -622,6 +622,7 @@ final class CharacteristicGetterService implements CharacteristicDefinitionLooku
 
         $out['norms_grid'] = $this->pickGroupValue($base, $overlay, 'norms_grid');
         $out['norms_formula'] = $this->pickGroupValue($base, $overlay, 'norms_formula');
+        $out['norms_power_coefficients'] = $this->pickGroupValue($base, $overlay, 'norms_power_coefficients');
         $out['norms_conditions'] = $this->pickGroupValue($base, $overlay, 'norms_conditions');
         $out['norms_description'] = $this->pickGroupValue($base, $overlay, 'norms_description');
         $out['norms_help_section_id'] = $this->pickGroupValue($base, $overlay, 'norms_help_section_id');

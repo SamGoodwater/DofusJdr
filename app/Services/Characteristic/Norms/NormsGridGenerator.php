@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Services\Characteristic\Norms;
 
 use App\Models\Characteristic;
+use App\Models\CharacteristicConsumable;
 use App\Models\CharacteristicCreature;
 use App\Models\CharacteristicObject;
+use App\Models\CharacteristicProfile;
 use App\Models\CharacteristicSpell;
 use App\Services\Characteristic\Formula\FormulaResolutionService;
 use App\Services\Characteristic\Formula\SafeExpressionEvaluator;
@@ -20,9 +22,13 @@ use RuntimeException;
  * Variables : [level] (1–20), [power] (−2…+2), [clé] = norme de la clé
  * au même niveau et même palier (ex. [life_points_creature]).
  *
+ * Mode coefficients (`norms_power_coefficients`) : la formule est évaluée
+ * une fois par niveau au palier neutre ([power]=0, dépendances sur `neutral`),
+ * puis chaque palier = round(base × coef). Incompatible avec [power] dans la formule.
+ *
  * @example
  * $gen->regenerateAll();
- * $grid = $gen->preview($formula, $dependencyGrids);
+ * $grid = $gen->preview($formula, $dependencyGrids, true, $coefs);
  */
 final class NormsGridGenerator
 {
@@ -37,6 +43,21 @@ final class NormsGridGenerator
         'strong' => 1,
         'very_strong' => 2,
     ];
+
+    /**
+     * Coefficients par défaut (neutral = 1, non stocké).
+     *
+     * @var array{very_weak: float, weak: float, strong: float, very_strong: float}
+     */
+    public const DEFAULT_POWER_COEFFICIENTS = [
+        'very_weak' => 0.5,
+        'weak' => 0.75,
+        'strong' => 1.3,
+        'very_strong' => 1.7,
+    ];
+
+    /** @var list<string> */
+    public const POWER_COEFFICIENT_KEYS = ['very_weak', 'weak', 'strong', 'very_strong'];
 
     public function __construct(
         private readonly FormulaResolutionService $formulas,
@@ -62,7 +83,9 @@ final class NormsGridGenerator
             $grid = $this->evaluateFormulaToGrid(
                 (string) $row['model']->norms_formula,
                 $cache,
-                $cacheKey
+                $cacheKey,
+                $this->coefficientsFromModel($row['model']),
+                $this->roundIntFromModel($row['model'])
             );
             $row['model']->norms_grid = $grid;
             $row['model']->save();
@@ -108,7 +131,9 @@ final class NormsGridGenerator
             $grid = $this->evaluateFormulaToGrid(
                 (string) $row['model']->norms_formula,
                 $cache,
-                $cacheKey
+                $cacheKey,
+                $this->coefficientsFromModel($row['model']),
+                $this->roundIntFromModel($row['model'])
             );
             $row['model']->norms_grid = $grid;
             $row['model']->save();
@@ -123,16 +148,25 @@ final class NormsGridGenerator
      * Aperçu d'une grille sans écriture.
      *
      * @param  array<string, array<string, list<int|float|null>>>  $dependencyGrids  cacheKey => grid
+     * @param  array<string, float|int>|null  $coefficients  Coefs paliers (sans neutral)
      * @return array<string, list<int|float|null>>
      */
-    /**
-     * @param  array<string, array<string, list<int|float|null>>>  $dependencyGrids
-     * @param  bool  $includeDatabase  Fusionne les grilles déjà en base (aperçu admin)
-     * @return array<string, list<int|float|null>>
-     */
-    public function preview(string $formula, array $dependencyGrids = [], bool $includeDatabase = false): array
-    {
+    public function preview(
+        string $formula,
+        array $dependencyGrids = [],
+        bool $includeDatabase = false,
+        ?array $coefficients = null,
+        bool $roundInt = true
+    ): array {
+        // Syntaxe + coefs uniquement (pas de requêtes BDD : utilisable en test unitaire).
         $errors = $this->formulas->validateFormula($formula);
+        $normalized = $this->normalizePowerCoefficients($coefficients);
+        if ($normalized !== null) {
+            $errors = array_merge($errors, $this->validatePowerCoefficientsShape($coefficients));
+            if (in_array('power', $this->formulas->extractVariablePlaceholders($formula), true)) {
+                $errors[] = 'norms_power_coefficients est incompatible avec [power] dans la formule (choisir l’un ou l’autre).';
+            }
+        }
         if ($errors !== []) {
             throw new InvalidArgumentException(implode('; ', $errors));
         }
@@ -141,26 +175,94 @@ final class NormsGridGenerator
             ? array_merge($this->seedGridCache(), $dependencyGrids)
             : $dependencyGrids;
 
-        return $this->evaluateFormulaToGrid($formula, $cache, 'preview');
+        return $this->evaluateFormulaToGrid(
+            $formula,
+            $cache,
+            'preview',
+            $normalized,
+            $roundInt
+        );
     }
 
     /**
-     * Valide une formule de normes et ses clés référencées.
+     * Valide une formule de normes, ses clés référencées et les coefficients.
      *
+     * @param  array<string, mixed>|null  $coefficients
      * @return list<string>
      */
-    public function validateNormsFormula(?string $formula): array
+    public function validateNormsFormula(?string $formula, ?array $coefficients = null): array
     {
         if ($formula === null || trim($formula) === '') {
             return [];
         }
         $errors = $this->formulas->validateFormula($formula);
-        foreach ($this->formulas->extractVariablePlaceholders($formula) as $placeholder) {
+        $placeholders = $this->formulas->extractVariablePlaceholders($formula);
+        foreach ($placeholders as $placeholder) {
             if (in_array($placeholder, self::BUILTIN_VARS, true)) {
                 continue;
             }
             if (! Characteristic::query()->where('key', $placeholder)->exists()) {
                 $errors[] = "Caractéristique inconnue dans norms_formula : [{$placeholder}]";
+            }
+        }
+
+        $normalized = $this->normalizePowerCoefficients($coefficients);
+        if ($normalized !== null) {
+            $coefErrors = $this->validatePowerCoefficientsShape($coefficients);
+            $errors = array_merge($errors, $coefErrors);
+            if (in_array('power', $placeholders, true)) {
+                $errors[] = 'norms_power_coefficients est incompatible avec [power] dans la formule (choisir l’un ou l’autre).';
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Normalise un tableau de coefficients (null si vide / invalide structurellement pour usage).
+     *
+     * @param  array<string, mixed>|null  $coefficients
+     * @return array{very_weak: float, weak: float, strong: float, very_strong: float}|null
+     */
+    public function normalizePowerCoefficients(?array $coefficients): ?array
+    {
+        if ($coefficients === null || $coefficients === []) {
+            return null;
+        }
+        $out = [];
+        foreach (self::POWER_COEFFICIENT_KEYS as $key) {
+            if (! array_key_exists($key, $coefficients) || ! is_numeric($coefficients[$key])) {
+                return null;
+            }
+            $out[$key] = (float) $coefficients[$key];
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param  array<string, mixed>|null  $coefficients
+     * @return list<string>
+     */
+    public function validatePowerCoefficientsShape(?array $coefficients): array
+    {
+        if ($coefficients === null || $coefficients === []) {
+            return [];
+        }
+        $errors = [];
+        foreach (self::POWER_COEFFICIENT_KEYS as $key) {
+            if (! array_key_exists($key, $coefficients)) {
+                $errors[] = "Coefficient manquant : {$key}";
+
+                continue;
+            }
+            if (! is_numeric($coefficients[$key])) {
+                $errors[] = "Coefficient non numérique : {$key}";
+
+                continue;
+            }
+            if ((float) $coefficients[$key] <= 0) {
+                $errors[] = "Coefficient doit être > 0 : {$key}";
             }
         }
 
@@ -226,10 +328,26 @@ final class NormsGridGenerator
 
     /**
      * @param  array<string, array<string, list<int|float|null>>>  $cache
+     * @param  array{very_weak: float, weak: float, strong: float, very_strong: float}|null  $coefficients
      * @return array<string, list<int|float|null>>
      */
-    private function evaluateFormulaToGrid(string $formula, array $cache, string $selfCacheKey): array
-    {
+    private function evaluateFormulaToGrid(
+        string $formula,
+        array $cache,
+        string $selfCacheKey,
+        ?array $coefficients = null,
+        bool $roundInt = true
+    ): array {
+        if ($coefficients !== null) {
+            return $this->evaluateFormulaToGridWithCoefficients(
+                $formula,
+                $cache,
+                $selfCacheKey,
+                $coefficients,
+                $roundInt
+            );
+        }
+
         $placeholders = $this->formulas->extractVariablePlaceholders($formula);
         $grid = [];
         foreach (NormsResolver::POWER_LEVELS as $powerKey) {
@@ -258,6 +376,66 @@ final class NormsGridGenerator
                     SafeExpressionEvaluator::DICE_MODE_AVERAGE
                 );
                 $row[] = $value === null ? null : (float) $value;
+            }
+            $grid[$powerKey] = $row;
+        }
+
+        return $grid;
+    }
+
+    /**
+     * @param  array<string, array<string, list<int|float|null>>>  $cache
+     * @param  array{very_weak: float, weak: float, strong: float, very_strong: float}  $coefficients
+     * @return array<string, list<int|float|null>>
+     */
+    private function evaluateFormulaToGridWithCoefficients(
+        string $formula,
+        array $cache,
+        string $selfCacheKey,
+        array $coefficients,
+        bool $roundInt
+    ): array {
+        $placeholders = $this->formulas->extractVariablePlaceholders($formula);
+        $neutralRow = [];
+        for ($level = 1; $level <= NormsResolver::MAX_LEVEL; $level++) {
+            $variables = [
+                'level' => $level,
+                'power' => 0,
+            ];
+            foreach ($placeholders as $placeholder) {
+                if (in_array($placeholder, self::BUILTIN_VARS, true)) {
+                    continue;
+                }
+                $variables[$placeholder] = $this->resolveDependencyValue(
+                    $placeholder,
+                    $level,
+                    'neutral',
+                    $cache,
+                    $selfCacheKey
+                );
+            }
+            $value = $this->formulas->evaluate(
+                $formula,
+                $variables,
+                SafeExpressionEvaluator::DICE_MODE_AVERAGE
+            );
+            $neutralRow[] = $value === null ? null : (float) $value;
+        }
+
+        $grid = [];
+        foreach (NormsResolver::POWER_LEVELS as $powerKey) {
+            $coef = $powerKey === 'neutral' ? 1.0 : (float) $coefficients[$powerKey];
+            $row = [];
+            foreach ($neutralRow as $base) {
+                if ($base === null) {
+                    $row[] = null;
+
+                    continue;
+                }
+                $scaled = $base * $coef;
+                $row[] = $roundInt
+                    ? (float) (int) round($scaled)
+                    : round($scaled, 2);
             }
             $grid[$powerKey] = $row;
         }
@@ -308,6 +486,9 @@ final class NormsGridGenerator
             "spell|*|{$key}",
             "object|*|{$key}",
             "object|consumable|{$key}",
+            "consumable|*|{$key}",
+            "consumable|consumable|{$key}",
+            "profile|*|{$key}",
         ];
 
         return array_values(array_unique($candidates));
@@ -323,6 +504,8 @@ final class NormsGridGenerator
             'creature' => CharacteristicCreature::query()->with('characteristic')->whereNotNull('norms_formula')->get(),
             'object' => CharacteristicObject::query()->with('characteristic')->whereNotNull('norms_formula')->get(),
             'spell' => CharacteristicSpell::query()->with('characteristic')->whereNotNull('norms_formula')->get(),
+            'consumable' => CharacteristicConsumable::query()->with('characteristic')->whereNotNull('norms_formula')->get(),
+            'profile' => CharacteristicProfile::query()->with('characteristic')->whereNotNull('norms_formula')->get(),
         ];
         foreach ($maps as $group => $collection) {
             foreach ($collection as $model) {
@@ -357,6 +540,8 @@ final class NormsGridGenerator
             'creature' => CharacteristicCreature::query()->with('characteristic')->get(),
             'object' => CharacteristicObject::query()->with('characteristic')->get(),
             'spell' => CharacteristicSpell::query()->with('characteristic')->get(),
+            'consumable' => CharacteristicConsumable::query()->with('characteristic')->get(),
+            'profile' => CharacteristicProfile::query()->with('characteristic')->get(),
         ];
         foreach ($maps as $group => $collection) {
             foreach ($collection as $model) {
@@ -407,6 +592,25 @@ final class NormsGridGenerator
         }
 
         return $needed;
+    }
+
+    /**
+     * @return array{very_weak: float, weak: float, strong: float, very_strong: float}|null
+     */
+    private function coefficientsFromModel(Model $model): ?array
+    {
+        $raw = $model->getAttribute('norms_power_coefficients');
+
+        return is_array($raw) ? $this->normalizePowerCoefficients($raw) : null;
+    }
+
+    private function roundIntFromModel(Model $model): bool
+    {
+        $type = $model->getRelationValue('characteristic')?->type
+            ?? $model->characteristic?->type
+            ?? 'int';
+
+        return $type === 'int' || $type === 'integer' || $type === null || $type === '';
     }
 
     private function cacheKey(string $group, string $entity, string $key): string

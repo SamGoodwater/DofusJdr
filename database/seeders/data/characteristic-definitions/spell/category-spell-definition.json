@@ -38,8 +38,9 @@
         "status": "validee",
         "sort_order": 3,
         "group": "spell",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -57,6 +58,7 @@
             "conversion_sample_rows": null,
             "norms_grid": null,
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Grille 5×20 non utilisée : catégorie de sort (énum 0–3).",
             "norms_help_section_id": null,

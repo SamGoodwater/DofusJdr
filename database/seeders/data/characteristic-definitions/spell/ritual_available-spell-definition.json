@@ -29,8 +29,9 @@
         "status": "validee",
         "sort_order": 29,
         "group": "spell",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -48,6 +49,7 @@
             "conversion_sample_rows": null,
             "norms_grid": null,
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Grille 5×20 non utilisée : booléen (rituel).",
             "norms_help_section_id": null,

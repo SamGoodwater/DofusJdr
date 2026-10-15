@@ -42,8 +42,8 @@
         "status": "validee",
         "sort_order": 26,
         "group": "object",
-        "linked_to_key": null,
         "nature": "bonus_malus",
+        "linked_to_key": null,
         "intrinsic_key": "resistance_air_creature"
     },
     "entities": {
@@ -173,6 +173,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Palier de résistance en pourcentage pour l’air ; plusieurs degrés selon la fiche.",
             "norms_help_section_id": null,
@@ -329,6 +330,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Bonus de panoplie uniquement : vulnérabilité < -50 %, faiblesse -50 à -20 %, résistance 8 à 12 %, invulnérabilité dès 13 %.",
             "norms_help_section_id": null,

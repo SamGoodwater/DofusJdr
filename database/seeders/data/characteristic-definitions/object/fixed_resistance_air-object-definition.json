@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 26,
         "group": "object",
-        "linked_to_key": null,
         "nature": "bonus_malus",
+        "linked_to_key": null,
         "intrinsic_key": "fixed_resistance_air_creature"
     },
     "entities": {
@@ -155,6 +155,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Résistance fixe portée par un bouclier : ±7 au maximum hors forgemagie ; ±3 supplémentaires par forgemagie (2.6.1).",
             "norms_help_section_id": null,

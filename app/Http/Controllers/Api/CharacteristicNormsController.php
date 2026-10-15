@@ -82,6 +82,7 @@ class CharacteristicNormsController extends Controller
             'norms' => [
                 'grid' => $row->norms_grid,
                 'formula' => $row->norms_formula,
+                'power_coefficients' => $row->norms_power_coefficients,
                 'conditions' => $row->norms_conditions ?? [],
                 'description' => $row->norms_description,
                 'limits' => [

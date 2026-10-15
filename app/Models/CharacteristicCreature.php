@@ -28,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property array|null $conversion_krosmoz_sample Niveau → valeur Krosmoz (ex. {"1":1,"20":20})
  * @property array|null $norms_grid Grille 5×20 : {power_level: [val_lvl1..val_lvl20]}
  * @property string|null $norms_formula Formule générant norms_grid ([level], [power], [clé])
+ * @property array|null $norms_power_coefficients Coefs paliers {very_weak, weak, strong, very_strong} (neutral=1)
  * @property array|null $norms_conditions Conditions de lecture
  * @property string|null $norms_description Description libre de la norme
  * @property int|null $norms_help_section_id Section CMS (texte) affichée sous la charte
@@ -65,6 +66,8 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature whereNormsHelpSectionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature whereValidation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature whereLimitAbsolute($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature whereNormsFormula($value)
  *
  * @mixin \Eloquent
  */
@@ -103,6 +106,7 @@ class CharacteristicCreature extends Model
         'conversion_sample_rows',
         'norms_grid',
         'norms_formula',
+        'norms_power_coefficients',
         'norms_conditions',
         'norms_description',
         'norms_help_section_id',
@@ -118,6 +122,7 @@ class CharacteristicCreature extends Model
         'conversion_krosmoz_sample' => 'array',
         'conversion_sample_rows' => 'array',
         'norms_grid' => 'array',
+        'norms_power_coefficients' => 'array',
         'norms_conditions' => 'array',
         'labels' => 'array',
         'validation' => 'array',

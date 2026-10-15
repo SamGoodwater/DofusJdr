@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 69,
         "group": "spell",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "dodge_creature"
     },
     "entities": {
@@ -183,6 +183,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Bonus fuite via sort (buff temporaire).",
             "norms_help_section_id": null,

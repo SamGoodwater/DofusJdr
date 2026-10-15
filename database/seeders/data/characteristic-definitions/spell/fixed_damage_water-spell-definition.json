@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 46,
         "group": "spell",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "fixed_damage_water_creature"
     },
     "entities": {
@@ -191,6 +191,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Dommages fixes eau via sort.",
             "norms_help_section_id": null,

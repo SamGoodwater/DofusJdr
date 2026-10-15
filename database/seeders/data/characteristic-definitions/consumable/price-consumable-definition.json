@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 21,
         "group": "consumable",
-        "linked_to_key": null,
         "nature": "descriptif",
+        "linked_to_key": null,
         "intrinsic_key": null
     },
     "entities": {
@@ -37,15 +37,11 @@
             "conversion_sample_rows": null,
             "norms_grid": null,
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": null,
             "norms_help_section_id": null,
-            "forgemagie_max": 0,
-            "base_price_per_unit": null,
-            "rune_price_per_unit": null,
-            "value_available": null,
-            "item_type_dofus_ids": null,
-            "item_type_ids": null
+            "value_available": null
         }
     },
     "relations": null

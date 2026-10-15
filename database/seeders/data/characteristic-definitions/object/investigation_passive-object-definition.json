@@ -36,8 +36,8 @@
         "status": "validee",
         "sort_order": 25,
         "group": "object",
-        "linked_to_key": null,
         "nature": "bonus_malus",
+        "linked_to_key": null,
         "intrinsic_key": "investigation_passive_creature"
     },
     "entities": {
@@ -167,6 +167,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Bonus de compétence passive sur chapeau (2.2.2.4).",
             "norms_help_section_id": null,

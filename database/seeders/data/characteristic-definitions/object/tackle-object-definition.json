@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 22,
         "group": "object",
-        "linked_to_key": null,
         "nature": "bonus_malus",
+        "linked_to_key": null,
         "intrinsic_key": "tackle_creature"
     },
     "entities": {
@@ -162,6 +162,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Tacle d'équipement.",
             "norms_help_section_id": null,

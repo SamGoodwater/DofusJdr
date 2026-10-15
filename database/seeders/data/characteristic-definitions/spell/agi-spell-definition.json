@@ -8,7 +8,7 @@
         "descriptions": "Augmente ou diminue temporairement l’Agilité tant que l’effet de sort dure. Lié à l’élément Air. Sur une fiche, ce score reste en pratique entre 6 et 24 (2.2.1).",
         "icon": "air.webp",
         "icon_false": null,
-        "color": "cyan",
+        "color": "lime",
         "value_overrides": null,
         "hide_when_empty": false,
         "hide_when_false": false,
@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 74,
         "group": "spell",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "agility_creature"
     },
     "entities": {
@@ -191,6 +191,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Agilité via sort (bonus temporaire). Les malus/retraits sont convertis à puissance réduite par le service de conversion afin de préserver la bounded accuracy.",
             "norms_help_section_id": null,

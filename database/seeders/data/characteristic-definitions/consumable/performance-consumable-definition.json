@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 212,
         "group": "consumable",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "performance_creature"
     },
     "entities": {
@@ -148,6 +148,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Bonus temporaire de compétence active via sort. Même enveloppe que l’équipement (max 5), sans forgemagie.",
             "norms_help_section_id": null,

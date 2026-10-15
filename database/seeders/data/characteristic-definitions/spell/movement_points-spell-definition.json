@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 63,
         "group": "spell",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "movement_points_creature"
     },
     "entities": {
@@ -183,6 +183,7 @@
                 ]
             },
             "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(0,2+[power]-1)\",\"5\":\"max(0,3+[power]-1)\",\"16\":\"max(0,4+[power]-1)\"}",
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Retrait PM (1er rôle Excel + ajustement [power]−1).",
             "norms_help_section_id": null,

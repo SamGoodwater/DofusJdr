@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 68,
         "group": "consumable",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "dodge_movement_points_creature"
     },
     "entities": {
@@ -183,6 +183,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": [
                 {
                     "characteristic_key": "action_points_spell",

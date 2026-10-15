@@ -17,8 +17,9 @@
         "status": "validee",
         "sort_order": 1,
         "group": "creature",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -198,6 +199,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": [
                 {
                     "characteristic_key": "vitality_creature",
@@ -218,6 +220,7 @@
             ],
             "norms_description": "Points de vie. Progression exponentielle douce. Très faible = cible fragile (mage verre), très fort = tank pur.",
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         }

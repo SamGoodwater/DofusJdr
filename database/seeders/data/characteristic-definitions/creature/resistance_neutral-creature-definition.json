@@ -17,8 +17,9 @@
         "status": "validee",
         "sort_order": 7,
         "group": "creature",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -184,9 +185,11 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Résistance % neutre. Progression linéaire.",
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         },
@@ -360,9 +363,11 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Résistance relative des monstres, limitée aux paliers -100, -50, 0, 50 et 100 %.",
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         }

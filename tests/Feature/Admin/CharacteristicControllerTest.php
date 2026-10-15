@@ -554,4 +554,122 @@ class CharacteristicControllerTest extends TestCase
         $mapping->refresh();
         $this->assertNull($mapping->characteristic_id);
     }
+
+    public function test_admin_can_preview_norms_with_power_coefficients(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+
+        $response = $this->actingAsConfirmed($admin)->postJson(
+            route('admin.characteristics.norms-preview', 'dommages_spell'),
+            [
+                'norms_formula' => 'round(3*pow([level],0.633))',
+                'entity' => '*',
+                'norms_power_coefficients' => [
+                    'very_weak' => 0.5,
+                    'weak' => 0.75,
+                    'strong' => 1.3,
+                    'very_strong' => 1.7,
+                ],
+            ]
+        );
+
+        $response->assertOk();
+        $grid = $response->json('grid');
+        $this->assertIsArray($grid);
+        $this->assertEquals(3, $grid['neutral'][0]);
+        $this->assertEquals(20, $grid['neutral'][19]);
+        $this->assertEquals(2, $grid['very_weak'][0]);
+        $this->assertEquals(34, $grid['very_strong'][19]);
+    }
+
+    public function test_norms_preview_rejects_power_with_coefficients(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+
+        $response = $this->actingAsConfirmed($admin)->postJson(
+            route('admin.characteristics.norms-preview', 'dommages_spell'),
+            [
+                'norms_formula' => 'round(10+[level]+[power])',
+                'norms_power_coefficients' => [
+                    'very_weak' => 0.5,
+                    'weak' => 0.75,
+                    'strong' => 1.3,
+                    'very_strong' => 1.7,
+                ],
+            ]
+        );
+
+        $response->assertStatus(422);
+        $this->assertStringContainsString('incompatible', (string) $response->json('message'));
+    }
+
+    public function test_admin_update_persists_norms_power_coefficients_and_regenerates_grid(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        $char = Characteristic::where('key', 'dommages_spell')->first();
+        $this->assertNotNull($char);
+        $existing = \App\Models\CharacteristicSpell::query()
+            ->where('characteristic_id', $char->id)
+            ->where('entity', '*')
+            ->first();
+        $this->assertNotNull($existing);
+
+        $payload = [
+            'name' => $char->name,
+            'short_name' => $char->short_name,
+            'description' => $char->descriptions,
+            'helper' => $char->helper,
+            'icon' => $char->icon,
+            'color' => $char->color,
+            'type' => $char->type,
+            'status' => $char->status,
+            'unit' => $char->unit,
+            'sort_order' => $char->sort_order,
+            'nature' => $char->nature instanceof \BackedEnum ? $char->nature->value : $char->nature,
+            'hide_when_empty' => false,
+            'hide_when_false' => false,
+            'value_overrides' => [],
+            'entity_override_keys' => [],
+            'entities' => [
+                [
+                    'entity' => '*',
+                    'db_column' => $existing->db_column,
+                    'min' => $existing->min,
+                    'max' => $existing->max,
+                    'formula' => $existing->formula,
+                    'formula_display' => $existing->formula_display,
+                    'default_value' => $existing->default_value,
+                    'conversion_formula' => $existing->conversion_formula,
+                    'conversion_function' => $existing->conversion_function,
+                    'norms_formula' => 'round(3*pow([level],0.633))',
+                    'norms_power_coefficients' => [
+                        'very_weak' => 0.5,
+                        'weak' => 0.75,
+                        'strong' => 1.3,
+                        'very_strong' => 1.7,
+                    ],
+                    'norms_conditions' => [],
+                    'norms_description' => 'Test coefs',
+                    'norms_grid' => null,
+                ],
+            ],
+        ];
+
+        $response = $this->actingAsConfirmed($admin)
+            ->withSession($this->passwordConfirmedSession())
+            ->patch(route('admin.characteristics.update', 'dommages_spell'), $payload);
+
+        $response->assertRedirect(route('admin.characteristics.show', 'dommages_spell'));
+
+        $existing->refresh();
+        $this->assertSame('round(3*pow([level],0.633))', $existing->norms_formula);
+        $this->assertEquals([
+            'very_weak' => 0.5,
+            'weak' => 0.75,
+            'strong' => 1.3,
+            'very_strong' => 1.7,
+        ], $existing->norms_power_coefficients);
+        $this->assertEquals(3, $existing->norms_grid['neutral'][0]);
+        $this->assertEquals(20, $existing->norms_grid['neutral'][19]);
+    }
 }

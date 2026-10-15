@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 66,
         "group": "consumable",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "initiative_creature"
     },
     "entities": {
@@ -160,6 +160,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Bonus temporaire d’initiative conservé directement, sans plafond artificiel.",
             "norms_help_section_id": null,

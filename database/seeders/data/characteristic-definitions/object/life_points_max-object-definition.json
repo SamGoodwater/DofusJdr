@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 24,
         "group": "object",
-        "linked_to_key": null,
         "nature": "bonus_malus",
+        "linked_to_key": null,
         "intrinsic_key": "life_points_creature"
     },
     "entities": {
@@ -148,6 +148,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Bonus aux points de vie maximum ; la forgemagie peut encore l’augmenter selon les règles (2.2.2).",
             "norms_help_section_id": null,

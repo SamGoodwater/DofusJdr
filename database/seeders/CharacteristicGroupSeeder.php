@@ -58,6 +58,7 @@ abstract class CharacteristicGroupSeeder extends Seeder
             'conversion_sample_rows' => $row['conversion_sample_rows'] ?? null,
             'norms_grid' => $row['norms_grid'] ?? null,
             'norms_formula' => $row['norms_formula'] ?? null,
+            'norms_power_coefficients' => $row['norms_power_coefficients'] ?? null,
             'norms_conditions' => $row['norms_conditions'] ?? null,
             'norms_description' => $row['norms_description'] ?? null,
             'norms_help_section_id' => $row['norms_help_section_id'] ?? null,

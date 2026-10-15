@@ -1015,6 +1015,11 @@ class CharacteristicController extends Controller
             'entities.*.norms_grid.strong' => 'nullable|array|size:20',
             'entities.*.norms_grid.very_strong' => 'nullable|array|size:20',
             'entities.*.norms_formula' => 'nullable|string',
+            'entities.*.norms_power_coefficients' => 'nullable|array',
+            'entities.*.norms_power_coefficients.very_weak' => 'nullable|numeric',
+            'entities.*.norms_power_coefficients.weak' => 'nullable|numeric',
+            'entities.*.norms_power_coefficients.strong' => 'nullable|numeric',
+            'entities.*.norms_power_coefficients.very_strong' => 'nullable|numeric',
             'entities.*.norms_conditions' => 'nullable|array',
             'entities.*.norms_conditions.*.characteristic_key' => 'required|string|max:128',
             'entities.*.norms_conditions.*.operator' => 'required|in:>,>=,=,<=,<',
@@ -1097,7 +1102,8 @@ class CharacteristicController extends Controller
             if ($formula === '') {
                 continue;
             }
-            $errors = $this->normsGridGenerator->validateNormsFormula($formula);
+            $coefs = $this->parseNormsPowerCoefficients($ent['norms_power_coefficients'] ?? null);
+            $errors = $this->normsGridGenerator->validateNormsFormula($formula, $coefs);
             if ($errors !== []) {
                 return redirect()->back()->withErrors(['entities' => implode(' ; ', $errors)])->withInput();
             }
@@ -1410,6 +1416,7 @@ class CharacteristicController extends Controller
             'conversion_sample_rows' => $sampleRows,
             'norms_grid' => $this->parseNormsGrid($data['norms_grid'] ?? null),
             'norms_formula' => $this->parseNormsFormula($data['norms_formula'] ?? null),
+            'norms_power_coefficients' => $this->parseNormsPowerCoefficients($data['norms_power_coefficients'] ?? null),
             'norms_conditions' => ! empty($data['norms_conditions']) ? array_values($data['norms_conditions']) : null,
             'norms_description' => ($data['norms_description'] ?? null) !== '' ? ($data['norms_description'] ?? null) : null,
             'norms_help_section_id' => $this->parseNormsHelpSectionId($data['norms_help_section_id'] ?? null),
@@ -1575,15 +1582,28 @@ class CharacteristicController extends Controller
         $validated = $request->validate([
             'norms_formula' => 'required|string',
             'entity' => 'nullable|string|max:32',
+            'norms_power_coefficients' => 'nullable|array',
+            'norms_power_coefficients.very_weak' => 'nullable|numeric',
+            'norms_power_coefficients.weak' => 'nullable|numeric',
+            'norms_power_coefficients.strong' => 'nullable|numeric',
+            'norms_power_coefficients.very_strong' => 'nullable|numeric',
         ]);
         $formula = $validated['norms_formula'];
-        $errors = $this->normsGridGenerator->validateNormsFormula($formula);
+        $coefs = $this->parseNormsPowerCoefficients($validated['norms_power_coefficients'] ?? null);
+        $errors = $this->normsGridGenerator->validateNormsFormula($formula, $coefs);
         if ($errors !== []) {
             return response()->json(['message' => implode(' ; ', $errors)], 422);
         }
 
+        $characteristic = Characteristic::query()->where('key', $characteristic_key)->first();
+        $roundInt = $characteristic === null
+            || $characteristic->type === null
+            || $characteristic->type === ''
+            || $characteristic->type === 'int'
+            || $characteristic->type === 'integer';
+
         try {
-            $grid = $this->normsGridGenerator->preview($formula, [], true);
+            $grid = $this->normsGridGenerator->preview($formula, [], true, $coefs, $roundInt);
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 422);
         }
@@ -1592,6 +1612,20 @@ class CharacteristicController extends Controller
             'key' => $characteristic_key,
             'grid' => $grid,
         ]);
+    }
+
+    /**
+     * Normalise les coefficients de palier (4 clés, sans neutral).
+     *
+     * @return array{very_weak: float, weak: float, strong: float, very_strong: float}|null
+     */
+    private function parseNormsPowerCoefficients(mixed $input): ?array
+    {
+        if (! is_array($input) || $input === []) {
+            return null;
+        }
+
+        return $this->normsGridGenerator->normalizePowerCoefficients($input);
     }
 
     /**

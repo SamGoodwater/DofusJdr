@@ -17,8 +17,9 @@
         "status": "validee",
         "sort_order": 25,
         "group": "spell",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -147,6 +148,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": [
                 {
                     "characteristic_key": "action_points_spell",

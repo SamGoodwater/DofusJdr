@@ -17,8 +17,9 @@
         "status": "validee",
         "sort_order": 10,
         "group": "creature",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -154,9 +155,11 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Réserve de Wakfu (PA bonus hors tour). Progression par paliers.",
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         },
@@ -175,9 +178,11 @@
             "conversion_sample_rows": null,
             "norms_grid": null,
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": null,
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         }

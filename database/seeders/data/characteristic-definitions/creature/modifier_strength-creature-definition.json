@@ -17,8 +17,9 @@
         "status": "validee",
         "sort_order": 4,
         "group": "creature",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -191,12 +192,13 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Modificateur de Force : bonus ou malus issu du score sur la fiche, avec un plafond lié au niveau (ordre de grandeur habituel : −2 à +7).",
             "norms_help_section_id": null,
+            "limit_absolute": true,
             "labels": null,
-            "validation": null,
-            "limit_absolute": true
+            "validation": null
         },
         "monster": {
             "dofusdb_characteristic_id": null,
@@ -361,9 +363,11 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Modificateur de strength des monstres : de -2 à +10, dérivé du score 6–30.",
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         }

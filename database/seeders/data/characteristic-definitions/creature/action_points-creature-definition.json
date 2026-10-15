@@ -17,8 +17,9 @@
         "status": "validee",
         "sort_order": 1,
         "group": "creature",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -198,9 +199,11 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Points d'action par tour. Progression par paliers de 5 niveaux. Base 6, max ~12.",
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         },
@@ -381,9 +384,11 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Points d'action des monstres : 3 à 14, valeur Dofus conservée puis limitée.",
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         }

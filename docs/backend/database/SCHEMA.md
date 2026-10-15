@@ -237,6 +237,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
+    norms_power_coefficients : json
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -263,6 +264,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
+    norms_power_coefficients : json
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -289,6 +291,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
+    norms_power_coefficients : json
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -324,6 +327,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
+    norms_power_coefficients : json
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -349,6 +353,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
+    norms_power_coefficients : json
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned

@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 50,
         "group": "spell",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "resistance_neutral_creature"
     },
     "entities": {
@@ -183,6 +183,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Résistance relative temporaire par paliers Krosmoz : −100, −50, 0, 50 ou 100.",
             "norms_help_section_id": null,

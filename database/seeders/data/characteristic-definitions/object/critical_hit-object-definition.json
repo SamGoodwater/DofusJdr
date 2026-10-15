@@ -60,8 +60,8 @@
         "status": "validee",
         "sort_order": 27,
         "group": "object",
-        "linked_to_key": null,
         "nature": "bonus_malus",
+        "linked_to_key": null,
         "intrinsic_key": "critical_hit_creature"
     },
     "entities": {
@@ -238,6 +238,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Bonus critique d'équipement. Rare.",
             "norms_help_section_id": null,

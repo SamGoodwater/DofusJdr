@@ -64,7 +64,7 @@ class CharacteristicNormsControllerTest extends TestCase
         $response->assertOk();
         $response->assertJsonStructure([
             'characteristic' => ['key', 'name', 'icon', 'color'],
-            'norms' => ['grid', 'conditions', 'description', 'limits' => ['min', 'max'], 'help_section'],
+            'norms' => ['grid', 'formula', 'power_coefficients', 'conditions', 'description', 'limits' => ['min', 'max'], 'help_section'],
             'power_levels',
             'max_level',
         ]);
@@ -78,6 +78,44 @@ class CharacteristicNormsControllerTest extends TestCase
         $this->assertSame('20', $data['norms']['limits']['max']);
         $this->assertEquals(20, $data['max_level']);
         $this->assertNull($data['norms']['help_section']);
+        $this->assertNull($data['norms']['power_coefficients']);
+    }
+
+    public function test_returns_power_coefficients_when_set(): void
+    {
+        $char = Characteristic::create([
+            'key' => 'damage_spell',
+            'name' => 'Dégâts',
+            'type' => 'int',
+            'sort_order' => 1,
+            'group' => 'spell',
+        ]);
+        $coefs = [
+            'very_weak' => 0.5,
+            'weak' => 0.75,
+            'strong' => 1.3,
+            'very_strong' => 1.7,
+        ];
+        \App\Models\CharacteristicSpell::create([
+            'characteristic_id' => $char->id,
+            'entity' => '*',
+            'min' => '0',
+            'max' => '80',
+            'norms_formula' => 'round(3*pow([level],0.633))',
+            'norms_power_coefficients' => $coefs,
+            'norms_grid' => [
+                'very_weak' => array_fill(0, 20, 2),
+                'weak' => array_fill(0, 20, 2),
+                'neutral' => array_fill(0, 20, 3),
+                'strong' => array_fill(0, 20, 4),
+                'very_strong' => array_fill(0, 20, 5),
+            ],
+        ]);
+
+        $response = $this->getJson('/api/characteristics/damage_spell/norms?group=spell');
+        $response->assertOk();
+        $this->assertEquals($coefs, $response->json('norms.power_coefficients'));
+        $this->assertSame('round(3*pow([level],0.633))', $response->json('norms.formula'));
     }
 
     public function test_returns_help_section_html_when_norms_help_section_id_set(): void

@@ -60,8 +60,8 @@
         "status": "validee",
         "sort_order": 7,
         "group": "spell",
-        "linked_to_key": null,
         "nature": "descriptif",
+        "linked_to_key": null,
         "intrinsic_key": null
     },
     "entities": {
@@ -80,6 +80,7 @@
             "conversion_sample_rows": null,
             "norms_grid": null,
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Grille 5×20 non utilisée : clé de sauvegarde / carac. (texte).",
             "norms_help_section_id": null,

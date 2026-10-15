@@ -1,7 +1,7 @@
 <script setup>
 /**
  * Panneau d'édition des normes (chartes) pour une caractéristique.
- * Grille 5 puissances × 20 niveaux + formule de génération + conditions + description.
+ * Grille 5 puissances × 20 niveaux + formule de génération + coefficients de palier + conditions.
  */
 import { computed, ref, watch } from 'vue';
 import axios from 'axios';
@@ -14,6 +14,8 @@ import {
     MAX_LEVEL,
     CONDITION_OPERATORS,
     CONDITION_TARGETS,
+    DEFAULT_POWER_COEFFICIENTS,
+    POWER_COEFFICIENT_KEYS,
 } from '@/Utils/Characteristic/normsConstants';
 
 const props = defineProps({
@@ -35,14 +37,55 @@ watch(
     { immediate: true }
 );
 const hasFormula = computed(() => (localFormula.value || '').trim() !== '');
+const formulaUsesPower = computed(() => /\[power\]/i.test(localFormula.value || ''));
 const previewError = ref('');
 const previewLoading = ref(false);
+let previewTimer = null;
+
+/**
+ * Coefficients locaux (null = mode [power] / manuel sans coefs).
+ * @type {import('vue').Ref<Record<string, number>|null>}
+ */
+const localCoefficients = ref(null);
+watch(
+    () => props.modelValue.norms_power_coefficients,
+    (val) => {
+        if (!val || typeof val !== 'object') {
+            localCoefficients.value = null;
+            return;
+        }
+        const next = {};
+        POWER_COEFFICIENT_KEYS.forEach((k) => {
+            next[k] = Number(val[k]);
+        });
+        if (POWER_COEFFICIENT_KEYS.every((k) => Number.isFinite(next[k]) && next[k] > 0)) {
+            localCoefficients.value = next;
+        } else {
+            localCoefficients.value = null;
+        }
+    },
+    { immediate: true, deep: true }
+);
+
+const hasCoefficients = computed(() => localCoefficients.value !== null);
+const coefficientsDisabled = computed(() => formulaUsesPower.value);
 
 function emitFormula() {
     emit('update:modelValue', {
         ...props.modelValue,
         norms_formula: localFormula.value.trim() === '' ? null : localFormula.value,
+        norms_power_coefficients: localCoefficients.value,
     });
+    schedulePreview();
+}
+
+function emitCoefficients() {
+    emit('update:modelValue', {
+        ...props.modelValue,
+        norms_formula: localFormula.value.trim() === '' ? null : localFormula.value,
+        norms_power_coefficients: localCoefficients.value,
+    });
+    schedulePreview();
 }
 
 function clearFormula() {
@@ -51,17 +94,62 @@ function clearFormula() {
     emitFormula();
 }
 
+function applyDefaultCoefficients() {
+    if (coefficientsDisabled.value) return;
+    localCoefficients.value = { ...DEFAULT_POWER_COEFFICIENTS };
+    emitCoefficients();
+}
+
+function clearCoefficients() {
+    localCoefficients.value = null;
+    emitCoefficients();
+}
+
+/**
+ * @param {string} key
+ * @param {string|number} raw
+ */
+function updateCoefficient(key, raw) {
+    if (coefficientsDisabled.value) return;
+    const n = Number(raw);
+    if (!localCoefficients.value) {
+        localCoefficients.value = { ...DEFAULT_POWER_COEFFICIENTS };
+    }
+    localCoefficients.value = {
+        ...localCoefficients.value,
+        [key]: Number.isFinite(n) ? n : localCoefficients.value[key],
+    };
+    emitCoefficients();
+}
+
+function schedulePreview() {
+    if (previewTimer) clearTimeout(previewTimer);
+    previewTimer = setTimeout(() => {
+        previewFormula();
+    }, 400);
+}
+
 async function previewFormula() {
     previewError.value = '';
     if (!hasFormula.value || !props.characteristicKey) {
-        previewError.value = 'Formule ou clé manquante.';
+        return;
+    }
+    if (hasCoefficients.value && formulaUsesPower.value) {
+        previewError.value = 'Les coefficients sont incompatibles avec [power] dans la formule.';
         return;
     }
     previewLoading.value = true;
     try {
+        const payload = {
+            norms_formula: localFormula.value,
+            entity: props.modelValue.entity || '*',
+        };
+        if (hasCoefficients.value && !formulaUsesPower.value) {
+            payload.norms_power_coefficients = localCoefficients.value;
+        }
         const { data } = await axios.post(
             route('admin.characteristics.norms-preview', props.characteristicKey),
-            { norms_formula: localFormula.value, entity: props.modelValue.entity || '*' }
+            payload
         );
         if (data?.grid) {
             grid.value = data.grid;
@@ -235,7 +323,7 @@ const characteristicsOptions = computed(() =>
 
         <div class="space-y-2">
             <div class="flex flex-wrap items-center justify-between gap-2">
-                <label class="label text-xs py-0">Formule de génération</label>
+                <label class="label text-xs py-0">Formule (palier neutre)</label>
                 <div class="flex gap-1">
                     <Btn
                         size="xs"
@@ -255,17 +343,87 @@ const characteristicsOptions = computed(() =>
                 v-model="localFormula"
                 class="textarea textarea-bordered textarea-sm w-full font-mono text-xs"
                 rows="3"
-                placeholder='Ex. round(0.35*[dommages_spell]) ou {"characteristic":"level","1":"…"}'
+                placeholder='Ex. round(3*pow([level],0.633))'
                 @change="emitFormula"
+                @input="schedulePreview"
             />
             <p class="text-xs text-content/50">
-                Variables : <code>[level]</code>, <code>[power]</code> (−2…+2), <code>[clé]</code> (norme au même niveau/palier).
+                Une formule de <code>[level]</code> et de <code>[clé]</code> (norme au même niveau).
+                Avec des coefficients ci-dessous, la formule définit le palier <strong>neutre</strong> ;
+                les autres paliers = neutre × coef. Sans coefficients, utiliser <code>[power]</code> (−2…+2).
                 Si renseignée, la grille est calculée à l’enregistrement.
             </p>
             <p v-if="previewError" class="text-xs text-error">{{ previewError }}</p>
             <p v-if="hasFormula" class="text-xs text-warning">
                 Grille en lecture seule (générée par formule).
             </p>
+        </div>
+
+        <div class="space-y-2 rounded-lg border border-base-300 bg-base-200/30 p-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <h5 class="text-xs font-semibold text-title">Coefficients de palier</h5>
+                <div class="flex flex-wrap gap-1">
+                    <Btn
+                        size="xs"
+                        color="primary"
+                        variant="ghost"
+                        :disabled="coefficientsDisabled"
+                        @click="applyDefaultCoefficients"
+                    >
+                        Valeurs par défaut
+                    </Btn>
+                    <Btn
+                        v-if="hasCoefficients"
+                        size="xs"
+                        color="warning"
+                        variant="ghost"
+                        @click="clearCoefficients"
+                    >
+                        Sans coefficients
+                    </Btn>
+                </div>
+            </div>
+            <p v-if="coefficientsDisabled" class="text-xs text-warning">
+                La formule contient <code>[power]</code> : les coefficients sont désactivés (un seul mode).
+            </p>
+            <p v-else class="text-xs text-content/50">
+                Neutre = 1 (fixe). Sans coefficients, la formule peut utiliser <code>[power]</code> ou hériter des paliers des dépendances.
+            </p>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                <div
+                    v-for="pl in POWER_LEVELS"
+                    :key="'coef-' + pl"
+                    class="flex flex-col gap-1"
+                >
+                    <label class="text-xs font-medium flex items-center gap-1">
+                        <span
+                            class="inline-block w-2 h-2 rounded-full"
+                            :style="{ backgroundColor: POWER_COLORS[pl] }"
+                        />
+                        {{ POWER_LABELS[pl] }}
+                    </label>
+                    <input
+                        v-if="pl === 'neutral'"
+                        type="number"
+                        class="input input-xs input-bordered w-full bg-base-200"
+                        :value="1"
+                        readonly
+                        disabled
+                    />
+                    <input
+                        v-else
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        class="input input-xs input-bordered w-full"
+                        :class="{ 'bg-base-200': coefficientsDisabled }"
+                        :disabled="coefficientsDisabled"
+                        :value="localCoefficients?.[pl] ?? ''"
+                        :placeholder="String(DEFAULT_POWER_COEFFICIENTS[pl])"
+                        @change="updateCoefficient(pl, $event.target.value)"
+                    />
+                </div>
+            </div>
         </div>
 
         <div class="overflow-x-auto">

@@ -17,8 +17,9 @@
         "status": "validee",
         "sort_order": 2,
         "group": "spell",
+        "nature": "intrinsic",
         "linked_to_key": "level_creature",
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -87,6 +88,7 @@
             ],
             "norms_grid": null,
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Niveau Krosmoz 1–20, obtenu depuis le niveau minimal Dofus par division par 10 puis bornage.",
             "norms_help_section_id": null,

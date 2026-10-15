@@ -50,11 +50,13 @@ Les définitions JSON dans `database/seeders/data/characteristic-definitions/` s
 
 ### Normes générées par formule (`norms_formula`)
 
-Colonne nullable sur `characteristic_creature` / `characteristic_object` / `characteristic_spell`. Syntaxe identique aux formules runtime (expression ou table JSON `{"characteristic":"level",…}`).
+Colonne nullable sur les cinq pivots (`creature` / `object` / `spell` / `consumable` / `profile`). Syntaxe identique aux formules runtime (expression ou table JSON `{"characteristic":"level",…}`).
 
 Variables de génération : `[level]` (1–20), `[power]` (−2…+2), `[clé]` = norme de cette caractéristique au même niveau et même palier.
 
-Service : `NormsGridGenerator` (ordre topologique, rejet des cycles). Commande : `php artisan characteristics:regenerate-norms`. Après seed des pivots, `RegenerateCharacteristicNormsSeeder` régénère les grilles. Admin : champ formule + aperçu dans `NormsPanel` ; hub **Équilibrage** (`/admin/content/balance`).
+**Coefficients de palier** (`norms_power_coefficients`, JSON nullable) : `{very_weak, weak, strong, very_strong}` (neutral = 1, non stocké). Quand renseignés, la formule est évaluée **une fois par niveau au palier neutre** (`[power]=0`, dépendances lues sur `neutral`), puis chaque palier = `round(base × coef)`. Incompatible avec `[power]` dans la formule (un seul mode). Défauts admin : 0,5 / 0,75 / 1,3 / 1,7. Sans coefficients, comportement historique inchangé.
+
+Service : `NormsGridGenerator` (ordre topologique, rejet des cycles ; lit aussi consumable/profile). Commande : `php artisan characteristics:regenerate-norms`. Après seed des pivots, `RegenerateCharacteristicNormsSeeder` régénère les grilles. Admin : formule + coefficients + aperçu (debounce) dans `NormsPanel` ; hub **Équilibrage** (`/admin/content/balance`).
 
 Pour les objets, les caractéristiques dont l'aide cible un type d'équipement portent aussi `item_type_dofus_ids` :
 - amulettes : `[1]`
@@ -140,8 +142,10 @@ le type de cible, le cumul maximal et le délai global disposent désormais de d
 ### Budgets dégâts et soins (normes de sort)
 
 Les `norms_grid` de `dommages_spell`, `soin_spell`, `bouclier_spell`, `pv_temporaires_spell` et
-`vol_vie_spell` sont la **source de vérité runtime** (générées depuis `norms_formula` Excel : coef × PV,
-soin/bouclier/PV temp dérivés, vol de vie = 0,3 × dégâts). Lancement de référence à **3 PA**.
+`vol_vie_spell` sont la **source de vérité runtime**. `dommages_spell` = formule neutre
+`round(3*pow([level],0.633))` (≈1d6 au niv.1, ≈4d10 au niv.20) × coefficients de palier
+(0,5 / 0,75 / 1 / 1,3 / 1,7) ; soin/bouclier/PV temp dérivés de `[dommages_spell]` ; vol de vie = 0,3 × dégâts.
+Lancement de référence à **3 PA**.
 
 ### Conversion Dofus → Krosmoz
 

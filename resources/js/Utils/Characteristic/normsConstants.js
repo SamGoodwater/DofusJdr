@@ -32,6 +32,20 @@ export const POWER_BG_COLORS = {
 export const NEUTRAL_INDEX = 2;
 export const MAX_LEVEL = 20;
 
+/**
+ * Coefficients de palier par défaut (neutral = 1, non stocké).
+ * Utilisés quand norms_power_coefficients est renseigné : grille = formule(neutre) × coef.
+ */
+export const DEFAULT_POWER_COEFFICIENTS = {
+    very_weak: 0.5,
+    weak: 0.75,
+    strong: 1.3,
+    very_strong: 1.7,
+};
+
+/** Clés éditables (hors neutral). */
+export const POWER_COEFFICIENT_KEYS = ['very_weak', 'weak', 'strong', 'very_strong'];
+
 export const CONDITION_OPERATORS = ['>', '>=', '=', '<=', '<'];
 
 export const CONDITION_TARGETS = [

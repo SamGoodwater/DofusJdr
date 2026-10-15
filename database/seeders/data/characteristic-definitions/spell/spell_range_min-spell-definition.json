@@ -28,8 +28,9 @@
         "status": "validee",
         "sort_order": 14,
         "group": "spell",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -158,6 +159,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Portée minimale en cases, bornée à 20 pour rester jouable sur une carte Krosmoz.",
             "norms_help_section_id": null,

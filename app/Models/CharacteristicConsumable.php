@@ -28,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property array|null $conversion_sample_rows
  * @property array|null $norms_grid
  * @property string|null $norms_formula
+ * @property array|null $norms_power_coefficients Coefs paliers {very_weak, weak, strong, very_strong} (neutral=1)
  * @property array|null $norms_conditions
  * @property string|null $norms_description
  * @property int|null $norms_help_section_id
@@ -36,6 +37,33 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Characteristic $characteristic
  * @property-read Section|null $normsHelpSection
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereCharacteristicId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereConversionDofusSample($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereConversionFormula($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereConversionFunction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereConversionKrosmozSample($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereConversionSampleRows($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereDbColumn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereDefaultValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereDofusdbCharacteristicId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereEntity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereFormula($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereFormulaDisplay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereMin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereNormsConditions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereNormsDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereNormsFormula($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereNormsGrid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereNormsHelpSectionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereValueAvailable($value)
  *
  * @mixin \Eloquent
  */
@@ -68,6 +96,7 @@ class CharacteristicConsumable extends Model
         'conversion_sample_rows',
         'norms_grid',
         'norms_formula',
+        'norms_power_coefficients',
         'norms_conditions',
         'norms_description',
         'norms_help_section_id',
@@ -81,6 +110,7 @@ class CharacteristicConsumable extends Model
         'conversion_krosmoz_sample' => 'array',
         'conversion_sample_rows' => 'array',
         'norms_grid' => 'array',
+        'norms_power_coefficients' => 'array',
         'norms_conditions' => 'array',
         'value_available' => 'array',
         'norms_help_section_id' => 'integer',

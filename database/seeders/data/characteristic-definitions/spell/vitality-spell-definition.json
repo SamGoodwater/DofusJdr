@@ -8,7 +8,7 @@
         "descriptions": "Augmente ou diminue temporairement la Vitalité tant que l’effet de sort dure. Liée à l’élément Vitalité et aux points de vie. Sur une fiche, ce score reste en pratique entre 6 et 24 (2.2.1).",
         "icon": "vitality.webp",
         "icon_false": null,
-        "color": "emerald",
+        "color": "amber",
         "value_overrides": null,
         "hide_when_empty": false,
         "hide_when_false": false,
@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 77,
         "group": "spell",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "vitality_creature"
     },
     "entities": {
@@ -191,6 +191,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Vitalité via sort (bonus temporaire). Les malus/retraits sont convertis à puissance réduite par le service de conversion afin de préserver la bounded accuracy.",
             "norms_help_section_id": null,

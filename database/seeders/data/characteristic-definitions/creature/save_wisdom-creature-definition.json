@@ -17,8 +17,9 @@
         "status": "validee",
         "sort_order": 8,
         "group": "creature",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -154,12 +155,13 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Sauvegarde sagesse. Progression linéaire neutre 0→8.",
             "norms_help_section_id": null,
+            "limit_absolute": true,
             "labels": null,
-            "validation": null,
-            "limit_absolute": true
+            "validation": null
         },
         "monster": {
             "dofusdb_characteristic_id": null,
@@ -176,9 +178,11 @@
             "conversion_sample_rows": null,
             "norms_grid": null,
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": null,
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         }

@@ -17,8 +17,9 @@
         "status": "validee",
         "sort_order": 13,
         "group": "spell",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -182,6 +183,7 @@
                 ]
             },
             "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(0,2+[power]-1)\",\"7\":\"max(0,3+[power]-1)\",\"13\":\"max(0,4+[power]-1)\"}",
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Retrait PA (1er rôle Excel + ajustement [power]−1). Invocations = normes monstre.",
             "norms_help_section_id": null,

@@ -1,4 +1,5 @@
 {
+    "_schema_version": "1",
     "characteristic": {
         "key": "fixed_damage_earth_creature",
         "name": "Dommage fixe Terre",
@@ -16,8 +17,9 @@
         "status": "validee",
         "sort_order": 6,
         "group": "creature",
+        "nature": "intrinsic",
         "linked_to_key": null,
-        "nature": "intrinsic"
+        "intrinsic_key": null
     },
     "entities": {
         "*": {
@@ -197,9 +199,11 @@
                 ]
             },
             "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(0,0+[power])\",\"4\":\"max(0,1+[power])\",\"8\":\"max(0,2+[power])\",\"12\":\"max(0,4+[power])\",\"16\":\"max(0,6+[power])\",\"20\":\"max(0,8+[power])\"}",
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Dommages fixes terre. Progression linéaire modérée.",
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         },
@@ -380,9 +384,11 @@
                 ]
             },
             "norms_formula": "{\"characteristic\":\"level\",\"1\":\"max(0,0+[power])\",\"4\":\"max(0,1+[power])\",\"8\":\"max(0,2+[power])\",\"12\":\"max(0,4+[power])\",\"16\":\"max(0,6+[power])\",\"20\":\"max(0,8+[power])\"}",
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": null,
             "norms_help_section_id": null,
+            "limit_absolute": null,
             "labels": null,
             "validation": null
         }

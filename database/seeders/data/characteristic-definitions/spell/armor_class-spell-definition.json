@@ -17,8 +17,8 @@
         "status": "validee",
         "sort_order": 41,
         "group": "spell",
-        "linked_to_key": null,
         "nature": "buff_debuff",
+        "linked_to_key": null,
         "intrinsic_key": "armor_class_creature"
     },
     "entities": {
@@ -167,6 +167,7 @@
                 ]
             },
             "norms_formula": null,
+            "norms_power_coefficients": null,
             "norms_conditions": null,
             "norms_description": "Bonus CA via sort. Faible pour éviter le stacking.",
             "norms_help_section_id": null,

@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Coefficients de palier pour les chartes
+
+Sur chaque fiche caractéristique (admin), une formule de génération peut remplir automatiquement le tableau des normes (5 paliers × 20 niveaux). On peut aussi saisir des **coefficients** pour Très faible / Faible / Fort / Très fort (Neutre = 1) : la formule définit le palier neutre, les autres lignes en découlent. Les dégâts de sort (`dommages_spell`) passent à environ 1d6 au niveau 1 et 4d10 au niveau 20, avec montée rapide puis ralentissement. Soin, bouclier, PV temporaires et vol de vie suivent automatiquement.
+
 ## Octobre 2026 — UI caractéristiques unifiée (fiche joueur + panneau MJ + Barèmes)
 
 Une seule source de données pour l’aide caractéristique : l’API **card** complète descriptions, défaut et formule affichée. Côté joueur, `CharacteristicInfoPanel` remplace les anciens tooltips / panels dispersés (propriétés, kref CMS, effets, booléens). Côté MJ, `CharacteristicGmPanel` regroupe barème, calcul (avec couches), conversion et propriétés ; le bouton d’aide sépare correctement groupe et entité. L’outil **Barèmes** (menu Outils) couvre les cinq groupes, avec extras sort (dés, budget tour) quand la caractéristique s’y prête.
