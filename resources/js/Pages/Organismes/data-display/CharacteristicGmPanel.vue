@@ -1,7 +1,7 @@
 <script setup>
 /**
- * Panneau MJ d'une caractéristique : barème, calcul, conversion, propriétés.
- * Réservé à l'édition, aux aides à la création et à l'outil Barème.
+ * Panneau MJ d'une caractéristique : barème, calcul (fiche créature), conversion, propriétés.
+ * L'outil Barème n'affiche pas l'onglet Calcul (pas de runtime, doublon du tableau).
  */
 import { computed, inject, ref, toValue, watch } from "vue";
 import { usePage } from "@inertiajs/vue3";
@@ -127,6 +127,14 @@ const title = computed(
     () => card.value?.name || normsData.value?.characteristic?.name || props.characteristicKey,
 );
 
+const subtitle = computed(() => {
+    const labels = availableTabs.value.map((t) => t.label.toLowerCase());
+    if (labels.length === 0) {
+        return "Outils MJ.";
+    }
+    return `Outils MJ — ${labels.join(", ")}.`;
+});
+
 const formulaTable = computed(() => buildFormulaTableView(card.value?.formula || ""));
 
 const conversionPoints = computed(() => {
@@ -215,7 +223,7 @@ defineExpose({ reload: load });
             <div class="min-w-0">
                 <h3 class="text-lg font-bold leading-tight">{{ title }}</h3>
                 <p class="text-sm text-base-content/70">
-                    Outils MJ — barème, formule, conversion et propriétés.
+                    {{ subtitle }}
                 </p>
             </div>
             <div v-if="availableTabs.length > 1" class="tabs tabs-boxed tabs-sm">

@@ -1,7 +1,7 @@
 <script setup>
 /**
  * Rendu public d'une section CharacteristicNorms.
- * Affiche le panneau MJ unifié (barème + calcul + propriétés).
+ * Affiche le panneau MJ unifié (barème + conversion + propriétés).
  */
 import { computed } from 'vue';
 import CharacteristicGmPanel from '@/Pages/Organismes/data-display/CharacteristicGmPanel.vue';
@@ -28,7 +28,7 @@ const group = computed(() => props.settings?.group || '');
             :characteristic-key="characteristicKey"
             :group="group"
             :entity="entity"
-            :tabs="['bareme', 'calcul', 'proprietes']"
+            :tabs="['bareme', 'conversion', 'proprietes']"
         />
     </div>
 </template>

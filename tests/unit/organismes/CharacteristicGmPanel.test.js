@@ -103,6 +103,7 @@ describe('CharacteristicGmPanel', () => {
         expect(wrapper.text()).toContain('Barème');
         expect(wrapper.text()).toContain('Propriétés');
         expect(wrapper.text()).not.toContain('Calcul');
+        expect(wrapper.text()).toContain('Outils MJ — barème, propriétés.');
     });
 
     it('montre la décomposition dans Calcul si runtimeModel fourni', async () => {

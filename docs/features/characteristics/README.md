@@ -163,8 +163,8 @@ Lancement de référence à **3 PA**.
 - **Conditions** (`norms_conditions`) : décalent niveau ou palier (PA, zone, portée, LoS, fréquence, etc.). `value` accepte un nombre ou un texte court (ex. `resolution_mode_spell = auto_success`).
 - **Invocations** : mêmes normes que les monstres (pas de clé PV d’invocation dédiée).
 - Consommables objet (`life_points_restore`, `shield_points`, `temporary_life_points`) = 1 lancement équivalent.
-- Outil UI : **Outils → Barèmes de sorts** + template `spell_reference_scales` ; hub admin **Équilibrage**.
-- Conversion dés : `resources/js/Utils/dice/diceEquivalents.js`.
+- Outil UI : **Outils → Barèmes** + template `spell_reference_scales` ; hub admin **Équilibrage**. Pas d’onglet Calcul ni de tableau « extras sort » (le barème + le survol des cellules suffisent).
+- Conversion dés : `resources/js/Utils/dice/diceEquivalents.js` (infobulle des cellules du barème).
 - IA PNJ : `NpcStatGabarit` lit les mêmes normes (PV/PA/PM/CA).
 
 Les compétences actives (18 clés `*_spell`, ex. `acrobatics_spell`) sont utilisables dans les sous-effets

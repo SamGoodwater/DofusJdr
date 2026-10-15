@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Barèmes : plus d’onglet Calcul
+
+Dans l’outil **Barèmes**, l’onglet Calcul (extras sort : dés, budget tour, conversion d’une valeur) faisait doublon avec le tableau des normes, dont les cellules affichent déjà les équivalents en dés. Il est retiré. Restent Barème, Conversion (si elle existe) et Propriétés. L’onglet Calcul du panneau MJ d’une fiche créature (décomposition base / équipement / contexte) est inchangé.
+
 ## Octobre 2026 — Alertes npm (Dependabot)
 
 Les 8 failles npm (undici, braces via csso-cli, brace-expansion, postcss-selector-parser) sont corrigées : plus d’override qui clouait undici 6.28.0, minification CSS via l’API `csso` à la place de `csso-cli`, et versions patchées pour les autres. `pnpm audit` ne remonte plus de vulnérabilité. Composer n’en avait aucune.
@@ -14,7 +18,7 @@ Sur chaque fiche caractéristique (admin), une formule de génération peut remp
 
 ## Octobre 2026 — UI caractéristiques unifiée (fiche joueur + panneau MJ + Barèmes)
 
-Une seule source de données pour l’aide caractéristique : l’API **card** complète descriptions, défaut et formule affichée. Côté joueur, `CharacteristicInfoPanel` remplace les anciens tooltips / panels dispersés (propriétés, kref CMS, effets, booléens). Côté MJ, `CharacteristicGmPanel` regroupe barème, calcul (avec couches), conversion et propriétés ; le bouton d’aide sépare correctement groupe et entité. L’outil **Barèmes** (menu Outils) couvre les cinq groupes, avec extras sort (dés, budget tour) quand la caractéristique s’y prête.
+Une seule source de données pour l’aide caractéristique : l’API **card** complète descriptions, défaut et formule affichée. Côté joueur, `CharacteristicInfoPanel` remplace les anciens tooltips / panels dispersés (propriétés, kref CMS, effets, booléens). Côté MJ, `CharacteristicGmPanel` regroupe barème, calcul (avec couches, sur une fiche créature), conversion et propriétés ; le bouton d’aide sépare correctement groupe et entité. L’outil **Barèmes** (menu Outils) couvre les cinq groupes ; les dés s’affichent au survol des cellules du tableau.
 
 ## Octobre 2026 — Bonus éphémères et limites absolues
 

@@ -1,15 +1,13 @@
 <script setup>
 /**
  * Outil Barème générique : sélectionne une caractéristique de n'importe quel groupe
- * et affiche CharacteristicGmPanel. Extras sort (dés, budget tour) si pertinent.
+ * et affiche CharacteristicGmPanel (barème, conversion, propriétés).
  *
  * Mémorise filtre + caractéristique (localStorage) pour restaurer à la réouverture du modal.
  */
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import axios from "axios";
 import CharacteristicGmPanel from "@/Pages/Organismes/data-display/CharacteristicGmPanel.vue";
-import SpellScaleExtras from "@/Pages/Organismes/tools/SpellScaleExtras.vue";
-import { SPELL_SCALE_FAMILIES } from "@/Composables/tools/useSpellReferenceScales.js";
 
 const STORAGE_KEY = "krosmoz-characteristic-scales-selection";
 
@@ -115,10 +113,6 @@ const selectedItem = computed(() =>
 
 const effectiveGroup = computed(
     () => selectedGroup.value || selectedItem.value?.group || (group.value !== "all" ? group.value : ""),
-);
-
-const showSpellExtras = computed(() =>
-    SPELL_SCALE_FAMILIES.some((family) => family.key === selectedKey.value),
 );
 
 function persistSelection() {
@@ -260,10 +254,7 @@ onMounted(() => {
                     :characteristic-key="selectedKey"
                     :group="effectiveGroup"
                     entity="*"
-                />
-                <SpellScaleExtras
-                    v-if="showSpellExtras"
-                    :characteristic-key="selectedKey"
+                    :tabs="['bareme', 'conversion', 'proprietes']"
                 />
             </div>
         </div>

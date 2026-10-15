@@ -7,7 +7,7 @@
 export default {
     name: 'Barèmes',
     description:
-        'Barèmes indicatifs des caractéristiques (tous groupes), avec extras sort (dés, budget tour) quand pertinent.',
+        'Barèmes indicatifs des caractéristiques (tous groupes). Les équivalents en dés s’affichent au survol des cellules.',
     icon: 'fa-solid fa-table',
     value: 'spell_reference_scales',
     supportsAutoSave: true,

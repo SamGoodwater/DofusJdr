@@ -18,11 +18,11 @@ vi.mock('axios', () => ({
 }));
 
 vi.mock('@/Pages/Organismes/data-display/CharacteristicGmPanel.vue', () => ({
-    default: { name: 'CharacteristicGmPanel', template: '<div data-test="gm" />' },
-}));
-
-vi.mock('@/Pages/Organismes/tools/SpellScaleExtras.vue', () => ({
-    default: { name: 'SpellScaleExtras', template: '<div />' },
+    default: {
+        name: 'CharacteristicGmPanel',
+        template: '<div data-test="gm" />',
+        props: ['characteristicKey', 'group', 'entity', 'tabs'],
+    },
 }));
 
 describe('CharacteristicScalesTool — mémorisation', () => {
@@ -64,6 +64,18 @@ describe('CharacteristicScalesTool — mémorisation', () => {
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
         expect(stored.key).toBe('dommages_spell');
         expect(stored.itemGroup).toBe('spell');
+    });
+
+    it('n’ouvre pas l’onglet Calcul (le barème suffit)', async () => {
+        const wrapper = mount(CharacteristicScalesTool, {
+            props: { initialGroup: 'all', initialKey: '' },
+        });
+        await flushPromises();
+
+        const panel = wrapper.findComponent({ name: 'CharacteristicGmPanel' });
+        expect(panel.exists()).toBe(true);
+        expect(panel.props('tabs')).toEqual(['bareme', 'conversion', 'proprietes']);
+        expect(wrapper.text()).not.toContain('Extras sort');
     });
 
     it('ne restaure pas si une clé CMS est forcée', async () => {

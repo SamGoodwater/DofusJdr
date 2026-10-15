@@ -40,12 +40,12 @@
   },
   {
     "name": "SpellReferenceScalesModal",
-    "description": "SpellReferenceScalesModal Organism",
+    "description": "Modal « Barèmes » : outil générique multi-groupes.",
     "props": [
       {
         "name": "open",
         "type": "Boolean",
-        "desc": "- Contrôle l'ouverture du modal"
+        "desc": ""
       }
     ],
     "slots": [],
@@ -53,39 +53,16 @@
   },
   {
     "name": "SpellReferenceScales",
-    "description": "Compatibilité : wrap CharacteristicScalesTool (groupe sort)",
+    "description": "Compatibilité : l’ancien outil « Barèmes de sorts » délègue à l’outil générique avec présélection du groupe sort.",
     "props": [
       {
         "name": "compact",
         "type": "Boolean",
-        "desc": "- Densité réduite (section page)"
+        "desc": ""
       }
     ],
     "slots": [],
     "file": "tools/SpellReferenceScales.vue"
-  },
-  {
-    "name": "CharacteristicScalesTool",
-    "description": "Outil Barème générique multi-groupes + extras sort",
-    "props": [
-      {
-        "name": "compact",
-        "type": "Boolean",
-        "desc": "- Densité réduite"
-      },
-      {
-        "name": "initialGroup",
-        "type": "String",
-        "desc": "- Groupe initial (all|creature|object|spell|consumable|profile)"
-      },
-      {
-        "name": "initialKey",
-        "type": "String",
-        "desc": "- Clé caractéristique initiale"
-      }
-    ],
-    "slots": [],
-    "file": "tools/CharacteristicScalesTool.vue"
   },
   {
     "name": "DiceRollerModal",
@@ -99,6 +76,13 @@
     ],
     "slots": [],
     "file": "tools/DiceRollerModal.vue"
+  },
+  {
+    "name": "CharacteristicScalesTool",
+    "description": "Outil Barème générique : sélectionne une caractéristique de n'importe quel groupe et affiche CharacteristicGmPanel (barème, conversion, propriétés). Mémorise filtre + caractéristique (localStorage) pour restaurer à la réouverture du modal.",
+    "props": [],
+    "slots": [],
+    "file": "tools/CharacteristicScalesTool.vue"
   },
   {
     "name": "TanStackTable",
@@ -316,7 +300,7 @@
   },
   {
     "name": "SectionSpellReferenceScalesRead",
-    "description": "Lecture publique d’une section Barèmes de sorts.",
+    "description": "Lecture publique d’une section Barèmes (présélection sort possible).",
     "props": [],
     "slots": [],
     "file": "section/templates/spell_reference_scales/SectionSpellReferenceScalesRead.vue"
@@ -458,7 +442,7 @@
   },
   {
     "name": "SectionCharacteristicNormsRead",
-    "description": "Rendu public d'une section CharacteristicNorms. Charge les normes via l'API et affiche le NormsViewer interactif.",
+    "description": "Rendu public d'une section CharacteristicNorms. Affiche le panneau MJ unifié (barème + conversion + propriétés).",
     "props": [],
     "slots": [],
     "file": "section/templates/characteristic_norms/SectionCharacteristicNormsRead.vue"
@@ -1041,5 +1025,12 @@
     ],
     "slots": [],
     "file": "data-display/CharacteristicsCard.vue"
+  },
+  {
+    "name": "CharacteristicGmPanel",
+    "description": "Panneau MJ d'une caractéristique : barème, calcul (fiche créature), conversion, propriétés. L'outil Barème n'affiche pas l'onglet Calcul (pas de runtime, doublon du tableau).",
+    "props": [],
+    "slots": [],
+    "file": "data-display/CharacteristicGmPanel.vue"
   }
 ]
