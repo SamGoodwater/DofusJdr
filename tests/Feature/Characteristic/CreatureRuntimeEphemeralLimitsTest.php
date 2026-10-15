@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Characteristic;
 
+use App\Models\Entity\Item;
 use App\Models\Entity\Monster;
 use App\Models\Entity\Npc;
 use App\Services\Characteristic\Getter\CharacteristicGetterService;
@@ -100,6 +101,61 @@ final class CreatureRuntimeEphemeralLimitsTest extends TestCase
 
         $this->assertSame(6.0, (float) $rows['action_points_creature']['total']);
         $this->assertSame(8.0, (float) $rows['agility_creature']['total']);
+    }
+
+    public function test_composed_totals_include_item_object_bonuses(): void
+    {
+        $monster = Monster::factory()->create(['acrobatics_mastery' => 0]);
+        $creature = $monster->creature;
+        $creature->forceFill([
+            'level' => '10',
+            'agi' => '10',
+            'intel' => '10',
+            'strong' => null,
+            'ini' => null,
+        ])->save();
+
+        $service = app(CreatureRuntimeStatsService::class);
+        $before = $service->resolve($creature->fresh()->load('items'), 'monster')['levels'][0]['characteristics'];
+
+        $item = Item::factory()->create([
+            'effect' => '{"acrobatics":4,"strength":4,"initiative":3,"wakfu_recharge":2}',
+            'bonus' => null,
+            'state' => Item::STATE_PLAYABLE,
+        ]);
+        $creature->items()->attach([$item->id => ['quantity' => 1]]);
+
+        $resolved = $service->resolve($creature->fresh()->load('items'), 'monster');
+        $rows = $resolved['levels'][0]['characteristics'];
+        $vars = $resolved['levels'][0]['variables'];
+
+        $this->assertSame(4.0, (float) $rows['acrobatics_creature']['object']);
+        $this->assertSame(
+            (float) $before['acrobatics_creature']['total'] + 4.0,
+            (float) $rows['acrobatics_creature']['total']
+        );
+        $this->assertSame(4.0, (float) ($vars['acrobatics_object'] ?? 0));
+        $this->assertArrayNotHasKey('acrobatics_creature_object', $vars);
+
+        $this->assertSame(4.0, (float) $rows['strength_creature']['object']);
+        $this->assertSame(
+            (float) $before['strength_creature']['total'] + 4.0,
+            (float) $rows['strength_creature']['total']
+        );
+        $this->assertSame(4.0, (float) ($vars['strength_object'] ?? 0));
+
+        $this->assertSame(3.0, (float) $rows['initiative_creature']['object']);
+        $this->assertSame(
+            (float) $before['initiative_creature']['total'] + 3.0,
+            (float) $rows['initiative_creature']['total']
+        );
+        $this->assertSame(3.0, (float) ($vars['initiative_object'] ?? 0));
+
+        $this->assertSame(2.0, (float) ($vars['wakfu_recharge_object'] ?? 0));
+        $this->assertSame(
+            (float) $before['wakfu_reserve_creature']['total'] + 2.0,
+            (float) $rows['wakfu_reserve_creature']['total']
+        );
     }
 
     public function test_wakfu_reserve_is_clamped_via_min_max_definition(): void

@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Bonus d’équipement de nouveau dans les totaux runtime
+
+Les formules créature lisent `[strength_object]`, `[initiative_object]`, `[wakfu_recharge_object]`, etc. Après l’unification des formules (termes objet dans la formule, plus d’ajout arithmétique de repli), le runtime injectait encore `strength_creature_object`. Les placeholders manquants valaient 0 : l’équipement apparaissait dans la décomposition mais n’entrait plus dans le total. L’injection reprend les clés courtes d’agrégation.
+
 ## Octobre 2026 — Enregistrement des fiches campagne, scénario et boutique
 
 Le bouton **Enregistrer** des pages Modifier (header sheet) écrit maintenant le nom, la description et les autres champs du formulaire. Avant, un scénario ou une boutique validait la requête puis ne persistait rien ; une campagne renvoyait du JSON brut, ce qui cassait le retour Inertia.
