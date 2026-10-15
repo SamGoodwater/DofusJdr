@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Barèmes en budget ± et formules
+
+Les bonus de sort, consommable et équipement avaient déjà des bornes symétriques (−N…+N), mais le tableau n’affichait que le côté positif. Les cellules s’affichent maintenant en ±N quand c’est un budget. Environ 190 barèmes passent en formule + coefficients (comme les dégâts) ; les résistances % encore quasi vides restent manuelles.
+
 ## Octobre 2026 — Barèmes : plus d’onglet Calcul
 
 Dans l’outil **Barèmes**, l’onglet Calcul (extras sort : dés, budget tour, conversion d’une valeur) faisait doublon avec le tableau des normes, dont les cellules affichent déjà les équivalents en dés. Il est retiré. Restent Barème, Conversion (si elle existe) et Propriétés. L’onglet Calcul du panneau MJ d’une fiche créature (décomposition base / équipement / contexte) est inchangé.

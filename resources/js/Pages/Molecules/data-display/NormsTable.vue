@@ -15,6 +15,11 @@ import {
 } from '@/Utils/Characteristic/normsConstants';
 import { levelColor } from '@/Utils/Characteristic/levelColorScale';
 import { formatDiceHoverTooltip } from '@/Utils/dice/diceEquivalents.js';
+import {
+    formatSignedBudgetCell,
+    isSignedBudgetDisplay,
+    signedBudgetAriaLabel,
+} from '@/Utils/Characteristic/signedNormsDisplay.js';
 
 const props = defineProps({
     grid: { type: Object, required: true },
@@ -33,11 +38,25 @@ const levels = Array.from({ length: MAX_LEVEL }, (_, i) => i + 1);
 
 const activePowerLevel = computed(() => POWER_LEVELS[props.effectivePowerIndex]);
 const activeColIndex = computed(() => props.effectiveLevelIndex);
+const signedBudget = computed(() => isSignedBudgetDisplay(props.minNumeric, props.maxNumeric));
 
 function cellValue(powerLevel, levelIndex) {
     const row = props.grid?.[powerLevel];
     if (!row) return null;
     return row[levelIndex];
+}
+
+function displayCell(powerLevel, levelIndex) {
+    return formatSignedBudgetCell(cellValue(powerLevel, levelIndex), signedBudget.value);
+}
+
+function cellAriaLabel(lvl, powerLevel, levelIndex) {
+    return signedBudgetAriaLabel(
+        lvl,
+        POWER_LABELS[powerLevel],
+        cellValue(powerLevel, levelIndex),
+        signedBudget.value,
+    );
 }
 
 function isResolvedCell(powerLevel, levelIndex) {
@@ -129,20 +148,20 @@ function onSelectLevel(lvl) {
                             <button
                                 type="button"
                                 class="btn btn-ghost btn-xs h-7 min-h-0 w-full rounded-none px-0 font-inherit tabular-nums hover:bg-primary/15"
-                                :aria-label="`Niveau ${lvl}, ${POWER_LABELS[pl]} : ${cellValue(pl, lvlIdx)}`"
+                                :aria-label="cellAriaLabel(lvl, pl, lvlIdx)"
                                 @click="onSelectLevel(lvl)"
                             >
-                                {{ cellValue(pl, lvlIdx) }}
+                                {{ displayCell(pl, lvlIdx) }}
                             </button>
                         </Tooltip>
                         <button
                             v-else-if="cellValue(pl, lvlIdx) !== null && cellValue(pl, lvlIdx) !== undefined"
                             type="button"
                             class="btn btn-ghost btn-xs h-7 min-h-0 w-full rounded-none px-0 font-inherit tabular-nums hover:bg-primary/15"
-                            :aria-label="`Niveau ${lvl}, ${POWER_LABELS[pl]} : ${cellValue(pl, lvlIdx)}`"
+                            :aria-label="cellAriaLabel(lvl, pl, lvlIdx)"
                             @click="onSelectLevel(lvl)"
                         >
-                            {{ cellValue(pl, lvlIdx) }}
+                            {{ displayCell(pl, lvlIdx) }}
                         </button>
                         <span v-else class="inline-flex h-7 w-full items-center justify-center text-base-content/20">—</span>
                     </td>

@@ -18,6 +18,10 @@ import {
     POWER_LABELS,
     POWER_COLORS,
 } from '@/Utils/Characteristic/normsConstants';
+import {
+    formatSignedBudgetCell,
+    isSignedBudgetDisplay,
+} from '@/Utils/Characteristic/signedNormsDisplay.js';
 
 const props = defineProps({
     grid: { type: Object, required: true },
@@ -67,6 +71,10 @@ function parseNumericLimit(limit) {
 
 const minNumeric = computed(() => parseNumericLimit(props.minLimit));
 const maxNumeric = computed(() => parseNumericLimit(props.maxLimit));
+const signedBudget = computed(() => isSignedBudgetDisplay(minNumeric.value, maxNumeric.value));
+const resolvedDisplay = computed(() =>
+    formatSignedBudgetCell(resolvedValue.value, signedBudget.value),
+);
 
 const sanitizedHelpHtml = computed(() => sanitizeHtml(props.helpSectionHtml || ''));
 
@@ -124,6 +132,9 @@ const resolvedCharacteristicColor = computed(() => resolveCharacteristicUiColor(
                 <li>La ligne « <strong>Neutre</strong> » est sélectionnée par défaut. Activez des <strong>conditions</strong> (chips ci-dessous) pour décaler la lecture vers une ligne plus forte ou plus faible.</li>
                 <li>Certaines conditions décalent le <strong>niveau</strong> (colonne) au lieu de la puissance.</li>
                 <li>La cellule à l'intersection de la ligne et de la colonne actives est la <strong>valeur de référence</strong>.</li>
+                <li v-if="signedBudget">
+                    Les cases <strong>±N</strong> sont un <strong>budget</strong> : bonus +N ou malus −N selon le sort, l’objet ou le consommable.
+                </li>
             </ul>
             <div class="flex flex-wrap gap-2 mt-2">
                 <span
@@ -148,7 +159,7 @@ const resolvedCharacteristicColor = computed(() => resolveCharacteristicUiColor(
                 Puissance <strong :style="{ color: POWER_COLORS[effectivePowerLevel] }">{{ POWER_LABELS[effectivePowerLevel] }}</strong>
             </span>
             <span v-if="resolvedValue !== null" class="badge badge-lg font-bold" :style="{ backgroundColor: resolvedCharacteristicColor, color: 'white' }">
-                {{ resolvedValue }}
+                {{ resolvedDisplay }}
             </span>
         </div>
 
@@ -170,6 +181,9 @@ const resolvedCharacteristicColor = computed(() => resolveCharacteristicUiColor(
                         class="text-xs italic text-base-content/60 border-l-2 border-base-300 pl-3"
                     >
                         {{ description }}
+                    </p>
+                    <p v-if="signedBudget" class="text-xs text-base-content/60">
+                        Budget ± : la case est une magnitude ; le signe (bonus ou malus) se choisit sur le sort, l’objet ou le consommable.
                     </p>
                     <p v-if="minLimit !== null || maxLimit !== null" class="text-xs text-base-content/60">
                         Limites :
@@ -199,6 +213,7 @@ const resolvedCharacteristicColor = computed(() => resolveCharacteristicUiColor(
                     :effective-power-index="effectivePowerIndex"
                     :selected-level="selectedLevel"
                     :effective-level-index="effectiveLevelIndex"
+                    :signed-budget="signedBudget"
                 />
             </div>
         </div>

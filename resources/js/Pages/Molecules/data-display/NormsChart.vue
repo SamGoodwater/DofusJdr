@@ -9,12 +9,15 @@ import {
     POWER_COLORS,
     MAX_LEVEL,
 } from '@/Utils/Characteristic/normsConstants';
+import { formatSignedBudgetCell } from '@/Utils/Characteristic/signedNormsDisplay.js';
 
 const props = defineProps({
     grid: { type: Object, required: true },
     effectivePowerIndex: { type: Number, default: 2 },
     selectedLevel: { type: Number, default: null },
     effectiveLevelIndex: { type: Number, default: null },
+    /** Affiche les valeurs du tooltip en ±N (budget bonus/malus). */
+    signedBudget: { type: Boolean, default: false },
 });
 
 const canvasRef = ref(null);
@@ -86,12 +89,21 @@ async function createChart() {
                     ticks: { stepSize: 1 },
                 },
                 y: {
-                    title: { display: true, text: 'Valeur' },
+                    title: { display: true, text: props.signedBudget ? 'Budget (±)' : 'Valeur' },
                     beginAtZero: true,
                 },
             },
             plugins: {
                 legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+                tooltip: {
+                    callbacks: {
+                        label(ctx) {
+                            const raw = ctx.parsed?.y;
+                            const shown = formatSignedBudgetCell(raw, props.signedBudget);
+                            return `${ctx.dataset.label} : ${shown}`;
+                        },
+                    },
+                },
             },
         },
     });
@@ -100,10 +112,13 @@ async function createChart() {
 function updateChart() {
     if (!chart) return;
     chart.data.datasets = datasets.value;
+    if (chart.options?.scales?.y?.title) {
+        chart.options.scales.y.title.text = props.signedBudget ? 'Budget (±)' : 'Valeur';
+    }
     chart.update();
 }
 
-watch([datasets, () => props.effectiveLevelIndex], updateChart, { deep: true });
+watch([datasets, () => props.effectiveLevelIndex, () => props.signedBudget], updateChart, { deep: true });
 onMounted(createChart);
 onBeforeUnmount(() => { chart?.destroy(); chart = null; });
 </script>

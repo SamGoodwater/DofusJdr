@@ -13,8 +13,8 @@ Chaque ligne `characteristics` porte une **nature** indépendante du groupe :
 | --- | --- |
 | `descriptif` | Information sans formule ni lien (nom, prix, zone de sort…) |
 | `intrinsic` | Propriété de base d'une créature, d'un sort ou d'un consommable |
-| `bonus_malus` | Bonus permanent (équipement, panoplie, profil) |
-| `buff_debuff` | Bonus temporaire (sort, consommable) — UI « Buff / Débuff / Vol » |
+| `bonus_malus` | Bonus / malus permanent (équipement…) — `min = −|max|` ; barème en ±N |
+| `buff_debuff` | Buff / débuff / vol (sort, consommable) — idem budget ± |
 | `action_value` | Valeur d'action (dégâts, soin, distances…) — `min` ≥ 0 |
 
 Les natures `bonus_malus` et `buff_debuff` pointent l'intrinsèque créature via `intrinsic_characteristic_id` (clé JSON `intrinsic_key`, libellé admin « Bonus de »). Ce lien est une métadonnée (« je suis le bonus de X ») : il est interdit sur une intrinsèque, mais **toute formule peut référencer n'importe quelle clé**.
@@ -58,6 +58,8 @@ Variables de génération : `[level]` (1–20), `[power]` (−2…+2), `[clé]` 
 **Coefficients de palier** (`norms_power_coefficients`, JSON nullable) : `{very_weak, weak, strong, very_strong}` (neutral = 1, non stocké). Quand renseignés, la formule est évaluée **une fois par niveau au palier neutre** (`[power]=0`, dépendances lues sur `neutral`), puis chaque palier = `round(base × coef)`. Incompatible avec `[power]` dans la formule (un seul mode). Défauts admin : 0,5 / 0,75 / 1,3 / 1,7. Sans coefficients, comportement historique inchangé.
 
 **Bornes** : toute grille générée (régénération et aperçu) est bornée cellule par cellule au `min` / `max` de la ligne (nombre ou formule en `[level]`). Une grille ne peut donc plus dépasser une limite absolue (ex. bonus de maîtrise ≤ 6).
+
+**Budget ± (bonus / malus)** : pour les natures `buff_debuff` (sort, consommable) et `bonus_malus` (objet), le tableau stocke une magnitude ≥ 0. L’UI affiche `±N` dès que `min < 0` et `max > 0`. Les valeurs d’action (`dommages_spell`, soin, distances…) restent en positif pur (`min = 0`). Ajustement de masse : `php artisan characteristics:fit-norms-budget-formulas` (formule `round(a*pow([level],b))` + coefficients ; ignore les grilles quasi vides comme les résistances % de sort).
 
 Service : `NormsGridGenerator` (ordre topologique, rejet des cycles ; lit aussi consumable/profile). Commande : `php artisan characteristics:regenerate-norms`. Après seed des pivots, `RegenerateCharacteristicNormsSeeder` régénère les grilles. Admin : formule + coefficients + aperçu (debounce) dans `NormsPanel` ; hub **Équilibrage** (`/admin/content/balance`).
 

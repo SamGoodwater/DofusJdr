@@ -52,4 +52,42 @@ describe('NormsTable', () => {
         expect(withSix.attributes('data-content')).toContain('2d6 (=)');
         expect(withSix.attributes('data-content')).toContain('3d4 (+)');
     });
+
+    it('affiche ±N quand les bornes sont signées', () => {
+        const wrapper = mount(NormsTable, {
+            props: {
+                grid: makeGrid(3),
+                minNumeric: -5,
+                maxNumeric: 5,
+                diceTooltips: false,
+            },
+        });
+
+        const buttons = wrapper.findAll('tbody button');
+        expect(buttons.some((b) => b.text() === '±3')).toBe(true);
+        expect(buttons.some((b) => b.text() === '3')).toBe(false);
+        expect(buttons[0].attributes('aria-label')).toContain('budget ±');
+    });
+
+    it('laisse 0 tel quel en mode budget ±', () => {
+        const zeros = Array.from({ length: 20 }, () => 0);
+        const grid = {
+            very_weak: zeros,
+            weak: zeros,
+            neutral: zeros,
+            strong: zeros,
+            very_strong: zeros,
+        };
+        const wrapper = mount(NormsTable, {
+            props: {
+                grid,
+                minNumeric: -5,
+                maxNumeric: 5,
+                diceTooltips: false,
+            },
+        });
+
+        expect(wrapper.findAll('tbody button').every((b) => b.text() === '0')).toBe(true);
+        expect(wrapper.findAll('tbody button').some((b) => b.text().startsWith('±'))).toBe(false);
+    });
 });
