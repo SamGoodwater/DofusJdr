@@ -14,7 +14,7 @@ total     = permanent + éphémère
 | Couche | Source | Rôle |
 | --- | --- | --- |
 | **Formule** | `characteristic_creature.formula` | Formule **complète** : intrinsèques (mods, maîtrise…), équipement (`*_object`), consommable (`*_consumable`), sort (`*_spell`). Ex. initiative : `[modifier_intelligence_creature]+[initiative_object]+[initiative_consumable]+[initiative_spell]`. |
-| **Objets** | Somme de `items.effect` (fallback `items.bonus` plat) des équipements portés | Injectée dans les variables `*_object` (agrégée par `CreatureItemBonusAggregator`). Si une formule n'a pas de `*_object`, la couche est ajoutée en repli. |
+| **Objets** | Somme de `items.effect` (fallback `items.bonus` plat) des équipements portés | Injectée dans les variables `*_object` depuis les **clés courtes** d'agrégation (`strength` → `[strength_object]`, `wakfu_recharge` → `[wakfu_recharge_object]`). Si une formule n'a pas de `*_object`, la couche est ajoutée en repli. |
 | **Contexte** | Colonne `<db_column>_context` sur `creatures` | Nombre ou formule saisie pour ce monstre / PNJ (permanent) |
 | **Éphémère** | Termes de nature `buff_debuff` | Buffs de sort / consommable : 0 hors combat ; `resolve($creature, $entity, ['initiative_spell' => 2])` les injecte. |
 

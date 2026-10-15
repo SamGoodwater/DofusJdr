@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Bonus d’équipement de nouveau dans les totaux runtime
+
+Les formules créature lisent `[strength_object]`, `[initiative_object]`, `[wakfu_recharge_object]`, etc. Après l’unification des formules (termes objet dans la formule, plus d’ajout arithmétique de repli), le runtime injectait encore `strength_creature_object`. Les placeholders manquants valaient 0 : l’équipement apparaissait dans la décomposition mais n’entrait plus dans le total. L’injection reprend les clés courtes d’agrégation.
+
 ## Octobre 2026 — UI caractéristiques unifiée (fiche joueur + panneau MJ + Barèmes)
 
 Une seule source de données pour l’aide caractéristique : l’API **card** complète descriptions, défaut et formule affichée. Côté joueur, `CharacteristicInfoPanel` remplace les anciens tooltips / panels dispersés (propriétés, kref CMS, effets, booléens). Côté MJ, `CharacteristicGmPanel` regroupe barème, calcul (avec couches), conversion et propriétés ; le bouton d’aide sépare correctement groupe et entité. L’outil **Barèmes** (menu Outils) couvre les cinq groupes, avec extras sort (dés, budget tour) quand la caractéristique s’y prête.

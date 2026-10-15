@@ -84,7 +84,8 @@ final class CreatureRuntimeStatsService
                 $level,
                 $objectByKey,
                 $dbColumnByKey,
-                $ephemeralValues
+                $ephemeralValues,
+                $itemTotals
             );
             $levelsPayload[] = [
                 'level' => $level,
@@ -138,6 +139,7 @@ final class CreatureRuntimeStatsService
      * @param  array<string, int>  $objectByKey
      * @param  array<string, string>  $dbColumnByKey
      * @param  array<string, int|float>  $ephemeralValues
+     * @param  array<string, int>  $itemTotals  Clés courtes d'agrégation (strength, wakfu_recharge…)
      * @return array{
      *   characteristics: array<string, array<string, mixed>>,
      *   variables: array<string, float|int>,
@@ -150,7 +152,8 @@ final class CreatureRuntimeStatsService
         int $level,
         array $objectByKey,
         array $dbColumnByKey,
-        array $ephemeralValues = []
+        array $ephemeralValues = [],
+        array $itemTotals = []
     ): array {
         $variables = $this->variableMapBuilder->buildBaseMap($creature, $entity);
         $variables = $this->stripContextColumnsFromVariables($variables);
@@ -158,8 +161,10 @@ final class CreatureRuntimeStatsService
         $variables['level'] = $level;
         $variables = FormulaVariableResolver::withShortNames('creature', $variables);
 
-        foreach ($objectByKey as $key => $amount) {
-            $variables[$key.'_object'] = (float) $amount;
+        // Les formules utilisent les clés groupe objet ([strength_object], [wakfu_recharge_object]),
+        // pas les clés créature suffixées ([strength_creature_object]).
+        foreach ($itemTotals as $shortKey => $amount) {
+            $variables[$this->objectFormulaVariableKey((string) $shortKey)] = (float) $amount;
         }
 
         foreach ($this->profileMasteryResolver->resolveForCreature($creature) as $profileKey => $tier) {
@@ -702,6 +707,14 @@ final class CreatureRuntimeStatsService
         }
 
         return 0.0;
+    }
+
+    /**
+     * Clé de formule objet à partir d'une clé courte d'agrégation (`strength` → `strength_object`).
+     */
+    private function objectFormulaVariableKey(string $shortKey): string
+    {
+        return str_ends_with($shortKey, '_object') ? $shortKey : $shortKey.'_object';
     }
 
     /**
