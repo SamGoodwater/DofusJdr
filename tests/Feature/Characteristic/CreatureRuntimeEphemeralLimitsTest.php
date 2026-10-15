@@ -89,10 +89,23 @@ final class CreatureRuntimeEphemeralLimitsTest extends TestCase
         $this->assertNull(CharacteristicDefinitionQualityService::formulaDisplayIssue('{"characteristic":"level_object","1":"0"}'));
     }
 
+    public function test_base_placeholder_uses_default_value_when_column_is_empty(): void
+    {
+        $monster = Monster::factory()->create();
+        $creature = $monster->creature;
+        $creature->forceFill(['level' => '5', 'pa' => null, 'agi' => null])->save();
+
+        $rows = app(CreatureRuntimeStatsService::class)
+            ->resolve($creature->fresh(), 'monster')['levels'][0]['characteristics'];
+
+        $this->assertSame(6.0, (float) $rows['action_points_creature']['total']);
+        $this->assertSame(8.0, (float) $rows['agility_creature']['total']);
+    }
+
     public function test_wakfu_reserve_is_clamped_via_min_max_definition(): void
     {
         $getter = app(CharacteristicGetterService::class);
-        $this->assertSame(['min' => 1, 'max' => 9], $getter->getLimits('wakfu_reserve_creature', 'npc'));
+        $this->assertSame(['min' => 0, 'max' => 9], $getter->getLimits('wakfu_reserve_creature', 'npc'));
 
         $npc = Npc::factory()->create();
         $creature = $npc->creature;

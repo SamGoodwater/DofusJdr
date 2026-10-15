@@ -137,6 +137,16 @@ final class NormsGridGeneratorTest extends TestCase
         );
     }
 
+    public function test_preview_clamps_grid_to_numeric_and_level_bounds(): void
+    {
+        $grid = $this->generator->preview('[level]+[power]', [], false, null, true, 0, '[level]');
+
+        $this->assertEquals(0, $grid['very_weak'][0]);
+        $this->assertEquals(1, $grid['very_strong'][0]);
+        $this->assertEquals(20, $grid['very_strong'][19]);
+        $this->assertEquals(18, $grid['very_weak'][19]);
+    }
+
     public function test_preview_rejects_non_positive_coefficient(): void
     {
         $this->expectException(\InvalidArgumentException::class);

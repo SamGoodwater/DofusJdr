@@ -1023,7 +1023,14 @@ class CharacteristicController extends Controller
             'entities.*.norms_conditions' => 'nullable|array',
             'entities.*.norms_conditions.*.characteristic_key' => 'required|string|max:128',
             'entities.*.norms_conditions.*.operator' => 'required|in:>,>=,=,<=,<',
-            'entities.*.norms_conditions.*.value' => 'required|numeric',
+            'entities.*.norms_conditions.*.value' => [
+                'required',
+                static function (string $attribute, mixed $value, \Closure $fail): void {
+                    if (! is_int($value) && ! is_float($value) && ! (is_string($value) && mb_strlen($value) <= 128)) {
+                        $fail('La valeur de condition doit être un nombre ou un texte court (ex. auto_success).');
+                    }
+                },
+            ],
             'entities.*.norms_conditions.*.target' => 'required|in:power,level',
             'entities.*.norms_conditions.*.modifier' => 'required|integer',
             'entities.*.norms_conditions.*.comment' => 'nullable|string|max:500',
@@ -1587,6 +1594,8 @@ class CharacteristicController extends Controller
             'norms_power_coefficients.weak' => 'nullable|numeric',
             'norms_power_coefficients.strong' => 'nullable|numeric',
             'norms_power_coefficients.very_strong' => 'nullable|numeric',
+            'min' => 'nullable|max:255',
+            'max' => 'nullable|max:255',
         ]);
         $formula = $validated['norms_formula'];
         $coefs = $this->parseNormsPowerCoefficients($validated['norms_power_coefficients'] ?? null);
@@ -1603,7 +1612,15 @@ class CharacteristicController extends Controller
             || $characteristic->type === 'integer';
 
         try {
-            $grid = $this->normsGridGenerator->preview($formula, [], true, $coefs, $roundInt);
+            $grid = $this->normsGridGenerator->preview(
+                $formula,
+                [],
+                true,
+                $coefs,
+                $roundInt,
+                $validated['min'] ?? null,
+                $validated['max'] ?? null
+            );
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 422);
         }

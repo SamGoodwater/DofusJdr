@@ -648,7 +648,14 @@ class CharacteristicControllerTest extends TestCase
                         'strong' => 1.3,
                         'very_strong' => 1.7,
                     ],
-                    'norms_conditions' => [],
+                    'norms_conditions' => [[
+                        'characteristic_key' => 'resolution_mode_spell',
+                        'operator' => '=',
+                        'value' => 'auto_success',
+                        'target' => 'power',
+                        'modifier' => -1,
+                        'comment' => 'Touche automatique',
+                    ]],
                     'norms_description' => 'Test coefs',
                     'norms_grid' => null,
                 ],
@@ -671,5 +678,6 @@ class CharacteristicControllerTest extends TestCase
         ], $existing->norms_power_coefficients);
         $this->assertEquals(3, $existing->norms_grid['neutral'][0]);
         $this->assertEquals(20, $existing->norms_grid['neutral'][19]);
+        $this->assertSame('auto_success', $existing->norms_conditions[0]['value']);
     }
 }

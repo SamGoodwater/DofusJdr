@@ -80,13 +80,7 @@ final class NormsGridGenerator
             if ($row === null) {
                 continue;
             }
-            $grid = $this->evaluateFormulaToGrid(
-                (string) $row['model']->norms_formula,
-                $cache,
-                $cacheKey,
-                $this->coefficientsFromModel($row['model']),
-                $this->roundIntFromModel($row['model'])
-            );
+            $grid = $this->evaluateModelGrid($row['model'], $cache, $cacheKey);
             $row['model']->norms_grid = $grid;
             $row['model']->save();
             $cache[$cacheKey] = $grid;
@@ -128,13 +122,7 @@ final class NormsGridGenerator
                 continue;
             }
             $row = $rows[$cacheKey];
-            $grid = $this->evaluateFormulaToGrid(
-                (string) $row['model']->norms_formula,
-                $cache,
-                $cacheKey,
-                $this->coefficientsFromModel($row['model']),
-                $this->roundIntFromModel($row['model'])
-            );
+            $grid = $this->evaluateModelGrid($row['model'], $cache, $cacheKey);
             $row['model']->norms_grid = $grid;
             $row['model']->save();
             $cache[$cacheKey] = $grid;
@@ -149,6 +137,8 @@ final class NormsGridGenerator
      *
      * @param  array<string, array<string, list<int|float|null>>>  $dependencyGrids  cacheKey => grid
      * @param  array<string, float|int>|null  $coefficients  Coefs paliers (sans neutral)
+     * @param  int|float|string|null  $min  Borne basse (nombre ou formule en [level])
+     * @param  int|float|string|null  $max  Borne haute (nombre ou formule en [level])
      * @return array<string, list<int|float|null>>
      */
     public function preview(
@@ -156,7 +146,9 @@ final class NormsGridGenerator
         array $dependencyGrids = [],
         bool $includeDatabase = false,
         ?array $coefficients = null,
-        bool $roundInt = true
+        bool $roundInt = true,
+        int|float|string|null $min = null,
+        int|float|string|null $max = null
     ): array {
         // Syntaxe + coefs uniquement (pas de requêtes BDD : utilisable en test unitaire).
         $errors = $this->formulas->validateFormula($formula);
@@ -175,13 +167,88 @@ final class NormsGridGenerator
             ? array_merge($this->seedGridCache(), $dependencyGrids)
             : $dependencyGrids;
 
-        return $this->evaluateFormulaToGrid(
-            $formula,
-            $cache,
-            'preview',
-            $normalized,
-            $roundInt
+        return $this->clampGridToBounds(
+            $this->evaluateFormulaToGrid($formula, $cache, 'preview', $normalized, $roundInt),
+            $min,
+            $max
         );
+    }
+
+    /**
+     * Borne chaque cellule de la grille entre min et max (évalués par niveau ; bornes vides ignorées).
+     *
+     * @param  array<string, list<int|float|null>>  $grid
+     * @return array<string, list<int|float|null>>
+     *
+     * @example $gen->clampGridToBounds(['neutral' => [3, 14]], 0, 12) // ['neutral' => [3, 12]]
+     */
+    public function clampGridToBounds(array $grid, int|float|string|null $min, int|float|string|null $max): array
+    {
+        if (! $this->hasBound($min) && ! $this->hasBound($max)) {
+            return $grid;
+        }
+        foreach ($grid as $powerKey => $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+            foreach ($row as $index => $value) {
+                if (! is_numeric($value)) {
+                    continue;
+                }
+                $level = (int) $index + 1;
+                $low = $this->resolveBound($min, $level);
+                $high = $this->resolveBound($max, $level);
+                $clamped = (float) $value;
+                if ($low !== null && $clamped < $low) {
+                    $clamped = $low;
+                }
+                if ($high !== null && $clamped > $high) {
+                    $clamped = $high;
+                }
+                $grid[$powerKey][$index] = $clamped;
+            }
+        }
+
+        return $grid;
+    }
+
+    private function hasBound(int|float|string|null $bound): bool
+    {
+        return $bound !== null && trim((string) $bound) !== '';
+    }
+
+    private function resolveBound(int|float|string|null $bound, int $level): ?float
+    {
+        if (! $this->hasBound($bound)) {
+            return null;
+        }
+        if (is_numeric($bound)) {
+            return (float) $bound;
+        }
+        $value = $this->formulas->evaluate(
+            (string) $bound,
+            ['level' => $level],
+            SafeExpressionEvaluator::DICE_MODE_AVERAGE
+        );
+
+        return $value === null ? null : (float) $value;
+    }
+
+    /**
+     * @param  array<string, array<string, list<int|float|null>>>  $cache
+     * @return array<string, list<int|float|null>>
+     */
+    private function evaluateModelGrid(Model $model, array $cache, string $cacheKey): array
+    {
+        $grid = $this->evaluateFormulaToGrid(
+            (string) $model->getAttribute('norms_formula'),
+            $cache,
+            $cacheKey,
+            $this->coefficientsFromModel($model),
+            $this->roundIntFromModel($model)
+        );
+
+        return $this->clampGridToBounds($grid, $model->getAttribute('min'), $model->getAttribute('max'));
     }
 
     /**

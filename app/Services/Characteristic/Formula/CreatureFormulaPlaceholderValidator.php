@@ -55,6 +55,8 @@ final class CreatureFormulaPlaceholderValidator
 
         /* Variable de conversion Dofus → Krosmoz (tables JSON, etc.) */
         $allowed['d'] = true;
+        /* Valeur intrinsèque injectée par CreatureRuntimeStatsService (colonne, sinon default_value) */
+        $allowed['base'] = true;
 
         return $allowed;
     }

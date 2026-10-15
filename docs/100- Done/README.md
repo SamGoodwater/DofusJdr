@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Audit des caractéristiques
+
+Vérification de toutes les caractéristiques (formules, chartes, coefficients, bornes). Corrections : une créature sans valeur saisie (PA, Agilité…) reprend sa valeur par défaut au lieu de 0 ; les chartes générées respectent désormais le min/max (bonus de maîtrise, bonus de touche, PM) ; la distance de saut peut monter jusqu'à 13 cases ; la réserve de Wakfu peut valoir 0 ; les conditions « touche automatique » des sorts de dégâts/soin/bouclier ne bloquent plus l'enregistrement.
+
 ## Octobre 2026 — Coefficients de palier pour les chartes
 
 Sur chaque fiche caractéristique (admin), une formule de génération peut remplir automatiquement le tableau des normes (5 paliers × 20 niveaux). On peut aussi saisir des **coefficients** pour Très faible / Faible / Fort / Très fort (Neutre = 1) : la formule définit le palier neutre, les autres lignes en découlent. Les dégâts de sort (`dommages_spell`) passent à environ 1d6 au niveau 1 et 4d10 au niveau 20, avec montée rapide puis ralentissement. Soin, bouclier, PV temporaires et vol de vie suivent automatiquement.

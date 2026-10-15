@@ -143,6 +143,8 @@ async function previewFormula() {
         const payload = {
             norms_formula: localFormula.value,
             entity: props.modelValue.entity || '*',
+            min: props.modelValue.min ?? null,
+            max: props.modelValue.max ?? null,
         };
         if (hasCoefficients.value && !formulaUsesPower.value) {
             payload.norms_power_coefficients = localCoefficients.value;
@@ -507,8 +509,8 @@ const characteristicsOptions = computed(() =>
                 </select>
 
                 <input
-                    type="number"
-                    class="input input-xs input-bordered w-20"
+                    type="text"
+                    class="input input-xs input-bordered w-28"
                     v-model.number="cond.value"
                     @change="emitConditions"
                     placeholder="Valeur"

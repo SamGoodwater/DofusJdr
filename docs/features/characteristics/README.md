@@ -24,6 +24,7 @@ Les termes `buff_debuff` d'une formule créature sont **éphémères** : ils val
 ## Règles de formule et de limite (créature)
 
 - Formule **complète** : intrinsèques + `*_object` + `*_consumable` + `*_spell` (script `scripts/apply_characteristic_absolute_limits.py`, idempotent).
+- `[base]` = valeur intrinsèque de la créature : colonne renseignée, sinon `default_value` (ex. PA vides → 6). Quand la colonne porte un total explicite, `[base]` vaut 0 (le total n'est pas compté deux fois).
 - **Limite absolue** (`limit_absolute`) : mods (−2 / ⌊niv/4⌋+2, max 7 ; monstre 10), compétences et sauvegardes ±15 (monstre ±20), bonus de maîtrise 0–6. Les autres limites sont souples.
 - `formula_display` : obligatoire dès qu'une formule est renseignée. Côté créature, texte joueur abrégé, sans consommable ni sort ni clé brute ; côté objet, même table que la formule réelle.
 
@@ -55,6 +56,8 @@ Colonne nullable sur les cinq pivots (`creature` / `object` / `spell` / `consuma
 Variables de génération : `[level]` (1–20), `[power]` (−2…+2), `[clé]` = norme de cette caractéristique au même niveau et même palier.
 
 **Coefficients de palier** (`norms_power_coefficients`, JSON nullable) : `{very_weak, weak, strong, very_strong}` (neutral = 1, non stocké). Quand renseignés, la formule est évaluée **une fois par niveau au palier neutre** (`[power]=0`, dépendances lues sur `neutral`), puis chaque palier = `round(base × coef)`. Incompatible avec `[power]` dans la formule (un seul mode). Défauts admin : 0,5 / 0,75 / 1,3 / 1,7. Sans coefficients, comportement historique inchangé.
+
+**Bornes** : toute grille générée (régénération et aperçu) est bornée cellule par cellule au `min` / `max` de la ligne (nombre ou formule en `[level]`). Une grille ne peut donc plus dépasser une limite absolue (ex. bonus de maîtrise ≤ 6).
 
 Service : `NormsGridGenerator` (ordre topologique, rejet des cycles ; lit aussi consumable/profile). Commande : `php artisan characteristics:regenerate-norms`. Après seed des pivots, `RegenerateCharacteristicNormsSeeder` régénère les grilles. Admin : formule + coefficients + aperçu (debounce) dans `NormsPanel` ; hub **Équilibrage** (`/admin/content/balance`).
 
@@ -157,7 +160,7 @@ Lancement de référence à **3 PA**.
 
 - **Par tour** = cast × PA(niveau, palier) ÷ 3 — PA lus dans `action_points_creature` (`SpellActionBudgetService`).
 - **Paliers** : `weak` / `neutral` / `strong` = 3ème / 2ème / 1er rôle.
-- **Conditions** (`norms_conditions`) : décalent niveau ou palier (PA, zone, portée, LoS, fréquence, etc.).
+- **Conditions** (`norms_conditions`) : décalent niveau ou palier (PA, zone, portée, LoS, fréquence, etc.). `value` accepte un nombre ou un texte court (ex. `resolution_mode_spell = auto_success`).
 - **Invocations** : mêmes normes que les monstres (pas de clé PV d’invocation dédiée).
 - Consommables objet (`life_points_restore`, `shield_points`, `temporary_life_points`) = 1 lancement équivalent.
 - Outil UI : **Outils → Barèmes de sorts** + template `spell_reference_scales` ; hub admin **Équilibrage**.

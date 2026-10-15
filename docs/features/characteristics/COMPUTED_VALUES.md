@@ -21,7 +21,7 @@ total     = permanent + éphémère
 ### Limites absolues et limites souples
 
 - **Limite absolue** (`characteristic_creature.limit_absolute`) : `min` / `max` bornent la partie **permanente** au runtime, même si score + équipement montent plus haut. Les éphémères s'ajoutent ensuite, sans borne. Valeurs : modificateurs `-2` / `min(floor([level_creature]/4)+2, 7)` (monstre `-2` / `10`), compétences et sauvegardes `±15` (monstre `±20`), bonus de maîtrise `0` / `6`.
-- **Plafonds métier post-composition** : la réserve de Wakfu lit ses `min`/`max` (1–9) ; les invocations appliquent aussi le plafond dynamique du bonus de maîtrise.
+- **Plafonds métier post-composition** : la réserve de Wakfu lit ses `min`/`max` (0–9) ; les invocations appliquent aussi le plafond dynamique du bonus de maîtrise.
 - **Limite souple** : toutes les autres. `min` / `max` larges servent à la validation, au clamp de conversion / scrapping et à l'UI ; elles sont tenues indirectement par les limites absolues dont elles dépendent.
 - Une borne peut dépendre du niveau. Sans niveau connu (scrapping, formulaires, partage front), `getLimits` renvoie l'intervalle le plus large sur les niveaux 1 à 20.
 - Les plafonds **d'un seul terme** restent dans la formule (ex. `min([wakfu_recharge_object],3)`).

@@ -178,6 +178,8 @@ final class CreatureRuntimeStatsService
         $resolvedKeys = [];
 
         // 1) Totaux explicites (colonnes non nulles) — priorité d'affichage.
+        // La colonne porte déjà le total : [base] reste à 0 pour ne pas compter deux fois l'intrinsèque.
+        $variables['base'] = $permanentVars['base'] = 0.0;
         foreach ($dbColumnByKey as $key => $column) {
             if (! CreatureComposableColumns::isComposable($column)) {
                 continue;
@@ -241,6 +243,7 @@ final class CreatureRuntimeStatsService
                 }
 
                 $column = $dbColumnByKey[$key] ?? null;
+                $variables['base'] = $permanentVars['base'] = $this->intrinsicBaseValue($creature, $column, $def);
                 $object = (float) ($objectByKey[$key] ?? 0);
                 $contextRaw = is_string($column) ? $creature->contextBonusRaw($column) : null;
                 $context = $this->evaluateContext($contextRaw, $permanentVars);
@@ -311,6 +314,7 @@ final class CreatureRuntimeStatsService
                 continue;
             }
             $column = $dbColumnByKey[$key] ?? null;
+            $variables['base'] = $permanentVars['base'] = $this->intrinsicBaseValue($creature, $column, $def);
             $contextRaw = is_string($column) ? $creature->contextBonusRaw($column) : null;
             $context = $this->evaluateContext($contextRaw, $permanentVars);
             $base = $this->evaluateBaseFormula($key, $entity, $permanentVars) ?? 0.0;
@@ -339,6 +343,7 @@ final class CreatureRuntimeStatsService
             );
             $resolvedKeys[$key] = true;
         }
+        unset($variables['base'], $permanentVars['base']);
         $variables = FormulaVariableResolver::withShortNames('creature', $variables);
 
         $unresolved = [];
@@ -585,6 +590,26 @@ final class CreatureRuntimeStatsService
         }
 
         return $this->formulas->evaluate($formula, $variables, SafeExpressionEvaluator::DICE_MODE_MIN);
+    }
+
+    /**
+     * Valeur intrinsèque exposée à `[base]` : colonne numérique de la créature, sinon `default_value`, sinon 0.
+     *
+     * @param  array<string, mixed>|null  $def
+     *
+     * @example $this->intrinsicBaseValue($creature, 'pa', ['default_value' => '6']) // 6.0 si pa est vide
+     */
+    private function intrinsicBaseValue(Creature $creature, ?string $column, ?array $def): float
+    {
+        if (is_string($column) && $column !== '') {
+            $raw = $creature->getAttribute($column);
+            if (is_numeric($raw)) {
+                return (float) $raw;
+            }
+        }
+        $default = $def['default_value'] ?? null;
+
+        return is_numeric($default) ? (float) $default : 0.0;
     }
 
     /**
