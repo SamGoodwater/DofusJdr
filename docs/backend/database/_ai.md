@@ -14,7 +14,7 @@
 - Astuces écran de chargement : table `loading_tips` (`body`, `url` nullable, `featured`, `is_active`, `duration_seconds` 2–30 défaut 8) — admin `/admin/loading-tips` (pas Contenu)
 - Colonnes JSON/TEXT MySQL : pas de `DEFAULT` SQL (erreur 1101) ; défaut via `$attributes` Eloquent (`users.notification_channels`, `creatures.res_fixe_*`, registres de types `show_in_catalog` / `allow_scrap`).
 - Classes : visuels `breeds.symbol_full` / `symbol_bw` / `logo_male` / `logo_female` / `image_full_male` / `image_full_female` (alias `image`/`icon`) via `BreedImagePaths`.
-- `conditions.canonical_condition_id` : FK self nullable, jeton Dofus → état JDR `playable`.
+- `conditions.canonical_condition_id` : FK self nullable, jeton Dofus → état JDR `playable`. `conditions.description` : `longText`, sans max de validation.
 
 ## Liens
 

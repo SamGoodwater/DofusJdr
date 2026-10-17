@@ -237,7 +237,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
-    norms_power_coefficients : json
+    norms_power_coefficients : longtext
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -264,7 +264,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
-    norms_power_coefficients : json
+    norms_power_coefficients : longtext
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -291,7 +291,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
-    norms_power_coefficients : json
+    norms_power_coefficients : longtext
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -327,7 +327,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
-    norms_power_coefficients : json
+    norms_power_coefficients : longtext
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -353,7 +353,7 @@ erDiagram
     conversion_sample_rows : longtext
     norms_grid : longtext
     norms_formula : text
-    norms_power_coefficients : json
+    norms_power_coefficients : longtext
     norms_conditions : longtext
     norms_description : text
     norms_help_section_id : bigint(20) unsigned
@@ -412,7 +412,7 @@ erDiagram
     dofusdb_id : int(10) unsigned
     canonical_condition_id : bigint(20) unsigned
     name : varchar(255)
-    description : text
+    description : longtext
     state : varchar(255)
     read_level : tinyint(4)
     write_level : tinyint(4)

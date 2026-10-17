@@ -7,7 +7,7 @@
   {
     "path": "100- Done/README.md",
     "title": "Ce qui a été fait",
-    "description": "Les formules créature listent désormais tous leurs termes : caractéristique de base, équipement, consommable et sort. Les bonus de consommable et de sort sont **éphémères** : nuls hors combat, ils s'ajoutent sans jamais être plafonnés, ce qui prépare un futur outil de combat. Certaines caractéristiques ont une **limite absolue** sur leur partie permanente : modificateurs (max +7, +10 pour les monstres), compétences et sauvegardes (±15, ±20 pour les monstres), bonus de maîtrise (max 6). Les autres restent souples. Les formules affichées dans les infobulles sont réécrites en texte court (« mod. Int + équip. »), et la décomposition indique les effets temporaires et le plafonnement."
+    "description": "Le catalogue des traits permanents reprend les traits optionnels de Donjons & Dragons, réécrits avec les compétences, les sauvegardes et l’avantage ou le désavantage du jeu. Chacun a une icône en losange. École prédestinée n’est pas repris : le jeu n’a pas d’écoles de magie. Le trait de vitesse s’appelle Rapide, pour laisser Vif / Vive à l’initiative. Les neuf traits déjà en place (tailles, Lourd, Agile, poisons…) gardent leur texte."
   },
   {
     "path": "backend/_ai.md",
@@ -82,7 +82,7 @@
   {
     "path": "features/characteristics/COMPUTED_VALUES.md",
     "title": "Valeurs calculées des caractéristiques",
-    "description": "Une caractéristique d’entité (créature, plus tard équipement) peut être un **total explicite**"
+    "description": "Une caractéristique d’entité peut être un **total explicite**"
   },
   {
     "path": "features/characteristics/README.md",

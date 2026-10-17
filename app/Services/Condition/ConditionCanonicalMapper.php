@@ -24,12 +24,8 @@ final class ConditionCanonicalMapper
     private const ALIASES = [
         'pesanteur' => 'pesanteur',
         'gravity' => 'pesanteur',
-        'lourd' => 'pesanteur',
-        'enracine' => 'pesanteur',
-        'enracinee' => 'pesanteur',
         'immobilise' => 'pesanteur',
         'immobilisee' => 'pesanteur',
-        'indeplacable' => 'pesanteur',
         'ancre' => 'pesanteur',
         'empoisonne' => 'empoisonne',
         'empoisonnee' => 'empoisonne',

@@ -4,6 +4,18 @@
 
 Chaque créature a désormais six **DD de sauvegarde** (Force, Intelligence, Agilité, Chance, Vitalité, Sagesse) : le seuil que la cible doit atteindre quand un effet demande une save de cet élément. Formule : 10 + modificateur + bonus d’arme (jusqu’à +5, sans forgemagie) + bonus temporaires de sort ou de consommable. Affichés sous les jets de sauvegarde sur la fiche, et documentés dans les règles de caractéristiques et de lancement de sorts.
 
+## Octobre 2026 — Traits de caractère
+
+Le catalogue des traits permanents reprend les traits optionnels de Donjons & Dragons, réécrits avec les compétences, les sauvegardes et l’avantage ou le désavantage du jeu. Chacun a une icône en losange. École prédestinée n’est pas repris : le jeu n’a pas d’écoles de magie. Le trait de vitesse s’appelle Rapide, pour laisser Vif / Vive à l’initiative. Les neuf traits déjà en place (tailles, Lourd, Agile, poisons…) gardent leur texte.
+
+## Octobre 2026 — États D&D et états Dofus
+
+Le catalogue des états jouables reprend les états de D&D (À terre, Agrippé, Charmé, Épuisement, etc.) et les états Dofus utiles (Altruiste, Enraciné, Invulnérable, Pacifiste, Saoul, et les variantes). Les fiches déjà jouables ne sont pas réécrites. Les états encore en brut, issus du scrap, sont retirés. Saoul donne un désavantage aux sauvegardes, aux compétences et aux attaques à distance. Lourd empêche d’être attiré ou repoussé. Chaque état a une icône : le badge Dofus quand le fichier existe, sinon une pastille dessinée dans le même style. S’y ajoutent Intaclable (fuite automatique, ne peut pas être taclé), Intacleur (ne peut pas tacler), Terrorisé, et Résistant avec ses variantes : les dégâts concernés sont divisés par 2. Inconscient était déjà au catalogue.
+
+## Octobre 2026 — Description des états sans limite
+
+La description d’un état (Pesanteur, Empoisonné, etc.) n’est plus bloquée à 255 caractères. On peut y écrire un texte aussi long que nécessaire.
+
 ## Octobre 2026 — Barèmes en budget ± et formules
 
 Les bonus de sort, consommable et équipement avaient déjà des bornes symétriques (−N…+N), mais le tableau n’affichait que le côté positif. Les cellules s’affichent maintenant en ±N quand c’est un budget. Environ 190 barèmes passent en formule + coefficients (comme les dégâts) ; les résistances % encore quasi vides restent manuelles.

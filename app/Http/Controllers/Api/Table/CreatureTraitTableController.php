@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Gate;
  */
 class CreatureTraitTableController extends Controller
 {
+    use InterpretsEntityTableFilters;
     use InterpretsEntityTableSort;
     use PaginatesEntityTable;
 
@@ -84,14 +85,14 @@ class CreatureTraitTableController extends Controller
             });
         }
 
-        if (array_key_exists('state', $filters) && $filters['state'] !== '' && $filters['state'] !== null) {
-            $query->where('state', (string) $filters['state']);
+        if ($this->hasFilterValue($filters, 'state')) {
+            $this->applyEqualityFilter($query, 'state', $filters['state']);
         }
-        if (array_key_exists('read_level', $filters) && $filters['read_level'] !== '' && $filters['read_level'] !== null) {
-            $query->where('read_level', (int) $filters['read_level']);
+        if ($this->hasFilterValue($filters, 'read_level')) {
+            $this->applyEqualityFilter($query, 'read_level', $filters['read_level'], 'int');
         }
-        if (array_key_exists('write_level', $filters) && $filters['write_level'] !== '' && $filters['write_level'] !== null) {
-            $query->where('write_level', (int) $filters['write_level']);
+        if ($this->hasFilterValue($filters, 'write_level')) {
+            $this->applyEqualityFilter($query, 'write_level', $filters['write_level'], 'int');
         }
 
         $allowedSort = ['id', 'name', 'state', 'read_level', 'write_level', 'created_at', 'updated_at'];

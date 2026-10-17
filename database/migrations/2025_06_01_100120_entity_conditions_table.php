@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('dofusdb_id')->nullable()->unique();
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('state')->default('draft');
             $table->tinyInteger('read_level')->default(0);
             $table->tinyInteger('write_level')->default(3);

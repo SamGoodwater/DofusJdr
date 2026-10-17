@@ -32,7 +32,7 @@ return static function (array $k): array {
                     .'<li><strong>Une phrase d’identité</strong> (« ne peut pas être déplacé », « voit dans le noir »).</li>'
                     .'<li>Si ça donne une stat, reste ligne neutre créature, et ce n’est pas un duplicata d’équipement du même niveau.</li>'
                     .'<li><strong>Un monstre : 0–2 traits lisibles.</strong> Une classe : le passif suffit souvent ; le trait ne le double pas.</li>'
-                    .'<li>Avant d’en inventer un : un des neuf du catalogue suffit-il ?</li>'
+                    .'<li>Avant d’en inventer un : un trait déjà jouable suffit-il ? Pour un monstre, privilégier les neuf tags (taille, Vif, Agile, Lourd, poisons). Les traits de caractère (Abrupt, Courageux, Rapide…) sont plutôt pour un personnage.</li>'
                     .'<li>Ce n’est pas un état (Empoisonné, Étourdi…) — voir [[kref:page:creation-etats|États]].</li>'
                     .'</ol>',
             ],
@@ -52,6 +52,7 @@ return static function (array $k): array {
                     .'<li><strong>Malade</strong> — désavantage Force et Agilité.</li>'
                     .'<li><strong>Insensible aux poisons</strong> / <strong>Métaboliseur rapide</strong> — immunités ciblées.</li>'
                     .'</ul>'
+                    .'<p>S’y ajoutent des traits de caractère permanents (avantage et désavantage, jamais un état temporaire) : Abrupt, Absorbé, Agressif, Amorphe, Appliqué, Bagarreur, Brutal, Cavalier-né, Corpulent, Courageux, Désinvolte, Dur d’oreille, Engageant, Honnête, Hypermétrope, Infatigable, Insaisissable, Lent, Maigre, Malhonnête, Méfiant, Musculeux, Myope, Nyctalope, Passionné, Poli, Prudent, Sauvage, Spécialisé, Rapide, Vigoureux. Rapide est la vitesse ; Vif / Vive reste l’initiative.</p>'
                     .'<p>Pas de charte niveau × puissance : le trait ne scale pas. Un Piou 2 et un boss 18 « petite taille » ont le même trait.</p>',
             ],
             [

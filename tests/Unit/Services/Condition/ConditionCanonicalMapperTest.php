@@ -21,13 +21,27 @@ final class ConditionCanonicalMapperTest extends TestCase
         $this->assertSame($playable->id, $mapper->resolve($playable)?->id);
     }
 
-    public function test_alias_lourd_maps_to_pesanteur(): void
+    public function test_lourd_without_flags_is_not_pesanteur(): void
     {
-        $playable = $this->playable('Pesanteur');
+        $this->playable('Pesanteur');
         $raw = $this->raw('Lourd', ['dofusdb_id' => 68]);
         $mapper = new ConditionCanonicalMapper;
 
-        $this->assertSame($playable->id, $mapper->resolve($raw)?->id);
+        $this->assertNull($mapper->resolve($raw));
+    }
+
+    public function test_playable_lourd_wins_over_movement_flags(): void
+    {
+        $this->playable('Pesanteur');
+        $lourd = $this->playable('Lourd');
+        $raw = $this->raw('Lourd', [
+            'dofusdb_id' => 63,
+            'cant_be_moved' => true,
+            'cant_be_pushed' => true,
+        ]);
+        $mapper = new ConditionCanonicalMapper;
+
+        $this->assertSame($lourd->id, $mapper->resolve($raw)?->id);
     }
 
     public function test_movement_flags_map_to_pesanteur(): void

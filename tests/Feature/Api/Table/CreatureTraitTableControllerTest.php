@@ -145,6 +145,34 @@ class CreatureTraitTableControllerTest extends TestCase
     }
 
     /**
+     * Le filtre Jouable arrive en tableau (`filters[state][]`) et ne doit pas casser la liste.
+     */
+    public function test_playable_state_filter_as_array_returns_only_playable(): void
+    {
+        $user = User::factory()->create();
+        CreatureTrait::factory()->create([
+            'name' => 'Trait jouable',
+            'state' => CreatureTrait::STATE_PLAYABLE,
+            'read_level' => User::ROLE_GUEST,
+            'created_by' => $user->id,
+        ]);
+        CreatureTrait::factory()->create([
+            'name' => 'Trait brouillon',
+            'state' => CreatureTrait::STATE_DRAFT,
+            'read_level' => User::ROLE_GUEST,
+            'created_by' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->getJson('/api/tables/creature-traits?format=entities&limit=25&filters[state][]=playable');
+
+        $response->assertOk();
+        $names = array_column($response->json('entities'), 'name');
+        $this->assertContains('Trait jouable', $names);
+        $this->assertNotContains('Trait brouillon', $names);
+    }
+
+    /**
      * Test : Le format `entities` gère la pagination/limite
      */
     public function test_entities_format_respects_limit(): void

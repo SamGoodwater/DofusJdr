@@ -6,6 +6,9 @@ namespace App\Services\Condition;
 
 use App\Models\EffectSubEffect;
 use App\Models\Entity\Condition;
+use App\Models\SpellDegreeEffect;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -137,16 +140,27 @@ final class ConditionSpellCanonicalRemapper
 
     private function remapEffectParams(bool $dryRun): int
     {
-        $updated = 0;
         $conditions = Condition::query()->get()->keyBy('id');
 
-        EffectSubEffect::query()
+        return $this->remapParamsOn(EffectSubEffect::class, $dryRun, $conditions)
+            + $this->remapParamsOn(SpellDegreeEffect::class, $dryRun, $conditions);
+    }
+
+    /**
+     * @param  class-string<Model>  $modelClass
+     * @param  Collection<int, Condition>  $conditions
+     */
+    private function remapParamsOn(string $modelClass, bool $dryRun, Collection $conditions): int
+    {
+        $updated = 0;
+
+        $modelClass::query()
             ->where('params', 'like', '%condition_id%')
             ->orderBy('id')
             ->chunkById(100, function ($chunk) use ($dryRun, $conditions, &$updated): void {
                 foreach ($chunk as $pivot) {
-                    /** @var EffectSubEffect $pivot */
-                    $params = is_array($pivot->params) ? $pivot->params : [];
+                    /** @var Model $pivot */
+                    $params = is_array($pivot->getAttribute('params')) ? $pivot->getAttribute('params') : [];
                     $rawId = $params['condition_id'] ?? null;
                     if ($rawId === null || $rawId === '' || ! is_numeric($rawId)) {
                         continue;
@@ -157,7 +171,7 @@ final class ConditionSpellCanonicalRemapper
                         unset($params['condition_id']);
                         $updated++;
                         if (! $dryRun) {
-                            $pivot->params = $params;
+                            $pivot->setAttribute('params', $params);
                             $pivot->save();
                         }
 
@@ -169,7 +183,7 @@ final class ConditionSpellCanonicalRemapper
                         unset($params['condition_id']);
                         $updated++;
                         if (! $dryRun) {
-                            $pivot->params = $params;
+                            $pivot->setAttribute('params', $params);
                             $pivot->save();
                         }
 
@@ -184,7 +198,7 @@ final class ConditionSpellCanonicalRemapper
                     $params['condition_name'] = $canonical->name;
                     $updated++;
                     if (! $dryRun) {
-                        $pivot->params = $params;
+                        $pivot->setAttribute('params', $params);
                         $pivot->save();
                     }
                 }
