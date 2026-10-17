@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — DD de sauvegarde par élément
+
+Chaque créature a désormais six **DD de sauvegarde** (Force, Intelligence, Agilité, Chance, Vitalité, Sagesse) : le seuil que la cible doit atteindre quand un effet demande une save de cet élément. Formule : 10 + modificateur + bonus d’arme (jusqu’à +5, sans forgemagie) + bonus temporaires de sort ou de consommable. Affichés sous les jets de sauvegarde sur la fiche, et documentés dans les règles de caractéristiques et de lancement de sorts.
+
 ## Octobre 2026 — Barèmes en budget ± et formules
 
 Les bonus de sort, consommable et équipement avaient déjà des bornes symétriques (−N…+N), mais le tableau n’affichait que le côté positif. Les cellules s’affichent maintenant en ±N quand c’est un budget. Environ 190 barèmes passent en formule + coefficients (comme les dégâts) ; les résistances % encore quasi vides restent manuelles.

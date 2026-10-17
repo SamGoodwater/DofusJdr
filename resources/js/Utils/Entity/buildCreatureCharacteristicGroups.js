@@ -248,15 +248,15 @@ function buildModifierItems(_creature, getCompDef, runtime) {
 }
 
 /**
- * Colonnes empilées score → modificateur → sauvegarde.
+ * Colonnes empilées score → modificateur → sauvegarde → DD de sauvegarde.
  *
- * @returns {Array<{ type: 'abilityColumn', stat: string, score: Object, modifier: Object, save: Object }>}
+ * @returns {Array<{ type: 'abilityColumn', stat: string, score: Object, modifier: Object, save: Object, saveDc: Object }>}
  */
 function buildAbilityStackItems(creature, getDef, getCompDef, byDb, runtime) {
     const items = [];
 
     for (const defRow of CREATURE_ABILITY_STAT_DEFS) {
-        const { stat, modKey, saveKey, saveBonusColumn, saveLabel } = defRow;
+        const { stat, modKey, saveKey, saveDcKey, saveBonusColumn, saveLabel } = defRow;
         const scoreDef = getDef(stat);
         const scoreRaw = resolveCreatureDbValue(creature, stat, scoreDef, runtime);
         const scoreVal = scoreRaw !== null && scoreRaw !== undefined && scoreRaw !== "" ? scoreRaw : "—";
@@ -270,6 +270,12 @@ function buildAbilityStackItems(creature, getDef, getCompDef, byDb, runtime) {
             { key: saveKey, name: `Sauv. ${saveLabel}`, short_name: saveLabel };
         const fromRuntimeSave = runtimeDisplayValue(runtime, saveKey);
         const saveDisplay = fromRuntimeSave != null ? String(fromRuntimeSave) : "—";
+
+        const saveDcDef =
+            getCompDef(saveDcKey) ||
+            { key: saveDcKey, name: `DD ${saveLabel}`, short_name: `DD ${saveLabel}` };
+        const fromRuntimeSaveDc = runtimeDisplayValue(runtime, saveDcKey);
+        const saveDcDisplay = fromRuntimeSaveDc != null ? String(fromRuntimeSaveDc) : "—";
 
         items.push({
             type: "abilityColumn",
@@ -292,6 +298,18 @@ function buildAbilityStackItems(creature, getDef, getCompDef, byDb, runtime) {
                 type: "formula",
                 def: { ...saveDef, key: saveDef.key || saveKey, short_name: saveLabel, hide_when_empty: false },
                 value: saveDisplay,
+                formulaResolved: "",
+                formulaRaw: "",
+            },
+            saveDc: {
+                type: "formula",
+                def: {
+                    ...saveDcDef,
+                    key: saveDcDef.key || saveDcKey,
+                    short_name: saveDcDef.short_name || `DD ${saveLabel}`,
+                    hide_when_empty: false,
+                },
+                value: saveDcDisplay,
                 formulaResolved: "",
                 formulaRaw: "",
             },

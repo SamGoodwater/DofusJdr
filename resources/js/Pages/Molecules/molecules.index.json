@@ -3074,7 +3074,7 @@
   },
   {
     "name": "AbilityScoreStack",
-    "description": "AbilityScoreStack — Grille score → modificateur → sauvegarde par caractéristique.",
+    "description": "AbilityScoreStack — Grille score → modificateur → sauvegarde → DD par caractéristique.",
     "props": [
       {
         "name": "columns",

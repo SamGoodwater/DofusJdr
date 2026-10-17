@@ -117,4 +117,32 @@ final class CreatureRuntimeEphemeralLimitsTest extends TestCase
         $this->assertArrayHasKey('wakfu_reserve_creature', $rows);
         $this->assertSame(9.0, (float) $rows['wakfu_reserve_creature']['total']);
     }
+
+    public function test_save_dc_is_ten_plus_modifier_and_ephemeral_buffs_add(): void
+    {
+        $getter = app(CharacteristicGetterService::class);
+        $this->assertSame(['min' => -22, 'max' => 22], $getter->getLimits('save_dc_agility_creature', 'npc'));
+        $this->assertSame(['min' => -30, 'max' => 30], $getter->getLimits('save_dc_agility_creature', 'monster'));
+
+        $npc = Npc::factory()->create();
+        $creature = $npc->creature;
+        $creature->forceFill(['level' => '8', 'agi' => '14'])->save();
+
+        $service = app(CreatureRuntimeStatsService::class);
+        $rows = $service->resolve($creature->fresh(), 'npc')['levels'][0]['characteristics'];
+
+        $this->assertArrayHasKey('save_dc_agility_creature', $rows);
+        $this->assertSame(2.0, (float) $rows['modifier_agility_creature']['total']);
+        $this->assertSame(12.0, (float) $rows['save_dc_agility_creature']['total']);
+        $this->assertSame(12.0, (float) $rows['save_dc_agility_creature']['permanent']);
+
+        $buffed = $service->resolve($creature->fresh(), 'npc', [
+            'save_dc_agility_spell' => 3,
+            'save_dc_agility_consumable' => 1,
+        ])['levels'][0]['characteristics'];
+
+        $this->assertSame(12.0, (float) $buffed['save_dc_agility_creature']['permanent']);
+        $this->assertSame(4.0, (float) $buffed['save_dc_agility_creature']['ephemeral']);
+        $this->assertSame(16.0, (float) $buffed['save_dc_agility_creature']['total']);
+    }
 }

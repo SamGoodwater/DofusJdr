@@ -174,6 +174,12 @@ describe("buildCreatureCharacteristicGroups", () => {
                     save_chance_creature: { total: 0 },
                     save_vitality_creature: { total: 1 },
                     save_wisdom_creature: { total: 0 },
+                    save_dc_strength_creature: { total: 12 },
+                    save_dc_intelligence_creature: { total: 10 },
+                    save_dc_agility_creature: { total: 11 },
+                    save_dc_chance_creature: { total: 10 },
+                    save_dc_vitality_creature: { total: 11 },
+                    save_dc_wisdom_creature: { total: 10 },
                     armor_class_creature: { total: 11 },
                     wakfu_reserve_creature: { total: 3 },
                 },
@@ -231,13 +237,26 @@ describe("buildCreatureCharacteristicGroups", () => {
     });
 
     it("mode full expose Combat puis Caractéristiques (abilityStack)", () => {
-        const groups = buildCreatureCharacteristicGroups(creature, { mode: "full", byDbColumn, runtime });
+        const groups = buildCreatureCharacteristicGroups(creature, {
+            mode: "full",
+            byDbColumn,
+            byComputedKey: {
+                save_dc_strength_creature: {
+                    key: "save_dc_strength_creature",
+                    short_name: "DD For",
+                },
+            },
+            runtime,
+        });
         expect(groups[0].title).toBe("Combat");
         expect(groups[1].title).toBe("Caractéristiques");
         expect(groups[1].kind).toBe("abilityStack");
         expect(groups[1].characteristics).toHaveLength(6);
         expect(groups[1].characteristics[0].type).toBe("abilityColumn");
         expect(groups[1].characteristics[0].modifier.value).toMatch(/^[+-]?\d+/);
+        expect(groups[1].characteristics[0].saveDc).toBeTruthy();
+        expect(groups[1].characteristics[0].saveDc.value).toBe("12");
+        expect(groups[1].characteristics[0].saveDc.def.key).toBe("save_dc_strength_creature");
     });
 
     it("résistances : masque 0 % et libelle les paliers", () => {

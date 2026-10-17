@@ -35,7 +35,7 @@ export const CREATURE_CHARACTERISTIC_COMBAT_COMPUTED_KEYS = Object.freeze([
 export const CREATURE_CHARACTERISTIC_SUMMARY_KEYS = CREATURE_CHARACTERISTIC_SUMMARY_COMBAT_KEYS;
 
 /**
- * Ordre des scores / mods / sauvegardes (colonnes empilées).
+ * Ordre des scores / mods / sauvegardes / DD (colonnes empilées).
  * @type {readonly string[]}
  */
 export const CREATURE_ABILITY_STAT_ORDER = Object.freeze([
@@ -52,6 +52,7 @@ export const CREATURE_ABILITY_STAT_ORDER = Object.freeze([
  * @property {string} stat - Colonne score (`strong`, …)
  * @property {string} modKey - Clé computed modificateur
  * @property {string} saveKey - Clé computed sauvegarde
+ * @property {string} saveDcKey - Clé computed DD de sauvegarde (lanceur)
  * @property {string} saveBonusColumn - Colonne bonus sauvegarde
  * @property {string} saveMasteryColumn - Colonne maîtrise sauvegarde
  * @property {string} saveLabel - Libellé court
@@ -63,6 +64,7 @@ export const CREATURE_ABILITY_STAT_DEFS = Object.freeze([
         stat: "strong",
         modKey: "modifier_strength_creature",
         saveKey: "save_strength_creature",
+        saveDcKey: "save_dc_strength_creature",
         saveBonusColumn: "save_strength_bonus",
         saveMasteryColumn: "save_strength_mastery",
         saveLabel: "For",
@@ -71,6 +73,7 @@ export const CREATURE_ABILITY_STAT_DEFS = Object.freeze([
         stat: "intel",
         modKey: "modifier_intelligence_creature",
         saveKey: "save_intelligence_creature",
+        saveDcKey: "save_dc_intelligence_creature",
         saveBonusColumn: "save_intelligence_bonus",
         saveMasteryColumn: "save_intelligence_mastery",
         saveLabel: "Int",
@@ -79,6 +82,7 @@ export const CREATURE_ABILITY_STAT_DEFS = Object.freeze([
         stat: "agi",
         modKey: "modifier_agility_creature",
         saveKey: "save_agility_creature",
+        saveDcKey: "save_dc_agility_creature",
         saveBonusColumn: "save_agility_bonus",
         saveMasteryColumn: "save_agility_mastery",
         saveLabel: "Agi",
@@ -87,6 +91,7 @@ export const CREATURE_ABILITY_STAT_DEFS = Object.freeze([
         stat: "chance",
         modKey: "modifier_chance_creature",
         saveKey: "save_chance_creature",
+        saveDcKey: "save_dc_chance_creature",
         saveBonusColumn: "save_chance_bonus",
         saveMasteryColumn: "save_chance_mastery",
         saveLabel: "Cha",
@@ -95,6 +100,7 @@ export const CREATURE_ABILITY_STAT_DEFS = Object.freeze([
         stat: "vitality",
         modKey: "modifier_vitality_creature",
         saveKey: "save_vitality_creature",
+        saveDcKey: "save_dc_vitality_creature",
         saveBonusColumn: "save_vitality_bonus",
         saveMasteryColumn: "save_vitality_mastery",
         saveLabel: "Vit",
@@ -103,6 +109,7 @@ export const CREATURE_ABILITY_STAT_DEFS = Object.freeze([
         stat: "sagesse",
         modKey: "modifier_wisdom_creature",
         saveKey: "save_wisdom_creature",
+        saveDcKey: "save_dc_wisdom_creature",
         saveBonusColumn: "save_wisdom_bonus",
         saveMasteryColumn: "save_wisdom_mastery",
         saveLabel: "Sag",

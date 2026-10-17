@@ -105,7 +105,7 @@ Résumé Minimal (`mode: summary`) :
 1. **Modificateurs** des 6 stats (mis en avant) ;
 2. Combat : `pa`, `pm`, `life`, `ca`, `po`, `ini`, `invocation`.
 
-Le groupe **Caractéristiques** empile par colonne : score → modificateur → sauvegarde
+Le groupe **Caractéristiques** empile par colonne : score → modificateur → sauvegarde → DD de sauvegarde
 (`AbilityScoreStack.vue`). Les valeurs DB nulles sont résolues via le runtime
 (formule complète + contexte) ; la CA utilise `10+[modifier_vitality_creature]+[armor_class_object]+…`.
 

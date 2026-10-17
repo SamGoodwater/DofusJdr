@@ -1,12 +1,12 @@
 <script setup>
 /**
- * AbilityScoreStack — Grille score → modificateur → sauvegarde par caractéristique.
+ * AbilityScoreStack — Grille score → modificateur → sauvegarde → DD par caractéristique.
  *
  * @description
  * Affiche une colonne par stat (For, Int, …) : score en haut, modificateur mis en avant,
- * sauvegarde en bas. Réutilise CharacteristicProperty pour icônes / popover.
+ * sauvegarde puis DD de sauvegarde en bas. Réutilise CharacteristicProperty pour icônes / popover.
  *
- * @props {Array<{stat: string, score: Object, modifier: Object, save: Object}>} columns
+ * @props {Array<{stat: string, score: Object, modifier: Object, save: Object, saveDc?: Object}>} columns
  * @props {number|null} [levelEffective]
  * @props {'icon'|'labeled'|'spacious'} [density]
  * @props {Object|null} [runtime]
@@ -107,7 +107,7 @@ function formulaViewModel(item) {
 </script>
 
 <template>
-    <div :class="gridClass" role="list" aria-label="Scores, modificateurs et sauvegardes">
+    <div :class="gridClass" role="list" aria-label="Scores, modificateurs, sauvegardes et DD">
         <div
             v-for="col in list"
             :key="col.stat"
@@ -137,6 +137,16 @@ function formulaViewModel(item) {
             <CharacteristicProperty
                 v-if="col.save"
                 :view-model="formulaViewModel(col.save)"
+                :density="propertyDensity"
+                :layout="CHARACTERISTIC_PROPERTY_LAYOUT.inline"
+                :badge="CHARACTERISTIC_PROPERTY_BADGE.none"
+                size="sm"
+                :prefer-decomposition-popover="useDecompositionPopover"
+                class="opacity-90 text-[0.9em]"
+            />
+            <CharacteristicProperty
+                v-if="col.saveDc"
+                :view-model="formulaViewModel(col.saveDc)"
                 :density="propertyDensity"
                 :layout="CHARACTERISTIC_PROPERTY_LAYOUT.inline"
                 :badge="CHARACTERISTIC_PROPERTY_BADGE.none"
