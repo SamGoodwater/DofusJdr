@@ -134,9 +134,12 @@ class ScenarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateScenarioRequest $request, Scenario $scenario)
+    public function update(UpdateScenarioRequest $request, Scenario $scenario): RedirectResponse
     {
-        //
+        $this->authorize('update', $scenario);
+        $scenario->update($request->validated());
+
+        return back()->with('success', 'Scénario mis à jour avec succès.');
     }
 
     /**

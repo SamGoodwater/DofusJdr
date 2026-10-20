@@ -112,7 +112,7 @@ La restauration et la suppression définitive (`restore`, `forceDelete`) sont r�
 
 ## Backend (CRUD)
 
-- Un contrôleur web par entité : `app/Http/Controllers/Entity/<Type>Controller.php` (ex. `SpellController`, `ItemController`, `MonsterController`). Pattern : `index`/`show` publics, `create`/`store`/`edit`/`update`/`destroy` sous `auth`, plus des routes relationnelles (ex. sorts d'une classe).
+- Un contrôleur web par entité : `app/Http/Controllers/Entity/<Type>Controller.php` (ex. `SpellController`, `ItemController`, `MonsterController`). Pattern : `index`/`show` publics, `create`/`store`/`edit`/`update`/`destroy` sous `auth`, plus des routes relationnelles (ex. sorts d'une classe). L’enregistrement sheet Inertia (`EntityEditForm` → `PATCH …/update`) persiste les champs validés pour les campagnes, scénarios et boutiques (`back()`), comme pour les objets / consommables.
 - Validation : Form Requests dédiées dans `app/Http/Requests/Entity/` (une par action).
 - Transformation de sortie : `app/Http/Resources/Entity/`.
 - Lecture en table : `app/Http/Controllers/Api/<Type>TableController.php` (datasets TanStack server-side), changement d'état via `EntityStateController`.

@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Enregistrement des fiches campagne, scénario et boutique
+
+Le bouton **Enregistrer** des pages Modifier (header sheet) écrit maintenant le nom, la description et les autres champs du formulaire. Avant, un scénario ou une boutique validait la requête puis ne persistait rien ; une campagne renvoyait du JSON brut, ce qui cassait le retour Inertia.
+
 ## Octobre 2026 — DD de sauvegarde par élément
 
 Chaque créature a désormais six **DD de sauvegarde** (Force, Intelligence, Agilité, Chance, Vitalité, Sagesse) : le seuil que la cible doit atteindre quand un effet demande une save de cet élément. Formule : 10 + modificateur + bonus d’arme (jusqu’à +5, sans forgemagie) + bonus temporaires de sort ou de consommable. Affichés sous les jets de sauvegarde sur la fiche, et documentés dans les règles de caractéristiques et de lancement de sorts.

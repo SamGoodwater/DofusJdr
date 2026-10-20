@@ -34,6 +34,52 @@ class ShopControllerTest extends TestCase
     }
 
     /**
+     * Test : Un admin peut modifier les champs d'une boutique (enregistrement sheet).
+     */
+    public function test_admin_can_update_shop_metadata(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        $shop = Shop::factory()->create([
+            'name' => 'Boutique originale',
+            'description' => 'Ancien texte',
+            'location' => 'Astrub',
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->from(route('entities.shops.edit', $shop))
+            ->patch(route('entities.shops.update', $shop), [
+                'name' => 'Boutique corrigée',
+                'description' => 'Nouveau texte',
+                'location' => 'Bonta',
+            ]);
+
+        $response->assertRedirect();
+        $fresh = $shop->fresh();
+        $this->assertSame('Boutique corrigée', $fresh->name);
+        $this->assertSame('Nouveau texte', $fresh->description);
+        $this->assertSame('Bonta', $fresh->location);
+    }
+
+    /**
+     * Test : Un joueur ne peut pas modifier une boutique (AdminMutationsOnly).
+     */
+    public function test_player_cannot_update_shop_metadata(): void
+    {
+        $player = User::factory()->create(['role' => User::ROLE_PLAYER]);
+        $shop = Shop::factory()->create([
+            'name' => 'Boutique verrouillée',
+        ]);
+
+        $response = $this->actingAs($player)
+            ->patch(route('entities.shops.update', $shop), [
+                'name' => 'Tentative joueur',
+            ]);
+
+        $response->assertForbidden();
+        $this->assertSame('Boutique verrouillée', $shop->fresh()->name);
+    }
+
+    /**
      * Test : Un admin peut ajouter des items à une hotel de vente avec prix/quantité/commentaire
      */
     public function test_admin_can_add_items_to_shop_with_pivot_data(): void

@@ -179,11 +179,14 @@ class CampaignController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCampaignRequest $request, Campaign $campaign)
+    public function update(UpdateCampaignRequest $request, Campaign $campaign): RedirectResponse|JsonResponse
     {
         $this->authorize('update', $campaign);
-        $data = $request->validated();
-        $campaign->update($data);
+        $campaign->update($request->validated());
+
+        if ($request->header('X-Inertia')) {
+            return back()->with('success', 'Campagne mise à jour avec succès.');
+        }
 
         return response()->json($campaign);
     }

@@ -125,9 +125,12 @@ class ShopController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateShopRequest $request, Shop $shop)
+    public function update(UpdateShopRequest $request, Shop $shop): RedirectResponse
     {
-        //
+        $this->authorize('update', $shop);
+        $shop->update($request->validated());
+
+        return back()->with('success', 'Boutique mise à jour avec succès.');
     }
 
     /**
