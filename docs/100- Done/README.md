@@ -10,11 +10,11 @@ Le raccourci vers la fiche du jeu (DofusDB) est de nouveau dans le menu d’opti
 
 ## Octobre 2026 — L’auteur d’un sort peut enregistrer ses degrés
 
-Un auteur (même simple utilisateur) qui a le droit de modifier sa fiche peut aussi enregistrer les degrés et effets. Avant, l’API exigeait le rôle MJ : l’éditeur s’ouvrait, mais le bouton Enregistrer échouait dès qu’un degré était modifié.
+Qui peut modifier un sort peut aussi enregistrer ses degrés et ses effets. L’éditeur s’ouvrait déjà, mais Enregistrer échouait dès qu’on touchait un degré — sauf pour un meneur.
 
 ## Octobre 2026 — Enregistrement d’un sort ne perd plus les dégâts chiffrés
 
-Sur les sorts venus de l’ancien modèle, certains effets stockent encore les dégâts en dés ou en min–max plutôt qu’en formule. Un enregistrement (même pour changer seulement le coût PA ou le niveau d’un degré) renvoyait les effets sans ces chiffres : ils disparaissaient de la fiche. L’enregistrement renvoie maintenant ces valeurs telles quelles.
+On peut enregistrer un sort (coût, niveau d’un degré…) sans perdre les dégâts encore écrits en dés ou en fourchette. Avant, ces chiffres disparaissaient de la fiche.
 
 ## Octobre 2026 — Droits de lecture après une maj DofusDB
 
@@ -24,13 +24,13 @@ Rétablir la version d’avant une actualisation DofusDB (ou une conversion IA) 
 
 Créer un PNJ ou un monstre vide ne force plus les résistances fixes à zéro. Ces champs restent vides : l’équipement et les formules s’ajoutent comme pour les autres caractéristiques. Un zéro écrit à la main reste un total explicite.
 
-## Octobre 2026 — Bonus d’équipement de nouveau dans les totaux runtime
+## Octobre 2026 — L’équipement compte de nouveau dans les totaux
 
-Les formules créature lisent `[strength_object]`, `[initiative_object]`, `[wakfu_recharge_object]`, etc. Après l’unification des formules (termes objet dans la formule, plus d’ajout arithmétique de repli), le runtime injectait encore `strength_creature_object`. Les placeholders manquants valaient 0 : l’équipement apparaissait dans la décomposition mais n’entrait plus dans le total. L’injection reprend les clés courtes d’agrégation.
+Les bonus d’équipement apparaissaient dans le détail d’une caractéristique, mais n’entraient plus dans le total. Ils sont de nouveau additionnés, comme le reste.
 
 ## Octobre 2026 — Enregistrement des fiches campagne, scénario et boutique
 
-Le bouton **Enregistrer** des pages Modifier (header sheet) écrit maintenant le nom, la description et les autres champs du formulaire. Avant, un scénario ou une boutique validait la requête puis ne persistait rien ; une campagne renvoyait du JSON brut, ce qui cassait le retour Inertia.
+Enregistrer une campagne, un scénario ou une boutique écrit bien le nom, la description et les autres champs. Avant, le bouton affichait un succès sans rien garder, ou cassait le retour vers la fiche.
 
 ## Octobre 2026 — Sorts de classe et édition en modal
 
@@ -39,6 +39,10 @@ Sur la fiche d’une classe, les sorts s’affichent en cartes de même largeur,
 ## Octobre 2026 — Le Crâ est jouable
 
 La classe Crâ peut se jouer : ses 12 choix de sorts (les quatre voies et les sorts généraux de la fiche) sont sur la classe, ainsi que le passif Flèche guidée par le Wakfu. Une flèche imprégnée contourne un obstacle, une fois entre deux repos longs, puis une fois entre deux repos courts à partir du niveau 10. Chaque sort du kit a une icône, reprise de DofusDB quand le sort existe.
+
+## Octobre 2026 — Mécanique de classe
+
+Sur la fiche d’une classe, un texte peut raconter sa mécanique signature — Pile ou Face chez le Féca, par exemple — juste avant les sorts. S’il n’y a rien à dire, le bloc reste masqué.
 
 ## Octobre 2026 — DD de sauvegarde par élément
 
@@ -54,19 +58,19 @@ Le catalogue des états jouables reprend les états de D&D (À terre, Agrippé, 
 
 ## Octobre 2026 — Description des états sans limite
 
-La description d’un état (Pesanteur, Empoisonné, etc.) n’est plus bloquée à 255 caractères. On peut y écrire un texte aussi long que nécessaire.
+La description d’un état (Pesanteur, Empoisonné, etc.) n’est plus coupée trop court. On peut y écrire un texte aussi long que nécessaire.
 
 ## Octobre 2026 — Barèmes en budget ± et formules
 
-Les bonus de sort, consommable et équipement avaient déjà des bornes symétriques (−N…+N), mais le tableau n’affichait que le côté positif. Les cellules s’affichent maintenant en ±N quand c’est un budget. Environ 190 barèmes passent en formule + coefficients (comme les dégâts) ; les résistances % encore quasi vides restent manuelles.
+Les bonus de sort, consommable et équipement avaient déjà des bornes des deux côtés, mais le tableau n’affichait que le positif. Les cellules s’affichent maintenant en plus ou moins quand c’est un budget. La plupart des barèmes passent en formule (comme les dégâts) ; les résistances encore quasi vides restent manuelles.
 
 ## Octobre 2026 — Barèmes : plus d’onglet Calcul
 
 Dans l’outil **Barèmes**, l’onglet Calcul (extras sort : dés, budget tour, conversion d’une valeur) faisait doublon avec le tableau des normes, dont les cellules affichent déjà les équivalents en dés. Il est retiré. Restent Barème, Conversion (si elle existe) et Propriétés. L’onglet Calcul du panneau MJ d’une fiche créature (décomposition base / équipement / contexte) est inchangé.
 
-## Octobre 2026 — Alertes npm (Dependabot)
+## Octobre 2026 — Dépendances à jour
 
-Les 8 failles npm (undici, braces via csso-cli, brace-expansion, postcss-selector-parser) sont corrigées : plus d’override qui clouait undici 6.28.0, minification CSS via l’API `csso` à la place de `csso-cli`, et versions patchées pour les autres. `pnpm audit` ne remonte plus de vulnérabilité. Composer n’en avait aucune.
+Les failles connues des paquets Node ont été corrigées. Plus d’alerte de sécurité de ce côté.
 
 ## Octobre 2026 — Audit des caractéristiques
 
@@ -74,21 +78,17 @@ Vérification de toutes les caractéristiques (formules, chartes, coefficients, 
 
 ## Octobre 2026 — Coefficients de palier pour les chartes
 
-Sur chaque fiche caractéristique (admin), une formule de génération peut remplir automatiquement le tableau des normes (5 paliers × 20 niveaux). On peut aussi saisir des **coefficients** pour Très faible / Faible / Fort / Très fort (Neutre = 1) : la formule définit le palier neutre, les autres lignes en découlent. Les dégâts de sort (`dommages_spell`) passent à environ 1d6 au niveau 1 et 4d10 au niveau 20, avec montée rapide puis ralentissement. Soin, bouclier, PV temporaires et vol de vie suivent automatiquement.
+Sur chaque fiche caractéristique (admin), une formule de génération peut remplir automatiquement le tableau des normes (5 paliers × 20 niveaux). On peut aussi saisir des **coefficients** pour Très faible / Faible / Fort / Très fort (Neutre = 1) : la formule définit le palier neutre, les autres lignes en découlent. Les dégâts de sort passent à environ 1d6 au niveau 1 et 4d10 au niveau 20, avec montée rapide puis ralentissement. Soin, bouclier, PV temporaires et vol de vie suivent automatiquement.
 
-## Octobre 2026 — UI caractéristiques unifiée (fiche joueur + panneau MJ + Barèmes)
+## Octobre 2026 — Aide caractéristique partout pareille
 
-Une seule source de données pour l’aide caractéristique : l’API **card** complète descriptions, défaut et formule affichée. Côté joueur, `CharacteristicInfoPanel` remplace les anciens tooltips / panels dispersés (propriétés, kref CMS, effets, booléens). Côté MJ, `CharacteristicGmPanel` regroupe barème, calcul (avec couches, sur une fiche créature), conversion et propriétés ; le bouton d’aide sépare correctement groupe et entité. L’outil **Barèmes** (menu Outils) couvre les cinq groupes ; les dés s’affichent au survol des cellules du tableau.
+L’aide d’une caractéristique dit la même chose sur la fiche, dans le panneau du meneur et dans l’outil **Barèmes**. Côté joueur, une infobulle remplace les anciens panneaux dispersés. Côté meneur, barème, calcul, conversion et propriétés sont regroupés. Dans Barèmes, les dés apparaissent au survol des cases.
 
 ## Octobre 2026 — Bonus éphémères et limites absolues
 
 Les formules créature listent désormais tous leurs termes : caractéristique de base, équipement, consommable et sort. Les bonus de consommable et de sort sont **éphémères** : nuls hors combat, ils s'ajoutent sans jamais être plafonnés, ce qui prépare un futur outil de combat. Certaines caractéristiques ont une **limite absolue** sur leur partie permanente : modificateurs (max +7, +10 pour les monstres), compétences et sauvegardes (±15, ±20 pour les monstres), bonus de maîtrise (max 6). Les autres restent souples. Les formules affichées dans les infobulles sont réécrites en texte court (« mod. Int + équip. »), et la décomposition indique les effets temporaires et le plafonnement.
 
-Correctifs liés : le panneau de décomposition (clic sur une caractéristique d'une fiche monstre ou PNJ) s'affichait vide, il montre de nouveau le calcul, avec des libellés courts pour les termes (« Acr. (maîtrise) », « Acr. (équip.) »). L'enregistrement d'un monstre, d'un PNJ ou d'une créature plantait depuis le passage des maîtrises au groupe Profil ; les maîtrises du monstre sont de nouveau enregistrées.
-
-Polish : l'admin liste les termes éphémères détectés dans la formule ; une règle qualité signale une formule créature sans `*_object` quand un bonus objet existe ; la réserve Wakfu lit ses bornes 1–9 depuis `min`/`max` plutôt qu'en dur.
-
-Nettoyage : les fiches Vue ne recalculent plus les statistiques, compétences ou limites et utilisent uniquement le runtime serveur. Les caractéristiques calculées sont découvertes depuis les définitions, sans liste parallèle. Toutes les formules renseignées ont maintenant une formule d'affichage ; celles des créatures restent courtes et masquent les effets éphémères. Les gabarits IA prennent l'initiative, la touche et la CA dans leurs barèmes respectifs.
+Le détail au clic sur une caractéristique de monstre ou de PNJ montre de nouveau le calcul. L’enregistrement d’une fiche gardait parfois les maîtrises de côté : elles sont de nouveau écrites. Les infobulles restent courtes et masquent les effets hors combat.
 
 ## Octobre 2026 — Nature des caractéristiques, Profil et Consommable
 
@@ -96,11 +96,11 @@ Chaque caractéristique a une **nature** (descriptif, intrinsèque, bonus/malus,
 
 ## Octobre 2026 — Formules de conversion sans bornes internes (buff / débuff)
 
-Les formules de conversion ne portent plus les plafonds : ce sont les `min`/`max` du pivot qui bornent. Elles sont **signées** (`+` buff, `−` débuff) pour les sorts (dégâts fixes, résistances, caracs, etc.). Plafond dégâts sort **±80**. Aperçu graphique admin : bornes d’affichage corrigées.
+Les formules de conversion ne portent plus les plafonds : ce sont les bornes de la caractéristique visée qui limitent. Elles sont **signées** (plus pour un buff, moins pour un débuff). Plafond dégâts de sort **±80**.
 
 ## Octobre 2026 — Équilibrage Excel via formules de normes
 
-Les barèmes (dégâts, soin, bouclier, PV temporaires, vol de vie, retraits PA/PM, placement, consommables) sont générés par des formules dans le système de caractéristiques (`norms_formula` → grille). Les dégâts suivent coef × PV du palier ; le vol de vie vaut 30 % des dégâts ; les invocations reprennent les normes monstre. Un hub **Équilibrage** dans la gestion du contenu pointe vers chaque fiche. Conversion classique et IA (`NpcStatGabarit`) lisent la même source. Remise à zéro : seed overwrite puis `characteristics:regenerate-norms`.
+Les barèmes (dégâts, soin, bouclier, PV temporaires, vol de vie, retraits PA/PM, placement, consommables) sont générés par des formules. Les dégâts suivent le palier de PV ; le vol de vie vaut 30 % des dégâts ; les invocations reprennent les normes monstre. Un hub **Équilibrage** dans la gestion du contenu pointe vers chaque fiche. Conversion classique et IA lisent la même source.
 
 ## Octobre 2026 — Barèmes de sorts et conversion en dés
 
@@ -108,15 +108,15 @@ Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de 
 
 ## Octobre 2026 — Suppression de sort sans « Page introuvable »
 
-Après suppression depuis l’édition, le bouton Précédent du navigateur ne rouvre plus la fiche déjà mise en corbeille (404). Les liens des notifications pointent vers les bonnes URLs `/entities/…`, et après suppression vers la liste plutôt que la fiche disparue. Depuis une modal d’édition, la suppression reste sur la liste.
+Après suppression depuis l’édition, le bouton Précédent du navigateur ne rouvre plus la fiche déjà mise en corbeille. Les liens des notifications mènent à la bonne page, et après suppression vers la liste plutôt que la fiche disparue. Depuis une fenêtre d’édition, la suppression reste sur la liste.
 
 ## Octobre 2026 — Édition d’entité : header compact et grille deux colonnes
 
 Toutes les fiches d’édition (équipements, monstres, PNJ, classes, panoplies, etc.) reprennent le header compact des sorts : retour, titre vers la fiche, état, options, annuler, supprimer et enregistrer restent visibles en haut. Le formulaire s’affiche en deux colonnes ; les métadonnées sont repliées par défaut. Les blocs de relations (recette, sorts, traits…) restent dans des panneaux séparés sous le formulaire. Les capacités gardent leur grille dédiée, avec le même header.
 
-## Octobre 2026 — Enregistrement des sorts fiable (localhost / 127.0.0.1)
+## Octobre 2026 — Enregistrement des sorts à la bonne adresse
 
-Le toast « Erreur lors de la sauvegarde » sans détail venait d’un écart d’adresse : le site ouvert en `127.0.0.1` alors que les routes JS pointaient encore vers `localhost`. L’enregistrement partait « ailleurs » et échouait sans message utile. Les routes suivent maintenant l’adresse réellement utilisée dans le navigateur.
+Le toast « Erreur lors de la sauvegarde » sans détail venait d’un écart d’adresse : le site ouvert d’un côté, les routes de l’autre. L’enregistrement partait ailleurs et échouait sans message utile. Les routes suivent maintenant l’adresse réellement utilisée dans le navigateur.
 
 ## Octobre 2026 — Édition des sorts : props globales et header
 
@@ -134,7 +134,7 @@ Supprimer le premier niveau (celui qui porte les effets) ne vide plus les onglet
 
 ## Octobre 2026 — Sauvegardes ZIP fiabilisées
 
-Une sauvegarde produit désormais une seule archive ZIP horodatée (base, médias `storage/app`, contenu `private/game`, manifeste avec checksums). On peut lister, supprimer et restaurer depuis la ligne de commande et la page admin Sauvegarde, avec confirmation renforcée et sauvegarde de secours avant restauration. Le cron configurable `project_backup` reste disponible ; le verrou empêche deux opérations en parallèle. Le suivi de restauration reste visible pendant la maintenance, et un crash / reboot marque l’opération comme interrompue puis nettoie les restes. Les médias ne sont plus recopiés dans un dossier temporaire avant compression (évite les plantages mémoire sous WSL), et le dossier des archives n’est jamais ré-inclus dans une sauvegarde.
+Une sauvegarde produit désormais une seule archive ZIP horodatée (base, médias, contenu de jeu). On peut lister, supprimer et restaurer depuis la page admin Sauvegarde, avec confirmation et copie de secours avant restauration. Deux opérations ne tournent pas en même temps. Un arrêt brutal marque la restauration comme interrompue, puis nettoie les restes.
 
 ## Octobre 2026 — Nettoyage des caractéristiques
 
@@ -142,7 +142,7 @@ Suppression des caractéristiques en trop (compétences Artisanat / Herbaliste /
 
 ## Octobre 2026 — La base garde les modifications
 
-Les changements faits dans l’application (caractéristiques, pages seedées, fiches versionnées…) ne sont plus écrasés au redémarrage du serveur. Les fichiers de seed ne remplissent que ce qui manque. Une sauvegarde hors production recopie la base vers ces fichiers. Pour forcer le retour aux fichiers du dépôt : `project:seed --overwrite`. Les boutons d’export/import seeders ont été retirés de l’admin (caractéristiques, IA métier) : seul l’écran Sauvegarde pilote cette copie, pour éviter d’écraser des données par erreur.
+Les changements faits dans l’application ne sont plus écrasés au redémarrage du serveur. Seul ce qui manque est complété. Une sauvegarde hors production recopie la base vers les fichiers du dépôt. Pour revenir aux fichiers d’origine, on passe par l’écran Sauvegarde — les anciens boutons d’export/import ont été retirés, pour éviter d’écraser des données par erreur.
 
 ## Octobre 2026 — Caractéristiques créature validées, monstres plus souples
 

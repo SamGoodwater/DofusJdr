@@ -7,7 +7,7 @@
   {
     "path": "100- Done/README.md",
     "title": "Ce qui a été fait",
-    "description": "L’édition des effets d’un sort reste sur la page du sort : fond neutre, liste des monstres, PNJ et classes qui le possèdent, et création d’un effet (puis de ses sous-effets) sans passer par l’administration des effets."
+    "description": "L’édition des effets d’un sort reste sur la page du sort : fond neutre, liste des monstres, PNJ et classes qui le possèdent, et création d’un effet avec ses sous-effets dès le formulaire d’ajout, sans passer par l’administration des effets."
   },
   {
     "path": "backend/_ai.md",
