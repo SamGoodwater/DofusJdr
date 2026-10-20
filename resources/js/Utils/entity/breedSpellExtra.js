@@ -1,6 +1,6 @@
 /**
- * Sorts d’une classe « hors grille » : pivot (character_level = 0, slot_index = 1).
- * Pas d’emplacement de progression — en plus des sorts placés sur la grille standard.
+ * Reliquat Dofus — sorts « hors grille » : pivot (character_level = 0, slot_index = 1).
+ * Non affichés ni éditables sur les fiches classe (variantes uniquement).
  */
 
 export const BREED_SPELL_EXTRA_LEVEL = 0;

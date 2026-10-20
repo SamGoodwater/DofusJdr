@@ -15,7 +15,8 @@ use App\Support\ElementBitmask;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Importe les sorts de classe (kit niveau 1 + progression) en `auto`.
+ * Importe les sorts de classe (kit niveau 1 + progression).
+ * L'état vient du catalogue (`state`, défaut `auto`).
  *
  * Idempotent. Upsert sur `dofusdb_id` ou `official_id`. Les catalogues d’une même
  * classe sont fusionnés avant le sync des emplacements. Les autres sorts de la
@@ -69,6 +70,31 @@ final class ClassLevel1SpellSeederImporter
             'updated' => $updated,
             'skipped' => $skipped,
         ];
+    }
+
+    /**
+     * Importe le kit niveau 1 et la progression d'une seule classe.
+     *
+     * @return array{created: list<string>, updated: list<string>, skipped: list<string>}
+     *
+     * @example app(ClassLevel1SpellSeederImporter::class)->importBreed('Crâ');
+     */
+    public function importBreed(string $breedName, bool $overwrite = true): array
+    {
+        $catalogs = array_values(array_filter(
+            ClassLevel1SpellCatalog::loadAllInDirectory(),
+            static fn (ClassLevel1SpellCatalog $catalog): bool => $catalog->breedName() === $breedName
+        ));
+
+        if ($catalogs === []) {
+            return [
+                'created' => [],
+                'updated' => [],
+                'skipped' => ['Aucun catalogue de sorts pour '.$breedName.'.'],
+            ];
+        }
+
+        return $this->importBreedCatalogs($catalogs, $overwrite);
     }
 
     /**
@@ -146,6 +172,20 @@ final class ClassLevel1SpellSeederImporter
     }
 
     /**
+     * État autorisé sur la fiche. Toute autre valeur retombe sur `auto`.
+     */
+    private function spellState(string $state): string
+    {
+        return in_array($state, [
+            Spell::STATE_RAW,
+            Spell::STATE_DRAFT,
+            Spell::STATE_AUTO,
+            Spell::STATE_PLAYABLE,
+            Spell::STATE_ARCHIVED,
+        ], true) ? $state : Spell::STATE_AUTO;
+    }
+
+    /**
      * @param  array{dofusdb_id: string|null, official_id: string|null}  $entry
      */
     private function findSpell(array $entry): ?Spell
@@ -183,9 +223,9 @@ final class ClassLevel1SpellSeederImporter
             'po_editable' => $entry['po_editable'],
             'sight_line' => $entry['sight_line'],
             'cast_per_turn' => $entry['cast_per_turn'],
-            'cast_per_target' => '0',
-            'number_between_two_cast' => '0',
-            'cast_in_line' => false,
+            'cast_per_target' => (string) ($entry['cast_per_target'] ?? '0'),
+            'number_between_two_cast' => (string) ($entry['number_between_two_cast'] ?? '0'),
+            'cast_in_line' => (bool) ($entry['cast_in_line'] ?? false),
             'cast_in_diagonal' => false,
             'target_type' => $this->targetType($entry),
             'max_stack' => $entry['max_stack'],
@@ -202,7 +242,7 @@ final class ClassLevel1SpellSeederImporter
             'auto_success_if_willing_target' => $entry['auto_success_if_willing_target'],
             'allows_reaction' => false,
             'duration' => $entry['duration'],
-            'state' => Spell::STATE_AUTO,
+            'state' => $this->spellState((string) ($entry['state'] ?? Spell::STATE_AUTO)),
             'read_level' => 0,
             'write_level' => 3,
             'auto_update' => false,

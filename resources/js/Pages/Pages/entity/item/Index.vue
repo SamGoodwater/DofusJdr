@@ -17,7 +17,6 @@ import { getEntityRouteConfig, resolveEntityRouteUrl } from "@/Composables/entit
 
 import Btn from '@/Pages/Atoms/action/Btn.vue';
 import EntityTanStackTable from '@/Pages/Organismes/table/EntityTanStackTable.vue';
-import EntityModal from '@/Pages/Organismes/entity/EntityModal.vue';
 import CreateEntityModal from '@/Pages/Organismes/entity/CreateEntityModal.vue';
 import { TableConfig } from "@/Utils/Entity/Configs/TableConfig.js";
 import { getEntityResponseAdapter } from "@/Entities/entity-registry";
@@ -25,6 +24,7 @@ import { getItemFieldDescriptors } from "@/Entities/item/item-descriptors";
 import { createFieldsConfigFromDescriptors, createDefaultEntityFromDescriptors } from "@/Utils/entity/descriptor-form";
 import { getEntityCreateAllowFieldKeys } from "@/Utils/entity/entity-create-config";
 import { useEntityIndexTableIntents } from "@/Composables/entity/useEntityIndexTableIntents";
+import { useEntityIndexSurface } from "@/Composables/entity/useEntityIndexSurface";
 import { normalizeIndexTableFilters } from "@/Composables/entity/useEntityIndexTableFilters";
 
 // Props Inertia : filtres + catalogues de filtres. La liste vient de api.tables.items.
@@ -60,15 +60,16 @@ const serverBaseUrl = computed(() => route('api.tables.items'));
 
 
 const tableMeta = ref({});
+
+const { openFullModal, openEdit } = useEntityIndexSurface("items", {
+    getTableMeta: () => tableMeta.value,
+});
 const handleTableLoaded = ({ rows, meta }) => {
     tableRows.value = Array.isArray(rows) ? rows : [];
     tableMeta.value = meta || {};
 };
 
 // État
-const selectedEntity = ref(null);
-const modalOpen = ref(false);
-const modalView = ref('full');
 const createModalOpen = ref(false);
 
 
@@ -87,18 +88,14 @@ const tableConfig = computed(() => {
 });
 
 // Handlers
-const openModal = (entity) => {
-    selectedEntity.value = entity;
-    modalView.value = 'full';
-    modalOpen.value = true;
-};
+const openModal = (entity) => openFullModal(entity);
 
 const handleRowDoubleClick = (row) => {
     const raw = row?.rowParams?.entity;
     if (!raw) return;
     const model = Item.fromArray([raw])[0] || null;
     if (!model) return;
-    openModal(model);
+    openFullModal(model);
 };
 
 const { handleKeyboardIntent } = useEntityIndexTableIntents({
@@ -107,10 +104,7 @@ const { handleKeyboardIntent } = useEntityIndexTableIntents({
     routeShowParam: "item",
     canModify: () => canModify.value,
     openFullModal: openModal,
-    openEdit: (model) => {
-        if (!model?.id) return;
-        router.visit(route('entities.items.edit', { item: model.id }));
-    },
+    openEdit,
 });
 
 const handleCreateRequest = () => {
@@ -133,11 +127,11 @@ const handleTableAction = async (actionKey, entity, row) => {
     switch (actionKey) {
         case 'view':
         case 'quick-view':
-            openModal(model);
+            openFullModal(model);
             break;
 
         case 'edit':
-            router.visit(route('entities.items.edit', { item: entityId }));
+            openEdit(model);
             break;
 
         case 'copy-link': {
@@ -158,65 +152,6 @@ const handleTableAction = async (actionKey, entity, row) => {
     }
 };
 
-// Handlers pour les actions du modal
-
-const handleModalExpand = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    router.visit(route('entities.items.show', { item: entityId }));
-    closeModal();
-};
-
-const handleModalCopyLink = async (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    const cfg = getEntityRouteConfig('item');
-    const url = resolveEntityRouteUrl('item', 'show', entityId, cfg);
-    if (url) {
-        await copyToClipboard(url, "Lien de l'entité copié !");
-    }
-};
-
-const handleModalDownloadPdf = (entity) => {
-    // TODO: Implémenter le téléchargement PDF
-};
-
-const handleModalRefresh = () => {
-    refreshToken.value++;
-    closeModal();
-};
-
-const handleModalDelete = (entity) => {
-    // TODO: Implémenter la suppression avec confirmation
-};
-
-
-const handleCreate = () => {
-    createModalOpen.value = true;
-};
-
-const handleCloseCreateModal = () => {
-    createModalOpen.value = false;
-};
-
-const handleEntityCreated = () => {
-    createModalOpen.value = false;
-    refreshToken.value++;
-};
-
-const closeModal = () => {
-    modalOpen.value = false;
-    selectedEntity.value = null;
-};
-
-// Descriptors -> fieldsConfig (source de vérité unique)
-const itemDescriptors = computed(() => getItemFieldDescriptors({ capabilities: { updateAny: canModify.value } }));
-const fieldsConfig = computed(() => createFieldsConfigFromDescriptors(itemDescriptors.value, { meta: {}, capabilities: { updateAny: canModify.value } }));
-const defaultEntity = computed(() => createDefaultEntityFromDescriptors(itemDescriptors.value));
-
-
-
-// const handleRefreshAll = () => refreshToken.value++;
 </script>
 
 <template>
@@ -264,23 +199,6 @@ const defaultEntity = computed(() => createDefaultEntityFromDescriptors(itemDesc
             :create-allow-field-keys="getEntityCreateAllowFieldKeys('items')"
             @close="handleCloseCreateModal"
             @created="handleEntityCreated"
-        />
-
-        <!-- Modal de visualisation -->
-        <EntityModal
-            v-if="selectedEntity"
-            :entity="selectedEntity"
-            entity-type="item"
-            :view="modalView"
-            :open="modalOpen"
-            :table-meta="tableMeta"
-            :use-stored-format="true"
-            @close="closeModal"
-            @expand="handleModalExpand"
-            @copy-link="handleModalCopyLink"
-            @download-pdf="handleModalDownloadPdf"
-            @refresh="handleModalRefresh"
-            @delete="handleModalDelete"
         />
     </div>
 </template>

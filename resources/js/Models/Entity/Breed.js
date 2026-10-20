@@ -54,6 +54,11 @@ export class Breed extends BaseModel {
         return this._data.specificity || null;
     }
 
+    /** HTML TipTap — mécanique signature hors voies (ex. Pile/Face). */
+    get mechanics() {
+        return this._data.mechanics ?? '';
+    }
+
     get dofusVersion() {
         return this._data.dofus_version || null;
     }

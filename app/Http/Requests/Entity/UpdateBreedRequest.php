@@ -38,6 +38,7 @@ class UpdateBreedRequest extends FormRequest
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'description_fast' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'mechanics' => ['nullable', 'string'],
             'dofus_version' => ['nullable', 'string', 'max:255'],
             'state' => ['nullable', 'string', EntityState::rule()],
             'read_level' => ['nullable', 'integer', 'min:0', 'max:5'],

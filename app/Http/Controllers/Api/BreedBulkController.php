@@ -28,6 +28,7 @@ class BreedBulkController extends Controller
 
             'life_dice' => ['sometimes', 'nullable', 'string', 'max:255'],
             'specificity' => ['sometimes', 'nullable', 'string'],
+            'mechanics' => ['sometimes', 'nullable', 'string'],
             'description' => ['sometimes', 'nullable', 'string'],
             'dofusdb_id' => ['sometimes', 'nullable', 'string', 'max:255'],
             'state' => ['sometimes', 'nullable', 'string', EntityState::rule()],
@@ -49,6 +50,7 @@ class BreedBulkController extends Controller
         foreach ([
             'life_dice',
             'specificity',
+            'mechanics',
             'description',
             'dofusdb_id',
             'state',

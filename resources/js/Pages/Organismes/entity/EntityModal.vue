@@ -108,10 +108,14 @@ const { dispatchEntityAction, deleteConfirm, confirmPendingDelete, cancelPending
         emit('expand', entity);
         handleClose();
     },
+    // Édition : le parent (EntitySurfaceHost) remplace l’affichage — ne pas fermer ici.
     onEditPage: (entity) => {
         emit('edit', entity);
-        handleClose();
     },
+    openEditModal: (entity) => {
+        emit('edit', entity);
+    },
+    actionContext: () => ({ inModal: true, modalMode: 'view' }),
     onCopyLink: (entity) => emit('copy-link', entity),
     onRefresh: (entity) => emit('refresh', entity),
     onDeleted: (entity) => {

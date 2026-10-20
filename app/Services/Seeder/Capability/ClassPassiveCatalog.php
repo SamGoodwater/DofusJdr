@@ -50,7 +50,8 @@ final class ClassPassiveCatalog
      *     engine: string,
      *     is_magic: bool,
      *     description: string,
-     *     effect: string
+     *     effect: string,
+     *     previous_name: string
      * }>
      */
     public function entries(): array
@@ -77,6 +78,7 @@ final class ClassPassiveCatalog
                 'is_magic' => (bool) ($row['is_magic'] ?? true),
                 'description' => (string) ($row['description'] ?? ''),
                 'effect' => (string) ($row['effect'] ?? ''),
+                'previous_name' => trim((string) ($row['previous_name'] ?? '')),
             ];
         }
 

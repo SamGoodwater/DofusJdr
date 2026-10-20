@@ -661,13 +661,6 @@
     "file": "entity/SpellEffectEditorRow.vue"
   },
   {
-    "name": "SpellEditModal",
-    "description": "Modal d’édition sort : même contenu que la page {@link Pages/entity/spell/Edit} (données chargées via JSON pour rester sur la liste).",
-    "props": [],
-    "slots": [],
-    "file": "entity/SpellEditModal.vue"
-  },
-  {
     "name": "SpellEditFormContent",
     "description": "Corps de la fiche d’édition d’un sort (header compact, formulaire, degrés).",
     "props": [],
@@ -722,6 +715,20 @@
     "props": [],
     "slots": [],
     "file": "entity/FavoritesModal.vue"
+  },
+  {
+    "name": "EntitySurfaceHost",
+    "description": "EntitySurfaceHost — pile globale d’affichage / édition d’entités en modal.",
+    "props": [],
+    "slots": [],
+    "file": "entity/EntitySurfaceHost.vue"
+  },
+  {
+    "name": "EntitySectionsRenderer",
+    "description": "Fiches immersives (ex. classes) : masque les titres génériques (Texte, Contenu…) et le chrome meta hors édition.",
+    "props": [],
+    "slots": [],
+    "file": "entity/EntitySectionsRenderer.vue"
   },
   {
     "name": "EntityRelationsManager",
@@ -884,13 +891,6 @@
     "file": "entity/CreateEntityModal.vue"
   },
   {
-    "name": "CapabilityEditModal",
-    "description": "Modal d’édition capacité : même contenu que {@link Pages/entity/capability/Edit} (données chargées via JSON pour rester sur la liste).",
-    "props": [],
-    "slots": [],
-    "file": "entity/CapabilityEditModal.vue"
-  },
-  {
     "name": "CapabilityEditFormContent",
     "description": "Corps de la fiche d’édition d’une capacité (header compact + formulaire unique).",
     "props": [],
@@ -899,7 +899,7 @@
   },
   {
     "name": "BreedSpellSlotsEditor",
-    "description": "Édition des sorts par emplacement + bloc « hors emplacement » (pivot 0/1). Affichage des sorts via SpellViewText (aperçu minimal au survol). Ajout via EntityPicker / api.tables.spells (pas de catalogue Inertia massif).",
+    "description": "Édition des sorts par emplacement de progression (variantes). Affichage des sorts via SpellViewText (aperçu minimal au survol). Ajout via EntityPicker / api.tables.spells (pas de catalogue Inertia massif). Les sorts pivot 0/1 (« hors emplacement ») sont ignorés à l’enregistrement (reliquat Dofus).",
     "props": [],
     "slots": [],
     "file": "entity/BreedSpellSlotsEditor.vue"

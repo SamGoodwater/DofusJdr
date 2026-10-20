@@ -56,6 +56,8 @@ const otherPreview = computed(() => otherList.value.slice(0, ICON_LIMIT));
 const hiddenPassiveCount = computed(() => Math.max(0, passiveList.value.length - passivePreview.value.length));
 const hiddenOtherCount = computed(() => Math.max(0, otherList.value.length - otherPreview.value.length));
 
+const showMinimalCards = computed(() => props.density === "full" || props.density === "compact");
+
 function entityName(entity) {
     return entity?.name || entity?._data?.name || "Capacité";
 }
@@ -71,8 +73,21 @@ function openCapability(entity) {
 
 <template>
     <div v-if="hasAny" class="breed-capabilities-display space-y-4" :data-density="density">
-        <div v-if="hasPassive" class="rounded-box border border-base-300 bg-base-100/40 p-4 space-y-3">
-            <h3 class="text-xs font-semibold uppercase tracking-wide text-primary-300">Passifs de classe</h3>
+        <div
+            v-if="hasPassive"
+            class="rounded-box border border-warning/40 bg-base-200/50 p-4 space-y-3 border-l-4 border-l-warning"
+        >
+            <div class="flex flex-wrap items-center gap-2">
+                <h3 class="text-xs font-semibold uppercase tracking-wide text-warning">Passifs de classe</h3>
+                <span
+                    class="badge badge-sm badge-warning badge-outline font-semibold tracking-wide"
+                >
+                    Passif
+                </span>
+            </div>
+            <p v-if="density === 'full'" class="text-xs text-base-content/70">
+                Effets permanents de la classe : distincts des sorts actifs ci-dessous.
+            </p>
             <ul v-if="density === 'text' && !lightweight" class="flex flex-wrap gap-x-4 gap-y-2">
                 <li v-for="c in passiveList" :key="`p-t-${c.id}`" class="min-w-0 max-w-full">
                     <CapabilityViewText :capability="c" />
@@ -101,13 +116,21 @@ function openCapability(entity) {
                 </Tooltip>
                 <span v-if="hiddenPassiveCount > 0" class="text-[10px] text-base-content/60">+{{ hiddenPassiveCount }}</span>
             </div>
-            <ul v-else class="flex flex-wrap gap-x-3 gap-y-3">
-                <li v-for="c in passiveList" :key="`p-m-${c.id}`" class="min-w-0 max-w-full">
+            <ul
+                v-else-if="showMinimalCards"
+                class="grid grid-cols-[repeat(auto-fill,minmax(22rem,1fr))] gap-3 items-start"
+            >
+                <li
+                    v-for="c in passiveList"
+                    :key="`p-m-${c.id}`"
+                    class="min-w-0 max-w-[22rem]"
+                >
                     <CapabilityViewMinimal
                         :capability="c"
                         :display-mode="'extended'"
                         :characteristic-runtime="characteristicRuntime"
-                        :show-actions="false"
+                        :show-actions="true"
+                        surface-tone="passive"
                     />
                 </li>
             </ul>
@@ -146,13 +169,20 @@ function openCapability(entity) {
                 </Tooltip>
                 <span v-if="hiddenOtherCount > 0" class="text-[10px] text-base-content/60">+{{ hiddenOtherCount }}</span>
             </div>
-            <ul v-else class="flex flex-wrap gap-x-3 gap-y-3">
-                <li v-for="c in otherList" :key="`o-m-${c.id}`" class="min-w-0 max-w-full">
+            <ul
+                v-else-if="showMinimalCards"
+                class="grid grid-cols-[repeat(auto-fill,minmax(22rem,1fr))] gap-3 items-start"
+            >
+                <li
+                    v-for="c in otherList"
+                    :key="`o-m-${c.id}`"
+                    class="min-w-0 max-w-[22rem]"
+                >
                     <CapabilityViewMinimal
                         :capability="c"
                         :display-mode="'extended'"
                         :characteristic-runtime="characteristicRuntime"
-                        :show-actions="false"
+                        :show-actions="true"
                     />
                 </li>
             </ul>

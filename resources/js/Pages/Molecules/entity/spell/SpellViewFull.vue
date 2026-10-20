@@ -353,7 +353,7 @@ const handleAction = async (actionKey) => {
             emit('view', props.spell);
             break;
         case 'edit':
-            router.visit(route('entities.spells.edit', { spell: spellId }));
+            await dispatchEntityAction("edit", props.spell, { context: actionsContext.value });
             emit('edit', props.spell);
             break;
         

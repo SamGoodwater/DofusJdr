@@ -209,7 +209,7 @@ const handleAction = async (actionKey) => {
             emit("view", props.panoply);
             break;
         case "edit":
-            router.visit(route("entities.panoplies.edit", { panoply: panoplyId }));
+            await dispatchEntityAction("edit", props.panoply, { context: actionsContext.value });
             emit("edit", props.panoply);
             break;
         

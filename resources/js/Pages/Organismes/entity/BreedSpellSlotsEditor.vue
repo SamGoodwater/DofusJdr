@@ -1,8 +1,9 @@
 <script setup>
 /**
- * Édition des sorts par emplacement + bloc « hors emplacement » (pivot 0/1).
+ * Édition des sorts par emplacement de progression (variantes).
  * Affichage des sorts via SpellViewText (aperçu minimal au survol).
  * Ajout via EntityPicker / api.tables.spells (pas de catalogue Inertia massif).
+ * Les sorts pivot 0/1 (« hors emplacement ») sont ignorés à l’enregistrement (reliquat Dofus).
  */
 import { ref, computed, watch } from "vue";
 import { useForm } from "@inertiajs/vue3";
@@ -19,11 +20,7 @@ import {
     getStandardBreedSlotDefinitions,
     isStandardSlot,
 } from "@/Utils/entity/breedSpellSlots";
-import {
-    BREED_SPELL_EXTRA_LEVEL,
-    BREED_SPELL_EXTRA_SLOT,
-    isBreedExtraSpellPivot,
-} from "@/Utils/entity/breedSpellExtra";
+import { isBreedExtraSpellPivot } from "@/Utils/entity/breedSpellExtra";
 import { warnDev } from "@/Utils/dev-logger";
 import { BREED_MAX_SPELLS_PER_VARIANT_SLOT } from "@/Utils/entity/breedSpellVariantLimits";
 
@@ -47,20 +44,20 @@ const notificationStore = useNotificationStore();
 
 const standardSlots = getStandardBreedSlotDefinitions();
 
-/** Sorts liés sans emplacement de progression (hors grille). */
-const extraSlotDef = Object.freeze({
-    character_level: BREED_SPELL_EXTRA_LEVEL,
-    slot_index: BREED_SPELL_EXTRA_SLOT,
-    label: "Hors emplacement (liste libre)",
-});
-
 /**
  * @param {object} raw
  * @returns {Spell}
  */
 const asSpellModel = (raw) => (raw instanceof Spell ? raw : new Spell(raw));
 
-const localRelations = ref([...props.relations]);
+/**
+ * @param {object[]} relations
+ * @returns {object[]}
+ */
+const withoutExtraSpells = (relations) =>
+    (Array.isArray(relations) ? relations : []).filter((item) => !isBreedExtraSpellPivot(item?.pivot));
+
+const localRelations = ref(withoutExtraSpells(props.relations));
 
 const pivotDefaults = () => ({
     character_level: "1",
@@ -76,7 +73,7 @@ const slotPickerValues = ref({});
 
 const initializePivotValues = () => {
     const pivots = {};
-    for (const item of props.relations) {
+    for (const item of withoutExtraSpells(props.relations)) {
         pivots[item.id] = { ...pivotDefaults() };
         const p = item.pivot || {};
         if (p.character_level != null && p.character_level !== "") {
@@ -97,7 +94,7 @@ initializePivotValues();
 watch(
     () => props.relations,
     (next) => {
-        localRelations.value = [...next];
+        localRelations.value = withoutExtraSpells(next);
         initializePivotValues();
     },
     { deep: true }
@@ -129,12 +126,11 @@ const sortedSpellsInSlot = (def) => {
     });
 };
 
-/** Emplacements présents en données mais hors grille standard (ni extra 0/1) */
+/** Emplacements présents en données mais hors grille standard */
 const orphanRelationItems = computed(() =>
     localRelations.value.filter((item) => {
         const pv = pivotValues.value[item.id];
         if (!pv) return false;
-        if (isBreedExtraSpellPivot(pv)) return false;
         return !isStandardSlot(Number(pv.character_level), Number(pv.slot_index), standardSlots);
     })
 );
@@ -223,15 +219,20 @@ const removeItem = (spellId) => {
 const relationsForm = useForm({ spells: {} });
 
 const hasUnsavedChanges = computed(() => {
-    const origIds = [...props.relations].map((r) => r.id).sort((a, b) => a - b);
+    // Reliquats pivot 0/1 encore en base : un enregistrement les détache.
+    if ((props.relations || []).some((r) => isBreedExtraSpellPivot(r?.pivot))) {
+        return true;
+    }
+    const orig = withoutExtraSpells(props.relations);
+    const origIds = [...orig].map((r) => r.id).sort((a, b) => a - b);
     const curIds = [...localRelations.value].map((r) => r.id).sort((a, b) => a - b);
     if (origIds.length !== curIds.length || origIds.some((id, i) => id !== curIds[i])) {
         return true;
     }
     for (const id of curIds) {
-        const orig = props.relations.find((r) => r.id === id);
+        const origItem = orig.find((r) => r.id === id);
         const pv = pivotValues.value[id] || {};
-        const op = orig?.pivot || {};
+        const op = origItem?.pivot || {};
         if (
             String(pv.character_level ?? "") !== String(op.character_level ?? "") ||
             String(pv.slot_index ?? "") !== String(op.slot_index ?? "") ||
@@ -247,6 +248,7 @@ const save = () => {
     const dataWithPivots = {};
     for (const item of localRelations.value) {
         const pv = pivotValues.value[item.id] || pivotDefaults();
+        if (isBreedExtraSpellPivot(pv)) continue;
         dataWithPivots[item.id] = {
             character_level: Number(pv.character_level) || 1,
             slot_index: Number(pv.slot_index) || 1,
@@ -359,71 +361,6 @@ const save = () => {
                         @update:selected-entities="onSlotPickerSelected($event, def)"
                     />
                 </div>
-            </div>
-        </div>
-
-        <div class="border border-primary/25 bg-primary/5 rounded-lg p-3 space-y-2 text-[13px]">
-            <div class="flex flex-wrap items-baseline gap-x-1 gap-y-1.5">
-                <span
-                    class="text-[11px] tabular-nums text-primary font-medium shrink-0"
-                    :title="extraSlotDef.label"
-                >
-                    0/1
-                </span>
-                <span class="text-base-content/35 shrink-0">·</span>
-                <span class="text-xs text-base-content/70">{{ extraSlotDef.label }}</span>
-            </div>
-            <div class="flex flex-wrap items-baseline gap-x-1 gap-y-1.5">
-                <template v-if="sortedSpellsInSlot(extraSlotDef).length">
-                    <template v-for="(s, si) in sortedSpellsInSlot(extraSlotDef)" :key="`ex-${s.id}`">
-                        <span class="inline-flex flex-wrap items-start gap-x-2 gap-y-1 max-w-full">
-                            <span class="min-w-0 flex-1 spell-text-embed">
-                                <SpellViewText :spell="asSpellModel(s)" />
-                            </span>
-                            <span class="inline-flex items-center gap-0.5 text-[11px] text-base-content/55 shrink-0">
-                                <span class="sr-only">Ordre</span>
-                                <input
-                                    v-model="pivotValues[s.id].choice_order"
-                                    type="number"
-                                    min="0"
-                                    max="255"
-                                    class="input input-bordered input-xs w-11 px-1 text-center"
-                                    :aria-label="`Ordre pour ${s.name || s.id}`"
-                                />
-                            </span>
-                            <Tooltip content="Retirer de la classe" placement="top">
-                                <button
-                                    type="button"
-                                    class="btn btn-ghost btn-xs h-6 min-h-0 px-1 text-error shrink-0"
-                                    @click="removeItem(s.id)"
-                                >
-                                    <Icon source="fa-solid fa-times" size="xs" />
-                                </button>
-                            </Tooltip>
-                        </span>
-                        <span
-                            v-if="si < sortedSpellsInSlot(extraSlotDef).length - 1"
-                            class="text-base-content/30 select-none"
-                        >
-                            ,
-                        </span>
-                    </template>
-                </template>
-                <span v-else class="text-[11px] text-base-content/45 italic">—</span>
-            </div>
-            <div v-if="canAddToSlot(extraSlotDef)" class="mt-2 space-y-1">
-                <p class="text-xs text-base-content/60">Ajouter (hors emplacement)</p>
-                <EntityPickerCore
-                    :model-value="slotPickerValues[slotKey(extraSlotDef)] ?? null"
-                    entity-type="spells"
-                    :multiple="false"
-                    variant="extended"
-                    :blacklist="slotBlacklist(extraSlotDef)"
-                    placeholder="Rechercher un sort…"
-                    size="sm"
-                    @update:model-value="slotPickerValues[slotKey(extraSlotDef)] = $event"
-                    @update:selected-entities="onSlotPickerSelected($event, extraSlotDef)"
-                />
             </div>
         </div>
 

@@ -11,12 +11,12 @@ import { usePermissions } from "@/Composables/permissions/usePermissions";
 import { Breed } from "@/Models/Entity/Breed";
 import { getEntityCreateAllowFieldKeys } from "@/Utils/entity/entity-create-config";
 import { useEntityIndexTableIntents } from "@/Composables/entity/useEntityIndexTableIntents";
+import { useEntityIndexSurface } from "@/Composables/entity/useEntityIndexSurface";
 import { useCopyToClipboard } from "@/Composables/utils/useCopyToClipboard";
 import { getEntityRouteConfig, resolveEntityRouteUrl } from "@/Composables/entity/entityRouteRegistry";
 
 import Btn from '@/Pages/Atoms/action/Btn.vue';
 import EntityTanStackTable from '@/Pages/Organismes/table/EntityTanStackTable.vue';
-import EntityModal from '@/Pages/Organismes/entity/EntityModal.vue';
 import CreateEntityModal from '@/Pages/Organismes/entity/CreateEntityModal.vue';
 import { TableConfig } from "@/Utils/Entity/Configs/TableConfig.js";
 import { getEntityResponseAdapter } from "@/Entities/entity-registry";
@@ -66,6 +66,10 @@ const serverUrl = computed(() => `${route('api.tables.breeds')}?format=entities&
 
 
 const tableMeta = ref({});
+
+const { openFullModal, openEdit } = useEntityIndexSurface("breeds", {
+    getTableMeta: () => tableMeta.value,
+});
 const handleTableLoaded = ({ rows, meta }) => {
     tableRows.value = Array.isArray(rows) ? rows : [];
     tableMeta.value = meta || {};
@@ -73,9 +77,7 @@ const handleTableLoaded = ({ rows, meta }) => {
 
 const openPreviewModal = (model) => {
     if (!model) return;
-    selectedEntity.value = model;
-    modalView.value = "full";
-    modalOpen.value = true;
+    openFullModal(model);
 };
 
 const handleRowDoubleClick = (row) => {
@@ -92,10 +94,7 @@ const { handleKeyboardIntent } = useEntityIndexTableIntents({
     routeShowParam: "breed",
     canModify: () => canModify.value,
     openFullModal: openPreviewModal,
-    openEdit: (model) => {
-        if (!model?.id) return;
-        router.visit(route('entities.breeds.edit', { breed: model.id }));
-    },
+    openEdit,
 });
 
 const handleCreateRequest = () => {
@@ -104,9 +103,6 @@ const handleCreateRequest = () => {
     }
 };
 
-const selectedEntity = ref(null);
-const modalOpen = ref(false);
-const modalView = ref('full');
 const createModalOpen = ref(false);
 const handleCreate = () => {
     createModalOpen.value = true;
@@ -121,10 +117,6 @@ const handleEntityCreated = () => {
     refreshToken.value++;
 };
 
-const closeModal = () => {
-    modalOpen.value = false;
-    selectedEntity.value = null;
-};
 
 const handleTableAction = async (actionKey, entity, row) => {
     const targetEntity = entity || row?.rowParams?.entity;
@@ -139,13 +131,11 @@ const handleTableAction = async (actionKey, entity, row) => {
     switch (actionKey) {
         case 'view':
         case 'quick-view':
-            selectedEntity.value = model;
-            modalView.value = 'full';
-            modalOpen.value = true;
+            openFullModal(model);
             break;
 
         case 'edit':
-            router.visit(route('entities.breeds.edit', { breed: entityId }));
+            openEdit(model);
             break;
 
         case 'copy-link': {
@@ -165,29 +155,8 @@ const handleTableAction = async (actionKey, entity, row) => {
 };
 
 
-const handleModalExpand = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    router.visit(route('entities.breeds.show', { breed: entityId }));
-    closeModal();
-};
 
-const handleModalCopyLink = async (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    const cfg = getEntityRouteConfig('breed');
-    const url = resolveEntityRouteUrl('breed', 'show', entityId, cfg);
-    if (url) {
-        await copyToClipboard(url, "Lien de l'entité copié !");
-    }
-};
 
-const handleModalDownloadPdf = (_entity) => {};
-
-const handleModalRefresh = () => {
-    refreshToken.value++;
-    closeModal();
-};
 
 const handleModalDelete = (_entity) => {};
 
@@ -229,21 +198,6 @@ const handleModalDelete = (_entity) => {};
             :create-allow-field-keys="getEntityCreateAllowFieldKeys('breeds')"
             @close="handleCloseCreateModal"
             @created="handleEntityCreated"
-        />
-
-        <EntityModal
-            v-if="selectedEntity"
-            :entity="selectedEntity"
-            entity-type="breeds"
-            :view="modalView"
-            :open="modalOpen"
-            :table-meta="tableMeta"
-            @close="closeModal"
-            @expand="handleModalExpand"
-            @copy-link="handleModalCopyLink"
-            @download-pdf="handleModalDownloadPdf"
-            @refresh="handleModalRefresh"
-            @delete="handleModalDelete"
         />
     </div>
 </template>

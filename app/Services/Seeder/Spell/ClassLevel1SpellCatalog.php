@@ -184,6 +184,10 @@ final class ClassLevel1SpellCatalog
      *     po_editable: bool,
      *     sight_line: bool,
      *     cast_per_turn: string,
+     *     cast_per_target: string,
+     *     number_between_two_cast: string,
+     *     cast_in_line: bool,
+     *     state: string,
      *     max_stack: int,
      *     resolution_mode: string,
      *     attack_characteristic_key: string|null,
@@ -259,6 +263,10 @@ final class ClassLevel1SpellCatalog
                 'po_editable' => (bool) ($row['po_editable'] ?? false),
                 'sight_line' => (bool) ($row['sight_line'] ?? true),
                 'cast_per_turn' => (string) ($row['cast_per_turn'] ?? '1'),
+                'cast_per_target' => (string) ($row['cast_per_target'] ?? '0'),
+                'number_between_two_cast' => (string) ($row['number_between_two_cast'] ?? '0'),
+                'cast_in_line' => (bool) ($row['cast_in_line'] ?? false),
+                'state' => $this->spellState($row['state'] ?? $this->payload['state'] ?? null),
                 'max_stack' => max(0, (int) ($row['max_stack'] ?? 0)),
                 'resolution_mode' => (string) ($row['resolution_mode'] ?? 'attack_roll'),
                 'attack_characteristic_key' => $this->nullableString($row['attack_characteristic_key'] ?? null),
@@ -331,6 +339,18 @@ final class ClassLevel1SpellCatalog
         $trimmed = trim((string) $value);
 
         return $trimmed === '' ? null : $trimmed;
+    }
+
+    /**
+     * État de fiche. Défaut `auto` ; un catalogue peut imposer `playable`.
+     */
+    private function spellState(mixed $value): string
+    {
+        $state = $this->nullableString($value) ?? 'auto';
+
+        return in_array($state, ['raw', 'draft', 'auto', 'playable', 'archived'], true)
+            ? $state
+            : 'auto';
     }
 
     private function targetType(mixed $value): string

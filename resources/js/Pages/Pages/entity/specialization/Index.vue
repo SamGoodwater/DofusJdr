@@ -14,13 +14,13 @@ import { usePermissions } from "@/Composables/permissions/usePermissions";
 import { Specialization } from "@/Models/Entity/Specialization";
 import { getEntityCreateAllowFieldKeys } from "@/Utils/entity/entity-create-config";
 import { useEntityIndexTableIntents } from "@/Composables/entity/useEntityIndexTableIntents";
+import { useEntityIndexSurface } from "@/Composables/entity/useEntityIndexSurface";
 import { useCopyToClipboard } from "@/Composables/utils/useCopyToClipboard";
 import { useDownloadPdf } from "@/Composables/utils/useDownloadPdf";
 import { getEntityRouteConfig, resolveEntityRouteUrl } from "@/Composables/entity/entityRouteRegistry";
 
 import Btn from '@/Pages/Atoms/action/Btn.vue';
 import EntityTanStackTable from '@/Pages/Organismes/table/EntityTanStackTable.vue';
-import EntityModal from '@/Pages/Organismes/entity/EntityModal.vue';
 import CreateEntityModal from '@/Pages/Organismes/entity/CreateEntityModal.vue';
 import { TableConfig } from "@/Utils/Entity/Configs/TableConfig.js";
 import { getSpecializationFieldDescriptors } from "@/Entities/specialization/specialization-descriptors";
@@ -77,6 +77,10 @@ const serverUrl = computed(() => `${route('api.tables.specializations')}?format=
 
 
 const tableMeta = ref({});
+
+const { openFullModal, openEdit } = useEntityIndexSurface("specializations", {
+    getTableMeta: () => tableMeta.value,
+});
 const handleTableLoaded = ({ rows, meta }) => {
     tableRows.value = Array.isArray(rows) ? rows : [];
     tableMeta.value = meta || {};
@@ -88,15 +92,10 @@ const handleRowDoubleClick = (row) => {
     // Si c'est déjà une instance Specialization, l'utiliser directement
     const model = raw instanceof Specialization ? raw : Specialization.fromArray([raw])[0] || null;
     if (!model) return;
-    selectedEntity.value = model;
-    modalView.value = "full";
-    modalOpen.value = true;
+    openFullModal(model);
 };
 
 // État
-const selectedEntity = ref(null);
-const modalOpen = ref(false);
-const modalView = ref('full');
 const createModalOpen = ref(false);
 
 const handleCreate = () => {
@@ -112,10 +111,6 @@ const handleEntityCreated = () => {
     refreshToken.value++;
 };
 
-const closeModal = () => {
-    modalOpen.value = false;
-    selectedEntity.value = null;
-};
 
 
 const { handleKeyboardIntent } = useEntityIndexTableIntents({
@@ -123,15 +118,8 @@ const { handleKeyboardIntent } = useEntityIndexTableIntents({
     routeShowName: "entities.specializations.show",
     routeShowParam: "specialization",
     canModify: () => canModify.value,
-    openFullModal: (model) => {
-        selectedEntity.value = model;
-        modalView.value = "full";
-        modalOpen.value = true;
-    },
-    openEdit: (model) => {
-        if (!model?.id) return;
-        router.visit(route('entities.specializations.edit', { specialization: model.id }));
-    },
+    openFullModal,
+    openEdit,
 });
 
 // Handler pour les actions du tableau
@@ -149,13 +137,11 @@ const handleTableAction = async (actionKey, entity, row) => {
     switch (actionKey) {
         case 'view':
         case 'quick-view':
-            selectedEntity.value = model;
-            modalView.value = 'full';
-            modalOpen.value = true;
+            openFullModal(model);
             break;
 
         case 'edit':
-            router.visit(route('entities.specializations.edit', { specialization: entityId }));
+            openEdit(model);
             break;
 
         case 'copy-link': {
@@ -175,54 +161,10 @@ const handleTableAction = async (actionKey, entity, row) => {
                 router.delete(route("entities.specializations.delete", { specialization: entityId }), {
                     onSuccess: () => {
                         refreshToken.value++;
-                        closeModal();
                     },
                 });
             }
             break;
-    }
-};
-
-// Handlers pour les actions du modal
-
-const handleModalExpand = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    router.visit(route('entities.specializations.show', { specialization: entityId }));
-    closeModal();
-};
-
-const handleModalCopyLink = async (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    const cfg = getEntityRouteConfig('specialization');
-    const url = resolveEntityRouteUrl('specialization', 'show', entityId, cfg);
-    if (url) {
-        await copyToClipboard(url, "Lien de l'entité copié !");
-    }
-};
-
-const handleModalDownloadPdf = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    downloadPdf(entityId);
-};
-
-const handleModalRefresh = () => {
-    refreshToken.value++;
-    closeModal();
-};
-
-const handleModalDelete = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    if (window.confirm("Supprimer cette spécialisation ? Elle sera placée en corbeille.")) {
-        router.delete(route("entities.specializations.delete", { specialization: entityId }), {
-            onSuccess: () => {
-                refreshToken.value++;
-                closeModal();
-            },
-        });
     }
 };
 
@@ -264,22 +206,6 @@ const handleModalDelete = (entity) => {
             :create-allow-field-keys="getEntityCreateAllowFieldKeys('specializations')"
             @close="handleCloseCreateModal"
             @created="handleEntityCreated"
-        />
-
-        <!-- Modal de visualisation -->
-        <EntityModal
-            v-if="selectedEntity"
-            :entity="selectedEntity"
-            entity-type="specializations"
-            :view="modalView"
-            :open="modalOpen"
-            :table-meta="tableMeta"
-            @close="closeModal"
-            @expand="handleModalExpand"
-            @copy-link="handleModalCopyLink"
-            @download-pdf="handleModalDownloadPdf"
-            @refresh="handleModalRefresh"
-            @delete="handleModalDelete"
         />
     </div>
 </template>

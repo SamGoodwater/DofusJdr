@@ -1,236 +1,931 @@
 {
     "_schema_version": "1",
     "breed": "Crâ",
+    "state": "playable",
     "entries": [
         {
-            "key": "fleche-cinglante",
-            "name": "Flèche Cinglante",
-            "dofusdb_id": "32427",
+            "key": "fleche-harcelante",
+            "name": "Flèche harcelante",
             "slot_index": 1,
             "choice_order": 0,
+            "character_level": 1,
             "types": [
                 "Offensif"
             ],
-            "element": "air",
             "pa": "3",
-            "po_min": "2",
-            "po_max": "6",
+            "po_min": "1",
+            "po_max": "7",
             "po_editable": true,
-            "sight_line": true,
+            "sight_line": false,
             "cast_per_turn": "2",
+            "cast_per_target": "0",
+            "number_between_two_cast": "0",
+            "cast_in_line": false,
             "resolution_mode": "attack_roll",
-            "attack_characteristic_key": "agi",
             "is_magic": false,
-            "powerful": 3,
-            "effect": "1d6 + Agilité (Air). Physique, 3 PA, 2×/tour, PO 2–6 adapté.",
-            "description": "Une flèche d’air vif, tirée de loin. Tu restes hors de portée, tu vises juste.",
+            "effect": "1d4 + Agilité (Air). 2×/tour.",
+            "description": "Tu décoches une flèche très rapide, sans ligne de vue. Sa portée te permet de harceler une cible sans t'exposer. Montée : niv. 5, 2d4 ; niv. 10, 2d6 ; niv. 15, 2d8 et 3 fois par tour ; niv. 20, 3d8.",
             "sub_effects": [
                 {
                     "slug": "frapper",
                     "area": "point",
+                    "order": 0,
                     "params": {
                         "characteristic": "air",
-                        "value": "1d6+Agilité",
-                        "value_formula": "1d6+[agi]",
-                        "dice_formula": "1d6+[agi]",
-                        "value_formula_crit": "2d6+[agi]",
+                        "value": "1d4+Agilité",
+                        "value_formula": "1d4+[agi]",
+                        "dice_formula": "1d4+[agi]",
                         "effect_direction": "action"
                     }
                 }
-            ]
+            ],
+            "intensification": [
+                {
+                    "tier": "I",
+                    "required_creature_level": 13,
+                    "effect": "2d6 + Agilité (Air).",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "air",
+                                "value": "2d6+Agilité",
+                                "value_formula": "2d6+[agi]",
+                                "dice_formula": "2d6+[agi]",
+                                "effect_direction": "action"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "II",
+                    "required_creature_level": 16,
+                    "effect": "2d8 + Agilité (Air). 3×/tour.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "air",
+                                "value": "2d8+Agilité",
+                                "value_formula": "2d8+[agi]",
+                                "dice_formula": "2d8+[agi]",
+                                "effect_direction": "action"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "III",
+                    "required_creature_level": 20,
+                    "effect": "3d8 + Agilité (Air). 3×/tour.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "air",
+                                "value": "3d8+Agilité",
+                                "value_formula": "3d8+[agi]",
+                                "dice_formula": "3d8+[agi]",
+                                "effect_direction": "action"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "element": "air",
+            "official_id": "jdr:cra:fleche-harcelante",
+            "attack_characteristic_key": "agi"
         },
         {
-            "key": "fleche-glacee",
-            "name": "Flèche Glacée",
-            "dofusdb_id": "32435",
+            "key": "fleche-enflammee",
+            "name": "Flèche enflammée",
             "slot_index": 1,
             "choice_order": 1,
+            "character_level": 1,
             "types": [
                 "Offensif"
             ],
-            "element": "water",
             "pa": "3",
             "po_min": "2",
-            "po_max": "6",
+            "po_max": "5",
             "po_editable": true,
             "sight_line": true,
             "cast_per_turn": "2",
+            "cast_per_target": "0",
+            "number_between_two_cast": "0",
+            "cast_in_line": false,
             "resolution_mode": "attack_roll",
-            "attack_characteristic_key": "chance",
             "is_magic": false,
-            "powerful": 3,
-            "effect": "1d6 + Chance (Eau). Physique, 3 PA, 2×/tour, PO 2–6 adapté.",
-            "description": "La flèche pique le froid. Même cadence que Cinglante, autre voie.",
+            "effect": "1d4 + Intelligence (Feu). Zone 1 case.",
+            "description": "Tu tires une flèche embrasée. Elle inflige des dégâts de Feu. Montée : niv. 5, 2d4, ligne 1×2, repousse 1 ; niv. 10, 2d6, ligne 1×3 ; niv. 15, 2d8, ligne 1×4 ; niv. 20, ligne 1×5.",
             "sub_effects": [
                 {
                     "slug": "frapper",
                     "area": "point",
+                    "order": 0,
                     "params": {
-                        "characteristic": "water",
-                        "value": "1d6+Chance",
-                        "value_formula": "1d6+[chance]",
-                        "dice_formula": "1d6+[chance]",
-                        "value_formula_crit": "2d6+[chance]",
+                        "characteristic": "fire",
+                        "value": "1d4+Intelligence",
+                        "value_formula": "1d4+[intel]",
+                        "dice_formula": "1d4+[intel]",
                         "effect_direction": "action"
                     }
                 }
-            ]
-        },
-        {
-            "key": "cra-fleche-empoisonnee",
-            "name": "Flèche Empoisonnée",
-            "slot_index": 1,
-            "choice_order": 2,
-            "types": [
-                "Offensif"
+            ],
+            "intensification": [
+                {
+                    "tier": "I",
+                    "required_creature_level": 13,
+                    "effect": "2d6 + Intelligence (Feu). Ligne 1×3, repousse de 1.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "line-1x3",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "fire",
+                                "value": "2d6+Intelligence",
+                                "value_formula": "2d6+[intel]",
+                                "dice_formula": "2d6+[intel]",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "line-1x3",
+                            "order": 1,
+                            "params": {
+                                "cells_formula": "1",
+                                "movement_kind": "push"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "II",
+                    "required_creature_level": 16,
+                    "effect": "2d8 + Intelligence (Feu). Ligne 1×4, repousse de 1.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "line-1x4",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "fire",
+                                "value": "2d8+Intelligence",
+                                "value_formula": "2d8+[intel]",
+                                "dice_formula": "2d8+[intel]",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "line-1x4",
+                            "order": 1,
+                            "params": {
+                                "cells_formula": "1",
+                                "movement_kind": "push"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "III",
+                    "required_creature_level": 20,
+                    "effect": "2d8 + Intelligence (Feu). Ligne 1×5, repousse de 1.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "line-1x5",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "fire",
+                                "value": "2d8+Intelligence",
+                                "value_formula": "2d8+[intel]",
+                                "dice_formula": "2d8+[intel]",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "line-1x5",
+                            "order": 1,
+                            "params": {
+                                "cells_formula": "1",
+                                "movement_kind": "push"
+                            }
+                        }
+                    ]
+                }
             ],
             "element": "fire",
-            "pa": "3",
-            "po_min": "2",
-            "po_max": "6",
+            "dofusdb_id": "32447",
+            "attack_characteristic_key": "intel"
+        },
+        {
+            "key": "fleche-immobilisation",
+            "name": "Flèche d'immobilisation",
+            "slot_index": 1,
+            "choice_order": 2,
+            "character_level": 1,
+            "types": [
+                "Offensif",
+                "Debuff"
+            ],
+            "pa": "2",
+            "po_min": "1",
+            "po_max": "5",
             "po_editable": true,
             "sight_line": true,
             "cast_per_turn": "2",
+            "cast_per_target": "1",
+            "number_between_two_cast": "0",
+            "cast_in_line": false,
             "resolution_mode": "attack_roll",
             "is_magic": false,
-            "powerful": 3,
-            "effect": "1d6 + Intelligence (Feu) et Empoisonné jusqu’à la fin du prochain tour. 3 PA, 2×/tour.",
-            "description": "Flèche Empoisonnée : ça s’accroche après le coup.",
+            "effect": "1d4 + Chance (Eau), −1 PM. Le retrait de PM se résout contre l'esquive PM.",
+            "description": "Tu retires des PM à la cible et tu ralentis sa fuite. Montée : niv. 5, 2d4 et 2 fois par cible ; niv. 10, 2d6 et −2 PM ; niv. 15, 2d8 et 3 fois par tour.",
             "sub_effects": [
                 {
                     "slug": "frapper",
                     "area": "point",
+                    "order": 0,
                     "params": {
-                        "characteristic": "fire",
-                        "value": "1d6+Intelligence",
-                        "value_formula": "1d6+[intel]",
-                        "dice_formula": "1d6+[intel]",
-                        "value_formula_crit": "2d6+[intel]",
+                        "characteristic": "water",
+                        "value": "1d4+Chance",
+                        "value_formula": "1d4+[chance]",
+                        "dice_formula": "1d4+[chance]",
                         "effect_direction": "action"
                     }
                 },
                 {
-                    "slug": "autre",
+                    "slug": "retirer",
                     "area": "point",
+                    "order": 1,
                     "params": {
-                        "value": "Empoisonné jusqu’à la fin du prochain tour de la cible.",
+                        "characteristic": "pm",
+                        "value": "1"
+                    }
+                }
+            ],
+            "intensification": [
+                {
+                    "tier": "I",
+                    "required_creature_level": 13,
+                    "effect": "2d6 + Chance (Eau), −2 PM.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "water",
+                                "value": "2d6+Chance",
+                                "value_formula": "2d6+[chance]",
+                                "dice_formula": "2d6+[chance]",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "retirer",
+                            "area": "point",
+                            "order": 1,
+                            "params": {
+                                "characteristic": "pm",
+                                "value": "2"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "II",
+                    "required_creature_level": 16,
+                    "effect": "2d8 + Chance (Eau), −2 PM. 3×/tour.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "water",
+                                "value": "2d8+Chance",
+                                "value_formula": "2d8+[chance]",
+                                "dice_formula": "2d8+[chance]",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "retirer",
+                            "area": "point",
+                            "order": 1,
+                            "params": {
+                                "characteristic": "pm",
+                                "value": "2"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "III",
+                    "required_creature_level": 20,
+                    "effect": "2d8 + Chance (Eau), −2 PM. 3×/tour.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "water",
+                                "value": "2d8+Chance",
+                                "value_formula": "2d8+[chance]",
+                                "dice_formula": "2d8+[chance]",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "retirer",
+                            "area": "point",
+                            "order": 1,
+                            "params": {
+                                "characteristic": "pm",
+                                "value": "2"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "element": "water",
+            "dofusdb_id": "32436",
+            "attack_characteristic_key": "chance"
+        },
+        {
+            "key": "fleche-du-vagabond",
+            "name": "Flèche du vagabond",
+            "slot_index": 1,
+            "choice_order": 3,
+            "character_level": 1,
+            "types": [
+                "Offensif"
+            ],
+            "pa": "3",
+            "po_min": "1",
+            "po_max": "5",
+            "po_editable": true,
+            "sight_line": true,
+            "cast_per_turn": "2",
+            "cast_per_target": "0",
+            "number_between_two_cast": "0",
+            "cast_in_line": false,
+            "resolution_mode": "attack_roll",
+            "is_magic": false,
+            "effect": "1d6 + Force (Terre).",
+            "description": "Tu infliges des dégâts de Terre. En montant de niveau, la flèche repousse aussi la cible. Montée : niv. 5, 2d8 et repousse de 1 ; niv. 10, 2d12 et repousse de 2 ; niv. 15, 4d8 et repousse de 3 ; niv. 20, 3d12 et repousse de 4.",
+            "sub_effects": [
+                {
+                    "slug": "frapper",
+                    "area": "point",
+                    "order": 0,
+                    "params": {
+                        "characteristic": "earth",
+                        "value": "1d6+Force",
+                        "value_formula": "1d6+[strong]",
+                        "dice_formula": "1d6+[strong]",
                         "effect_direction": "action"
                     }
                 }
             ],
-            "dofusdb_id": "13060",
-            "attack_characteristic_key": "intel"
+            "intensification": [
+                {
+                    "tier": "I",
+                    "required_creature_level": 13,
+                    "effect": "2d12 + Force (Terre), repousse de 2.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "earth",
+                                "value": "2d12+Force",
+                                "value_formula": "2d12+[strong]",
+                                "dice_formula": "2d12+[strong]",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 1,
+                            "params": {
+                                "cells_formula": "2",
+                                "movement_kind": "push"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "II",
+                    "required_creature_level": 16,
+                    "effect": "4d8 + Force (Terre), repousse de 3.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "earth",
+                                "value": "4d8+Force",
+                                "value_formula": "4d8+[strong]",
+                                "dice_formula": "4d8+[strong]",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 1,
+                            "params": {
+                                "cells_formula": "3",
+                                "movement_kind": "push"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "III",
+                    "required_creature_level": 20,
+                    "effect": "3d12 + Force (Terre), repousse de 4.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "earth",
+                                "value": "3d12+Force",
+                                "value_formula": "3d12+[strong]",
+                                "dice_formula": "3d12+[strong]",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 1,
+                            "params": {
+                                "cells_formula": "4",
+                                "movement_kind": "push"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "element": "earth",
+            "official_id": "jdr:cra:fleche-du-vagabond",
+            "attack_characteristic_key": "strong"
         },
         {
-            "key": "cra-fleche-assaillante",
-            "name": "Flèche Assaillante",
-            "slot_index": 1,
-            "choice_order": 3,
+            "key": "fleche-evasive",
+            "name": "Flèche évasive",
+            "slot_index": 2,
+            "choice_order": 0,
+            "character_level": 1,
             "types": [
-                "Offensif"
+                "Offensif",
+                "Téléportation"
             ],
-            "element": "air",
             "pa": "3",
             "po_min": "2",
             "po_max": "6",
             "po_editable": true,
             "sight_line": true,
-            "cast_per_turn": "2",
+            "cast_per_turn": "1",
+            "cast_per_target": "2",
+            "number_between_two_cast": "0",
+            "cast_in_line": false,
             "resolution_mode": "attack_roll",
             "is_magic": false,
-            "powerful": 3,
-            "effect": "1d6 + Agilité (Air). Physique, 3 PA, 2×/tour.",
-            "description": "Flèche Assaillante : attaque simple, même budget que le palier 4.",
+            "effect": "1d4 neutre. Tu t'éloignes de 1 et tu repousses de 1. L'éloignement est automatique.",
+            "description": "Tu t'éloignes de la cible et tu la repousses. Les créatures ennemies touchées subissent des dégâts neutres. Montée : niv. 9, 1d6, portée 2–8, 2 fois par tour, éloignement et repousse de 2.",
             "sub_effects": [
                 {
                     "slug": "frapper",
                     "area": "point",
+                    "order": 0,
                     "params": {
-                        "characteristic": "air",
-                        "value": "1d6+Agilité",
-                        "value_formula": "1d6+[agi]",
-                        "dice_formula": "1d6+[agi]",
-                        "value_formula_crit": "2d6+[agi]",
+                        "characteristic": "neutral",
+                        "value": "1d4",
+                        "value_formula": "1d4",
+                        "dice_formula": "1d4",
                         "effect_direction": "action"
+                    }
+                },
+                {
+                    "slug": "déplacer",
+                    "area": "point",
+                    "order": 1,
+                    "params": {
+                        "cells_formula": "1",
+                        "movement_kind": "push"
+                    }
+                },
+                {
+                    "slug": "déplacer",
+                    "area": "point",
+                    "order": 2,
+                    "params": {
+                        "cells_formula": "1",
+                        "movement_kind": "movement"
                     }
                 }
             ],
-            "dofusdb_id": "32781",
-            "attack_characteristic_key": "agi"
+            "intensification": [
+                {
+                    "tier": "I",
+                    "required_creature_level": 13,
+                    "effect": "1d6 neutre. PO 2–8, 2×/tour. Tu t'éloignes de 2 et tu repousses de 2.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "neutral",
+                                "value": "1d6",
+                                "value_formula": "1d6",
+                                "dice_formula": "1d6",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 1,
+                            "params": {
+                                "cells_formula": "2",
+                                "movement_kind": "push"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 2,
+                            "params": {
+                                "cells_formula": "2",
+                                "movement_kind": "movement"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "II",
+                    "required_creature_level": 16,
+                    "effect": "1d6 neutre. PO 2–8, 2×/tour. Tu t'éloignes de 2 et tu repousses de 2.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "neutral",
+                                "value": "1d6",
+                                "value_formula": "1d6",
+                                "dice_formula": "1d6",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 1,
+                            "params": {
+                                "cells_formula": "2",
+                                "movement_kind": "push"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 2,
+                            "params": {
+                                "cells_formula": "2",
+                                "movement_kind": "movement"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "III",
+                    "required_creature_level": 20,
+                    "effect": "1d6 neutre. PO 2–8, 2×/tour. Tu t'éloignes de 2 et tu repousses de 2.",
+                    "sub_effects": [
+                        {
+                            "slug": "frapper",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "neutral",
+                                "value": "1d6",
+                                "value_formula": "1d6",
+                                "dice_formula": "1d6",
+                                "effect_direction": "action"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 1,
+                            "params": {
+                                "cells_formula": "2",
+                                "movement_kind": "push"
+                            }
+                        },
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 2,
+                            "params": {
+                                "cells_formula": "2",
+                                "movement_kind": "movement"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "official_id": "jdr:cra:fleche-evasive",
+            "attack_characteristic_key": "vitality"
         },
         {
-            "key": "oeil-de-lynx",
-            "name": "Œil de Lynx",
-            "official_id": "jdr:oeil-de-lynx",
+            "key": "tir-de-repli",
+            "name": "Tir de repli",
             "slot_index": 2,
-            "choice_order": 0,
+            "choice_order": 1,
+            "character_level": 1,
             "types": [
-                "Buff"
+                "Téléportation"
             ],
-            "element": null,
-            "pa": "3",
+            "pa": "2",
             "po_min": "0",
             "po_max": "0",
             "po_editable": false,
-            "sight_line": false,
-            "cast_per_turn": "1",
-            "max_stack": 1,
-            "resolution_mode": "auto_success",
-            "auto_success_if_willing_target": true,
-            "is_magic": true,
-            "powerful": 3,
-            "duration": "jusqu’à la fin de ton prochain tour",
-            "effect": "+2 PO jusqu’à la fin de ton prochain tour. Pas de cumul. 3 PA, 1×/tour.",
-            "description": "Tu plisses les yeux. Le champ s’allonge : tes flèches portent plus loin.",
-            "sub_effects": [
-                {
-                    "slug": "booster",
-                    "area": "point",
-                    "duration_formula": "1",
-                    "params": {
-                        "characteristic": "range_spell",
-                        "value": "2",
-                        "value_formula": "2",
-                        "dice_formula": "2",
-                        "effect_direction": "self",
-                        "duration_formula": "1"
-                    }
-                }
-            ]
-        },
-        {
-            "key": "tir-de-recul",
-            "name": "Tir de Recul",
-            "dofusdb_id": "13055",
-            "slot_index": 3,
-            "choice_order": 0,
-            "types": [
-                "Debuff"
-            ],
-            "element": "air",
-            "pa": "3",
-            "po_min": "1",
-            "po_max": "6",
-            "po_editable": true,
             "sight_line": true,
-            "cast_per_turn": "1",
-            "resolution_mode": "attack_roll",
-            "attack_characteristic_key": "agi",
+            "cast_per_turn": "2",
+            "cast_per_target": "0",
+            "number_between_two_cast": "0",
+            "cast_in_line": false,
+            "resolution_mode": "auto_success",
             "is_magic": false,
-            "powerful": 3,
-            "effect": "Poussée de 2 cases, pas de dégâts. Physique, 3 PA, 1×/tour, PO 1–6 adapté.",
-            "description": "Pas pour blesser : pour reculer l’ennemi. Tu gardes tes distances.",
+            "effect": "Tu te repousses d'au plus 3 cases.",
+            "description": "Tu t'éloignes de la cible en profitant du recul du tir. Tu romps le contact sans renoncer à agir. Montée : niv. 9, jusqu'à 4 cases.",
             "sub_effects": [
                 {
                     "slug": "déplacer",
                     "area": "point",
+                    "order": 0,
                     "params": {
-                        "cells_formula": "2",
-                        "movement_kind": "push",
-                        "effect_direction": "action"
+                        "cells_formula": "3",
+                        "movement_kind": "push"
                     }
                 }
-            ]
+            ],
+            "intensification": [
+                {
+                    "tier": "I",
+                    "required_creature_level": 13,
+                    "effect": "Tu te repousses d'au plus 4 cases.",
+                    "sub_effects": [
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "cells_formula": "4",
+                                "movement_kind": "push"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "II",
+                    "required_creature_level": 16,
+                    "effect": "Tu te repousses d'au plus 4 cases.",
+                    "sub_effects": [
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "cells_formula": "4",
+                                "movement_kind": "push"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "tier": "III",
+                    "required_creature_level": 20,
+                    "effect": "Tu te repousses d'au plus 4 cases.",
+                    "sub_effects": [
+                        {
+                            "slug": "déplacer",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "cells_formula": "4",
+                                "movement_kind": "push"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "dofusdb_id": "32470"
+        },
+        {
+            "key": "tir-eloigne",
+            "name": "Tir éloigné",
+            "slot_index": 3,
+            "choice_order": 0,
+            "character_level": 1,
+            "types": [
+                "Buff"
+            ],
+            "pa": "3",
+            "po_min": "1",
+            "po_max": "7",
+            "po_editable": true,
+            "sight_line": true,
+            "cast_per_turn": "1",
+            "cast_per_target": "0",
+            "number_between_two_cast": "3",
+            "cast_in_line": false,
+            "resolution_mode": "auto_success",
+            "is_magic": false,
+            "effect": "+5 PO pendant 2 tours. Cibles : modificateur d'Intelligence + 2.",
+            "description": "Tu augmentes la portée de tes tirs, ou celle d'un·e allié·e. Si plusieurs allié·e·s sont dans la zone, tu peux en affecter plusieurs. Montée : niv. 7, 2 PA, +10 PO et modificateur d'Intelligence + 4 cibles ; niv. 14, +20 PO et + 5 cibles.",
+            "sub_effects": [
+                {
+                    "slug": "booster",
+                    "area": "point",
+                    "order": 0,
+                    "params": {
+                        "characteristic": "po",
+                        "value": "5"
+                    },
+                    "duration_formula": "2"
+                }
+            ],
+            "intensification": [
+                {
+                    "tier": "I",
+                    "required_creature_level": 13,
+                    "effect": "+10 PO pendant 2 tours. 2 PA. Cibles : modificateur d'Intelligence + 4.",
+                    "sub_effects": [
+                        {
+                            "slug": "booster",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "po",
+                                "value": "10"
+                            },
+                            "duration_formula": "2"
+                        }
+                    ]
+                },
+                {
+                    "tier": "II",
+                    "required_creature_level": 16,
+                    "effect": "+20 PO pendant 2 tours. Cibles : modificateur d'Intelligence + 5.",
+                    "sub_effects": [
+                        {
+                            "slug": "booster",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "po",
+                                "value": "20"
+                            },
+                            "duration_formula": "2"
+                        }
+                    ]
+                },
+                {
+                    "tier": "III",
+                    "required_creature_level": 20,
+                    "effect": "+20 PO pendant 2 tours. Cibles : modificateur d'Intelligence + 5.",
+                    "sub_effects": [
+                        {
+                            "slug": "booster",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "po",
+                                "value": "20"
+                            },
+                            "duration_formula": "2"
+                        }
+                    ]
+                }
+            ],
+            "dofusdb_id": "32558",
+            "duration": "2 tours"
+        },
+        {
+            "key": "tir-percant",
+            "name": "Tir perçant",
+            "slot_index": 3,
+            "choice_order": 1,
+            "character_level": 1,
+            "types": [
+                "Buff"
+            ],
+            "pa": "3",
+            "po_min": "0",
+            "po_max": "0",
+            "po_editable": false,
+            "sight_line": true,
+            "cast_per_turn": "1",
+            "cast_per_target": "0",
+            "number_between_two_cast": "3",
+            "cast_in_line": false,
+            "resolution_mode": "auto_success",
+            "is_magic": false,
+            "effect": "+ modificateur de Force aux dégâts de Terre pendant 2 tours.",
+            "description": "Tu concentres tes prochains tirs. Pendant 2 tours, tes attaques à distance infligent des dégâts supplémentaires liés à la Terre. Montée : niv. 7, modificateur de Force + 2 ; niv. 14, modificateur de Force + 5.",
+            "sub_effects": [
+                {
+                    "slug": "booster",
+                    "area": "point",
+                    "order": 0,
+                    "params": {
+                        "characteristic": "earth",
+                        "value": "[strong]"
+                    },
+                    "duration_formula": "2"
+                }
+            ],
+            "intensification": [
+                {
+                    "tier": "I",
+                    "required_creature_level": 13,
+                    "effect": "+ modificateur de Force + 2 pendant 2 tours.",
+                    "sub_effects": [
+                        {
+                            "slug": "booster",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "earth",
+                                "value": "[strong]+2"
+                            },
+                            "duration_formula": "2"
+                        }
+                    ]
+                },
+                {
+                    "tier": "II",
+                    "required_creature_level": 16,
+                    "effect": "+ modificateur de Force + 5 pendant 2 tours.",
+                    "sub_effects": [
+                        {
+                            "slug": "booster",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "earth",
+                                "value": "[strong]+5"
+                            },
+                            "duration_formula": "2"
+                        }
+                    ]
+                },
+                {
+                    "tier": "III",
+                    "required_creature_level": 20,
+                    "effect": "+ modificateur de Force + 5 pendant 2 tours.",
+                    "sub_effects": [
+                        {
+                            "slug": "booster",
+                            "area": "point",
+                            "order": 0,
+                            "params": {
+                                "characteristic": "earth",
+                                "value": "[strong]+5"
+                            },
+                            "duration_formula": "2"
+                        }
+                    ]
+                }
+            ],
+            "element": "earth",
+            "dofusdb_id": "13080",
+            "duration": "2 tours"
         }
     ]
 }

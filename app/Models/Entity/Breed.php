@@ -38,6 +38,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string|null $evolution
  * @property string|null $life_dice
  * @property string|null $specificity
+ * @property string|null $mechanics
  * @property string $dofus_version
  * @property string $state
  * @property int $read_level
@@ -107,6 +108,54 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Breed whereLogoMale($value)
  * @method static Builder<static>|Breed whereSymbolBw($value)
  * @method static Builder<static>|Breed whereSymbolFull($value)
+ * @property int $acrobatics_mastery
+ * @property int $animal_handling_mastery
+ * @property int $arcana_mastery
+ * @property int $athletics_mastery
+ * @property int $deception_mastery
+ * @property int $history_mastery
+ * @property int $insight_mastery
+ * @property int $intimidation_mastery
+ * @property int $investigation_mastery
+ * @property int $medicine_mastery
+ * @property int $nature_mastery
+ * @property int $perception_mastery
+ * @property int $performance_mastery
+ * @property int $persuasion_mastery
+ * @property int $religion_mastery
+ * @property int $sleight_of_hand_mastery
+ * @property int $stealth_mastery
+ * @property int $survival_mastery
+ * @property int $save_strength_mastery
+ * @property int $save_intelligence_mastery
+ * @property int $save_agility_mastery
+ * @property int $save_chance_mastery
+ * @property int $save_vitality_mastery
+ * @property int $save_wisdom_mastery
+ * @method static Builder<static>|Breed whereAcrobaticsMastery($value)
+ * @method static Builder<static>|Breed whereAnimalHandlingMastery($value)
+ * @method static Builder<static>|Breed whereArcanaMastery($value)
+ * @method static Builder<static>|Breed whereAthleticsMastery($value)
+ * @method static Builder<static>|Breed whereDeceptionMastery($value)
+ * @method static Builder<static>|Breed whereHistoryMastery($value)
+ * @method static Builder<static>|Breed whereInsightMastery($value)
+ * @method static Builder<static>|Breed whereIntimidationMastery($value)
+ * @method static Builder<static>|Breed whereInvestigationMastery($value)
+ * @method static Builder<static>|Breed whereMedicineMastery($value)
+ * @method static Builder<static>|Breed whereNatureMastery($value)
+ * @method static Builder<static>|Breed wherePerceptionMastery($value)
+ * @method static Builder<static>|Breed wherePerformanceMastery($value)
+ * @method static Builder<static>|Breed wherePersuasionMastery($value)
+ * @method static Builder<static>|Breed whereReligionMastery($value)
+ * @method static Builder<static>|Breed whereSaveAgilityMastery($value)
+ * @method static Builder<static>|Breed whereSaveChanceMastery($value)
+ * @method static Builder<static>|Breed whereSaveIntelligenceMastery($value)
+ * @method static Builder<static>|Breed whereSaveStrengthMastery($value)
+ * @method static Builder<static>|Breed whereSaveVitalityMastery($value)
+ * @method static Builder<static>|Breed whereSaveWisdomMastery($value)
+ * @method static Builder<static>|Breed whereSleightOfHandMastery($value)
+ * @method static Builder<static>|Breed whereStealthMastery($value)
+ * @method static Builder<static>|Breed whereSurvivalMastery($value)
  * @mixin \Eloquent
  */
 class Breed extends Model implements HasMedia
@@ -158,6 +207,7 @@ class Breed extends Model implements HasMedia
         'evolution',
         'life_dice',
         'specificity',
+        'mechanics',
         'dofus_version',
         'state',
         'read_level',

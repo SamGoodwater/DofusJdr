@@ -7,7 +7,7 @@
   {
     "path": "100- Done/README.md",
     "title": "Ce qui a été fait",
-    "description": "Le catalogue des traits permanents reprend les traits optionnels de Donjons & Dragons, réécrits avec les compétences, les sauvegardes et l’avantage ou le désavantage du jeu. Chacun a une icône en losange. École prédestinée n’est pas repris : le jeu n’a pas d’écoles de magie. Le trait de vitesse s’appelle Rapide, pour laisser Vif / Vive à l’initiative. Les neuf traits déjà en place (tailles, Lourd, Agile, poisons…) gardent leur texte."
+    "description": "Sur la fiche d’une classe, les sorts s’affichent en cartes de même largeur, avec le menu d’options (afficher, modifier) et l’ouverture au double-clic. Le passif de classe se distingue visuellement des sorts. Modifier une entité depuis une carte ou une fiche en modal ouvre l’éditeur dans une modal, sans quitter la page en cours ; depuis la page de l’entité, l’édition reste en page pleine."
   },
   {
     "path": "backend/_ai.md",

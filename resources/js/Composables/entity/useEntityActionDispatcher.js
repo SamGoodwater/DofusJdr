@@ -26,6 +26,8 @@ import { useCopyToClipboard } from "@/Composables/utils/useCopyToClipboard";
 import { useEntityDofusdbRefresh } from "@/Composables/entity/useEntityDofusdbRefresh";
 import { usePermissions } from "@/Composables/permissions/usePermissions";
 import { useNotificationStore } from "@/Composables/store/useNotificationStore";
+import { useEntitySurfaceStore } from "@/Composables/store/useEntitySurfaceStore";
+import { resolveEntityEditHref } from "@/Utils/entity/resolveEntityEditHref";
 
 function getEntityId(entity) {
     return entity?.id ?? entity?._data?.id ?? null;
@@ -585,16 +587,77 @@ export function useEntityActionDispatcher(entityType, handlers = {}) {
                 return true;
 
             case "quick-view":
-            case "open-modal":
-                handlers.openModal?.(entity, meta);
+            case "open-modal": {
+                if (typeof handlers.openModal === "function") {
+                    handlers.openModal(entity, meta);
+                    return true;
+                }
+                useEntitySurfaceStore().openView({
+                    entityType: plural,
+                    entityId,
+                    entity,
+                    tableMeta: meta?.tableMeta || {},
+                });
                 return true;
+            }
 
             case "edit":
             case "edit-page":
-            case "edit-modal":
-                router.visit(route(`entities.${plural}.edit`, { [paramKey]: entityId }));
+            case "edit-modal": {
+                const ctx =
+                    meta?.context
+                    || (typeof handlers.actionContext === "function" ? handlers.actionContext() : null)
+                    || handlers.actionContext
+                    || {};
+                const surface = useEntitySurfaceStore();
+
+                // Modal d’édition : « Agrandir » → page Modifier.
+                if (ctx.inModal && ctx.modalMode === "edit") {
+                    surface.expandTopEditToPage();
+                    handlers.onEditPage?.(entity, meta);
+                    return true;
+                }
+
+                // Modal d’affichage : remplacer par l’éditeur.
+                if (ctx.inModal && ctx.modalMode === "view") {
+                    if (typeof handlers.openEditModal === "function") {
+                        handlers.openEditModal(entity, meta);
+                    } else if (surface.top?.entityId === entityId && surface.top?.entityType === plural) {
+                        surface.replaceTopWithEdit();
+                    } else {
+                        surface.openEdit({ entityType: plural, entityId, entity });
+                    }
+                    handlers.onEditPage?.(entity, meta);
+                    return true;
+                }
+
+                // Carte minimale / ligne : éditeur en modal.
+                if (
+                    ctx.inMinimal
+                    || ctx.viewMode === "minimal"
+                    || ctx.inLine
+                    || ctx.viewMode === "line"
+                    || actionKey === "edit-modal"
+                ) {
+                    if (typeof handlers.openEditModal === "function") {
+                        handlers.openEditModal(entity, meta);
+                    } else {
+                        surface.openEdit({ entityType: plural, entityId, entity });
+                    }
+                    handlers.onEditPage?.(entity, meta);
+                    return true;
+                }
+
+                // Page fiche (ou défaut) : page Modifier.
+                const editHref =
+                    resolveEntityEditHref(plural, entityId)
+                    || route(`entities.${plural}.edit`, { [paramKey]: entityId }, false);
+                if (editHref) {
+                    router.visit(editHref);
+                }
                 handlers.onEditPage?.(entity, meta);
                 return true;
+            }
 
             case "copy-link": {
                 const url = resolveEntityRouteUrl(paramKey, "show", entityId, cfg);

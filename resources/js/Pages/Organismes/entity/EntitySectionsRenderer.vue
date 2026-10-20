@@ -15,6 +15,14 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    /**
+     * Fiches immersives (ex. classes) : masque les titres génériques (Texte, Contenu…)
+     * et le chrome meta hors édition.
+     */
+    immersive: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const toNumericOrder = (value, fallback = 0) => {
@@ -61,10 +69,14 @@ const normalizedSections = computed(() => {
                 v-for="section in normalizedSections"
                 :key="section.id"
                 :section="section"
+                :immersive="immersive"
             />
         </div>
 
-        <div v-else class="rounded-box border border-base-300/60 bg-base-100/35 p-4 text-sm text-base-content/70">
+        <div
+            v-else-if="emptyMessage"
+            class="rounded-box border border-base-300/60 bg-base-100/35 p-4 text-sm text-base-content/70"
+        >
             {{ emptyMessage }}
         </div>
     </div>

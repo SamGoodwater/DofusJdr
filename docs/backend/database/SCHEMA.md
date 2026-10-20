@@ -91,6 +91,7 @@ erDiagram
     life : varchar(255)
     life_dice : varchar(255)
     specificity : varchar(255)
+    mechanics : longtext
     dofus_version : varchar(255)
     state : varchar(255)
     read_level : tinyint(4)

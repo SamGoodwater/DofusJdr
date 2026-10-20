@@ -29,6 +29,10 @@
   garde `capability`. Conteneurs : `EntityEditContainer` + `EntityEditGrid`.
 - Pages `entity/*/Edit.vue` : header + sheet + dock masqué ; managers en
   `#after-sections`. Sous-éditeurs gardent leur propre enregistrement.
+- Modal globale : `EntitySurfaceHost` + `useEntitySurfaceStore` (affichage / édition,
+  pile, remplacement affichage→édition). Embed : `EntityEditEmbedBridge` (provide
+  dans le Teleport) + `useEntityEditEmbed` → `redirect_after_update=stay` ; PATCH
+  via `EntityUpdateRedirect` (`stay` → `back()`, sans navigation vers show/edit).
 
 ## Descendre
 

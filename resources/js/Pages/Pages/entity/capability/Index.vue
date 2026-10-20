@@ -3,7 +3,7 @@
  * Capability Index Page
  *
  * @description
- * Liste des capacités ; édition complète en modal ({@link CapabilityEditModal}, charge utile `edit-payload`), comme les sorts.
+ * Liste des capacités ; affichage / édition via EntitySurfaceHost.
  *
  * @props {Object} capabilities - Collection paginée des capacités
  */
@@ -18,9 +18,7 @@ import { getEntityRouteConfig, resolveEntityRouteUrl } from "@/Composables/entit
 
 import Btn from '@/Pages/Atoms/action/Btn.vue';
 import EntityTanStackTable from '@/Pages/Organismes/table/EntityTanStackTable.vue';
-import EntityModal from '@/Pages/Organismes/entity/EntityModal.vue';
 import CreateEntityModal from '@/Pages/Organismes/entity/CreateEntityModal.vue';
-import CapabilityEditModal from '@/Pages/Organismes/entity/CapabilityEditModal.vue';
 import { TableConfig } from "@/Utils/Entity/Configs/TableConfig.js";
 import { getCapabilityFieldDescriptors } from "@/Entities/capability/capability-descriptors";
 import { getEntityResponseAdapter } from "@/Entities/entity-registry";
@@ -31,6 +29,7 @@ import {
 } from "@/Entities/capability/capability-form-config";
 import { getEntityCreateAllowFieldKeys } from "@/Utils/entity/entity-create-config";
 import { useEntityIndexTableIntents } from "@/Composables/entity/useEntityIndexTableIntents";
+import { useEntityIndexSurface } from "@/Composables/entity/useEntityIndexSurface";
 
 defineProps({
     capabilities: {
@@ -82,6 +81,10 @@ const capabilityCreateDefaultEntity = getCapabilityCreateDefaultEntity();
 
 
 const tableMeta = ref({});
+
+const { openFullModal, openEdit } = useEntityIndexSurface("capabilities", {
+    getTableMeta: () => tableMeta.value,
+});
 const handleTableLoaded = ({ rows, meta }) => {
     tableRows.value = Array.isArray(rows) ? rows : [];
     tableMeta.value = meta || {};
@@ -93,36 +96,12 @@ const handleRowDoubleClick = (row) => {
     // Si c'est déjà une instance Capability, l'utiliser directement
     const model = raw instanceof Capability ? raw : Capability.fromArray([raw])[0] || null;
     if (!model) return;
-    selectedEntity.value = model;
-    modalView.value = "full";
-    modalOpen.value = true;
+    openFullModal(model);
 };
 
 // État
-const selectedEntity = ref(null);
-const modalOpen = ref(false);
-const modalView = ref('full');
 const createModalOpen = ref(false);
 
-/** Éditeur complet en modal (même corps que la page Edit). */
-const capabilityEditModalOpen = ref(false);
-const capabilityEditId = ref(null);
-
-const openCapabilityEditModal = (entityId) => {
-    if (!entityId) return;
-    capabilityEditId.value = entityId;
-    capabilityEditModalOpen.value = true;
-};
-
-const closeCapabilityEditModal = () => {
-    capabilityEditModalOpen.value = false;
-    capabilityEditId.value = null;
-};
-
-const onCapabilityEditModalSaved = () => {
-    closeCapabilityEditModal();
-    refreshToken.value++;
-};
 
 const handleCreate = () => {
     createModalOpen.value = true;
@@ -137,10 +116,6 @@ const handleEntityCreated = () => {
     refreshToken.value++;
 };
 
-const closeModal = () => {
-    modalOpen.value = false;
-    selectedEntity.value = null;
-};
 
 
 const { handleKeyboardIntent } = useEntityIndexTableIntents({
@@ -148,14 +123,8 @@ const { handleKeyboardIntent } = useEntityIndexTableIntents({
     routeShowName: "entities.capabilities.show",
     routeShowParam: "capability",
     canModify: () => canModify.value,
-    openFullModal: (model) => {
-        selectedEntity.value = model;
-        modalView.value = "full";
-        modalOpen.value = true;
-    },
-    openEdit: (model) => {
-        openCapabilityEditModal(model?.id);
-    },
+    openFullModal,
+    openEdit,
 });
 
 // Handler pour les actions du tableau
@@ -173,16 +142,11 @@ const handleTableAction = async (actionKey, entity, row) => {
     switch (actionKey) {
         case 'view':
         case 'quick-view':
-            selectedEntity.value = model;
-            modalView.value = 'full';
-            modalOpen.value = true;
+            openFullModal(model);
             break;
 
         case 'edit':
-            openCapabilityEditModal(entityId);
-            break;
-
-            openCapabilityEditModal(entityId);
+            openEdit(model);
             break;
 
         case 'copy-link': {
@@ -201,40 +165,6 @@ const handleTableAction = async (actionKey, entity, row) => {
             // TODO: Implémenter la suppression avec confirmation
             break;
     }
-};
-
-// Handlers pour les actions du modal
-
-const handleModalExpand = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    router.visit(route('entities.capabilities.show', { capability: entityId }));
-    closeModal();
-};
-
-const handleModalCopyLink = async (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    const cfg = getEntityRouteConfig('capability');
-    const url = resolveEntityRouteUrl('capability', 'show', entityId, cfg);
-    if (url) {
-        await copyToClipboard(url, "Lien de l'entité copié !");
-    }
-};
-
-const handleModalDownloadPdf = async (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    await downloadPdf(entityId);
-};
-
-const handleModalRefresh = () => {
-    refreshToken.value++;
-    closeModal();
-};
-
-const handleModalDelete = (_entity) => {
-    // TODO: Implémenter la suppression avec confirmation
 };
 
 </script>
@@ -279,29 +209,6 @@ const handleModalDelete = (_entity) => {
             :create-allow-field-keys="getEntityCreateAllowFieldKeys('capabilities')"
             @close="handleCloseCreateModal"
             @created="handleEntityCreated"
-        />
-
-        <!-- Modal de visualisation -->
-        <EntityModal
-            v-if="selectedEntity"
-            :entity="selectedEntity"
-            entity-type="capabilities"
-            :view="modalView"
-            :open="modalOpen"
-            :table-meta="tableMeta"
-            @close="closeModal"
-            @expand="handleModalExpand"
-            @copy-link="handleModalCopyLink"
-            @download-pdf="handleModalDownloadPdf"
-            @refresh="handleModalRefresh"
-            @delete="handleModalDelete"
-        />
-
-        <CapabilityEditModal
-            :open="capabilityEditModalOpen"
-            :capability-id="capabilityEditId"
-            @close="closeCapabilityEditModal"
-            @saved="onCapabilityEditModalSaved"
         />
     </div>
 </template>

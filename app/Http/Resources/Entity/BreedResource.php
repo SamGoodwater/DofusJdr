@@ -34,6 +34,7 @@ class BreedResource extends JsonResource
             'life_dice' => $this->life_dice,
             'life_dice_meta' => $this->lifeDiceCharacteristicMeta(),
             'specificity' => $this->specificity,
+            'mechanics' => $this->mechanics,
             'dofus_version' => $this->dofus_version,
             'state' => $this->state,
             'read_level' => (int) ($this->read_level ?? 0),

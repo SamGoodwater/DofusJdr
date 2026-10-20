@@ -18,6 +18,7 @@ use App\Services\Entity\EntityDeletionService;
 use App\Services\PdfService;
 use App\Services\Spell\SpellDegreeResolver;
 use App\Services\Spell\SpellDegreesSerializer;
+use App\Support\Entity\EntityUpdateRedirect;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -357,7 +358,6 @@ class SpellController extends Controller
         $this->authorize('update', $spell);
 
         $data = $request->validated();
-        $redirectAfter = $data['redirect_after_update'] ?? null;
         unset($data['redirect_after_update']);
 
         $spellTypes = $data['spellTypes'] ?? null;
@@ -371,28 +371,14 @@ class SpellController extends Controller
 
         $spell->load(['createdBy', 'creatures', 'breeds', 'spellTypes']);
 
-        $successMessage = 'Sort mis à jour avec succès.';
-
-        if ($redirectAfter === 'stay' || $redirectAfter === null || $redirectAfter === '') {
-            return back()->with('success', $successMessage);
-        }
-
-        if ($redirectAfter === 'index') {
-            return redirect()->route('entities.spells.index')
-                ->with('success', $successMessage);
-        }
-
-        if ($redirectAfter === 'edit') {
-            return redirect()->route('entities.spells.edit', $spell)
-                ->with('success', $successMessage);
-        }
-
-        if ($redirectAfter === 'show') {
-            return redirect()->route('entities.spells.show', $spell)
-                ->with('success', $successMessage);
-        }
-
-        return back()->with('success', $successMessage);
+        return EntityUpdateRedirect::respond(
+            $request,
+            'Sort mis à jour avec succès.',
+            fn () => back(),
+            editRedirect: fn () => redirect()->route('entities.spells.edit', $spell),
+            indexRedirect: fn () => redirect()->route('entities.spells.index'),
+            showRedirect: fn () => redirect()->route('entities.spells.show', $spell),
+        );
     }
 
     /**

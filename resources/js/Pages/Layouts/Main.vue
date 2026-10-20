@@ -38,6 +38,7 @@ import PendingErasureBanner from "@/Pages/Molecules/privacy/PendingErasureBanner
 import FeedbackFab from "@/Pages/Organismes/feedback/FeedbackFab.vue";
 import DofusDbReferencePanel from "@/Pages/Molecules/entity/DofusDbReferencePanel.vue";
 import PinnedEntitiesHost from "@/Pages/Organismes/entity/PinnedEntitiesHost.vue";
+import EntitySurfaceHost from "@/Pages/Organismes/entity/EntitySurfaceHost.vue";
 import FavoritesModal from "@/Pages/Organismes/entity/FavoritesModal.vue";
 import SearchInput from "@/Pages/Organismes/data-input/SearchInput.vue";
 import {
@@ -248,6 +249,7 @@ onUnmounted(() => {
         <FeedbackFab />
         <DofusDbReferencePanel />
         <PinnedEntitiesHost />
+        <EntitySurfaceHost />
         <FavoritesModal />
         <CookieConsentBanner />
     </div>

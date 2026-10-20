@@ -57,7 +57,8 @@ class BreedTableController extends Controller
         if ($search !== '') {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('specificity', 'like', "%{$search}%");
+                    ->orWhere('specificity', 'like', "%{$search}%")
+                    ->orWhere('mechanics', 'like', "%{$search}%");
             });
         }
 

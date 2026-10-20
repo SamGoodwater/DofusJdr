@@ -11,6 +11,7 @@ use App\Models\Entity\Condition;
 use App\Models\User;
 use App\Services\Entity\EntityDeletionService;
 use App\Services\PdfService;
+use App\Support\Entity\EntityUpdateRedirect;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -129,26 +130,19 @@ class ConditionController extends Controller
      */
     public function update(UpdateConditionRequest $request, Condition $condition)
     {
-        $redirectAfter = (string) $request->input('redirect_after_update', '');
         $data = $request->validated();
+        unset($data['redirect_after_update']);
         $condition->update($data);
 
         if ($request->header('X-Inertia')) {
-            if ($redirectAfter === 'edit') {
-                return redirect()
-                    ->route('entities.conditions.edit', $condition)
-                    ->with('success', 'État mis à jour avec succès.');
-            }
-
-            if ($redirectAfter === 'index') {
-                return redirect()
-                    ->route('entities.conditions.index')
-                    ->with('success', 'État mis à jour avec succès.');
-            }
-
-            return redirect()
-                ->route('entities.conditions.show', $condition)
-                ->with('success', 'État mis à jour avec succès.');
+            return EntityUpdateRedirect::respond(
+                $request,
+                'État mis à jour avec succès.',
+                fn () => back(),
+                editRedirect: fn () => redirect()->route('entities.conditions.edit', $condition),
+                indexRedirect: fn () => redirect()->route('entities.conditions.index'),
+                showRedirect: fn () => redirect()->route('entities.conditions.show', $condition),
+            );
         }
 
         return response()->json($condition);

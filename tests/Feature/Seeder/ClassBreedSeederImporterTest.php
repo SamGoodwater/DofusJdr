@@ -41,9 +41,15 @@ final class ClassBreedSeederImporterTest extends TestCase
         $this->assertSame('Pandawa', $panda->name);
         $this->assertSame('Bagarreur assoiffé', $panda->description_fast);
 
+        $feca = Breed::query()->where('dofusdb_id', '1')->first();
+        $this->assertNotNull($feca);
+        $this->assertSame('Féca', $feca->name);
+        $this->assertStringContainsString('Pile ou Face', (string) $feca->mechanics);
+
         $iop = Breed::query()->where('dofusdb_id', '8')->first();
         $this->assertNotNull($iop);
         $this->assertSame('Iop', $iop->name);
+        $this->assertNull($iop->mechanics);
         $this->assertFalse($iop->auto_update);
         $this->assertSame('/storage/images/breeds/iop/full_m.png', $iop->image_full_male);
         $this->assertSame('/storage/images/breeds/iop/logo_m.png', $iop->logo_male);

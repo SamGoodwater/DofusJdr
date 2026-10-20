@@ -475,13 +475,21 @@ class PageService
     }
 
     /**
-     * Index automatique des sous-pages pour une page parente (cartes ou fiches minimal entité).
+     * Index automatique des sous-pages pour une page parente (cartes CMS).
+     *
+     * Les catalogues Classes / Spécialisations n’affichent pas cet index : le tableau
+     * d’entités sur la page suffit ; les fiches restent accessibles via le menu déplié.
      *
      * @return list<array<string, mixed>>
      */
     public static function buildMenuChildIndex(Page $page, ?User $user = null): array
     {
         if (! self::isMenuCollapsible($page)) {
+            return [];
+        }
+
+        $slug = (string) ($page->slug ?? '');
+        if (in_array($slug, ['bibliotheque-breed', 'bibliotheque-specialization'], true)) {
             return [];
         }
 

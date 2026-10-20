@@ -223,7 +223,7 @@ const handleAction = async (actionKey) => {
             emit('view', props.item);
             break;
         case 'edit':
-            router.visit(route('entities.items.edit', { item: itemId }));
+            await dispatchEntityAction("edit", props.item, { context: actionsContext.value });
             emit('edit', props.item);
             break;
         

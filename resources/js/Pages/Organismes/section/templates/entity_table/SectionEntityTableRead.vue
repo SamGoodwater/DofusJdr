@@ -16,9 +16,9 @@ import { normalizeIndexTableFilters } from "@/Composables/entity/useEntityIndexT
 import { usePermissions } from "@/Composables/permissions/usePermissions";
 import { entitySupportsQuickCreate, getEntityCreateLabel } from "@/Utils/entity/entity-create-config";
 import EntityTanStackTable from "@/Pages/Organismes/table/EntityTanStackTable.vue";
-import EntityModal from "@/Pages/Organismes/entity/EntityModal.vue";
 import CreateEntityModal from "@/Pages/Organismes/entity/CreateEntityModal.vue";
 import Btn from "@/Pages/Atoms/action/Btn.vue";
+import { useEntitySurfaceStore } from "@/Composables/store/useEntitySurfaceStore";
 
 /**
  * Virtualisation client (TanStackTable) — activée uniquement dans les sections CMS.
@@ -113,8 +113,7 @@ const resolveEntityId = (raw) => {
     return null;
 };
 
-const selectedEntity = ref(null);
-const modalOpen = ref(false);
+const entitySurface = useEntitySurfaceStore();
 
 const resolveModel = (raw) => {
     if (!raw) return null;
@@ -129,27 +128,17 @@ const resolveModel = (raw) => {
 
 const openViewModal = (raw) => {
     const model = resolveModel(raw);
-    if (!resolveEntityId(model)) return;
-    selectedEntity.value = model;
-    modalOpen.value = true;
-};
-
-const closeViewModal = () => {
-    modalOpen.value = false;
-    selectedEntity.value = null;
-};
-
-const handleViewModalExpand = (entity) => {
-    const entityId = resolveEntityId(entity ?? selectedEntity.value);
+    const entityId = resolveEntityId(model);
     if (entityId === null || entityId === "") return;
-    const plural = entityType.value;
-    const paramKey = getEntitySingularRouteKey(plural);
-    router.visit(route(`entities.${plural}.show`, { [paramKey]: entityId }));
-    closeViewModal();
+    entitySurface.openView({
+        entityType: entityType.value,
+        entityId,
+        entity: model,
+    });
 };
 
 /**
- * Navigation fiche entité — Afficher / double-clic → modal full ; Agrandir (expand) → page Show.
+ * Navigation fiche entité — Afficher / double-clic → modal full ; Éditer → modal édition.
  *
  * @param {string} actionKey
  * @param {unknown} entity
@@ -163,16 +152,24 @@ const handleTableAction = (actionKey, entity, row) => {
         case "quick-view":
             openViewModal(raw);
             break;
-        case "expand":
-            handleViewModalExpand(raw);
-            break;
-        case "edit":
-        case "edit-page": {
+        case "expand": {
             const entityId = resolveEntityId(raw);
             if (entityId === null || entityId === "") return;
             const plural = entityType.value;
             const paramKey = getEntitySingularRouteKey(plural);
-            router.visit(route(`entities.${plural}.edit`, { [paramKey]: entityId }));
+            router.visit(route(`entities.${plural}.show`, { [paramKey]: entityId }));
+            break;
+        }
+        case "edit":
+        case "edit-page": {
+            const model = resolveModel(raw);
+            const entityId = resolveEntityId(model);
+            if (entityId === null || entityId === "") return;
+            entitySurface.openEdit({
+                entityType: entityType.value,
+                entityId,
+                entity: model,
+            });
             break;
         }
         default:
@@ -240,17 +237,6 @@ const handleEntityCreated = () => {
             :entity-type="entityType"
             @close="handleCloseCreateModal"
             @created="handleEntityCreated"
-        />
-
-        <EntityModal
-            v-if="selectedEntity"
-            :entity="selectedEntity"
-            :entity-type="entityType"
-            view="full"
-            :open="modalOpen"
-            :use-stored-format="false"
-            @close="closeViewModal"
-            @expand="handleViewModalExpand"
         />
     </div>
 </template>

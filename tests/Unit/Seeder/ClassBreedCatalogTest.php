@@ -76,8 +76,11 @@ final class ClassBreedCatalogTest extends TestCase
         $this->assertSame('Féca', $feca['name'] ?? null);
         $this->assertSame('1', $feca['dofusdb_id'] ?? null);
         $this->assertSame('Protecteur', $feca['description_fast'] ?? null);
+        $this->assertNotNull($feca['mechanics'] ?? null);
+        $this->assertStringContainsString('Pile ou Face', (string) $feca['mechanics']);
         $this->assertSame('Iop', $iop['name'] ?? null);
         $this->assertSame('8', $iop['dofusdb_id'] ?? null);
+        $this->assertNull($iop['mechanics'] ?? null);
         $this->assertSame('Guerrier téméraire', $iop['description_fast'] ?? null);
     }
 }

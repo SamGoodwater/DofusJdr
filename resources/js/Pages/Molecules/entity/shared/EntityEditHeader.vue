@@ -22,6 +22,8 @@ import Btn from '@/Pages/Atoms/action/Btn.vue';
 import EntityListBackButton from '@/Pages/Atoms/action/EntityListBackButton.vue';
 import FormulaHelpHint from '@/Pages/Molecules/entity/FormulaHelpHint.vue';
 import SelectField from '@/Pages/Molecules/data-input/SelectField.vue';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
+import { useEntitySurfaceStore } from '@/Composables/store/useEntitySurfaceStore';
 
 const props = defineProps({
     /** Segment pluriel (ex. `spells`, `items`) pour EntityActions. */
@@ -39,7 +41,7 @@ const props = defineProps({
     canDelete: { type: Boolean, default: false },
     actionsWhitelist: {
         type: Array,
-        default: () => ['view', 'view-dofusdb', 'refresh', 'copy-link'],
+        default: null,
     },
     embeddedInModal: { type: Boolean, default: false },
     showFormulaHelp: { type: Boolean, default: false },
@@ -51,6 +53,19 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['cancel', 'deleted']);
+
+const { isEmbeddedInModal, embed: entityEditEmbed } = useEntityEditEmbed(props);
+const embeddedInModal = isEmbeddedInModal;
+
+const resolvedActionsWhitelist = computed(() => {
+    if (Array.isArray(props.actionsWhitelist) && props.actionsWhitelist.length) {
+        return props.actionsWhitelist;
+    }
+    if (isEmbeddedInModal.value) {
+        return ['edit', 'view', 'view-dofusdb', 'refresh', 'copy-link'];
+    }
+    return ['view', 'view-dofusdb', 'refresh', 'copy-link'];
+});
 
 const formApi = computed(() => props.formRef ?? null);
 
@@ -103,6 +118,15 @@ function goToShow() {
 }
 
 async function handleOptionsAction(actionKey) {
+    // Modal d’édition : « Agrandir » (action edit) → page Modifier.
+    if (actionKey === 'edit' && isEmbeddedInModal.value) {
+        if (typeof entityEditEmbed?.onExpand === 'function') {
+            entityEditEmbed.onExpand();
+        } else {
+            useEntitySurfaceStore().expandTopEditToPage();
+        }
+        return;
+    }
     if (actionKey === 'view') {
         goToShow();
         return;
@@ -139,7 +163,7 @@ async function confirmDelete() {
     if (!window.confirm(message)) return;
 
     // Modal : API JSON pour rester sur la liste (évite une navigation Inertia + historique cassé).
-    if (props.embeddedInModal) {
+    if (isEmbeddedInModal.value) {
         try {
             await axios.delete(
                 `/api/entities/${encodeURIComponent(props.entityType)}/${encodeURIComponent(String(id))}`,
@@ -265,7 +289,7 @@ function onHeaderSave() {
                         display="icon-text"
                         size="sm"
                         color="neutral"
-                        :whitelist="actionsWhitelist"
+                        :whitelist="resolvedActionsWhitelist"
                         :context="
                             embeddedInModal
                                 ? { inModal: true, modalMode: 'edit' }

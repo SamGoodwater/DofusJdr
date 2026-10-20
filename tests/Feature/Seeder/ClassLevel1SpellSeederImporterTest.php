@@ -133,7 +133,7 @@ final class ClassLevel1SpellSeederImporterTest extends TestCase
             'created_by' => null,
         ]);
         $extra = Spell::factory()->create([
-            'name' => 'Flèche Punitive',
+            'name' => 'Ancien sort hors kit',
             'state' => Spell::STATE_DRAFT,
             'read_level' => 0,
             'write_level' => 3,
@@ -149,54 +149,54 @@ final class ClassLevel1SpellSeederImporterTest extends TestCase
         $importer = app(ClassLevel1SpellSeederImporter::class);
         $first = $importer->import($catalog);
 
-        $this->assertCount(6, $first['created']);
+        $this->assertCount(8, $first['created']);
         $this->assertSame([], $first['skipped']);
 
-        $cinglante = Spell::query()->where('dofusdb_id', '32427')->first();
-        $this->assertNotNull($cinglante);
-        $this->assertSame('Flèche Cinglante', $cinglante->name);
-        $this->assertSame(Spell::STATE_AUTO, $cinglante->state);
-        $this->assertFalse($cinglante->auto_update);
-        $this->assertSame('3', $cinglante->pa);
-        $this->assertSame('2', $cinglante->po_min);
-        $this->assertSame('6', $cinglante->po_max);
-        $this->assertTrue($cinglante->po_editable);
-        $this->assertSame(Spell::RESOLUTION_ATTACK_ROLL, $cinglante->resolution_mode);
-        $this->assertSame('agi', $cinglante->attack_characteristic_key);
-        $this->assertSame(ElementBitmask::fromSlug('air'), $cinglante->element);
-        $this->assertSame(Spell::CATEGORY_CLASS, $cinglante->category);
+        $harcelante = Spell::query()->where('official_id', 'jdr:cra:fleche-harcelante')->first();
+        $this->assertNotNull($harcelante);
+        $this->assertSame('Flèche harcelante', $harcelante->name);
+        $this->assertSame(Spell::STATE_PLAYABLE, $harcelante->state);
+        $this->assertFalse($harcelante->auto_update);
+        $this->assertSame('3', $harcelante->pa);
+        $this->assertSame('1', $harcelante->po_min);
+        $this->assertSame('7', $harcelante->po_max);
+        $this->assertFalse($harcelante->sight_line);
+        $this->assertSame('2', $harcelante->cast_per_turn);
+        $this->assertSame(Spell::RESOLUTION_ATTACK_ROLL, $harcelante->resolution_mode);
+        $this->assertSame('agi', $harcelante->attack_characteristic_key);
+        $this->assertSame(ElementBitmask::fromSlug('air'), $harcelante->element);
+        $this->assertSame(Spell::CATEGORY_CLASS, $harcelante->category);
 
-        $glacee = Spell::query()->where('dofusdb_id', '32435')->first();
-        $this->assertSame('chance', $glacee?->attack_characteristic_key);
-        $this->assertSame(ElementBitmask::fromSlug('water'), $glacee?->element);
+        $immobilisation = Spell::query()->where('dofusdb_id', '32436')->first();
+        $this->assertSame('Flèche d\'immobilisation', $immobilisation?->name);
+        $this->assertSame('chance', $immobilisation?->attack_characteristic_key);
+        $this->assertSame('1', $immobilisation?->cast_per_target);
+        $this->assertSame(ElementBitmask::fromSlug('water'), $immobilisation?->element);
 
-        $empoisonnee = Spell::query()->where('dofusdb_id', '13060')->first();
-        $this->assertSame('Flèche Empoisonnée', $empoisonnee?->name);
-        $this->assertSame('3', $empoisonnee?->pa);
-        $this->assertSame(ElementBitmask::fromSlug('fire'), $empoisonnee?->element);
+        $evasive = Spell::query()->where('official_id', 'jdr:cra:fleche-evasive')->first();
+        $this->assertSame('Flèche évasive', $evasive?->name);
+        $this->assertSame('vitality', $evasive?->attack_characteristic_key);
+        $this->assertSame('3', $evasive?->pa);
+        $this->assertSame('2', $evasive?->cast_per_target);
+        $this->assertNull($evasive?->element);
 
-        $lynx = Spell::query()->where('official_id', 'jdr:oeil-de-lynx')->first();
-        $this->assertNotNull($lynx);
-        $this->assertSame('Œil de Lynx', $lynx->name);
-        $this->assertSame(Spell::RESOLUTION_AUTO_SUCCESS, $lynx->resolution_mode);
-        $this->assertSame('3', $lynx->pa);
+        $repli = Spell::query()->where('dofusdb_id', '32470')->first();
+        $this->assertSame('Tir de repli', $repli?->name);
+        $this->assertSame(Spell::RESOLUTION_AUTO_SUCCESS, $repli?->resolution_mode);
+        $this->assertSame('2', $repli?->cast_per_turn);
+        $this->assertFalse($repli?->is_magic);
 
-        $recul = Spell::query()->where('dofusdb_id', '13055')->first();
-        $this->assertSame('1', $recul?->po_min);
-        $this->assertSame(Spell::RESOLUTION_ATTACK_ROLL, $recul?->resolution_mode);
-        $this->assertFalse($recul?->is_magic);
-
-        $this->assertSame(6, Spell::query()->where('state', Spell::STATE_AUTO)->count());
+        $this->assertSame(8, Spell::query()->where('state', Spell::STATE_PLAYABLE)->count());
 
         $cra->refresh();
-        $cinglantePivot = $cra->spells()->where('spells.id', $cinglante->id)->first()?->pivot;
-        $this->assertSame(1, (int) $cinglantePivot?->character_level);
-        $this->assertSame(1, (int) $cinglantePivot?->slot_index);
-        $this->assertSame(0, (int) $cinglantePivot?->choice_order);
+        $harcelantePivot = $cra->spells()->where('spells.id', $harcelante->id)->first()?->pivot;
+        $this->assertSame(1, (int) $harcelantePivot?->character_level);
+        $this->assertSame(1, (int) $harcelantePivot?->slot_index);
+        $this->assertSame(0, (int) $harcelantePivot?->choice_order);
 
-        $lynxPivot = $cra->spells()->where('spells.id', $lynx->id)->first()?->pivot;
-        $this->assertSame(2, (int) $lynxPivot?->slot_index);
-        $this->assertSame(0, (int) $lynxPivot?->choice_order);
+        $repliPivot = $cra->spells()->where('spells.id', $repli->id)->first()?->pivot;
+        $this->assertSame(2, (int) $repliPivot?->slot_index);
+        $this->assertSame(1, (int) $repliPivot?->choice_order);
 
         $extraPivot = $cra->spells()->where('spells.id', $extra->id)->first()?->pivot;
         $this->assertSame(

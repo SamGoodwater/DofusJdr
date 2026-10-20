@@ -27,6 +27,11 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  /** Affiche le libellé / input titre (false = actions seules, fiches immersives). */
+  showTitle: {
+    type: Boolean,
+    default: true,
+  },
   isEditing: {
     type: Boolean,
     default: false
@@ -75,9 +80,15 @@ const handleTitleKeydown = (event) => {
 </script>
 
 <template>
-  <div class="section-header flex items-center justify-between gap-4 border-b border-base-300/45 py-3">
+  <div
+    class="section-header flex items-center justify-between gap-4 py-3"
+    :class="showTitle || isEditing ? 'border-b border-base-300/45' : 'justify-end border-b-0 py-1'"
+  >
     <!-- Titre à gauche -->
-    <div class="section-header__title flex min-w-0 flex-1 items-start gap-2">
+    <div
+      v-if="showTitle || isEditing"
+      class="section-header__title flex min-w-0 flex-1 items-start gap-2"
+    >
       <span class="mt-1.5 hidden h-8 w-1 shrink-0 rounded-full bg-primary/70 sm:block" aria-hidden="true" />
       <input
         v-if="isEditing"

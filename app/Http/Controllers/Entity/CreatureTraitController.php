@@ -11,6 +11,7 @@ use App\Models\Entity\CreatureTrait;
 use App\Models\User;
 use App\Services\Entity\EntityDeletionService;
 use App\Services\PdfService;
+use App\Support\Entity\EntityUpdateRedirect;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -127,26 +128,19 @@ class CreatureTraitController extends Controller
      */
     public function update(UpdateCreatureTraitRequest $request, CreatureTrait $creatureTrait)
     {
-        $redirectAfter = (string) $request->input('redirect_after_update', '');
         $data = $request->validated();
+        unset($data['redirect_after_update']);
         $creatureTrait->update($data);
 
         if ($request->header('X-Inertia')) {
-            if ($redirectAfter === 'edit') {
-                return redirect()
-                    ->route('entities.creature-traits.edit', $creatureTrait)
-                    ->with('success', 'Trait mis à jour avec succès.');
-            }
-
-            if ($redirectAfter === 'index') {
-                return redirect()
-                    ->route('entities.creature-traits.index')
-                    ->with('success', 'Trait mis à jour avec succès.');
-            }
-
-            return redirect()
-                ->route('entities.creature-traits.show', $creatureTrait)
-                ->with('success', 'Trait mis à jour avec succès.');
+            return EntityUpdateRedirect::respond(
+                $request,
+                'Trait mis à jour avec succès.',
+                fn () => back(),
+                editRedirect: fn () => redirect()->route('entities.creature-traits.edit', $creatureTrait),
+                indexRedirect: fn () => redirect()->route('entities.creature-traits.index'),
+                showRedirect: fn () => redirect()->route('entities.creature-traits.show', $creatureTrait),
+            );
         }
 
         return response()->json($creatureTrait);

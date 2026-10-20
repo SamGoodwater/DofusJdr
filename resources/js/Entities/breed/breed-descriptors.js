@@ -157,6 +157,46 @@ export function getBreedFieldDescriptors(ctx = {}) {
         },
       },
     },
+    mechanics: {
+      key: "mechanics",
+      label: "Mécanique de classe",
+      icon: "fa-solid fa-gears",
+      table: {
+        searchable: true,
+        defaultVisible: { xs: false, sm: false, md: false, lg: false, xl: false },
+        cell: {
+          sizes: {
+            xs: { mode: "text", truncate: 20 },
+            sm: { mode: "text", truncate: 30 },
+            md: { mode: "text", truncate: 50 },
+            lg: { mode: "text" },
+            xl: { mode: "text" },
+          },
+        },
+      },
+      display: {
+        sizes: {
+          xs: { mode: "text", truncate: 20 },
+          sm: { mode: "text", truncate: 30 },
+          md: { mode: "text", truncate: 50 },
+          lg: { mode: "text" },
+          xl: { mode: "text" },
+        },
+      },
+      edit: {
+        form: {
+          type: "richtext",
+          group: "Classe",
+          label: "Mécanique de classe",
+          help: "Signature hors voies (états propres, sort sans variante, règle centrale). Affichée avant les sorts sur la fiche.",
+          required: false,
+          showInCompact: false,
+          richEditorHeight: "min-h-[220px]",
+          placeholder: "Ex. Pile ou Face : deux états distincts tirés au dé…",
+          bulk: { enabled: false },
+        },
+      },
+    },
     evolution: {
       key: "evolution",
       label: "Évolution",

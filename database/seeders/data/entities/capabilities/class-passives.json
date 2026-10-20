@@ -67,11 +67,12 @@
         },
         {
             "breed": "Crâ",
-            "name": "Œil",
-            "engine": "zone",
+            "previous_name": "Œil",
+            "name": "Flèche guidée par le Wakfu",
+            "engine": "ligne-de-vue",
             "is_magic": false,
-            "description": "Tu vois plus loin. Les balises, c’est pour plus tard.",
-            "effect": "<p><strong>Niveau 1.</strong> Tes sorts de classe ont +1 PO. Portée minimale 2 sur les flèches.</p><p><strong>Montée.</strong> Niveau 7 : 1 balise (zone 1 case) ; tirer à travers donne +1 PO supplémentaire. Niveau 11 : +2 PO passif.</p><p><strong>Moteur.</strong> Portée d’abord. Balises = zones à partir du 7.</p>"
+            "description": "Une fois entre deux repos longs, une de tes flèches contourne un obstacle.",
+            "effect": "<p><strong>Niveau 1.</strong> Une fois entre deux repos longs, tu imprègnes une flèche de Wakfu. Elle contourne un obstacle et atteint une cible que tu ne vois pas.</p><p><strong>Montée.</strong> À partir du niveau 10, tu peux le refaire une fois entre deux repos courts.</p>"
         },
         {
             "breed": "Sadida",

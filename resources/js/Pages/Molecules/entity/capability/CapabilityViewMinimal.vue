@@ -45,6 +45,14 @@ const props = defineProps({
         default: () => ({}),
     },
     characteristicRuntime: { type: Object, default: null },
+    /**
+     * Ton de surface : `passive` = carte mate sans halo d’élément (distinction passif / sort).
+     */
+    surfaceTone: {
+        type: String,
+        default: "default",
+        validator: (v) => ["default", "passive"].includes(v),
+    },
 });
 
 provideCharacteristicRuntime(computed(() => props.characteristicRuntime));
@@ -161,8 +169,15 @@ const handleAction = async (actionKey) => {
     await handleMinimalAction(actionKey);
 };
 
-const elementSurfaceStyle = computed(() =>
-    getElementGlassSurfaceStyle(resolveEntityElementValue(entity.value))
+const elementSurfaceStyle = computed(() => {
+    if (props.surfaceTone === "passive") {
+        return {};
+    }
+    return getElementGlassSurfaceStyle(resolveEntityElementValue(entity.value));
+});
+
+const cardRootClass = computed(() =>
+    props.surfaceTone === "passive" ? "capability-minimal--passive" : "",
 );
 </script>
 
@@ -172,6 +187,7 @@ const elementSurfaceStyle = computed(() =>
         pinned-entity-type="capabilities"
         :pinned-entity-id="entity?.id"
         :surface-style="elementSurfaceStyle"
+        :class="cardRootClass"
         @open-quick-view="openQuickView"
     >
         <template #compact>
@@ -326,3 +342,15 @@ const elementSurfaceStyle = computed(() =>
         </template>
     </EntityMinimalCard>
 </template>
+
+<style scoped>
+/* Passif : surface mate, filet ambre, sans halo d’élément (distinction vs sorts). */
+.capability-minimal--passive :deep(.entity-minimal-card__compact),
+.capability-minimal--passive :deep(.entity-minimal-card__expanded) {
+    border-color: color-mix(in srgb, var(--color-warning, #f59e0b) 45%, var(--color-base-300, #334155));
+    background-color: color-mix(in srgb, var(--color-base-200, #1e293b) 88%, var(--color-warning, #f59e0b) 12%);
+    box-shadow:
+        0 10px 28px rgb(0 0 0 / 0.28),
+        0 0 0 1px color-mix(in srgb, var(--color-warning, #f59e0b) 18%, transparent) inset;
+}
+</style>

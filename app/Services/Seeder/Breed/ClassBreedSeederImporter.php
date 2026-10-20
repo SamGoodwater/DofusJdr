@@ -82,6 +82,7 @@ final class ClassBreedSeederImporter
             'description_fast' => $entry['description_fast'],
             'description' => $entry['description'],
             'specificity' => $entry['specificity'],
+            'mechanics' => $entry['mechanics'],
             'dofus_version' => $entry['dofus_version'],
             'auto_update' => false,
             ...BreedImagePaths::columnValuesForSlug($catalog->slug()),

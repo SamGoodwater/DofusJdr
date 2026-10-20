@@ -5,6 +5,7 @@
 import { computed, ref } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { usePageTitle } from '@/Composables/layout/usePageTitle';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import { usePermissions } from '@/Composables/permissions/usePermissions';
 import { Specialization } from '@/Models/Entity/Specialization';
 import Container from '@/Pages/Atoms/data-display/Container.vue';
@@ -30,7 +31,14 @@ const props = defineProps({
     availableResources: { type: Array, default: () => [] },
     availableItems: { type: Array, default: () => [] },
     availableSections: { type: Array, default: () => [] },
+    /** True quand la page est chargée dans EntitySurfaceHost (modal). */
+    embeddedInModal: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { isEmbeddedInModal, resolvedRedirectAfterUpdate } = useEntityEditEmbed(props);
+
 
 const specialization = computed(() => {
     const raw = props.specialization || page.props.specialization || {};
@@ -85,7 +93,8 @@ const canDelete = computed(() => canDeleteAny('specializations') || isAdmin.valu
             :fixed-footer-inset-class="fixedFooterInsetClass"
             :footer-secondary-actions="false"
             :compact-access-levels="true"
-            redirect-after-update="edit"
+            :embedded-in-modal="isEmbeddedInModal"
+            :redirect-after-update="resolvedRedirectAfterUpdate"
         >
             <template #after-sections>
                 <EntityEditContainer

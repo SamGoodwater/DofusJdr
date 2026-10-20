@@ -10,6 +10,7 @@
 import { computed, ref } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { usePageTitle } from '@/Composables/layout/usePageTitle';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import { usePermissions } from '@/Composables/permissions/usePermissions';
 import { Scenario } from '@/Models/Entity/Scenario';
 import EntityEditForm from '@/Pages/Organismes/entity/EntityEditForm.vue';
@@ -51,7 +52,14 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    /** True quand la page est chargée dans EntitySurfaceHost (modal). */
+    embeddedInModal: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { isEmbeddedInModal, resolvedRedirectAfterUpdate } = useEntityEditEmbed(props);
+
 
 const fieldsConfig = computed(() =>
     buildScenarioFormFieldsConfig({ includeReadonlyMeta: true }),
@@ -100,7 +108,8 @@ setPageTitle(`Modifier le scénario : ${scenario.value.name || 'Nouveau scénari
             :fixed-footer-actions="false"
             :fixed-footer-inset-class="fixedFooterInsetClass"
             :compact-access-levels="true"
-            redirect-after-update="edit"
+            :embedded-in-modal="isEmbeddedInModal"
+            :redirect-after-update="resolvedRedirectAfterUpdate"
         >
             <template #after-sections>
                 <EntityEditContainer

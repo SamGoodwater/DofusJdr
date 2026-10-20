@@ -14,12 +14,12 @@ import { usePermissions } from "@/Composables/permissions/usePermissions";
 import { Monster } from "@/Models/Entity/Monster";
 import { getEntityCreateAllowFieldKeys } from "@/Utils/entity/entity-create-config";
 import { useEntityIndexTableIntents } from "@/Composables/entity/useEntityIndexTableIntents";
+import { useEntityIndexSurface } from "@/Composables/entity/useEntityIndexSurface";
 import { useCopyToClipboard } from "@/Composables/utils/useCopyToClipboard";
 import { getEntityRouteConfig, resolveEntityRouteUrl } from "@/Composables/entity/entityRouteRegistry";
 
 import Btn from '@/Pages/Atoms/action/Btn.vue';
 import EntityTanStackTable from '@/Pages/Organismes/table/EntityTanStackTable.vue';
-import EntityModal from '@/Pages/Organismes/entity/EntityModal.vue';
 import CreateEntityModal from '@/Pages/Organismes/entity/CreateEntityModal.vue';
 import { TableConfig } from "@/Utils/Entity/Configs/TableConfig.js";
 import { getEntityResponseAdapter } from "@/Entities/entity-registry";
@@ -54,9 +54,6 @@ const canModify = computed(() => canUpdateAny('monsters'));
 const { copyToClipboard } = useCopyToClipboard();
 
 // État
-const selectedEntity = ref(null);
-const modalOpen = ref(false);
-const modalView = ref('full');
 const createModalOpen = ref(false);
 const selectedIds = ref([]);
 const tableRows = ref([]);
@@ -105,23 +102,23 @@ const defaultEntity = computed(() => createDefaultEntityFromDescriptors(monsterD
 
 
 const tableMeta = ref({});
+
+const { openFullModal, openEdit } = useEntityIndexSurface("monsters", {
+    getTableMeta: () => tableMeta.value,
+});
 const handleTableLoaded = ({ rows, meta }) => {
     tableRows.value = Array.isArray(rows) ? rows : [];
     tableMeta.value = meta || {};
 };
 
-const openModal = (entity) => {
-    selectedEntity.value = entity;
-    modalView.value = 'full';
-    modalOpen.value = true;
-};
+const openModal = (entity) => openFullModal(entity);
 
 const handleRowDoubleClick = (row) => {
     const raw = row?.rowParams?.entity;
     if (!raw) return;
     const model = Monster.fromArray([raw])[0] || null;
     if (!model) return;
-    openModal(model);
+    openFullModal(model);
 };
 
 const handleCreate = () => {
@@ -137,10 +134,6 @@ const handleEntityCreated = () => {
     refreshToken.value++;
 };
 
-const closeModal = () => {
-    modalOpen.value = false;
-    selectedEntity.value = null;
-};
 
 
 const { handleKeyboardIntent } = useEntityIndexTableIntents({
@@ -148,15 +141,8 @@ const { handleKeyboardIntent } = useEntityIndexTableIntents({
     routeShowName: "entities.monsters.show",
     routeShowParam: "monster",
     canModify: () => canModify.value,
-    openFullModal: (model) => {
-        selectedEntity.value = model;
-        modalView.value = "full";
-        modalOpen.value = true;
-    },
-    openEdit: (model) => {
-        if (!model?.id) return;
-        router.visit(route('entities.monsters.edit', { monster: model.id }));
-    },
+    openFullModal,
+    openEdit,
 });
 
 // Handler pour les actions du tableau
@@ -174,11 +160,11 @@ const handleTableAction = async (actionKey, entity, row) => {
     switch (actionKey) {
         case 'view':
         case 'quick-view':
-            openModal(model);
+            openFullModal(model);
             break;
 
         case 'edit':
-            router.visit(route('entities.monsters.edit', { monster: entityId }));
+            openEdit(model);
             break;
 
         case 'copy-link': {
@@ -197,38 +183,6 @@ const handleTableAction = async (actionKey, entity, row) => {
             // TODO: Implémenter la suppression avec confirmation
             break;
     }
-};
-
-// Handlers pour les actions du modal
-
-const handleModalExpand = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    router.visit(route('entities.monsters.show', { monster: entityId }));
-    closeModal();
-};
-
-const handleModalCopyLink = async (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    const cfg = getEntityRouteConfig('monster');
-    const url = resolveEntityRouteUrl('monster', 'show', entityId, cfg);
-    if (url) {
-        await copyToClipboard(url, "Lien de l'entité copié !");
-    }
-};
-
-const handleModalDownloadPdf = () => {
-    // TODO: Implémenter le téléchargement PDF
-};
-
-const handleModalRefresh = () => {
-    refreshToken.value++;
-    closeModal();
-};
-
-const handleModalDelete = () => {
-    // TODO: Implémenter la suppression avec confirmation
 };
 
 </script>
@@ -284,22 +238,6 @@ const handleModalDelete = () => {
             :create-allow-field-keys="getEntityCreateAllowFieldKeys('monsters')"
             @close="handleCloseCreateModal"
             @created="handleEntityCreated"
-        />
-
-        <!-- Modal de visualisation -->
-        <EntityModal
-            v-if="selectedEntity"
-            :entity="selectedEntity"
-            entity-type="monster"
-            :view="modalView"
-            :open="modalOpen"
-            :table-meta="tableMeta"
-            @close="closeModal"
-            @expand="handleModalExpand"
-            @copy-link="handleModalCopyLink"
-            @download-pdf="handleModalDownloadPdf"
-            @refresh="handleModalRefresh"
-            @delete="handleModalDelete"
         />
     </div>
 </template>

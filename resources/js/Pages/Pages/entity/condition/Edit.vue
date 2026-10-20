@@ -8,6 +8,7 @@
 import { computed, ref } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { usePageTitle } from '@/Composables/layout/usePageTitle';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import { usePermissions } from '@/Composables/permissions/usePermissions';
 import { Condition } from '@/Models/Entity/Condition';
 import { getConditionFieldDescriptors } from '@/Entities/condition/condition-descriptors';
@@ -25,7 +26,14 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    /** True quand la page est chargée dans EntitySurfaceHost (modal). */
+    embeddedInModal: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { isEmbeddedInModal, resolvedRedirectAfterUpdate } = useEntityEditEmbed(props);
+
 
 const condition = computed(() => {
     const raw = props.condition || page.props.condition || {};
@@ -72,7 +80,8 @@ setPageTitle(`Modifier l'état : ${condition.value.name || 'Sans nom'}`);
             :hide-action-dock="true"
             :fixed-footer-actions="false"
             :fixed-footer-inset-class="fixedFooterInsetClass"
-            redirect-after-update="edit"
+            :embedded-in-modal="isEmbeddedInModal"
+            :redirect-after-update="resolvedRedirectAfterUpdate"
         />
     </Container>
 </template>

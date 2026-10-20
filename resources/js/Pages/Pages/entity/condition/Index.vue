@@ -12,12 +12,12 @@ import { Condition } from "@/Models/Entity/Condition";
 import { getEntityCreateAllowFieldKeys } from "@/Utils/entity/entity-create-config";
 import { normalizeIndexTableFilters } from "@/Composables/entity/useEntityIndexTableFilters";
 import { useEntityIndexTableIntents } from "@/Composables/entity/useEntityIndexTableIntents";
+import { useEntityIndexSurface } from "@/Composables/entity/useEntityIndexSurface";
 import { useCopyToClipboard } from "@/Composables/utils/useCopyToClipboard";
 import { getEntityRouteConfig, resolveEntityRouteUrl } from "@/Composables/entity/entityRouteRegistry";
 
 import Btn from '@/Pages/Atoms/action/Btn.vue';
 import EntityTanStackTable from '@/Pages/Organismes/table/EntityTanStackTable.vue';
-import EntityModal from '@/Pages/Organismes/entity/EntityModal.vue';
 import CreateEntityModal from '@/Pages/Organismes/entity/CreateEntityModal.vue';
 import { TableConfig } from "@/Utils/Entity/Configs/TableConfig.js";
 import { getEntityResponseAdapter } from "@/Entities/entity-registry";
@@ -74,6 +74,10 @@ const serverBaseUrl = computed(() => route('api.tables.conditions'));
 
 
 const tableMeta = ref({});
+
+const { openFullModal, openEdit } = useEntityIndexSurface("conditions", {
+    getTableMeta: () => tableMeta.value,
+});
 const handleTableLoaded = ({ rows, meta }) => {
     tableRows.value = Array.isArray(rows) ? rows : [];
     tableMeta.value = meta || {};
@@ -85,15 +89,10 @@ const handleRowDoubleClick = (row) => {
     // Si c'est déjà une instance Condition, l'utiliser directement
     const model = raw instanceof Condition ? raw : Condition.fromArray([raw])[0] || null;
     if (!model) return;
-    selectedEntity.value = model;
-    modalView.value = "full";
-    modalOpen.value = true;
+    openFullModal(model);
 };
 
 // État
-const selectedEntity = ref(null);
-const modalOpen = ref(false);
-const modalView = ref('full');
 const createModalOpen = ref(false);
 
 const handleCreate = () => {
@@ -110,10 +109,6 @@ const handleEntityCreated = () => {
     refreshToken.value++;
 };
 
-const closeModal = () => {
-    modalOpen.value = false;
-    selectedEntity.value = null;
-};
 
 
 const { handleKeyboardIntent } = useEntityIndexTableIntents({
@@ -121,15 +116,8 @@ const { handleKeyboardIntent } = useEntityIndexTableIntents({
     routeShowName: "entities.conditions.show",
     routeShowParam: "condition",
     canModify: () => canModify.value,
-    openFullModal: (model) => {
-        selectedEntity.value = model;
-        modalView.value = "full";
-        modalOpen.value = true;
-    },
-    openEdit: (model) => {
-        if (!model?.id) return;
-        router.visit(route('entities.conditions.edit', { condition: model.id }));
-    },
+    openFullModal,
+    openEdit,
 });
 
 // Handler pour les actions du tableau
@@ -147,13 +135,11 @@ const handleTableAction = async (actionKey, entity, row) => {
     switch (actionKey) {
         case 'view':
         case 'quick-view':
-            selectedEntity.value = model;
-            modalView.value = 'full';
-            modalOpen.value = true;
+            openFullModal(model);
             break;
 
         case 'edit':
-            router.visit(route('entities.conditions.edit', { condition: entityId }));
+            openEdit(model);
             break;
 
         case 'copy-link': {
@@ -172,38 +158,6 @@ const handleTableAction = async (actionKey, entity, row) => {
             // TODO: Implémenter la suppression avec confirmation
             break;
     }
-};
-
-// Handlers pour les actions du modal
-
-const handleModalExpand = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    router.visit(route('entities.conditions.show', { condition: entityId }));
-    closeModal();
-};
-
-const handleModalCopyLink = async (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    const cfg = getEntityRouteConfig('condition');
-    const url = resolveEntityRouteUrl('condition', 'show', entityId, cfg);
-    if (url) {
-        await copyToClipboard(url, "Lien de l'état copié !");
-    }
-};
-
-const handleModalDownloadPdf = (entity) => {
-    // TODO: Implémenter le téléchargement PDF
-};
-
-const handleModalRefresh = () => {
-    refreshToken.value++;
-    closeModal();
-};
-
-const handleModalDelete = (entity) => {
-    // TODO: Implémenter la suppression avec confirmation
 };
 
 </script>
@@ -247,22 +201,6 @@ const handleModalDelete = (entity) => {
             :create-allow-field-keys="getEntityCreateAllowFieldKeys('conditions')"
             @close="handleCloseCreateModal"
             @created="handleEntityCreated"
-        />
-
-        <!-- Modal de visualisation -->
-        <EntityModal
-            v-if="selectedEntity"
-            :entity="selectedEntity"
-            entity-type="condition"
-            :view="modalView"
-            :open="modalOpen"
-            :table-meta="tableMeta"
-            @close="closeModal"
-            @expand="handleModalExpand"
-            @copy-link="handleModalCopyLink"
-            @download-pdf="handleModalDownloadPdf"
-            @refresh="handleModalRefresh"
-            @delete="handleModalDelete"
         />
     </div>
 </template>

@@ -8,6 +8,7 @@
 import { computed, ref } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { usePageTitle } from '@/Composables/layout/usePageTitle';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import { usePermissions } from '@/Composables/permissions/usePermissions';
 import { CreatureTrait } from '@/Models/Entity/CreatureTrait';
 import { getCreatureTraitFieldDescriptors } from '@/Entities/creature-trait/creature-trait-descriptors';
@@ -25,7 +26,14 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    /** True quand la page est chargée dans EntitySurfaceHost (modal). */
+    embeddedInModal: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { isEmbeddedInModal, resolvedRedirectAfterUpdate } = useEntityEditEmbed(props);
+
 
 const creatureTrait = computed(() => {
     const raw = props.creatureTrait || page.props.creatureTrait || {};
@@ -72,7 +80,8 @@ setPageTitle(`Modifier le trait : ${creatureTrait.value.name || 'Sans nom'}`);
             :hide-action-dock="true"
             :fixed-footer-actions="false"
             :fixed-footer-inset-class="fixedFooterInsetClass"
-            redirect-after-update="edit"
+            :embedded-in-modal="isEmbeddedInModal"
+            :redirect-after-update="resolvedRedirectAfterUpdate"
         />
     </Container>
 </template>

@@ -1,5 +1,15 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Sorts de classe et édition en modal
+
+Sur la fiche d’une classe, les sorts s’affichent en cartes de même largeur, avec le menu d’options (afficher, modifier) et l’ouverture au double-clic. Le passif de classe se distingue visuellement des sorts. Modifier une entité depuis une carte ou une fiche en modal ouvre l’éditeur dans une modal, sans quitter la page en cours ; depuis la page de l’entité, l’édition reste en page pleine. Après enregistrement en modal, on reste sur la page d’origine (le modal se ferme) pour toutes les entités, y compris les capacités.
+
+## Octobre 2026 — Le Crâ est jouable
+
+## Octobre 2026 — Le Crâ est jouable
+
+La classe Crâ peut se jouer : ses 12 choix de sorts (les quatre voies et les sorts généraux de la fiche) sont sur la classe, ainsi que le passif Flèche guidée par le Wakfu. Une flèche imprégnée contourne un obstacle, une fois entre deux repos longs, puis une fois entre deux repos courts à partir du niveau 10. Chaque sort du kit a une icône, reprise de DofusDB quand le sort existe.
+
 ## Octobre 2026 — DD de sauvegarde par élément
 
 Chaque créature a désormais six **DD de sauvegarde** (Force, Intelligence, Agilité, Chance, Vitalité, Sagesse) : le seuil que la cible doit atteindre quand un effet demande une save de cet élément. Formule : 10 + modificateur + bonus d’arme (jusqu’à +5, sans forgemagie) + bonus temporaires de sort ou de consommable. Affichés sous les jets de sauvegarde sur la fiche, et documentés dans les règles de caractéristiques et de lancement de sorts.

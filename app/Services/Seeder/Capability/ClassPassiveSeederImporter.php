@@ -92,7 +92,7 @@ final class ClassPassiveSeederImporter
 
     /**
      * @param  array{name: string, engine: string, is_magic: bool, description: string, effect: string}  $entry
-     * @return array{created: bool, model: Capability}|null  Null = existant conservé (pas d’overwrite)
+     * @return array{created: bool, model: Capability}|null Null = existant conservé (pas d’overwrite)
      */
     private function upsertCapability(array $entry, bool $overwrite): ?array
     {
@@ -100,6 +100,13 @@ final class ClassPassiveSeederImporter
             ->where('is_passive', true)
             ->where('name', $entry['name'])
             ->first();
+
+        if ($existing === null && ($entry['previous_name'] ?? '') !== '') {
+            $existing = Capability::query()
+                ->where('is_passive', true)
+                ->where('name', $entry['previous_name'])
+                ->first();
+        }
 
         if ($existing !== null && ! $overwrite) {
             return null;

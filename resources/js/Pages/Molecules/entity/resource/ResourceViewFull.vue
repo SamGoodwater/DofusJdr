@@ -204,7 +204,7 @@ const handleAction = async (actionKey) => {
             emit('quick-view', props.resource);
             break;
         case 'edit':
-            router.visit(route('entities.resources.edit', { resource: resourceId }));
+            await dispatchEntityAction("edit", props.resource, { context: actionsContext.value });
             emit('edit', props.resource);
             break;
         

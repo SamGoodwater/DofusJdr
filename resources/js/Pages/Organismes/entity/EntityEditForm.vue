@@ -13,6 +13,7 @@
 import { ref, computed, watch, onUnmounted } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
 import { useNotificationStore } from '@/Composables/store/useNotificationStore';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import Container from '@/Pages/Atoms/data-display/Container.vue';
 import SelectField from '@/Pages/Molecules/data-input/SelectField.vue';
 import Btn from '@/Pages/Atoms/action/Btn.vue';
@@ -213,6 +214,14 @@ const props = defineProps({
 
 const emit = defineEmits(['submit', 'cancel']);
 
+const {
+    embed: entityEditEmbed,
+    isEmbeddedInModal,
+    resolvedRedirectAfterUpdate,
+} = useEntityEditEmbed(props);
+/** Alias template + script (prop ou provide EntitySurfaceHost). */
+const embeddedInModal = isEmbeddedInModal;
+
 /** Grille dense / sheet (fiches sort, sheet générique, capacité, dense legacy). */
 const isSpellLayout = computed(
     () =>
@@ -251,7 +260,7 @@ const showReadAction = computed(() => props.isUpdating && Boolean(props.entity?.
 
 /** Contexte actions : page d’édition ou modal d’édition embarquée. */
 const editActionsContext = computed(() => {
-    if (props.embeddedInModal) {
+    if (isEmbeddedInModal.value) {
         return { inModal: true, modalMode: 'edit' };
     }
     return { inPage: true, pageMode: 'edit' };
@@ -370,7 +379,7 @@ const useEditActionDock = computed(
     () =>
         !props.hideActionDock &&
         (props.fixedFooterActions || props.floatingSaveButton) &&
-        !props.embeddedInModal,
+        !isEmbeddedInModal.value,
 );
 
 /** Espace sous le formulaire pour ne pas masquer le dernier champ derrière le pied fixe. */
@@ -379,7 +388,7 @@ const formScrollPaddingClass = computed(() => {
         return '';
     }
     // Modale : pied en sticky dans la zone scroll → peu de marge basse.
-    if (props.embeddedInModal && !useEditActionDock.value) {
+    if (isEmbeddedInModal.value && !useEditActionDock.value) {
         return 'pb-3 sm:pb-4';
     }
     if (useEditActionDock.value) {
@@ -412,7 +421,7 @@ const footerBarClass = computed(() => {
             'backdrop-blur-md',
             'border-glass-t-md',
         );
-        if (props.embeddedInModal) {
+        if (isEmbeddedInModal.value) {
             base.push('px-3', 'py-2', 'sm:px-4');
         } else {
             base.push('px-4', 'py-2.5', 'sm:px-6');
@@ -425,7 +434,7 @@ const footerBarClass = computed(() => {
             'border-base-300/60',
             'bg-base-100/35',
         );
-        if (props.embeddedInModal) {
+        if (isEmbeddedInModal.value) {
             base.push('px-3', 'py-2', 'sm:px-3');
         } else {
             base.push('px-3', 'py-3', 'sm:px-4');
@@ -455,7 +464,7 @@ const primaryAction = computed(() => (props.isUpdating ? ACTION.save : ACTION.cr
 const primarySaveLabel = computed(() => primaryAction.value.label);
 
 /** Sortie : ferme la modale embarquée, sinon retour à la fiche. */
-const cancelAction = computed(() => (props.embeddedInModal ? ACTION.close : ACTION.back));
+const cancelAction = computed(() => (isEmbeddedInModal.value ? ACTION.close : ACTION.back));
 
 /** Actions secondaires du dock (Retour / Annuler les modifications). */
 const editDockSecondaryActions = computed(() => {
@@ -1176,8 +1185,8 @@ const submit = async () => {
 
     const method = props.isUpdating ? 'patch' : 'post';
 
-    if (props.redirectAfterUpdate && method === 'patch') {
-        form.redirect_after_update = props.redirectAfterUpdate;
+    if (resolvedRedirectAfterUpdate.value && method === 'patch') {
+        form.redirect_after_update = resolvedRedirectAfterUpdate.value;
     }
 
     if (props.redirectAfterCreate && method === 'post') {
@@ -1199,6 +1208,9 @@ const submit = async () => {
                 );
             }
             emit('submit', form.data());
+            if (isEmbeddedInModal.value) {
+                entityEditEmbed?.onSaved?.();
+            }
         },
         onError: (errors) => {
             const first = Object.values(errors || {})
@@ -1211,7 +1223,7 @@ const submit = async () => {
             console.error('Erreurs de validation:', errors);
         },
         onFinish: () => {
-            if (props.redirectAfterUpdate && Object.prototype.hasOwnProperty.call(form, 'redirect_after_update')) {
+            if (resolvedRedirectAfterUpdate.value && Object.prototype.hasOwnProperty.call(form, 'redirect_after_update')) {
                 delete form.redirect_after_update;
             }
         },
@@ -1221,7 +1233,8 @@ const submit = async () => {
 // Annulation
 const cancel = () => {
     emit('cancel');
-    if (props.embeddedInModal) {
+    if (isEmbeddedInModal.value) {
+        entityEditEmbed?.onCancel?.();
         return;
     }
     // Seulement rediriger si c'est une page d'édition hors modal

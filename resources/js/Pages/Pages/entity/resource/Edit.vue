@@ -10,6 +10,7 @@
 import { computed, ref } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { usePageTitle } from '@/Composables/layout/usePageTitle';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import { usePermissions } from '@/Composables/permissions/usePermissions';
 import { Resource } from '@/Models/Entity/Resource';
 import EntityEditForm from '@/Pages/Organismes/entity/EntityEditForm.vue';
@@ -54,7 +55,14 @@ const props = defineProps({
     objectEffects: { type: Array, default: () => [] },
     objectEffectCharacteristics: { type: Array, default: () => [] },
     objectEffectMonsters: { type: Array, default: () => [] },
+    /** True quand la page est chargée dans EntitySurfaceHost (modal). */
+    embeddedInModal: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { isEmbeddedInModal, resolvedRedirectAfterUpdate } = useEntityEditEmbed(props);
+
 
 const ctx = computed(() => ({
     resourceTypes: props.resourceTypes,
@@ -114,7 +122,8 @@ setPageTitle(`Modifier la ressource : ${resource.value.name || 'Nouvelle ressour
             :fixed-footer-actions="false"
             :fixed-footer-inset-class="fixedFooterInsetClass"
             :compact-access-levels="true"
-            redirect-after-update="edit"
+            :embedded-in-modal="isEmbeddedInModal"
+            :redirect-after-update="resolvedRedirectAfterUpdate"
         >
             <template #after-sections>
                 <EntityEditContainer

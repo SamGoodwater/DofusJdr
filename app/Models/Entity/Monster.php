@@ -64,6 +64,54 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster withoutTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster visibleToUser(?\App\Models\User $user)
+ * @property int $acrobatics_mastery
+ * @property int $animal_handling_mastery
+ * @property int $arcana_mastery
+ * @property int $athletics_mastery
+ * @property int $deception_mastery
+ * @property int $history_mastery
+ * @property int $insight_mastery
+ * @property int $intimidation_mastery
+ * @property int $investigation_mastery
+ * @property int $medicine_mastery
+ * @property int $nature_mastery
+ * @property int $perception_mastery
+ * @property int $performance_mastery
+ * @property int $persuasion_mastery
+ * @property int $religion_mastery
+ * @property int $sleight_of_hand_mastery
+ * @property int $stealth_mastery
+ * @property int $survival_mastery
+ * @property int $save_strength_mastery
+ * @property int $save_intelligence_mastery
+ * @property int $save_agility_mastery
+ * @property int $save_chance_mastery
+ * @property int $save_vitality_mastery
+ * @property int $save_wisdom_mastery
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereAcrobaticsMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereAnimalHandlingMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereArcanaMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereAthleticsMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereDeceptionMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereHistoryMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereInsightMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereIntimidationMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereInvestigationMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereMedicineMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereNatureMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster wherePerceptionMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster wherePerformanceMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster wherePersuasionMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereReligionMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereSaveAgilityMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereSaveChanceMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereSaveIntelligenceMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereSaveStrengthMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereSaveVitalityMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereSaveWisdomMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereSleightOfHandMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereStealthMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Monster whereSurvivalMastery($value)
  * @mixin \Eloquent
  */
 class Monster extends Model

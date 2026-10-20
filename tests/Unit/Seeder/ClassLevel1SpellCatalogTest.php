@@ -23,19 +23,36 @@ final class ClassLevel1SpellCatalogTest extends TestCase
         $this->assertSame('3', $entries[2]['pa']);
     }
 
-    public function test_cra_catalog_has_six_spells_in_three_slots(): void
+    public function test_cra_catalog_has_eight_playable_spells_in_three_slots(): void
     {
         $catalog = ClassLevel1SpellCatalog::load(ClassLevel1SpellCatalog::craPath());
-        $entries = $this->assertIopStyleLevel1Slots(
-            $catalog,
-            'Crâ',
-            ['Flèche Cinglante', 'Flèche Glacée', 'Flèche Empoisonnée', 'Flèche Assaillante', 'Œil de Lynx', 'Tir de Recul']
+        $this->assertSame('Crâ', $catalog->breedName());
+        $entries = $catalog->entries();
+        $this->assertCount(8, $entries);
+        $this->assertSame(
+            [
+                'Flèche harcelante',
+                'Flèche enflammée',
+                'Flèche d\'immobilisation',
+                'Flèche du vagabond',
+                'Flèche évasive',
+                'Tir de repli',
+                'Tir éloigné',
+                'Tir perçant',
+            ],
+            array_column($entries, 'name')
         );
-        $this->assertSame('jdr:oeil-de-lynx', $entries[4]['official_id']);
-        $this->assertSame('3', $entries[0]['pa']);
-        $this->assertSame('3', $entries[2]['pa']);
-        $this->assertSame('2', $entries[0]['po_min']);
-        $this->assertTrue($entries[0]['po_editable']);
+        $this->assertSame('playable', $entries[0]['state']);
+        $this->assertSame('jdr:cra:fleche-harcelante', $entries[0]['official_id']);
+        $this->assertFalse($entries[0]['sight_line']);
+        $this->assertSame('2', $entries[0]['cast_per_turn']);
+        $this->assertSame('1', $entries[2]['cast_per_target']);
+        $this->assertSame('chance', $entries[2]['attack_characteristic_key']);
+        $this->assertSame('vitality', $entries[4]['attack_characteristic_key']);
+        $this->assertSame('3', $entries[4]['pa']);
+        $this->assertSame([0, 1, 2, 3], array_column(array_slice($entries, 0, 4), 'choice_order'));
+        $this->assertSame(2, $entries[4]['slot_index']);
+        $this->assertSame(3, $entries[6]['slot_index']);
     }
 
     public function test_eniripsa_catalog_has_six_spells_in_three_slots(): void
@@ -223,16 +240,19 @@ final class ClassLevel1SpellCatalogTest extends TestCase
         foreach ($files as $file) {
             $catalog = ClassLevel1SpellCatalog::load($file);
             $entries = $catalog->entries();
-            $this->assertCount(18, $entries, $catalog->breedName());
             $got = [];
             foreach ($entries as $entry) {
                 $got[] = [$entry['character_level'], $entry['choice_order']];
             }
+            $elementalLevels = str_ends_with($file, 'cra-progression.json') ? [4, 7, 12] : [];
             $expected = [];
             foreach ($levels as $level) {
-                $expected[] = [$level, 0];
-                $expected[] = [$level, 1];
+                $variants = in_array($level, $elementalLevels, true) ? 4 : 2;
+                for ($order = 0; $order < $variants; $order++) {
+                    $expected[] = [$level, $order];
+                }
             }
+            $this->assertCount(count($expected), $entries, $catalog->breedName());
             $this->assertSame($expected, $got, $catalog->breedName());
         }
     }

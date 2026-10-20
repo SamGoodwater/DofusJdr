@@ -73,6 +73,54 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read int|null $spells_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereShortDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization visibleToUser(?\App\Models\User $user)
+ * @property int $acrobatics_mastery
+ * @property int $animal_handling_mastery
+ * @property int $arcana_mastery
+ * @property int $athletics_mastery
+ * @property int $deception_mastery
+ * @property int $history_mastery
+ * @property int $insight_mastery
+ * @property int $intimidation_mastery
+ * @property int $investigation_mastery
+ * @property int $medicine_mastery
+ * @property int $nature_mastery
+ * @property int $perception_mastery
+ * @property int $performance_mastery
+ * @property int $persuasion_mastery
+ * @property int $religion_mastery
+ * @property int $sleight_of_hand_mastery
+ * @property int $stealth_mastery
+ * @property int $survival_mastery
+ * @property int $save_strength_mastery
+ * @property int $save_intelligence_mastery
+ * @property int $save_agility_mastery
+ * @property int $save_chance_mastery
+ * @property int $save_vitality_mastery
+ * @property int $save_wisdom_mastery
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereAcrobaticsMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereAnimalHandlingMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereArcanaMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereAthleticsMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereDeceptionMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereHistoryMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereInsightMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereIntimidationMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereInvestigationMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereMedicineMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereNatureMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization wherePerceptionMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization wherePerformanceMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization wherePersuasionMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereReligionMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereSaveAgilityMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereSaveChanceMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereSaveIntelligenceMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereSaveStrengthMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereSaveVitalityMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereSaveWisdomMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereSleightOfHandMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereStealthMastery($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Specialization whereSurvivalMastery($value)
  * @mixin \Eloquent
  */
 class Specialization extends Model implements HasMedia

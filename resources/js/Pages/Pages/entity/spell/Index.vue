@@ -1,12 +1,10 @@
 <script setup>
 /**
  * Spell Index Page
- * 
+ *
  * @description
- * Page de liste des sorts avec tableau et modal de lecture.
- * L’édition depuis la liste ouvre une modal avec le même contenu que {@link Pages/entity/spell/Edit.vue}
- * ({@link SpellEditModal} + charge utile JSON `entities.spells.edit-payload`).
- * 
+ * Page de liste des sorts avec tableau. Affichage / édition en modal via {@link EntitySurfaceHost}.
+ *
  * @props {Object} spells - Collection paginée des sorts
  */
 import { Head, router } from "@inertiajs/vue3";
@@ -19,9 +17,7 @@ import { getEntityRouteConfig, resolveEntityRouteUrl } from "@/Composables/entit
 
 import Btn from '@/Pages/Atoms/action/Btn.vue';
 import EntityTanStackTable from '@/Pages/Organismes/table/EntityTanStackTable.vue';
-import EntityModal from '@/Pages/Organismes/entity/EntityModal.vue';
 import CreateEntityModal from '@/Pages/Organismes/entity/CreateEntityModal.vue';
-import SpellEditModal from '@/Pages/Organismes/entity/SpellEditModal.vue';
 import { TableConfig } from "@/Utils/Entity/Configs/TableConfig.js";
 import { getEntityResponseAdapter } from "@/Entities/entity-registry";
 import { getSpellFieldDescriptors } from "@/Entities/spell/spell-descriptors";
@@ -31,8 +27,8 @@ import {
     getSpellCreateDefaultEntity,
     mergeSpellTypesFieldIntoSpellFormConfig,
 } from "@/Entities/spell/spell-form-config";
-import { clearKrefEntityPreviewCache } from "@/Composables/richText/krefEntityPreviewCache";
 import { useEntityIndexTableIntents } from "@/Composables/entity/useEntityIndexTableIntents";
+import { useEntityIndexSurface } from "@/Composables/entity/useEntityIndexSurface";
 import { getEntityCreateAllowFieldKeys } from "@/Utils/entity/entity-create-config";
 import { normalizeIndexTableFilters } from "@/Composables/entity/useEntityIndexTableFilters";
 
@@ -58,20 +54,15 @@ const canModify = computed(() => canUpdateAny('spells'));
 // Bulk request
 const { copyToClipboard } = useCopyToClipboard();
 
-// État
-const selectedEntity = ref(null);
-const modalOpen = ref(false);
-const modalView = ref('full');
 const createModalOpen = ref(false);
 const selectedIds = ref([]);
 const tableRows = ref([]);
 const refreshToken = ref(0);
+const tableMeta = ref({});
 
-/** Éditeur complet en modal (même corps que la page Edit). */
-const spellEditModalOpen = ref(false);
-const spellEditId = ref(null);
-
-
+const { openFullModal, openEdit } = useEntityIndexSurface("spells", {
+    getTableMeta: () => tableMeta.value,
+});
 
 // Configuration du tableau avec permissions et contexte
 const tableConfig = computed(() => {
@@ -100,26 +91,6 @@ const spellCreateFieldsConfig = computed(() =>
 );
 const spellCreateDefaultEntity = getSpellCreateDefaultEntity();
 
-const openSpellEditModal = (entityId) => {
-    if (!entityId) return;
-    spellEditId.value = entityId;
-    spellEditModalOpen.value = true;
-};
-
-const closeSpellEditModal = () => {
-    spellEditModalOpen.value = false;
-    spellEditId.value = null;
-};
-
-/** Après enregistrement depuis la modal : fermer + rafraîchir le tableau API. */
-const onSpellEditModalSaved = () => {
-    closeSpellEditModal();
-    refreshToken.value++;
-};
-
-
-
-const tableMeta = ref({});
 const handleTableLoaded = ({ rows, meta }) => {
     tableRows.value = Array.isArray(rows) ? rows : [];
     tableMeta.value = meta || {};
@@ -130,9 +101,7 @@ const handleRowDoubleClick = (row) => {
     if (!raw) return;
     const model = Spell.fromArray([raw])[0] || null;
     if (!model) return;
-    selectedEntity.value = model;
-    modalView.value = "full";
-    modalOpen.value = true;
+    openFullModal(model);
 };
 
 const handleCreate = () => {
@@ -149,22 +118,13 @@ const handleEntityCreated = () => {
     refreshToken.value++;
 };
 
-const closeModal = () => {
-    modalOpen.value = false;
-    selectedEntity.value = null;
-};
-
 const { handleKeyboardIntent } = useEntityIndexTableIntents({
     ModelClass: Spell,
     routeShowName: "entities.spells.show",
     routeShowParam: "spell",
     canModify: () => canModify.value,
-    openFullModal: (model) => {
-        selectedEntity.value = model;
-        modalView.value = "full";
-        modalOpen.value = true;
-    },
-    openEdit: (model) => openSpellEditModal(model.id),
+    openFullModal,
+    openEdit,
 });
 
 const handleCreateRequest = () => {
@@ -187,13 +147,11 @@ const handleTableAction = async (actionKey, entity, row) => {
     switch (actionKey) {
         case 'view':
         case 'quick-view':
-            selectedEntity.value = model;
-            modalView.value = 'full';
-            modalOpen.value = true;
+            openFullModal(model);
             break;
 
         case 'edit':
-            openSpellEditModal(entityId);
+            openEdit(model);
             break;
 
         case 'copy-link': {
@@ -206,7 +164,6 @@ const handleTableAction = async (actionKey, entity, row) => {
         }
 
         case 'download-pdf':
-            // TODO: Implémenter le téléchargement PDF
             break;
         case 'delete':
             if (window.confirm('Supprimer ce sort ? Il sera placé en corbeille (récupération possible côté admin).')) {
@@ -214,44 +171,11 @@ const handleTableAction = async (actionKey, entity, row) => {
                     replace: true,
                     onSuccess: () => {
                         refreshToken.value++;
-                        closeModal();
                     },
                 });
             }
             break;
     }
-};
-
-// Handlers pour les actions du modal
-
-const handleModalExpand = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    router.visit(route('entities.spells.show', { spell: entityId }));
-    closeModal();
-};
-
-const handleModalCopyLink = async (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    const cfg = getEntityRouteConfig('spell');
-    const url = resolveEntityRouteUrl('spell', 'show', entityId, cfg);
-    if (url) {
-        await copyToClipboard(url, "Lien de l'entité copié !");
-    }
-};
-
-const handleModalDownloadPdf = (_entity) => {
-    // TODO: Implémenter le téléchargement PDF
-};
-
-const handleModalRefresh = () => {
-    refreshToken.value++;
-    closeModal();
-};
-
-const handleModalDelete = () => {
-    refreshToken.value++;
 };
 </script>
 
@@ -304,27 +228,5 @@ const handleModalDelete = () => {
             @created="handleEntityCreated"
         />
 
-        <!-- Modal de visualisation -->
-        <EntityModal
-            v-if="selectedEntity"
-            :entity="selectedEntity"
-            entity-type="spells"
-            :view="modalView"
-            :open="modalOpen"
-            :table-meta="tableMeta"
-            @close="closeModal"
-            @expand="handleModalExpand"
-            @copy-link="handleModalCopyLink"
-            @download-pdf="handleModalDownloadPdf"
-            @refresh="handleModalRefresh"
-            @delete="handleModalDelete"
-        />
-
-        <SpellEditModal
-            :open="spellEditModalOpen"
-            :spell-id="spellEditId"
-            @close="closeSpellEditModal"
-            @saved="onSpellEditModalSaved"
-        />
     </div>
 </template>

@@ -3,8 +3,8 @@
  * PageMenuChildrenIndex — Index automatique des sous-pages d'une page parente.
  *
  * @description
- * Affiché en tête de page lorsque menu_collapsible est actif :
- * cartes pour les sous-pages CMS, vues minimal pour classes / spécialisations liées.
+ * Affiché en tête de page lorsque menu_collapsible est actif (cartes CMS).
+ * Les catalogues Classes / Spécialisations n’envoient pas d’index (tableau entité + menu).
  *
  * @props {Array} items - Entrées renvoyées par PageService::buildMenuChildIndex
  */

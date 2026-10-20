@@ -11,8 +11,8 @@ import { router } from "@inertiajs/vue3";
 import Icon from "@/Pages/Atoms/data-display/Icon.vue";
 import Btn from "@/Pages/Atoms/action/Btn.vue";
 import InputField from "@/Pages/Molecules/data-input/InputField.vue";
-import EntityModal from "@/Pages/Organismes/entity/EntityModal.vue";
 import EntitySearchHitCard from "@/Pages/Molecules/entity/shared/EntitySearchHitCard.vue";
+import { useEntitySurfaceStore } from "@/Composables/store/useEntitySurfaceStore";
 import {
     FAVORITES_ACCESS_AUTH_REQUIRED_MESSAGE,
     FAVORITES_AUTH_REQUIRED_MESSAGE,
@@ -62,9 +62,6 @@ const favoriteEntities = shallowRef({});
 const minimalComponents = shallowRef({});
 const loadError = ref(null);
 
-const entityModalOpen = ref(false);
-const entityModalEntity = ref(null);
-const entityModalEntityType = ref("");
 const entityModalLoading = ref(false);
 
 const {
@@ -235,6 +232,8 @@ async function onToggleFavorite(row) {
     }
 }
 
+const entitySurface = useEntitySurfaceStore();
+
 async function openEntityModal(payload) {
     const result = payload?.result || payload;
     const type = result?.entityType;
@@ -250,7 +249,6 @@ async function openEntityModal(payload) {
     }
 
     entityModalLoading.value = true;
-    entityModalEntityType.value = type;
     try {
         let entity = payload?.entity || favoriteEntities.value[entityKey(type, id)] || null;
         if (!entity) {
@@ -260,36 +258,16 @@ async function openEntityModal(payload) {
             notifyError("Impossible d’ouvrir cette fiche.");
             return;
         }
-        entityModalEntity.value = entity;
-        entityModalOpen.value = true;
+        entitySurface.openView({
+            entityType: type,
+            entityId: id,
+            entity,
+        });
     } catch {
         notifyError("Impossible d’ouvrir cette fiche.");
     } finally {
         entityModalLoading.value = false;
     }
-}
-
-function closeEntityModal() {
-    entityModalOpen.value = false;
-    entityModalEntity.value = null;
-    entityModalEntityType.value = "";
-}
-
-function onExpandToPage(entity) {
-    const type = entityModalEntityType.value;
-    const id = entity?.id ?? entityModalEntity.value?.id;
-    closeEntityModal();
-    emit("close");
-    if (!id) return;
-    const url = resolveEntityRouteUrl(type, "show", id);
-    if (url) {
-        router.visit(url);
-        return;
-    }
-    const hit = favoriteItems.value.find(
-        (it) => String(it.entityType) === String(type) && String(it.id) === String(id),
-    );
-    if (hit?.href) router.visit(hit.href);
 }
 
 function onMinimalQuickView(entity, entityType) {
@@ -477,14 +455,5 @@ watch(isAuthenticated, (ok) => {
             </div>
         </template>
 
-        <EntityModal
-            v-if="entityModalEntity"
-            :open="entityModalOpen"
-            :entity="entityModalEntity"
-            :entity-type="entityModalEntityType"
-            view="full"
-            @close="closeEntityModal"
-            @expand="onExpandToPage"
-        />
     </div>
 </template>

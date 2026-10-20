@@ -2451,14 +2451,14 @@
   },
   {
     "name": "BreedViewFull",
-    "description": "BreedViewFull — Vue Full pour Breed En-tête + blocs gameplay structuraux (voix, passif, traits, langues, choix de sorts). Le contenu narratif (spécificité, dé de vie, évolution) est dans les sections liées.",
+    "description": "BreedViewFull — Vue Full pour Breed En-tête + blocs gameplay structuraux (voix, passif, mécanique, traits, langues, choix de sorts). Le contenu narratif (spécificité, dé de vie, évolution) est dans les sections liées.",
     "props": [],
     "slots": [],
     "file": "entity/breed/BreedViewFull.vue"
   },
   {
     "name": "BreedVariantsDisplay",
-    "description": "Affichage des variantes de sorts (choix exclusifs) et des sorts toujours disponibles.",
+    "description": "Affichage des variantes de sorts (choix exclusifs par emplacement de progression).",
     "props": [
       {
         "name": "breed",
@@ -2468,7 +2468,7 @@
       {
         "name": "density",
         "type": "'text'|'compact'|'full'",
-        "desc": "- text = Minimal/Line, compact = modal, full = fiche"
+        "desc": "- text = Minimal/Line, compact = modal dense, full = fiche"
       }
     ],
     "slots": [],
@@ -2493,6 +2493,19 @@
     "file": "entity/breed/BreedSpellSlotsDisplay.vue"
   },
   {
+    "name": "BreedMechanicsDisplay",
+    "description": "Bloc « Mécanique de classe » — signature hors voies (ex. Pile/Face du Féca).",
+    "props": [
+      {
+        "name": "html",
+        "type": "string",
+        "desc": "- Contenu TipTap / HTML sanitizé côté lecteur"
+      }
+    ],
+    "slots": [],
+    "file": "entity/breed/BreedMechanicsDisplay.vue"
+  },
+  {
     "name": "BreedLineRow",
     "description": "BreedLineRow — Une ligne de la vue Line pour les classes (Breed)",
     "props": [],
@@ -2501,12 +2514,17 @@
   },
   {
     "name": "BreedElementOrientationsDisplay",
-    "description": "Bandeau compact : 4 voix élémentaires + icône d’orientation par voix.",
+    "description": "Affichage des 4 voix / orientations de classe.",
     "props": [
       {
         "name": "orientationMap",
         "type": "Record<string, string|null|undefined>",
         "desc": "- air|earth|fire|water => orientation_key"
+      },
+      {
+        "name": "variant",
+        "type": "'icons'|'cards'",
+        "desc": "- icons = bandeau compact ; cards = fiche page/modal (valeur + voie)"
       }
     ],
     "slots": [],
@@ -2786,7 +2804,7 @@
   },
   {
     "name": "NormsTable",
-    "description": "Tableau interactif de normes : 5 lignes puissance × 20 colonnes niveaux. La ligne active (puissance effective) et la colonne active (level sélectionné) sont mises en avant.",
+    "description": "Tableau interactif de normes : 5 lignes puissance × 20 colonnes niveaux. Clic sur en-tête ou cellule → sélectionne le niveau. Survol → tooltip dés (moyenne).",
     "props": [],
     "slots": [],
     "file": "data-display/NormsTable.vue"
@@ -2881,52 +2899,6 @@
     "file": "data-display/DiceFormulaStrip.vue"
   },
   {
-    "name": "CharacteristicInfoPanel",
-    "description": "Fiche joueur unifiée d’une caractéristique (tooltip / popover) : description, limites, formula_display, valeurs runtime.",
-    "props": [
-      {
-        "name": "model",
-        "type": "Object",
-        "desc": "— viewModel (useCharacteristicViewModel / runtime)"
-      },
-      {
-        "name": "group",
-        "type": "String",
-        "desc": "- Groupe API (creature|object|spell|consumable|profile)"
-      },
-      {
-        "name": "tone",
-        "type": "String",
-        "desc": "- dark | light"
-      }
-    ],
-    "slots": [],
-    "file": "data-display/CharacteristicInfoPanel.vue"
-  },
-  {
-    "name": "CharacteristicGmButton",
-    "description": "Bouton d’aide MJ : ouvre CharacteristicGmPanel (group et entity séparés).",
-    "props": [
-      {
-        "name": "characteristicKey",
-        "type": "string",
-        "desc": "- Clé BDD (ex. `vitality_creature`)"
-      },
-      {
-        "name": "group",
-        "type": "string",
-        "desc": "- Groupe API (creature|object|spell|consumable|profile)"
-      },
-      {
-        "name": "entity",
-        "type": "string",
-        "desc": "- Pivot entité (`*`, `monster`, `item`…)"
-      }
-    ],
-    "slots": [],
-    "file": "data-display/CharacteristicGmButton.vue"
-  },
-  {
     "name": "CharacteristicInlineGroup",
     "description": "CharacteristicInlineGroup — molécule d'affichage inline de caractéristiques.",
     "props": [
@@ -2938,6 +2910,13 @@
     ],
     "slots": [],
     "file": "data-display/CharacteristicInlineGroup.vue"
+  },
+  {
+    "name": "CharacteristicInfoPanel",
+    "description": "Fiche joueur d'une caractéristique (tooltip / popover). Contenu : nom, icône, description, min / défaut / max, formula_display, « Avec tes valeurs » si runtime fourni, table par niveau. Pas de décomposition des couches (réservée au panneau MJ).",
+    "props": [],
+    "slots": [],
+    "file": "data-display/CharacteristicInfoPanel.vue"
   },
   {
     "name": "CharacteristicGroup",
@@ -2968,6 +2947,13 @@
     "file": "data-display/CharacteristicGroup.vue"
   },
   {
+    "name": "CharacteristicGmButton",
+    "description": "Bouton d’aide MJ : ouvre CharacteristicGmPanel (barème, calcul, conversion, propriétés). Remplace CharacteristicNormsHelpButton — sépare clairement `group` et `entity`.",
+    "props": [],
+    "slots": [],
+    "file": "data-display/CharacteristicGmButton.vue"
+  },
+  {
     "name": "CharacteristicFormulaRichText",
     "description": "Formule de caractéristique : expression (puces) ou tableau de paliers lisible.",
     "props": [
@@ -2987,12 +2973,17 @@
       {
         "name": "items",
         "type": "Array",
-        "desc": "- [{ icon, color, name, shortLabel, value, unit, tooltip }]"
+        "desc": "- [{ key, icon, color, name, shortLabel, value, unit, tooltip }]"
       },
       {
         "name": "labelMode",
         "type": "String",
-        "desc": "- 'full' | 'short' | 'icon-only' — full: nom complet, short: abrégé, icon-only: icône + valeur + unité"
+        "desc": "- 'full' | 'short' | 'icon-only'"
+      },
+      {
+        "name": "group",
+        "type": "String",
+        "desc": "- Groupe API pour la fiche (object, consumable…)"
       }
     ],
     "slots": [],
@@ -3078,7 +3069,7 @@
     "props": [
       {
         "name": "columns",
-        "type": "Array<{stat: string, score: Object, modifier: Object, save: Object}>",
+        "type": "Array<{stat: string, score: Object, modifier: Object, save: Object, saveDc?: Object}>",
         "desc": ""
       },
       {

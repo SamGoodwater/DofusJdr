@@ -83,6 +83,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Characteristic whereHideWhenEmpty($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Characteristic whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Characteristic whereHideWhenFalse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Characteristic whereIntrinsicCharacteristicId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Characteristic whereNature($value)
  * @mixin \Eloquent
  */
 class Characteristic extends Model implements HasMedia

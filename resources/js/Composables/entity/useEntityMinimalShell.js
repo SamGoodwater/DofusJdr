@@ -5,16 +5,17 @@
  * Centralise whitelist, contexte et handlers d’ouverture (modal vs page)
  * pour toutes les `*ViewMinimal` alignées sur le parcours
  * compact → overlay → modal → page.
- * Afficher (`view` / `quick-view`) ouvre la modal full ; la page se gagne depuis la modal (Agrandir).
+ * Afficher (`view` / `quick-view`) ouvre la modal full via EntitySurfaceHost ;
+ * Éditer ouvre la modal d’édition (même hôte).
  *
  * @example
  * const { minimalActionsContext, minimalActionWhitelist, createMinimalActionHandler } =
  *   useEntityMinimalShell({ entityTypePlural: 'spells', routeParam: 'spell', showRoute: 'entities.spells.show', editRoute: 'entities.spells.edit', emit });
  */
-import { router } from "@inertiajs/vue3";
 import {
     MINIMAL_EXPANDED_ACTION_KEYS,
 } from "@/Entities/entity-actions-config";
+import { useEntitySurfaceStore } from "@/Composables/store/useEntitySurfaceStore";
 
 export const MINIMAL_ACTIONS_CONTEXT = Object.freeze({
     inMinimal: true,
@@ -38,17 +39,22 @@ export const MINIMAL_ACTIONS_CONTEXT = Object.freeze({
  */
 export function useEntityMinimalShell(options) {
     const {
-        editRoute,
-        routeParam,
+        entityTypePlural,
         emit,
         getEntity,
     } = options;
 
     const minimalActionWhitelist = MINIMAL_EXPANDED_ACTION_KEYS;
+    const surface = useEntitySurfaceStore();
 
     function openQuickView() {
         const entity = getEntity();
         if (!entity?.id) return;
+        surface.openView({
+            entityType: entityTypePlural,
+            entityId: entity.id,
+            entity,
+        });
         emit("quick-view", entity);
         emit("action", "quick-view", entity);
     }
@@ -64,7 +70,11 @@ export function useEntityMinimalShell(options) {
                 openQuickView();
                 break;
             case "edit":
-                router.visit(route(editRoute, { [routeParam]: id }));
+                surface.openEdit({
+                    entityType: entityTypePlural,
+                    entityId: id,
+                    entity,
+                });
                 emit("edit", entity);
                 break;
             case "delete":

@@ -26,9 +26,10 @@ alwaysApply: false
 
 ## Ouverture
 
-- **Afficher** (Minimal / Line / listes) : modal full (`quick-view`), pas la page Show.
-- **Agrandir** (depuis la modal) ou Ctrl+clic : page Show.
-- **Éditer** (Minimal / Line / listes) : page Modifier (`edit`). Pas de modal d’édition unitaire ni de panneau d’édition multiple.
+- **Afficher** (Minimal / Line / listes) : modal full via `EntitySurfaceHost` (`quick-view`), pas la page Show.
+- **Agrandir** (depuis la modal d’affichage) ou Ctrl+clic : page Show.
+- **Éditer** (Minimal / Line / listes) : modal d’édition (`EntitySurfaceHost`, charge la page `Edit` en Inertia). Depuis la modal d’affichage : **remplace** l’affichage par l’édition.
+- **Éditer** (page fiche) ou **Agrandir** (modal d’édition) : page Modifier (`edit`).
 - Preset `minimalLine` : pas d’action `view`.
 - **Sélection tableau** : cases toujours visibles en vue colonnes et Line ; en vue **minimale**, visibles seulement sur la carte **déployée** (ou si déjà cochée). Indépendante de l’édition.
 

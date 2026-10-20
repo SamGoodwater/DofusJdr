@@ -46,7 +46,7 @@ export function buildSpellSlotGroups(breed) {
 }
 
 /**
- * Sépare les groupes « variantes » (progression) des sorts toujours disponibles (pivot 0/1).
+ * Sépare les groupes « variantes » (progression) du pivot 0/1 (reliquat Dofus, non affiché).
  *
  * @param {object} breed - Données Breed
  * @returns {{ variantGroups: Array<{ character_level: number, slot_index: number, spells: object[] }>, alwaysAvailableGroups: typeof variantGroups }}

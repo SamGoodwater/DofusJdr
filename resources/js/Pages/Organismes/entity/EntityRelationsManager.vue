@@ -24,7 +24,7 @@ import Badge from '@/Pages/Atoms/data-display/Badge.vue';
 import Container from '@/Pages/Atoms/data-display/Container.vue';
 import Tooltip from '@/Pages/Atoms/feedback/Tooltip.vue';
 import Icon from '@/Pages/Atoms/data-display/Icon.vue';
-import EntityModal from '@/Pages/Organismes/entity/EntityModal.vue';
+import { useEntitySurfaceStore } from "@/Composables/store/useEntitySurfaceStore";
 import EntityPickerCore from '@/Pages/Organismes/entity/EntityPickerCore.vue';
 import { normalizeEntityType, getEntityResponseAdapter } from '@/Entities/entity-registry';
 import { resolveEntityViewComponent } from '@/Utils/entity/resolveEntityViewComponent';
@@ -168,8 +168,7 @@ watch(
     { immediate: true }
 );
 
-const isRelationModalOpen = ref(false);
-const selectedRelationEntity = ref(null);
+const entitySurface = useEntitySurfaceStore();
 
 const canConsultRelation = computed(() =>
     Boolean(relationTextViewComponent.value && relatedEntityPropName.value)
@@ -177,13 +176,13 @@ const canConsultRelation = computed(() =>
 
 const openRelationModal = (viewEntity) => {
     if (!canConsultRelation.value) return;
-    selectedRelationEntity.value = viewEntity;
-    isRelationModalOpen.value = true;
-};
-
-const closeRelationModal = () => {
-    isRelationModalOpen.value = false;
-    selectedRelationEntity.value = null;
+    const id = viewEntity?.id ?? viewEntity?._data?.id;
+    if (id == null || !relationEntityType.value) return;
+    entitySurface.openView({
+        entityType: relationEntityType.value,
+        entityId: id,
+        entity: viewEntity,
+    });
 };
 
 const getRelationTextProps = (viewEntity) => {
@@ -751,15 +750,6 @@ const displayField = (item, field) => {
         </div>
     </Container>
 
-    <EntityModal
-        v-if="selectedRelationEntity && relationEntityType"
-        :open="isRelationModalOpen"
-        :entity="selectedRelationEntity"
-        :entity-type="relationEntityType"
-        view="text"
-        :use-stored-format="false"
-        @close="closeRelationModal"
-    />
 </template>
 
 <style scoped>

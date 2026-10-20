@@ -286,7 +286,7 @@ const handleAction = async (actionKey) => {
             emit("quick-view", props.npc);
             break;
         case "edit":
-            router.visit(route("entities.npcs.edit", { npc: npcId }));
+            await dispatchEntityAction("edit", props.npc, { context: actionsContext.value });
             emit("edit", props.npc);
             break;
         case "copy-link": {

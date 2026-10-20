@@ -8,6 +8,7 @@
 import { computed, ref } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { usePageTitle } from '@/Composables/layout/usePageTitle';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import { usePermissions } from '@/Composables/permissions/usePermissions';
 import { Consumable } from '@/Models/Entity/Consumable';
 import EntityEditForm from '@/Pages/Organismes/entity/EntityEditForm.vue';
@@ -46,7 +47,14 @@ const props = defineProps({
     objectEffects: { type: Array, default: () => [] },
     objectEffectCharacteristics: { type: Array, default: () => [] },
     objectEffectMonsters: { type: Array, default: () => [] },
+    /** True quand la page est chargée dans EntitySurfaceHost (modal). */
+    embeddedInModal: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { isEmbeddedInModal, resolvedRedirectAfterUpdate } = useEntityEditEmbed(props);
+
 
 const consumable = computed(() => {
     const data = props.consumable || page.props.consumable || {};
@@ -99,7 +107,8 @@ setPageTitle(`Modifier le consommable : ${consumable.value.name || 'Sans nom'}`)
             :fixed-footer-actions="false"
             :fixed-footer-inset-class="fixedFooterInsetClass"
             :compact-access-levels="true"
-            redirect-after-update="edit"
+            :embedded-in-modal="isEmbeddedInModal"
+            :redirect-after-update="resolvedRedirectAfterUpdate"
         >
             <template #after-sections>
                 <EntityEditContainer

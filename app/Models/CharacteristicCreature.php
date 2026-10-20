@@ -39,7 +39,6 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Characteristic $characteristic
  * @property-read Section|null $normsHelpSection
- *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature query()
@@ -68,7 +67,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature whereValidation($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature whereLimitAbsolute($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature whereNormsFormula($value)
- *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicCreature whereNormsPowerCoefficients($value)
  * @mixin \Eloquent
  */
 class CharacteristicCreature extends Model

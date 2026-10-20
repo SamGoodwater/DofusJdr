@@ -49,8 +49,41 @@ use Illuminate\Support\Carbon;
  * @property-read Spell $spell
  * @property-read Collection<int, SpellDegreeEffect> $effects
  * @property-read int|null $effects_count
- *
  * @method static SpellDegreeFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereAllowsReaction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereAttackCharacteristicKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereAutoSuccessIfWillingTarget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereCastInDiagonal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereCastInLine($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereCastPerTarget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereCastPerTurn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereCastingTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereGlobalCooldown($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereInheritsEffects($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereMaxStack($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereNumberBetweenTwoCast($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree wherePa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree wherePoEditable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree wherePoMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree wherePoMin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree wherePosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree wherePropertiesSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereRequiredLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereResolutionMode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereSaveCharacteristicKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereSaveDcFormula($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereSaveSuccessNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereSightLine($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereSpellId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegree whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class SpellDegree extends Model
 {

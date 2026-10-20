@@ -7,6 +7,7 @@
 import { computed } from "vue";
 import { Head, usePage } from "@inertiajs/vue3";
 import { usePageTitle } from "@/Composables/layout/usePageTitle";
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import { Capability } from "@/Models/Entity/Capability";
 import CapabilityEditFormContent from "@/Pages/Organismes/entity/CapabilityEditFormContent.vue";
 import Container from "@/Pages/Atoms/data-display/Container.vue";
@@ -23,7 +24,14 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    /** True quand la page est chargée dans EntitySurfaceHost (modal). */
+    embeddedInModal: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { isEmbeddedInModal, resolvedRedirectAfterUpdate } = useEntityEditEmbed(props);
+
 
 const capability = computed(() => {
     const raw = props.capability || page.props.capability || {};
@@ -40,7 +48,8 @@ setPageTitle(`Modifier la capacité : ${capability.value.name || "Sans nom"}`);
         <CapabilityEditFormContent
             :capability="capability"
             :available-conditions="availableConditions"
-            redirect-after-update="edit"
+            :embedded-in-modal="isEmbeddedInModal"
+            :redirect-after-update="resolvedRedirectAfterUpdate"
         />
     </Container>
 </template>

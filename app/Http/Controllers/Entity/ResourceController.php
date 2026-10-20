@@ -19,6 +19,7 @@ use App\Models\Type\ResourceType;
 use App\Models\User;
 use App\Services\Entity\EntityDeletionService;
 use App\Services\PdfService;
+use App\Support\Entity\EntityUpdateRedirect;
 use App\Support\Entity\ObjectEffectEditOptions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -234,9 +235,14 @@ class ResourceController extends Controller
 
         $resource->update($data);
 
-        return redirect()
-            ->route('entities.resources.show', $resource)
-            ->with('success', 'Ressource mise à jour avec succès.');
+        return EntityUpdateRedirect::respond(
+            $request,
+            'Ressource mise à jour avec succès.',
+            fn () => back(),
+            editRedirect: fn () => redirect()->route('entities.resources.edit', $resource),
+            indexRedirect: fn () => redirect()->route('entities.resources.index'),
+            showRedirect: fn () => redirect()->route('entities.resources.show', $resource),
+        );
     }
 
     /**

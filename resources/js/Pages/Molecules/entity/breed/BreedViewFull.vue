@@ -2,7 +2,7 @@
 /**
  * BreedViewFull — Vue Full pour Breed
  *
- * En-tête + blocs gameplay structuraux (voix, passif, traits, langues, choix de sorts).
+ * En-tête + blocs gameplay structuraux (voix, passif, mécanique, traits, langues, choix de sorts).
  * Le contenu narratif (spécificité, dé de vie, évolution) est dans les sections liées.
  */
 import { computed, ref } from "vue";
@@ -24,6 +24,7 @@ import { provideCharacteristicRuntime } from "@/Composables/entity/characteristi
 import BreedElementOrientationsDisplay from "@/Pages/Molecules/entity/breed/BreedElementOrientationsDisplay.vue";
 import BreedCapabilitiesDisplay from "@/Pages/Molecules/entity/breed/BreedCapabilitiesDisplay.vue";
 import BreedVariantsDisplay from "@/Pages/Molecules/entity/breed/BreedVariantsDisplay.vue";
+import BreedMechanicsDisplay from "@/Pages/Molecules/entity/breed/BreedMechanicsDisplay.vue";
 import CreatureTraitBadges from "@/Pages/Molecules/entity/creature-trait/CreatureTraitBadges.vue";
 import EntityLanguagesInline from "@/Pages/Molecules/entity/language/EntityLanguagesInline.vue";
 import { buildSpellSlotGroups } from "@/Utils/entity/breedSpellSlots";
@@ -132,6 +133,13 @@ const descriptionFull = computed(() => {
     return t != null && String(t).trim() !== "" ? String(t).trim() : "";
 });
 
+/** HTML TipTap — mécanique signature (vide = bloc masqué). */
+const mechanicsHtml = computed(() => {
+    const b = props.breed?._data ?? props.breed;
+    const t = b?.mechanics ?? props.breed?.mechanics;
+    return t != null && String(t).trim() !== "" ? String(t).trim() : "";
+});
+
 const orientationMap = computed(() => {
     const raw = props.breed?._data ?? props.breed;
     return normalizeElementOrientationMap(raw?.element_orientations);
@@ -181,7 +189,7 @@ const handleAction = async (actionKey) => {
             emit("view", props.breed);
             break;
         case "edit":
-            router.visit(route("entities.breeds.edit", { breed: breedId }));
+            await dispatchEntityAction("edit", props.breed, { context: actionsContext.value });
             emit("edit", props.breed);
             break;
         
@@ -318,12 +326,14 @@ const handleAction = async (actionKey) => {
             </template>
         </EntityViewHeader>
 
-        <div class="rounded-box border border-base-300 bg-base-100/40 p-4 space-y-2">
-            <h3 class="text-xs font-semibold uppercase tracking-wide text-primary-300">Voix élémentaires</h3>
-            <p class="text-xs text-primary-400/90">
-                Chaque voix (air, terre, feu, eau) porte un rôle : elles orientent les sorts à la création.
-            </p>
-            <BreedElementOrientationsDisplay :orientation-map="orientationMap" size="md" />
+        <div class="rounded-box border border-base-300 bg-base-100/40 p-4 space-y-3">
+            <div>
+                <h3 class="text-xs font-semibold uppercase tracking-wide text-primary-300">Orientations</h3>
+                <p class="text-xs text-primary-400/90 mt-1">
+                    Chaque voie (Air, Terre, Feu, Eau) porte un rôle à la création : dégâts, soin, placement…
+                </p>
+            </div>
+            <BreedElementOrientationsDisplay :orientation-map="orientationMap" variant="cards" />
         </div>
 
         <BreedCapabilitiesDisplay
@@ -353,6 +363,8 @@ const handleAction = async (actionKey) => {
             <h3 class="text-xs font-semibold uppercase tracking-wide text-primary-300">Langues</h3>
             <EntityLanguagesInline :languages="linkedLanguages" :show-label="false" />
         </div>
+
+        <BreedMechanicsDisplay :html="mechanicsHtml" />
 
         <BreedVariantsDisplay
             v-if="hasSpellSlots"

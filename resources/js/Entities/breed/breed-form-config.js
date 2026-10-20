@@ -16,8 +16,8 @@ export const BREED_FORM_FIELD_SECTIONS_EDIT = [
     {
         id: 'gameplay',
         title: 'Règles de classe',
-        subtitle: 'Évolution, dés de vie, spécificité.',
-        fieldKeys: ['evolution', 'life_dice', 'specificity'],
+        subtitle: 'Mécanique signature, évolution, dés de vie.',
+        fieldKeys: ['mechanics', 'evolution', 'life_dice', 'specificity'],
     },
     {
         id: 'visuals',

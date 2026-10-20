@@ -5,7 +5,7 @@
     "description_fast": "Archer",
     "description": "Les Crâs sont des archers aussi fiers que précis ! Ils font des alliés précieux contre les adeptes de la mêlée franche. Restant à distance, décochant leurs traits empennés dans le moindre orifice laissé sans surveillance, ils ne laissent aucun répit à leu",
     "dofus_version": "3",
-    "state": "draft",
+    "state": "playable",
     "read_level": 0,
     "write_level": 3,
     "element_orientations": {

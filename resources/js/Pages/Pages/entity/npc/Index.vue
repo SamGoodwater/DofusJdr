@@ -14,12 +14,12 @@ import { usePermissions } from "@/Composables/permissions/usePermissions";
 import { Npc } from "@/Models/Entity/Npc";
 import { getEntityCreateAllowFieldKeys } from "@/Utils/entity/entity-create-config";
 import { useEntityIndexTableIntents } from "@/Composables/entity/useEntityIndexTableIntents";
+import { useEntityIndexSurface } from "@/Composables/entity/useEntityIndexSurface";
 import { useCopyToClipboard } from "@/Composables/utils/useCopyToClipboard";
 import { getEntityRouteConfig, resolveEntityRouteUrl } from "@/Composables/entity/entityRouteRegistry";
 
 import Btn from "@/Pages/Atoms/action/Btn.vue";
 import EntityTanStackTable from "@/Pages/Organismes/table/EntityTanStackTable.vue";
-import EntityModal from "@/Pages/Organismes/entity/EntityModal.vue";
 import CreateEntityModal from "@/Pages/Organismes/entity/CreateEntityModal.vue";
 import { TableConfig } from "@/Utils/Entity/Configs/TableConfig.js";
 import { getEntityResponseAdapter } from "@/Entities/entity-registry";
@@ -59,9 +59,6 @@ const canModify = computed(() => canUpdateAny("npcs"));
 
 const { copyToClipboard } = useCopyToClipboard();
 
-const selectedEntity = ref(null);
-const modalOpen = ref(false);
-const modalView = ref("full");
 const createModalOpen = ref(false);
 const selectedIds = ref([]);
 const tableRows = ref([]);
@@ -93,23 +90,23 @@ const fieldsConfig = computed(() =>
 const defaultEntity = computed(() => createDefaultEntityFromDescriptors(npcDescriptors.value));
 
 const tableMeta = ref({});
+
+const { openFullModal, openEdit } = useEntityIndexSurface("npcs", {
+    getTableMeta: () => tableMeta.value,
+});
 const handleTableLoaded = ({ rows, meta }) => {
     tableRows.value = Array.isArray(rows) ? rows : [];
     tableMeta.value = meta || {};
 };
 
-const openModal = (entity) => {
-    selectedEntity.value = entity;
-    modalView.value = "full";
-    modalOpen.value = true;
-};
+const openModal = (entity) => openFullModal(entity);
 
 const handleRowDoubleClick = (row) => {
     const raw = row?.rowParams?.entity;
     if (!raw) return;
     const model = raw instanceof Npc ? raw : Npc.fromArray([raw])[0] || null;
     if (!model) return;
-    openModal(model);
+    openFullModal(model);
 };
 
 const handleCreate = () => {
@@ -125,25 +122,14 @@ const handleEntityCreated = () => {
     refreshToken.value++;
 };
 
-const closeModal = () => {
-    modalOpen.value = false;
-    selectedEntity.value = null;
-};
 
 const { handleKeyboardIntent } = useEntityIndexTableIntents({
     ModelClass: Npc,
     routeShowName: "entities.npcs.show",
     routeShowParam: "npc",
     canModify: () => canModify.value,
-    openFullModal: (model) => {
-        selectedEntity.value = model;
-        modalView.value = "full";
-        modalOpen.value = true;
-    },
-    openEdit: (model) => {
-        if (!model?.id) return;
-        router.visit(route("entities.npcs.edit", { npc: model.id }));
-    },
+    openFullModal,
+    openEdit,
 });
 
 const handleTableAction = async (actionKey, entity, row) => {
@@ -157,13 +143,13 @@ const handleTableAction = async (actionKey, entity, row) => {
     if (!entityId) return;
 
     switch (actionKey) {
-        case "view":
-        case "quick-view":
-            openModal(model);
+        case 'view':
+        case 'quick-view':
+            openFullModal(model);
             break;
 
-        case "edit":
-            router.visit(route("entities.npcs.edit", { npc: entityId }));
+        case 'edit':
+            openEdit(model);
             break;
 
         case "copy-link": {
@@ -182,29 +168,8 @@ const handleTableAction = async (actionKey, entity, row) => {
     }
 };
 
-const handleModalExpand = (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    router.visit(route("entities.npcs.show", { npc: entityId }));
-    closeModal();
-};
 
-const handleModalCopyLink = async (entity) => {
-    const entityId = entity?.id;
-    if (!entityId) return;
-    const cfg = getEntityRouteConfig("npc");
-    const url = resolveEntityRouteUrl("npc", "show", entityId, cfg);
-    if (url) {
-        await copyToClipboard(url, "Lien de l'entité copié !");
-    }
-};
 
-const handleModalDownloadPdf = () => {};
-
-const handleModalRefresh = () => {
-    refreshToken.value++;
-    closeModal();
-};
 
 const handleModalDelete = () => {};
 </script>
@@ -254,21 +219,6 @@ const handleModalDelete = () => {};
             :create-allow-field-keys="getEntityCreateAllowFieldKeys('npcs')"
             @close="handleCloseCreateModal"
             @created="handleEntityCreated"
-        />
-
-        <EntityModal
-            v-if="selectedEntity"
-            :entity="selectedEntity"
-            entity-type="npc"
-            :view="modalView"
-            :open="modalOpen"
-            :table-meta="tableMeta"
-            @close="closeModal"
-            @expand="handleModalExpand"
-            @copy-link="handleModalCopyLink"
-            @download-pdf="handleModalDownloadPdf"
-            @refresh="handleModalRefresh"
-            @delete="handleModalDelete"
         />
     </div>
 </template>

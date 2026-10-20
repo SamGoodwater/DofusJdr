@@ -10,6 +10,7 @@ use App\Models\Entity\Panoply;
 use App\Models\User;
 use App\Services\Entity\EntityDeletionService;
 use App\Services\PdfService;
+use App\Support\Entity\EntityUpdateRedirect;
 use App\Support\Entity\ObjectEffectEditOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -125,8 +126,14 @@ class PanoplyController extends Controller
             ]);
         }
 
-        return redirect()->route('entities.panoplies.show', $panoply)
-            ->with('success', 'Panoplie mise à jour avec succès.');
+        return EntityUpdateRedirect::respond(
+            $request,
+            'Panoplie mise à jour avec succès.',
+            fn () => back(),
+            editRedirect: fn () => redirect()->route('entities.panoplies.edit', $panoply),
+            indexRedirect: fn () => redirect()->route('entities.panoplies.index'),
+            showRedirect: fn () => redirect()->route('entities.panoplies.show', $panoply),
+        );
     }
 
     /**

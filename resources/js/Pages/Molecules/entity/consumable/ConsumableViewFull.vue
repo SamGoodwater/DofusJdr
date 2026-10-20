@@ -188,7 +188,7 @@ const handleAction = async (actionKey) => {
             emit('view', props.consumable);
             break;
         case 'edit':
-            router.visit(route('entities.consumables.edit', { consumable: consumableId }));
+            await dispatchEntityAction("edit", props.consumable, { context: actionsContext.value });
             emit('edit', props.consumable);
             break;
         

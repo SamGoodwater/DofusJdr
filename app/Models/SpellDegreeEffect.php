@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * Effet d’un degré de sort (catalogue SubEffect + paramètres).
+ *
  * Vocabulaire UI : « effet » (anciennement sous-effet).
  *
  * @property int $id
@@ -33,8 +34,28 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read SpellDegree $spellDegree
  * @property-read SubEffect $subEffect
- *
  * @method static SpellDegreeEffectFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereCritOnly($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereDiceNum($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereDiceSide($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereDurationFormula($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereLogicCondition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereLogicGroup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereLogicOperator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereParams($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereScope($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereSpellDegreeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereSubEffectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereValueMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SpellDegreeEffect whereValueMin($value)
+ * @mixin \Eloquent
  */
 class SpellDegreeEffect extends Model
 {

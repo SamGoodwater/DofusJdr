@@ -3,12 +3,13 @@
  * Corps de la fiche d’édition d’une capacité (header compact + formulaire unique).
  *
  * @description
- * Partagé entre {@link Pages/entity/capability/Edit} et {@link CapabilityEditModal}.
+ * Partagé entre {@link Pages/entity/capability/Edit} et l’édition embarquée ({@link EntitySurfaceHost}).
  * Grille `capability` inchangée ; header partagé via EntityEditHeader.
  */
 import { computed, ref } from "vue";
 import { Capability } from "@/Models/Entity/Capability";
 import { usePermissions } from "@/Composables/permissions/usePermissions";
+import { useEntityEditEmbed } from "@/Composables/entity/useEntityEditEmbed";
 import EntityEditForm from "@/Pages/Organismes/entity/EntityEditForm.vue";
 import ConditionsEditor from "@/Pages/Organismes/entity/ConditionsEditor.vue";
 import EntityEditHeader from "@/Pages/Molecules/entity/shared/EntityEditHeader.vue";
@@ -30,6 +31,14 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["cancel", "saved"]);
+
+const {
+    embed: entityEditEmbed,
+    isEmbeddedInModal,
+    resolvedRedirectAfterUpdate,
+} = useEntityEditEmbed(props);
+const embeddedInModal = isEmbeddedInModal;
+const redirectAfterUpdate = resolvedRedirectAfterUpdate;
 
 const { canDeleteAny, isAdmin } = usePermissions();
 const canDeleteCapability = computed(() => canDeleteAny("capabilities") || isAdmin.value);
@@ -55,9 +64,20 @@ function onDeleted() {
     if (id) {
         invalidateKrefEntityPreviewCache("capabilities", id);
     }
-    if (props.embeddedInModal) {
+    if (isEmbeddedInModal.value) {
         emit("cancel");
+        entityEditEmbed?.onCancel?.();
     }
+}
+
+function onHeaderCancel() {
+    emit("cancel");
+    entityEditEmbed?.onCancel?.();
+}
+
+function onFormSaved() {
+    emit("saved");
+    entityEditEmbed?.onSaved?.();
 }
 </script>
 
@@ -74,7 +94,7 @@ function onDeleted() {
             :can-delete="canDeleteCapability"
             :embedded-in-modal="embeddedInModal"
             delete-confirm-message="Supprimer cette capacité ? Elle sera placée en corbeille (récupération possible côté admin)."
-            @cancel="emit('cancel')"
+            @cancel="onHeaderCancel"
             @deleted="onDeleted"
         />
 
@@ -97,8 +117,8 @@ function onDeleted() {
             :embedded-in-modal="embeddedInModal"
             :redirect-after-update="redirectAfterUpdate || undefined"
             :shortcuts-active="!embeddedInModal"
-            @cancel="emit('cancel')"
-            @submit="emit('saved')"
+            @cancel="onHeaderCancel"
+            @submit="onFormSaved"
         />
 
         <!-- Même éditeur d’états en page et en modal (source unique). -->

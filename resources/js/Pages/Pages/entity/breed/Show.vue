@@ -64,11 +64,11 @@ const goEdit = () => {
                     :characteristic-runtime="characteristicRuntime"
                 />
 
-                <section class="space-y-3">
-                    <h2 class="text-lg font-semibold">Sections</h2>
+                <section v-if="breedSections.length" class="space-y-3" aria-label="Contenu de la classe">
                     <EntitySectionsRenderer
                         :sections="breedSections"
-                        empty-message="Aucune section liée à cette classe."
+                        :immersive="true"
+                        empty-message=""
                     />
                 </section>
 

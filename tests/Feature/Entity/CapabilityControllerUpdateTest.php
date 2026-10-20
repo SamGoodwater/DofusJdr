@@ -33,4 +33,37 @@ class CapabilityControllerUpdateTest extends TestCase
         $this->assertSame('0', $capability->time_before_use_again);
         $this->assertTrue($capability->ritual_available);
     }
+
+    /**
+     * Modal EntitySurfaceHost : stay → back (pas de navigation vers la fiche capacité).
+     */
+    public function test_update_redirects_back_when_stay_requested(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        $capability = Capability::factory()->create(['created_by' => $admin->id]);
+
+        $response = $this->actingAs($admin)
+            ->from(route('entities.capabilities.index'))
+            ->patch(route('entities.capabilities.update', $capability), [
+                'name' => 'Capacité stay '.$capability->id,
+                'redirect_after_update' => 'stay',
+            ]);
+
+        $response->assertRedirect(route('entities.capabilities.index'));
+    }
+
+    public function test_update_redirects_to_edit_when_requested(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        $capability = Capability::factory()->create(['created_by' => $admin->id]);
+
+        $response = $this->actingAs($admin)
+            ->from(route('entities.capabilities.edit', $capability))
+            ->patch(route('entities.capabilities.update', $capability), [
+                'name' => 'Capacité éditeur '.$capability->id,
+                'redirect_after_update' => 'edit',
+            ]);
+
+        $response->assertRedirect(route('entities.capabilities.edit', $capability));
+    }
 }

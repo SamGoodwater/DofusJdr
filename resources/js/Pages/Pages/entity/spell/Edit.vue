@@ -7,6 +7,7 @@
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { usePageTitle } from '@/Composables/layout/usePageTitle';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import { Spell } from '@/Models/Entity/Spell';
 import SpellEditFormContent from '@/Pages/Organismes/entity/SpellEditFormContent.vue';
 import Container from '@/Pages/Atoms/data-display/Container.vue';
@@ -29,7 +30,14 @@ const props = defineProps({
     spellDegrees: { type: Object, default: () => ({ degrees: [], default_degree_id: null }) },
     spellEffectGroups: { type: Array, default: () => [] },
     spellHolders: { type: Object, default: () => ({}) },
+    /** True quand la page est chargée dans EntitySurfaceHost (modal). */
+    embeddedInModal: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { isEmbeddedInModal, resolvedRedirectAfterUpdate } = useEntityEditEmbed(props);
+
 
 const spell = computed(() => {
     const spellData = props.spell || page.props.spell || {};
@@ -52,6 +60,8 @@ setPageTitle(`Modifier le sort : ${spell.value.name || 'Nouveau sort'}`);
             :spell-degrees="spellDegrees"
             :spell-effect-groups="spellEffectGroups"
             :spell-holders="spellHolders"
+            :embedded-in-modal="isEmbeddedInModal"
+            :redirect-after-update="resolvedRedirectAfterUpdate"
         />
     </Container>
 </template>

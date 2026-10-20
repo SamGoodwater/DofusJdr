@@ -37,7 +37,6 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Characteristic $characteristic
  * @property-read Section|null $normsHelpSection
- *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable query()
@@ -64,7 +63,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereNormsHelpSectionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereValueAvailable($value)
- *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CharacteristicConsumable whereNormsPowerCoefficients($value)
  * @mixin \Eloquent
  */
 class CharacteristicConsumable extends Model

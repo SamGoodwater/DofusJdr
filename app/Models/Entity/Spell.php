@@ -77,7 +77,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read int|null $scenarios_count
  * @property-read Collection<int, SpellType> $spellTypes
  * @property-read int|null $spell_types_count
- *
  * @method static \Database\Factories\Entity\SpellFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell newQuery()
@@ -115,7 +114,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereWriteLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell withoutTrashed()
- *
  * @property string|null $duration
  * @property-read Collection<int, Breed> $breeds
  * @property-read int|null $breeds_count
@@ -129,7 +127,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read int|null $spell_effects_count
  * @property-read Collection<int, Condition> $conditions
  * @property-read int|null $conditions_count
- *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereAllowsReaction($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereAttackCharacteristicKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereAutoSuccessIfWillingTarget($value)
@@ -140,15 +137,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereSaveCharacteristicKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereSaveDcFormula($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereSaveSuccessNote($value)
- *
  * @property-read BreedSpellPivot|null $pivot
- *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereCastInDiagonal($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereCastInLine($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereGlobalCooldown($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereMaxStack($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Spell whereTargetType($value)
- *
+ * @property-read Collection<int, SpellDegree> $degrees
+ * @property-read int|null $degrees_count
  * @mixin \Eloquent
  */
 class Spell extends Model implements HasMedia

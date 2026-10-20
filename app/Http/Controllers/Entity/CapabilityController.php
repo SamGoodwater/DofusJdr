@@ -14,6 +14,7 @@ use App\Models\Entity\Condition;
 use App\Models\User;
 use App\Services\Entity\EntityDeletionService;
 use App\Services\PdfService;
+use App\Support\Entity\EntityUpdateRedirect;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -180,31 +181,21 @@ class CapabilityController extends Controller
         $this->authorize('update', $capability);
 
         $data = $request->validated();
-        $redirectAfter = $data['redirect_after_update'] ?? null;
         unset($data['redirect_after_update']);
 
         $capability->update($data);
 
         $capability->load(['createdBy', 'specializations', 'creatures', 'conditions']);
 
-        $successMessage = 'Capacité mise à jour avec succès.';
-
-        if ($redirectAfter === 'stay') {
-            return back()->with('success', $successMessage);
-        }
-
-        if ($redirectAfter === 'index') {
-            return redirect()->route('entities.capabilities.index')
-                ->with('success', $successMessage);
-        }
-
-        if ($redirectAfter === 'edit') {
-            return redirect()->route('entities.capabilities.edit', $capability)
-                ->with('success', $successMessage);
-        }
-
-        return redirect()->route('entities.capabilities.show', $capability)
-            ->with('success', $successMessage);
+        return EntityUpdateRedirect::respond(
+            $request,
+            'Capacité mise à jour avec succès.',
+            // Aligné sorts : sans cible explicite → back (modal EntitySurfaceHost).
+            fn () => back(),
+            editRedirect: fn () => redirect()->route('entities.capabilities.edit', $capability),
+            indexRedirect: fn () => redirect()->route('entities.capabilities.index'),
+            showRedirect: fn () => redirect()->route('entities.capabilities.show', $capability),
+        );
     }
 
     public function updateConditions(UpdateCapabilityConditionsRequest $request, Capability $capability): RedirectResponse

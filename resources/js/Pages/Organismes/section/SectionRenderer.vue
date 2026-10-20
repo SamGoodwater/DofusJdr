@@ -44,8 +44,28 @@ const props = defineProps({
     autoEdit: {
         type: Boolean,
         default: false
-    }
+    },
+    /**
+     * Masque les titres génériques (Texte, Contenu…) hors édition — fiches immersives.
+     */
+    immersive: {
+        type: Boolean,
+        default: false,
+    },
 });
+
+/** Titres CMS « méta » à ne pas afficher en lecture immersive. */
+const GENERIC_SECTION_TITLES = new Set([
+    "texte",
+    "text",
+    "section",
+    "sections",
+    "contenu",
+    "content",
+    "description",
+    "body",
+    "sans titre",
+]);
 
 /** Section locale (peut recevoir le HTML différé via API). */
 const hydratedSection = ref({ ...props.section });
@@ -140,6 +160,31 @@ const { saveSectionImmediate } = useSectionSave();
 const registry = useTemplateRegistry();
 const { updateSection, deleteSection } = useSectionAPI();
 const { copyToClipboard } = useCopyToClipboard();
+
+const sectionTitle = computed(
+    () => String(hydratedSection.value?.title || sectionModel.value?.title || "").trim(),
+);
+
+const isGenericSectionTitle = computed(() => {
+    const t = sectionTitle.value.toLowerCase();
+    return t === "" || GENERIC_SECTION_TITLES.has(t);
+});
+
+/** Afficher le libellé de titre dans le header. */
+const showSectionTitle = computed(() => {
+    if (isEditing.value) return true;
+    if (!props.immersive) return true;
+    return !isGenericSectionTitle.value;
+});
+
+/**
+ * En lecture immersive, pas de bandeau header si titre générique et pas de droits d’édition.
+ */
+const showSectionHeader = computed(() => {
+    if (!props.immersive) return true;
+    if (isEditing.value || canEdit.value) return true;
+    return showSectionTitle.value;
+});
 
 // Activer automatiquement le mode édition si autoEdit est true
 watch(() => props.autoEdit, async (shouldEdit) => {
@@ -419,9 +464,10 @@ const handleDeleteSection = async () => {
         class="section-scroll-anchor pointer-events-none absolute left-0 top-0 block h-px w-px -translate-y-20 opacity-0"
         aria-hidden="true"
     />
-    <!-- Header toujours visible -->
     <SectionHeader
-      :title="hydratedSection.title || sectionModel?.title"
+      v-if="showSectionHeader"
+      :title="sectionTitle"
+      :show-title="showSectionTitle"
       :isEditing="isEditing"
       :canEdit="canEdit"
       :canDelete="canEdit"

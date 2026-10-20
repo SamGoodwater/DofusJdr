@@ -7,7 +7,7 @@
  */
 import { computed } from "vue";
 import Route from "@/Pages/Atoms/action/Route.vue";
-import { buildSpellSlotGroups } from "@/Utils/entity/breedSpellSlots";
+import { splitBreedSpellSlotGroups } from "@/Utils/entity/breedSpellSlots";
 
 const props = defineProps({
     breed: {
@@ -21,7 +21,8 @@ const props = defineProps({
     },
 });
 
-const groups = computed(() => buildSpellSlotGroups(props.breed));
+/** Emplacements de progression uniquement (pas le pivot 0/1 reliquat Dofus). */
+const groups = computed(() => splitBreedSpellSlotGroups(props.breed).variantGroups);
 const hasSlots = computed(() => groups.value.length > 0);
 </script>
 
@@ -35,12 +36,7 @@ const hasSlots = computed(() => groups.value.length > 0);
                     class="space-y-2 border-l-2 border-primary-500/50 pl-3"
                 >
                     <div class="text-xs font-semibold text-primary-200">
-                        <template v-if="group.character_level === 0 && group.slot_index === 1">
-                            Sorts hors emplacement
-                        </template>
-                        <template v-else>
-                            Niveau {{ group.character_level }} · Emplacement {{ group.slot_index }}
-                        </template>
+                        Niveau {{ group.character_level }} · Emplacement {{ group.slot_index }}
                     </div>
                     <ul class="flex flex-wrap gap-x-3 gap-y-1.5">
                         <li v-for="s in group.spells" :key="s.id">
@@ -72,12 +68,7 @@ const hasSlots = computed(() => groups.value.length > 0);
                         class="rounded-md bg-base-100/60 border border-base-300/50 p-2 min-w-0"
                     >
                         <div class="text-[10px] font-semibold text-primary-300 mb-1.5 truncate">
-                            <template v-if="group.character_level === 0 && group.slot_index === 1">
-                                Hors emplacement
-                            </template>
-                            <template v-else>
-                                Nv. {{ group.character_level }} · Empl. {{ group.slot_index }}
-                            </template>
+                            Nv. {{ group.character_level }} · Empl. {{ group.slot_index }}
                         </div>
                         <ul class="space-y-1">
                             <li v-for="s in group.spells" :key="s.id" class="min-w-0">
@@ -108,8 +99,7 @@ const hasSlots = computed(() => groups.value.length > 0);
                     class="flex flex-wrap gap-x-1 gap-y-0.5"
                 >
                     <span class="text-base-content/55 shrink-0 font-medium">
-                        <template v-if="group.character_level === 0 && group.slot_index === 1">+</template>
-                        <template v-else>{{ group.character_level }}/{{ group.slot_index }}</template>
+                        {{ group.character_level }}/{{ group.slot_index }}
                     </span>
                     <span class="text-base-content/40">·</span>
                     <span class="min-w-0 flex flex-wrap gap-x-1">

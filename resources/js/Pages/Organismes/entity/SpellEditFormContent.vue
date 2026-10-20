@@ -3,12 +3,13 @@
  * Corps de la fiche d’édition d’un sort (header compact, formulaire, degrés).
  *
  * @description
- * Partagé entre la page {@link Pages/entity/spell/Edit} et {@link SpellEditModal}.
+ * Partagé entre la page {@link Pages/entity/spell/Edit} et l’édition embarquée ({@link EntitySurfaceHost}).
  * Enregistrement unique : degrés (bulk) puis formulaire sort.
  */
 import { computed, ref } from "vue";
 import { Spell } from "@/Models/Entity/Spell";
 import { usePermissions } from "@/Composables/permissions/usePermissions";
+import { useEntityEditEmbed } from "@/Composables/entity/useEntityEditEmbed";
 import EntityEditForm from "@/Pages/Organismes/entity/EntityEditForm.vue";
 import SpellDegreesEditor from "@/Pages/Organismes/entity/SpellDegreesEditor.vue";
 import EntityEditHeader from "@/Pages/Molecules/entity/shared/EntityEditHeader.vue";
@@ -40,6 +41,14 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["cancel", "saved"]);
+
+const {
+    embed: entityEditEmbed,
+    isEmbeddedInModal,
+    resolvedRedirectAfterUpdate,
+} = useEntityEditEmbed(props);
+const embeddedInModal = isEmbeddedInModal;
+const redirectAfterUpdate = resolvedRedirectAfterUpdate;
 
 const { canDeleteAny, isAdmin } = usePermissions();
 const canDeleteSpell = computed(() => canDeleteAny("spells") || isAdmin.value);
@@ -87,9 +96,20 @@ async function beforeSpellSubmitAsync() {
 }
 
 function onHeaderDeleted() {
-    if (props.embeddedInModal) {
-        emit('cancel');
+    if (isEmbeddedInModal.value) {
+        emit("cancel");
+        entityEditEmbed?.onCancel?.();
     }
+}
+
+function onHeaderCancel() {
+    emit("cancel");
+    entityEditEmbed?.onCancel?.();
+}
+
+function onFormSaved() {
+    emit("saved");
+    entityEditEmbed?.onSaved?.();
 }
 </script>
 
@@ -108,7 +128,7 @@ function onHeaderDeleted() {
             save-data-cy="spell-edit-save"
             header-data-cy="spell-edit-header"
             delete-confirm-message="Supprimer ce sort ? Il sera placé en corbeille (récupération possible côté admin)."
-            @cancel="emit('cancel')"
+            @cancel="onHeaderCancel"
             @deleted="onHeaderDeleted"
         >
             <template #left>
@@ -138,8 +158,8 @@ function onHeaderDeleted() {
             :embedded-in-modal="embeddedInModal"
             :redirect-after-update="redirectAfterUpdate || undefined"
             :before-submit-async="beforeSpellSubmitAsync"
-            @cancel="emit('cancel')"
-            @submit="emit('saved')"
+            @cancel="onHeaderCancel"
+            @submit="onFormSaved"
         >
             <template #after-sections>
                 <EntityEditContainer

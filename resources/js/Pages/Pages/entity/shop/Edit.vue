@@ -8,6 +8,7 @@
 import { computed, ref } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { usePageTitle } from '@/Composables/layout/usePageTitle';
+import { useEntityEditEmbed } from '@/Composables/entity/useEntityEditEmbed';
 import { usePermissions } from '@/Composables/permissions/usePermissions';
 import { Shop } from '@/Models/Entity/Shop';
 import EntityEditForm from '@/Pages/Organismes/entity/EntityEditForm.vue';
@@ -41,7 +42,14 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    /** True quand la page est chargée dans EntitySurfaceHost (modal). */
+    embeddedInModal: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { isEmbeddedInModal, resolvedRedirectAfterUpdate } = useEntityEditEmbed(props);
+
 
 const fieldsConfig = computed(() =>
     buildShopFormFieldsConfig({ includeReadonlyMeta: true }),
@@ -90,7 +98,8 @@ setPageTitle(`Modifier la hotel de vente : ${shop.value.name || 'Nouvelle hotel 
             :fixed-footer-actions="false"
             :fixed-footer-inset-class="fixedFooterInsetClass"
             :compact-access-levels="true"
-            redirect-after-update="edit"
+            :embedded-in-modal="isEmbeddedInModal"
+            :redirect-after-update="resolvedRedirectAfterUpdate"
         >
             <template #after-sections>
                 <EntityEditContainer

@@ -66,11 +66,16 @@ const linkedEntitySections = computed(() => {
             <SpecializationViewFull :specialization="specialization" :show-actions="true" />
         </template>
 
-        <section v-if="linkedEntitySections.length" class="space-y-3">
-            <h2 class="text-lg font-semibold">Sections</h2>
+        <section
+            v-if="linkedEntitySections.length"
+            class="space-y-3"
+            :aria-label="breed ? 'Contenu de la classe' : 'Contenu de la spécialisation'"
+        >
+            <h2 v-if="!breed" class="text-lg font-semibold">Sections</h2>
             <EntitySectionsRenderer
                 :sections="linkedEntitySections"
-                :empty-message="breed ? 'Aucune section liée à cette classe.' : 'Aucune section liée à cette spécialisation.'"
+                :immersive="Boolean(breed)"
+                :empty-message="breed ? '' : 'Aucune section liée à cette spécialisation.'"
             />
         </section>
 
