@@ -496,7 +496,7 @@
                     "pa": "2",
                     "po_min": "0",
                     "po_max": "0",
-                    "type": "Téléportation"
+                    "type": "Placement"
                 },
                 {
                     "key": "perce-vessie",

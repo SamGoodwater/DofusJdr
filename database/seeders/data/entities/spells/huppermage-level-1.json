@@ -9,7 +9,7 @@
             "slot_index": 1,
             "choice_order": 0,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "fire",
             "pa": "3",
@@ -46,7 +46,7 @@
             "slot_index": 1,
             "choice_order": 1,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "earth",
             "pa": "3",
@@ -82,7 +82,7 @@
             "slot_index": 1,
             "choice_order": 2,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "water",
             "pa": "3",
@@ -119,7 +119,7 @@
             "slot_index": 1,
             "choice_order": 3,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "air",
             "pa": "3",
@@ -157,7 +157,7 @@
             "slot_index": 2,
             "choice_order": 0,
             "types": [
-                "Téléportation"
+                "Placement"
             ],
             "element": null,
             "pa": "3",
@@ -191,7 +191,7 @@
             "slot_index": 3,
             "choice_order": 0,
             "types": [
-                "Buff"
+                "Amélioration"
             ],
             "element": null,
             "pa": "3",

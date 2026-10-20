@@ -210,10 +210,10 @@ final class BestiaryCatalog
     {
         return match ($kind) {
             'soigner' => 'Soin',
-            'protéger', 'donner-pv-temporaires' => 'Défensif',
-            'booster' => 'Buff',
-            'appliquer-etat', 'retirer' => 'Debuff',
-            default => 'Offensif',
+            'protéger', 'donner-pv-temporaires' => 'Protection',
+            'booster' => 'Amélioration',
+            'appliquer-etat', 'retirer' => 'Entrave',
+            default => 'Dégâts',
         };
     }
 

@@ -9,7 +9,7 @@
             "slot_index": 1,
             "choice_order": 0,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "earth",
             "pa": "3",
@@ -46,7 +46,7 @@
             "slot_index": 1,
             "choice_order": 1,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "fire",
             "pa": "3",
@@ -83,7 +83,7 @@
             "slot_index": 1,
             "choice_order": 2,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "earth",
             "pa": "3",
@@ -120,7 +120,7 @@
             "slot_index": 1,
             "choice_order": 3,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "air",
             "pa": "3",
@@ -158,7 +158,7 @@
             "slot_index": 2,
             "choice_order": 0,
             "types": [
-                "Debuff"
+                "Entrave"
             ],
             "element": "air",
             "pa": "3",
@@ -192,7 +192,7 @@
             "slot_index": 3,
             "choice_order": 0,
             "types": [
-                "Défensif"
+                "Protection"
             ],
             "element": "water",
             "pa": "3",

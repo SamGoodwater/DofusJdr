@@ -47,7 +47,7 @@ final class ClassSummonSeederImporterTest extends TestCase
         $this->assertSame(Spell::CATEGORY_CREATURE, $bec?->category);
         $this->assertSame('jdr:summon:tofu:action', $bec?->official_id);
         $this->assertSame(Spell::STATE_AUTO, $bec?->state);
-        $this->assertTrue($bec?->spellTypes()->where('name', 'Offensif')->exists());
+        $this->assertTrue($bec?->spellTypes()->where('name', 'Dégâts')->exists());
 
         $gardienne = Monster::query()->where('official_id', 'jdr:summon:gardienne')->with([
             'creature.spells.effects.degrees.effectSubEffects.subEffect',
@@ -76,7 +76,7 @@ final class ClassSummonSeederImporterTest extends TestCase
 
     private function seedSpellTypes(): void
     {
-        foreach (['Offensif', 'Buff', 'Debuff', 'Téléportation', 'Soin', 'Défensif', 'Invocation'] as $name) {
+        foreach (['Dégâts', 'Amélioration', 'Entrave', 'Placement', 'Soin', 'Protection', 'Invocation'] as $name) {
             SpellType::factory()->create([
                 'name' => $name,
                 'state' => SpellType::STATE_PLAYABLE,

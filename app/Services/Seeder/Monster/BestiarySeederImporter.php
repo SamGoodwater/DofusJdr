@@ -184,7 +184,7 @@ final class BestiarySeederImporter
         ]);
         $spell->save();
 
-        $type = SpellType::query()->where('name', $spellRow['type'])->first();
+        $type = SpellType::findByLabel($spellRow['type'] ?? null);
         if ($type === null) {
             $skipped[] = $entry['name'].' / '.$spellRow['name'].' : type « '.$spellRow['type'].' » introuvable';
         } else {

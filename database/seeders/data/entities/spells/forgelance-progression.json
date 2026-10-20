@@ -9,7 +9,7 @@
             "choice_order": 0,
             "character_level": 2,
             "types": [
-                "Défensif"
+                "Protection"
             ],
             "element": null,
             "pa": "3",
@@ -48,7 +48,7 @@
             "choice_order": 1,
             "character_level": 2,
             "types": [
-                "Téléportation"
+                "Placement"
             ],
             "element": null,
             "pa": "3",
@@ -83,7 +83,7 @@
             "slot_index": 1,
             "choice_order": 0,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "air",
             "pa": "5",
@@ -123,7 +123,7 @@
             "slot_index": 1,
             "choice_order": 1,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "earth",
             "pa": "5",
@@ -163,7 +163,7 @@
             "choice_order": 0,
             "character_level": 5,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "air",
             "pa": "5",
@@ -203,7 +203,7 @@
             "choice_order": 1,
             "character_level": 5,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "earth",
             "pa": "5",
@@ -243,7 +243,7 @@
             "choice_order": 0,
             "character_level": 6,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "air",
             "pa": "3",
@@ -281,7 +281,7 @@
             "choice_order": 1,
             "character_level": 6,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "water",
             "pa": "3",
@@ -319,7 +319,7 @@
             "choice_order": 0,
             "character_level": 7,
             "types": [
-                "Buff"
+                "Amélioration"
             ],
             "element": null,
             "pa": "3",
@@ -357,7 +357,7 @@
             "choice_order": 1,
             "character_level": 7,
             "types": [
-                "Défensif"
+                "Protection"
             ],
             "element": null,
             "pa": "3",
@@ -396,7 +396,7 @@
             "choice_order": 0,
             "character_level": 8,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "fire",
             "pa": "3",
@@ -434,7 +434,7 @@
             "choice_order": 1,
             "character_level": 8,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "water",
             "pa": "3",
@@ -472,7 +472,7 @@
             "choice_order": 0,
             "character_level": 10,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "air",
             "pa": "5",
@@ -512,7 +512,7 @@
             "choice_order": 1,
             "character_level": 10,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "earth",
             "pa": "5",
@@ -552,7 +552,7 @@
             "choice_order": 0,
             "character_level": 11,
             "types": [
-                "Téléportation"
+                "Placement"
             ],
             "element": null,
             "pa": "3",
@@ -587,7 +587,7 @@
             "choice_order": 1,
             "character_level": 11,
             "types": [
-                "Défensif"
+                "Protection"
             ],
             "element": null,
             "pa": "3",
@@ -626,7 +626,7 @@
             "choice_order": 0,
             "character_level": 12,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "fire",
             "pa": "5",
@@ -666,7 +666,7 @@
             "choice_order": 1,
             "character_level": 12,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "element": "air",
             "pa": "5",

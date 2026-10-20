@@ -266,7 +266,7 @@ final class ClassLevel1SpellSeederImporter
     {
         $ids = [];
         foreach ($typeNames as $name) {
-            $type = SpellType::query()->where('name', $name)->first();
+            $type = SpellType::findByLabel($name);
             if ($type === null) {
                 $skipped[] = $spell->name.' : type « '.$name.' » introuvable';
 

@@ -157,7 +157,7 @@
             "slot_index": 2,
             "choice_order": 0,
             "types": [
-                "Debuff"
+                "Entrave"
             ],
             "element": "air",
             "pa": "3",
@@ -191,7 +191,7 @@
             "slot_index": 3,
             "choice_order": 0,
             "types": [
-                "Téléportation"
+                "Placement"
             ],
             "element": null,
             "pa": "3",

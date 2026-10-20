@@ -92,7 +92,7 @@ final class ClassSummonSeederImporter
         $element = is_string($elementSlug) ? ElementBitmask::fromSlug($elementSlug) : null;
 
         $isHeal = $action['kind'] === 'soigner';
-        $typeName = $isHeal ? 'Soin' : 'Offensif';
+        $typeName = $isHeal ? 'Soin' : 'Dégâts';
         $effectText = $isHeal
             ? 'Soigne '.$action['value'].'. 3 PA.'
             : 'Dégâts '.$action['value'].'. 3 PA.';
@@ -135,7 +135,7 @@ final class ClassSummonSeederImporter
         ]);
         $spell->save();
 
-        $type = SpellType::query()->where('name', $typeName)->first();
+        $type = SpellType::findByLabel($typeName);
         if ($type === null) {
             $skipped[] = $entry['name'].' : type « '.$typeName.' » introuvable pour l’action';
         } else {

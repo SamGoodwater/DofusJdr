@@ -10,7 +10,7 @@
             "choice_order": 0,
             "character_level": 1,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "pa": "3",
             "po_min": "1",
@@ -109,7 +109,7 @@
             "choice_order": 1,
             "character_level": 1,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "pa": "3",
             "po_min": "2",
@@ -235,8 +235,8 @@
             "choice_order": 2,
             "character_level": 1,
             "types": [
-                "Offensif",
-                "Debuff"
+                "Dégâts",
+                "Entrave"
             ],
             "pa": "2",
             "po_min": "1",
@@ -371,7 +371,7 @@
             "choice_order": 3,
             "character_level": 1,
             "types": [
-                "Offensif"
+                "Dégâts"
             ],
             "pa": "3",
             "po_min": "1",
@@ -497,8 +497,8 @@
             "choice_order": 0,
             "character_level": 1,
             "types": [
-                "Offensif",
-                "Téléportation"
+                "Dégâts",
+                "Placement"
             ],
             "pa": "3",
             "po_min": "2",
@@ -668,7 +668,7 @@
             "choice_order": 1,
             "character_level": 1,
             "types": [
-                "Téléportation"
+                "Placement"
             ],
             "pa": "2",
             "po_min": "0",
@@ -753,7 +753,7 @@
             "choice_order": 0,
             "character_level": 1,
             "types": [
-                "Buff"
+                "Amélioration"
             ],
             "pa": "3",
             "po_min": "1",
@@ -843,7 +843,7 @@
             "choice_order": 1,
             "character_level": 1,
             "types": [
-                "Buff"
+                "Amélioration"
             ],
             "pa": "3",
             "po_min": "0",

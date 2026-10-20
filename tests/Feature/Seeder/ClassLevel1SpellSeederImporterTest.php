@@ -89,7 +89,7 @@ final class ClassLevel1SpellSeederImporterTest extends TestCase
 
         $this->assertSame(6, Spell::query()->where('state', Spell::STATE_AUTO)->count());
         $this->assertGreaterThan(0, $pression->effects()->count());
-        $this->assertTrue($pression->spellTypes()->where('name', 'Offensif')->exists());
+        $this->assertTrue($pression->spellTypes()->where('name', 'Dégâts')->exists());
 
         $iop->refresh();
         $pressionPivot = $iop->spells()->where('spells.id', $pression->id)->first()?->pivot;
@@ -453,7 +453,7 @@ final class ClassLevel1SpellSeederImporterTest extends TestCase
 
         $bouclier = Spell::query()->where('dofusdb_id', '32365')->first();
         $this->assertSame(Spell::RESOLUTION_AUTO_SUCCESS, $bouclier?->resolution_mode);
-        $this->assertTrue($bouclier?->spellTypes()->where('name', 'Défensif')->exists());
+        $this->assertTrue($bouclier?->spellTypes()->where('name', 'Protection')->exists());
 
         $this->assertSame(6, Spell::query()->where('state', Spell::STATE_AUTO)->count());
 
@@ -937,7 +937,7 @@ final class ClassLevel1SpellSeederImporterTest extends TestCase
 
     private function seedSpellTypes(): void
     {
-        foreach (['Offensif', 'Buff', 'Debuff', 'Téléportation', 'Soin', 'Défensif', 'Invocation'] as $name) {
+        foreach (['Dégâts', 'Amélioration', 'Entrave', 'Placement', 'Soin', 'Protection', 'Invocation'] as $name) {
             SpellType::factory()->create([
                 'name' => $name,
                 'state' => SpellType::STATE_PLAYABLE,

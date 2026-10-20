@@ -32,6 +32,10 @@ Les bonus d’équipement apparaissaient dans le détail d’une caractéristiqu
 
 Enregistrer une campagne, un scénario ou une boutique écrit bien le nom, la description et les autres champs. Avant, le bouton affichait un succès sans rien garder, ou cassait le retour vers la fiche.
 
+## Octobre 2026 — Types de sort = orientations
+
+Les types de sort affichés sur les fiches (et en infobulle) portent les mêmes noms que les orientations de classe : Dégâts, Soin, Protection, Amélioration, Entrave, Invocation, Placement, Tank. Plus de « Buff » ni « Offensif » côté joueur.
+
 ## Octobre 2026 — Sorts de classe et édition en modal
 
 Sur la fiche d’une classe, les sorts s’affichent en cartes de même largeur, avec le menu d’options (afficher, modifier) et l’ouverture au double-clic. Le passif de classe se distingue visuellement des sorts. Modifier une entité depuis une carte ou une fiche en modal ouvre l’éditeur dans une modal, sans quitter la page en cours ; depuis la page de l’entité, l’édition reste en page pleine. Après enregistrement en modal, on reste sur la page d’origine (le modal se ferme) pour toutes les entités, y compris les capacités.

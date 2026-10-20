@@ -110,6 +110,25 @@ class SpellType extends Model
     ];
 
     /**
+     * Anciens libellés seed → nom d’orientation (caractéristique `spell_type_spell`).
+     *
+     * @var array<string, string>
+     */
+    public const LEGACY_NAME_ALIASES = [
+        'Offensif' => 'Dégâts',
+        'Offensifs' => 'Dégâts',
+        'Défensif' => 'Protection',
+        'Defensif' => 'Protection',
+        'Buff' => 'Amélioration',
+        'Buffs' => 'Amélioration',
+        'Debuff' => 'Entrave',
+        'Debuffs' => 'Entrave',
+        'Téléportation' => 'Placement',
+        'Teleportation' => 'Placement',
+        'Transformation' => 'Tank',
+    ];
+
+    /**
      * Get the user that created the spell type.
      */
     public function createdBy()
@@ -123,5 +142,27 @@ class SpellType extends Model
     public function spells()
     {
         return $this->belongsToMany(Spell::class, 'spell_type');
+    }
+
+    /**
+     * Résout un type par nom d’orientation ou ancien libellé (Buff, Offensif…).
+     */
+    public static function findByLabel(?string $label): ?self
+    {
+        $name = trim((string) $label);
+        if ($name === '') {
+            return null;
+        }
+
+        $canonical = self::LEGACY_NAME_ALIASES[$name] ?? $name;
+
+        return static::query()
+            ->where(function ($query) use ($canonical, $name): void {
+                $query->where('name', $canonical);
+                if ($canonical !== $name) {
+                    $query->orWhere('name', $name);
+                }
+            })
+            ->first();
     }
 }

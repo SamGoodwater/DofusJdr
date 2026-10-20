@@ -149,7 +149,7 @@ final class BestiarySeederImporterTest extends TestCase
 
     private function seedSpellTypes(): void
     {
-        foreach (['Offensif', 'Buff', 'Debuff', 'Téléportation', 'Soin', 'Défensif', 'Invocation'] as $name) {
+        foreach (['Dégâts', 'Amélioration', 'Entrave', 'Placement', 'Soin', 'Protection', 'Invocation'] as $name) {
             SpellType::factory()->create([
                 'name' => $name,
                 'state' => SpellType::STATE_PLAYABLE,

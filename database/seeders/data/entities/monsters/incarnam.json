@@ -238,7 +238,7 @@
                     "pa": "2",
                     "po_min": "0",
                     "po_max": "0",
-                    "type": "Défensif"
+                    "type": "Protection"
                 }
             ]
         },
@@ -285,7 +285,7 @@
                     "pa": "2",
                     "po_min": "0",
                     "po_max": "0",
-                    "type": "Défensif"
+                    "type": "Protection"
                 }
             ]
         },
@@ -413,7 +413,7 @@
                     "pa": "3",
                     "po_min": "0",
                     "po_max": "0",
-                    "type": "Défensif"
+                    "type": "Protection"
                 }
             ]
         },
@@ -526,7 +526,7 @@
                     "po_max": "3",
                     "condition": "Empoisonné",
                     "is_magic": true,
-                    "type": "Debuff"
+                    "type": "Entrave"
                 },
                 {
                     "key": "effleurement",
@@ -582,7 +582,7 @@
                     "po_max": "6",
                     "condition": "Empoisonné",
                     "is_magic": true,
-                    "type": "Debuff"
+                    "type": "Entrave"
                 }
             ]
         }
