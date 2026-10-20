@@ -212,8 +212,16 @@ final class SpellDegreeResolverTest extends TestCase
             'sub_effect_id' => $sub->id,
             'params' => ['value_formula' => '2d6'],
         ]]);
-        $second = $service->createDegree($spell->fresh(), ['required_level' => 10]);
-        $third = $service->createDegree($spell->fresh(), ['required_level' => 16]);
+        $second = $service->createDegree($spell->fresh(), [
+            'required_level' => 10,
+            'inherits_effects' => true,
+            'skip_copy_effects' => true,
+        ]);
+        $third = $service->createDegree($spell->fresh(), [
+            'required_level' => 16,
+            'inherits_effects' => true,
+            'skip_copy_effects' => true,
+        ]);
 
         $this->assertTrue($second->fresh()->inherits_effects);
         $this->assertTrue($third->fresh()->inherits_effects);
@@ -250,8 +258,16 @@ final class SpellDegreeResolverTest extends TestCase
             'sub_effect_id' => $sub->id,
             'params' => ['value_formula' => '1d8'],
         ]]);
-        $second = $service->createDegree($spell->fresh(), ['required_level' => 8]);
-        $third = $service->createDegree($spell->fresh(), ['required_level' => 13]);
+        $second = $service->createDegree($spell->fresh(), [
+            'required_level' => 8,
+            'inherits_effects' => true,
+            'skip_copy_effects' => true,
+        ]);
+        $third = $service->createDegree($spell->fresh(), [
+            'required_level' => 13,
+            'inherits_effects' => true,
+            'skip_copy_effects' => true,
+        ]);
 
         $service->deleteDegree($second->fresh());
 

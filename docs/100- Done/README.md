@@ -1,9 +1,21 @@
 # Ce qui a été fait
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+## Octobre 2026 — L’auteur d’un sort peut enregistrer ses degrés
+
+Un auteur (même simple utilisateur) qui a le droit de modifier sa fiche peut aussi enregistrer les degrés et effets. Avant, l’API exigeait le rôle MJ : l’éditeur s’ouvrait, mais le bouton Enregistrer échouait dès qu’un degré était modifié.
+
+## Octobre 2026 — Enregistrement d’un sort ne perd plus les dégâts chiffrés
+
+Sur les sorts venus de l’ancien modèle, certains effets stockent encore les dégâts en dés ou en min–max plutôt qu’en formule. Un enregistrement (même pour changer seulement le coût PA ou le niveau d’un degré) renvoyait les effets sans ces chiffres : ils disparaissaient de la fiche. L’enregistrement renvoie maintenant ces valeurs telles quelles.
+
+## Octobre 2026 — Droits de lecture après une maj DofusDB
+
+Rétablir la version d’avant une actualisation DofusDB (ou une conversion IA) ne change plus les seuils de lecture et d’écriture d’une fiche, sauf pour un admin. Un MJ qui annule une maj ne rouvre plus accidentellement une fiche restreinte.
+
+## Octobre 2026 — Résistances d’une fiche neuve
+
+Créer un PNJ ou un monstre vide ne force plus les résistances fixes à zéro. Ces champs restent vides : l’équipement et les formules s’ajoutent comme pour les autres caractéristiques. Un zéro écrit à la main reste un total explicite.
+
 ## Octobre 2026 — Bonus d’équipement de nouveau dans les totaux runtime
 
 Les formules créature lisent `[strength_object]`, `[initiative_object]`, `[wakfu_recharge_object]`, etc. Après l’unification des formules (termes objet dans la formule, plus d’ajout arithmétique de repli), le runtime injectait encore `strength_creature_object`. Les placeholders manquants valaient 0 : l’équipement apparaissait dans la décomposition mais n’entrait plus dans le total. L’injection reprend les clés courtes d’agrégation.
@@ -85,16 +97,6 @@ Les barèmes (dégâts, soin, bouclier, PV temporaires, vol de vie, retraits PA/
 ## Octobre 2026 — Barèmes de sorts et conversion en dés
 
 Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de vie restent des repères (dés, budget tour) intégrés à l’outil générique **Barèmes** (menu Outils et sections CMS). Ce sont des repères, pas une loi absolue.
-=======
-## Octobre 2026 — L’auteur d’un sort peut enregistrer ses degrés
-
-Un auteur (même simple utilisateur) qui a le droit de modifier sa fiche peut aussi enregistrer les degrés et effets. Avant, l’API exigeait le rôle MJ : l’éditeur s’ouvrait, mais le bouton Enregistrer échouait dès qu’un degré était modifié.
->>>>>>> b725ded3f (fix: aligner l’API degrés sur SpellPolicy::update)
-=======
-## Octobre 2026 — Enregistrement d’un sort ne perd plus les dégâts chiffrés
-
-Sur les sorts venus de l’ancien modèle, certains effets stockent encore les dégâts en dés ou en min–max plutôt qu’en formule. Un enregistrement (même pour changer seulement le coût PA ou le niveau d’un degré) renvoyait les effets sans ces chiffres : ils disparaissaient de la fiche. L’enregistrement renvoie maintenant ces valeurs telles quelles.
->>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
 
 ## Octobre 2026 — Suppression de sort sans « Page introuvable »
 
@@ -121,11 +123,6 @@ L’édition d’un sort est regroupée en blocs (description, propriétés hors
 L’édition d’un sort ne passe plus par plusieurs « définitions d’effet ». On ajoute des **degrés** (niveaux) : chacun porte les propriétés de lancement (PA, portée, ligne de vue, zone, relance, limites et incantation) et des **effets** (frapper, soigner…). Un degré peut reprendre les effets du précédent pour éviter de tout ressaisir. Les effets proposent le bon outil selon l’action : élément, caractéristique recherchable, créature ou état, avec une durée propre. La portée se saisit simplement sous la forme `4` ou `2-8` et la zone retrouve son aperçu et son aide de notation. Le ciblage, la résolution et l’utilisation en réaction restent des propriétés globales du sort. À l’affichage, des onglets de niveau mettent à jour les propriétés visibles. L’éditeur montre aussi les monstres, PNJ et classes qui utilisent le sort.
 
 Supprimer le premier niveau (celui qui porte les effets) ne vide plus les onglets restants : les effets sont recopiés sur le degré suivant s’il héritait.
-=======
-## Octobre 2026 — Droits de lecture après une maj DofusDB
-
-Rétablir la version d’avant une actualisation DofusDB (ou une conversion IA) ne change plus les seuils de lecture et d’écriture d’une fiche, sauf pour un admin. Un MJ qui annule une maj ne rouvre plus accidentellement une fiche restreinte.
->>>>>>> becf278ea (fix: empêcher un MJ de rétablir les niveaux d’accès via un instantané)
 
 ## Octobre 2026 — Sauvegardes ZIP fiabilisées
 
@@ -134,11 +131,6 @@ Une sauvegarde produit désormais une seule archive ZIP horodatée (base, média
 ## Octobre 2026 — Nettoyage des caractéristiques
 
 Suppression des caractéristiques en trop (compétences Artisanat / Herbaliste / Connaissance des créatures, échec critique d’équipement, puissance et poussée de sort, dommages et résistances sagesse·vitalité). Les bornes numériques créature / objet / sort sont symétriques (`min = −max`), avec recalcul des plafonds monstre. Les libellés parlent de **dommage** fixe. Les règles et la doc technique suivent.
-=======
-## Octobre 2026 — Résistances d’une fiche neuve
-
-Créer un PNJ ou un monstre vide ne force plus les résistances fixes à zéro. Ces champs restent vides : l’équipement et les formules s’ajoutent comme pour les autres caractéristiques. Un zéro écrit à la main reste un total explicite.
->>>>>>> 17efd2058 (fix: ne plus forcer les résistances fixes à 0 sur une fiche vide)
 
 ## Octobre 2026 — La base garde les modifications
 

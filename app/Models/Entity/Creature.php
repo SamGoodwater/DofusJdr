@@ -48,13 +48,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $do_fixe_air
  * @property string $do_fixe_eau
  * @property string|null $do_fixe_multiple
-<<<<<<< HEAD
- * @property string $res_fixe_neutre
- * @property string $res_fixe_terre
- * @property string $res_fixe_feu
- * @property string $res_fixe_air
- * @property string $res_fixe_eau
-=======
  * @property string $do_sagesse
  * @property string $do_vitalite
  * @property string|null $res_fixe_neutre
@@ -62,7 +55,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string|null $res_fixe_feu
  * @property string|null $res_fixe_air
  * @property string|null $res_fixe_eau
->>>>>>> 17efd2058 (fix: ne plus forcer les résistances fixes à 0 sur une fiche vide)
  * @property string $res_neutre
  * @property string $res_terre
  * @property string $res_feu

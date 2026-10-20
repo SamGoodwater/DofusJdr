@@ -98,27 +98,18 @@ final class SpellDegreeApiTest extends TestCase
         $this->assertSame('4d6', $index->json('data.degrees.1.rows.0.params.value_formula'));
     }
 
-<<<<<<< HEAD
     public function test_game_master_can_sync_degrees_bulk(): void
-=======
-    public function test_deleting_source_degree_keeps_inherited_effects_on_remaining_degrees(): void
->>>>>>> 3062eafe6 (fix: conserver les effets hérités à la suppression d’un degré source)
     {
         $gm = User::factory()->create(['role' => User::ROLE_GAME_MASTER]);
         $spell = Spell::factory()->create(['created_by' => $gm->id, 'write_level' => 0, 'pa' => '3']);
         $sub = SubEffect::query()->create([
-<<<<<<< HEAD
             'slug' => 'frapper-bulk-'.uniqid(),
-=======
-            'slug' => 'frapper-del-'.uniqid(),
->>>>>>> 3062eafe6 (fix: conserver les effets hérités à la suppression d’un degré source)
             'type_slug' => 'frapper',
             'template_text' => 'Dégâts [value].',
             'variables_allowed' => ['value'],
             'param_schema' => [],
         ]);
 
-<<<<<<< HEAD
         $first = $this->actingAs($gm)->postJson("/api/spells/{$spell->id}/degrees", [
             'required_level' => 1,
             'inherits_effects' => false,
@@ -155,7 +146,7 @@ final class SpellDegreeApiTest extends TestCase
         $this->assertSame('3d6', $bulk->json('data.degrees.0.rows.0.params.value_formula_crit'));
     }
 
-<<<<<<< HEAD
+
     /**
      * SpellPolicy::update autorise l’auteur (rôle user) : l’API degrés doit suivre,
      * sinon l’enregistrement unique de l’éditeur échoue en 403.
@@ -166,21 +157,12 @@ final class SpellDegreeApiTest extends TestCase
         $spell = Spell::factory()->create(['created_by' => $author->id, 'write_level' => 0, 'pa' => '3']);
         $sub = SubEffect::query()->create([
             'slug' => 'frapper-author-'.uniqid(),
-=======
-    public function test_bulk_sync_preserves_numeric_effect_fields_when_round_tripped(): void
-    {
-        $gm = User::factory()->create(['role' => User::ROLE_GAME_MASTER]);
-        $spell = Spell::factory()->create(['created_by' => $gm->id, 'write_level' => 0]);
-        $sub = SubEffect::query()->create([
-            'slug' => 'frapper-numeric-'.uniqid(),
->>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
             'type_slug' => 'frapper',
             'template_text' => 'Dégâts [value].',
             'variables_allowed' => ['value'],
             'param_schema' => [],
         ]);
 
-<<<<<<< HEAD
         $create = $this->actingAs($author)->postJson("/api/spells/{$spell->id}/degrees", [
             'required_level' => 1,
             'inherits_effects' => false,
@@ -195,7 +177,45 @@ final class SpellDegreeApiTest extends TestCase
         $degreeId = (int) $create->json('degree_id');
 
         $bulk = $this->actingAs($author)->putJson("/api/spells/{$spell->id}/degrees", [
-=======
+            'degrees' => [[
+                'id' => $degreeId,
+                'required_level' => 2,
+                'inherits_effects' => false,
+                'effects' => [[
+                    'sub_effect_id' => $sub->id,
+                    'params' => ['value_formula' => '2d6'],
+                ]],
+            ]],
+        ]);
+        $bulk->assertOk();
+        $this->assertSame(2, $bulk->json('data.degrees.0.required_level'));
+        $this->assertSame('2d6', $bulk->json('data.degrees.0.rows.0.params.value_formula'));
+    }
+
+    public function test_non_author_user_cannot_mutate_degrees(): void
+    {
+        $owner = User::factory()->create(['role' => User::ROLE_USER]);
+        $other = User::factory()->create(['role' => User::ROLE_USER]);
+        $spell = Spell::factory()->create(['created_by' => $owner->id, 'write_level' => 0, 'pa' => '3']);
+
+        $this->actingAs($other)->postJson("/api/spells/{$spell->id}/degrees", [
+            'required_level' => 1,
+            'pa' => '3',
+        ])->assertForbidden();
+    }
+
+    public function test_bulk_sync_preserves_numeric_effect_fields_when_round_tripped(): void
+    {
+        $gm = User::factory()->create(['role' => User::ROLE_GAME_MASTER]);
+        $spell = Spell::factory()->create(['created_by' => $gm->id, 'write_level' => 0]);
+        $sub = SubEffect::query()->create([
+            'slug' => 'frapper-numeric-'.uniqid(),
+            'type_slug' => 'frapper',
+            'template_text' => 'Dégâts [value].',
+            'variables_allowed' => ['value'],
+            'param_schema' => [],
+        ]);
+
         $first = $this->actingAs($gm)->postJson("/api/spells/{$spell->id}/degrees", [
             'required_level' => 1,
             'inherits_effects' => false,
@@ -265,45 +285,36 @@ final class SpellDegreeApiTest extends TestCase
         $degreeId = (int) $first->json('degree_id');
 
         $bulk = $this->actingAs($gm)->putJson("/api/spells/{$spell->id}/degrees", [
->>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
             'degrees' => [[
                 'id' => $degreeId,
                 'required_level' => 2,
                 'inherits_effects' => false,
                 'effects' => [[
                     'sub_effect_id' => $sub->id,
-<<<<<<< HEAD
-                    'params' => ['value_formula' => '2d6'],
-=======
                     'params' => [],
->>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
                 ]],
             ]],
         ]);
         $bulk->assertOk();
-<<<<<<< HEAD
-        $this->assertSame(2, $bulk->json('data.degrees.0.required_level'));
-        $this->assertSame('2d6', $bulk->json('data.degrees.0.rows.0.params.value_formula'));
-    }
-
-    public function test_non_author_user_cannot_mutate_degrees(): void
-    {
-        $owner = User::factory()->create(['role' => User::ROLE_USER]);
-        $other = User::factory()->create(['role' => User::ROLE_USER]);
-        $spell = Spell::factory()->create(['created_by' => $owner->id, 'write_level' => 0, 'pa' => '3']);
-
-        $this->actingAs($other)->postJson("/api/spells/{$spell->id}/degrees", [
-            'required_level' => 1,
-            'pa' => '3',
-        ])->assertForbidden();
-=======
         $row = $bulk->json('data.degrees.0.rows.0');
         $this->assertNull($row['dice_num']);
         $this->assertNull($row['dice_side']);
         $this->assertNull($row['value_min']);
         $this->assertNull($row['logic_group']);
->>>>>>> 16b4e6976 (fix: conserver dés et magnitudes d’effet au save des degrés)
-=======
+    }
+
+    public function test_deleting_source_degree_keeps_inherited_effects_on_remaining_degrees(): void
+    {
+        $gm = User::factory()->create(['role' => User::ROLE_GAME_MASTER]);
+        $spell = Spell::factory()->create(['created_by' => $gm->id, 'write_level' => 0, 'pa' => '3']);
+        $sub = SubEffect::query()->create([
+            'slug' => 'frapper-del-'.uniqid(),
+            'type_slug' => 'frapper',
+            'template_text' => 'Dégâts [value].',
+            'variables_allowed' => ['value'],
+            'param_schema' => [],
+        ]);
+
         $create = $this->actingAs($gm)->postJson("/api/spells/{$spell->id}/degrees", [
             'required_level' => 1,
             'inherits_effects' => false,
@@ -319,9 +330,11 @@ final class SpellDegreeApiTest extends TestCase
 
         $this->actingAs($gm)->postJson("/api/spells/{$spell->id}/degrees", [
             'required_level' => 10,
+            'inherits_effects' => true,
         ])->assertCreated();
         $this->actingAs($gm)->postJson("/api/spells/{$spell->id}/degrees", [
             'required_level' => 16,
+            'inherits_effects' => true,
         ])->assertCreated();
 
         $deleted = $this->actingAs($gm)->deleteJson("/api/spells/{$spell->id}/degrees/{$sourceId}");
@@ -334,6 +347,6 @@ final class SpellDegreeApiTest extends TestCase
         $this->assertTrue($degrees[1]['inherits_effects']);
         $this->assertSame('2d6', $degrees[1]['rows'][0]['params']['value_formula']);
         $this->assertSame($degrees[0]['id'], $degrees[1]['effects_source_degree_id']);
->>>>>>> 3062eafe6 (fix: conserver les effets hérités à la suppression d’un degré source)
     }
+
 }
