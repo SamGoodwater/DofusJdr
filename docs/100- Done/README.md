@@ -1,10 +1,12 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Enregistrement des fiches campagne, scénario et boutique
+
+Le bouton **Enregistrer** des pages Modifier (header sheet) écrit maintenant le nom, la description et les autres champs du formulaire. Avant, un scénario ou une boutique validait la requête puis ne persistait rien ; une campagne renvoyait du JSON brut, ce qui cassait le retour Inertia.
+
 ## Octobre 2026 — Sorts de classe et édition en modal
 
 Sur la fiche d’une classe, les sorts s’affichent en cartes de même largeur, avec le menu d’options (afficher, modifier) et l’ouverture au double-clic. Le passif de classe se distingue visuellement des sorts. Modifier une entité depuis une carte ou une fiche en modal ouvre l’éditeur dans une modal, sans quitter la page en cours ; depuis la page de l’entité, l’édition reste en page pleine. Après enregistrement en modal, on reste sur la page d’origine (le modal se ferme) pour toutes les entités, y compris les capacités.
-
-## Octobre 2026 — Le Crâ est jouable
 
 ## Octobre 2026 — Le Crâ est jouable
 
