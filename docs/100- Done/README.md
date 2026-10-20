@@ -50,7 +50,7 @@ Sur la fiche d’une classe, un texte peut raconter sa mécanique signature — 
 
 ## Octobre 2026 — DD de sauvegarde par élément
 
-Chaque créature a désormais six **DD de sauvegarde** (Force, Intelligence, Agilité, Chance, Vitalité, Sagesse) : le seuil que la cible doit atteindre quand un effet demande une save de cet élément. Formule : 10 + modificateur + bonus d’arme (jusqu’à +5, sans forgemagie) + bonus temporaires de sort ou de consommable. Affichés sous les jets de sauvegarde sur la fiche, et documentés dans les règles de caractéristiques et de lancement de sorts.
+Chaque créature a désormais six **DD de sauvegarde** (Force, Intelligence, Agilité, Chance, Vitalité, Sagesse) : le seuil que la cible doit atteindre quand un effet demande une save de cet élément. Formule : 10 + modificateur + bonus d’arme (jusqu’à +5, sans forgemagie) + bonus temporaires de sort ou de consommable. Affichés sous les jets de sauvegarde sur la fiche, et documentés dans les règles de caractéristiques et de lancement de sorts. Le tableau de référence de la page Caractéristiques les liste aussi, juste après chaque sauvegarde, avec le Dé de vie, l’Hostilité et la Perception passive.
 
 ## Octobre 2026 — Traits de caractère
 
