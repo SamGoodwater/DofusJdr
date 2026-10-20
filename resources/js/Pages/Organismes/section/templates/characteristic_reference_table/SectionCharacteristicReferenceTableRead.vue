@@ -183,9 +183,10 @@ const DISPLAY_SPEC = [
     { category: "Défensif", label: "Résistance % Air", creatureKey: "resistance_air", objectKey: "resistance_percent_tier_air" },
     { category: "Défensif", label: "Résistance % Eau", creatureKey: "resistance_water", objectKey: "resistance_percent_tier_water" },
 
-    // Compétences
+    // Compétences (passives listées pour Perception et Discrétion ; les autres suivent la même formule)
     { category: "Compétences", label: "Agilité — Acrobaties", creatureKey: "acrobatics", objectKey: "acrobatics" },
     { category: "Compétences", label: "Agilité — Discrétion", creatureKey: "stealth", objectKey: "stealth" },
+    { category: "Compétences", label: "Agilité — Discrétion passive", creatureKey: "stealth_passive", objectKey: "stealth_passive" },
     { category: "Compétences", label: "Agilité — Escamotage", creatureKey: "sleight_of_hand", objectKey: "sleight_of_hand" },
     { category: "Compétences", label: "Force — Athlétisme", creatureKey: "athletics", objectKey: "athletics" },
     { category: "Compétences", label: "Force — Intimidation", creatureKey: "intimidation", objectKey: "intimidation" },
@@ -695,6 +696,18 @@ watch([group, entity, search, sortBy, sortDir, statusFilter, onlyWithEquipment, 
                     </template>
                 </tbody>
             </table>
+        </div>
+
+        <div
+            v-if="!loading && !error && rows.length > 0"
+            class="rounded-box border border-base-content/15 bg-base-200/40 px-3 py-2 text-xs text-base-content/75 space-y-1"
+        >
+            <p class="font-semibold text-base-content/85">Compétences passives</p>
+            <p>
+                Toute compétence peut servir de score passif (sans lancer de dé) :
+                <span class="font-mono text-base-content/90">10 + valeur de la compétence</span>
+                (+ bonus d’équipement passif éventuel). Seules la Perception et la Discrétion sont détaillées dans le tableau, car ce sont les plus utilisées (remarquer quelque chose, rester caché).
+            </p>
         </div>
     </div>
 </template>
