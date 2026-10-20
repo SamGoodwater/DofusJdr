@@ -2,7 +2,7 @@
 
 ## Octobre 2026 — Effets de sort, sur la fiche
 
-L’édition des effets d’un sort reste sur la page du sort : fond neutre, liste des monstres, PNJ et classes qui le possèdent, et création d’un effet avec ses sous-effets dès le formulaire d’ajout, sans passer par l’administration des effets.
+On édite les effets d’un sort sur sa fiche : qui le possède (monstres, PNJ, classes), et on crée un effet avec ses suites dès l’ajout, sans passer par l’administration des effets.
 
 ## Octobre 2026 — Lien DofusDB dans les options
 
@@ -32,13 +32,13 @@ Les bonus d’équipement apparaissaient dans le détail d’une caractéristiqu
 
 Enregistrer une campagne, un scénario ou une boutique écrit bien le nom, la description et les autres champs. Avant, le bouton affichait un succès sans rien garder, ou cassait le retour vers la fiche.
 
-## Octobre 2026 — Sorts de classe et édition en modal
+## Octobre 2026 — Sorts de classe et édition en fenêtre
 
-Sur la fiche d’une classe, les sorts s’affichent en cartes de même largeur, avec le menu d’options (afficher, modifier) et l’ouverture au double-clic. Le passif de classe se distingue visuellement des sorts. Modifier une entité depuis une carte ou une fiche en modal ouvre l’éditeur dans une modal, sans quitter la page en cours ; depuis la page de l’entité, l’édition reste en page pleine. Après enregistrement en modal, on reste sur la page d’origine (le modal se ferme) pour toutes les entités, y compris les capacités.
+Sur la fiche d’une classe, les sorts s’affichent en cartes de même largeur, avec le menu d’options (afficher, modifier) et l’ouverture au double-clic. Le passif de classe se distingue visuellement des sorts. Modifier une entité depuis une carte ou une fiche en fenêtre ouvre l’éditeur dans une fenêtre, sans quitter la page en cours ; depuis la page de l’entité, l’édition reste en page pleine. Après enregistrement, on reste sur la page d’origine (la fenêtre se ferme) pour toutes les entités, y compris les capacités.
 
 ## Octobre 2026 — Le Crâ est jouable
 
-La classe Crâ peut se jouer : ses 12 choix de sorts (les quatre voies et les sorts généraux de la fiche) sont sur la classe, ainsi que le passif Flèche guidée par le Wakfu. Une flèche imprégnée contourne un obstacle, une fois entre deux repos longs, puis une fois entre deux repos courts à partir du niveau 10. Chaque sort du kit a une icône, reprise de DofusDB quand le sort existe.
+La classe Crâ peut se jouer : ses choix de sorts (les quatre voies et les sorts généraux) sont sur la classe, ainsi que le passif Flèche guidée par le Wakfu. Une flèche imprégnée peut contourner un obstacle, plus souvent à haut niveau. Chaque sort du kit a une icône, reprise de DofusDB quand le sort existe.
 
 ## Octobre 2026 — Mécanique de classe
 
@@ -46,7 +46,7 @@ Sur la fiche d’une classe, un texte peut raconter sa mécanique signature — 
 
 ## Octobre 2026 — DD de sauvegarde par élément
 
-Chaque créature a désormais six **DD de sauvegarde** (Force, Intelligence, Agilité, Chance, Vitalité, Sagesse) : le seuil que la cible doit atteindre quand un effet demande une save de cet élément. Formule : 10 + modificateur + bonus d’arme (jusqu’à +5, sans forgemagie) + bonus temporaires de sort ou de consommable. Affichés sous les jets de sauvegarde sur la fiche, et documentés dans les règles de caractéristiques et de lancement de sorts.
+Chaque créature a désormais six **DD de sauvegarde** (Force, Intelligence, Agilité, Chance, Vitalité, Sagesse) : le seuil que la cible doit atteindre quand un effet demande une sauvegarde de cet élément. Ça tient compte du modificateur, du bonus d’arme (jusqu’à +5, sans forgemagie) et des bonus temporaires de sort ou de consommable. Ils s’affichent sous les jets de sauvegarde sur la fiche, et les règles les rappellent.
 
 ## Octobre 2026 — Traits de caractère
 
@@ -54,7 +54,7 @@ Le catalogue des traits permanents reprend les traits optionnels de Donjons & Dr
 
 ## Octobre 2026 — États D&D et états Dofus
 
-Le catalogue des états jouables reprend les états de D&D (À terre, Agrippé, Charmé, Épuisement, etc.) et les états Dofus utiles (Altruiste, Enraciné, Invulnérable, Pacifiste, Saoul, et les variantes). Les fiches déjà jouables ne sont pas réécrites. Les états encore en brut, issus du scrap, sont retirés. Saoul donne un désavantage aux sauvegardes, aux compétences et aux attaques à distance. Lourd empêche d’être attiré ou repoussé. Chaque état a une icône : le badge Dofus quand le fichier existe, sinon une pastille dessinée dans le même style. S’y ajoutent Intaclable (fuite automatique, ne peut pas être taclé), Intacleur (ne peut pas tacler), Terrorisé, et Résistant avec ses variantes : les dégâts concernés sont divisés par 2. Inconscient était déjà au catalogue.
+Le catalogue des états jouables reprend les états de D&D (À terre, Agrippé, Charmé, Épuisement, etc.) et les états Dofus utiles (Altruiste, Enraciné, Invulnérable, Pacifiste, Saoul, et les variantes). Les fiches déjà jouables ne sont pas réécrites. Les états encore en brut, issus de l’import Dofus, sont retirés. Saoul donne un désavantage aux sauvegardes, aux compétences et aux attaques à distance. Lourd empêche d’être attiré ou repoussé. Chaque état a une icône : le badge Dofus quand il existe, sinon une pastille dans le même style. S’y ajoutent Intaclable (fuite automatique, ne peut pas être taclé), Intacleur (ne peut pas tacler), Terrorisé, et Résistant avec ses variantes : les dégâts concernés sont divisés par 2. Inconscient était déjà au catalogue.
 
 ## Octobre 2026 — Description des états sans limite
 
@@ -70,15 +70,15 @@ Dans l’outil **Barèmes**, l’onglet Calcul (extras sort : dés, budget tour,
 
 ## Octobre 2026 — Dépendances à jour
 
-Les failles connues des paquets Node ont été corrigées. Plus d’alerte de sécurité de ce côté.
+Les failles connues des outils du site ont été corrigées. Plus d’alerte de sécurité de ce côté.
 
 ## Octobre 2026 — Audit des caractéristiques
 
-Vérification de toutes les caractéristiques (formules, chartes, coefficients, bornes). Corrections : une créature sans valeur saisie (PA, Agilité…) reprend sa valeur par défaut au lieu de 0 ; les chartes générées respectent désormais le min/max (bonus de maîtrise, bonus de touche, PM) ; la distance de saut peut monter jusqu'à 13 cases ; la réserve de Wakfu peut valoir 0 ; les conditions « touche automatique » des sorts de dégâts/soin/bouclier ne bloquent plus l'enregistrement.
+Vérification de toutes les caractéristiques (formules, chartes, bornes). Corrections : une créature sans valeur saisie (PA, Agilité…) reprend sa valeur par défaut au lieu de 0 ; les chartes restent dans leurs bornes (bonus de maîtrise, bonus de touche, PM) ; la distance de saut peut monter jusqu'à 13 cases ; la réserve de Wakfu peut valoir 0 ; les conditions « touche automatique » des sorts de dégâts, soin ou bouclier ne bloquent plus l'enregistrement.
 
 ## Octobre 2026 — Coefficients de palier pour les chartes
 
-Sur chaque fiche caractéristique (admin), une formule de génération peut remplir automatiquement le tableau des normes (5 paliers × 20 niveaux). On peut aussi saisir des **coefficients** pour Très faible / Faible / Fort / Très fort (Neutre = 1) : la formule définit le palier neutre, les autres lignes en découlent. Les dégâts de sort passent à environ 1d6 au niveau 1 et 4d10 au niveau 20, avec montée rapide puis ralentissement. Soin, bouclier, PV temporaires et vol de vie suivent automatiquement.
+Sur chaque fiche caractéristique (admin), une formule de génération peut remplir automatiquement le tableau des normes (paliers et niveaux). On peut aussi saisir des **coefficients** pour Très faible / Faible / Fort / Très fort : la formule définit le palier neutre, les autres lignes en découlent. Les dégâts de sort montent vite au début, puis ralentissent. Soin, bouclier, PV temporaires et vol de vie suivent.
 
 ## Octobre 2026 — Aide caractéristique partout pareille
 
@@ -92,35 +92,35 @@ Le détail au clic sur une caractéristique de monstre ou de PNJ montre de nouve
 
 ## Octobre 2026 — Nature des caractéristiques, Profil et Consommable
 
-Chaque caractéristique a une **nature** (descriptif, intrinsèque, bonus/malus, buff/débuff/vol, valeur d'action), indépendante de son groupe. Les bonus et buffs pointent l'intrinsèque créature qu'ils modifient. Deux nouveaux groupes : **Profil** (maîtrises de compétences et de sauvegardes pour classe, spécialisation et monstre) et **Consommable** (effets temporaires). Les ressources sortent du système ; équipements et panoplies restent ensemble. Les formules créature affichent explicitement le bonus d'équipement. L'admin replie par défaut les panneaux Conversion et Mapping.
+Chaque caractéristique a une **nature** (ce qu’elle décrit, ce qu’elle vaut, un bonus, un effet temporaire…), indépendante de son groupe. Les bonus pointent la caractéristique de créature qu’ils modifient. Deux nouveaux groupes : **Profil** (maîtrises de compétences et de sauvegardes) et **Consommable** (effets temporaires). Les ressources sortent du système ; équipements et panoplies restent ensemble. Les formules de créature montrent le bonus d’équipement. En admin, les panneaux Conversion et correspondances sont repliés par défaut.
 
 ## Octobre 2026 — Formules de conversion sans bornes internes (buff / débuff)
 
 Les formules de conversion ne portent plus les plafonds : ce sont les bornes de la caractéristique visée qui limitent. Elles sont **signées** (plus pour un buff, moins pour un débuff). Plafond dégâts de sort **±80**.
 
-## Octobre 2026 — Équilibrage Excel via formules de normes
+## Octobre 2026 — Équilibrage via formules de normes
 
 Les barèmes (dégâts, soin, bouclier, PV temporaires, vol de vie, retraits PA/PM, placement, consommables) sont générés par des formules. Les dégâts suivent le palier de PV ; le vol de vie vaut 30 % des dégâts ; les invocations reprennent les normes monstre. Un hub **Équilibrage** dans la gestion du contenu pointe vers chaque fiche. Conversion classique et IA lisent la même source.
 
 ## Octobre 2026 — Barèmes de sorts et conversion en dés
 
-Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de vie restent des repères (dés, budget tour) intégrés à l’outil générique **Barèmes** (menu Outils et sections CMS). Ce sont des repères, pas une loi absolue.
+Les tables de référence dégâts / soins / bouclier / PV temporaires / vol de vie restent des repères (dés, budget tour) intégrés à l’outil **Barèmes** (menu Outils et pages de règles). Ce sont des repères, pas une loi absolue.
 
 ## Octobre 2026 — Suppression de sort sans « Page introuvable »
 
 Après suppression depuis l’édition, le bouton Précédent du navigateur ne rouvre plus la fiche déjà mise en corbeille. Les liens des notifications mènent à la bonne page, et après suppression vers la liste plutôt que la fiche disparue. Depuis une fenêtre d’édition, la suppression reste sur la liste.
 
-## Octobre 2026 — Édition d’entité : header compact et grille deux colonnes
+## Octobre 2026 — Édition d’entité : barre compacte et deux colonnes
 
-Toutes les fiches d’édition (équipements, monstres, PNJ, classes, panoplies, etc.) reprennent le header compact des sorts : retour, titre vers la fiche, état, options, annuler, supprimer et enregistrer restent visibles en haut. Le formulaire s’affiche en deux colonnes ; les métadonnées sont repliées par défaut. Les blocs de relations (recette, sorts, traits…) restent dans des panneaux séparés sous le formulaire. Les capacités gardent leur grille dédiée, avec le même header.
+Toutes les fiches d’édition (équipements, monstres, PNJ, classes, panoplies, etc.) reprennent la barre compacte des sorts : retour, titre vers la fiche, état, options, annuler, supprimer et enregistrer restent visibles en haut. Le formulaire s’affiche en deux colonnes ; les métadonnées sont repliées par défaut. Les blocs de relations (recette, sorts, traits…) restent dans des panneaux séparés sous le formulaire. Les capacités gardent leur grille dédiée, avec la même barre.
 
-## Octobre 2026 — Enregistrement des sorts à la bonne adresse
+## Octobre 2026 — Enregistrement des sorts de nouveau fiable
 
-Le toast « Erreur lors de la sauvegarde » sans détail venait d’un écart d’adresse : le site ouvert d’un côté, les routes de l’autre. L’enregistrement partait ailleurs et échouait sans message utile. Les routes suivent maintenant l’adresse réellement utilisée dans le navigateur.
+On peut de nouveau enregistrer un sort sans tomber sur une erreur sans détail. Le site et les liens d’enregistrement restent d’accord, même si on a ouvert l’app depuis une autre adresse.
 
-## Octobre 2026 — Édition des sorts : props globales et header
+## Octobre 2026 — Édition des sorts : propriétés communes et barre compacte
 
-Éléments, type de ciblage et disponibilité rituelle appartiennent au sort, plus aux degrés. Les propriétés communes restent éditables dans un container toujours visible mais replié. La portée de jeu d’un effet n’est plus cachée dans « Avancé ». Disposition en deux colonnes (descriptif / hors degrés, puis communes / métadonnées repliés, puis degrés & effets). Header compact : retour et porteurs à gauche, titre cliquable au centre, aide formules / état / options / annuler / supprimer / enregistrer à droite.
+Éléments, type de ciblage et disponibilité rituelle appartiennent au sort, plus aux degrés. Les propriétés communes restent éditables dans un bloc toujours visible mais replié. La portée de jeu d’un effet n’est plus cachée dans « Avancé ». Disposition en deux colonnes (descriptif / hors degrés, puis communes / métadonnées repliés, puis degrés et effets). Barre compacte : retour et porteurs à gauche, titre cliquable au centre, aide, état, options, annuler, supprimer et enregistrer à droite.
 
 ## Octobre 2026 — Édition des sorts condensée
 
@@ -128,7 +128,7 @@ L’édition d’un sort est regroupée en blocs (description, propriétés hors
 
 ## Octobre 2026 — Degrés de sorts simplifiés
 
-L’édition d’un sort ne passe plus par plusieurs « définitions d’effet ». On ajoute des **degrés** (niveaux) : chacun porte les propriétés de lancement (PA, portée, ligne de vue, zone, relance, limites et incantation) et des **effets** (frapper, soigner…). Un degré peut reprendre les effets du précédent pour éviter de tout ressaisir. Les effets proposent le bon outil selon l’action : élément, caractéristique recherchable, créature ou état, avec une durée propre. La portée se saisit simplement sous la forme `4` ou `2-8` et la zone retrouve son aperçu et son aide de notation. Le ciblage, la résolution et l’utilisation en réaction restent des propriétés globales du sort. À l’affichage, des onglets de niveau mettent à jour les propriétés visibles. L’éditeur montre aussi les monstres, PNJ et classes qui utilisent le sort.
+L’édition d’un sort ne passe plus par plusieurs « définitions d’effet ». On ajoute des **degrés** (niveaux) : chacun porte les propriétés de lancement (PA, portée, ligne de vue, zone, relance, limites et incantation) et des **effets** (frapper, soigner…). Un degré peut reprendre les effets du précédent pour éviter de tout ressaisir. Les effets proposent le bon outil selon l’action : élément, caractéristique recherchable, créature ou état, avec une durée propre. La portée se saisit simplement (une case, ou un minimum et un maximum) et la zone retrouve son aperçu. Le ciblage, la résolution et l’utilisation en réaction restent des propriétés du sort. À l’affichage, des onglets de niveau mettent à jour les propriétés visibles. L’éditeur montre aussi les monstres, PNJ et classes qui utilisent le sort.
 
 Supprimer le premier niveau (celui qui porte les effets) ne vide plus les onglets restants : les effets sont recopiés sur le degré suivant s’il héritait.
 
@@ -138,7 +138,7 @@ Une sauvegarde produit désormais une seule archive ZIP horodatée (base, média
 
 ## Octobre 2026 — Nettoyage des caractéristiques
 
-Suppression des caractéristiques en trop (compétences Artisanat / Herbaliste / Connaissance des créatures, échec critique d’équipement, puissance et poussée de sort, dommages et résistances sagesse·vitalité). Les bornes numériques créature / objet / sort sont symétriques (`min = −max`), avec recalcul des plafonds monstre. Les libellés parlent de **dommage** fixe. Les règles et la doc technique suivent.
+Suppression des caractéristiques en trop (compétences Artisanat / Herbaliste / Connaissance des créatures, échec critique d’équipement, puissance et poussée de sort, dommages et résistances sagesse·vitalité). Les bornes numériques (créature, objet, sort) sont les mêmes des deux côtés : le minimum est l’opposé du maximum. Les plafonds monstre suivent. Les libellés parlent de **dommage** fixe. Les règles aussi.
 
 ## Octobre 2026 — La base garde les modifications
 
@@ -150,7 +150,7 @@ Toutes les caractéristiques de créature sont passées en **validée**. Les min
 
 ## Octobre 2026 — Système de caractéristiques finalisé
 
-Les définitions d’équipement sont reproductibles (emplacements versionnés). La réserve de Wakfu, les PV max d’objet et les invocations suivent les règles. Les bonus d’équipement se lisent dans `effect` (le brut Dofus reste dans `bonus`). On peut éditer totaux et contexte sur les fiches monstre/PNJ. L’Intimidation choisit Force ou Chance ; les expertises sont plafonnées à 3. Les tooltips de caractéristiques sont utilisables au clavier.
+Les définitions d’équipement sont reproductibles. La réserve de Wakfu, les PV max d’objet et les invocations suivent les règles. Les bonus d’équipement se lisent dans l’effet jouable (le texte brut Dofus reste à part). On peut éditer totaux et contexte sur les fiches monstre et PNJ. L’Intimidation choisit Force ou Chance ; les expertises sont plafonnées à 3. Les infobulles de caractéristiques sont utilisables au clavier.
 
 ## Octobre 2026 — L’Essentiel pour qui vient de D&D
 
@@ -162,7 +162,7 @@ Lancer une sauvegarde, un import ou une compilation ne reste plus bloqué derri�
 
 ## Octobre 2026 — Contenu pour les MJ, Admin pour l’app
 
-La gestion du contenu est ouverte aux maîtres du jeu (langues, types, caractéristiques, effets), après confirmation du mot de passe. Import DofusDB, mappings et IA restent réservés aux admins. Les astuces de chargement sont dans l’espace administration. Débloquer son mot de passe n’élargit jamais le rôle.
+La gestion du contenu est ouverte aux maîtres du jeu (langues, types, caractéristiques, effets), après confirmation du mot de passe. Import DofusDB, correspondances et IA restent réservés aux admins. Les astuces de chargement sont dans l’espace administration. Débloquer son mot de passe n’élargit jamais le rôle.
 
 ## Octobre 2026 — Astuces sur l’écran de chargement
 
@@ -182,7 +182,7 @@ Sur une page de règles un peu longue, les chapitres plus bas mettent un moment 
 
 ## Octobre 2026 — Journal du jeu
 
-La page **Journal** dit en peu de mots ce qui est déjà jouable, et une frise indique la suite : campagnes, scénarios et fiches en 1.4, puis des outils de combat en 1.5. Les textes restent des fichiers markdown. Un admin les modifie depuis la page.
+La page **Journal** dit en peu de mots ce qui est déjà jouable, et une frise indique la suite : campagnes, scénarios et fiches en 1.4, puis des outils de combat en 1.5. Un admin les modifie depuis la page.
 
 ## Octobre 2026 — Réglages IA : enregistrer le prompt, choisir un étalon
 
@@ -194,7 +194,7 @@ La classe d’armure est 10 + le modificateur de Vitalité, plus le bouclier ou 
 
 ## Octobre 2026 — Enregistrer une caractéristique sans redescendre
 
-Sur une caractéristique, le bouton **Enregistrer** est dans la barre du haut, à côté du nom, de l’état et de **Lier**. Il s’allume seulement après une modification, et la barre reste visible quand on descend dans la fiche. Sur un petit écran, le libellé « Lier » et la clé technique se rangent pour garder la barre sur une ligne.
+Sur une caractéristique, le bouton **Enregistrer** est dans la barre du haut, à côté du nom, de l’état et de **Lier**. Il s’allume seulement après une modification, et la barre reste visible quand on descend dans la fiche. Sur un petit écran, le libellé « Lier » et le nom technique se rangent pour garder la barre sur une ligne.
 
 ## Octobre 2026 — L’Essentiel aligné sur le livre
 
@@ -206,7 +206,7 @@ Sur une caractéristique dans un texte, l’infobulle distingue le personnage ou
 
 ## Octobre 2026 — Formules en paliers
 
-Quand une caractéristique dépend d’une autre par paliers (par exemple les PM selon le niveau), l’infobulle et la charte montrent un tableau : de tel niveau à tel niveau, telle valeur. Le JSON technique n’apparaît plus.
+Quand une caractéristique dépend d’une autre par paliers (par exemple les PM selon le niveau), l’infobulle et la charte montrent un tableau : de tel niveau à tel niveau, telle valeur. Le détail technique n’apparaît plus.
 
 ## Octobre 2026 — Références dans les textes de règles
 
