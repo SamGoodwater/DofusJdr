@@ -193,6 +193,23 @@ describe('SpellDegreesEditor', () => {
         expect(body.degrees[0].po_max).toBe('8');
     });
 
+    it('un nouveau snapshot spellDegrees (visite Inertia) remet dirty à false sans PUT', async () => {
+        const degrees = [baseDegree()];
+        const wrapper = mountEditor(degrees);
+        await flushPromises();
+        await wrapper.find('[data-cy="spell-cast-po-range"]').setValue('2-8');
+        await wrapper.setProps({
+            spellDegrees: {
+                degrees: [{ ...degrees[0] }],
+                default_degree_id: degrees[0].id,
+            },
+        });
+        await flushPromises();
+        const ok = await wrapper.vm.flushSave();
+        expect(ok).toBe(true);
+        expect(axios.put).not.toHaveBeenCalled();
+    });
+
     it('affiche un badge hérité quand properties_source = spell', async () => {
         const wrapper = mountEditor([
             baseDegree({

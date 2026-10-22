@@ -1,5 +1,9 @@
 # Ce qui a été fait
 
+## Octobre 2026 — Enregistrer un sort ne perd plus les degrés
+
+Sur la page Modifier d’un sort (pas la fenêtre), « Mettre à jour » enregistrait d’abord le bloc d’effets lié, ce qui rechargeait la page et effaçait les changements encore en mémoire dans « Degrés & effets ». Les degrés et les dégâts revus n’étaient pas écrits, alors que le sort affichait un succès. L’enregistrement écrit d’abord les degrés, puis le bloc d’effets sans quitter la page.
+
 ## Octobre 2026 — Effets de sort, sur la fiche
 
 L’édition des effets d’un sort reste sur la page du sort : fond neutre, liste des monstres, PNJ et classes qui le possèdent, et création d’un effet avec ses sous-effets dès le formulaire d’ajout, sans passer par l’administration des effets.

@@ -737,43 +737,29 @@ function submitGroup() {
 }
 
 /**
- * Même logique que {@link submitGroup}, en Promise (enchaînement depuis le formulaire parent).
+ * Enregistre le groupe en JSON (pas de visite Inertia).
  *
- * @returns {Promise<{ ok: true } | { ok: false, reason: 'validation_area' }>}
+ * Une visite `back()` remplace les props de la fiche sort : le watcher de
+ * `useSpellDegreesDraft` remet alors `dirty` à false et `flushAll` ignore
+ * les degrés natifs encore en mémoire.
+ *
+ * @returns {Promise<{ ok: true } | { ok: false, reason: 'validation_area'|'request' }>}
  */
 function submitGroupAsync() {
     if (!validateDegreeAreas()) {
         return Promise.resolve({ ok: false, reason: 'validation_area' });
     }
-    if (props.saveWithoutInertia) {
-        return patchEffectGroupJson()
-            .then(() => ({ ok: true }))
-            .catch((e) => {
-                if (!e?.toasted) {
-                    notificationStore.error('Impossible d’enregistrer les effets du sort.', {
-                        duration: 5000,
-                        placement: 'top-right',
-                    });
-                }
-                return { ok: false, reason: 'request' };
-            });
-    }
-    applyGroupPayloadToForm();
-    return new Promise((resolve, reject) => {
-        groupSaveForm.patch(props.patchUrl, {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                captureSavedSnapshot();
-                resolve({ ok: true });
-            },
-            onError: (errors) => {
-                const err = new Error('Effect group validation failed');
-                err.errors = errors;
-                reject(err);
-            },
+    return patchEffectGroupJson()
+        .then(() => ({ ok: true }))
+        .catch((e) => {
+            if (!e?.toasted) {
+                notificationStore.error('Impossible d’enregistrer les effets du sort.', {
+                    duration: 5000,
+                    placement: 'top-right',
+                });
+            }
+            return { ok: false, reason: 'request' };
         });
-    });
 }
 
 function getActiveEffectId() {
