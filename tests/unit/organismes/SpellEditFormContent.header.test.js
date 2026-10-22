@@ -85,6 +85,7 @@ describe('SpellEditFormContent header', () => {
                 stubs: {
                     EntityEditForm: EntityEditFormStub,
                     SpellDegreesEditor: true,
+                    SpellEffectsUnifiedSection: true,
                     EntityActions: true,
                     SpellHoldersPanel: true,
                     SpellViewText: {

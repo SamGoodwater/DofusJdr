@@ -524,12 +524,15 @@ const patchUrlForSelectedGroup = computed(() => {
 });
 
 /**
- * Enregistre le groupe d’effets sélectionné avant le PATCH du sort (si l’éditeur est monté).
+ * Enregistre le groupe d’effets sélectionné (JSON, sans visite Inertia) s’il est dirty.
  *
  * @returns {Promise<boolean>} true pour poursuivre la soumission du formulaire entité
  */
 async function flushEffectGroupSave() {
     if (!effectEditorFormRef.value?.submitGroupAsync) {
+        return true;
+    }
+    if (!effectsEditorDirty.value) {
         return true;
     }
     try {
@@ -874,7 +877,7 @@ defineExpose({
             :patch-url="patchUrlForSelectedGroup"
             :heading="selectedGroup.label"
             :hide-submit-button="hideEffectGroupSubmitButton"
-            :save-without-inertia="embeddedInModal"
+            :save-without-inertia="embeddedInModal || hideEffectGroupSubmitButton"
             :embedded-in-modal="embeddedInModal"
             @dirty-change="onEffectGroupDirtyChange"
         />

@@ -14,8 +14,10 @@
   - `properties_source` sur `spell_degrees` : `own` | `previous` | `spell` (résolu par
     `SpellDegreeResolver`). Création de degré = copie matérialisée (props + effets, pas d’héritage
     d’effets par défaut).
-  - UI édition : `SpellEditFormContent` + `SpellDegreesEditor` + `SpellCastPropertiesGrid` +
-    `AreaShapePicker` + `SpellEffectEditorRow` ; enregistrement unique (bulk degrés puis sort).
+  -     UI édition : `SpellEditFormContent` + `SpellDegreesEditor` + `SpellCastPropertiesGrid` +
+    `AreaShapePicker` + `SpellEffectEditorRow` ; enregistrement unique (bulk degrés natifs,
+    puis groupe d’effets legacy en JSON sans visite Inertia, puis sort). `submitGroupAsync`
+    n’utilise pas Inertia `back()` : ça réinitialiserait le brouillon des degrés.
     `serializeEffectRowForApi` round-trippe aussi `value_min` / `value_max` / `dice_num` /
     `dice_side` / `logic_group` : `syncEffects` recrée les lignes, omettre ces clés les
     nullifie (dégâts migrés / legacy).

@@ -80,28 +80,31 @@ const spellDegreesEditorRef = ref(null);
 const spellEffectsSectionRef = ref(null);
 const entityEditFormRef = ref(null);
 
-/** Enregistre les groupes d’effets du sort puis les degrés avant le PATCH entité. */
+/**
+ * Enregistre les degrés natifs puis le groupe d’effets legacy, avant le PATCH entité.
+ * Les degrés d’abord : même si le flush groupe a un effet de bord sur les props,
+ * le PUT `/degrees` a déjà persisté le brouillon.
+ */
 async function beforeSpellSubmitAsync() {
+    const editor = spellDegreesEditorRef.value;
+    const fn = editor?.flushAll || editor?.flushSave;
+    if (typeof fn === "function") {
+        const ok = await fn();
+        if (ok === false) {
+            const detail =
+                editor?.errorMessage?.value ||
+                editor?.errorMessage ||
+                "Enregistrement des degrés impossible.";
+            throw new Error(typeof detail === "string" ? detail : "Enregistrement des degrés impossible.");
+        }
+    }
+
     const flushGroups = spellEffectsSectionRef.value?.flushEffectGroupSave;
     if (typeof flushGroups === "function") {
         const groupsOk = await flushGroups();
         if (groupsOk === false) {
             throw new Error("Enregistrement des effets du sort impossible.");
         }
-    }
-
-    const editor = spellDegreesEditorRef.value;
-    const fn = editor?.flushAll || editor?.flushSave;
-    if (typeof fn !== "function") {
-        return true;
-    }
-    const ok = await fn();
-    if (ok === false) {
-        const detail =
-            editor?.errorMessage?.value ||
-            editor?.errorMessage ||
-            "Enregistrement des degrés impossible.";
-        throw new Error(typeof detail === "string" ? detail : "Enregistrement des degrés impossible.");
     }
     return true;
 }

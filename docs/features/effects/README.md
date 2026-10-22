@@ -17,8 +17,10 @@ Le système d'effets décrit les effets de sorts et d'objets : degrés, effets (
 - API : `/api/spells/{spell}/degrees` (CRUD + `PUT` bulk + materialize / sync effets).
 - UI édition : containers thématiques (`EntityEditContainer`), `SpellDegreesEditor`,
   `SpellCastPropertiesGrid`, `AreaShapePicker`, `SpellEffectEditorRow` ; un seul Enregistrer
-  (bulk degrés puis sort). Grille 2 colonnes + header compact (aide formules, état, options,
-  annuler / reset / supprimer / enregistrer). Affichage : `SpellEffectsJournal`.
+  (bulk degrés natifs, puis groupe d’effets legacy en JSON sans visite Inertia, puis sort).
+  Le flush groupe ne doit pas passer par Inertia `back()` : ça rafraîchit `spellDegrees` et
+  le brouillon des degrés est perdu. Grille 2 colonnes + header compact (aide formules, état,
+  options, annuler / reset / supprimer / enregistrer). Affichage : `SpellEffectsJournal`.
 - Portée unique (`4` ou `2-8`) ; zone par icônes de formes + paramètres numériques (notation Krosmoz).
 - Effets : élément / caractéristique (icônes et couleurs), créature, état ; `value_formula` et
   `value_formula_crit` ; durée (`duration_formula`) ; portée de jeu (`scope`) au même niveau.
